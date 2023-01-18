@@ -1,0 +1,3 @@
+# TS REACT YARN/NPM Library Template (TRY-N-LT)
+
+This is a forkable template repo for creating TS ready library components in cjs and esm, dats it...

@@ -1,0 +1,13 @@
+*.log
+.DS_Store
+node_modules
+.parcel-cache
+.cache
+.rts2_cache_cjs
+.rts2_cache_esm
+.rts2_cache_umd
+dist
+coverage
+/example/gatsby-example/
+/example/.parcel-cache
+/example/.cache
