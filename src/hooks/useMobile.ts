@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import throttle from 'lodash.throttle'
 
-const useMobile = () => {
+export const useMobile = () => {
   const [width, setWidth] = useState(Infinity)
 
   useEffect(() => {
@@ -22,5 +22,3 @@ const useMobile = () => {
 
   return width < 1200
 }
-
-export default useMobile

@@ -1,16 +1,26 @@
 import 'react-app-polyfill/ie11'
 import * as React from 'react'
-import * as ReactDOM from 'react-dom'
+import * as ReactDOM from 'react-dom/client'
+
+import { ThemeProvider, LayoutText, ArticleFadeIn } from '@past3lle/schematics'
 
 import './index.css'
 
 const App = () => {
   return (
-    <div>
-      <h1>EXAMPLE APP</h1>
-      <p>CODE HERE</p>
-    </div>
+    <ArticleFadeIn>
+      <LayoutText.largeHeader>EXAMPLE APP</LayoutText.largeHeader>
+      <LayoutText.black>CODE HERE</LayoutText.black>
+    </ArticleFadeIn>
   )
 }
 
-ReactDOM.render(<App />, document.getElementById('root'))
+const container = document.getElementById('root') as HTMLElement
+const root = ReactDOM.createRoot(container)
+root.render(
+  <>
+    <ThemeProvider>
+      <App />
+    </ThemeProvider>
+  </>
+)

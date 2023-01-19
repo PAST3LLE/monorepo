@@ -1,10 +1,10 @@
 {
-  "name": "ts-lib-component-template",
+  "name": "@past3lle/schematics",
   "version": "0.0.1",
-  "homepage": "https://github.com/past3lle/ts-lib-component-template",
-  "repository": "past3lle/ts-lib-component-template",
+  "homepage": "https://github.com/past3lle/schematics",
+  "repository": "past3lle/schematics",
   "main": "dist/index.js",
-  "module": "dist/ts-lib-component-template.esm.js",
+  "module": "dist/schematics.esm.js",
   "typings": "dist/index.d.ts",
   "files": [
     "dist"
@@ -12,24 +12,18 @@
   "scripts": {
     "analyze": "yarn build && source-map-explorer ./dist/*.js",
     "release": "yarn build && npm publish",
-    "start": "tsdx watch",
-    "build": "tsdx build",
+    "start": "tsc watch",
+    "build": "tsc",
     "test": "echo 'removed default test' ",
-    "alt-test": "tsdx test --env=jsdom",
-    "test:ui": "cd ./example && yarn start && cd ../",
-    "test:watch": "tsdx test --env=jsdom --watchAll",
+    "alt-test": "tsc test --env=jsdom",
+    "test:ui": "cd ./example && rm -rf .parcel-cache dist && yarn start && cd ../",
+    "test:watch": "tsc test --env=jsdom --watchAll",
     "test:ci": "yarn alt-test --coverage --no-watch --watch=false --watchAll=false --no-watchman --forceExit --detectOpenHandles",
     "pre-commit": "pretty-quick --staged && yarn test:ci && yarn build",
     "postinstall": "cd ./example && yarn && cd ../"
   },
-  "peerDependencies": {
-    "react": ">=16",
-    "styled-components": ">=5"
-  },
   "husky": {
-    "hooks": {
-      "pre-commit": "yarn pre-commit"
-    }
+    "hooks": {}
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
@@ -68,8 +62,12 @@
     "@types/lodash.throttle": "^4.1.7",
     "@types/react": "^18.0.10",
     "@types/react-dom": "^18.0.10",
+    "@types/rebass": "^4.0.10",
     "@types/styled-components": "^5.1.26",
+    "@types/styled-theming": "^2.2.5",
+    "@types/ua-parser-js": "^0.7.36",
     "@types/uuid": "^7.0.0",
+    "@types/wcag-contrast": "^3.0.0",
     "@typescript-eslint/eslint-plugin": "^4.1.0",
     "@typescript-eslint/parser": "^4.1.0",
     "babel-plugin-annotate-pure-calls": "^0.4.0",
@@ -83,16 +81,26 @@
     "eslint-plugin-simple-import-sort": "^7.0.0",
     "husky": "^4.2.3",
     "identity-obj-proxy": "^3.0.0",
+    "imagekitio-react": "^2.0.0",
     "jest-styled-components": "^7.0.0-beta.1",
     "lodash.throttle": "^4.1.1",
+    "polished": "^4.2.2",
     "prettier": "^2.8.2",
     "pretty-quick": "^2.0.1",
     "react": "^18.0.10",
     "react-dom": "^18.0.10",
+    "react-feather": "^2.0.10",
+    "rebass": "^4.0.7",
     "source-map-explorer": "^2.0.1",
-    "tsdx": "^0.14.1",
+    "styled-theming": "^2.2.0",
     "tslib": "^2.4.1",
-    "typescript": "^4.9.4"
+    "typescript": "^4.9.4",
+    "ua-parser-js": "^1.0.32",
+    "wcag-contrast": "^3.0.0"
+  },
+  "peerDependencies": {
+    "react": ">=16",
+    "styled-components": ">=5"
   },
   "dependencies": {
     "styled-components": "^5.3.6"
