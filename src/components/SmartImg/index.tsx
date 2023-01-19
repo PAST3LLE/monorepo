@@ -121,7 +121,7 @@ export function ApiImage({
     {
       ...BASE_INTERSECTION_OPTIONS,
       // root component to use as "in view" containment
-      root: loadInViewOptions?.container || document,
+      root: loadInViewOptions?.container || (document as any),
     },
     // default view state
     // if left blank will show
