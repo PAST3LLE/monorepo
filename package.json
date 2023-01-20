@@ -1,6 +1,6 @@
 {
   "name": "@past3lle/schematics",
-  "version": "0.0.1-rc.1",
+  "version": "0.0.1-rc.1.1",
   "homepage": "https://github.com/past3lle/schematics",
   "repository": "past3lle/schematics",
   "main": "dist/index.js",
