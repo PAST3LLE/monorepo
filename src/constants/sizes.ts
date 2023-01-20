@@ -1,13 +1,17 @@
 import { isMobile } from '../utils'
 
 export const BASE_FONT_SIZE = 10
-export const LAYOUT_REM_HEIGHT_MAP = {
+export const LAYOUT_REM_SIZE_MAP = {
   HEADER: 8,
   FOOTER: 10,
-  PRICE_LABEL: 7.3,
-  FIXED_ADD_TO_CART_BUTTON: 6,
+  NAV: 12,
 }
-export const HEADER_FOOTER_HEIGHT_REM = LAYOUT_REM_HEIGHT_MAP.FOOTER + LAYOUT_REM_HEIGHT_MAP.HEADER
+export const LAYOUT_VIEW_SIZE_MAP = {
+  HEADER: 8,
+  FOOTER: 15,
+  NAV: 12,
+}
+export const HEADER_FOOTER_HEIGHT_REM = LAYOUT_REM_SIZE_MAP.FOOTER + LAYOUT_REM_SIZE_MAP.HEADER
 export const SIZE_RATIOS = {
   16_9: {
     landscape: 16 / 9,

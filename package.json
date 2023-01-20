@@ -59,6 +59,8 @@
     "@testing-library/react": "^13.4.0",
     "@types/jest": "^29.2.5",
     "@types/lodash": "^4.14.149",
+    "@types/lodash.clamp": "^4.0.7",
+    "@types/lodash.debounce": "^4.0.7",
     "@types/lodash.throttle": "^4.1.7",
     "@types/react": "^18.0.10",
     "@types/react-dom": "^18.0.10",
@@ -81,30 +83,36 @@
     "eslint-plugin-simple-import-sort": "^7.0.0",
     "husky": "^4.2.3",
     "identity-obj-proxy": "^3.0.0",
-    "imagekitio-react": "^2.0.0",
     "jest-styled-components": "^7.0.0-beta.1",
-    "lodash.throttle": "^4.1.1",
-    "polished": "^4.2.2",
     "prettier": "^2.8.2",
     "pretty-quick": "^2.0.1",
     "react": "^18.0.10",
     "react-dom": "^18.0.10",
-    "react-feather": "^2.0.10",
-    "rebass": "^4.0.7",
     "rollup-plugin-svg": "^2.0.0",
     "source-map-explorer": "^2.0.1",
-    "styled-theming": "^2.2.0",
+    "styled-components": "^5.3.6",
     "tsdx": "^0.14.1",
     "tslib": "^2.4.1",
-    "typescript": "^4.9.4",
-    "ua-parser-js": "^1.0.32",
-    "wcag-contrast": "^3.0.0"
+    "typescript": "^4.9.4"
   },
   "peerDependencies": {
     "react": ">=16",
     "styled-components": ">=5"
   },
   "dependencies": {
-    "styled-components": "^5.3.6"
+    "@reach/dialog": "^0.18.0",
+    "@use-gesture/react": "^10.2.23",
+    "copy-to-clipboard": "^3.3.3",
+    "imagekitio-react": "^2.0.0",
+    "lodash.clamp": "^4.0.3",
+    "lodash.debounce": "^4.0.8",
+    "lodash.throttle": "^4.1.1",
+    "polished": "^4.2.2",
+    "react-feather": "^2.0.10",
+    "react-spring": "^9.6.1",
+    "rebass": "^4.0.7",
+    "styled-theming": "^2.2.0",
+    "ua-parser-js": "^1.0.32",
+    "wcag-contrast": "^3.0.0"
   }
 }

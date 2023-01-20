@@ -1,3 +1,5 @@
-# TS REACT YARN/NPM Library Template (TRY-N-LT)
+# PASTELLE SCHEMATICS
 
-This is a forkable template repo for creating TS ready library components in cjs and esm, dats it...
+### COFNFIG
+1. You'll need an .env file similar to .env-sample with the required keys:
+    a. COOKIE_STORAGE_KEY <string> - used for cookie storage retrieval from browser localstorage

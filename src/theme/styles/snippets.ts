@@ -1,5 +1,5 @@
 import { css } from 'styled-components'
-import { BASE_FONT_SIZE, LAYOUT_REM_HEIGHT_MAP } from '../../constants/index'
+import { BASE_FONT_SIZE, LAYOUT_VIEW_SIZE_MAP } from '../../constants/index'
 
 /***
     The new CSS reset - version 1.8.2 (last updated 23.12.2022)
@@ -137,21 +137,22 @@ export const CommonGlobalCssSnippet = css`
   }
 
   body {
-    background-position: 0 -30vh;
     background-repeat: no-repeat;
   }
 
   header {
-    height: ${LAYOUT_REM_HEIGHT_MAP.HEADER}rem;
+    height: ${LAYOUT_VIEW_SIZE_MAP.HEADER}vw;
     grid-area: header;
   }
 
   footer {
+    height: ${LAYOUT_VIEW_SIZE_MAP.FOOTER}vw;
     grid-area: footer;
   }
 
   nav {
     grid-area: nav;
+    width: ${LAYOUT_VIEW_SIZE_MAP.NAV}vw;
   }
 
   article {
@@ -163,16 +164,12 @@ export const CommonGlobalCssSnippet = css`
     overflow-y: auto;
   }
 
-  a {
-    color: ${({ theme }) => theme.blue1};
-  }
-
   button {
     user-select: none;
   }
 
   body > div#root {
-    height: 100vh;
+    height: calc(${LAYOUT_VIEW_SIZE_MAP.FOOTER}vw + 100vh);
     display: grid;
     grid-template-areas:
       'header header'

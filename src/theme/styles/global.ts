@@ -43,4 +43,8 @@ export const ThemedGlobalCssProvider = createGlobalStyle`
       font-size: 0.5vw;
     `}
   }
+
+  a {
+    color: ${({ theme }) => theme.blue1};
+  }
 `

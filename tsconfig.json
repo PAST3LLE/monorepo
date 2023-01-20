@@ -1,5 +1,5 @@
 {
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "src/__mocks__", "src/setupTests.d.ts"],
   "include": ["src", "types"],
   "compilerOptions": {
     "target": "es5",
