@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { animated, useSpring } from 'react-spring'
 import { useGesture } from '@use-gesture/react'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { X } from 'react-feather'
 import clamp from 'lodash.clamp'
 
@@ -108,21 +108,15 @@ const CookieContainer = styled(animated.div)`
 `
 
 export interface CookieProps {
+  storageKey: string
   message: string
   onAcceptParameters?: () => void
   onAcceptStatistic?: () => void
   onAcceptMarketing?: () => void
 }
 
-const COOKIE_STORAGE_KEY = process.env.COOKIE_STORAGE_KEY
 export function CookieBanner(props: CookieProps) {
-  useEffect(() => {
-    if (!COOKIE_STORAGE_KEY) {
-      throw new Error('CONFIGURATION ERROR! MISSING COOKIE_STORAGE_KEY FROM ".env"')
-    }
-  }, [])
-
-  const storage = COOKIE_STORAGE_KEY ? localStorage.getItem(COOKIE_STORAGE_KEY) : null
+  const storage = localStorage.getItem(props.storageKey)
   const [isOpen, setBannerOpen] = useState(storage === null || !JSON.parse(storage).interacted)
 
   const [cookieState, setCookieState] = useState({
@@ -139,14 +133,13 @@ export function CookieBanner(props: CookieProps) {
   }, [])
 
   const onSubmit = useCallback(() => {
-    if (!COOKIE_STORAGE_KEY) return
     setCookieState((state) => {
       const next = { ...state, interacted: true }
-      localStorage.setItem(COOKIE_STORAGE_KEY, JSON.stringify(next))
+      localStorage.setItem(props.storageKey, JSON.stringify(next))
       return next
     })
     onDismiss()
-  }, [onDismiss])
+  }, [onDismiss, props.storageKey])
 
   useGesture(
     {
