@@ -1,0 +1,44 @@
+{
+    "extends": "../../tsconfig.build.json",
+    "compilerOptions": {
+        "composite": true,
+        "target": "es5",
+        "module": "esnext",
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "lib": [
+            "dom",
+            "dom.iterable",
+            "esnext"
+        ],
+        "importHelpers": true,
+        "declaration": true,
+        "sourceMap": true,
+        "paths": {
+            "~/*": [
+                "./src/*"
+            ]
+        },
+        "strict": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "strictFunctionTypes": true,
+        "strictPropertyInitialization": true,
+        "noImplicitThis": true,
+        "alwaysStrict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "moduleResolution": "node",
+        "jsx": "react",
+        "esModuleInterop": true,
+        "baseUrl": "./",
+        "rootDir": "./src",
+        "outDir": "./dist"
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "references": []
+}

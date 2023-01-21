@@ -1,32 +1,53 @@
 {
-  "exclude": ["node_modules", "src/__mocks__", "src/setupTests.d.ts"],
-  "include": ["src", "types"],
-  "compilerOptions": {
-    "target": "es5",
-    "module": "esnext",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "importHelpers": true,
-    "declaration": true,
-    "sourceMap": true,
-    "rootDir": "./src",
-    "outDir": "./dist",
-    "baseUrl": "./",
-    "paths": {
-      "*": ["src/*", "node_modules/*"]
+    "compilerOptions": {
+        "jsx": "react",
+        "baseUrl": "./packages",
+        "paths": {
+            "@past3lle-schematics/assets/*": [
+                "assets/src/*"
+            ],
+            "@past3lle-schematics/components/*": [
+                "components/src/*"
+            ],
+            "@past3lle-schematics/constants/*": [
+                "constants/src/*"
+            ],
+            "@past3lle-schematics/hooks/*": [
+                "hooks/src/*"
+            ],
+            "@past3lle-schematics/theme/*": [
+                "theme/src/*"
+            ],
+            "@past3lle-schematics/types/*": [
+                "types/src/*"
+            ],
+            "@past3lle-schematics/utils/*": [
+                "utils/src/*"
+            ]
+        }
     },
-    "strict": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "strictPropertyInitialization": true,
-    "noImplicitThis": true,
-    "alwaysStrict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "moduleResolution": "node",
-    "jsx": "react",
-    "esModuleInterop": true
-  }
+    "files": [],
+    "references": [
+        {
+            "path": "packages/assets"
+        },
+        {
+            "path": "packages/components"
+        },
+        {
+            "path": "packages/constants"
+        },
+        {
+            "path": "packages/hooks"
+        },
+        {
+            "path": "packages/theme"
+        },
+        {
+            "path": "packages/types"
+        },
+        {
+            "path": "packages/utils"
+        }
+    ]
 }
