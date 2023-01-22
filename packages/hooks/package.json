@@ -1,6 +1,5 @@
 {
   "name": "@past3lle/hooks",
-  "private": true,
   "sideEffects": false,
   "version": "0.0.1",
   "description": "common hooks",

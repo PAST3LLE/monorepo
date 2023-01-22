@@ -1,6 +1,5 @@
 {
   "name": "@past3lle/assets",
-  "private": true,
   "sideEffects": false,
   "version": "0.0.1",
   "description": "common assets",
