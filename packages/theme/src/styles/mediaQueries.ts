@@ -1,4 +1,4 @@
-import { ThemedCssFunction, DefaultTheme, CSSObject, FlattenSimpleInterpolation, css } from 'styled-components'
+import { CSSObject, DefaultTheme, FlattenSimpleInterpolation, ThemedCssFunction, css } from 'styled-components'
 
 export type MediaHeights = 400 | 600 | 768 | 1080 | 2160
 export const MEDIA_HEIGHTS: { [key in keyof DefaultTheme['mediaHeight']]: MediaHeights } = {
@@ -6,7 +6,7 @@ export const MEDIA_HEIGHTS: { [key in keyof DefaultTheme['mediaHeight']]: MediaH
   upToSmallHeight: 600,
   upToMediumHeight: 768,
   upToLargeHeight: 1080,
-  upToExtraLargeHeight: 2160,
+  upToExtraLargeHeight: 2160
 }
 
 export type MediaWidths = 500 | 720 | 960 | 1280 | 1440
@@ -15,7 +15,7 @@ export const MEDIA_WIDTHS: { [key in keyof DefaultTheme['mediaWidth']]: MediaWid
   upToSmall: 720,
   upToMedium: 960,
   upToLarge: 1280,
-  upToExtraLarge: 1440,
+  upToExtraLarge: 1440
 }
 
 export const FROM_MEDIA_WIDTHS = {
@@ -23,7 +23,7 @@ export const FROM_MEDIA_WIDTHS = {
   fromSmall: MEDIA_WIDTHS.upToSmall,
   fromMedium: MEDIA_WIDTHS.upToMedium,
   fromLarge: MEDIA_WIDTHS.upToLarge,
-  fromExtraLarge: MEDIA_WIDTHS.upToExtraLarge,
+  fromExtraLarge: MEDIA_WIDTHS.upToExtraLarge
 }
 
 export const BETWEEN_MEDIA_WIDTHS = {
@@ -32,7 +32,7 @@ export const BETWEEN_MEDIA_WIDTHS = {
   betweenMediumAndLarge: [MEDIA_WIDTHS.upToMedium, MEDIA_WIDTHS.upToLarge],
   betweenLargeAndExtraLarge: [MEDIA_WIDTHS.upToLarge, MEDIA_WIDTHS.upToExtraLarge],
   // weird but useful
-  betweenSmallAndLarge: [MEDIA_WIDTHS.upToSmall, MEDIA_WIDTHS.upToLarge],
+  betweenSmallAndLarge: [MEDIA_WIDTHS.upToSmall, MEDIA_WIDTHS.upToLarge]
 }
 
 type MediaHeightKeys = keyof typeof MEDIA_HEIGHTS

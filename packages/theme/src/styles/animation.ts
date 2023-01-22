@@ -1,5 +1,5 @@
 import { transparentize } from 'polished'
-import { css, DefaultTheme, FlattenInterpolation, Keyframes, keyframes, ThemedStyledProps } from 'styled-components'
+import { DefaultTheme, FlattenInterpolation, Keyframes, ThemedStyledProps, css, keyframes } from 'styled-components'
 
 /**
  * KEYFRAMES

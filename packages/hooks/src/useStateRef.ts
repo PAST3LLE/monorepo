@@ -1,4 +1,4 @@
-import { SetStateAction, useState, useCallback } from 'react'
+import { SetStateAction, useCallback, useState } from 'react'
 
 export function useStateRef<T>(
   defaultRef: T,

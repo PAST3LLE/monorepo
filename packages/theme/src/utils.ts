@@ -1,10 +1,10 @@
-import { DefaultTheme, FlattenSimpleInterpolation, css, CSSObject, SimpleInterpolation } from 'styled-components'
-import { hex } from 'wcag-contrast'
-import { transparentize } from 'polished'
-
-import { THEME_COLOURS, MediaWidths, MEDIA_WIDTHS } from './styles'
-import { Colors, ThemeModes } from './types'
 import { DDPXImageUrlMap, GenericImageSrcSet } from '@past3lle/types'
+import { transparentize } from 'polished'
+import { CSSObject, DefaultTheme, FlattenSimpleInterpolation, SimpleInterpolation, css } from 'styled-components'
+import { hex } from 'wcag-contrast'
+
+import { MEDIA_WIDTHS, MediaWidths, THEME_COLOURS } from './styles'
+import { Colors, ThemeModes } from './types'
 
 export function getThemeColours(mode: ThemeModes): Colors {
   return THEME_COLOURS(mode)
@@ -103,7 +103,7 @@ const CONTRAST_THRESHOLD = 10
 export function setBestContrastingColour({ bgColour, fgColour, lightColour, darkColour }: BestContrastingColourParams) {
   const contrastLevel = checkHexColourContrast({
     bgColour,
-    fgColour,
+    fgColour
   })
 
   return contrastLevel < CONTRAST_THRESHOLD ? lightColour : darkColour
@@ -157,7 +157,7 @@ export const setCssBackground = (
     ignoreQueriesWithFixedWidth = undefined,
     dpiLevel = '1x',
     skipIk = false,
-    lqIkUrlOptions = {},
+    lqIkUrlOptions = {}
   }: SetCssBackgroundParams
 ) => {
   const getBackground = (width?: MediaWidths) => {
@@ -219,7 +219,7 @@ export function setBestTextColour(bgColor = transparentize(0.3, getThemeColours(
     bgColour: bgColor,
     fgColour: OFF_WHITE,
     darkColour: BLACK,
-    lightColour: OFF_WHITE,
+    lightColour: OFF_WHITE
   })
 }
 
@@ -256,7 +256,7 @@ function _getPresetOptions(
         backgroundColor: isLightMode ? lmColour : dmColour,
         backgroundAttributes: ['center / cover no-repeat', '5px / cover repeat'],
         backgroundBlendMode: 'difference',
-        lqIkUrlOptions: { dpi: '3x', transforms: [null, 'pr-true,q-2,w-770,h-50'], ...options.lqIkUrlOptions },
+        lqIkUrlOptions: { dpi: '3x', transforms: [null, 'pr-true,q-2,w-770,h-50'], ...options.lqIkUrlOptions }
       }
     }
     case 'navbar': {
@@ -265,20 +265,20 @@ function _getPresetOptions(
         backgroundColor: isLightMode ? lmColour : dmColour,
         backgroundAttributes: ['center / cover no-repeat', '5px / cover repeat'],
         backgroundBlendMode: 'difference',
-        lqIkUrlOptions: { dpi: '3x', transforms: [null, 'pr-true,q-2,w-50,h-700'], ...options.lqIkUrlOptions },
+        lqIkUrlOptions: { dpi: '3x', transforms: [null, 'pr-true,q-2,w-50,h-700'], ...options.lqIkUrlOptions }
       }
     }
     case 'logo':
       return {
         ...options,
-        backgroundAttributes: ['center/cover repeat', 'center/cover repeat'],
+        backgroundAttributes: ['center/cover repeat', 'center/cover repeat']
       }
 
     default: {
       const [lmColour, dmColour] = options.modeColours || [BLACK, BLACK]
       return {
         ...options,
-        backgroundColor: isLightMode ? lmColour : dmColour,
+        backgroundColor: isLightMode ? lmColour : dmColour
       }
     }
   }

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, MutableRefObject } from 'react'
+import { MutableRefObject, useEffect, useRef, useState } from 'react'
 
 export function useEffectRef<T>(defaultRefValue: any) {
   const [refToObserve, setRefToObserve] = useState<MutableRefObject<T>>()

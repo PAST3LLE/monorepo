@@ -27,3 +27,6 @@ tsconfig.*.json
 # local stuff
 .yalc
 .vscode
+
+src/fonts
+src/svg

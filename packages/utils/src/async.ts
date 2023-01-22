@@ -64,6 +64,6 @@ export function retry<T>(
       if (completed) return
       completed = true
       rejectCancelled(new CancelledError())
-    },
+    }
   }
 }

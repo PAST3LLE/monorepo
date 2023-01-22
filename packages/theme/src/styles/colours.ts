@@ -1,4 +1,5 @@
 import { transparentize } from 'polished'
+
 import { ThemeModes } from '../types'
 
 export const DEFAULT_COLOURS = {
@@ -45,7 +46,7 @@ export const DEFAULT_COLOURS = {
   textDisabled: '#31323E',
   disabledDark: '#31323E',
   mainGradient: 'linear-gradient(270deg, #8958FF 0%, #3F77FF 100%)',
-  mainGradientDarker: 'linear-gradient(270deg, #6a2cff 0%, #185afb 100%)',
+  mainGradientDarker: 'linear-gradient(270deg, #6a2cff 0%, #185afb 100%)'
 }
 export const LIGHT_COLOURS = {
   // text
@@ -79,7 +80,7 @@ export const LIGHT_COLOURS = {
   // secondary colors
   secondary1: '#ff007a',
   secondary2: '#F6DDE8',
-  secondary3: '#FDEAF1',
+  secondary3: '#FDEAF1'
 }
 
 export const MODE_COLOURS = (mode: ThemeModes) => ({
@@ -134,12 +135,12 @@ export const MODE_COLOURS = (mode: ThemeModes) => ({
       textColor: mode === ThemeModes.DARK ? DEFAULT_COLOURS.offWhite : DEFAULT_COLOURS.black,
       subItemDescription: mode === ThemeModes.DARK ? DEFAULT_COLOURS.blackOpaque2 : DEFAULT_COLOURS.offWhiteOpaque3,
       inputs: mode === ThemeModes.DARK ? DEFAULT_COLOURS.black : DEFAULT_COLOURS.offWhite,
-      inputsBorderColor: mode === ThemeModes.DARK ? DEFAULT_COLOURS.purple3 : 'transparent',
-    },
-  },
+      inputsBorderColor: mode === ThemeModes.DARK ? DEFAULT_COLOURS.purple3 : 'transparent'
+    }
+  }
 })
 
 export const THEME_COLOURS = (mode: ThemeModes) => ({
   ...DEFAULT_COLOURS,
-  ...MODE_COLOURS(mode),
+  ...MODE_COLOURS(mode)
 })

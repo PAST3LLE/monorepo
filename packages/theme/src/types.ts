@@ -81,7 +81,7 @@ export interface Sections {
 
 export enum ThemeModes {
   LIGHT = 'LIGHT',
-  DARK = 'DARK',
+  DARK = 'DARK'
 }
 
 export type Theme = {

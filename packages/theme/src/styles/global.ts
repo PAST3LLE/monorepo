@@ -1,5 +1,5 @@
-import { createGlobalStyle } from 'styled-components'
 import { transparentize } from 'polished'
+import { createGlobalStyle } from 'styled-components'
 
 import { CommonGlobalCssSnippet, CssResetSnippet } from './snippets'
 

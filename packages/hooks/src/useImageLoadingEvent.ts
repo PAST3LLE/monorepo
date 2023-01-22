@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 export function useImageLoadingEvent(imageElem: HTMLImageElement | null) {
   const [imageLoaded, setImageLoaded] = useState(false)

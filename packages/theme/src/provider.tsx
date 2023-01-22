@@ -1,14 +1,14 @@
-import React, { useMemo, Children, isValidElement, cloneElement, ReactNode, useState } from 'react'
-import { ThemeProvider as StyledComponentsThemeProvider, css, DefaultTheme } from 'styled-components'
+import React, { Children, ReactNode, cloneElement, isValidElement, useMemo, useState } from 'react'
+import { DefaultTheme, ThemeProvider as StyledComponentsThemeProvider, css } from 'styled-components'
 
-import { getThemeColours } from './utils'
 import {
-  mediaHeightTemplates as mediaHeight,
-  mediaWidthTemplates as mediaWidth,
-  fromMediaWidthTemplates as fromMediaWidth,
   betweenMediaWidthTemplates as betweenMediaWidth,
+  fromMediaWidthTemplates as fromMediaWidth,
+  mediaHeightTemplates as mediaHeight,
+  mediaWidthTemplates as mediaWidth
 } from './styles/mediaQueries'
 import { ThemeModes } from './types'
+import { getThemeColours } from './utils'
 
 const DEFAULT_THEME: Partial<DefaultTheme> = {
   buttons: {
@@ -16,11 +16,11 @@ const DEFAULT_THEME: Partial<DefaultTheme> = {
       size: {
         small: '1rem',
         normal: '1.2rem',
-        large: '1.6rem',
-      },
+        large: '1.6rem'
+      }
     },
     borderRadius: '1rem',
-    border: '0.1rem solid transparent',
+    border: '0.1rem solid transparent'
   },
   // gradients
   whiteGradient1: css`
@@ -45,7 +45,7 @@ const DEFAULT_THEME: Partial<DefaultTheme> = {
   flexRowNoWrap: css`
     display: flex;
     flex-flow: row nowrap;
-  `,
+  `
 }
 
 interface ThemeProviderProps {
@@ -71,7 +71,7 @@ export const ThemeProvider = ({ children, themeExtension = {} }: ThemeProviderPr
       // unfold in any extensions
       // for example to make big/small buttons -> see src/components/Button ThemeWrappedButtonBase
       // to see it in action
-      ...(themeExtension as any),
+      ...(themeExtension as any)
     }
 
     return computedTheme
