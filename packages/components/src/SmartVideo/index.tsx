@@ -2,9 +2,10 @@ import React, { ForwardedRef, forwardRef, useEffect, useState } from 'react'
 import { BoxProps } from 'rebass'
 import { Play } from 'react-feather'
 
-import { LogoCircle } from '@past3lle-schematics/assets'
-import { useDetectScrollIntoView } from '@past3lle-schematics/hooks'
-import { getThemeColours, OFF_WHITE, ThemeModes, LayoutText } from '@past3lle-schematics/theme'
+import { Text as LayoutText } from '../Text'
+import { LogoCircle } from '@past3lle/assets'
+import { useDetectScrollIntoView } from '@past3lle/hooks'
+import { getThemeColours, OFF_WHITE, ThemeModes } from '@past3lle/theme'
 
 import { CTAOverlayProps, VideoContainer, VideoHeader, VideoPlayCTAOverlay } from './styleds'
 

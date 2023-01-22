@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
-import { fromExtraSmall } from '@past3lle-schematics/theme'
-import { LogoShort, LogoFull } from '@past3lle-schematics/assets'
+import { fromExtraSmall } from '@past3lle/theme'
+import { LogoShort, LogoFull } from '@past3lle/assets'
 
 export const Pastellecon = styled.div`
   height: 100%;

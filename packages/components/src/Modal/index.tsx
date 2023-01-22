@@ -4,9 +4,9 @@ import { DialogContent, DialogOverlay } from '@reach/dialog'
 import { transparentize } from 'polished'
 import { animated } from 'react-spring'
 
-import { isMobile } from '@past3lle-schematics/utils'
-import { upToExtraSmall } from '@past3lle-schematics/theme'
-import { Z_INDICES } from '@past3lle-schematics/constants'
+import { isMobile } from '@past3lle/utils'
+import { upToExtraSmall } from '@past3lle/theme'
+import { Z_INDICES } from '@past3lle/constants'
 
 const AnimatedDialogOverlay = animated(DialogOverlay)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -1,4 +1,8 @@
 {
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended"
+  ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 2020,
@@ -6,21 +10,18 @@
     "ecmaFeatures": {
       // Allows for the parsing of JSX
       "jsx": true
-    }
+    },
+    "project": ["./tsconfig.eslint.json", "./packages/*/tsconfig.json"]
+
   },
+  "plugins": ["@typescript-eslint"],
+  "root": true,
   "ignorePatterns": ["node_modules/**/*", ".github/*"],
   "settings": {
     "react": {
       "version": "detect"
     }
   },
-  "extends": [
-    "plugin:react/recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:react-hooks/recommended",
-    "prettier/@typescript-eslint",
-    "plugin:prettier/recommended"
-  ],
   "rules": {
     "@typescript-eslint/explicit-function-return-type": "off",
     "prettier/prettier": "error",
@@ -28,8 +29,6 @@
     "@typescript-eslint/ban-ts-comment": "off",
     "@typescript-eslint/ban-ts-ignore": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
-    "react/react-in-jsx-scope": "off",
-    "react/prop-types": "off",
     "object-shorthand": ["error", "always"],
     "no-restricted-imports": [
       "error",

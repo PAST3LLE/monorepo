@@ -8,8 +8,9 @@ import clamp from 'lodash.clamp'
 import { Row } from '../Layout'
 import { Button, ButtonVariations } from '../Button'
 
-import { fromMedium, LayoutText } from '@past3lle-schematics/theme'
-import { Z_INDICES } from '@past3lle-schematics/constants'
+import { Text as LayoutText } from '../Text'
+import { fromMedium } from '@past3lle/theme'
+import { Z_INDICES } from '@past3lle/constants'
 
 const CookieSubHeader = styled(LayoutText.SubHeader)`
   color: ${({ theme }) => theme.products.aside.textColor};

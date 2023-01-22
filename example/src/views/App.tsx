@@ -1,7 +1,7 @@
 import * as React from 'react'
-import { ColumnCenter, Modal, Button, BV } from '@past3lle-schematics/components'
-import { useOnClickOutside }from '@past3lle-schematics/hooks'
-import { LayoutText } from '@past3lle-schematics/theme'
+import { ColumnCenter, Modal, Button, BV } from '@past3lle/components'
+import { useOnClickOutside }from '@past3lle/hooks'
+import { Text as LayoutText } from '@past3lle/components'
 import { PstlMain, PstlHeader, PstlNav, PstlFooter } from '../components/Layout'
 
 const App = () => {

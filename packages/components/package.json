@@ -1,5 +1,5 @@
 {
-  "name": "@past3lle-schematics/components",
+  "name": "@past3lle/components",
   "private": true,
   "sideEffects": false,
   "version": "0.0.1",
@@ -85,12 +85,12 @@
     "typescript": "^4.9.4"
   },
   "dependencies": {
-    "@past3lle-schematics/assets": "*",
-    "@past3lle-schematics/constants": "*",
-    "@past3lle-schematics/hooks": "*",
-    "@past3lle-schematics/theme": "*",
-    "@past3lle-schematics/types": "*",
-    "@past3lle-schematics/utils": "*",
+    "@past3lle/assets": "*",
+    "@past3lle/constants": "*",
+    "@past3lle/hooks": "*",
+    "@past3lle/theme": "*",
+    "@past3lle/types": "*",
+    "@past3lle/utils": "*",
     "@reach/dialog": "^0.18.0",
     "@use-gesture/react": "^10.2.23",
     "imagekitio-react": "^2.0.0",

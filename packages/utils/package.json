@@ -1,5 +1,5 @@
 {
-  "name": "@past3lle-schematics/utils",
+  "name": "@past3lle/utils",
   "private": true,
   "sideEffects": false,
   "version": "0.0.1",

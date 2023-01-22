@@ -1,13 +1,32 @@
 {
     "compilerOptions": {
        "target": "es5",
-       "outDir": "./dist",
        "module": "commonjs",
        "jsx": "react",
        "strict": true,
        "allowSyntheticDefaultImports": true,
        "esModuleInterop": true,
        "skipLibCheck": true,
-       "forceConsistentCasingInFileNames": true
-    }
+       "forceConsistentCasingInFileNames": true,                
+        "lib": [
+            "dom",
+            "dom.iterable",
+            "esnext"
+        ],
+        "importHelpers": true,
+        "declaration": true,
+        "sourceMap": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "strictFunctionTypes": true,
+        "strictPropertyInitialization": true,
+        "noImplicitThis": true,
+        "alwaysStrict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "moduleResolution": "node"
+    },
+    "exclude": ["node_modules", "dist"]
 }

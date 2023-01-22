@@ -1,4 +1,4 @@
-import { isMobile } from '@past3lle-schematics/utils'
+import { isMobile } from '@past3lle/utils'
 
 export const BASE_FONT_SIZE = 10
 export const LAYOUT_REM_SIZE_MAP = {

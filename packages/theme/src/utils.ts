@@ -4,7 +4,7 @@ import { transparentize } from 'polished'
 
 import { THEME_COLOURS, MediaWidths, MEDIA_WIDTHS } from './styles'
 import { Colors, ThemeModes } from './types'
-import { DDPXImageUrlMap, GenericImageSrcSet } from '@past3lle-schematics/types'
+import { DDPXImageUrlMap, GenericImageSrcSet } from '@past3lle/types'
 
 export function getThemeColours(mode: ThemeModes): Colors {
   return THEME_COLOURS(mode)

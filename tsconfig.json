@@ -3,25 +3,25 @@
         "jsx": "react",
         "baseUrl": "./packages",
         "paths": {
-            "@past3lle-schematics/assets/*": [
+            "@past3lle/assets/*": [
                 "assets/src/*"
             ],
-            "@past3lle-schematics/components/*": [
+            "@past3lle/components/*": [
                 "components/src/*"
             ],
-            "@past3lle-schematics/constants/*": [
+            "@past3lle/constants/*": [
                 "constants/src/*"
             ],
-            "@past3lle-schematics/hooks/*": [
+            "@past3lle/hooks/*": [
                 "hooks/src/*"
             ],
-            "@past3lle-schematics/theme/*": [
+            "@past3lle/theme/*": [
                 "theme/src/*"
             ],
-            "@past3lle-schematics/types/*": [
+            "@past3lle/types/*": [
                 "types/src/*"
             ],
-            "@past3lle-schematics/utils/*": [
+            "@past3lle/utils/*": [
                 "utils/src/*"
             ]
         }

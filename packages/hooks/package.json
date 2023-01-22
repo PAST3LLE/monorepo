@@ -1,5 +1,5 @@
 {
-  "name": "@past3lle-schematics/hooks",
+  "name": "@past3lle/hooks",
   "private": true,
   "sideEffects": false,
   "version": "0.0.1",

@@ -1,5 +1,5 @@
 {
-  "name": "@past3lle-schematics/types",
+  "name": "@past3lle/types",
   "private": true,
   "sideEffects": false,
   "version": "0.0.1",

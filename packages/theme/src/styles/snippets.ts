@@ -1,5 +1,5 @@
 import { css } from 'styled-components'
-import { BASE_FONT_SIZE, LAYOUT_VIEW_SIZE_MAP } from '@past3lle-schematics/constants'
+import { BASE_FONT_SIZE, LAYOUT_VIEW_SIZE_MAP } from '@past3lle/constants'
 
 /***
     The new CSS reset - version 1.8.2 (last updated 23.12.2022)

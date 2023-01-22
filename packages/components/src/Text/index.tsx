@@ -1,14 +1,14 @@
 import React, { ReactElement } from 'react'
-import { Text, TextProps } from 'rebass/styled-components'
+import { Text as RebassText, TextProps } from 'rebass/styled-components'
 import styled from 'styled-components'
-import { Colors } from '../../types'
+import { Colors } from '@past3lle/theme'
 
-const TextWrapper = styled(Text)<{ colour: keyof Colors }>`
+const TextWrapper = styled(RebassText)<{ colour: keyof Colors }>`
   color: ${({ colour, theme }): string => (theme as Colors)[colour]};
   font-size: 1.2rem;
 `
 
-export const LayoutText = {
+export const Text = {
     Main(props: TextProps): ReactElement {
         return <TextWrapper fontWeight={500} color="text2" {...props} />
     },

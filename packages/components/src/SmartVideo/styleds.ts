@@ -1,6 +1,7 @@
 import styled from 'styled-components'
-import { rotateKeyframe, LayoutText } from '@past3lle-schematics/theme'
+import { rotateKeyframe } from '@past3lle/theme'
 import { Row } from '../Layout'
+import { Text as LayoutText } from '../Text'
 
 export interface CTAOverlayProps {
   $width?: string

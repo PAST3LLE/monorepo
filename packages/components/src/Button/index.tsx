@@ -4,8 +4,8 @@ import { darken, transparentize } from 'polished'
 import { BoxProps, Button as RebassButton, ButtonProps as RebassButtonProps } from 'rebass'
 import styled, { css, FlattenInterpolation, ThemeProps, DefaultTheme, ThemedStyledProps } from 'styled-components'
 
-import { ThemeProvider, THEME_LIST, ThemeModes, setBackgroundWithDPI } from '@past3lle-schematics/theme'
-import { GenericImageSrcSet, Writable } from '@past3lle-schematics/types'
+import { ThemeProvider, THEME_LIST, ThemeModes, setBackgroundWithDPI } from '@past3lle/theme'
+import { GenericImageSrcSet, Writable } from '@past3lle/types'
 
 export interface ButtonBaseProps extends RebassButtonProps {
   variant?: ButtonVariations

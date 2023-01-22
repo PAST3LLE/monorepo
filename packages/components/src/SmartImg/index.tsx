@@ -2,14 +2,14 @@ import React, { ForwardedRef, forwardRef, Fragment, useMemo } from 'react'
 import { IKImage, IKContext } from 'imagekitio-react'
 import styled from 'styled-components'
 
-import { useStateRef, useEffectRef, useImageLoadingEvent, useDetectScrollIntoView, LoadInViewOptions } from '@past3lle-schematics/hooks'
+import { useStateRef, useEffectRef, useImageLoadingEvent, useDetectScrollIntoView, LoadInViewOptions } from '@past3lle/hooks'
 
-import { MediaWidths, ThemeModes, getLqIkUrl } from '@past3lle-schematics/theme'
+import { MediaWidths, ThemeModes, getLqIkUrl } from '@past3lle/theme'
 
 import { ColumnCenter } from '../Layout'
 
-import { DDPXImageUrlMap } from '@past3lle-schematics/types'
-import { setForwardedRef } from '@past3lle-schematics/utils'
+import { DDPXImageUrlMap } from '@past3lle/types'
+import { setForwardedRef } from '@past3lle/utils'
 
 export type ImageKitTransformation = { [x: string]: undefined | number | string | boolean }[]
 

@@ -1,5 +1,5 @@
 {
-  "name": "@past3lle-schematics/theme",
+  "name": "@past3lle/theme",
   "private": true,
   "sideEffects": false,
   "version": "0.0.1",
@@ -88,8 +88,8 @@
     "styled-components": ">=5"
   },
   "dependencies": {
-    "@past3lle-schematics/constants": "*",
-    "@past3lle-schematics/types": "*",
+    "@past3lle/constants": "*",
+    "@past3lle/types": "*",
     "polished": "^4.2.2",
     "rebass": "^4.0.7",
     "styled-theming": "^2.2.0",
