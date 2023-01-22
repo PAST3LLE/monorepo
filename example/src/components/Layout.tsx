@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { ArticleFadeIn, Footer, Header, Nav } from '@past3lle/schematics'
+import { ArticleFadeIn, Footer, Header, Nav } from '@past3lle/components'
 
 const BLACK_TRANSPARENT = '#000007b0'
 export const PstlHeader = styled(Header)`

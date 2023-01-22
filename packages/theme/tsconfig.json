@@ -1,0 +1,21 @@
+{
+    "extends": "../../tsconfig.build.json",
+    "compilerOptions": {
+        "module": "esnext",
+        "baseUrl": "./",
+        "rootDir": "./src",
+        "outDir": "./dist",
+        "composite": true
+    },
+    "references": [
+        {
+            "path": "../constants"
+        },
+        {
+            "path": "../types"
+        }
+    ],
+    "include": [
+        "src/**/*"
+    ]
+}

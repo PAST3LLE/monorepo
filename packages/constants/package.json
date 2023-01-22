@@ -1,0 +1,30 @@
+{
+  "name": "@past3lle/constants",
+  "private": true,
+  "sideEffects": false,
+  "version": "0.0.1",
+  "description": "common constants",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "directory": "packages/constants",
+    "url": "https://github.com/PAST3LLE/schematics-monorepo.git"
+  },
+  "author": "pastelle",
+  "license": "MIT",
+  "scripts": {
+    "clean": "rm -rf dist && rm -rf tsconfig.tsbuildinfo",
+    "compile": "tsdx build && cp \"./package.json\" ./dist/",
+    "build": "yarn clean && yarn compile",
+    "prepack": "yarn build",
+    "start": "tsdx watch",
+    "pre-commit": "pretty-quick --staged && yarn test:ci && yarn build"
+  },
+  "dependencies": {
+    "@past3lle/utils": "*"
+  }
+}

@@ -12,7 +12,13 @@
     "react-app-polyfill": "^3.0.0"
   },
   "alias": {
-    "@pastelle/schematics": "../node_modules/@pastelle/schematics",
+    "@pastelle-schematics/assets": "../node_modules/@pastelle-schematics/assets",
+    "@pastelle-schematics/components": "../node_modules/@pastelle-schematics/components",
+    "@pastelle-schematics/constants": "../node_modules/@pastelle-schematics/constants",
+    "@pastelle-schematics/hooks": "../node_modules/@pastelle-schematics/hooks",
+    "@pastelle-schematics/theme": "../node_modules/@pastelle-schematics/theme",
+    "@pastelle-schematics/type": "../node_modules/@pastelle-schematics/types",
+    "@pastelle-schematics/utils": "../node_modules/@pastelle-schematics/utils",
     "react": "../node_modules/react",
     "react-dom": "../node_modules/react-dom",
     "scheduler/tracing": "../node_modules/scheduler/tracing-profiling"

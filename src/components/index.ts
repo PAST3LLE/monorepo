@@ -1,7 +1,0 @@
-export * from './Button'
-export * from './Cookies'
-export * from './Layout'
-export * from './Modal'
-export * from './Pastellecon'
-export * from './SmartImg'
-export * from './SmartVideo'
