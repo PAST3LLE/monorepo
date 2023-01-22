@@ -24,6 +24,7 @@
     "pre-commit": "pretty-quick --staged && yarn test:ci && yarn build"
   },
   "publishConfig": {
+    "access": "public",
     "registry": "https://registry.npmjs.org"
   },
   "prettier": {
@@ -53,5 +54,6 @@
     "tsdx": "^0.14.1",
     "tslib": "^2.4.1",
     "typescript": "^4.9.4"
-  }
+  },
+  "gitHead": "1b8591cdca437e22423a28d2cd2ecb5862ab66c0"
 }

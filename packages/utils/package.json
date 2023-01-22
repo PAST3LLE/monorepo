@@ -23,6 +23,10 @@
     "start": "tsdx watch",
     "pre-commit": "pretty-quick --staged && yarn test:ci && yarn build"
   },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
   "peerDependencies": {
     "react": ">=16"
   },
@@ -32,5 +36,6 @@
   },
   "dependencies": {
     "ua-parser-js": "^1.0.32"
-  }
+  },
+  "gitHead": "1b8591cdca437e22423a28d2cd2ecb5862ab66c0"
 }
