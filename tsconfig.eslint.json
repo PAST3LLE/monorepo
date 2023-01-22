@@ -5,9 +5,5 @@
       // ensure that nobody can accidentally use this config for a build
       "noEmit": true
     },
-    "include": [
-      // whatever paths you intend to lint
-      "src/**/*",
-      "app"
-    ]
+    "include": ["src/**/*"]
   }

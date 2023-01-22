@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 const image = require('@rollup/plugin-image')
 const svg = require('rollup-plugin-svg')
 

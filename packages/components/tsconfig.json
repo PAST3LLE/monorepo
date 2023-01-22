@@ -27,7 +27,5 @@
             "path": "../utils"
         }
     ],
-    "include": [
-        "src/**/*"
-    ]
+    "include": ["./src"]
 }
