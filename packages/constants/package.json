@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/constants",
   "sideEffects": false,
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "common constants",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -24,6 +24,6 @@
     "pre-commit": "pretty-quick --staged && yarn test:ci && yarn build"
   },
   "dependencies": {
-    "@past3lle/utils": "*"
+    "@past3lle/utils": "^0.0.2"
   }
 }
