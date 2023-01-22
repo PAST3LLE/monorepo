@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react'
 import debounce from 'lodash.debounce'
+import { useEffect, useState } from 'react'
+
 import { useDebouncedChangeHandler } from './useDebouncedChangeHandler'
 
 type ElemOrParentHeightProps = { findParent: boolean; elem: HTMLElement | null | undefined }

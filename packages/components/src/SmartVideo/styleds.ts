@@ -1,5 +1,6 @@
-import styled from 'styled-components'
 import { rotateKeyframe } from '@past3lle/theme'
+import styled from 'styled-components'
+
 import { Row } from '../Layout'
 import { Text as LayoutText } from '../Text'
 
@@ -14,7 +15,7 @@ export const VideoPlayCTAOverlay = styled(Row).attrs((props) => ({
   bottom: 0,
   left: 0,
   right: 0,
-  ...props,
+  ...props
 }))<CTAOverlayProps>`
   position: absolute;
   cursor: pointer;

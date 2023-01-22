@@ -1,9 +1,10 @@
 import { devDebug } from '@past3lle/utils'
 import React, { HTMLProps, useCallback } from 'react'
-import { HashLink } from 'react-router-hash-link'
-import ReactGA from 'react-ga'
 import { ArrowLeft } from 'react-feather'
-import { StyledLink, StyledBackArrowLink, LinkStyledButton as ButtonLink } from './styleds'
+import ReactGA from 'react-ga'
+import { HashLink } from 'react-router-hash-link'
+
+import { LinkStyledButton as ButtonLink, StyledBackArrowLink, StyledLink } from './styleds'
 
 export interface LinkRendererProps {
   href: string

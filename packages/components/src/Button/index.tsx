@@ -1,11 +1,10 @@
-import { variants } from 'styled-theming'
-import React, { ForwardedRef, forwardRef } from 'react'
-import { darken, transparentize } from 'polished'
-import { BoxProps, Button as RebassButton, ButtonProps as RebassButtonProps } from 'rebass'
-import styled, { css, FlattenInterpolation, ThemeProps, DefaultTheme, ThemedStyledProps } from 'styled-components'
-
-import { ThemeProvider, THEME_LIST, ThemeModes, setBackgroundWithDPI } from '@past3lle/theme'
+import { THEME_LIST, ThemeModes, ThemeProvider, setBackgroundWithDPI } from '@past3lle/theme'
 import { GenericImageSrcSet, Writable } from '@past3lle/types'
+import { darken, transparentize } from 'polished'
+import React, { ForwardedRef, forwardRef } from 'react'
+import { BoxProps, Button as RebassButton, ButtonProps as RebassButtonProps } from 'rebass'
+import styled, { DefaultTheme, FlattenInterpolation, ThemeProps, ThemedStyledProps, css } from 'styled-components'
+import { variants } from 'styled-theming'
 
 export interface ButtonBaseProps extends RebassButtonProps {
   variant?: ButtonVariations
@@ -22,13 +21,13 @@ export enum ButtonVariations {
   CANCEL = 'CANCEL',
   DISABLED = 'DISABLED',
   THEME = 'THEME',
-  DARK_MODE_TOGGLE = 'DARK_MODE_TOGGLE',
+  DARK_MODE_TOGGLE = 'DARK_MODE_TOGGLE'
 }
 
 export enum ButtonSizeVariations {
   DEFAULT = 'DEFAULT',
   SMALL = 'SMALL',
-  BIG = 'BIG',
+  BIG = 'BIG'
 }
 
 // Aliases
@@ -224,20 +223,20 @@ const ButtonSizes = variants('component', '$size', {
     [BUTTON_THEME_KEY]: css`
       font-size: ${({ theme }) => theme.buttons.font.size.normal};
       padding: 0.5rem 1rem;
-    `,
+    `
   },
   SMALL: {
     [BUTTON_THEME_KEY]: css`
       font-size: ${({ theme }) => theme.buttons.font.size.small};
       padding: 0.3rem 1rem;
-    `,
+    `
   },
   BIG: {
     [BUTTON_THEME_KEY]: css`
       font-size: ${({ theme }) => theme.buttons.font.size.large};
       padding: 0.65rem 1.2rem;
-    `,
-  },
+    `
+  }
 })
 
 type CustomButtonStyleProps = BoxProps & {
@@ -307,7 +306,7 @@ const ThemeWrappedButtonBase: React.FC<React.ButtonHTMLAttributes<Element>> = fo
 export const Button = styled(ThemeWrappedButtonBase).attrs<ButtonBaseProps>(
   ({ $size = BSV.DEFAULT, ...restProps }) => ({
     ...restProps,
-    $size,
+    $size
   })
 )<ButtonProps>`
   ${({ backgroundColor, bgImage }) => !bgImage && backgroundColor && `background-color: ${backgroundColor};`}
@@ -316,7 +315,7 @@ export const Button = styled(ThemeWrappedButtonBase).attrs<ButtonBaseProps>(
     bgImage,
     bgAttributes = ['center / cover no-repeat', '5px / cover repeat'],
     bgBlendMode = 'difference',
-    backgroundColor = transparentize(0.3, theme.bg1),
+    backgroundColor = transparentize(0.3, theme.bg1)
   }) =>
     bgImage &&
     setBackgroundWithDPI(theme, bgImage, {
@@ -324,6 +323,6 @@ export const Button = styled(ThemeWrappedButtonBase).attrs<ButtonBaseProps>(
       backgroundAttributes: bgAttributes,
       backgroundBlendMode: bgBlendMode,
       ignoreQueriesWithFixedWidth: 500,
-      skipIk: true,
+      skipIk: true
     })}
 `

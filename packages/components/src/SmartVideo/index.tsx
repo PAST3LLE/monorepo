@@ -1,12 +1,11 @@
-import React, { ForwardedRef, forwardRef, useEffect, useState } from 'react'
-import { BoxProps } from 'rebass'
-import { Play } from 'react-feather'
-
-import { Text as LayoutText } from '../Text'
 import { LogoCircle } from '@past3lle/assets'
 import { useDetectScrollIntoView } from '@past3lle/hooks'
-import { getThemeColours, OFF_WHITE, ThemeModes } from '@past3lle/theme'
+import { OFF_WHITE, ThemeModes, getThemeColours } from '@past3lle/theme'
+import React, { ForwardedRef, forwardRef, useEffect, useState } from 'react'
+import { Play } from 'react-feather'
+import { BoxProps } from 'rebass'
 
+import { Text as LayoutText } from '../Text'
 import { CTAOverlayProps, VideoContainer, VideoHeader, VideoPlayCTAOverlay } from './styleds'
 
 type WithContainer = {
@@ -37,12 +36,12 @@ const BASE_VIDEO_PROPS: Partial<
   muted: true,
   autoPlay: true,
   preload: 'none',
-  playsInline: true,
+  playsInline: true
 }
 const BASE_INTERSECTION_OPTIONS = {
   threshold: 0.1,
   trackVisibility: true,
-  delay: 300,
+  delay: 300
 }
 
 export const SmartVideo = forwardRef(function LazyVideo(
@@ -123,7 +122,7 @@ export const SmartVideo = forwardRef(function LazyVideo(
     loadInView ? videoElement : undefined,
     {
       ...BASE_INTERSECTION_OPTIONS,
-      root: container,
+      root: container
     },
     !loadInView
   )

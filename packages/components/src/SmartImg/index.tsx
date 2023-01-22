@@ -1,15 +1,18 @@
-import React, { ForwardedRef, forwardRef, Fragment, useMemo } from 'react'
-import { IKImage, IKContext } from 'imagekitio-react'
-import styled from 'styled-components'
-
-import { useStateRef, useEffectRef, useImageLoadingEvent, useDetectScrollIntoView, LoadInViewOptions } from '@past3lle/hooks'
-
+import {
+  LoadInViewOptions,
+  useDetectScrollIntoView,
+  useEffectRef,
+  useImageLoadingEvent,
+  useStateRef
+} from '@past3lle/hooks'
 import { MediaWidths, ThemeModes, getLqIkUrl } from '@past3lle/theme'
-
-import { ColumnCenter } from '../Layout'
-
 import { DDPXImageUrlMap } from '@past3lle/types'
 import { setForwardedRef } from '@past3lle/utils'
+import { IKContext, IKImage } from 'imagekitio-react'
+import React, { ForwardedRef, Fragment, forwardRef, useMemo } from 'react'
+import styled from 'styled-components'
+
+import { ColumnCenter } from '../Layout'
 
 export type ImageKitTransformation = { [x: string]: undefined | number | string | boolean }[]
 
@@ -66,17 +69,17 @@ export const PlaceholderPicture = styled(StyledPicture)<{ bgColor?: string }>`
 
 const DEFAULT_LQ_IP = {
   quality: 5,
-  blur: 10,
+  blur: 10
 }
 const DEFAULT_LQ_IMAGE_OPTIONS = {
   width: 0,
   height: 0,
-  showLoadingIndicator: true,
+  showLoadingIndicator: true
 }
 const DEFAULT_TRANSFORMATIONS = [{ pr: true }]
 const BASE_INTERSECTION_OPTIONS = {
   threshold: 0.1,
-  delay: 1000,
+  delay: 1000
 }
 
 export function ApiImage({
@@ -86,7 +89,7 @@ export function ApiImage({
   loadInViewOptions,
   lqImageOptions,
   lazy,
-  forwardedRef,
+  forwardedRef
 }: ImagePropsWithDefaultImage): JSX.Element | null
 export function ApiImage({
   path,
@@ -95,7 +98,7 @@ export function ApiImage({
   loadInViewOptions,
   lqImageOptions,
   lazy,
-  forwardedRef,
+  forwardedRef
 }: ImagePropsWithIkImage): JSX.Element | null
 export function ApiImage({
   path,
@@ -115,7 +118,7 @@ export function ApiImage({
     {
       ...BASE_INTERSECTION_OPTIONS,
       // root component to use as "in view" containment
-      root: loadInViewOptions?.container || (document as any),
+      root: loadInViewOptions?.container || (document as any)
     },
     // default view state
     // if left blank will show
@@ -214,10 +217,10 @@ function _getLqImageOptions(path: SmartImageProps['path'], lqImageOptions: Smart
   return {
     background: `url(${getLqIkUrl(undefined, {
       fallbackUrl: path?.defaultPath,
-      transform: `q-1,bl-20,pr-true,w-${width},h-${height}:w-${width / 4},h-${height / 4}`,
+      transform: `q-1,bl-20,pr-true,w-${width},h-${height}:w-${width / 4},h-${height / 4}`
     })}) center/cover no-repeat`,
     width,
-    height,
+    height
   }
 }
 

@@ -1,16 +1,15 @@
-import styled from 'styled-components'
-import { animated, useSpring } from 'react-spring'
+import { Z_INDICES } from '@past3lle/constants'
+import { fromMedium } from '@past3lle/theme'
 import { useGesture } from '@use-gesture/react'
+import clamp from 'lodash.clamp'
 import React, { useCallback, useRef, useState } from 'react'
 import { X } from 'react-feather'
-import clamp from 'lodash.clamp'
+import { animated, useSpring } from 'react-spring'
+import styled from 'styled-components'
 
-import { Row } from '../Layout'
 import { Button, ButtonVariations } from '../Button'
-
+import { Row } from '../Layout'
 import { Text as LayoutText } from '../Text'
-import { fromMedium } from '@past3lle/theme'
-import { Z_INDICES } from '@past3lle/constants'
 
 const CookieSubHeader = styled(LayoutText.SubHeader)`
   color: ${({ theme }) => theme.products.aside.textColor};
@@ -25,17 +24,17 @@ const CookieSubDescription = styled(LayoutText.Black)`
 
 const CheckboxRow = styled(Row)``
 const CookieFullText = styled(CookieSubDescription).attrs((props) => ({
-  backgroundColor: props.theme.purple1,
+  backgroundColor: props.theme.purple1
 }))``
 const CookieCheckbox = styled.input.attrs((props) => ({
   type: 'checkbox',
-  ...props,
+  ...props
 }))`
   z-index: ${Z_INDICES.BEHIND};
 `
 const CookiesText = styled(CookieSubDescription).attrs({
   margin: 0,
-  backgroundColor: 'transparent',
+  backgroundColor: 'transparent'
 })`
   gap: 0.5rem;
   cursor: pointer;
@@ -123,7 +122,7 @@ export function CookieBanner(props: CookieProps) {
   const [cookieState, setCookieState] = useState({
     interacted: false,
     statistical: false,
-    marketing: false,
+    marketing: false
   })
 
   const [spring, api] = useSpring(() => ({ y: 0, opacity: 1 }))
@@ -153,10 +152,10 @@ export function CookieBanner(props: CookieProps) {
 
           api.start({
             y: -oy,
-            opacity: clamp(Math.abs((1 / my) * 50), 0, 1),
+            opacity: clamp(Math.abs((1 / my) * 50), 0, 1)
           })
         }
-      },
+      }
     },
     { target: ref }
   )

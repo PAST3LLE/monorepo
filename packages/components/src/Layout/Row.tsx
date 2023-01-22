@@ -1,5 +1,5 @@
-import styled from 'styled-components'
 import { Box, BoxProps } from 'rebass'
+import styled from 'styled-components'
 
 export type RowProps = {
   align?: string

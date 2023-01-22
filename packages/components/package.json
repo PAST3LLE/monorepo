@@ -25,17 +25,12 @@
     "alt-test": "tsc test --env=jsdom",
     "test:watch": "tsc test --env=jsdom --watchAll",
     "test:ci": "yarn alt-test --coverage --no-watch --watch=false --watchAll=false --no-watchman --forceExit --detectOpenHandles",
-    "pre-commit": "pretty-quick --staged && yarn test:ci && yarn build"
+    "pre-commit": "pretty-quick --staged && yarn test:ci && yarn build",
+    "lint:prettier": "prettier --check ./src/**"
   },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
-  },
-  "prettier": {
-    "printWidth": 120,
-    "semi": false,
-    "singleQuote": true,
-    "trailingComma": "es5"
   },
   "jest": {
     "setupFilesAfterEnv": [
@@ -51,8 +46,8 @@
   },
   "peerDependencies": {
     "react": ">=16",
-    "react-router-dom": ">=6",
     "react-ga": ">=3",
+    "react-router-dom": ">=6",
     "styled-components": ">=5"
   },
   "devDependencies": {
@@ -68,11 +63,13 @@
     "@types/styled-components": "^5.1.26",
     "babel-plugin-annotate-pure-calls": "^0.4.0",
     "babel-plugin-styled-components": "^1.10.6",
+    "eslint-plugin-react": "^7.32.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "pretty-quick": "^2.0.1",
     "react": "^18.0.10",
     "react-dom": "^18.0.10",
-    "react-router-dom": "^6.7.0",
     "react-ga": "^3.3.1",
+    "react-router-dom": "^6.7.0",
     "rollup-plugin-svg": "^2.0.0",
     "styled-components": "^5.3.6",
     "tsdx": "^0.14.1",
