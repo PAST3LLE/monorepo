@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/constants",
   "sideEffects": false,
-  "version": "0.0.3",
+  "version": "0.0.4-alpha.0",
   "description": "common constants",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -29,7 +29,7 @@
     "registry": "https://registry.npmjs.org"
   },
   "dependencies": {
-    "@past3lle/utils": "^0.0.3"
+    "@past3lle/utils": "^0.0.4-alpha.0"
   },
   "gitHead": "1b8591cdca437e22423a28d2cd2ecb5862ab66c0"
 }
