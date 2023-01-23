@@ -13,6 +13,6 @@ export type DeepPartial<T> = {
 }
 
 export type DDPXImageUrlMap = { '1x': string; '2x'?: string; '3x'?: string }
-export type GenericImageSrcSet = { defaultUrl: string } & {
-  [key: number]: DDPXImageUrlMap
+export type GenericImageSrcSet<T extends number> = { defaultUrl: string } & {
+  [key in T]: DDPXImageUrlMap
 }
