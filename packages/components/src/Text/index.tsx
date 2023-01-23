@@ -1,28 +1,27 @@
 import { Colors } from '@past3lle/theme'
 import React, { ReactElement } from 'react'
-import { Text as RebassText, TextProps } from 'rebass/styled-components'
+import { Text as RebassText, TextProps } from 'rebass'
 import styled from 'styled-components'
 
-const TextWrapper = styled(RebassText)<{ colour: keyof Colors }>`
+const TextWrapper = styled(RebassText).attrs((props) => ({ fontSize: '1.2rem', ...props }))<{ colour: keyof Colors }>`
   color: ${({ colour, theme }): string => (theme as Colors)[colour]};
-  font-size: 1.2rem;
 `
 
 export const Text = {
   Main(props: TextProps): ReactElement {
-    return <TextWrapper fontWeight={500} color="text2" {...props} />
+    return <TextWrapper fontWeight={500} colour="text2" {...props} />
   },
   Link(props: TextProps): ReactElement {
-    return <TextWrapper fontWeight={500} color="primary1" {...props} />
+    return <TextWrapper fontWeight={500} colour="primary1" {...props} />
   },
   Black(props: TextProps): ReactElement {
-    return <TextWrapper fontWeight={500} color="black" {...props} />
+    return <TextWrapper fontWeight={500} colour="black" {...props} />
   },
   White(props: TextProps): ReactElement {
-    return <TextWrapper fontWeight={500} color="white" {...props} />
+    return <TextWrapper fontWeight={500} colour="white" {...props} />
   },
   Body(props: TextProps): ReactElement {
-    return <TextWrapper fontWeight={400} fontSize={'1.6rem'} color="text1" {...props} />
+    return <TextWrapper fontWeight={400} fontSize={'1.6rem'} colour="text1" {...props} />
   },
   Basic(props: TextProps): ReactElement {
     return <TextWrapper {...props} />
@@ -45,21 +44,21 @@ export const Text = {
     return <TextWrapper fontWeight={500} fontSize={'1.1rem'} {...props} />
   },
   Blue(props: TextProps): ReactElement {
-    return <TextWrapper fontWeight={500} color="primary1" {...props} />
+    return <TextWrapper fontWeight={500} colour="primary1" {...props} />
   },
   Yellow(props: TextProps): ReactElement {
-    return <TextWrapper fontWeight={500} color="yellow1" {...props} />
+    return <TextWrapper fontWeight={500} colour="yellow1" {...props} />
   },
   DarkGray(props: TextProps): ReactElement {
-    return <TextWrapper fontWeight={500} color="text3" {...props} />
+    return <TextWrapper fontWeight={500} colour="text3" {...props} />
   },
   Gray(props: TextProps): ReactElement {
-    return <TextWrapper fontWeight={500} color="bg3" {...props} />
+    return <TextWrapper fontWeight={500} colour="bg3" {...props} />
   },
   Italic(props: TextProps): ReactElement {
-    return <TextWrapper fontWeight={500} fontSize={'1.2rem'} fontStyle={'italic'} color="text2" {...props} />
+    return <TextWrapper fontWeight={500} fontSize={'1.2rem'} fontStyle={'italic'} colour="text2" {...props} />
   },
   Error({ error, ...props }: { error: boolean } & TextProps): ReactElement {
-    return <TextWrapper fontWeight={500} color={error ? 'red1' : 'text2'} {...props} />
+    return <TextWrapper fontWeight={500} colour={error ? 'red1' : 'text2'} {...props} />
   }
 }
