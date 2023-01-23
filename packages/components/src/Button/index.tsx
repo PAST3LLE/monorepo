@@ -1,4 +1,4 @@
-import { THEME_LIST, ThemeModes, ThemeProvider, setBackgroundWithDPI } from '@past3lle/theme'
+import { MediaWidths, THEME_LIST, ThemeModes, ThemeProvider, setBackgroundWithDPI } from '@past3lle/theme'
 import { GenericImageSrcSet, Writable } from '@past3lle/types'
 import { darken, transparentize } from 'polished'
 import React, { ForwardedRef, forwardRef } from 'react'
@@ -258,7 +258,7 @@ type CustomButtonStyleProps = BoxProps & {
   filter?: string
 }
 
-export type ButtonProps = ButtonBaseProps & CustomButtonStyleProps & { bgImage?: GenericImageSrcSet }
+export type ButtonProps = ButtonBaseProps & CustomButtonStyleProps & { bgImage?: GenericImageSrcSet<MediaWidths> }
 
 const ButtonBase = styled(RebassButton)`
   border: none;

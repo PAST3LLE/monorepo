@@ -138,7 +138,7 @@ export function getLqIkUrl(
  * @returns
  */
 type SetCssBackgroundParams = {
-  imageUrls?: GenericImageSrcSet[]
+  imageUrls?: GenericImageSrcSet<MediaWidths>[]
   backgroundAttributes?: string[]
   backgroundBlendMode?: string
   backgroundColor?: string
@@ -225,7 +225,7 @@ export function setBestTextColour(bgColor = transparentize(0.3, getThemeColours(
 
 export function setBackgroundWithDPI(
   theme: DefaultTheme,
-  logoUrlSet: GenericImageSrcSet | SetCssBackgroundParams['imageUrls'],
+  logoUrlSet: GenericImageSrcSet<MediaWidths> | SetCssBackgroundParams['imageUrls'],
   auxOptions: BackgroundWithDPIProps = {}
 ) {
   const imageUrls = logoUrlSet && (Array.isArray(logoUrlSet) ? logoUrlSet : [logoUrlSet, logoUrlSet])
