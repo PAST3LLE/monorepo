@@ -1,7 +1,7 @@
 import { FONTS } from '@past3lle/assets'
 import { createGlobalStyle } from 'styled-components'
 
-export const FontStyles = createGlobalStyle`
+export const FontCssProvider = createGlobalStyle`
     @font-face {
         font-family: 'Roboto';
         src: url(${FONTS.FONT_Roboto_Thin}) format('truetype');
