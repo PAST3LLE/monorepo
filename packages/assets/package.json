@@ -35,7 +35,6 @@
     "babel-plugin-annotate-pure-calls": "^0.4.0",
     "babel-plugin-styled-components": "^1.10.6",
     "pretty-quick": "^2.0.1",
-    "rollup-plugin-svg": "^2.0.0",
     "source-map-explorer": "^2.0.1",
     "tsdx": "^0.14.1",
     "tslib": "^2.4.1",

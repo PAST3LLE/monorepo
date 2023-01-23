@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-// const svg = require('rollup-plugin-svg')
 const image = require('@rollup/plugin-image')
 const url = require('@rollup/plugin-url')
 
@@ -10,7 +9,9 @@ module.exports = {
         include: ["**/*.png", "**/*.svg"]
       }),
       url({
-        include: ["**/*.ttf"]
+        include: ["**/*.ttf"],
+        limit: Infinity,
+        fileName: '[dirname][name][extname]',
       })
     )
 
