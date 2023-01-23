@@ -9,6 +9,7 @@
     },
     "references": [],
     "include": [
-        "./src"
+        "./src", 
+        "src/declarations.d.ts"    
     ]
 }

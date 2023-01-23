@@ -1,11 +1,19 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+// const svg = require('rollup-plugin-svg')
 const image = require('@rollup/plugin-image')
-const svg = require('rollup-plugin-svg')
+const url = require('@rollup/plugin-url')
 
 module.exports = {
   rollup(config) {
-    config.plugins.unshift(image())
-    config.plugins.push(svg())
+    config.plugins.unshift(
+      image({
+        include: ["**/*.png", "**/*.svg"]
+      }),
+      url({
+        include: ["**/*.ttf"]
+      })
+    )
+
     return config
   },
 }
