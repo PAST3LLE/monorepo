@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react'
 import styled from 'styled-components/macro'
 
-import Popover, { PopoverProps } from '../Popover'
+import { Popover, PopoverProps } from '../Popover'
 
 const TooltipContainer = styled.div`
   width: 228px;
@@ -14,7 +14,7 @@ interface TooltipProps extends Omit<PopoverProps, 'content'> {
   text: string
 }
 
-export default function Tooltip({ text, ...rest }: TooltipProps) {
+export function Tooltip({ text, ...rest }: TooltipProps) {
   return <Popover content={<TooltipContainer>{text}</TooltipContainer>} {...rest} />
 }
 
