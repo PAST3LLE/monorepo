@@ -4,6 +4,13 @@
   "useWorkspaces": true,
   "npmClientArgs": ["--no-lockfile"],
   "version": "independent",
+  "ignoreChanges": [
+   "**/CHANGELOG.md",
+   "**/node_modules/**",
+   "**/package.json",
+   "**/*.md",
+   "**/perf/**"
+ ],
   "command": {
      "version": {
         "ignoreChanges": ["*.md"],
