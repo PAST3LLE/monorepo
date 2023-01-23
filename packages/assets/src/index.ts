@@ -29,12 +29,7 @@ import SVG_LogoFull from './svg/pastelle-logo-full.svg'
 import SVG_LogoShort from './svg/pastelle-logo-short.svg'
 
 const PNG = {
-  PNG_LogoCircle
-}
-const SVG = {
-  SVG_LogoCircle,
-  SVG_LogoFull,
-  SVG_LogoShort,
+  PNG_LogoCircle,
   PNG_LogoCircle_2x,
   PNG_LogoCircle_3x,
   // PNG full logo
@@ -45,6 +40,11 @@ const SVG = {
   PNG_LogoShort,
   PNG_LogoShort_2x,
   PNG_LogoShort_3x
+}
+const SVG = {
+  SVG_LogoCircle,
+  SVG_LogoFull,
+  SVG_LogoShort
 }
 const FONTS = {
   FONT_Roboto_Black,

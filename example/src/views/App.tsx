@@ -1,7 +1,6 @@
 import * as React from 'react'
-import { ColumnCenter, Modal, Button, BV } from '@past3lle/components'
+import { ColumnCenter, Modal, Button, BV, Pastellecon, Text as LayoutText } from '@past3lle/components'
 import { useOnClickOutside }from '@past3lle/hooks'
-import { Text as LayoutText } from '@past3lle/components'
 import { PstlMain, PstlHeader, PstlNav, PstlFooter } from '../components/Layout'
 
 const App = () => {
@@ -17,7 +16,9 @@ const App = () => {
           <LayoutText.Black>Click anywhere outside modal to close</LayoutText.Black>
         </ColumnCenter>
       </Modal>
-      <PstlHeader />
+      <PstlHeader>
+        <Pastellecon />
+      </PstlHeader>
       <PstlNav />
       <PstlMain>
         <LayoutText.LargeHeader>EXAMPLE APP</LayoutText.LargeHeader>
