@@ -4,7 +4,7 @@
   "repository": "past3lle/schematics-monorepo",
   "private": true,
   "scripts": {
-    "test:ui": "cd example && yarn start && cd ..",
+    "test:ui": "cd example && rm -rf node_modules .parcel-cache && yarn && yarn start && cd ..",
     "prepare": "node ./configure-references.js",
     "build": "lerna run build --stream",
     "lint": "lerna run lint --stream --parallel",
