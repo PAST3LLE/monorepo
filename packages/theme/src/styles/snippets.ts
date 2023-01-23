@@ -6,11 +6,6 @@ import { css } from 'styled-components'
     GitHub page: https://github.com/elad2412/the-new-css-reset 
 ***/
 export const CssResetSnippet = css`
-  *:where(:not(html, iframe, canvas, img, svg, video, audio):not(svg *, symbol *)) {
-    all: unset;
-    display: revert;
-  }
-
   *,
   *::before,
   *::after {
@@ -87,8 +82,6 @@ export const CssResetSnippet = css`
 export const CommonGlobalCssSnippet = css`
   * {
     &::-webkit-scrollbar {
-      // TODO: marked to find easier
-      // hide scrollbar
       width: 0px;
       border-radius: 16px;
       border-top-left-radius: 0;
