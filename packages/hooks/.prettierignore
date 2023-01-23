@@ -1,0 +1,32 @@
+*.log
+.env
+.DS_Store
+
+node_modules
+
+.parcel-cache
+.cache
+.rts2_cache_cjs
+.rts2_cache_esm
+.rts2_cache_umd
+
+dist
+coverage
+
+example/**/*
+src/**/*.d.ts
+src/**/*.md
+
+# Every commit this is changed. NO MORE!
+.prettier.rc
+.yarn.rc
+tsconfig.json
+tsconfig.*.json
+.eslintrc.json
+
+# local stuff
+.yalc
+.vscode
+
+src/fonts
+src/svg
