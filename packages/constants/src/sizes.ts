@@ -1,6 +1,6 @@
 import { isMobile } from '@past3lle/utils'
 
-export const BASE_FONT_SIZE = 10
+export const BASE_FONT_SIZE_PX = 10
 export const LAYOUT_REM_SIZE_MAP = {
   HEADER: 8,
   FOOTER: 10,

@@ -1,4 +1,4 @@
-import { BASE_FONT_SIZE, LAYOUT_VIEW_SIZE_MAP } from '@past3lle/constants'
+import { BASE_FONT_SIZE_PX, LAYOUT_REM_SIZE_MAP } from '@past3lle/constants'
 import { css } from 'styled-components'
 
 /***
@@ -123,7 +123,7 @@ export const CommonGlobalCssSnippet = css`
 
   html,
   body {
-    font-size: ${BASE_FONT_SIZE}px;
+    font-size: ${BASE_FONT_SIZE_PX}px;
     margin: 0;
     padding: 0;
   }
@@ -141,18 +141,18 @@ export const CommonGlobalCssSnippet = css`
   }
 
   header {
-    height: ${LAYOUT_VIEW_SIZE_MAP.HEADER}vw;
+    height: ${LAYOUT_REM_SIZE_MAP.HEADER}rem;
     grid-area: header;
   }
 
   footer {
-    height: ${LAYOUT_VIEW_SIZE_MAP.FOOTER}vw;
+    height: ${LAYOUT_REM_SIZE_MAP.FOOTER}rem;
     grid-area: footer;
   }
 
   nav {
     grid-area: nav;
-    width: ${LAYOUT_VIEW_SIZE_MAP.NAV}vw;
+    width: ${LAYOUT_REM_SIZE_MAP.NAV}rem;
   }
 
   article {
@@ -169,7 +169,7 @@ export const CommonGlobalCssSnippet = css`
   }
 
   body > div#root {
-    height: calc(${LAYOUT_VIEW_SIZE_MAP.FOOTER}vw + 100vh);
+    height: calc(${LAYOUT_REM_SIZE_MAP.FOOTER + LAYOUT_REM_SIZE_MAP.HEADER}rem + 100vh);
     display: grid;
     grid-template-areas:
       'header header'
