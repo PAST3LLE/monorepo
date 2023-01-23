@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/theme",
   "sideEffects": false,
-  "version": "0.0.4-alpha.0",
+  "version": "0.0.4-alpha.3.0",
   "description": "common theme parts",
   "main": "dist/index.js",
   "repository": {
@@ -71,7 +71,7 @@
   },
   "dependencies": {
     "@past3lle/constants": "^0.0.4-alpha.0",
-    "@past3lle/types": "^0.0.4-alpha.0",
+    "@past3lle/types": "^0.0.4-alpha.3.0",
     "polished": "^4.2.2",
     "rebass": "^4.0.7",
     "styled-theming": "^2.2.0",
