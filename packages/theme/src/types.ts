@@ -84,17 +84,17 @@ export enum ThemeModes {
   DARK = 'DARK'
 }
 
-export type Theme = {
+export interface ThemeState {
   mode: ThemeModes
+  setMode: React.Dispatch<React.SetStateAction<ThemeModes>>
   autoDetect: boolean
 }
 
 export const THEME_LIST = Object.entries(ThemeModes)
 
 declare module 'styled-components' {
-  export interface DefaultTheme extends Colors, Sections {
+  export interface DefaultTheme extends ThemeState, Colors, Sections {
     // theming
-    mode: ThemeModes
     buttons: {
       font: {
         size: {

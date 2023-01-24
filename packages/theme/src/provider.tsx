@@ -50,12 +50,12 @@ const DEFAULT_THEME: Partial<DefaultTheme> = {
 
 interface ThemeProviderProps {
   children?: ReactNode
-  themeExtension: Record<any, any>
+  themeExtension?: Record<string, any>
 }
 
 // Extension/override of styled-components' ThemeProvider but with our own constructed theme object
 export const ThemeProvider = ({ children, themeExtension = {} }: ThemeProviderProps) => {
-  const [mode, setThemeMode] = useState<ThemeModes>(ThemeModes.DARK)
+  const [mode, setMode] = useState<ThemeModes>(ThemeModes.DARK)
 
   const themeObject = useMemo(() => {
     const themeColours = getThemeColours(mode)
@@ -66,6 +66,7 @@ export const ThemeProvider = ({ children, themeExtension = {} }: ThemeProviderPr
       // pass in defaults
       ...DEFAULT_THEME,
       mode,
+      setMode,
       //shadows
       shadow1: '#2F80ED',
       // unfold in any extensions
@@ -84,7 +85,7 @@ export const ThemeProvider = ({ children, themeExtension = {} }: ThemeProviderPr
         (childWithTheme) =>
           // make sure child is a valid react element as children by default can be type string|null|number
           // @ts-ignore
-          isValidElement(childWithTheme) && cloneElement(childWithTheme, { theme: themeObject, setThemeMode })
+          isValidElement(childWithTheme) && cloneElement(childWithTheme, { theme: themeObject })
       )}
     </StyledComponentsThemeProvider>
   )
