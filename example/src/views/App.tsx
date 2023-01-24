@@ -1,12 +1,17 @@
 import * as React from 'react'
+import { PNG } from '@past3lle/assets'
 import { ColumnCenter, Modal, Button, BV, Pastellecon, Text as LayoutText } from '@past3lle/components'
 import { useOnClickOutside }from '@past3lle/hooks'
 import { PstlMain, PstlHeader, PstlNav, PstlFooter } from '../components/Layout'
+import { useTheme } from 'styled-components'
+import { ThemeModes } from '@past3lle/theme'
 
 const App = () => {
   const ref = React.useRef()
   const [modalOpen, setModalOpen] = React.useState(false)
   useOnClickOutside(ref, () => setModalOpen(false))
+
+  const { mode, setMode } = useTheme()
 
   return (
     <>
@@ -26,6 +31,8 @@ const App = () => {
         <Button variant={BV.PRIMARY} onClick={() => setModalOpen(true)}>
           See modal
         </Button>
+        <LayoutText.SubHeader>CURRENT THEME: {mode}</LayoutText.SubHeader>
+        <Button  variant={BV.THEME} onClick={() => setMode(mode === ThemeModes.DARK ? ThemeModes.LIGHT : ThemeModes.DARK)} bgImage={PNG.LogoCircle_2x} color={"#000"}>CHANGE THEME</Button>
       </PstlMain>
       <PstlFooter>
         <ul>
