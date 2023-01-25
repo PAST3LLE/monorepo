@@ -7,8 +7,8 @@ export const Pastellecon = styled.div`
   width: 100%;
   transition: transform 0.3s ease;
 
-  background: url(${PNG.PNG_LogoFull_2x}) left/contain no-repeat;
-  ${fromExtraSmall`background: url(${PNG.PNG_LogoShort_2x}) left/contain no-repeat;`}
+  background: url(${PNG.LogoFull_2x}) left/contain no-repeat;
+  ${fromExtraSmall`background: url(${PNG.LogoShort_2x}) left/contain no-repeat;`}
 
   &:hover {
     transform: rotate(-5deg);
