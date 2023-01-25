@@ -9,6 +9,7 @@
     "prepare": "node ./configure-references.js",
     "build": "lerna run build --stream",
     "lint": "lerna run lint --stream --parallel",
+    "lint:examples": "npx prettier --write examples --ignore-file './prettierignore'",
     "test": "yarn jest --coverage",
     "postinstall": "cd examples/generic && yarn && cd ../ && cd skills && yarn && cd ../../"
  },

@@ -15,6 +15,7 @@ coverage
 
 example/**/*
 src/**/*.d.ts
+examples/**/*.d.ts
 src/**/*.md
 
 # Every commit this is changed. NO MORE!

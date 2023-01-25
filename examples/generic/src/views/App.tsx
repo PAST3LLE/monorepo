@@ -1,10 +1,11 @@
-import * as React from 'react'
 import { PNG } from '@past3lle/assets'
-import { ColumnCenter, Modal, Button, BV, Pastellecon, Text as LayoutText } from '@past3lle/components'
-import { useOnClickOutside }from '@past3lle/hooks'
-import { PstlMain, PstlHeader, PstlNav, PstlFooter } from '../components/Layout'
-import { useTheme } from 'styled-components'
+import { BV, Button, ColumnCenter, Text as LayoutText, Modal, Pastellecon } from '@past3lle/components'
+import { useOnClickOutside } from '@past3lle/hooks'
 import { ThemeModes } from '@past3lle/theme'
+import * as React from 'react'
+import { useTheme } from 'styled-components'
+
+import { PstlFooter, PstlHeader, PstlMain, PstlNav } from '../components/Layout'
 
 const App = () => {
   const ref = React.useRef()
@@ -32,7 +33,14 @@ const App = () => {
           See modal
         </Button>
         <LayoutText.SubHeader>CURRENT THEME: {mode}</LayoutText.SubHeader>
-        <Button  variant={BV.THEME} onClick={() => setMode(mode === ThemeModes.DARK ? ThemeModes.LIGHT : ThemeModes.DARK)} bgImage={PNG.LogoCircle_2x} color={"#000"}>CHANGE THEME</Button>
+        <Button
+          variant={BV.THEME}
+          onClick={() => setMode(mode === ThemeModes.DARK ? ThemeModes.LIGHT : ThemeModes.DARK)}
+          bgImage={PNG.LogoCircle_2x}
+          color={'#000'}
+        >
+          CHANGE THEME
+        </Button>
       </PstlMain>
       <PstlFooter>
         <ul>
