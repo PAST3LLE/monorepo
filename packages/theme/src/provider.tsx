@@ -80,11 +80,14 @@ export const ThemeProvider = ({ children, themeExtension = {} }: ThemeProviderPr
 
   return (
     <StyledComponentsThemeProvider theme={themeObject}>
-      {Children.map(children, (child) =>
-        // make sure child is a valid react element as children by default can be type string|null|number
-        // @ts-ignore
-        isValidElement(child) ? cloneElement(child, { theme: themeObject }) : child
-      )}
+      {Children.map(children, (childElem) => {
+        const isValid = isValidElement(childElem) && childElem.type === 'function'
+        return (
+          // make sure child is a valid react element as children by default can be type string|null|number
+          // @ts-ignore
+          isValid ? cloneElement(childElem, { theme: themeObject }) : childElem
+        )
+      })}
     </StyledComponentsThemeProvider>
   )
 }
