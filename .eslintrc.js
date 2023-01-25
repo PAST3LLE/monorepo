@@ -7,7 +7,7 @@ module.exports = {
       // Allows for the parsing of JSX
       jsx: true
     },
-    project: ["./tsconfig.eslint.json", "./packages/*/tsconfig.json"]
+    project: ["./tsconfig.eslint.json", "./packages/*/tsconfig.json", "./examples/*/tsconfig.json"]
 
   },
   extends: [

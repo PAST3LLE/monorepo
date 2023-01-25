@@ -4,11 +4,13 @@
   "repository": "past3lle/schematics-monorepo",
   "private": true,
   "scripts": {
-    "test:ui": "cd example && rm -rf node_modules .parcel-cache && yarn && yarn start && cd ..",
+    "test:generic": "cd examples/generic && rm -rf node_modules .parcel-cache && yarn && yarn start && cd ../..",
+    "test:skills": "cd examples/skills && rm -rf node_modules .parcel-cache && yarn && yarn start && cd ../..",
     "prepare": "node ./configure-references.js",
     "build": "lerna run build --stream",
     "lint": "lerna run lint --stream --parallel",
-    "test": "yarn jest --coverage"
+    "test": "yarn jest --coverage",
+    "postinstall": "cd examples/generic && yarn && cd ../ && cd skills && yarn && cd ../../"
  },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.48.2",

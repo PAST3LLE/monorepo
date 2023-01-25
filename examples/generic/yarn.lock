@@ -22,7 +22,7 @@
   resolved "https://registry.yarnpkg.com/@babel/compat-data/-/compat-data-7.20.10.tgz#9d92fa81b87542fff50e848ed585b4212c1d34ec"
   integrity sha512-sEnuDPpOJR/fcafHMjpcpGN5M2jbUGUHwmuWKM/YdPzeEDJg8bgmbcWQFUfE32MQjti1koACvoPVsDe8Uq+idg==
 
-"@babel/core@../node_modules/@babel/core":
+"@babel/core@../../node_modules/@babel/core":
   version "7.20.12"
   dependencies:
     "@ampproject/remapping" "^2.1.0"
@@ -900,12 +900,12 @@
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.5.tgz#5f19d2b85a98e9558036f6a3cacc8819420f05cf"
   integrity sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==
 
-"@types/react-dom@../node_modules/@types/react-dom":
+"@types/react-dom@../../node_modules/@types/react-dom":
   version "18.0.10"
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@../node_modules/@types/react":
+"@types/react@*", "@types/react@../../node_modules/@types/react":
   version "18.0.27"
   dependencies:
     "@types/prop-types" "*"
@@ -1721,7 +1721,7 @@ type-fest@^0.20.2:
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.20.2.tgz#1bf207f4b28f91583666cb5fbd327887301cd5f4"
   integrity sha512-Ne+eE4r0/iWnpAxD852z3A+N0Bt5RN//NjJwRd2VFHEmrywxf5vsZlh4R6lixl6B+wz/8d+maTSAkN1FIkI3LQ==
 
-typescript@../node_modules/typescript:
+typescript@../../node_modules/typescript:
   version "4.9.4"
 
 update-browserslist-db@^1.0.9:
