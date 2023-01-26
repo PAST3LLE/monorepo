@@ -66,7 +66,7 @@ export interface Colors {
   darkModeSvg: Color
 }
 
-export interface Sections {
+export interface ThemeSections {
   // elems
   products: {
     aside: {
@@ -77,6 +77,12 @@ export interface Sections {
       inputsBorderColor: Color
     }
   }
+}
+
+export interface ThemeFilters {
+  // filters
+  darkModeFilter: string
+  darkModeLogoFilter: string
 }
 
 export enum ThemeModes {
@@ -93,7 +99,7 @@ export interface ThemeState {
 export const THEME_LIST = Object.entries(ThemeModes)
 
 declare module 'styled-components' {
-  export interface DefaultTheme extends ThemeState, Colors, Sections {
+  export interface DefaultTheme extends ThemeState, ThemeFilters, Colors, ThemeSections {
     // theming
     buttons: {
       font: {
@@ -111,10 +117,6 @@ declare module 'styled-components' {
 
     // shadows
     shadow1: string
-
-    // filters
-    darkModeFilter: string
-    darkModeLogoFilter: string
 
     // media queries
     mediaWidth: {
@@ -152,9 +154,5 @@ declare module 'styled-components' {
       upToLargeHeight: ThemedCssFunction<DefaultTheme>
       upToExtraLargeHeight: ThemedCssFunction<DefaultTheme>
     }
-
-    // css snippets
-    flexColumnNoWrap: FlattenSimpleInterpolation
-    flexRowNoWrap: FlattenSimpleInterpolation
   }
 }

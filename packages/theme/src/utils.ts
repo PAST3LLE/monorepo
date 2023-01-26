@@ -4,9 +4,9 @@ import { CSSObject, DefaultTheme, FlattenSimpleInterpolation, SimpleInterpolatio
 import { hex } from 'wcag-contrast'
 
 import { MEDIA_WIDTHS, MediaWidths, THEME_COLOURS } from './styles'
-import { Colors, ThemeModes } from './types'
+import { Colors, ThemeFilters, ThemeModes, ThemeSections } from './types'
 
-export function getThemeColours(mode: ThemeModes): Colors {
+export function getThemeColours(mode: ThemeModes): Colors & ThemeFilters & ThemeSections {
   return THEME_COLOURS(mode)
 }
 
