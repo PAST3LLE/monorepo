@@ -16,11 +16,8 @@ import {
   mediaHeightTemplates as mediaHeight,
   mediaWidthTemplates as mediaWidth
 } from './styles/mediaQueries'
-import { ThemeModes } from './types'
+import { ThemeModes, ThemeValueTypes } from './types'
 import { getThemeColours } from './utils'
-
-type BaseThemeTypes = string | number | ((...args: any[]) => any)
-type ThemeValueTypes = BaseThemeTypes | Record<string, BaseThemeTypes>
 
 type KeyOmit<T, U extends keyof DefaultTheme> = T & { [P in U]?: never }
 type OverrideableTheme = Partial<DefaultTheme> &

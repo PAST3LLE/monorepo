@@ -1,3 +1,16 @@
+import React from 'react'
+import { ThemedCssFunction } from 'styled-components'
+
+export type BaseThemeTypes =
+  | boolean
+  | string
+  | number
+  | ((...args: any[]) => any)
+  | React.Dispatch<React.SetStateAction<any>>
+  | ThemedCssFunction<any>
+
+export type ThemeValueTypes = BaseThemeTypes | Record<string, BaseThemeTypes>
+
 export type Color = string
 export interface Colors {
   // base
