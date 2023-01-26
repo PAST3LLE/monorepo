@@ -1,15 +1,23 @@
-import { Text } from '@past3lle/components'
-import { FontCssProvider, StaticGlobalCssProvider, ThemeProvider } from '@past3lle/theme'
+import { FontCssProvider, StaticGlobalCssProvider, ThemeProvider, ThemedGlobalCssProvider } from '@past3lle/theme'
 import * as React from 'react'
 import 'react-app-polyfill/ie11'
 import * as ReactDOM from 'react-dom/client'
 
-import { PstlStaticGlobalCss } from './styles/global'
+import { CUSTOM_THEME } from './theme/customTheme'
+import { CustomStaticGlobalCss, CustomThemeGlobalCss } from './theme/global'
+import { SkilltreeView } from './views/SkilltreeView'
 
 const StaticCssProviders = () => (
   <>
     <StaticGlobalCssProvider />
-    <PstlStaticGlobalCss />
+    <CustomStaticGlobalCss />
+  </>
+)
+
+const ThemedCssProviders = () => (
+  <>
+    <ThemedGlobalCssProvider />
+    <CustomThemeGlobalCss />
   </>
 )
 
@@ -17,13 +25,12 @@ const container = document.getElementById('root') as HTMLElement
 const root = ReactDOM.createRoot(container)
 
 root.render(
-  <>
+  <React.StrictMode>
     <FontCssProvider />
     <StaticCssProviders />
-    <ThemeProvider themeExtension={{}}>
-      <Text.SubHeader>COLLECTION SKILLS</Text.SubHeader>
-      <h1>SKILLTREE</h1>
-      <p>Code skilltree UI here</p>
+    <ThemeProvider themeExtension={CUSTOM_THEME}>
+      <ThemedCssProviders />
+      <SkilltreeView />
     </ThemeProvider>
-  </>
+  </React.StrictMode>
 )

@@ -1,0 +1,36 @@
+import { ArticleFadeIn, ColumnCenter, Header as HeaderPstl, RowStart } from '@past3lle/components'
+import * as React from 'react'
+
+import { BlackBoldItalic, BlackHeader, ThemedHeader } from '../../components/Text'
+
+const Header = () => (
+  <HeaderPstl>
+    <BlackHeader>PASTELLE SKILLTREE</BlackHeader>
+  </HeaderPstl>
+)
+
+const Main = () => (
+  <ArticleFadeIn>
+    <ColumnCenter padding={'2rem'}>
+      {/* TITLE */}
+      <RowStart display={'inline-flex'} backgroundColor={'ghostwhite'} padding={'1rem'}>
+        <BlackBoldItalic fontSize={'1.5rem'}>
+          VIEW CURRENT SKILLS AND ANY UPGRADABLES. HOVER OVER SKILL FOR MORE INFO.
+        </BlackBoldItalic>
+      </RowStart>
+      <RowStart display={'inline-flex'} backgroundColor={'ghostwhite'} margin={'2rem 0'}>
+        <ThemedHeader>THEMED HEADER</ThemedHeader>
+      </RowStart>
+      {/* CONTENT */}
+    </ColumnCenter>
+  </ArticleFadeIn>
+)
+
+export function SkilltreeView() {
+  return (
+    <>
+      <Header />
+      <Main />
+    </>
+  )
+}
