@@ -1,4 +1,13 @@
-import React, { Children, ReactElement, ReactNode, cloneElement, isValidElement, useMemo, useState } from 'react'
+import React, {
+  Children,
+  FunctionComponent,
+  ReactElement,
+  ReactNode,
+  cloneElement,
+  isValidElement,
+  useMemo,
+  useState
+} from 'react'
 import { DefaultTheme, ThemeProvider as StyledComponentsThemeProvider, css } from 'styled-components'
 
 import {
@@ -9,6 +18,23 @@ import {
 } from './styles/mediaQueries'
 import { ThemeModes } from './types'
 import { getThemeColours } from './utils'
+
+type BaseThemeTypes = string | number | ((...args: any[]) => any)
+type ThemeValueTypes = BaseThemeTypes | Record<string, BaseThemeTypes>
+
+type KeyOmit<T, U extends keyof DefaultTheme> = T & { [P in U]?: never }
+type OverrideableTheme = Partial<DefaultTheme> &
+  KeyOmit<
+    { [key: string]: ThemeValueTypes },
+    | 'mode'
+    | 'autoDetect'
+    | 'setMode'
+    | 'setAutoDetect'
+    | 'mediaHeight'
+    | 'mediaWidth'
+    | 'betweenMediaWidth'
+    | 'fromMediaWidth'
+  >
 
 const DEFAULT_THEME: Pick<
   DefaultTheme,
@@ -40,37 +66,39 @@ const DEFAULT_THEME: Pick<
   fromMediaWidth,
   // between size queries
   betweenMediaWidth
-} as const
+}
 
 interface ThemeProviderProps {
   children?: ReactNode
-  themeExtension?: Record<string, any>
+  themeExtension?: OverrideableTheme
 }
 
 // Extension/override of styled-components' ThemeProvider but with our own constructed theme object
-export const ThemeProvider = <T extends DefaultTheme>({ children, themeExtension = {} as T }: ThemeProviderProps) => {
+export const ThemeProvider = ({ children, themeExtension = {} }: ThemeProviderProps) => {
   const [mode, setMode] = useState<ThemeModes>(ThemeModes.DARK)
+  const [autoDetect, setAutoDetect] = useState<boolean>(true)
 
   const themeObject = useMemo(() => {
-    const themeColours = getThemeColours(mode)
+    const THEME_COLOURS = getThemeColours(mode)
 
-    const computedTheme: DefaultTheme & typeof themeExtension = {
+    const computedTheme = {
       // Compute the app colour pallette using the passed in colourTheme
-      ...themeColours,
+      ...THEME_COLOURS,
       // pass in defaults
       ...DEFAULT_THEME,
-      // state
-      autoDetect: true,
-      mode,
-      setMode,
       // unfold in any extensions
       // for example to make big/small buttons -> see src/components/Button ThemeWrappedButtonBase
       // to see it in action
-      ...themeExtension
+      ...themeExtension,
+      // state
+      mode,
+      autoDetect,
+      setMode,
+      setAutoDetect
     }
 
     return computedTheme
-  }, [mode, themeExtension])
+  }, [autoDetect, mode, themeExtension])
 
   return (
     <StyledComponentsThemeProvider theme={themeObject}>
@@ -78,7 +106,12 @@ export const ThemeProvider = <T extends DefaultTheme>({ children, themeExtension
         // make sure child is a valid react element as children by default can be type string|null|number
         const isValid = isValidElement(childElem) && childElem.type === 'function'
         return isValid
-          ? cloneElement<DefaultTheme & typeof themeExtension>(childElem as ReactElement, { theme: themeObject })
+          ? cloneElement<{ theme: typeof themeObject }>(
+              childElem as ReactElement<any, FunctionComponent<{ theme: typeof themeObject }>>,
+              {
+                theme: themeObject
+              }
+            )
           : childElem
       })}
     </StyledComponentsThemeProvider>

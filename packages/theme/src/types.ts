@@ -92,11 +92,10 @@ export enum ThemeModes {
 
 export interface ThemeState {
   mode: ThemeModes
-  setMode: React.Dispatch<React.SetStateAction<ThemeModes>>
   autoDetect: boolean
+  setMode: React.Dispatch<React.SetStateAction<ThemeModes>>
+  setAutoDetect: React.Dispatch<React.SetStateAction<boolean>>
 }
-
-export const THEME_LIST = Object.entries(ThemeModes)
 
 declare module 'styled-components' {
   export interface DefaultTheme extends ThemeState, ThemeFilters, Colors, ThemeSections {
