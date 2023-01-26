@@ -70,7 +70,7 @@ export class Lightning {
   Circle(context: CanvasRenderingContext2D, p: { X1: number; Y1: number }, lR: number) {
     context.beginPath()
     context.arc(p.X1 + Math.random() * 10 * lR, p.Y1 + Math.random() * 10 * lR, 5, 0, 2 * Math.PI, false)
-    context.fillStyle = 'white'
+    context.fillStyle = 'transparent'
     context.shadowBlur = 100
     context.shadowColor = '#2319FF'
     context.fill()

@@ -1,7 +1,9 @@
 import { ArticleFadeIn, ColumnCenter, Header as HeaderPstl, RowStart } from '@past3lle/components'
 import * as React from 'react'
+import styled from 'styled-components'
 
 import { BlackBoldItalic, BlackHeader, ThemedHeader } from '../../components/Text'
+import { LightningCanvas } from '../../components/canvas'
 
 const Header = () => (
   <HeaderPstl>
@@ -9,8 +11,9 @@ const Header = () => (
   </HeaderPstl>
 )
 
+const StyledMain = styled(ArticleFadeIn)``
 const Main = () => (
-  <ArticleFadeIn>
+  <StyledMain>
     <ColumnCenter padding={'2rem'}>
       {/* TITLE */}
       <RowStart display={'inline-flex'} backgroundColor={'ghostwhite'} padding={'1rem'}>
@@ -23,7 +26,9 @@ const Main = () => (
       </RowStart>
       {/* CONTENT */}
     </ColumnCenter>
-  </ArticleFadeIn>
+    {/* CANVAS */}
+    <LightningCanvas />
+  </StyledMain>
 )
 
 export function SkilltreeView() {
