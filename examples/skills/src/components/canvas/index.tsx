@@ -35,6 +35,10 @@ export function LightningCanvas() {
 
   const [{ width }] = useGetWindowSize()
 
+  React.useEffect(() => {
+    console.debug('WIDTH CHANGE DETECTED')
+  }, [width])
+
   // ===========================
   // EFFECTS
   // ===========================
@@ -50,82 +54,33 @@ export function LightningCanvas() {
   React.useEffect(() => {
     if (!canvas || !ready) return
 
-    canvas.addEventListener(
-      'mousedown',
-      (e) => {
-        console.log('MOUSE-DOWN -- EVENT FIRED!')
-        draw = true
-        target = new Vector(
-          0,
-          0,
-          e.clientX - canvas.offsetLeft + document.documentElement.scrollLeft,
-          e.clientY - canvas.offsetTop + document.documentElement.scrollTop
-        )
-      },
-      false
-    )
+    // when changes we remove listeners
+    canvas.removeEventListener('mousedown', _onMouseDown, false)
+    canvas.removeEventListener('mouseup', _onMouseUp, false)
+    canvas.removeEventListener('mousemove', _onMouseMove)
+    canvas.removeEventListener('touchstart', _onTouchStart, false)
+    canvas.removeEventListener('touchend', _onTouchEnd, false)
+    canvas.removeEventListener('touchmove', _onTouchMove)
 
-    canvas.addEventListener(
-      'mouseup',
-      (e) => {
-        console.log('MOUSE-UP -- EVENT FIRED!')
-        draw = false
-      },
-      false
-    )
+    // add listeners
+    canvas.addEventListener('mousedown', _onMouseDown, false)
+    canvas.addEventListener('mouseup', _onMouseUp, false)
+    canvas.addEventListener('mousemove', _onMouseMove)
+    canvas.addEventListener('touchstart', _onTouchStart, false)
+    canvas.addEventListener('touchend', _onTouchEnd, false)
+    canvas.addEventListener('touchmove', _onTouchMove)
 
-    canvas.addEventListener('mousemove', (e) => {
-      if (draw) {
-        target = new Vector(
-          0,
-          0,
-          e.clientX - canvas.offsetLeft + document.documentElement.scrollLeft,
-          e.clientY - canvas.offsetTop + document.documentElement.scrollTop
-        )
-      }
-    })
+    // reset points array
+    points = []
 
-    canvas.addEventListener(
-      'touchstart',
-      (e) => {
-        console.log('TOUCH-START -- EVENT FIRED!')
-        draw = true
-        target = new Vector(
-          0,
-          0,
-          e.touches[0].clientX - canvas.offsetLeft + document.documentElement.scrollLeft,
-          e.touches[0].clientY - canvas.offsetTop + document.documentElement.scrollTop
-        )
-      },
-      false
-    )
-
-    canvas.addEventListener(
-      'touchend',
-      (e) => {
-        console.log('TOUCH-END -- EVENT FIRED!')
-        draw = false
-      },
-      false
-    )
-
-    canvas.addEventListener('touchmove', (e) => {
-      if (draw) {
-        target = new Vector(
-          0,
-          0,
-          e.touches[0].clientX - canvas.offsetLeft + document.documentElement.scrollLeft,
-          e.touches[0].clientY - canvas.offsetTop + document.documentElement.scrollTop
-        )
-      }
-    })
+    // config
     const rowHeight = Math.round(canvas.height / LAYOUT_CONFIG.rows)
     const halfRow = Math.round(rowHeight / 2)
-    const yOffset = halfRow /* + LAYOUT_CONFIG.offset */
     const columnWidth = Math.round(canvas.width / LAYOUT_CONFIG.columns)
     const halfColumn = Math.round(columnWidth / 2)
-    const xOffset = halfColumn /* - LAYOUT_CONFIG.offset */
-    // columns: canvas.height / rows * rowIndex
+    const xOffset = halfColumn
+
+    // cache which row we're currently on
     let row = 1
     // loop while count is smaller than total cells (3col * 6row = 18)
     for (let i = 0; i < LAYOUT_CONFIG.columns * LAYOUT_CONFIG.rows; i++) {
@@ -140,35 +95,17 @@ export function LightningCanvas() {
       // 200cw + 400aw = 600aw
       // 600 - 100hc = 500
       const xAxis = columnWidth * (i % LAYOUT_CONFIG.columns) + xOffset
-      // const yAxis = (canvas.height / LAYOUT_CONFIG.rows + yOffset) * row
       const yAxis = (canvas.height / LAYOUT_CONFIG.rows) * row - halfRow
       const vector = new Vector(0, 0, xAxis, yAxis)
 
       points.push(vector)
     }
     console.debug('POINTS', points)
-    /* 
-    //Lighning sources
-    // top-left
-    points.push(new Vector(0, 0, LAYOUT_CONFIG.offset, LAYOUT_CONFIG.offset))
-    // top-center
-    points.push(new Vector(0, 0, canvas.width / 2, LAYOUT_CONFIG.offset))
-    // top-right
-    points.push(new Vector(0, 0, canvas.width - LAYOUT_CONFIG.offset, LAYOUT_CONFIG.offset))
-    // center-center
-    points.push(new Vector(0, 0, canvas.width / 2, canvas.height / 2))
-    // bottom-left
-    points.push(new Vector(0, 0, LAYOUT_CONFIG.offset, canvas.height - LAYOUT_CONFIG.offset))
-    // bottom-center
-    points.push(new Vector(0, 0, canvas.width / 2, canvas.height - LAYOUT_CONFIG.offset))
-    // bottom-right
-    points.push(new Vector(0, 0, canvas.width - LAYOUT_CONFIG.offset, canvas.height - LAYOUT_CONFIG.offset))
-    */
 
     _buildApi()
 
     window.requestAnimationFrame(_animate)
-  }, [ready])
+  }, [ready, width])
 
   // ========================
   // CLEARS CANVAS ON A TIMER
@@ -229,4 +166,53 @@ function _animate() {
   setTimeout(() => {
     _animate()
   }, 60)
+}
+
+function _onMouseDown(e) {
+  console.log('MOUSE-DOWN -- EVENT FIRED!')
+  draw = true
+  target = new Vector(
+    0,
+    0,
+    e.clientX - canvas.offsetLeft + document.documentElement.scrollLeft,
+    e.clientY - canvas.offsetTop + document.documentElement.scrollTop
+  )
+}
+function _onMouseUp(e) {
+  console.log('MOUSE-UP -- EVENT FIRED!')
+  draw = false
+}
+function _onMouseMove(e) {
+  if (draw) {
+    target = new Vector(
+      0,
+      0,
+      e.clientX - canvas.offsetLeft + document.documentElement.scrollLeft,
+      e.clientY - canvas.offsetTop + document.documentElement.scrollTop
+    )
+  }
+}
+function _onTouchStart(e) {
+  console.log('TOUCH-START -- EVENT FIRED!')
+  draw = true
+  target = new Vector(
+    0,
+    0,
+    e.touches[0].clientX - canvas.offsetLeft + document.documentElement.scrollLeft,
+    e.touches[0].clientY - canvas.offsetTop + document.documentElement.scrollTop
+  )
+}
+function _onTouchEnd(e) {
+  console.log('TOUCH-END -- EVENT FIRED!')
+  draw = false
+}
+function _onTouchMove(e) {
+  if (draw) {
+    target = new Vector(
+      0,
+      0,
+      e.touches[0].clientX - canvas.offsetLeft + document.documentElement.scrollLeft,
+      e.touches[0].clientY - canvas.offsetTop + document.documentElement.scrollTop
+    )
+  }
 }
