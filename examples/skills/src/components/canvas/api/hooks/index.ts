@@ -1,5 +1,6 @@
 import * as React from 'react'
 
+import BG_IMAGE from '../../../../assets/png/background.png'
 import { LAYOUT_CONFIG } from '../config'
 import { Lightning } from '../lightning'
 import { LightningConfig } from '../types'
@@ -111,7 +112,8 @@ export function useLightningCanvas({ canvasDOM, config, dimensions }: LightningC
 function _buildApi(config: LightningConfig) {
   ltApi = new Lightning(config)
 }
-
+const bgImage = new Image()
+bgImage.src = BG_IMAGE
 function _animate() {
   if (!ctx) return
 
@@ -120,6 +122,7 @@ function _animate() {
   ctx.shadowColor = ''
   ctx.fillStyle = 'rgba(0,0,0,0.15)'
   ctx.fillRect(0, 0, canvas.width, canvas.height)
+  ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height)
 
   if (draw) {
     points.forEach((point) => {

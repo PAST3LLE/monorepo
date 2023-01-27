@@ -15,6 +15,7 @@ export function LightningCanvas() {
   const [{ width = 0 }] = useGetWindowSize()
   const height = (canvasDOM?.parentElement?.clientHeight || 0) - 92
 
+  // run lightning canvas logic
   useLightningCanvas({ canvasDOM, dimensions: { width, height }, config: CONFIG })
 
   return <StyledCanvas id={CANVAS_ID} ref={setRef} width={width} height={height}></StyledCanvas>
