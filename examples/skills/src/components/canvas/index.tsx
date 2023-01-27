@@ -1,15 +1,12 @@
 /* eslint-disable prefer-const */
-
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffectRef } from '@past3lle/hooks'
-import { useAtom } from 'jotai'
 import * as React from 'react'
-import styled from 'styled-components'
 
 import { useGetWindowSize } from '../../state/WindowSize'
 import { CONFIG, LAYOUT_CONFIG } from './api/config'
 import { Lightning } from './api/lightning'
 import { Vector } from './api/vector'
+import { StyledCanvas } from './styleds'
 
 const CANVAS_ID = 'skilltree'
 let canvas: HTMLCanvasElement,
@@ -19,14 +16,6 @@ let canvas: HTMLCanvasElement,
   draw: boolean,
   points: Vector[] = []
 
-const StyledCanvas = styled.canvas`
-  // z-index: 10;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  opacity: 0.4;
-`
-
 export function LightningCanvas() {
   const [ready, setReadyStatus] = React.useState(false)
 
@@ -34,10 +23,6 @@ export function LightningCanvas() {
   const canvasRef = ref?.current
 
   const [{ width }] = useGetWindowSize()
-
-  React.useEffect(() => {
-    console.debug('WIDTH CHANGE DETECTED')
-  }, [width])
 
   // ===========================
   // EFFECTS
@@ -169,7 +154,6 @@ function _animate() {
 }
 
 function _onMouseDown(e) {
-  console.log('MOUSE-DOWN -- EVENT FIRED!')
   draw = true
   target = new Vector(
     0,
@@ -178,8 +162,7 @@ function _onMouseDown(e) {
     e.clientY - canvas.offsetTop + document.documentElement.scrollTop
   )
 }
-function _onMouseUp(e) {
-  console.log('MOUSE-UP -- EVENT FIRED!')
+function _onMouseUp() {
   draw = false
 }
 function _onMouseMove(e) {
@@ -193,7 +176,6 @@ function _onMouseMove(e) {
   }
 }
 function _onTouchStart(e) {
-  console.log('TOUCH-START -- EVENT FIRED!')
   draw = true
   target = new Vector(
     0,
@@ -202,8 +184,7 @@ function _onTouchStart(e) {
     e.touches[0].clientY - canvas.offsetTop + document.documentElement.scrollTop
   )
 }
-function _onTouchEnd(e) {
-  console.log('TOUCH-END -- EVENT FIRED!')
+function _onTouchEnd() {
   draw = false
 }
 function _onTouchMove(e) {
