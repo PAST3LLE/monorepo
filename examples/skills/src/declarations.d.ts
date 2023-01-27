@@ -12,3 +12,8 @@ declare module '*.jpeg' {
   export const src: string
   export default src
 }
+
+declare module '*.otf' {
+  export const src: string
+  export default src
+}

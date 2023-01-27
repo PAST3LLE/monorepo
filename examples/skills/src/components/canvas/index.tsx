@@ -2,10 +2,12 @@
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffectRef } from '@past3lle/hooks'
+import { useAtom } from 'jotai'
 import * as React from 'react'
 import styled from 'styled-components'
 
-import { CONFIG } from './api/config'
+import { useGetWindowSize } from '../../state/WindowSize'
+import { CONFIG, LAYOUT_CONFIG } from './api/config'
 import { Lightning } from './api/lightning'
 import { Vector } from './api/vector'
 
@@ -18,10 +20,11 @@ let canvas: HTMLCanvasElement,
   points: Vector[] = []
 
 const StyledCanvas = styled.canvas`
-  z-index: -1;
+  // z-index: 10;
   position: absolute;
-  top: 0;
+  bottom: 0;
   left: 0;
+  opacity: 0.4;
 `
 
 export function LightningCanvas() {
@@ -29,6 +32,8 @@ export function LightningCanvas() {
 
   const [setRef, ref] = useEffectRef<HTMLCanvasElement | null>(null)
   const canvasRef = ref?.current
+
+  const [{ width }] = useGetWindowSize()
 
   // ===========================
   // EFFECTS
@@ -114,27 +119,79 @@ export function LightningCanvas() {
         )
       }
     })
+    const rowHeight = Math.round(canvas.height / LAYOUT_CONFIG.rows)
+    const halfRow = Math.round(rowHeight / 2)
+    const yOffset = halfRow /* + LAYOUT_CONFIG.offset */
+    const columnWidth = Math.round(canvas.width / LAYOUT_CONFIG.columns)
+    const halfColumn = Math.round(columnWidth / 2)
+    const xOffset = halfColumn /* - LAYOUT_CONFIG.offset */
+    // columns: canvas.height / rows * rowIndex
+    let row = 1
+    // loop while count is smaller than total cells (3col * 6row = 18)
+    for (let i = 0; i < LAYOUT_CONFIG.columns * LAYOUT_CONFIG.rows; i++) {
+      // e.g 3i % 3 === 0 means we are onto the next row
+      if (i > 0 && i % LAYOUT_CONFIG.columns === 0) {
+        // we have moved onto the next row, iterate variable
+        row++
+      }
 
+      // e.g i = 2
+      // 200cw * 2 = 400aw
+      // 200cw + 400aw = 600aw
+      // 600 - 100hc = 500
+      const xAxis = columnWidth * (i % LAYOUT_CONFIG.columns) + xOffset
+      // const yAxis = (canvas.height / LAYOUT_CONFIG.rows + yOffset) * row
+      const yAxis = (canvas.height / LAYOUT_CONFIG.rows) * row - halfRow
+      const vector = new Vector(0, 0, xAxis, yAxis)
+
+      points.push(vector)
+    }
+    console.debug('POINTS', points)
+    /* 
     //Lighning sources
+    // top-left
+    points.push(new Vector(0, 0, LAYOUT_CONFIG.offset, LAYOUT_CONFIG.offset))
+    // top-center
+    points.push(new Vector(0, 0, canvas.width / 2, LAYOUT_CONFIG.offset))
+    // top-right
+    points.push(new Vector(0, 0, canvas.width - LAYOUT_CONFIG.offset, LAYOUT_CONFIG.offset))
+    // center-center
     points.push(new Vector(0, 0, canvas.width / 2, canvas.height / 2))
-    points.push(new Vector(0, 0, 20, 20))
-    points.push(new Vector(0, 0, canvas.width / 2, 20))
-    points.push(new Vector(0, 0, canvas.width - 20, 20))
-    points.push(new Vector(0, 0, 20, canvas.height - 20))
-    points.push(new Vector(0, 0, canvas.width / 2, canvas.height - 20))
-    points.push(new Vector(0, 0, canvas.width - 20, canvas.height - 20))
+    // bottom-left
+    points.push(new Vector(0, 0, LAYOUT_CONFIG.offset, canvas.height - LAYOUT_CONFIG.offset))
+    // bottom-center
+    points.push(new Vector(0, 0, canvas.width / 2, canvas.height - LAYOUT_CONFIG.offset))
+    // bottom-right
+    points.push(new Vector(0, 0, canvas.width - LAYOUT_CONFIG.offset, canvas.height - LAYOUT_CONFIG.offset))
+    */
 
     _buildApi()
 
     window.requestAnimationFrame(_animate)
   }, [ready])
 
+  // ========================
+  // CLEARS CANVAS ON A TIMER
+  // ========================
+  React.useEffect(() => {
+    let interval
+    if (draw) {
+      interval = setInterval(() => ctx?.clearRect(0, 0, canvas.width, canvas.height), 5000)
+    } else {
+      clearInterval(interval)
+    }
+
+    return () => {
+      clearInterval(interval)
+    }
+  }, [])
+
   return (
     <StyledCanvas
       id={CANVAS_ID}
       ref={setRef}
-      width={canvasRef?.parentElement?.clientWidth}
-      height={canvasRef?.parentElement?.clientHeight}
+      width={width}
+      height={(canvasRef?.parentElement?.clientHeight || 0) - 92}
     ></StyledCanvas>
   )
 }
@@ -151,14 +208,23 @@ function _animate() {
   // Clear board
   ctx.shadowBlur = 0
   ctx.shadowColor = ''
-  ctx.fillStyle = 'rgba(0,0,0,0.35)'
+  ctx.fillStyle = 'rgba(0,0,0,0.15)'
   ctx.fillRect(0, 0, canvas.width, canvas.height)
 
   if (draw) {
-    points.forEach((p) => {
-      ctx && ltApi.Cast(ctx, p, target)
+    points.forEach((point) => {
+      if (ctx) {
+        // TODO: enable to see lightning sources
+        // shouldn't be enabled in prod
+        // ctx.fillRect(point.X1, point.Y1, 20, 20)
+        // ctx.fillStyle = 'red'
+
+        ltApi.Cast(ctx, point, target)
+      }
     })
-  }
+  } /* else {
+    ctx.globalAlpha = 0.1
+  } */
 
   setTimeout(() => {
     _animate()

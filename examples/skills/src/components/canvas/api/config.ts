@@ -13,3 +13,9 @@ export const CONFIG: LightningConfig = {
   GlowBlur: 70,
   GlowAlpha: 17
 }
+
+export const LAYOUT_CONFIG = {
+  offset: 20,
+  columns: 3,
+  rows: 6
+}
