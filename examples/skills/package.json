@@ -31,6 +31,7 @@
     "eslint-plugin-react": "^7.32.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "jotai": "^1.13.1",
+    "jotai-devtools": "^0.1.0",
     "parcel": "^2.8.2",
     "process": "^0.11.10",
     "typescript": "../../node_modules/typescript"

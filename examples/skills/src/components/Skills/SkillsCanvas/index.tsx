@@ -4,25 +4,29 @@ import styled from 'styled-components'
 
 import { LightningCanvas } from '../../../components/Canvas'
 import { SkillColumn } from '../SkillsColumn'
+import { useMetadata } from '../hooks'
 
-const StyledSkillColumn = styled(SkillColumn)``
 const SkilltreeCanvasContainer = styled(Row)`
   position: relative;
   padding: 2rem;
   height: 100%;
-  > ${StyledSkillColumn} {
-    width: auto;
-    margin: auto;
-    z-index: 1;
-  }
 `
 
 export function SkillsCanvas() {
+  const metadata = useMetadata()
   return (
     <SkilltreeCanvasContainer>
-      <StyledSkillColumn header="i" /* alignItems="flex-start" */ />
-      <StyledSkillColumn header="ii" />
-      <StyledSkillColumn header="iii" /* alignItems="flex-end" */ />
+      <SkillColumn
+        header="i"
+        skills={metadata.skills}
+        /* boxProps={{ alignItems: "flex-start" }} */
+      />
+      <SkillColumn header="ii" skills={metadata.skills} />
+      <SkillColumn
+        header="iii"
+        skills={metadata.skills}
+        /* boxProps={{ alignItems: "flex-end" }} */
+      />
       {/* CANVAS */}
       <LightningCanvas />
     </SkilltreeCanvasContainer>

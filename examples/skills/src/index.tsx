@@ -1,4 +1,5 @@
 import { FontCssProvider, StaticGlobalCssProvider, ThemeProvider, ThemedGlobalCssProvider } from '@past3lle/theme'
+import { useAtomsDevtools } from 'jotai-devtools'
 import * as React from 'react'
 import 'react-app-polyfill/ie11'
 import * as ReactDOM from 'react-dom/client'
@@ -23,20 +24,28 @@ const ThemedCssProviders = () => (
   </>
 )
 
+// Attach atoms to redux devtools
+const AtomsDevtools = ({ children }) => {
+  useAtomsDevtools('examples-skilltree')
+  return children
+}
+
 const container = document.getElementById('root') as HTMLElement
 const root = ReactDOM.createRoot(container)
 
 root.render(
   <React.StrictMode>
-    {/* UPDATERS */}
-    <WindowSizeUpdater />
-    {/* THEME PROVIDERS */}
-    <GothicFontCssProvider />
-    <FontCssProvider />
-    <StaticCssProviders />
-    <ThemeProvider themeExtension={CUSTOM_THEME}>
-      <ThemedCssProviders />
-      <SkilltreeView />
-    </ThemeProvider>
+    <AtomsDevtools>
+      {/* UPDATERS */}
+      <WindowSizeUpdater />
+      {/* THEME PROVIDERS */}
+      <GothicFontCssProvider />
+      <FontCssProvider />
+      <StaticCssProviders />
+      <ThemeProvider themeExtension={CUSTOM_THEME}>
+        <ThemedCssProviders />
+        <SkilltreeView />
+      </ThemeProvider>
+    </AtomsDevtools>
   </React.StrictMode>
 )
