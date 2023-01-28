@@ -4,6 +4,7 @@ import { BoxProps } from 'rebass'
 import styled from 'styled-components'
 
 import { Skillpoint } from '../Skillpoint'
+import { StyledSkillpoint } from '../common'
 import { SkillMetadata } from '../types'
 
 const SkillpointHeader = styled(Text.SubHeader).attrs({ fontSize: '6rem', margin: 0, padding: 0 })`
@@ -31,12 +32,20 @@ interface SkillColumnProps {
 }
 export function SkillColumn(props: SkillColumnProps) {
   const { skills, header, boxProps } = props
+
+  const isEmpty = !skills.length
+  const data = !isEmpty ? skills : (Array.from({ length: 6 }) as SkillMetadata[])
+
   return (
     <StyledSkillColumnWrapper {...boxProps}>
       {header && <SkillpointHeader>{header}</SkillpointHeader>}
-      {skills.map((skill) => (
-        <Skillpoint key={skill.image} {...skill} />
-      ))}
+      {data.map((skill, idx) =>
+        !isEmpty ? (
+          <Skillpoint key={skill.image} {...skill} />
+        ) : (
+          <StyledSkillpoint active={false} key={idx} backgroundColor="#4a484e57" />
+        )
+      )}
     </StyledSkillColumnWrapper>
   )
 }

@@ -16,17 +16,9 @@ export function SkillsCanvas() {
   const metadata = useMetadata()
   return (
     <SkilltreeCanvasContainer>
-      <SkillColumn
-        header="i"
-        skills={metadata.skills}
-        /* boxProps={{ alignItems: "flex-start" }} */
-      />
-      <SkillColumn header="ii" skills={metadata.skills} />
-      <SkillColumn
-        header="iii"
-        skills={metadata.skills}
-        /* boxProps={{ alignItems: "flex-end" }} */
-      />
+      <SkillColumn header="i" skills={metadata.skills} />
+      <SkillColumn header="ii" skills={[]} />
+      <SkillColumn header="iii" skills={[]} />
       {/* CANVAS */}
       <LightningCanvas />
     </SkilltreeCanvasContainer>
