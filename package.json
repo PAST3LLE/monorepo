@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "test:generic": "cd examples/generic && rm -rf node_modules .parcel-cache && yarn && yarn start && cd ../..",
-    "test:skills": "cd examples/skills && rm -rf node_modules .parcel-cache && yarn && yarn start && cd ../..",
+    "test:skills": "cd examples/skilltree-ui && rm -rf node_modules .parcel-cache && yarn && yarn start && cd ../..",
     "prepare": "node ./configure-references.js",
     "build": "lerna run build --stream",
     "lint": "lerna run lint --stream --parallel",

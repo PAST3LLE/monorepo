@@ -2,7 +2,7 @@ import { Row } from '@past3lle/components'
 import * as React from 'react'
 import styled from 'styled-components'
 
-import { LightningCanvas } from '../../../components/Canvas'
+import { LightningCanvas } from '../../Canvas'
 import { SkillColumn } from '../SkillsColumn'
 import { useMetadata } from '../hooks'
 
