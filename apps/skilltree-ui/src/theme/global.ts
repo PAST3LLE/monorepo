@@ -9,7 +9,7 @@ export const CustomStaticGlobalCss = createGlobalStyle`
     > header {
       min-height: 8rem;
       height: auto;
-      padding: 0 2rem;
+      padding: 1.5rem 2.5rem 0;
     }
     > nav {
       min-width: 12rem;

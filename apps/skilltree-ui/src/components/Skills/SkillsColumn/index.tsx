@@ -45,8 +45,8 @@ export function SkillColumn(props: SkillColumnProps) {
         ) : (
           <StyledSkillpoint active={false} key={idx} backgroundColor="#4a484e57">
             <VideoDelayer $zIndex={100} />
-            <ThemedHeader fontSize="1.2rem" letterSpacing={0}>
-              LOADING...
+            <ThemedHeader fontSize="1.2rem" letterSpacing={0} padding="0.5rem">
+              LOADING
             </ThemedHeader>
           </StyledSkillpoint>
         )
