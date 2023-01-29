@@ -30,7 +30,7 @@ module.exports = {
           http: false,
           https: false,
           stream: false,
-          crypto: require.resolve('crypto-browserify'),
+          crypto: false,
           os: false,
           assert: false
         }
