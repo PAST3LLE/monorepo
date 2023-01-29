@@ -1,31 +1,31 @@
 {
     "compilerOptions": {
         "jsx": "react",
-        "baseUrl": "./packages",
+        "baseUrl": ".",
         "paths": {
             "@past3lle/assets/*": [
-                "assets/src/*"
+                "packages/assets/src/*"
             ],
             "@past3lle/components/*": [
-                "components/src/*"
+                "packages/components/src/*"
             ],
             "@past3lle/constants/*": [
-                "constants/src/*"
+                "packages/constants/src/*"
             ],
             "@past3lle/hooks/*": [
-                "hooks/src/*"
+                "packages/hooks/src/*"
             ],
             "@past3lle/skilltree-ui/*": [
-                "skilltree-ui/src/*"
+                "apps/skilltree-ui/src/*"
             ],
             "@past3lle/theme/*": [
-                "theme/src/*"
+                "packages/theme/src/*"
             ],
             "@past3lle/types/*": [
-                "types/src/*"
+                "packages/types/src/*"
             ],
             "@past3lle/utils/*": [
-                "utils/src/*"
+                "packages/utils/src/*"
             ]
         }
     },

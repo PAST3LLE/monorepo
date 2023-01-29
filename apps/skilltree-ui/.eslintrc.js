@@ -5,7 +5,7 @@ module.exports = {
     "../../.eslintrc.js",
   ],
   parserOptions: {
-    tsconfigRootDir: path.resolve(path.dirname("../../.."))
+    tsconfigRootDir: path.join(__dirname, "../../")
   },
   plugins: ["react-hooks"],
   rules: {

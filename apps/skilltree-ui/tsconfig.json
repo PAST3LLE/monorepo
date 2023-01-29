@@ -4,9 +4,9 @@
         "src/**/*"
     ],
     "compilerOptions": {
-        "baseUrl": "./",
+        "baseUrl": "src",
         "module": "esnext",
-        "rootDir": "./src",
+        "rootDir": ".",
         "outDir": "./build",
         "composite": true
     },
