@@ -2,13 +2,13 @@ import { PNG } from '@past3lle/assets'
 import { fromExtraSmall } from '@past3lle/theme'
 import styled from 'styled-components'
 
-export const Pastellecon = styled.div`
+export const Pastellecon = styled.div<{ $smallLogo?: string; $fullLogo?: string }>`
   height: 100%;
   width: 100%;
   transition: transform 0.3s ease;
 
-  background: url(${PNG.LogoFull_2x}) left/contain no-repeat;
-  ${fromExtraSmall`background: url(${PNG.LogoShort_2x}) left/contain no-repeat;`}
+  background: ${({ $smallLogo = PNG.LogoShort_2x }) => `url(${$smallLogo}) left/contain no-repeat`};
+  ${({ $fullLogo = PNG.LogoFull_2x }) => fromExtraSmall`background: url(${$fullLogo}) left/contain no-repeat;`}
 
   &:hover {
     transform: rotate(-5deg);
