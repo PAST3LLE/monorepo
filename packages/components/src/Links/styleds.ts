@@ -22,11 +22,11 @@ export const StyledInternalLink = styled(Link)`
   }
 `
 
-export const StyledLink = styled.a`
+export const StyledLink = styled.a<{ $color?: string }>`
   text-decoration: none;
   cursor: pointer;
-  color: ${({ theme }) => theme.primary1};
-  font-weight: 500;
+  color: ${({ theme, $color = theme.primary1 }) => $color};
+  font-weight: inherit;
 
   :hover {
     text-decoration: underline;
