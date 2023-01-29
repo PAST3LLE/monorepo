@@ -15,7 +15,7 @@ module.exports = {
     "plugin:prettier/recommended",
   ],
   root: true,
-  ignorePatterns: ["node_modules/**/*", ".github/*", "dist", ".eslintrc.js", "*.config.js"],
+  ignorePatterns: ["node_modules/**/*", ".github/*", "build", "dist", ".eslintrc.js", "*.config.js"],
   settings: {
     react: {
       version: "detect"
