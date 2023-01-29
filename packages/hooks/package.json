@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/hooks",
   "sideEffects": false,
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "PAST3LLE common hooks e.g useDetectIntoView, useDebounce, etc.",
   "main": "dist/index.js",
   "repository": {
@@ -67,5 +67,5 @@
     "lodash.debounce": "^4.0.8",
     "lodash.throttle": "^4.1.1"
   },
-  "gitHead": "e32b6f7cc208c0545e6dbfdbcf332432c3b145c1"
+  "gitHead": "361c29f970165772fef732b68ad9f454fe6c3a47"
 }
