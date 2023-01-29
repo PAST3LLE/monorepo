@@ -1,0 +1,84 @@
+{
+  "name": "@past3lle/skilltree-ui",
+  "description": "SKILLTREE UI",
+  "homepage": ".",
+  "sideEffects": false,
+  "main": "build/skilltree.js",
+  "module": "build/skilltree.esm.js",
+  "types": "build/index.d.ts",
+  "files": [
+    "build"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PAST3LLE/past3lle-monorepo.git"
+  },
+  "private": true,
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "scripts": {
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
+    "lint": "npx prettier --write src --ignore-path ./.prettierignore",
+    "start:mock": "REACT_APP_IS_MOCK=true && yarn start",
+    "start": "PORT=8080 GENERATE_SOURCEMAP=false craco start",
+    "build": "craco build",
+    "build:serve": "DISABLE_ESLINT_PLUGIN='true' craco build && npx serve build -l 666",
+    "test": "craco test --env=jsdom",
+    "test:debug": "craco --inspect-brk test --runInBand --no-cache",
+    "eject": "react-scripts eject",
+    "dedup": "npx yarn-deduplicate"
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.13.8",
+    "@craco/craco": "^5.7.0",
+    "@past3lle/assets": "^0.0.5",
+    "@past3lle/components": "^0.0.8-alpha.0",
+    "@past3lle/constants": "^0.0.4",
+    "@past3lle/hooks": "^0.0.4",
+    "@past3lle/theme": "^0.0.7-alpha.0",
+    "@past3lle/types": "^0.0.4",
+    "@past3lle/utils": "^0.0.4",
+    "@trivago/prettier-plugin-sort-imports": "^4.0.0",
+    "@types/jest": "^25.2.1",
+    "@types/node": "^13.13.5",
+    "@types/react": "^18.0.19",
+    "@types/react-dom": "^18.0.6",
+    "@types/rebass": "^4.0.5",
+    "@types/styled-components": "^5.1.0",
+    "@typescript-eslint/eslint-plugin": "^5.48.2",
+    "@typescript-eslint/parser": "^5.48.2",
+    "eslint": "^7.11.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.19.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "jotai": "^1.13.1",
+    "jotai-devtools": "^0.1.0",
+    "polished": "^3.3.2",
+    "prettier": "^2.8.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-error-overlay": "^6.0.11",
+    "react-scripts": "^5.0.1",
+    "rebass": "^4.0.7",
+    "serve": "^11.3.2",
+    "source-map-explorer": "^2.5.3",
+    "styled-components": "^5.3.5",
+    "typescript": "^4.8.3",
+    "web-vitals": "^3.1.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

@@ -43,9 +43,6 @@
             "path": "packages/hooks"
         },
         {
-            "path": "packages/skilltree-ui"
-        },
-        {
             "path": "packages/theme"
         },
         {
@@ -53,6 +50,9 @@
         },
         {
             "path": "packages/utils"
+        },
+        {
+            "path": "apps/skilltree-ui"
         }
     ],
     "files": []

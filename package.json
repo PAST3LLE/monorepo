@@ -1,5 +1,5 @@
 {
-  "name": "root",
+  "name": "past3lle-monorepo",
   "homepage": "https://github.com/past3lle/schematics-monorepo",
   "repository": "past3lle/schematics-monorepo",
   "private": true,
@@ -10,7 +10,7 @@
     "build": "lerna run build --stream",
     "lint": "lerna run lint --stream --parallel",
     "lint:examples": "npx prettier --write examples --ignore-file './prettierignore'",
-    "start:skilltree": "cd packages/skilltree-ui && yarn start && cd ../../",
+    "start:skilltree": "npx lerna run start --scope @past3lle/skilltree-ui",
     "test": "yarn jest --coverage",
     "install:examples": "cd examples/generic && yarn && cd ../ && cd skilltree-ui && yarn && cd ../../"
  },
@@ -29,6 +29,7 @@
   "dependencies": {
   },
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "apps/*"
   ]
 }

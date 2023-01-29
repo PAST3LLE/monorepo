@@ -1,5 +1,5 @@
 {
-  "packages": ["packages/*"],
+  "packages": ["packages/*", "apps/*"],
   "npmClient": "yarn",
   "useWorkspaces": true,
   "npmClientArgs": ["--no-lockfile"],
