@@ -10,8 +10,9 @@
     "build": "lerna run build --stream",
     "lint": "lerna run lint --stream --parallel",
     "lint:examples": "npx prettier --write examples --ignore-file './prettierignore'",
+    "start:skilltree": "cd packages/skilltree-ui && yarn start && cd ../../",
     "test": "yarn jest --coverage",
-    "postinstall": "cd examples/generic && yarn && cd ../ && cd skills && yarn && cd ../../"
+    "postinstall": "cd examples/generic && yarn && cd ../ && cd skilltree-ui && yarn && cd ../../"
  },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.48.2",

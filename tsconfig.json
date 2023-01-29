@@ -15,6 +15,9 @@
             "@past3lle/hooks/*": [
                 "hooks/src/*"
             ],
+            "@past3lle/skilltree-ui/*": [
+                "skilltree-ui/src/*"
+            ],
             "@past3lle/theme/*": [
                 "theme/src/*"
             ],
@@ -38,6 +41,9 @@
         },
         {
             "path": "packages/hooks"
+        },
+        {
+            "path": "packages/skilltree-ui"
         },
         {
             "path": "packages/theme"
