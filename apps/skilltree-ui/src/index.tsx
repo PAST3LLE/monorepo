@@ -1,13 +1,13 @@
-import { WindowSizeUpdater } from './state/WindowSize/udpaters'
-import { CUSTOM_THEME } from './theme/customTheme'
-import { GothicFontCssProvider } from './theme/fonts'
-import { CustomStaticGlobalCss, CustomThemeGlobalCss } from './theme/global'
-import { SkilltreeView } from './views/SkilltreeView'
 import { FontCssProvider, StaticGlobalCssProvider, ThemeProvider, ThemedGlobalCssProvider } from '@past3lle/theme'
 import { useAtomsDevtools } from 'jotai-devtools'
 import React, { ReactNode, StrictMode } from 'react'
 import 'react-app-polyfill/ie11'
 import ReactDOM from 'react-dom/client'
+import { WindowSizeUpdater } from 'state/WindowSize/updaters'
+import { CUSTOM_THEME } from 'theme/customTheme'
+import { GothicFontCssProvider } from 'theme/fonts'
+import { CustomStaticGlobalCss, CustomThemeGlobalCss } from 'theme/global'
+import { SkilltreeView } from 'views/SkilltreeView'
 
 const StaticCssProviders = () => (
   <>
