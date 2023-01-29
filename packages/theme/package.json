@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/theme",
   "sideEffects": false,
-  "version": "0.0.7-alpha.0",
+  "version": "0.0.7",
   "description": "common theme parts",
   "main": "dist/index.js",
   "repository": {
