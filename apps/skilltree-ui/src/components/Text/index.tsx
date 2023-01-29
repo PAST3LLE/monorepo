@@ -7,7 +7,11 @@ export const BlackBoldItalic = styled(Text.Black).attrs((props) => ({
   ...props,
 }))``
 
-export const BlackHeader = styled(BlackBoldItalic).attrs({ fontSize: '3.5rem', letterSpacing: -2 })`
+export const BlackHeader = styled(BlackBoldItalic).attrs((props) => ({
+  fontSize: '3.5rem',
+  letterSpacing: -2,
+  ...props,
+}))`
   padding: 1rem;
   margin: 1rem 0;
 `

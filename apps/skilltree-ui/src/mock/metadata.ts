@@ -1,4 +1,4 @@
-import { CollectionMetadata, SkillMetadata } from '../components/Skills/types'
+import { CollectionMetadata, SkillMetadata } from 'components/Skills/types'
 
 export const MOCK_COLLECTIONS_DATA: CollectionMetadata[] = [
   {

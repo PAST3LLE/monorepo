@@ -1,8 +1,8 @@
-import { GATEWAY_URI } from '../../constants/ipfs'
-import { MOCK_COLLECTIONS_DATA } from '../../mock/metadata'
 import { CollectionMetadata, SkillMetadata } from './types'
 import { getHash } from './utils'
 import { delay } from '@past3lle/utils'
+import { GATEWAY_URI } from 'constants/ipfs'
+import { MOCK_COLLECTIONS_DATA } from 'mock/metadata'
 import { useState, useEffect } from 'react'
 
 export function useMetadata(): { skills: SkillMetadata[]; collection: CollectionMetadata | undefined } {
@@ -33,15 +33,15 @@ export function useMetadata(): { skills: SkillMetadata[]; collection: Collection
 
 async function _fetchFreshestCollectionMetadata(): Promise<CollectionMetadata> {
   // TODO: call totalSupply() on PSTLCollections contract
-  const totalCollections = await delay(500, 1)
+  const totalCollections = await delay(272, 1)
   const freshestID = totalCollections - 1
 
   // TODO: call tokenUri(freshestID) on PSTLCollections contract using freshestID
-  const collectionMetadataUri = await delay(600, `https://ik.imagekit.io/pastelle/SKILLS/COLLECTIONS/${freshestID}`)
+  const collectionMetadataUri = await delay(250, `https://ik.imagekit.io/pastelle/SKILLS/COLLECTIONS/${freshestID}`)
 
   // TODO: fetch actual collection metadata here using <collectionMetadataUri>
   console.debug('[useSkills]::Fetching latest collection @ index', freshestID, ' @ url', collectionMetadataUri)
-  const collectionMetadata: CollectionMetadata = await delay(1200, MOCK_COLLECTIONS_DATA[freshestID])
+  const collectionMetadata: CollectionMetadata = await delay(300, MOCK_COLLECTIONS_DATA[freshestID])
 
   return collectionMetadata
 }
@@ -52,7 +52,7 @@ async function _fetchNewestCollectionSkills(
   const totalSkills = collectionMetadata?.properties?.skills
   if (!totalSkills) return undefined
 
-  const mockContract = await delay<{ uri(id: number): Promise<string> }>(700, {
+  const mockContract = await delay<{ uri(id: number): Promise<string> }>(320, {
     async uri(id: number): Promise<string> {
       console.debug('Fetchihg URI for id', id)
       return 'ipfs://QmPf95AjYdgsTsZ9BcqqabYB4pdFgLoAQhnHN93UbDswio/{id}.json'

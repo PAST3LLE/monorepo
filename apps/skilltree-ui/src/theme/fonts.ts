@@ -1,4 +1,4 @@
-import Gothic from '../assets/fonts/GothAndGothic.otf'
+import Gothic from 'assets/fonts/GothAndGothic.otf'
 import { createGlobalStyle } from 'styled-components/macro'
 
 export const GothicFontCssProvider = createGlobalStyle`

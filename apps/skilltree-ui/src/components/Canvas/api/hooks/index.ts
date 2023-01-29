@@ -1,8 +1,8 @@
-import BG_IMAGE from '../../../../assets/png/background.png'
 import { LAYOUT_CONFIG } from '../config'
 import { Lightning } from '../lightning'
 import { LightningConfig } from '../types'
 import { Vector } from '../vector'
+import BG_IMAGE from 'assets/png/background.png'
 import { useEffect, useState } from 'react'
 
 interface LightningCanvasProps {

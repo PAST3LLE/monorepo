@@ -1,5 +1,5 @@
-import { GATEWAY_URI } from '../../constants/ipfs'
 import { SkillMetadata } from './types'
+import { GATEWAY_URI } from 'constants/ipfs'
 
 export const getHash = (uri: string) => (uri.startsWith('ipfs://') ? uri.substring(7) : uri)
 

@@ -1,4 +1,4 @@
-import BG_IMAGE from '../assets/png/background.png'
+import BG_IMAGE from 'assets/png/background.png'
 import { createGlobalStyle } from 'styled-components/macro'
 
 export const CustomStaticGlobalCss = createGlobalStyle`

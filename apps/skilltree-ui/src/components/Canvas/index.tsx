@@ -1,9 +1,9 @@
-import { useGetWindowSize } from '../../state/WindowSize'
 import { CONFIG } from './api/config'
 import { useLightningCanvas } from './api/hooks'
 import { StyledCanvas } from './styleds'
 import { useEffectRef } from '@past3lle/hooks'
 import React from 'react'
+import { useGetWindowSize } from 'state/WindowSize'
 
 const CANVAS_ID = 'skilltree'
 

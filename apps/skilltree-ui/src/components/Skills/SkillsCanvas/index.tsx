@@ -1,7 +1,7 @@
-import { LightningCanvas } from '../../Canvas'
-import { SkillColumn } from '../SkillsColumn'
-import { useMetadata } from '../hooks'
 import { Row } from '@past3lle/components'
+import { LightningCanvas } from 'components/Canvas'
+import { SkillColumn } from 'components/Skills/SkillsColumn'
+import { useMetadata } from 'components/Skills/hooks'
 import React from 'react'
 import styled from 'styled-components/macro'
 

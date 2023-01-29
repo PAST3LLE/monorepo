@@ -1,7 +1,8 @@
-import { Skillpoint } from '../Skillpoint'
-import { StyledSkillpoint } from '../common'
-import { SkillMetadata } from '../types'
-import { ColumnCenter, Text } from '@past3lle/components'
+import { ColumnCenter, Text, VideoDelayer } from '@past3lle/components'
+import { Skillpoint } from 'components/Skills/Skillpoint'
+import { StyledSkillpoint } from 'components/Skills/common'
+import { SkillMetadata } from 'components/Skills/types'
+import { ThemedHeader } from 'components/Text'
 import React from 'react'
 import { BoxProps } from 'rebass'
 import styled from 'styled-components/macro'
@@ -42,7 +43,12 @@ export function SkillColumn(props: SkillColumnProps) {
         !isEmpty ? (
           <Skillpoint key={skill.image} {...skill} />
         ) : (
-          <StyledSkillpoint active={false} key={idx} backgroundColor="#4a484e57" />
+          <StyledSkillpoint active={false} key={idx} backgroundColor="#4a484e57">
+            <VideoDelayer $zIndex={100} />
+            <ThemedHeader fontSize="1.2rem" letterSpacing={0}>
+              LOADING...
+            </ThemedHeader>
+          </StyledSkillpoint>
         )
       )}
     </StyledSkillColumnWrapper>
