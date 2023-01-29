@@ -14,7 +14,8 @@
     "lint:examples": "npx prettier --write examples --ignore-file './prettierignore'",
     "start:skilltree": "npx lerna run start --scope @past3lle/skilltree-ui",
     "test": "yarn jest --coverage",
-    "install:examples": "cd examples/generic && yarn && cd ../../"
+    "install:examples": "cd examples/generic && yarn && cd ../../",
+    "publish:all": "lerna publish"
  },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.48.2",
