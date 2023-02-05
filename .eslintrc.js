@@ -38,10 +38,6 @@ module.exports = {
             message: "Please import from 'lodash/module' directly to support tree-shaking."
           },
           {
-            name: "ethers",
-            message: "Please import from '@ethersproject/module' directly to support tree-shaking."
-          },
-          {
             name: "@lingui/macro",
             importNames: ["t"],
             message: "Please use <Trans> instead of t."

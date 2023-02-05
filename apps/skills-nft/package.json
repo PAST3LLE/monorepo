@@ -1,0 +1,38 @@
+{
+  "name": "@past3lle/skills-nft",
+  "version": "0.0.1",
+  "description": "Skills and Skilltree NFT assets and scripts",
+  "author": "pastelle <pastelle.portugal@gmail.com>",
+  "homepage": "https://github.com/past3lle/schematics-monorepo/tree/main/apps/skills-nft#readme",
+  "license": "ISC",
+  "main": "lib/skills-nft.js",
+  "type": "module",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PAST3LLE/past3lle-monorepo.git"
+  },
+  "scripts": {
+    "test": "node ./__tests__/skills-nft.test.js",
+    "w3name:key": "node src/scripts/ipns/key.js",
+    "w3name:publish": "node src/scripts/ipns/publish.js",
+    "w3name:revise": "node src/scripts/ipns/revise.js",
+    "firebase:upload": "node src/scripts/firebase/upload.js"
+  },
+  "bugs": {
+    "url": "https://github.com/PAST3LLE/past3lle-monorepo/issues"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.3",
+    "firebase-admin": "^11.5.0",
+    "is-ipfs": "^8.0.1",
+    "uuid": "^9.0.0",
+    "w3name": "^1.0.7"
+  }
+}

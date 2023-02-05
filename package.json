@@ -4,7 +4,7 @@
   "repository": "past3lle/schematics-monorepo",
   "private": true,
   "engines": {
-    "node": ">=16.11.1"
+    "node": ">=18.0.0"
   },
   "scripts": {
     "test:generic": "cd examples/generic && rm -rf node_modules .parcel-cache && yarn && yarn start && cd ../..",

@@ -18,6 +18,9 @@
             "@past3lle/skilltree-ui/*": [
                 "apps/skilltree-ui/src/*"
             ],
+            "@past3lle/skills-nft/*": [
+                "apps/skilltree-ui/src/*"
+            ],
             "@past3lle/theme/*": [
                 "packages/theme/src/*"
             ],
@@ -50,6 +53,9 @@
         },
         {
             "path": "packages/utils"
+        },
+        {
+            "path": "apps/skills-nft"
         },
         {
             "path": "apps/skilltree-ui"
