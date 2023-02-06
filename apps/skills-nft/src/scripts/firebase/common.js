@@ -12,9 +12,9 @@ export function createFirebaseAdmin() {
   return { admin, storageRef }
 }
 
-export async function uploadFile({ path, destination }) {
-  const { storageRef } = createFirebaseAdmin()
-  const storage = storageRef.upload(path, {
+export async function uploadFile({ path, destination }, storageRef) {
+  const ref = storageRef || createFirebaseAdmin().storageRef
+  const storage = ref.upload(path, {
     public: true,
     destination,
     metadata: {
