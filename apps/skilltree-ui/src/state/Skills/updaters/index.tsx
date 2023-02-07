@@ -1,11 +1,11 @@
-import { SkillsMetadataUpdater } from './metadata'
+import { GridPositionUpdater } from './GridPositionUpdater'
+import { SkillsMetadataUpdater } from './MetadataUpdater'
 import React from 'react'
-
-export * from './metadata'
 
 const SkillsUpdaters = () => (
   <>
     <SkillsMetadataUpdater />
+    <GridPositionUpdater />
   </>
 )
 

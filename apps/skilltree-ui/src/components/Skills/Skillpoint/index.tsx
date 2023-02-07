@@ -5,14 +5,15 @@ import sprayBg from 'assets/png/spray.png'
 import { Vector } from 'components/Canvas/api/vector'
 import { GATEWAY_URI } from 'constants/ipfs'
 import React from 'react'
-import { useSkillsAtom } from 'state/Skills'
+import { SkillsState, useSkillsAtom } from 'state/Skills'
 import styled from 'styled-components/macro'
 
 interface Props {
   metadata: SkillMetadata
   vector?: Vector
+  lightupDependencies: (state: SkillsState) => void
 }
-export function Skillpoint({ metadata, vector }: Props) {
+export function Skillpoint({ metadata, vector, lightupDependencies }: Props) {
   const [state, setSkillState] = useSkillsAtom()
   const formattedUri = getHash(metadata.image)
 
@@ -20,12 +21,18 @@ export function Skillpoint({ metadata, vector }: Props) {
   const isDependency = state.activeDependencies.includes(metadata.properties.id)
   const isOtherSkillActive = !isDependency && !isCurrentSkillActive && !!state.active
 
-  const handleClick = () =>
-    setSkillState((state) => ({
-      ...state,
-      active: isCurrentSkillActive ? undefined : metadata.properties.id,
-      activeDependencies: isCurrentSkillActive ? [] : metadata.properties.dependencies,
-    }))
+  const handleClick = () => {
+    setSkillState((state) => {
+      const newState = {
+        ...state,
+        active: isCurrentSkillActive ? undefined : metadata.properties.id,
+        activeDependencies: isCurrentSkillActive ? [] : metadata.properties.dependencies,
+      }
+      // light it up
+      lightupDependencies(newState)
+      return newState
+    })
+  }
 
   return (
     <StyledSkillpoint

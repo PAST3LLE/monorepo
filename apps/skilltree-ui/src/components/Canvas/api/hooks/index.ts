@@ -4,7 +4,7 @@ import { Vector } from '../vector'
 import BG_IMAGE from 'assets/png/background.png'
 import { SkillMetadata } from 'components/Skills/types'
 import { useEffect, useState } from 'react'
-import { useSkillsAtomRead } from 'state/Skills'
+import { SkillGridPositionList, SkillsState, useSkillsAtomRead } from 'state/Skills'
 
 interface LightningCanvasProps {
   canvasDOM: HTMLCanvasElement | null | undefined
@@ -40,6 +40,7 @@ export function useLightningCanvas({ canvasDOM, config, dimensions }: LightningC
   useEffect(() => {
     if (!canvas || !ready || !canvasDOM?.parentElement) return
 
+    /* Uncomment for event listening
     // when changes we remove listeners
     canvas.removeEventListener('mousedown', _onMouseDown, true)
     canvas.removeEventListener('mouseup', _onMouseUp, true)
@@ -55,6 +56,7 @@ export function useLightningCanvas({ canvasDOM, config, dimensions }: LightningC
     canvas.addEventListener('touchstart', _onTouchStart, { passive: true })
     canvas.addEventListener('touchend', _onTouchEnd, { passive: true })
     canvas.addEventListener('touchmove', _onTouchMove, { passive: true })
+    */
 
     // reset points array
     points = calculateGridPoints(metadata, canvasDOM.parentElement)
@@ -99,23 +101,28 @@ function _animate() {
   if (draw) {
     points.forEach(({ vector: point }) => {
       if (ctx && point) {
-        // TODO: enable to see lightning sources
-        // shouldn't be enabled in prod
-        // ctx.fillRect(point.X1, point.Y1, 20, 20)
-        // ctx.fillStyle = 'red'
-
         ltApi.Cast(ctx, point, target)
       }
     })
-  } /* else {
-      ctx.globalAlpha = 0.1
-    } */
+  }
 
   setTimeout(() => {
     _animate()
   }, 60)
 }
 
+export function toggleSelectedSkill(id: `${string}-${string}`, state: SkillsState) {
+  const selectedSkill = state.vectorsMap[id]
+  if (!state.active || !selectedSkill.vector) {
+    draw = false
+  } else {
+    points = (state.activeDependencies || []).map((key) => state.vectorsMap[key])
+    draw = true
+    target = new Vector(0, 0, selectedSkill.vector.X1, selectedSkill.vector.Y1)
+  }
+}
+
+/* Uncomment for eventListening
 function _onMouseDown(e: MouseEvent) {
   draw = true
   target = new Vector(
@@ -160,11 +167,8 @@ function _onTouchMove(e: TouchEvent) {
     )
   }
 }
-
-export function calculateGridPoints(
-  metadata: SkillMetadata[][],
-  container: HTMLElement
-): { vector: Vector | undefined; skill: SkillMetadata | undefined }[] {
+*/
+export function calculateGridPoints(metadata: SkillMetadata[][], container: HTMLElement): SkillGridPositionList {
   const largest = metadata.slice().sort((a, b) => b.length - a.length)
   const columns = metadata.length
   const rows = largest[0].length
