@@ -9,11 +9,12 @@
    "**/node_modules/**",
    "**/package.json",
    "**/*.md",
-   "**/perf/**"
+   "**/perf/**",
+   "**/.nvmrc"
  ],
   "command": {
      "version": {
-        "ignoreChanges": ["*.md"],
+        "ignoreChanges": ["*.md", ".nvmrc"],
         "npmClient": "npm",
         "message": "chore(release): publish"
      },
