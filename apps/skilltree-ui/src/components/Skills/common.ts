@@ -32,7 +32,7 @@ export const StyledSkillpoint = styled(StyledGridItem)<{
   ${({ isDependency }) => isDependency && `box-shadow: 5px 5px 10px 0px #d5fb73b8, -5px -5px 10px 0px #00ff7fa8;`}
   ${({ dimSkill }) => dimSkill && `filter: brightness(0.25) saturate(5);`}
 
-  transition: filter 1.2s ease-in-out;
+  transition: filter 0.4s ease-in-out;
 `
 
 export const SkillpointHeader = styled(StyledGridItem)`
