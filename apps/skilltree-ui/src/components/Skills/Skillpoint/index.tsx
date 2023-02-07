@@ -16,26 +16,28 @@ export function Skillpoint({ metadata, vector }: Props) {
   const [state, setSkillState] = useSkillsAtom()
   const formattedUri = getHash(metadata.image)
 
-  const isActive = metadata.properties.id === state.active
+  const isCurrentSkillActive = metadata.properties.id === state.active
   const isDependency = state.activeDependencies.includes(metadata.properties.id)
+  const isOtherSkillActive = !isDependency && !isCurrentSkillActive && !!state.active
 
   const handleClick = () =>
     setSkillState((state) => ({
       ...state,
-      active: isActive ? undefined : metadata.properties.id,
-      activeDependencies: isActive ? [] : metadata.properties.dependencies,
+      active: isCurrentSkillActive ? undefined : metadata.properties.id,
+      activeDependencies: isCurrentSkillActive ? [] : metadata.properties.dependencies,
     }))
 
   return (
     <StyledSkillpoint
       rarity={metadata.properties?.rarity}
-      active={isActive}
+      dimSkill={isOtherSkillActive}
+      active={isCurrentSkillActive}
       isDependency={!!isDependency}
       onClick={handleClick}
       vector={vector}
     >
       <img src={`${GATEWAY_URI}/${formattedUri}`} style={{ maxWidth: '100%' }} />
-      {isActive && <SprayBg />}
+      {isCurrentSkillActive && <SprayBg />}
     </StyledSkillpoint>
   )
 }

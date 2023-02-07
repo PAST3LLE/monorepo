@@ -30,6 +30,7 @@ export function SkillColumn(props: SkillColumnProps) {
           <StyledSkillpoint
             isDependency={false}
             rarity={undefined}
+            dimSkill={false}
             active={false}
             key={idx}
             backgroundColor="#4a484e57"

@@ -169,7 +169,7 @@ export function calculateGridPoints(
   const columns = metadata.length
   const rows = largest[0].length
 
-  const gridHeight = container.clientHeight - 60
+  const gridHeight = container.clientHeight - 40
   const gridWidth = container.clientWidth
 
   // config

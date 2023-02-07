@@ -79,7 +79,7 @@ export function SkillsCanvas() {
   )
 
   return (
-    <Column padding="2rem" height={'100%'} style={{ position: 'relative' }}>
+    <Column height={'100%'} style={{ position: 'relative' }}>
       <Row width={'100%'} height={'10rem'} justifyContent="space-between" style={{ position: 'relative' }}>
         <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
           {skillGridPosition.slice(0, skillsMetadata.length).map(({ vector }, idx) => {
