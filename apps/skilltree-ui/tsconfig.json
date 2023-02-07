@@ -1,7 +1,8 @@
 {
     "extends": "../../tsconfig.build.json",
     "include": [
-        "src/**/*"
+        "src/**/*",
+        "src/web3/old_abis/*.json"
     ],
     "compilerOptions": {
         "baseUrl": "src",
@@ -22,6 +23,9 @@
         },
         {
             "path": "../../packages/hooks"
+        },
+        {
+            "path": "../skills-nft"
         },
         {
             "path": "../../packages/theme"

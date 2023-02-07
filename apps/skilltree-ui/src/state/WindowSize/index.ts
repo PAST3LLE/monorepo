@@ -10,6 +10,7 @@ export const windowSizeAtom = atom<WindowSizeState>({
   width: undefined,
   height: undefined,
 })
+windowSizeAtom.debugLabel = 'WINDOW SIZE ATOM'
 
 export const windowSizeGetter = atom((get) => get(windowSizeAtom))
 export const useGetWindowSize = () => useAtom(windowSizeGetter)

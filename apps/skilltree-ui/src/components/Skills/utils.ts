@@ -1,4 +1,4 @@
-import { SkillMetadata } from './types'
+import { Rarity, SkillMetadata } from './types'
 import { GATEWAY_URI } from 'constants/ipfs'
 
 export const getHash = (uri: string) => (uri.startsWith('ipfs://') ? uri.substring(7) : uri)
@@ -8,4 +8,21 @@ export async function getTokenUri(imageUri: SkillMetadata['image']) {
   const skillUriHash = getHash(skillMetaData.image)
 
   return `${GATEWAY_URI}/${skillUriHash}`
+}
+
+export function getRarityColours(rarity?: Rarity) {
+  switch (rarity) {
+    case 'rare':
+      return { backgroundColor: '#6495ed', boxShadowColor: '#6495ed' }
+    case 'legendary':
+      return { backgroundColor: '#ab64ffbd', boxShadowColor: '#8000809e' }
+    case 'epic':
+      return { backgroundColor: '#ffb467', boxShadowColor: '#ffb467' }
+    default:
+      // is common or unset
+      return {
+        backgroundColor: '#969696b3',
+        boxShadowColor: '#969696b3',
+      }
+  }
 }

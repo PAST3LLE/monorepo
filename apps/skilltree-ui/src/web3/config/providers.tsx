@@ -9,7 +9,7 @@ if (!process.env.REACT_APP_WALLETCONNECT_KEY) {
 }
 
 // Wagmi client
-const { provider } = configureChains(SUPPORTED_CHAINS, [
+export const { provider } = configureChains(SUPPORTED_CHAINS, [
   walletConnectProvider({ projectId: process.env.REACT_APP_WALLETCONNECT_KEY }),
 ])
 
@@ -35,5 +35,11 @@ export const Web3Modal = () => {
   if (!process.env.REACT_APP_WALLETCONNECT_KEY) {
     throw new Error('MISSING OR INVALID WALLET_CONNECT KEY! PLEASE SET ONE IN YOUR ENV FILES')
   }
-  return <Web3ModalComponent projectId={process.env.REACT_APP_WALLETCONNECT_KEY} ethereumClient={ethereumClient} />
+  return (
+    <Web3ModalComponent
+      themeBackground="themeColor"
+      projectId={process.env.REACT_APP_WALLETCONNECT_KEY}
+      ethereumClient={ethereumClient}
+    />
+  )
 }

@@ -17,3 +17,5 @@ declare module '*.otf' {
   export const src: string
   export default src
 }
+
+declare module '@past3lle/skills-nft/src/skills/metadata.js'

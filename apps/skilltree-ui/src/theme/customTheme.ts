@@ -2,7 +2,9 @@ export const CUSTOM_THEME = {
   text1: '#fff',
   bg1: '#d5fb73',
   mainBg: '#d5fb73',
-  mainBg2: 'ghostwhite',
+  mainBg2: '#262528',
+  mainFg: 'ghostwhite',
+  mainFg2: 'red',
   darkText: '#000',
   lightText: 'ghostwhite',
 } as const

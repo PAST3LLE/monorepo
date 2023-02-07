@@ -1,9 +1,10 @@
-import { LAYOUT_CONFIG } from '../config'
 import { Lightning } from '../lightning'
 import { LightningConfig } from '../types'
 import { Vector } from '../vector'
 import BG_IMAGE from 'assets/png/background.png'
+import { SkillMetadata } from 'components/Skills/types'
 import { useEffect, useState } from 'react'
+import { useSkillsAtomRead } from 'state/Skills'
 
 interface LightningCanvasProps {
   canvasDOM: HTMLCanvasElement | null | undefined
@@ -16,10 +17,11 @@ let canvas: HTMLCanvasElement,
   ctx: CanvasRenderingContext2D | null,
   ltApi: Lightning,
   draw: boolean,
-  points: Vector[] = []
+  points: { vector: Vector | undefined; skill: SkillMetadata | undefined }[] = []
 
 export function useLightningCanvas({ canvasDOM, config, dimensions }: LightningCanvasProps) {
   const [ready, setReadyStatus] = useState(false)
+  const [{ metadata }] = useSkillsAtomRead()
 
   // ===========================
   // EFFECTS
@@ -36,7 +38,7 @@ export function useLightningCanvas({ canvasDOM, config, dimensions }: LightningC
   // use as a dep
   const { width, height } = dimensions
   useEffect(() => {
-    if (!canvas || !ready) return
+    if (!canvas || !ready || !canvasDOM?.parentElement) return
 
     // when changes we remove listeners
     canvas.removeEventListener('mousedown', _onMouseDown, true)
@@ -55,41 +57,12 @@ export function useLightningCanvas({ canvasDOM, config, dimensions }: LightningC
     canvas.addEventListener('touchmove', _onTouchMove, { passive: true })
 
     // reset points array
-    points = []
-
-    // config
-    const rowHeight = Math.round(canvas.height / LAYOUT_CONFIG.rows)
-    const halfRow = Math.round(rowHeight / 2)
-    const columnWidth = Math.round(canvas.width / LAYOUT_CONFIG.columns)
-    const halfColumn = Math.round(columnWidth / 2)
-    const xOffset = halfColumn
-
-    // cache which row we're currently on
-    let row = 1
-    // loop while count is smaller than total cells (3col * 6row = 18)
-    for (let i = 0; i < LAYOUT_CONFIG.columns * LAYOUT_CONFIG.rows; i++) {
-      // e.g 3i % 3 === 0 means we are onto the next row
-      if (i > 0 && i % LAYOUT_CONFIG.columns === 0) {
-        // we have moved onto the next row, iterate variable
-        row++
-      }
-
-      // e.g i = 2
-      // 200cw * 2 = 400aw
-      // 200cw + 400aw = 600aw
-      // 600 - 100hc = 500
-      const xAxis = columnWidth * (i % LAYOUT_CONFIG.columns) + xOffset
-      const yAxis = (canvas.height / LAYOUT_CONFIG.rows) * row - halfRow
-      const vector = new Vector(0, 0, xAxis, yAxis)
-
-      points.push(vector)
-    }
-    console.debug('POINTS', points)
+    points = calculateGridPoints(metadata, canvasDOM.parentElement)
 
     _buildApi(config)
 
     window.requestAnimationFrame(_animate)
-  }, [config, ready, height, width])
+  }, [config, ready, height, width, metadata, canvasDOM?.parentElement])
 
   // ========================
   // CLEARS CANVAS ON A TIMER
@@ -124,8 +97,8 @@ function _animate() {
   ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height)
 
   if (draw) {
-    points.forEach((point) => {
-      if (ctx) {
+    points.forEach(({ vector: point }) => {
+      if (ctx && point) {
         // TODO: enable to see lightning sources
         // shouldn't be enabled in prod
         // ctx.fillRect(point.X1, point.Y1, 20, 20)
@@ -186,4 +159,46 @@ function _onTouchMove(e: TouchEvent) {
       e.touches[0].clientY - canvas.offsetTop + document.documentElement.scrollTop
     )
   }
+}
+
+export function calculateGridPoints(
+  metadata: SkillMetadata[][],
+  container: HTMLElement
+): { vector: Vector | undefined; skill: SkillMetadata | undefined }[] {
+  const largest = metadata.slice().sort((a, b) => b.length - a.length)
+  const columns = metadata.length
+  const rows = largest[0].length
+
+  const gridHeight = container.clientHeight - 60
+  const gridWidth = container.clientWidth
+
+  // config
+  const rowHeight = Math.round(gridHeight / rows)
+  const columnWidth = Math.round(gridWidth / columns)
+
+  // cache which row we're currently on
+  let row = 1
+  // loop while count is smaller than total cells (3col * 6row = 18)
+  const points = []
+  for (let i = 0; i < columns * rows; i++) {
+    // e.g 3i % 3 === 0 means we are onto the next row
+    if (i > 0 && i % columns === 0) {
+      // we have moved onto the next row, iterate variable
+      row++
+    }
+
+    const skillAtPosition = metadata[i % columns][row - 1]
+
+    // e.g i = 2
+    // 200cw * 2 = 400aw
+    // 200cw + 400aw = 600aw
+    // 600 - 100hc = 500
+    const xAxis = Math.floor(columnWidth * (i % columns) + columnWidth / columns)
+    const yAxis = Math.floor((gridHeight / rows) * row - rowHeight / 1.5)
+    const vector: Vector | undefined = !!skillAtPosition ? new Vector(0, 0, xAxis, yAxis) : undefined
+
+    points.push({ vector, skill: skillAtPosition })
+  }
+
+  return points
 }
