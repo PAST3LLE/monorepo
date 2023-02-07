@@ -1,0 +1,13 @@
+{
+ "description": "GODLY.LONGSLEEVE.OVERSIZED.HEAVY-COTTON.",
+ "image": "ipfs://QmPTYa4M3dsPQiYDeDfsVu23EmcRx1gxYsX7sVzdwaFz64",
+ "name": "GODLY",
+ "properties": {
+  "rarity": "rare",
+  "dependencies": [
+   "0xECEC89d8FEfAd93a9199b6f9498F75459335e3Cb",
+   "1000"
+  ],
+  "shopifyId": "SOME_SHOPIFY_ID"
+ }
+}

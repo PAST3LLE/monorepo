@@ -18,4 +18,7 @@ declare module '*.otf' {
   export default src
 }
 
-declare module '@past3lle/skills-nft/src/skills/metadata.js'
+declare module '*.json' {
+  export const src: string
+  export default src
+}
