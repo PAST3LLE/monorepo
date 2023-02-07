@@ -13,10 +13,11 @@ if (!args.fileType) throw new Error('Missing fileType<string> arg')
 
 const size = args.size || 1
 // index exists, don't loop
-if (args.index) {
+if (args.fileName || args.index) {
+  const fileName = args.fileName || args.index * 1000
   await uploadFile({
-    path: `${args.path}/${args.index * 1000}.${args.fileType}`,
-    destination: `${args.destination}/${args.index * 1000}.${args.fileType}`
+    path: `${args.path}/${fileName}.${args.fileType}`,
+    destination: `${args.destination}/${fileName}.${args.fileType}`
   }).catch(console.error)
 } else {
   const { storageRef: singletonStorageRef } = createFirebaseAdmin()
@@ -43,10 +44,17 @@ npx lerna run firebase:upload -- \
 --size 6 \
 --fileType "json"
 
-// SINGLE FILE
+// SINGLE WITH ID NAME (e.g 1000.json) FILE
 npx lerna run firebase:upload -- \
 --path "./src/skills/1/metadata" \
 --destination "1/metadata" \
 --index 2 \
+--fileType "json"
+
+// SINGLE WITH ID NAME (e.g 1000.json) FILE
+npx lerna run firebase:upload -- \
+--path "./src/skills/1" \
+--destination "1" \
+--fileName "metadata" \
 --fileType "json"
 */
