@@ -3,7 +3,6 @@ import { AtomsDevtools } from 'dev/devTools'
 import React, { StrictMode } from 'react'
 import 'react-app-polyfill/ie11'
 import ReactDOM from 'react-dom/client'
-// import { JotaiStateProvider } from 'state'
 import { SkillsUpdaters } from 'state/Skills/updaters'
 import { WindowSizeUpdater } from 'state/WindowSize/updaters'
 import { CUSTOM_THEME } from 'theme/customTheme'
@@ -36,7 +35,6 @@ root.render(
       {/* @ts-ignore */}
       <AtomsDevtools>
         {/* UPDATERS */}
-        {/* <JotaiStateProvider /> */}
         <SkillsUpdaters />
         <WindowSizeUpdater />
         {/* THEME PROVIDERS */}

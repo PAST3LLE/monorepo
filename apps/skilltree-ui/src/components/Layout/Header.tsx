@@ -28,13 +28,12 @@ export const Header = () => (
       <LogoHeader>
         <Skilltreecon /> SKILLTREE
       </LogoHeader>
-      <AutoRow display={'inline-flex'} backgroundColor={'ghostwhite'} padding={'1rem'}>
+      <AutoRow display={'inline-flex'} backgroundColor={'ghostwhite'} padding={'1rem'} marginRight="auto">
         <BlackBoldItalic fontSize={'1.5rem'}>
-          ACQUIRE NEW SKILL IN{' '}
+          CHECK OUT THE{' '}
           <ExternalLink color="red" href={SHOP_URL}>
             THE FORGE
           </ExternalLink>{' '}
-          AND UPGRADE THEM HERE
         </BlackBoldItalic>
       </AutoRow>
       <Row justifyContent={'flex-end'} width="auto" gap="1rem" minWidth="371px">

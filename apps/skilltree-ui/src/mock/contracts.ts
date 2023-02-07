@@ -2,7 +2,7 @@ import { Address } from 'abitype'
 
 export const CONTRACT_COLLECTIONS = {
   async getUri(id: number) {
-    return `pastelle-skilltree/firebase-storage/${id}`
+    return `ipfs://QwdAdkjnafAfbiasf1289asfdabAkfbaksfb/${id}`
   },
   async getSkillsAddress(id: number): Promise<Address> {
     return `0xaaaaaaaabbbbbbxxccccccc000${id}`
