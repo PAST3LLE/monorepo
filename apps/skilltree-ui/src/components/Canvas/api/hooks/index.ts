@@ -86,6 +86,7 @@ export function useLightningCanvas({ canvasDOM, config, dimensions }: LightningC
 function _buildApi(config: LightningConfig) {
   ltApi = new Lightning(config)
 }
+
 const bgImage = new Image()
 bgImage.src = BG_IMAGE
 function _animate() {
@@ -173,7 +174,7 @@ export function calculateGridPoints(metadata: SkillMetadata[][], container: HTML
   const columns = metadata.length
   const rows = largest[0].length
 
-  const gridHeight = container.clientHeight - 40
+  const gridHeight = container.clientHeight - 30
   const gridWidth = container.clientWidth
 
   // config
@@ -198,7 +199,7 @@ export function calculateGridPoints(metadata: SkillMetadata[][], container: HTML
     // 200cw + 400aw = 600aw
     // 600 - 100hc = 500
     const xAxis = Math.floor(columnWidth * (i % columns) + columnWidth / columns)
-    const yAxis = Math.floor((gridHeight / rows) * row - rowHeight / 1.5)
+    const yAxis = Math.floor((gridHeight / rows) * (row + 0.2) - rowHeight)
     const vector: Vector | undefined = !!skillAtPosition ? new Vector(0, 0, xAxis, yAxis) : undefined
 
     points.push({ vector, skill: skillAtPosition })

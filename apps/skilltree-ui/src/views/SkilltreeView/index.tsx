@@ -5,8 +5,6 @@ import React from 'react'
 import styled from 'styled-components/macro'
 
 const StyledMain = styled(ArticleFadeIn)`
-  // TOOD: remove - testing to see main boundaries
-  margin: 2rem;
   background: rgba(0, 0, 0, 0.4);
 `
 const Main = () => (

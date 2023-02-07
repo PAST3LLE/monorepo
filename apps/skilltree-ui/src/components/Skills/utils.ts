@@ -13,16 +13,16 @@ export async function getTokenUri(imageUri: SkillMetadata['image']) {
 export function getRarityColours(rarity?: Rarity) {
   switch (rarity) {
     case 'rare':
-      return { backgroundColor: '#6495ed', boxShadowColor: '#6495ed' }
+      return { backgroundColor: '#6495ed', boxShadowColor: '12px 8px #6495ed' }
     case 'legendary':
-      return { backgroundColor: '#ab64ffbd', boxShadowColor: '#8000809e' }
+      return { backgroundColor: '#ab64ffbd', boxShadowColor: '12px 8px #8000809e' }
     case 'epic':
-      return { backgroundColor: '#ffb467', boxShadowColor: '#ffb467' }
+      return { backgroundColor: '#ffb467', boxShadowColor: '12px 8px #ffb467' }
     default:
       // is common or unset
       return {
         backgroundColor: '#969696b3',
-        boxShadowColor: '#969696b3',
+        boxShadowColor: '12px 2px #969696b3',
       }
   }
 }
