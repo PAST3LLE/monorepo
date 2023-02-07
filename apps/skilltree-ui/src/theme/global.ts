@@ -6,7 +6,8 @@ import { createGlobalStyle, css } from 'styled-components/macro'
 const Web3ModalOverrideVariables = css`
   ${({ theme }) => `
     --w3m-color-fg-accent: ${theme.mainBg2} !important;
-    --w3m-color-bg-1: ${theme.mainBg} !important;
+    // --w3m-color-bg-1: ${theme.mainBg} !important;
+    --w3m-color-bg-1: ${theme.mainBgDarker} !important;
     --w3m-color-bg-2: ${theme.mainBg2} !important;
     --w3m-color-fg-1: ${theme.mainBg2} !important;
     --w3m-color-fg-2: ${theme.mainFg} !important;
