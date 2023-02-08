@@ -53,7 +53,15 @@ export function SkillsCanvas() {
   return (
     <Column height={'100%'} style={{ position: 'relative' }}>
       <Row width={'100%'} height={'12vh'} justifyContent="space-between" style={{ position: 'relative' }}>
-        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+          }}
+        >
           {vectors.slice(0, metadata.length).map(({ vector }, idx) => {
             const idxToRoman = convertToRomanNumerals(idx + 1)
             if (!vector) return null
@@ -66,7 +74,15 @@ export function SkillsCanvas() {
         </div>
       </Row>
       <Column height={'100%'} style={{ position: 'relative' }} id="CANVAS-CONTAINER">
-        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+          }}
+        >
           {vectors.map(({ skill, vector }) => {
             if (!skill) return null
             return (

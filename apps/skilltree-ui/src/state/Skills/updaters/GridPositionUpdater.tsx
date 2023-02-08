@@ -15,7 +15,10 @@ export function GridPositionUpdater() {
   useEffect(
     () => {
       const ref = document.getElementById('CANVAS-CONTAINER')
-      setSkillState((state) => ({ ...state, vectors: ref ? calculateGridPoints(skillsMetadata, ref) : [] }))
+      setSkillState((state) => ({
+        ...state,
+        vectors: ref ? calculateGridPoints(skillsMetadata, ref) : [],
+      }))
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [skillsMetadata, windowSizeState.height, windowSizeState.width]

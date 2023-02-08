@@ -15,7 +15,10 @@ export function getRarityColours(rarity?: Rarity) {
     case 'rare':
       return { backgroundColor: '#6495ed', boxShadowColor: '12px 8px #6495ed' }
     case 'legendary':
-      return { backgroundColor: '#ab64ffbd', boxShadowColor: '12px 8px #8000809e' }
+      return {
+        backgroundColor: '#ab64ffbd',
+        boxShadowColor: '12px 8px #8000809e',
+      }
     case 'epic':
       return { backgroundColor: '#ffb467', boxShadowColor: '12px 8px #ffb467' }
     default:

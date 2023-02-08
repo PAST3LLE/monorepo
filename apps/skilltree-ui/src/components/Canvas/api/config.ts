@@ -1,11 +1,11 @@
 import { LightningConfig } from './types'
 
 export const CONFIG: LightningConfig = {
-  Segments: 41,
-  Threshold: 0.5,
+  Segments: 21,
+  Threshold: 0.7,
   Width: 2.7,
   Color: 'ghostwhite',
-  Blur: 14,
+  Blur: 5,
   BlurColor: 'ghostwhite',
   Alpha: 0.9,
   GlowColor: '#d5fb73',

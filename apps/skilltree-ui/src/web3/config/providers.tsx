@@ -2,7 +2,7 @@ import { SUPPORTED_CHAINS } from './chains'
 import { EthereumClient, modalConnectors, walletConnectProvider } from '@web3modal/ethereum'
 import { Web3Modal as Web3ModalComponent } from '@web3modal/react'
 import React, { ReactNode } from 'react'
-import { configureChains, createClient, WagmiConfig } from 'wagmi'
+import { WagmiConfig, configureChains, createClient } from 'wagmi'
 
 if (!process.env.REACT_APP_WALLETCONNECT_KEY) {
   throw new Error('MISSING OR INVALID WALLET_CONNECT KEY! PLEASE SET ONE IN YOUR ENV FILES')

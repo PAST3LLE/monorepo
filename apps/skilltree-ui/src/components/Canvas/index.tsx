@@ -25,7 +25,11 @@ export function LightningCanvas() {
   ])
 
   // run lightning canvas logic
-  useLightningCanvas({ canvasDOM, dimensions: { width, height }, config: CONFIG })
+  useLightningCanvas({
+    canvasDOM,
+    dimensions: { width, height },
+    config: CONFIG,
+  })
 
   return <StyledCanvas id={CANVAS_ID} ref={setRef} width={width} height={height}></StyledCanvas>
 }

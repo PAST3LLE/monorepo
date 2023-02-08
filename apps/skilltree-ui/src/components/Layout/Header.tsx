@@ -1,6 +1,6 @@
-import { Pastellecon, Row, AutoRow, ExternalLink, Header as HeaderPstl } from '@past3lle/components'
+import { AutoRow, ExternalLink, Header as HeaderPstl, Pastellecon, Row } from '@past3lle/components'
 import { Web3Button, Web3NetworkSwitch } from '@web3modal/react'
-import { BlackHeader, BlackBoldItalic } from 'components/Text'
+import { BlackBoldItalic, BlackHeader } from 'components/Text'
 import { SHOP_URL } from 'constants/index'
 import React from 'react'
 import styled from 'styled-components/macro'

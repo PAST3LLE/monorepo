@@ -5,6 +5,9 @@ build
 src/**/*.d.ts
 src/abis
 src/**/*.md
+src/**/*.png
+src/**/*.svg
+src/**/*.json
 
 # public
 public/index.html

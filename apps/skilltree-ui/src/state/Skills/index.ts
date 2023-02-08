@@ -3,7 +3,10 @@ import { SkillId } from 'components/Skills/types'
 import { SkillMetadata } from 'components/Skills/types'
 import { atom, useAtom } from 'jotai'
 
-export type SkillGridPositionList = { vector: Vector | undefined; skill: SkillMetadata | undefined }[]
+export type SkillGridPositionList = {
+  vector: Vector | undefined
+  skill: SkillMetadata | undefined
+}[]
 export type SkillVectorsMap = {
   [key: SkillId]: SkillGridPositionList[0]
 }
