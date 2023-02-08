@@ -28,7 +28,7 @@
     "test": "craco test --env=jsdom",
     "test:debug": "craco --inspect-brk test --runInBand --no-cache",
     "dedup": "npx yarn-deduplicate",
-    "prestart": "cp ../skills-nft/src/skills/metadata.js ./src/mock/metadata/fullMetadata.js"
+    "copy:metadata": "cp ../skills-nft/src/skills/metadata.js ./src/mock/metadata/fullMetadata.js"
   },
   "devDependencies": {
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.13.8",
