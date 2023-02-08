@@ -2,9 +2,9 @@ import { Lightning } from '../lightning'
 import { LightningConfig } from '../types'
 import { Vector } from '../vector'
 import BG_IMAGE from 'assets/png/background.png'
-import { SkillMetadata } from 'components/Skills/types'
+import { SkillId, SkillMetadata } from 'components/Skills/types'
 import { useEffect, useState } from 'react'
-import { SkillGridPositionList, SkillsState, useSkillsAtomRead } from 'state/Skills'
+import { SkillGridPositionList, SkillsState } from 'state/Skills'
 
 interface LightningCanvasProps {
   canvasDOM: HTMLCanvasElement | null | undefined
@@ -21,7 +21,6 @@ let canvas: HTMLCanvasElement,
 
 export function useLightningCanvas({ canvasDOM, config, dimensions }: LightningCanvasProps) {
   const [ready, setReadyStatus] = useState(false)
-  const [{ metadata }] = useSkillsAtomRead()
 
   // ===========================
   // EFFECTS
@@ -58,13 +57,10 @@ export function useLightningCanvas({ canvasDOM, config, dimensions }: LightningC
     canvas.addEventListener('touchmove', _onTouchMove, { passive: true })
     */
 
-    // reset points array
-    points = calculateGridPoints(metadata, canvasDOM.parentElement)
-
     _buildApi(config)
 
     window.requestAnimationFrame(_animate)
-  }, [config, ready, height, width, metadata, canvasDOM?.parentElement])
+  }, [config, ready, height, width, canvasDOM?.parentElement])
 
   // ========================
   // CLEARS CANVAS ON A TIMER
@@ -112,12 +108,36 @@ function _animate() {
   }, 60)
 }
 
-export function toggleSelectedSkill(id: `${string}-${string}`, state: SkillsState) {
+/**
+ * Offsets (moves) the lightning start source the same width as a single SkillSquare and half the height
+ * @param state SkillsState
+ * @returns Vector object with new location vectors
+ */
+const offsetLightningFromSkill = (state: SkillsState) => (key: SkillId) => {
+  const currentSkillState = state.vectorsMap[key]
+
+  return {
+    ...currentSkillState,
+    vector: new Vector(
+      0,
+      0,
+      (currentSkillState.vector?.X1 || 0) + state.sizes.width,
+      (currentSkillState.vector?.Y1 || 0) + state.sizes.height / 2
+    ),
+  }
+}
+
+/**
+ * Toggling a skill triggers the lightning from the deps to the source (skill to be unlocked)
+ * @param id SkillId - from metadata
+ * @param state SkillsState
+ */
+export function toggleSelectedSkill(id: SkillId, state: SkillsState) {
   const selectedSkill = state.vectorsMap[id]
   if (!state.active || !selectedSkill.vector) {
     draw = false
   } else {
-    points = (state.activeDependencies || []).map((key) => state.vectorsMap[key])
+    points = (state.activeDependencies || []).map(offsetLightningFromSkill(state))
     draw = true
     target = new Vector(0, 0, selectedSkill.vector.X1, selectedSkill.vector.Y1)
   }
@@ -169,6 +189,13 @@ function _onTouchMove(e: TouchEvent) {
   }
 }
 */
+
+/**
+ * Calculates vector points of a grid by multiplying highest amount of rows by number of columns
+ * @param metadata Skills metadata - aggregation of skills metadata in each collection
+ * @param container HTMLElement containing the canvas
+ * @returns Array (list) of Vectors each containing location Vector data for each square of the grid
+ */
 export function calculateGridPoints(metadata: SkillMetadata[][], container: HTMLElement): SkillGridPositionList {
   const largest = metadata.slice().sort((a, b) => b.length - a.length)
   const columns = metadata.length

@@ -36,6 +36,7 @@ export function Skillpoint({ metadata, vector, lightupDependencies }: Props) {
 
   return (
     <StyledSkillpoint
+      id="SKILLPOINT_SQUARE"
       rarity={metadata.properties?.rarity}
       dimSkill={isOtherSkillActive}
       active={isCurrentSkillActive}

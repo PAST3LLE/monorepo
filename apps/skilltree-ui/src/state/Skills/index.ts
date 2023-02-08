@@ -16,17 +16,37 @@ export interface SkillsState {
   activeDependencies: SkillId[]
   vectors: SkillGridPositionList
   vectorsMap: SkillVectorsMap
+  sizes: { width: number; height: number }
 }
-export const skillsAtom = atom<SkillsState>({
+const skillsAtom = atom<SkillsState>({
   metadata: [],
   active: undefined,
   activeDependencies: [],
   vectors: [],
   vectorsMap: {},
+  sizes: { width: 0, height: 0 },
 })
 skillsAtom.debugLabel = 'SKILLS ATOM'
 
-export const activeSkillRead = atom((get) => get(skillsAtom))
+const activeSkillRead = atom((get) => get(skillsAtom).active)
 
-export const useSkillsAtomRead = () => useAtom(activeSkillRead)
+const skillSizeWriteAtom = atom<null, SkillsState['sizes']>(null, (get, set, update) => {
+  const state = get(skillsAtom)
+  return set(skillsAtom, { ...state, sizes: update })
+})
+const skillSizeReadAtom = atom<SkillsState['sizes']>((get) => get(skillsAtom).sizes)
+
+const skillMetadataReadAtom = atom((get) => get(skillsAtom).metadata)
+const skillMetadataWriteAtom = atom<null, SkillsState['metadata']>(null, (get, set, update) => {
+  const state = get(skillsAtom)
+  return set(skillsAtom, { ...state, metadata: update })
+})
+
+export const useSkillMetadataReadAtom = () => useAtom(skillMetadataReadAtom)
+export const useSkillMetadataWriteAtom = () => useAtom(skillMetadataWriteAtom)
+
+export const useSkillSizeWriteAtom = () => useAtom(skillSizeWriteAtom)
+export const useSkillSizeReadAtom = () => useAtom(skillSizeReadAtom)
+
+export const useActiveSkillReadAtom = () => useAtom(activeSkillRead)
 export const useSkillsAtom = () => useAtom(skillsAtom)
