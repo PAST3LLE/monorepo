@@ -14,7 +14,7 @@ export default [
     },
     {
       description: 'DAYDREAMING.TEE.OVERSIZED.HEAVY-COTTON.',
-      image: 'ipfs://QmdgZwFCKqragcqZa5mL2XjrMxxCiqjVpF4QMTBU9S6ngn',
+      image: 'ipfs://QmQoQRBM7JTfYHb2skR2UWxrvauiP7iLMrc2eyAvcVhb7e',
       name: 'DAYDREAMING',
       properties: {
         rarity: 'common',
