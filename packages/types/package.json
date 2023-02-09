@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/types",
   "sideEffects": false,
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "common types",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -28,5 +28,8 @@
     "access": "public",
     "registry": "https://registry.npmjs.org"
   },
-  "gitHead": "844a40ca768fd8b246635af67d7a2db054639ea3"
+  "devDependencies": {
+    "abitype": "^0.4.0"
+  },
+  "gitHead": "79223c975bf00f7c4c763c6805a3101eb3fbaaf3"
 }
