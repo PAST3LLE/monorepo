@@ -34,7 +34,7 @@ export function ActiveSkillPanel({
         </MonospaceText>
       </Row>
       <Row justifyContent={'flex-end'} marginBottom="auto">
-        <ThemedButtonExternalLink href="https://pastelle.shop">
+        <ThemedButtonExternalLink href={`https://pastelle.shop/#/collection/${activeSkill?.name?.toLowerCase()}`}>
           <Text.Black fontSize={'2rem'} fontWeight={300}>
             VIEW IN STORE
           </Text.Black>
