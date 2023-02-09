@@ -18,9 +18,7 @@ config.references = [];
 
     const { stdout } = await exec('yarn workspaces info --json');
 
-    const lines = stdout.split('\n');
-    const depthTree = lines.slice(1, lines.length - 2).join('\n');
-    const workspaces = JSON.parse(depthTree);
+    const workspaces = JSON.parse(stdout);
 
     for (const name in workspaces) {
         const workspace = workspaces[name];
