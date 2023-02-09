@@ -1,3 +1,5 @@
+import { Address } from '@past3lle/types'
+
 /**
  * @name formatCurrency
  * @param amount number amount to format e.g 1234
@@ -250,3 +252,10 @@ export type CurrencyCode =
   | 'ZAR'
   | 'ZMW'
   | 'ZWL'
+
+export function truncateAddress(address: Address) {
+  const firstPart = address.slice(0, 7)
+  const lastPart = address.slice(37)
+
+  return firstPart + '...' + lastPart
+}
