@@ -30,7 +30,7 @@ export function ActiveSkillPanel({
       </Row>
       <Row justifyContent={'center'} margin="0 0 13% 0">
         <MonospaceText>
-          Buy the {activeSkill?.name} and receive a free NFT SKILL giving you access to exclusive perks.
+          Buy {activeSkill?.name} and receive a free NFT skillpoint giving you access to exclusive perks.
         </MonospaceText>
       </Row>
       <Row justifyContent={'flex-end'} marginBottom="auto">
@@ -59,7 +59,7 @@ export function ActiveSkillPanel({
             {' '}
             <strong style={{ color: CUSTOM_THEME.mainBg }}>tutorial</strong>{' '}
           </ExternalLink>{' '}
-          to understand how to claim your NFT.
+          to understand how to claim your skillpoint NFT.
         </MonospaceText>
       </Row>
     </ActiveSkillContainer>
