@@ -1,6 +1,6 @@
 import { Button, ExternalLink } from '@past3lle/components'
 import { setCssBackground } from '@past3lle/theme'
-import styled from 'styled-components/macro'
+import styled, { css } from 'styled-components/macro'
 import { BACKGROUND_IMAGE_DDPX_URL_MAP } from 'theme/global'
 
 export const ThemedButton = styled(Button).attrs(() => ({}))<{ invert?: boolean; gap?: string; withBgImage?: boolean }>`
@@ -16,13 +16,13 @@ export const ThemedButton = styled(Button).attrs(() => ({}))<{ invert?: boolean;
   ${({ gap }) => gap && `gap: ${gap};`}
   ${({ theme, withBgImage }) =>
     withBgImage &&
-    `
-    ${setCssBackground(theme, {
-      imageUrls: [BACKGROUND_IMAGE_DDPX_URL_MAP, BACKGROUND_IMAGE_DDPX_URL_MAP],
-      backgroundColor: '#422548',
-      backgroundBlendMode: 'difference'
-    })}
-  `}
+    css`
+      ${setCssBackground(theme, {
+        imageUrls: [BACKGROUND_IMAGE_DDPX_URL_MAP],
+        backgroundColor: '#422548',
+        backgroundBlendMode: 'difference'
+      })}
+    `}
 `
 
 export const ThemedButtonExternalLink = styled(ExternalLink)`
