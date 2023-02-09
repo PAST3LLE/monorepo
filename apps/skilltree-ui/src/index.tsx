@@ -41,6 +41,7 @@ root.render(
         <GothicFontCssProvider />
         <FontCssProvider />
         <StaticCssProviders />
+        {/* @ts-ignore */}
         <ThemeProvider themeExtension={CUSTOM_THEME}>
           <ThemedCssProviders />
           <SkilltreeView />

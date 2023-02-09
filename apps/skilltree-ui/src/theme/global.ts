@@ -1,5 +1,16 @@
+import { MediaWidths } from '@past3lle/theme'
+import { GenericImageSrcSet } from '@past3lle/types'
 import BG_IMAGE from 'assets/png/background.png'
 import { createGlobalStyle, css } from 'styled-components/macro'
+
+export const BACKGROUND_IMAGE_DDPX_URL_MAP: GenericImageSrcSet<MediaWidths> = {
+  defaultUrl: BG_IMAGE,
+  500: { '1x': BG_IMAGE },
+  720: { '1x': BG_IMAGE },
+  960: { '1x': BG_IMAGE },
+  1280: { '1x': BG_IMAGE },
+  1440: { '1x': BG_IMAGE },
+}
 
 // "!important" override on WalletConnect style variables
 // this is ugly but currently the only way to style web3modal
