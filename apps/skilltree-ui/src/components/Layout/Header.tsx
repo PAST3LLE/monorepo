@@ -8,7 +8,7 @@ import {
   Row,
   RowProps
 } from '@past3lle/components'
-import { BLACK_TRANSPARENT, OFF_WHITE, setAnimation, upToSmall } from '@past3lle/theme'
+import { BLACK_TRANSPARENT, setAnimation, upToSmall } from '@past3lle/theme'
 import { useWeb3Modal } from '@web3modal/react'
 import { Address } from 'abitype'
 import { ThemedButton } from 'components/Button'
@@ -128,9 +128,6 @@ const HeaderContainer = styled(HeaderPstl)``
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false)
-  const { address } = useAccount()
-  const { chain } = useNetwork()
-  console.log('ADDRESS & NETWORK', address, chain)
 
   return (
     <HeaderContainer>
@@ -182,7 +179,6 @@ interface Props {
 }
 
 export function SkillsWeb3Button({ logoUri, openOptions, buttonProps, children }: Props) {
-  // const { address } = useAccount()
   const { open, isOpen } = useWeb3Modal()
 
   const handleClick = useCallback(async () => {
@@ -224,26 +220,30 @@ export function UserConnectionStats({ containerProps }: { containerProps?: RowPr
         cursor="pointer"
         fontSize="1.5rem"
         title={address || 'disconnected'}
-        color={OFF_WHITE}
-        onClick={() => handleClick({ route: 'Account' })}
+        color={'#f8f8ffed'}
+        onClick={() => handleClick({ route: address ? 'Account' : 'ConnectWallet' })}
       >
-        <FlashingText>{`> `}</FlashingText>
-        <strong>CONNECTION</strong>{' '}
-        <i>
-          <small>{`${address ? truncateAddress(address) : '<disconnected>'}`}</small>
-        </i>
+        <ConnectionColorWrapper isConnected={!!address}>
+          <FlashingText>{`> `}</FlashingText>
+          <strong>CONNECTION</strong>{' '}
+          <i>
+            <small>{`${address ? truncateAddress(address) : '<disconnected>'}`}</small>
+          </i>
+        </ConnectionColorWrapper>
       </MonospaceText>
       <MonospaceText
         cursor="pointer"
         fontSize="1.5rem"
-        color={OFF_WHITE}
+        color={'#f8f8ffed'}
         onClick={() => handleClick({ route: 'SelectNetwork' })}
       >
-        <FlashingText>{`> `}</FlashingText>
-        <strong>NETWORK</strong>{' '}
-        <i>
-          <small>{`${chain?.name || '<disconnected>'}`}</small>
-        </i>
+        <ConnectionColorWrapper isConnected={!!address}>
+          <FlashingText>{`> `}</FlashingText>
+          <strong>NETWORK</strong>{' '}
+          <i>
+            <small>{`${chain?.name || '<disconnected>'}`}</small>
+          </i>
+        </ConnectionColorWrapper>
       </MonospaceText>
     </Column>
   )
@@ -265,6 +265,12 @@ const flashingTextAnimation = css`
 
 const FlashingText = styled.strong`
   ${setAnimation(flashingTextAnimation, { name: 'flashingText' as any, duration: 1.5, count: 'infinite' })}
+`
+
+const ConnectionColorWrapper = styled.div<{ isConnected: boolean }>`
+  > ${FlashingText}, > i {
+    color: ${({ isConnected }) => (isConnected ? 'springgreen' : 'indianred')};
+  }
 `
 
 /* 
