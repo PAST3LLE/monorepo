@@ -1,14 +1,21 @@
-import { Column } from '@past3lle/components'
+import { ArticleFadeIn } from '@past3lle/components'
 import { MonospaceText } from 'components/Text'
 import styled from 'styled-components/macro'
 
-export const ActiveSkillContainer = styled(Column)`
+export const ActiveSkillContainer = styled(ArticleFadeIn)`
+  display: flex;
+  flex-flow: column nowrap;
+
   position: fixed;
   // position: relative;
+
   z-index: 999;
+
   background: lightgrey;
+
   // width: 60%;
   width: 40%;
+
   // border-radius: 5px;
 
   top: 0;
