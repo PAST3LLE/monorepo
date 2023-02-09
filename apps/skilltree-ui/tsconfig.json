@@ -28,6 +28,9 @@
             "path": "../../packages/hooks"
         },
         {
+            "path": "../skills-nft"
+        },
+        {
             "path": "../../packages/theme"
         },
         {
