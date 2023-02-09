@@ -27,7 +27,7 @@ export function useMetadata(/* collectionId?: number */) {
     return {
       uri,
       supply,
-      skillsAddressList: await Promise.all(promised),
+      skillsAddressList: await Promise.all(promised)
     }
   }, [])
 

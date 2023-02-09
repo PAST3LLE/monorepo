@@ -6,13 +6,13 @@ import styled from 'styled-components/macro'
 export const BlackBoldItalic = styled(Text.Black).attrs((props) => ({
   fontStyle: 'italic',
   fontWeight: 900,
-  ...props,
+  ...props
 }))``
 
 export const BlackHeader = styled(BlackBoldItalic).attrs((props) => ({
   fontSize: '3.5rem',
   letterSpacing: -2,
-  ...props,
+  ...props
 }))`
   padding: 1rem;
   margin: 1rem 0;
@@ -45,7 +45,7 @@ export const CursiveHeader = styled(CursiveText)<{ whiteSpace?: string }>`
 export const CursiveMonoHeader = ({
   text,
   capitalLetterProps,
-  restWordProps,
+  restWordProps
 }: {
   text: string
   capitalLetterProps?: TextProps

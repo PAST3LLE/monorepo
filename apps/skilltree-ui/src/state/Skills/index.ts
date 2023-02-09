@@ -24,7 +24,7 @@ const skillsAtom = atom<SkillsState>({
   activeDependencies: [],
   vectors: [],
   vectorsMap: {},
-  sizes: { width: 0, height: 0 },
+  sizes: { width: 0, height: 0 }
 })
 skillsAtom.debugLabel = 'SKILLS ATOM'
 

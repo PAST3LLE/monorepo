@@ -8,7 +8,7 @@ import { CUSTOM_THEME } from 'theme/customTheme'
 
 export function ActiveSkillPanel({
   skillState,
-  setSkillState,
+  setSkillState
 }: {
   skillState: SkillsState
   setSkillState: ReturnType<typeof useSkillsAtom>[1]

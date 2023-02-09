@@ -11,7 +11,7 @@ export function usePrepareCollectionsContract() {
   const { config } = usePrepareContractWrite({
     abi: pstlCollectionsAbi,
     chainId,
-    address: CONTRACT_ADDRESSES_MAP[chainId].collections,
+    address: CONTRACT_ADDRESSES_MAP[chainId].collections
   })
 
   return config

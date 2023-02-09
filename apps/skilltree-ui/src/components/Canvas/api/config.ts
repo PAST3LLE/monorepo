@@ -11,11 +11,11 @@ export const CONFIG: LightningConfig = {
   GlowColor: '#d5fb73',
   GlowWidth: 20,
   GlowBlur: 70,
-  GlowAlpha: 40,
+  GlowAlpha: 40
 }
 
 export const LAYOUT_CONFIG = {
   offset: 20,
   columns: 3,
-  rows: 6,
+  rows: 6
 }

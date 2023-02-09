@@ -123,7 +123,7 @@ const offsetLightningFromSkill = (state: SkillsState) => (key: SkillId) => {
       0,
       (currentSkillState.vector?.X1 || 0) + state.sizes.width,
       (currentSkillState.vector?.Y1 || 0) + state.sizes.height / 2
-    ),
+    )
   }
 }
 

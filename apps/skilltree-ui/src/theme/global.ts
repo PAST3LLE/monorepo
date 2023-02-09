@@ -9,7 +9,7 @@ export const BACKGROUND_IMAGE_DDPX_URL_MAP: GenericImageSrcSet<MediaWidths> = {
   720: { '1x': BG_IMAGE },
   960: { '1x': BG_IMAGE },
   1280: { '1x': BG_IMAGE },
-  1440: { '1x': BG_IMAGE },
+  1440: { '1x': BG_IMAGE }
 }
 
 // "!important" override on WalletConnect style variables

@@ -19,9 +19,9 @@ export function GridPositionUpdater() {
         vectors: ref
           ? calculateGridPoints(skillsMetadata, {
               clientWidth: document.body.clientWidth,
-              clientHeight: ref.clientHeight,
+              clientHeight: ref.clientHeight
             })
-          : [],
+          : []
       }))
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

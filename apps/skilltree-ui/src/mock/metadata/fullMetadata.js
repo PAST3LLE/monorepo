@@ -9,8 +9,8 @@ const METADATA = [
         rarity: 'common',
         dependencies: '',
         shopifyId: '6758874447923',
-        id: '1-1000',
-      },
+        id: '1-1000'
+      }
     },
     {
       description: 'DAYDREAMING.TEE.OVERSIZED.HEAVY-COTTON.',
@@ -20,8 +20,8 @@ const METADATA = [
         rarity: 'common',
         dependencies: '',
         shopifyId: '6758884540467',
-        id: '1-2000',
-      },
+        id: '1-2000'
+      }
     },
     {
       description: 'ELLEX.TEE.OVERSIZED.HEAVY-COTTON.',
@@ -31,8 +31,8 @@ const METADATA = [
         rarity: 'common',
         dependencies: '',
         shopifyId: '6758853771315',
-        id: '1-3000',
-      },
+        id: '1-3000'
+      }
     },
     {
       description: 'REBIRTH.TEE.OVERSIZED.HEAVY-COTTON.',
@@ -42,8 +42,8 @@ const METADATA = [
         rarity: 'common',
         dependencies: '',
         shopifyId: '6758881984563',
-        id: '1-4000',
-      },
+        id: '1-4000'
+      }
     },
     {
       description: 'VIRGIL.LONGSLEEVE.OVERSIZED.HEAVY-COTTON.',
@@ -53,8 +53,8 @@ const METADATA = [
         rarity: 'common',
         dependencies: '',
         shopifyId: '6755479486515',
-        id: '1-5000',
-      },
+        id: '1-5000'
+      }
     },
     {
       description: 'VOODOO.LONGSLEEVE.OVERSIZED.HEAVY-COTTON.',
@@ -64,9 +64,9 @@ const METADATA = [
         rarity: 'common',
         dependencies: '',
         shopifyId: '6758852821043',
-        id: '1-6000',
-      },
-    },
+        id: '1-6000'
+      }
+    }
   ],
   // COLLECTION 2
   [
@@ -78,8 +78,8 @@ const METADATA = [
         rarity: 'rare',
         dependencies: ['1-1000', '1-3000', '1-4000'],
         shopifyId: 'SOME_SHOPIFY_ID',
-        id: '2-1000',
-      },
+        id: '2-1000'
+      }
     },
     undefined,
     {
@@ -90,9 +90,9 @@ const METADATA = [
         rarity: 'epic',
         dependencies: ['1-5000', '1-1000'],
         shopifyId: 'SOME_SHOPIFY_ID',
-        id: '2-2000',
-      },
-    },
+        id: '2-2000'
+      }
+    }
   ],
   // COLLECTION 3
   [
@@ -104,8 +104,8 @@ const METADATA = [
         rarity: 'common',
         dependencies: '',
         shopifyId: '6758874447923',
-        id: '3-1000',
-      },
+        id: '3-1000'
+      }
     },
     {
       description: 'TREEGLIDE.TEE.OVERSIZED.HEAVY-COTTON.',
@@ -115,8 +115,8 @@ const METADATA = [
         rarity: 'common',
         dependencies: '',
         shopifyId: '6758884540467',
-        id: '3-2000',
-      },
+        id: '3-2000'
+      }
     },
     {
       description: 'SALT.TEE.OVERSIZED.HEAVY-COTTON.',
@@ -126,8 +126,8 @@ const METADATA = [
         rarity: 'common',
         dependencies: '',
         shopifyId: '6758853771315',
-        id: '3-3000',
-      },
+        id: '3-3000'
+      }
     },
     undefined,
     {
@@ -138,8 +138,8 @@ const METADATA = [
         rarity: 'common',
         dependencies: '',
         shopifyId: '6758881984563',
-        id: '3-4000',
-      },
+        id: '3-4000'
+      }
     },
     {
       description: 'GHOSTWHITE.LONGSLEEVE.OVERSIZED.HEAVY-COTTON.',
@@ -149,9 +149,9 @@ const METADATA = [
         rarity: 'common',
         dependencies: '',
         shopifyId: '6755479486515',
-        id: '3-5000',
-      },
-    },
+        id: '3-5000'
+      }
+    }
   ],
   // COLLECTION 4
   [
@@ -163,8 +163,8 @@ const METADATA = [
         rarity: 'legendary',
         dependencies: ['1-1000', '1-3000', '1-6000', '2-1000', '2-2000', '3-4000', '3-5000'],
         shopifyId: '6758874447923',
-        id: '4-1000',
-      },
+        id: '4-1000'
+      }
     },
     undefined,
     {
@@ -175,8 +175,8 @@ const METADATA = [
         rarity: 'rare',
         dependencies: ['3-2000', '3-3000'],
         shopifyId: '6758884540467',
-        id: '4-2000',
-      },
+        id: '4-2000'
+      }
     },
     undefined,
     {
@@ -189,11 +189,11 @@ const METADATA = [
           return [...METADATA[3][2].properties.dependencies, '4-1000']
         },
         shopifyId: '6758853771315',
-        id: '4-3000',
-      },
+        id: '4-3000'
+      }
     },
-    undefined,
-  ],
+    undefined
+  ]
   // COLLECTION 5
   // [
   //   {

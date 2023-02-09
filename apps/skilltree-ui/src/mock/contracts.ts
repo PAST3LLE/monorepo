@@ -15,9 +15,9 @@ export const CONTRACT_COLLECTIONS = {
       },
       toString() {
         return amt.toString()
-      },
+      }
     }
-  },
+  }
 }
 
 export const CONTRACT_SKILLS_1 = {
@@ -33,12 +33,12 @@ export const CONTRACT_SKILLS_1 = {
       },
       toNumber() {
         return id
-      },
+      }
     }
   },
   async getCollectionAddress(): Promise<Address> {
     return '0xaaaaaaaaaaaaaaaaaaaaaaaa0001'
-  },
+  }
 }
 export const CONTRACT_SKILLS_2 = {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -53,12 +53,12 @@ export const CONTRACT_SKILLS_2 = {
       },
       toNumber() {
         return id
-      },
+      }
     }
   },
   async getCollectionAddress(): Promise<Address> {
     return '0xaaaaaaaaaaaaaaaaaaaaaaaa0002'
-  },
+  }
 }
 export const CONTRACT_SKILLS_3 = {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -73,19 +73,19 @@ export const CONTRACT_SKILLS_3 = {
       },
       toNumber() {
         return id
-      },
+      }
     }
   },
   async getCollectionAddress(): Promise<Address> {
     return '0xaaaaaaaaaaaaaaaaaaaaaaaa0003'
-  },
+  }
 }
 
 export const COLLECTION_CONTRACTS_MAP = {
   CONTRACT_COLLECTIONS,
   CONTRACT_SKILLS_1,
   CONTRACT_SKILLS_2,
-  CONTRACT_SKILLS_3,
+  CONTRACT_SKILLS_3
 }
 
 const SKILLS_CONTRACT_MAP: {
@@ -93,7 +93,7 @@ const SKILLS_CONTRACT_MAP: {
 } = {
   ['0xaaaaaaaabbbbbbxxccccccc0001']: COLLECTION_CONTRACTS_MAP.CONTRACT_SKILLS_1,
   ['0xaaaaaaaabbbbbbxxccccccc0002']: COLLECTION_CONTRACTS_MAP.CONTRACT_SKILLS_2,
-  ['0xaaaaaaaabbbbbbxxccccccc0003']: COLLECTION_CONTRACTS_MAP.CONTRACT_SKILLS_3,
+  ['0xaaaaaaaabbbbbbxxccccccc0003']: COLLECTION_CONTRACTS_MAP.CONTRACT_SKILLS_3
 }
 
 export async function mockGetContract(address: `0x${string}`) {

@@ -10,7 +10,7 @@ if (!process.env.REACT_APP_WALLETCONNECT_KEY) {
 
 // Wagmi client
 export const { provider } = configureChains(SUPPORTED_CHAINS, [
-  walletConnectProvider({ projectId: process.env.REACT_APP_WALLETCONNECT_KEY }),
+  walletConnectProvider({ projectId: process.env.REACT_APP_WALLETCONNECT_KEY })
 ])
 
 const wagmiClient = createClient({
@@ -19,9 +19,9 @@ const wagmiClient = createClient({
     projectId: process.env.REACT_APP_WALLETCONNECT_KEY,
     version: '2',
     appName: 'PSTL SKILLTREE',
-    chains: SUPPORTED_CHAINS,
+    chains: SUPPORTED_CHAINS
   }),
-  provider,
+  provider
 })
 
 // Web3Modal Ethereum Client

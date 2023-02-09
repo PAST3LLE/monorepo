@@ -20,7 +20,7 @@ export const ThemedButton = styled(Button).attrs(() => ({}))<{ invert?: boolean;
     ${setCssBackground(theme, {
       imageUrls: [BACKGROUND_IMAGE_DDPX_URL_MAP, BACKGROUND_IMAGE_DDPX_URL_MAP],
       backgroundColor: '#422548',
-      backgroundBlendMode: 'difference',
+      backgroundBlendMode: 'difference'
     })}
   `}
 `

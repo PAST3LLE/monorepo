@@ -3,7 +3,7 @@ import { SkillContainerAbsolute, SkillpointHeader } from '../common'
 import { SkillCanvasContainer } from './styleds'
 import { Column, Row } from '@past3lle/components'
 import {
-  PSTLAllCollections__factory,
+  PSTLAllCollections__factory
   /* PSTLCollectionBaseSkills__factory */
 } from '@past3lle/skilltree-contracts'
 import { convertToRomanNumerals } from '@past3lle/utils'
@@ -22,7 +22,7 @@ export function SkillsCanvas() {
   const { data: supplyBn } = useContractRead({
     abi: PSTLAllCollections__factory.abi,
     functionName: 'totalSupply',
-    address: collections,
+    address: collections
   })
   const collectionsAmt = supplyBn?.toNumber() || 0
   // read skills collection ID && pass to "getSkillsAddress" in collections contract

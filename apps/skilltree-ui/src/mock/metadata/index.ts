@@ -7,7 +7,7 @@ import { CollectionMetadata, SkillMetadata } from 'components/Skills/types'
 export const MOCK_COLLECTIONS_DATA = [
   Collection1Metadata as CollectionMetadata,
   Collection2Metadata as CollectionMetadata,
-  Collection3Metadata as CollectionMetadata,
+  Collection3Metadata as CollectionMetadata
 ] as const
 
 export const MOCK_ALL_SKILLS_METADATA: SkillMetadata[][] = AllSkillsMetadata as SkillMetadata[][]

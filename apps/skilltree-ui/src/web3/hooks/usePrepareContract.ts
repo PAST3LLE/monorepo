@@ -12,7 +12,7 @@ export function usePrepareContract<TAbi extends Narrow<Abi | readonly unknown[]>
   const { config } = usePrepareContractWrite({
     abi,
     chainId,
-    address,
+    address
   })
 
   return config

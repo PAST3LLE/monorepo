@@ -26,7 +26,7 @@ export function Skillpoint({ metadata, vector, lightupDependencies }: Props) {
       const newState = {
         ...state,
         active: isCurrentSkillActive ? undefined : metadata.properties.id,
-        activeDependencies: isCurrentSkillActive ? [] : metadata.properties.dependencies,
+        activeDependencies: isCurrentSkillActive ? [] : metadata.properties.dependencies
       }
       // light it up
       lightupDependencies && lightupDependencies(newState)

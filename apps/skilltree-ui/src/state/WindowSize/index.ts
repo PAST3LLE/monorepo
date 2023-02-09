@@ -8,7 +8,7 @@ interface WindowSizeState {
 export const windowSizeAtom = atom<WindowSizeState>({
   ar: undefined,
   width: undefined,
-  height: undefined,
+  height: undefined
 })
 windowSizeAtom.debugLabel = 'WINDOW SIZE ATOM'
 

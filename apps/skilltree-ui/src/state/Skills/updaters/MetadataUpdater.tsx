@@ -9,7 +9,7 @@ export function SkillsMetadataUpdater() {
   useEffect(() => {
     setSkillState((state) => ({
       ...state,
-      metadata: metadataInfo.skillsMetadata,
+      metadata: metadataInfo.skillsMetadata
     }))
   }, [metadataInfo.skillsMetadata, setSkillState])
 

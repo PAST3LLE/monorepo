@@ -47,7 +47,7 @@ export class Lightning {
         Width: this.config.GlowWidth * lR,
         Blur: this.config.GlowBlur * lR,
         BlurColor: this.config.GlowColor,
-        Alpha: this.Random(this.config.GlowAlpha, this.config.GlowAlpha * 2) / 100,
+        Alpha: this.Random(this.config.GlowAlpha, this.config.GlowAlpha * 2) / 100
       })
 
       //main line
@@ -56,7 +56,7 @@ export class Lightning {
         Width: this.config.Width,
         Blur: this.config.Blur,
         BlurColor: this.config.BlurColor,
-        Alpha: this.config.Alpha,
+        Alpha: this.config.Alpha
       })
       refv = r
     }

@@ -21,14 +21,15 @@ export function LightningCanvas({ useWindowWidth }: { useWindowWidth?: boolean }
     canvasDOM?.parentElement?.clientHeight,
     canvasDOM?.parentElement?.clientWidth,
     windowSize.height,
-    windowSize.width,
+    // eslint-disable-next-line prettier/prettier
+    windowSize.width
   ])
 
   // run lightning canvas logic
   useLightningCanvas({
     canvasDOM,
     dimensions: { width, height },
-    config: CONFIG,
+    config: CONFIG
   })
 
   return <StyledCanvas id={CANVAS_ID} ref={setRef} width={width} height={height}></StyledCanvas>

@@ -15,7 +15,7 @@ export function useSkillsContract() {
   const skillsContract = useContract({
     abi: PSTLCollectionBaseSkills__factory.abi,
     address: skills[1],
-    signerOrProvider: provider,
+    signerOrProvider: provider
   })
 
   return {
@@ -27,7 +27,7 @@ export function useSkillsContract() {
           skillsContract?.balanceOfBatch(accountBatch, idBatch, overrides),
         getUri: async (id: number) => skillsContract?.uri(BigNumber.from(id)),
         getCollectionAddress: async (overrides?: CallOverrides) => skillsContract?.getCollectionAddress(overrides),
-        getCollectionId: async (overrides?: CallOverrides) => skillsContract?.getCollectionId(overrides),
+        getCollectionId: async (overrides?: CallOverrides) => skillsContract?.getCollectionId(overrides)
       }),
       [skillsContract]
     ),
@@ -48,9 +48,9 @@ export function useSkillsContract() {
           overrides?: PayableOverrides
         ) => skillsContract?.mintBatch(to, idBatch, amountBatch, data, overrides),
         pause: async (overrides?: PayableOverrides) => skillsContract?.pause(overrides),
-        unpause: async (overrides?: PayableOverrides) => skillsContract?.unpause(overrides),
+        unpause: async (overrides?: PayableOverrides) => skillsContract?.unpause(overrides)
       }),
       [skillsContract]
-    ),
+    )
   }
 }

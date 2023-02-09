@@ -6,7 +6,7 @@ import {
   Header as HeaderPstl,
   Pastellecon,
   Row,
-  RowProps,
+  RowProps
 } from '@past3lle/components'
 import { BLACK_TRANSPARENT, OFF_WHITE, setAnimation, upToSmall } from '@past3lle/theme'
 import { useWeb3Modal } from '@web3modal/react'
