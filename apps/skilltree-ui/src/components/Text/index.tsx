@@ -18,3 +18,23 @@ export const BlackHeader = styled(BlackBoldItalic).attrs((props) => ({
 export const ThemedHeader = styled(BlackHeader)`
   background-color: ${({ theme }) => theme.mainBg};
 `
+
+export const MonospaceText = styled(Text.Black)`
+  font-family: monospace;
+  margin: 0;
+  text-align: center;
+  justify-content: center;
+`
+
+export const CursiveText = styled(Text.Black)`
+  font-family: 'Goth';
+  margin: 0;
+  text-align: center;
+  justify-content: center;
+  width: 100%;
+`
+
+export const CursiveHeader = styled(CursiveText)`
+  color: ${({ theme }) => theme.black};
+  font-size: 6rem;
+`

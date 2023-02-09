@@ -1,15 +1,15 @@
 import { CONFIG } from './api/config'
 import { useLightningCanvas } from './api/hooks'
 import { StyledCanvas } from './styleds'
-import { useEffectRef } from '@past3lle/hooks'
+import { useStateRef } from '@past3lle/hooks'
 import React, { useMemo } from 'react'
 import { useGetWindowSize } from 'state/WindowSize'
 
 const CANVAS_ID = 'skilltree'
 
 export function LightningCanvas() {
-  const [setRef, ref] = useEffectRef<HTMLCanvasElement | null>(null)
-  const canvasDOM = ref?.current
+  const [ref, setRef] = useStateRef<HTMLCanvasElement | null>(null, (node) => node)
+  const canvasDOM = ref
 
   const [windowSize] = useGetWindowSize()
   const { width, height } = useMemo(() => {

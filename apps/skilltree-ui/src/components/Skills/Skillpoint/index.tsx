@@ -11,7 +11,7 @@ import styled from 'styled-components/macro'
 interface Props {
   metadata: SkillMetadata
   vector?: Vector
-  lightupDependencies: (state: SkillsState) => void
+  lightupDependencies?: (state: SkillsState) => void
 }
 export function Skillpoint({ metadata, vector, lightupDependencies }: Props) {
   const [state, setSkillState] = useSkillsAtom()
@@ -29,7 +29,7 @@ export function Skillpoint({ metadata, vector, lightupDependencies }: Props) {
         activeDependencies: isCurrentSkillActive ? [] : metadata.properties.dependencies,
       }
       // light it up
-      lightupDependencies(newState)
+      lightupDependencies && lightupDependencies(newState)
       return newState
     })
   }

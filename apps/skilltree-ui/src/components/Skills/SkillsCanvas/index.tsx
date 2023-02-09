@@ -1,5 +1,6 @@
 import { Skillpoint } from '../Skillpoint'
-import { SkillpointHeader } from '../common'
+import { SkillContainerAbsolute, SkillpointHeader } from '../common'
+import { SkillCanvasContainer } from './styleds'
 import { Column, Row } from '@past3lle/components'
 import {
   PSTLAllCollections__factory,
@@ -7,7 +8,6 @@ import {
 } from '@past3lle/skilltree-contracts'
 import { convertToRomanNumerals } from '@past3lle/utils'
 import { LightningCanvas } from 'components/Canvas'
-import { toggleSelectedSkill } from 'components/Canvas/api/hooks'
 import { Vector } from 'components/Canvas/api/vector'
 // import { BigNumber } from 'ethers'
 import React from 'react'
@@ -17,7 +17,7 @@ import { useSkillsContract } from 'web3/hooks/skills/useSkillsContract'
 import { useContractAddressesByChain } from 'web3/hooks/useContractAddress'
 
 export function SkillsCanvas() {
-  const { collections /* , skills */ } = useContractAddressesByChain()
+  const { collections } = useContractAddressesByChain()
 
   const { data: supplyBn } = useContractRead({
     abi: PSTLAllCollections__factory.abi,
@@ -51,17 +51,9 @@ export function SkillsCanvas() {
   const { vectors, metadata } = state
 
   return (
-    <Column height={'100%'} style={{ position: 'relative' }}>
+    <SkillCanvasContainer style={{ position: 'relative' }}>
       <Row width={'100%'} height={'12vh'} justifyContent="space-between" style={{ position: 'relative' }}>
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-          }}
-        >
+        <SkillContainerAbsolute>
           {vectors.slice(0, metadata.length).map(({ vector }, idx) => {
             const idxToRoman = convertToRomanNumerals(idx + 1)
             if (!vector) return null
@@ -71,33 +63,18 @@ export function SkillsCanvas() {
               </SkillpointHeader>
             )
           })}
-        </div>
+        </SkillContainerAbsolute>
       </Row>
-      <Column height={'100%'} style={{ position: 'relative' }} id="CANVAS-CONTAINER">
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-          }}
-        >
+      <Column height={'100%'} width="100%" style={{ position: 'relative' }} id="CANVAS-CONTAINER">
+        <SkillContainerAbsolute>
           {vectors.map(({ skill, vector }) => {
             if (!skill) return null
-            return (
-              <Skillpoint
-                key={skill.properties.id}
-                metadata={skill}
-                vector={vector}
-                lightupDependencies={(state) => toggleSelectedSkill(skill.properties.id, state)}
-              />
-            )
+            return <Skillpoint key={skill.properties.id} metadata={skill} vector={vector} />
           })}
-        </div>
+        </SkillContainerAbsolute>
         {/* CANVAS */}
         <LightningCanvas />
       </Column>
-    </Column>
+    </SkillCanvasContainer>
   )
 }

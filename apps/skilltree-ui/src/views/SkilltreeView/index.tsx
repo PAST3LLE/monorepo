@@ -1,7 +1,11 @@
 import { SkillsCanvas } from '../../components/Skills/SkillsCanvas'
-import { ArticleFadeIn } from '@past3lle/components'
+import { ArticleFadeIn, Row } from '@past3lle/components'
 import { Header } from 'components/Layout/Header'
+import { ActiveSkillPanel } from 'components/Skills/ActiveSkillPanel'
+import { ActiveSkillContainer } from 'components/Skills/ActiveSkillPanel/styleds'
+import { SkillCanvasContainer } from 'components/Skills/SkillsCanvas/styleds'
 import React from 'react'
+import { useSkillsAtom } from 'state/Skills'
 import styled from 'styled-components/macro'
 
 const StyledMain = styled(ArticleFadeIn)`
@@ -9,7 +13,7 @@ const StyledMain = styled(ArticleFadeIn)`
 `
 const Main = () => (
   <StyledMain>
-    <SkillsCanvas />
+    <SkilltreeBoard />
   </StyledMain>
 )
 
@@ -21,3 +25,27 @@ export function SkilltreeView() {
     </>
   )
 }
+
+function SkilltreeBoard() {
+  const api = useSkillsAtom()
+  return (
+    <SkilltreeBoardContainer>
+      <SkillsCanvas />
+      {/* ACTIVE SKILLS PANEL */}
+      <ActiveSkillPanel skillState={api[0]} setSkillState={api[1]} />
+    </SkilltreeBoardContainer>
+  )
+}
+
+const SkilltreeBoardContainer = styled(Row)`
+  height: 100%;
+  width: 100%;
+
+  > ${SkillCanvasContainer} {
+    flex: 1 1 60%;
+  }
+  > ${ActiveSkillContainer} {
+    flex: 1 1 40%;
+    height: 100%;
+  }
+`

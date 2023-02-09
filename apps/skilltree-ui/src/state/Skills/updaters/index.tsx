@@ -1,3 +1,4 @@
+import { ActiveSkillUpdater } from './ActiveSkillUpdater'
 import { GridPositionUpdater } from './GridPositionUpdater'
 import { SkillsMetadataUpdater } from './MetadataUpdater'
 import { SkillSquareSizeUpdater } from './SkillSquareSizeUpdater'
@@ -8,6 +9,7 @@ const SkillsUpdaters = () => (
     <SkillsMetadataUpdater />
     <GridPositionUpdater />
     <SkillSquareSizeUpdater />
+    <ActiveSkillUpdater />
   </>
 )
 
