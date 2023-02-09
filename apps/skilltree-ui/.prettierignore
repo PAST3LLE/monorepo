@@ -1,5 +1,7 @@
 # generated stuff
 build
+dist
+lib
 .git
 .github
 src/**/*.d.ts

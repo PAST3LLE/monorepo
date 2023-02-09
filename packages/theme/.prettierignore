@@ -11,6 +11,8 @@ node_modules
 .rts2_cache_umd
 
 dist
+build
+lib
 coverage
 
 example/**/*
