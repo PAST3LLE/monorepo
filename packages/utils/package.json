@@ -33,10 +33,11 @@
   },
   "devDependencies": {
     "@types/ua-parser-js": "^0.7.36",
+    "@past3lle/types": "^0.0.10",
     "react": "^18.2.0"
   },
   "dependencies": {
     "ua-parser-js": "^1.0.32"
   },
-  "gitHead": "844a40ca768fd8b246635af67d7a2db054639ea3"
+  "gitHead": "79223c975bf00f7c4c763c6805a3101eb3fbaaf3"
 }

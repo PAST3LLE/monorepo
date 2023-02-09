@@ -3823,6 +3823,11 @@
   resolved "https://registry.yarnpkg.com/@past3lle/skilltree-contracts/-/skilltree-contracts-0.0.1-rc.2.tgz#e5f504dccd00eea7f9e0c1dd7c52460360645d83"
   integrity sha512-FfrJgB+BoaWydnvJznImm6HUVQ55olm4FrwsVxcV31qJBDMskWjldiYeOh/5TjZZtIg8jccAsrZVz1ZuchTAGw==
 
+"@past3lle/types@^0.0.8":
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/@past3lle/types/-/types-0.0.8.tgz#fc3a7446e471731ab29f6acc32dcf2ffa8b36760"
+  integrity sha512-SeX0Umu4OQnnY8yTQJJRCwmmBEyfrOX36/zvGxt4gDhO0B5Zv97b6Hn4KK8845/tNDLxWW05RLwVYgPmWUiYHg==
+
 "@pedrouid/environment@^1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@pedrouid/environment/-/environment-1.0.1.tgz#858f0f8a057340e0b250398b75ead77d6f4342ec"
@@ -6176,6 +6181,11 @@ abitype@^0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/abitype/-/abitype-0.3.0.tgz#75150e337d88cc0b2423ed0d3fc36935f139d04c"
   integrity sha512-0YokyAV4hKMcy97Pl+6QgZBlBdZJN2llslOs7kiFY+cu7kMlVXDBpxMExfv0krzBCQt2t7hNovpQ3y/zvEm18A==
+
+abitype@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/abitype/-/abitype-0.4.0.tgz#dc1d63611f87612f2a1cf72bbe4580b5b80ef7be"
+  integrity sha512-Wrd101Zw77RxfuyqaQ2y3/NKK21rGgjPhKn0skKJXQAtkguOQFyvwq/91bkfkId+kbygzj9jLfZV5DGZAT6m1w==
 
 abort-controller@^3.0.0:
   version "3.0.0"

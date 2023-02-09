@@ -1,1 +1,3 @@
-export type Address = `0x${string}`
+import { Address } from 'abitype'
+
+export { Address }
