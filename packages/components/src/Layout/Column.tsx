@@ -1,10 +1,15 @@
 import { Box } from 'rebass'
 import styled from 'styled-components'
 
-export const Column = styled(Box)`
+import { RowProps } from './Row'
+
+export const Column = styled(Box)<RowProps>`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  border: ${({ border }) => border};
+  border-radius: ${({ borderRadius }) => borderRadius};
+  ${({ gap }) => gap && `gap: ${gap};`}
 `
 export const ColumnCenter = styled(Column)`
   width: 100%;
@@ -18,7 +23,7 @@ export const AutoColumn = styled(Column)<{
   display: grid;
   grid-auto-rows: auto;
   grid-row-gap: ${({ gap }) => (gap === 'sm' && '8px') || (gap === 'md' && '12px') || (gap === 'lg' && '24px') || gap};
-  ${({ justify }) => justify && `justify-items: ${justify};`}
+  ${({ justifyItems }) => justifyItems && `justify-items: ${justifyItems};`}
 `
 
 export const FixedColumn = styled(AutoColumn)`
