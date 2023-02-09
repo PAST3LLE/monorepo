@@ -8,9 +8,9 @@ export function ActiveSkillUpdater() {
   useEffect(() => {
     toggleSelectedSkill(state)
 
-    if (state.active) {
-      const { vector } = state.vectorsMap[state.active]
-      vector && window.scroll(vector.X1, vector.Y1)
+    const activeSkillNode = state.active ? document.getElementById(state.active) : null
+    if (activeSkillNode) {
+      activeSkillNode.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.active])

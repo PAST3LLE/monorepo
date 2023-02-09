@@ -2,13 +2,14 @@ import { getRarityColours } from './utils'
 import { Row } from '@past3lle/components'
 import { Vector } from 'components/Canvas/api/vector'
 import { Rarity } from 'components/Skills/types'
+import { SKILLPOINT_SIZES } from 'constants/skills'
 import styled from 'styled-components/macro'
 
 const StyledGridItem = styled(Row)<{
   vector?: Vector
 }>`
-  width: 10vh;
-  height: 10vh;
+  width: ${SKILLPOINT_SIZES.width};
+  height: ${SKILLPOINT_SIZES.height};
   padding: 6px;
 
   border-radius: 3px;
