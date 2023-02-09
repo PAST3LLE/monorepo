@@ -7,7 +7,7 @@ import { useGetWindowSize } from 'state/WindowSize'
 export function GridPositionUpdater() {
   const metadata = useMetadata()
   const { skillsMetadata = [] } = metadata
-  const [{ vectors }, setSkillState] = useSkillsAtom()
+  const [{ active, vectors }, setSkillState] = useSkillsAtom()
   // Skill ID in contract corresponds to position in grid, e.g Collection 2 has 2 skills with IDs 1000 and 4000, respectively
   // Meaning they will get grid positions skill2_1 and skill2_4, respectively
   const [windowSizeState] = useGetWindowSize()
@@ -17,11 +17,16 @@ export function GridPositionUpdater() {
       const ref = document.getElementById('CANVAS-CONTAINER')
       setSkillState((state) => ({
         ...state,
-        vectors: ref ? calculateGridPoints(skillsMetadata, ref) : [],
+        vectors: ref
+          ? calculateGridPoints(skillsMetadata, {
+              clientWidth: document.body.clientWidth,
+              clientHeight: ref.clientHeight,
+            })
+          : [],
       }))
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [skillsMetadata, windowSizeState.height, windowSizeState.width]
+    [skillsMetadata, windowSizeState.height, windowSizeState.width, active]
   )
 
   useEffect(() => {

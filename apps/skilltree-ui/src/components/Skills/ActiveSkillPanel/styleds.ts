@@ -3,17 +3,17 @@ import { MonospaceText } from 'components/Text'
 import styled from 'styled-components/macro'
 
 export const ActiveSkillContainer = styled(Column)`
-  // position: fixed;
-  position: relative;
+  position: fixed;
+  // position: relative;
   z-index: 999;
   background: lightgrey;
   // width: 60%;
-  // width: 40%;
+  width: 40%;
   // border-radius: 5px;
 
-  // top: 2rem;
-  // bottom: 2rem;
-  // right: 2rem;
+  top: 0;
+  bottom: 0;
+  right: 0;
   padding: 4rem;
 
   ${MonospaceText} {

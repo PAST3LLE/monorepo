@@ -196,7 +196,10 @@ function _onTouchMove(e: TouchEvent) {
  * @param container HTMLElement containing the canvas
  * @returns Array (list) of Vectors each containing location Vector data for each square of the grid
  */
-export function calculateGridPoints(metadata: SkillMetadata[][], container: HTMLElement): SkillGridPositionList {
+export function calculateGridPoints(
+  metadata: SkillMetadata[][],
+  container: Pick<HTMLElement, 'clientHeight' | 'clientWidth'>
+): SkillGridPositionList {
   const highestRowCount = metadata.slice().sort((a, b) => b.length - a.length)[0].length
   const columns = metadata.length
   const rows = highestRowCount

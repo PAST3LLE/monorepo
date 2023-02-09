@@ -7,14 +7,14 @@ import { useGetWindowSize } from 'state/WindowSize'
 
 const CANVAS_ID = 'skilltree'
 
-export function LightningCanvas() {
+export function LightningCanvas({ useWindowWidth }: { useWindowWidth?: boolean }) {
   const [ref, setRef] = useStateRef<HTMLCanvasElement | null>(null, (node) => node)
   const canvasDOM = ref
 
   const [windowSize] = useGetWindowSize()
   const { width, height } = useMemo(() => {
     const height = canvasDOM?.parentElement?.clientHeight || 0
-    const width = canvasDOM?.parentElement?.clientWidth || 0
+    const width = useWindowWidth ? window.innerWidth : canvasDOM?.parentElement?.clientWidth || 0
     return { height, width }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [

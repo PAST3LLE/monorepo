@@ -27,25 +27,26 @@ export function SkilltreeView() {
 }
 
 function SkilltreeBoard() {
-  const api = useSkillsAtom()
+  const [state, setState] = useSkillsAtom()
   return (
-    <SkilltreeBoardContainer>
+    <SkilltreeBoardContainer active={!!state.active}>
       <SkillsCanvas />
       {/* ACTIVE SKILLS PANEL */}
-      <ActiveSkillPanel skillState={api[0]} setSkillState={api[1]} />
+      <ActiveSkillPanel skillState={state} setSkillState={setState} />
     </SkilltreeBoardContainer>
   )
 }
 
-const SkilltreeBoardContainer = styled(Row)`
+const SkilltreeBoardContainer = styled(Row)<{ active: boolean }>`
   height: 100%;
   width: 100%;
 
   > ${SkillCanvasContainer} {
-    flex: 1 1 60%;
+    width: ${({ active }) => (active ? '60%' : '100%')};
+    overflow-x: auto;
   }
   > ${ActiveSkillContainer} {
-    flex: 1 1 40%;
     height: 100%;
+    width: 40%;
   }
 `
