@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/theme",
   "sideEffects": false,
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "common theme parts",
   "main": "dist/index.js",
   "repository": {
@@ -67,13 +67,13 @@
     "styled-components": ">=5"
   },
   "dependencies": {
-    "@past3lle/assets": "^0.0.7",
-    "@past3lle/constants": "^0.0.7",
-    "@past3lle/types": "^0.0.6",
+    "@past3lle/assets": "^0.0.8",
+    "@past3lle/constants": "^0.0.8",
+    "@past3lle/types": "^0.0.7",
     "polished": "^4.2.2",
     "rebass": "^4.0.7",
     "styled-theming": "^2.2.0",
     "wcag-contrast": "^3.0.0"
   },
-  "gitHead": "361c29f970165772fef732b68ad9f454fe6c3a47"
+  "gitHead": "7bb72f1eb719f70e9958fb4dd827eb2d9532126b"
 }
