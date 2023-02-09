@@ -24,7 +24,7 @@ export function ActiveSkillPanel({
         x
       </div>
       <Row>
-        <CursiveHeader fontSize={'6rem'} marginBottom="4rem" justifyContent={'center'}>
+        <CursiveHeader marginBottom="4rem" justifyContent={'center'}>
           {activeSkill?.name}
         </CursiveHeader>
       </Row>
