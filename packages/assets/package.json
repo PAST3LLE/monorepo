@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/assets",
   "sideEffects": false,
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "common assets",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
