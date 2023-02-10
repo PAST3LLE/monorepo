@@ -77,7 +77,7 @@ export const Header = () => {
               <CursiveMonoHeader
                 text="SKILLPOINTS"
                 capitalLetterProps={{ color: '#77c51b', fontSize: '3rem', zIndex: 3 }}
-                restWordProps={{ color: '#ebebe9', fontSize: '2.2rem', fontWeight: 200, zIndex: -1 }}
+                restWordProps={{ color: '#ebebe9', fontSize: '2.2rem', fontWeight: 300, zIndex: -1 }}
               />
             </ThemedButton>
             <UserConnectionStats containerProps={{ height: '100%' }} />

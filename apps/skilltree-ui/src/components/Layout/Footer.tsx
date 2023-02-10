@@ -26,7 +26,7 @@ export function Footer() {
             <CursiveMonoHeader
               text="SKILLPOINTS"
               capitalLetterProps={{ color: '#77c51b', fontSize: '2.4rem', zIndex: 3 }}
-              restWordProps={{ color: '#ebebe9', fontSize: '1.6rem', fontWeight: 200, zIndex: -1 }}
+              restWordProps={{ color: '#ebebe9', fontSize: '1.6rem', fontWeight: 300, zIndex: -1 }}
             />
           </ThemedButton>
           <UserConnectionStats containerProps={{ height: '100%', width: '100%' }} fontSize={'1.2rem'} />
