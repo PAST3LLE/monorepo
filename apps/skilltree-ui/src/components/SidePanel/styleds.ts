@@ -32,8 +32,9 @@ export const StyledSidePanel = styled(ArticleFadeIn)<SidePanelCssProps>`
   border-radius: ${({ borderRadius = DEFAULT_SIDE_PANEL_PROPS.borderRadius }) => borderRadius};
 
   top: 0;
-  bottom: 0;
   right: 0;
+  bottom: 0;
+  height: 100%;
 
   ${CursiveHeader} {
     font-size: 6rem;
@@ -53,7 +54,7 @@ export const StyledSidePanel = styled(ArticleFadeIn)<SidePanelCssProps>`
   `}
   ${({ useMediaQueries = DEFAULT_SIDE_PANEL_PROPS.useMediaQueries }) => upToSmall`
     width: 90%;
-    padding: 4rem 2rem 0;
+    padding: 4rem 2rem;
 
     ${
       useMediaQueries &&

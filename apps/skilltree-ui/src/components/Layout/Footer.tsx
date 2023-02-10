@@ -1,6 +1,7 @@
 import { Web3InfoContainer } from './common'
 import { Footer as PstlFooter, Row } from '@past3lle/components'
 import { ThemedButton } from 'components/Button'
+import { FlashingText } from 'components/FlashingText'
 import { CursiveMonoHeader } from 'components/Text'
 import { UserConnectionStats } from 'components/UserWeb3ConnectionStats'
 import React, { useState } from 'react'
@@ -12,6 +13,7 @@ export function Footer() {
   const [, openActivePanel] = useSidePanelAtom()
   return (
     <FooterContainer isOpen={isOpen} onClick={() => setIsOpen((state) => !state)}>
+      <FlashingText duration={3}>Tap to open</FlashingText>
       <Web3InfoContainer>
         <Row margin="0.5rem" width="100%" height="52px" gap="1rem">
           <ThemedButton
@@ -39,10 +41,27 @@ export function Footer() {
 const FooterContainer = styled(PstlFooter)<{ isOpen?: boolean }>`
   ${({ isOpen }) =>
     isOpen
-      ? ``
+      ? `
+      > ${FlashingText} {
+        display: none;
+      }
+      `
       : `
     overflow: hidden;
-    height: 10px;
+    height: 30px;
+
+    > ${FlashingText} {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: -2px auto auto;
+      font-size: 2rem;
+      font-weight: 300;
+    }
+
+    > ${Web3InfoContainer} {
+      display: none;
+    }
     
   `}
 `

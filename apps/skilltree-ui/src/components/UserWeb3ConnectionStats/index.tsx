@@ -1,11 +1,12 @@
 import { RowProps, Column } from '@past3lle/components'
-import { BLACK_TRANSPARENT, setAnimation } from '@past3lle/theme'
+import { BLACK_TRANSPARENT } from '@past3lle/theme'
 import { truncateAddress } from '@past3lle/utils'
 import { useWeb3Modal } from '@web3modal/react'
 import { OpenOptions } from 'components/Button/Web3Button'
+import { FlashingText } from 'components/FlashingText'
 import { MonospaceText } from 'components/Text'
 import React, { useCallback } from 'react'
-import styled, { css } from 'styled-components/macro'
+import styled from 'styled-components/macro'
 import { useAccount, useNetwork } from 'wagmi'
 
 function UnstyledUserConnectionStats({
@@ -72,24 +73,6 @@ function UnstyledUserConnectionStats({
 }
 
 export const UserConnectionStats = styled(UnstyledUserConnectionStats)``
-
-const flashingTextAnimation = css`
-  @keyframes flashingText {
-    0% {
-      opacity: 0.5;
-    }
-    50% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 0.5;
-    }
-  }
-`
-
-const FlashingText = styled.strong`
-  ${setAnimation(flashingTextAnimation, { name: 'flashingText' as any, duration: 1.5, count: 'infinite' })}
-`
 
 const ConnectionColorWrapper = styled.div<{ isConnected: boolean }>`
   > ${FlashingText}, > i {

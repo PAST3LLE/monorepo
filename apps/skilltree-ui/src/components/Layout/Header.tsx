@@ -84,7 +84,7 @@ export const Header = () => {
           <Skilltreecon />{' '}
           <CursiveMonoHeader
             text="SKILLTREE"
-            capitalLetterProps={{ fontSize: '4.5rem', textAlign: 'left', color: 'springgreen' }}
+            capitalLetterProps={{ fontSize: '4.5rem', textAlign: 'left', color: '#552b5d' }}
             restWordProps={{ fontSize: '3.4rem', marginLeft: 0, color: 'ghostwhite', fontWeight: 300 }}
           />
         </LogoHeader>
