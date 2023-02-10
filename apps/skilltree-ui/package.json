@@ -65,7 +65,7 @@
     "@past3lle/skills-nft": "^0.0.4",
     "@past3lle/skilltree-contracts": "^0.0.1-rc.2",
     "@past3lle/theme": "^0.0.16",
-    "@past3lle/types": "^0.0.9",
+    "@past3lle/types": "^0.011",
     "@past3lle/utils": "^0.0.11",
     "@web3modal/ethereum": "^2.1.0",
     "@web3modal/react": "^2.1.0",
