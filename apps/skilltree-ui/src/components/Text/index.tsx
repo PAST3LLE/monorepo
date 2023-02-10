@@ -67,9 +67,15 @@ export const CursiveMonoHeader = ({
       {firstLetters.map((letter, idx) => (
         <CursiveHeader key={idx} {...capitalLetterProps} whiteSpace="nowrap">
           {letter}
-          <MonospaceText {...restWordProps} display="inline-flex">
+          <Text.SubHeader
+            fontWeight={100}
+            fontFamily="Roboto"
+            display="inline-flex"
+            margin="0 0 0 -0.7rem"
+            {...restWordProps}
+          >
             {restWords[idx]}
-          </MonospaceText>
+          </Text.SubHeader>
         </CursiveHeader>
       ))}
     </>

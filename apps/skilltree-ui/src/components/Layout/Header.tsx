@@ -1,10 +1,10 @@
 import { AutoRow, ExternalLink, Header as HeaderPstl, Pastellecon, Row } from '@past3lle/components'
-import { upToSmall } from '@past3lle/theme'
 import { ThemedButton } from 'components/Button'
 import { BlackBoldItalic, BlackHeader, CursiveMonoHeader } from 'components/Text'
 import { UserConnectionStats } from 'components/UserWeb3ConnectionStats'
 import { SHOP_URL } from 'constants/index'
 import React, { useState } from 'react'
+import { useSidePanelAtom } from 'state/SidePanel'
 import styled from 'styled-components/macro'
 
 export const Skilltreecon = styled(Pastellecon)`
@@ -52,8 +52,53 @@ const Web3InfoContainer = styled(Row)<{ isOpen: boolean }>`
   #Web3InfoContainer-menu {
     display: none;
   }
+`
 
-  ${({ isOpen, theme }) => upToSmall`
+const HeaderContainer = styled(HeaderPstl)``
+
+export const Header = () => {
+  const [isOpen, setIsOpen] = useState(false)
+  const [, openActivePanel] = useSidePanelAtom()
+
+  return (
+    <HeaderContainer>
+      <Row gap="1rem" height="100%" justifyContent={'space-between'}>
+        <LogoHeader>
+          <Skilltreecon /> SKILLTREE
+        </LogoHeader>
+        <Web3InfoContainer isOpen={isOpen}>
+          <span id="Web3InfoContainer-close-button" onClick={(e) => (e.stopPropagation(), setIsOpen(false))}>
+            x
+          </span>
+          <Row margin="0.5rem" width="auto" height="52px" gap="1rem">
+            <ThemedButton
+              display="flex"
+              alignItems="center"
+              gap="0.25rem"
+              height="100%"
+              withBgImage
+              onClick={() => openActivePanel({ type: 'USER_STATS' })}
+            >
+              <CursiveMonoHeader
+                text="View Stats"
+                capitalLetterProps={{ color: '#77c51b', fontSize: '3rem' }}
+                restWordProps={{ color: '#ebebe9', fontSize: '2rem' }}
+              />
+            </ThemedButton>
+            <UserConnectionStats containerProps={{ height: '100%' }} />
+          </Row>
+          {/* <CheckoutForge /> */}
+
+          <div id="Web3InfoContainer-menu" onClick={(e) => (e.stopPropagation(), setIsOpen(true))}>
+            OPEN MENU
+          </div>
+        </Web3InfoContainer>
+      </Row>
+    </HeaderContainer>
+  )
+}
+/* 
+${({ isOpen, theme }) => upToSmall`
     overflow: hidden;
     
     > ${ThemedButton} {
@@ -111,40 +156,4 @@ const Web3InfoContainer = styled(Row)<{ isOpen: boolean }>`
     `
     }
   `}
-`
-
-const HeaderContainer = styled(HeaderPstl)``
-
-export const Header = () => {
-  const [isOpen, setIsOpen] = useState(false)
-
-  return (
-    <HeaderContainer>
-      <Row gap="1rem" height="100%" justifyContent={'space-between'}>
-        <LogoHeader>
-          <Skilltreecon /> SKILLTREE
-        </LogoHeader>
-        <Web3InfoContainer isOpen={isOpen}>
-          <span id="Web3InfoContainer-close-button" onClick={(e) => (e.stopPropagation(), setIsOpen(false))}>
-            x
-          </span>
-          <Row margin="0.5rem" width="auto" height="52px" gap="1rem">
-            <ThemedButton display="flex" alignItems="center" gap="0.25rem" height="100%" withBgImage>
-              <CursiveMonoHeader
-                text="View Stats"
-                capitalLetterProps={{ color: '#77c51b', fontSize: '3rem' }}
-                restWordProps={{ color: '#ebebe9', fontSize: '2rem' }}
-              />
-            </ThemedButton>
-            <UserConnectionStats containerProps={{ height: '100%' }} />
-          </Row>
-          {/* <CheckoutForge /> */}
-
-          <div id="Web3InfoContainer-menu" onClick={(e) => (e.stopPropagation(), setIsOpen(true))}>
-            OPEN MENU
-          </div>
-        </Web3InfoContainer>
-      </Row>
-    </HeaderContainer>
-  )
-}
+*/

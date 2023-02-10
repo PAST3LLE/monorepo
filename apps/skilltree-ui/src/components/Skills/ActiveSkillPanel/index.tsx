@@ -1,33 +1,21 @@
-import { ActiveSkillContainer } from './styleds'
 import { Row, AutoRow, ExternalLink, Text } from '@past3lle/components'
 import { ThemedButtonExternalLink } from 'components/Button'
-import { CursiveHeader, MonospaceText } from 'components/Text'
+import { SidePanel } from 'components/SidePanel'
+import { MonospaceText } from 'components/Text'
 import React from 'react'
-import { SkillsState, useSkillsAtom } from 'state/Skills'
+import { useSkillsAtom } from 'state/Skills'
 import { CUSTOM_THEME } from 'theme/customTheme'
 
-export function ActiveSkillPanel({
-  skillState,
-  setSkillState
-}: {
-  skillState: SkillsState
-  setSkillState: ReturnType<typeof useSkillsAtom>[1]
-}) {
+export function ActiveSkillPanel() {
+  const [skillState, setSkillState] = useSkillsAtom()
+
   if (!skillState.active) return null
   const activeSkill = skillState.vectorsMap[skillState.active].skill
   return (
-    <ActiveSkillContainer>
-      <div
-        onClick={() => setSkillState((state) => ({ ...state, active: undefined }))}
-        style={{ position: 'absolute', right: 15, top: 10, fontWeight: 300, fontSize: '3rem', cursor: 'pointer' }}
-      >
-        x
-      </div>
-      <Row>
-        <CursiveHeader marginBottom="4rem" justifyContent={'center'}>
-          {activeSkill?.name}
-        </CursiveHeader>
-      </Row>
+    <SidePanel
+      header={activeSkill?.name || 'Unknown'}
+      onDismiss={() => setSkillState((state) => ({ ...state, active: undefined }))}
+    >
       <Row justifyContent={'center'} margin="0 0 13% 0">
         <MonospaceText>
           Buy {activeSkill?.name} and receive a free NFT skillpoint giving you access to exclusive perks.
@@ -62,6 +50,6 @@ export function ActiveSkillPanel({
           to understand how to claim your skillpoint NFT.
         </MonospaceText>
       </Row>
-    </ActiveSkillContainer>
+    </SidePanel>
   )
 }
