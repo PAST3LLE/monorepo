@@ -21,9 +21,6 @@
             "path": "../theme"
         },
         {
-            "path": "../types"
-        },
-        {
             "path": "../utils"
         }
     ],

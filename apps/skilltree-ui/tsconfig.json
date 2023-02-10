@@ -34,9 +34,6 @@
             "path": "../../packages/theme"
         },
         {
-            "path": "../../packages/types"
-        },
-        {
             "path": "../../packages/utils"
         }
     ]
