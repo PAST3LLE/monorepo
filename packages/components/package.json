@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/components",
   "sideEffects": false,
-  "version": "0.0.17",
+  "version": "0.0.18",
   "description": "common components",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -74,11 +74,11 @@
   },
   "dependencies": {
     "@past3lle/assets": "^0.0.9",
-    "@past3lle/constants": "^0.0.10",
+    "@past3lle/constants": "^0.0.11",
     "@past3lle/hooks": "^0.0.11",
-    "@past3lle/theme": "^0.0.15",
+    "@past3lle/theme": "^0.0.16",
     "@past3lle/types": "^0.0.9",
-    "@past3lle/utils": "^0.0.10",
+    "@past3lle/utils": "^0.0.11",
     "@popperjs/core": "^2.11.6",
     "@reach/dialog": "^0.18.0",
     "@use-gesture/react": "^10.2.23",
