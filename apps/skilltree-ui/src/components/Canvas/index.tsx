@@ -3,18 +3,20 @@ import { useLightningCanvas } from './api/hooks'
 import { StyledCanvas } from './styleds'
 import { useStateRef } from '@past3lle/hooks'
 import React, { useMemo } from 'react'
+import { calculateCanvasWidth } from 'state/Skills/updaters/GridPositionUpdater'
 import { useGetWindowSize } from 'state/WindowSize'
 
 const CANVAS_ID = 'skilltree'
 
-export function LightningCanvas({ useWindowWidth }: { useWindowWidth?: boolean }) {
+export function LightningCanvas() {
   const [ref, setRef] = useStateRef<HTMLCanvasElement | null>(null, (node) => node)
   const canvasDOM = ref
 
   const [windowSize] = useGetWindowSize()
   const { width, height } = useMemo(() => {
     const height = canvasDOM?.parentElement?.clientHeight || 0
-    const width = useWindowWidth ? window.innerWidth : canvasDOM?.parentElement?.clientWidth || 0
+    // const width = useWindowWidth ? window.innerWidth : canvasDOM?.parentElement?.clientWidth || 0
+    const width = calculateCanvasWidth(document.body.clientWidth)
     return { height, width }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [

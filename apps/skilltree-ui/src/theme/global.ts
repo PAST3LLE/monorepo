@@ -34,12 +34,7 @@ export const CustomStaticGlobalCss = createGlobalStyle`
   body > div#root {
     background: url(${BG_IMAGE}) center/cover no-repeat;
     height: 100vh;
-
-    > header {
-      min-height: 8rem;
-      height: auto;
-      padding: 1.5rem 2.5rem 0;
-    }
+    
     > nav {
       min-width: 12rem;
       width: auto;

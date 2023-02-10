@@ -17,9 +17,9 @@ export function ActiveSkillPanel() {
       onDismiss={() => setSkillState((state) => ({ ...state, active: undefined }))}
     >
       <Row justifyContent={'center'} margin="0 0 13% 0">
-        <MonospaceText>
+        <Text.SubHeader fontSize={'2.5rem'} fontWeight={200}>
           Buy {activeSkill?.name} and receive a free NFT skillpoint giving you access to exclusive perks.
-        </MonospaceText>
+        </Text.SubHeader>
       </Row>
       <Row justifyContent={'flex-end'} marginBottom="auto">
         <ThemedButtonExternalLink href={`https://pastelle.shop/#/collection/${activeSkill?.name?.toLowerCase()}`}>

@@ -45,10 +45,29 @@ export const CheckoutForge = ({ className }: { className?: string }) => (
 )
 
 const HeaderContainer = styled(HeaderPstl)`
+  min-height: 8rem;
+  height: auto;
+  padding: 1.5rem 2.5rem 0;
+
   > ${Row} > ${Web3InfoContainer} {
     display: flex;
   }
   ${upToSmall`
+    min-height: 6rem;
+    padding: 0;
+
+  > ${Row} > ${LogoHeader} {
+    width: 100%;
+    padding: 0.5rem;
+    margin-left: 6.5rem;
+
+    > ${Skilltreecon} {
+      width: 20%;
+      left: -5.5rem;
+      top: 0;
+    }
+  }
+
     > ${Row} > ${Web3InfoContainer} {
       display: none;
     }
@@ -60,9 +79,14 @@ export const Header = () => {
 
   return (
     <HeaderContainer>
-      <Row gap="1rem" height="100%" justifyContent={'space-between'}>
+      <Row gap="1rem" height="100%" width="100%" justifyContent={'space-between'}>
         <LogoHeader>
-          <Skilltreecon /> SKILLTREE
+          <Skilltreecon />{' '}
+          <CursiveMonoHeader
+            text="SKILLTREE"
+            capitalLetterProps={{ fontSize: '4.5rem', textAlign: 'left', color: 'springgreen' }}
+            restWordProps={{ fontSize: '3.4rem', marginLeft: 0, color: 'ghostwhite', fontWeight: 300 }}
+          />
         </LogoHeader>
         <Web3InfoContainer>
           <Row margin="0.5rem" width="auto" height="52px" gap="1rem">

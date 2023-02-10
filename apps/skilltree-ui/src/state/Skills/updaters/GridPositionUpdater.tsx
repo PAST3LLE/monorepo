@@ -1,4 +1,5 @@
 import { SkillVectorsMap, useSkillsAtom } from '..'
+import { MEDIA_WIDTHS } from '@past3lle/theme'
 import { calculateGridPoints } from 'components/Canvas/api/hooks'
 import { useMetadata } from 'components/Skills/hooks'
 import { useEffect } from 'react'
@@ -18,7 +19,7 @@ export function GridPositionUpdater() {
         ...state,
         vectors: ref
           ? calculateGridPoints(skillsMetadata, {
-              clientWidth: document.body.clientWidth,
+              clientWidth: calculateCanvasWidth(document.body.clientWidth),
               clientHeight: ref.clientHeight
             })
           : []
@@ -42,4 +43,12 @@ export function GridPositionUpdater() {
   }, [setSkillState, vectors])
 
   return null
+}
+
+export function calculateCanvasWidth(width: number) {
+  if (width <= MEDIA_WIDTHS.upToSmall) {
+    return MEDIA_WIDTHS.upToExtraSmall
+  } else {
+    return width
+  }
 }

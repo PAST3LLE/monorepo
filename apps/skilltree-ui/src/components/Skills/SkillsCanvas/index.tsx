@@ -73,7 +73,7 @@ export function SkillsCanvas() {
           })}
         </SkillContainerAbsolute>
         {/* CANVAS */}
-        <LightningCanvas useWindowWidth />
+        <LightningCanvas />
       </Column>
     </SkillCanvasContainer>
   )
