@@ -48,6 +48,10 @@ module.exports = {
             name: "@lingui/macro",
             importNames: ["t"],
             message: "Please use <Trans> instead of t."
+          },
+          {
+            name: "styled-components",
+            message: "Please use styled-components/macro instead"
           }
         ],
         patterns: [

@@ -8,7 +8,13 @@ import React, { useCallback } from 'react'
 import styled, { css } from 'styled-components/macro'
 import { useAccount, useNetwork } from 'wagmi'
 
-export function UserConnectionStats({ containerProps }: { containerProps?: RowProps }) {
+export function UserConnectionStats({
+  containerProps,
+  fontSize = '1.5rem'
+}: {
+  containerProps?: RowProps
+  fontSize?: string
+}) {
   const { address } = useAccount()
   const { chain } = useNetwork()
   const { open } = useWeb3Modal()
@@ -31,7 +37,7 @@ export function UserConnectionStats({ containerProps }: { containerProps?: RowPr
     >
       <MonospaceText
         cursor="pointer"
-        fontSize="1.5rem"
+        fontSize={fontSize}
         title={address || 'disconnected'}
         color={'#f8f8ffed'}
         onClick={() => handleClick({ route: address ? 'Account' : 'ConnectWallet' })}
@@ -46,7 +52,7 @@ export function UserConnectionStats({ containerProps }: { containerProps?: RowPr
       </MonospaceText>
       <MonospaceText
         cursor="pointer"
-        fontSize="1.5rem"
+        fontSize={fontSize}
         color={'#f8f8ffed'}
         onClick={() => handleClick({ route: 'SelectNetwork' })}
       >
