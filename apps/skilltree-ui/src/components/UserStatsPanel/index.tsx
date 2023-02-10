@@ -12,11 +12,11 @@ import { CUSTOM_THEME } from 'theme/customTheme'
 export function UserStatsPanel() {
   const [{ vectors }] = useSkillsAtom()
   return (
-    <SidePanel header="Your Stats" styledProps={{ useMediaQueries: false }}>
+    <SidePanel header="SKILLPOINTS" styledProps={{ useMediaQueries: false }}>
       <Row padding="0.2rem 2rem" gap="1rem" backgroundColor={CUSTOM_THEME.mainBg}>
         <CursiveMonoHeader
           text="CONNECTION"
-          capitalLetterProps={{ display: 'inline-flex', width: 'auto' }}
+          capitalLetterProps={{ width: 'auto', display: 'flex', alignItems: 'center' }}
           restWordProps={{ fontSize: '3.2rem' }}
         />
       </Row>
@@ -27,7 +27,7 @@ export function UserStatsPanel() {
       <Row padding="0.2rem 2rem" gap="1rem" backgroundColor={CUSTOM_THEME.mainBg}>
         <CursiveMonoHeader
           text="INVENTORY"
-          capitalLetterProps={{ display: 'inline-flex', width: 'auto' }}
+          capitalLetterProps={{ width: 'auto', display: 'flex', alignItems: 'center' }}
           restWordProps={{ fontSize: '3.2rem' }}
         />
       </Row>

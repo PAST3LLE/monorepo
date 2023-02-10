@@ -48,8 +48,8 @@ export const CursiveMonoHeader = ({
   restWordProps
 }: {
   text: string
-  capitalLetterProps?: TextProps
-  restWordProps?: TextProps
+  capitalLetterProps?: TextProps & { zIndex?: number }
+  restWordProps?: TextProps & { zIndex?: number }
 }) => {
   const textArr = text.split(' ')
   const firstLetters: string[] = []
@@ -65,13 +65,20 @@ export const CursiveMonoHeader = ({
   return (
     <>
       {firstLetters.map((letter, idx) => (
-        <CursiveHeader key={idx} {...capitalLetterProps} whiteSpace="nowrap">
+        <CursiveHeader
+          key={idx}
+          style={{ zIndex: capitalLetterProps?.zIndex }}
+          {...capitalLetterProps}
+          whiteSpace="nowrap"
+        >
           {letter}
           <Text.SubHeader
             fontWeight={100}
             fontFamily="Roboto"
             display="inline-flex"
             margin="0 0 0 -0.7rem"
+            padding={0}
+            style={{ position: 'relative', zIndex: restWordProps?.zIndex }}
             {...restWordProps}
           >
             {restWords[idx]}

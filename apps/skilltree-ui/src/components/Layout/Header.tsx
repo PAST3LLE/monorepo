@@ -1,9 +1,11 @@
+import { Web3InfoContainer } from './common'
 import { AutoRow, ExternalLink, Header as HeaderPstl, Pastellecon, Row } from '@past3lle/components'
+import { upToSmall } from '@past3lle/theme'
 import { ThemedButton } from 'components/Button'
 import { BlackBoldItalic, BlackHeader, CursiveMonoHeader } from 'components/Text'
 import { UserConnectionStats } from 'components/UserWeb3ConnectionStats'
 import { SHOP_URL } from 'constants/index'
-import React, { useState } from 'react'
+import React from 'react'
 import { useSidePanelAtom } from 'state/SidePanel'
 import styled from 'styled-components/macro'
 
@@ -42,22 +44,18 @@ export const CheckoutForge = ({ className }: { className?: string }) => (
   </AutoRow>
 )
 
-const Web3InfoContainer = styled(Row)<{ isOpen: boolean }>`
-  position: relative;
-  justify-content: flex-end;
-  width: auto;
-  gap: 1rem;
-
-  > #Web3InfoContainer-close-button,
-  #Web3InfoContainer-menu {
-    display: none;
+const HeaderContainer = styled(HeaderPstl)`
+  > ${Row} > ${Web3InfoContainer} {
+    display: flex;
   }
+  ${upToSmall`
+    > ${Row} > ${Web3InfoContainer} {
+      display: none;
+    }
+  `}
 `
 
-const HeaderContainer = styled(HeaderPstl)``
-
 export const Header = () => {
-  const [isOpen, setIsOpen] = useState(false)
   const [, openActivePanel] = useSidePanelAtom()
 
   return (
@@ -66,10 +64,7 @@ export const Header = () => {
         <LogoHeader>
           <Skilltreecon /> SKILLTREE
         </LogoHeader>
-        <Web3InfoContainer isOpen={isOpen}>
-          <span id="Web3InfoContainer-close-button" onClick={(e) => (e.stopPropagation(), setIsOpen(false))}>
-            x
-          </span>
+        <Web3InfoContainer>
           <Row margin="0.5rem" width="auto" height="52px" gap="1rem">
             <ThemedButton
               display="flex"
@@ -80,18 +75,13 @@ export const Header = () => {
               onClick={() => openActivePanel({ type: 'USER_STATS' })}
             >
               <CursiveMonoHeader
-                text="View Stats"
-                capitalLetterProps={{ color: '#77c51b', fontSize: '3rem' }}
-                restWordProps={{ color: '#ebebe9', fontSize: '2rem' }}
+                text="SKILLPOINTS"
+                capitalLetterProps={{ color: '#77c51b', fontSize: '3rem', zIndex: 3 }}
+                restWordProps={{ color: '#ebebe9', fontSize: '2.2rem', fontWeight: 200, zIndex: -1 }}
               />
             </ThemedButton>
             <UserConnectionStats containerProps={{ height: '100%' }} />
           </Row>
-          {/* <CheckoutForge /> */}
-
-          <div id="Web3InfoContainer-menu" onClick={(e) => (e.stopPropagation(), setIsOpen(true))}>
-            OPEN MENU
-          </div>
         </Web3InfoContainer>
       </Row>
     </HeaderContainer>
