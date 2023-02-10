@@ -77,7 +77,7 @@
     "@past3lle/constants": "^0.0.11",
     "@past3lle/hooks": "^0.0.11",
     "@past3lle/theme": "^0.0.16",
-    "@past3lle/types": "^0.0.9",
+    "@past3lle/types": "^0.0.11",
     "@past3lle/utils": "^0.0.11",
     "@popperjs/core": "^2.11.6",
     "@reach/dialog": "^0.18.0",
