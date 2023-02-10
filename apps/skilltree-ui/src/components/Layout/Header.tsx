@@ -1,8 +1,8 @@
 import { Web3InfoContainer } from './common'
-import { AutoRow, ExternalLink, Header as HeaderPstl, Pastellecon, Row } from '@past3lle/components'
+import { AutoRow, ExternalLink, Header as HeaderPstl, Pastellecon, Row, Text } from '@past3lle/components'
 import { upToSmall } from '@past3lle/theme'
 import { ThemedButton } from 'components/Button'
-import { BlackBoldItalic, BlackHeader, CursiveMonoHeader } from 'components/Text'
+import { BlackBoldItalic, BlackHeader, CursiveHeader, CursiveMonoHeader } from 'components/Text'
 import { UserConnectionStats } from 'components/UserWeb3ConnectionStats'
 import { SHOP_URL } from 'constants/index'
 import React from 'react'
@@ -49,9 +49,18 @@ const HeaderContainer = styled(HeaderPstl)`
   height: auto;
   padding: 1.5rem 2.5rem 0;
 
-  > ${Row} > ${Web3InfoContainer} {
-    display: flex;
+  > ${Row} {
+    > ${LogoHeader} {
+      > ${Skilltreecon} {
+        width: 50%;
+        opacity: 0.82;
+      }
+    }
+    > ${Web3InfoContainer} {
+      display: flex;
+    }
   }
+
   ${upToSmall`
     min-height: 6rem;
     padding: 0;
@@ -65,6 +74,20 @@ const HeaderContainer = styled(HeaderPstl)`
       width: 20%;
       left: -5.5rem;
       top: 0;
+      opacity: 1;
+    }
+    > ${Row} {
+      display: inline-flex;
+      width: auto;
+      margin-left: 0rem;
+
+      ${CursiveHeader} {
+        font-size: 5rem;
+      }
+      > div:last-child {
+        margin-left: -1.5rem;
+        z-index: -1;
+      }
     }
   }
 
@@ -81,12 +104,20 @@ export const Header = () => {
     <HeaderContainer>
       <Row gap="1rem" height="100%" width="100%" justifyContent={'space-between'}>
         <LogoHeader>
-          <Skilltreecon />{' '}
-          <CursiveMonoHeader
+          <Skilltreecon />
+          <Row alignItems={'center'}>
+            <CursiveHeader fontSize="4rem" color="darkred">
+              SKILL
+            </CursiveHeader>
+            <Text.SubHeader fontSize="3.4rem" fontWeight={300} padding={0} margin={0} marginLeft={'-1.7rem'}>
+              TREE
+            </Text.SubHeader>
+          </Row>
+          {/* <CursiveMonoHeader
             text="SKILLTREE"
             capitalLetterProps={{ fontSize: '4.5rem', textAlign: 'left', color: '#552b5d' }}
             restWordProps={{ fontSize: '3.4rem', marginLeft: 0, color: 'ghostwhite', fontWeight: 300 }}
-          />
+          /> */}
         </LogoHeader>
         <Web3InfoContainer>
           <Row margin="0.5rem" width="auto" height="52px" gap="1rem">
