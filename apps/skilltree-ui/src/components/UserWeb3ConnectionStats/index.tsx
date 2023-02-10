@@ -8,12 +8,14 @@ import React, { useCallback } from 'react'
 import styled, { css } from 'styled-components/macro'
 import { useAccount, useNetwork } from 'wagmi'
 
-export function UserConnectionStats({
+function UnstyledUserConnectionStats({
   containerProps,
-  fontSize = '1.5rem'
+  fontSize = '1.5rem',
+  className
 }: {
   containerProps?: RowProps
   fontSize?: string
+  className?: string
 }) {
   const { address } = useAccount()
   const { chain } = useNetwork()
@@ -33,6 +35,7 @@ export function UserConnectionStats({
       justifyContent="center"
       alignItems="flex-start"
       borderRadius="5px"
+      className={className}
       {...containerProps}
     >
       <MonospaceText
@@ -67,6 +70,8 @@ export function UserConnectionStats({
     </Column>
   )
 }
+
+export const UserConnectionStats = styled(UnstyledUserConnectionStats)``
 
 const flashingTextAnimation = css`
   @keyframes flashingText {

@@ -1,5 +1,5 @@
 import { ArticleFadeIn, RowProps } from '@past3lle/components'
-import { upToLarge, upToSmall } from '@past3lle/theme'
+import { upToLarge, upToSmall, upToExtraSmall } from '@past3lle/theme'
 import { CursiveHeader, MonospaceText } from 'components/Text'
 import styled from 'styled-components/macro'
 
@@ -10,7 +10,7 @@ const DEFAULT_SIDE_PANEL_PROPS = {
   borderRadius: '0px',
   flexDir: 'column' as RowProps['flexDirection'],
   flexWrap: 'nowrap' as RowProps['flexWrap'],
-  zIndex: 999,
+  zIndex: 88,
   useMediaQueries: true as boolean
 }
 
@@ -39,24 +39,32 @@ export const StyledSidePanel = styled(ArticleFadeIn)<SidePanelCssProps>`
     font-size: 6rem;
   }
 
-  ${upToLarge`width: 50%;`}
-  ${upToSmall`width: 90%;`}
+  ${({ useMediaQueries = DEFAULT_SIDE_PANEL_PROPS.useMediaQueries }) => upToLarge`
+    width: 50%;
 
-  ${({ useMediaQueries = DEFAULT_SIDE_PANEL_PROPS.useMediaQueries }) =>
-    useMediaQueries &&
-    `
-    ${upToLarge`
-      ${CursiveHeader} {
-        font-size: 4vw;
-      }
-    `}
-
-    ${upToSmall`
-      ${CursiveHeader} {
-        font-size: 4rem;
-      }
-    `}
+    ${
+      useMediaQueries &&
+      `
+        ${CursiveHeader} {
+          font-size: 4vw;
+        }
+  `
+    }
   `}
+  ${({ useMediaQueries = DEFAULT_SIDE_PANEL_PROPS.useMediaQueries }) => upToSmall`
+    width: 90%;
+    padding: 4rem 2rem 0;
+
+    ${
+      useMediaQueries &&
+      `
+      ${CursiveHeader} {
+        font-size: 4.2rem;
+      }
+    `
+    }
+  `}
+  ${upToExtraSmall`width: 100%;`}
 
   ${MonospaceText} {
     font-size: 2rem;

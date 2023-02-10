@@ -42,11 +42,13 @@ export const CursiveHeader = styled(CursiveText)<{ whiteSpace?: string }>`
   font-size: 6rem;
   ${({ whiteSpace }) => whiteSpace && `white-space: ${whiteSpace};`};
 `
-export const CursiveMonoHeader = ({
+const UnstyledCursiveMonoHeader = ({
   text,
+  className,
   capitalLetterProps,
   restWordProps
 }: {
+  className?: string
   text: string
   capitalLetterProps?: TextProps & { zIndex?: number }
   restWordProps?: TextProps & { zIndex?: number }
@@ -66,6 +68,7 @@ export const CursiveMonoHeader = ({
     <>
       {firstLetters.map((letter, idx) => (
         <CursiveHeader
+          className={className}
           key={idx}
           style={{ zIndex: capitalLetterProps?.zIndex }}
           {...capitalLetterProps}
@@ -88,6 +91,8 @@ export const CursiveMonoHeader = ({
     </>
   )
 }
+
+export const CursiveMonoHeader = styled(UnstyledCursiveMonoHeader)``
 /* 
 return (
     <CursiveHeader textAlign="left" fontSize="2.2rem">
