@@ -23,7 +23,7 @@ config.references = [];
     console.log('LINES', lines)
     // CAREFUL: i changed this manually after it started failing...
     // it was: const depthTree = lines.slice(1, lines.length - 2).join('\n');
-    const depthTree = lines.slice(0).join('\n');
+    const depthTree = lines.slice(1, lines.length - 2).join('\n');
     console.log('DEPTH TREE', depthTree)
     const workspaces = JSON.parse(depthTree);
 
