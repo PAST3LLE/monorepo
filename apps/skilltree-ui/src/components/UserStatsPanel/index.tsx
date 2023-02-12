@@ -53,6 +53,7 @@ export function UserStatsPanel() {
 const UserStatsPanelContainer = styled(Column)`
   overflow: hidden;
   height: 100%;
+  padding: 2rem 0 0;
 
   ${() => upToSmall`
     ${UserConnectionStats} {
