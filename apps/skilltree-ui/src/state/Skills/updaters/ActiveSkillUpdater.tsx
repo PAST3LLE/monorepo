@@ -14,6 +14,8 @@ export function ActiveSkillUpdater() {
       openSidePanel('ACTIVE SKILL')
       toggleSelectedSkill(state)
       activeSkillNode.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' })
+    } else {
+      toggleSelectedSkill(undefined)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.active])

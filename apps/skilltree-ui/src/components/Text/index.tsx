@@ -42,17 +42,13 @@ export const CursiveHeader = styled(CursiveText)<{ whiteSpace?: string }>`
   font-size: 6rem;
   ${({ whiteSpace }) => whiteSpace && `white-space: ${whiteSpace};`};
 `
-const UnstyledCursiveMonoHeader = ({
-  text,
-  className,
-  capitalLetterProps,
-  restWordProps
-}: {
+export interface CursiveMonoHeaderProps {
   className?: string
   text: string
   capitalLetterProps?: TextProps & { zIndex?: number }
   restWordProps?: TextProps & { zIndex?: number }
-}) => {
+}
+const UnstyledCursiveMonoHeader = ({ text, className, capitalLetterProps, restWordProps }: CursiveMonoHeaderProps) => {
   const textArr = text.split(' ')
   const firstLetters: string[] = []
   const restWords: string[] = []

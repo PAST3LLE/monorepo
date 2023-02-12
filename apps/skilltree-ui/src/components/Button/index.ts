@@ -3,6 +3,7 @@ import { setCssBackground } from '@past3lle/theme'
 import styled, { css } from 'styled-components/macro'
 import { BACKGROUND_IMAGE_DDPX_URL_MAP } from 'theme/global'
 
+export * from './InventoryButton'
 export * from './Web3Button'
 
 export const ThemedButton = styled(Button).attrs(() => ({}))<{ invert?: boolean; gap?: string; withBgImage?: boolean }>`

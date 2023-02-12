@@ -1,12 +1,11 @@
 import { Web3InfoContainer } from './common'
 import { AutoRow, ExternalLink, Header as HeaderPstl, Pastellecon, Row, Text } from '@past3lle/components'
 import { upToSmall } from '@past3lle/theme'
-import { ThemedButton } from 'components/Button'
-import { BlackBoldItalic, BlackHeader, CursiveHeader, CursiveMonoHeader } from 'components/Text'
+import { InventoryButton } from 'components/Button'
+import { BlackBoldItalic, BlackHeader, CursiveHeader } from 'components/Text'
 import { UserConnectionStats } from 'components/UserWeb3ConnectionStats'
 import { SHOP_URL } from 'constants/index'
 import React from 'react'
-import { useSidePanelAtom } from 'state/SidePanel'
 import styled from 'styled-components/macro'
 
 export const Skilltreecon = styled(Pastellecon)`
@@ -98,8 +97,6 @@ const HeaderContainer = styled(HeaderPstl)`
 `
 
 export const Header = () => {
-  const [, openActivePanel] = useSidePanelAtom()
-
   return (
     <HeaderContainer>
       <Row gap="1rem" height="100%" width="100%" justifyContent={'space-between'}>
@@ -113,28 +110,10 @@ export const Header = () => {
               TREE
             </Text.SubHeader>
           </Row>
-          {/* <CursiveMonoHeader
-            text="SKILLTREE"
-            capitalLetterProps={{ fontSize: '4.5rem', textAlign: 'left', color: '#552b5d' }}
-            restWordProps={{ fontSize: '3.4rem', marginLeft: 0, color: 'ghostwhite', fontWeight: 300 }}
-          /> */}
         </LogoHeader>
         <Web3InfoContainer>
           <Row margin="0.5rem" width="auto" height="52px" gap="1rem">
-            <ThemedButton
-              display="flex"
-              alignItems="center"
-              gap="0.25rem"
-              height="100%"
-              withBgImage
-              onClick={() => openActivePanel('USER STATS')}
-            >
-              <CursiveMonoHeader
-                text="SKILLPOINTS"
-                capitalLetterProps={{ color: '#77c51b', fontSize: '3rem', zIndex: 3 }}
-                restWordProps={{ color: '#ebebe9', fontSize: '2.2rem', fontWeight: 300, zIndex: -1 }}
-              />
-            </ThemedButton>
+            <InventoryButton restWordProps={{ fontSize: '1.8rem' }} />
             <UserConnectionStats containerProps={{ height: '100%' }} />
           </Row>
         </Web3InfoContainer>
