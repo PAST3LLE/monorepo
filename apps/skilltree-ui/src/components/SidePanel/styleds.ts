@@ -1,5 +1,5 @@
 import { ArticleFadeIn, RowProps } from '@past3lle/components'
-import { upToLarge, upToSmall, upToExtraSmall } from '@past3lle/theme'
+import { upToLarge, upToSmall, upToExtraSmall, upToMedium } from '@past3lle/theme'
 import { CursiveHeader, MonospaceText } from 'components/Text'
 import styled from 'styled-components/macro'
 
@@ -37,7 +37,7 @@ export const StyledSidePanel = styled(ArticleFadeIn)<SidePanelCssProps>`
   height: 100%;
 
   ${CursiveHeader} {
-    font-size: 6rem;
+    font-size: 5rem;
   }
 
   ${({ useMediaQueries = DEFAULT_SIDE_PANEL_PROPS.useMediaQueries }) => upToLarge`
@@ -52,6 +52,11 @@ export const StyledSidePanel = styled(ArticleFadeIn)<SidePanelCssProps>`
   `
     }
   `}
+
+  ${upToMedium`
+    width: 65%;
+  `}
+
   ${({ useMediaQueries = DEFAULT_SIDE_PANEL_PROPS.useMediaQueries }) => upToSmall`
     width: 90%;
     padding: 4rem 2rem;

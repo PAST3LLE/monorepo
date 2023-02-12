@@ -17,9 +17,9 @@ export function UserStatsPanel() {
       <UserStatsPanelContainer>
         <Row padding="0.2rem 2rem" gap="1rem" backgroundColor={CUSTOM_THEME.mainBg}>
           <CursiveMonoHeader
-            text="CONNECTION"
+            text="ACCOUNT"
             capitalLetterProps={{ width: 'auto', display: 'flex', alignItems: 'center' }}
-            restWordProps={{ fontSize: '3.2rem' }}
+            restWordProps={{ fontSize: '3rem' }}
           />
         </Row>
 
@@ -29,7 +29,7 @@ export function UserStatsPanel() {
           <CursiveMonoHeader
             text="INVENTORY"
             capitalLetterProps={{ width: 'auto', display: 'flex', alignItems: 'center' }}
-            restWordProps={{ fontSize: '3.2rem' }}
+            restWordProps={{ fontSize: '3rem' }}
           />
           <Text.SubHeader fontWeight={300}>
             {vectors.length}/{vectors.length} COLLECTED

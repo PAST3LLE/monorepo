@@ -8,11 +8,11 @@ export function ActiveSkillUpdater() {
   const [, openSidePanel] = useSidePanelAtom()
 
   useEffect(() => {
-    openSidePanel({ type: 'ACTIVE_SKILL' })
-    toggleSelectedSkill(state)
-
     const activeSkillNode = state.active ? document.getElementById(state.active) : null
+
     if (activeSkillNode) {
+      openSidePanel('ACTIVE SKILL')
+      toggleSelectedSkill(state)
       activeSkillNode.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

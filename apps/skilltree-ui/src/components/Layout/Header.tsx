@@ -127,7 +127,7 @@ export const Header = () => {
               gap="0.25rem"
               height="100%"
               withBgImage
-              onClick={() => openActivePanel({ type: 'USER_STATS' })}
+              onClick={() => openActivePanel('USER STATS')}
             >
               <CursiveMonoHeader
                 text="SKILLPOINTS"
