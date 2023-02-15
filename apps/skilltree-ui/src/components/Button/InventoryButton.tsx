@@ -36,7 +36,7 @@ export function InventoryButton(props: InventoryButtonProps) {
         }}
         restWordProps={{
           zIndex: -1,
-          marginLeft: '-0.3rem',
+          marginLeft: '-0.2rem',
           color: '#ebebe9e3',
           fontFamily: 'monospace',
           fontSize: '1.4rem',

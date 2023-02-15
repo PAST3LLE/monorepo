@@ -75,7 +75,7 @@ const UnstyledCursiveMonoHeader = ({ text, className, capitalLetterProps, restWo
             fontWeight={100}
             fontFamily="Roboto"
             display="inline-flex"
-            margin="0 0 0 -0.4rem"
+            margin="0 0 0.2rem -0.4rem"
             padding={0}
             style={{ position: 'relative', zIndex: restWordProps?.zIndex, textShadow: restWordProps?.textShadow }}
             {...restWordProps}

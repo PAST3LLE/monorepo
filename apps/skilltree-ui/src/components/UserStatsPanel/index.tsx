@@ -1,5 +1,7 @@
 import { Column, Row, Text } from '@past3lle/components'
 import { upToSmall } from '@past3lle/theme'
+import ACCOUNT from 'assets/png/icons/icons8-footman-100.png'
+import TREASURE_CHEST_GREEN from 'assets/png/icons/icons8-treasure-chest-90-green.png'
 import { SidePanel } from 'components/SidePanel'
 import { Skillpoint } from 'components/Skills/Skillpoint'
 // import { StyledSkillpoint } from 'components/Skills/common'
@@ -17,6 +19,7 @@ export function UserStatsPanel() {
     <SidePanel header="STATS & SKILLS">
       <UserStatsPanelContainer>
         <Row padding="1rem 2rem" gap="0 1rem" backgroundColor={CUSTOM_THEME.mainBg}>
+          <img src={ACCOUNT} style={{ maxWidth: '4rem' }} />
           <CursiveMonoHeader
             text="ACCOUNT"
             capitalLetterProps={{ width: 'auto', display: 'flex', alignItems: 'center' }}
@@ -33,6 +36,7 @@ export function UserStatsPanel() {
         <UserConnectionStats containerProps={{ margin: '2rem 0' }} />
 
         <Row padding="1rem 2rem" gap="0 1rem" backgroundColor={CUSTOM_THEME.mainBg}>
+          <img src={TREASURE_CHEST_GREEN} style={{ maxWidth: '4rem' }} />
           <CursiveMonoHeader
             text="INVENTORY"
             capitalLetterProps={{ width: 'auto', display: 'flex', alignItems: 'center' }}
