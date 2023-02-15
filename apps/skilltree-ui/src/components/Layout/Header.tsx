@@ -2,8 +2,9 @@ import { Web3InfoContainer } from './common'
 import { ExternalLink, Header as HeaderPstl, Pastellecon, Row } from '@past3lle/components'
 import { upToSmall } from '@past3lle/theme'
 import { InventoryButton } from 'components/Button'
+import { ConnectionInfoButton } from 'components/Button/ConnectionInfoButton'
 import { BlackBoldItalic, BlackHeader, CursiveHeader } from 'components/Text'
-import { UserConnectionStats } from 'components/UserWeb3ConnectionStats'
+// import { UserConnectionStats } from 'components/UserWeb3ConnectionStats'
 import { SHOP_URL } from 'constants/index'
 import React from 'react'
 import styled from 'styled-components/macro'
@@ -40,7 +41,7 @@ export const CheckoutForge = ({ className }: { className?: string }) => (
     <BlackBoldItalic fontSize={'1.5rem'} fontWeight={500}>
       {/* @ts-ignore */}
       <ExternalLink $color={MAIN_BG} href={SHOP_URL} style={{ letterSpacing: '0' }}>
-        go to shop
+        view shop
       </ExternalLink>
     </BlackBoldItalic>
   </Row>
@@ -114,13 +115,15 @@ export const Header = () => {
         <Web3InfoContainer>
           <Row margin="0.5rem" width="auto" height="52px" gap="1rem">
             <InventoryButton restWordProps={{ fontSize: '1.8rem' }} />
-            <UserConnectionStats containerProps={{ height: '100%' }} />
+            <ConnectionInfoButton />
+            {/* <UserConnectionStats containerProps={{ height: '100%' }} /> */}
           </Row>
         </Web3InfoContainer>
       </Row>
     </HeaderContainer>
   )
 }
+
 /* 
 ${({ isOpen, theme }) => upToSmall`
     overflow: hidden;

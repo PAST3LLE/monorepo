@@ -2,6 +2,7 @@ import { MediaWidths } from '@past3lle/theme'
 import { GenericImageSrcSet } from '@past3lle/types'
 import BG_LOGO from 'assets/png/back-logo.png'
 import BG_IMAGE from 'assets/png/background.png'
+import SPRAY_ACCOUNT from 'assets/png/spray-account.png'
 import { createGlobalStyle, css } from 'styled-components/macro'
 
 export const BACKGROUND_IMAGE_DDPX_URL_MAP: GenericImageSrcSet<MediaWidths> = {
@@ -20,6 +21,15 @@ export const BG_LOGO_DDPX_URL_MAP: GenericImageSrcSet<MediaWidths> = {
   960: { '1x': BG_LOGO },
   1280: { '1x': BG_LOGO },
   1440: { '1x': BG_LOGO }
+}
+
+export const SPRAY_ACCOUNT_DDPX_URL_MAP: GenericImageSrcSet<MediaWidths> = {
+  defaultUrl: SPRAY_ACCOUNT,
+  500: { '1x': SPRAY_ACCOUNT },
+  720: { '1x': SPRAY_ACCOUNT },
+  960: { '1x': SPRAY_ACCOUNT },
+  1280: { '1x': SPRAY_ACCOUNT },
+  1440: { '1x': SPRAY_ACCOUNT }
 }
 
 // "!important" override on WalletConnect style variables
