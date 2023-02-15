@@ -3823,11 +3823,6 @@
   resolved "https://registry.yarnpkg.com/@past3lle/skilltree-contracts/-/skilltree-contracts-0.0.1-rc.2.tgz#e5f504dccd00eea7f9e0c1dd7c52460360645d83"
   integrity sha512-FfrJgB+BoaWydnvJznImm6HUVQ55olm4FrwsVxcV31qJBDMskWjldiYeOh/5TjZZtIg8jccAsrZVz1ZuchTAGw==
 
-"@past3lle/types@^0.0.8":
-  version "0.0.8"
-  resolved "https://registry.yarnpkg.com/@past3lle/types/-/types-0.0.8.tgz#fc3a7446e471731ab29f6acc32dcf2ffa8b36760"
-  integrity sha512-SeX0Umu4OQnnY8yTQJJRCwmmBEyfrOX36/zvGxt4gDhO0B5Zv97b6Hn4KK8845/tNDLxWW05RLwVYgPmWUiYHg==
-
 "@pedrouid/environment@^1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@pedrouid/environment/-/environment-1.0.1.tgz#858f0f8a057340e0b250398b75ead77d6f4342ec"
