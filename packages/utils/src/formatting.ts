@@ -253,9 +253,11 @@ export type CurrencyCode =
   | 'ZMW'
   | 'ZWL'
 
-export function truncateAddress(address: Address) {
-  const firstPart = address.slice(0, 7)
-  const lastPart = address.slice(37)
+export function truncateAddress(address: Address, opt?: { type: 'long' | 'short' }) {
+  const options = opt || { type: 'short' }
+  const numbers = options.type === 'short' ? [7, 37] : [10, 32]
+  const firstPart = address.slice(0, numbers[0])
+  const lastPart = address.slice(numbers[1])
 
   return firstPart + '...' + lastPart
 }
