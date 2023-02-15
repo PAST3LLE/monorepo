@@ -25,6 +25,7 @@ export function ConnectionInfoButton() {
   return (
     <ConnectionInfoContainer
       width={'26rem'}
+      minWidth="24rem"
       gap="0.5rem"
       onClick={() => handleClick({ route: address ? 'Account' : 'ConnectWallet' })}
     >
@@ -48,5 +49,9 @@ const ConnectionInfoContainer = styled(Row).attrs({ justifyContent: 'center', al
     opacity: 0.8;
   }
   filter: invert(1);
-  ${({ theme }) => setCssBackground(theme, { imageUrls: [SPRAY_ACCOUNT_DDPX_URL_MAP] })}
+  ${({ theme }) =>
+    setCssBackground(theme, {
+      imageUrls: [SPRAY_ACCOUNT_DDPX_URL_MAP],
+      backgroundAttributes: ['center/contain no-repeat']
+    })}
 `

@@ -1,8 +1,9 @@
 import { Web3InfoContainer } from './common'
 import { Footer as PstlFooter, Row } from '@past3lle/components'
 import { InventoryButton } from 'components/Button'
+import { ConnectionInfoButton } from 'components/Button/ConnectionInfoButton'
 import { FlashingText } from 'components/FlashingText'
-import { UserConnectionStats } from 'components/UserWeb3ConnectionStats'
+// import { UserConnectionStats } from 'components/UserWeb3ConnectionStats'
 import React, { useState } from 'react'
 import styled from 'styled-components/macro'
 
@@ -18,7 +19,8 @@ export function Footer() {
             capitalLetterProps={{ color: '#77c51b', fontSize: '2.4rem', zIndex: 3 }}
             restWordProps={{ color: '#ebebe9', fontSize: '1.6rem', fontWeight: 300, zIndex: -1 }}
           />
-          <UserConnectionStats containerProps={{ height: '100%', width: '100%' }} fontSize={'1.2rem'} />
+          {/* <UserConnectionStats containerProps={{ height: '100%', width: '100%' }} fontSize={'1.2rem'} /> */}
+          <ConnectionInfoButton />
         </Row>
       </Web3InfoContainer>
     </FooterContainer>
