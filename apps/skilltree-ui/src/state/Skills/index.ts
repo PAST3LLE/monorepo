@@ -1,5 +1,5 @@
 import { Vector } from 'components/Canvas/api/vector'
-import { SkillId } from 'components/Skills/types'
+import { SkillId, SkillProperties } from 'components/Skills/types'
 import { SkillMetadata } from 'components/Skills/types'
 import { atom, useAtom } from 'jotai'
 
@@ -13,7 +13,7 @@ export type SkillVectorsMap = {
 export interface SkillsState {
   metadata: SkillMetadata[][]
   active: SkillId | undefined
-  activeDependencies: SkillId[]
+  activeDependencies: SkillProperties['dependencies']
   vectors: SkillGridPositionList
   vectorsMap: SkillVectorsMap
   sizes: { width: number; height: number }

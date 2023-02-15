@@ -8,6 +8,7 @@ import { UserConnectionStats } from 'components/UserWeb3ConnectionStats'
 import React from 'react'
 import { useSkillsAtom } from 'state/Skills'
 import styled from 'styled-components/macro'
+import { MAIN_FG } from 'theme/constants'
 import { CUSTOM_THEME } from 'theme/customTheme'
 
 export function UserStatsPanel() {
@@ -15,23 +16,35 @@ export function UserStatsPanel() {
   return (
     <SidePanel header="STATS & SKILLS">
       <UserStatsPanelContainer>
-        <Row padding="0.2rem 2rem" gap="1rem" backgroundColor={CUSTOM_THEME.mainBg}>
+        <Row padding="1rem 2rem" gap="0 1rem" backgroundColor={CUSTOM_THEME.mainBg}>
           <CursiveMonoHeader
             text="ACCOUNT"
             capitalLetterProps={{ width: 'auto', display: 'flex', alignItems: 'center' }}
-            restWordProps={{ fontSize: '3rem' }}
+            restWordProps={{
+              fontSize: '2.6rem',
+              opacity: 0.85,
+              textShadow: '2px 2px 2px #000000b0',
+              fontFamily: 'aria',
+              fontStyle: 'normal'
+            }}
           />
         </Row>
 
         <UserConnectionStats containerProps={{ margin: '2rem 0' }} />
 
-        <Row padding="0.2rem 2rem" gap="1rem" backgroundColor={CUSTOM_THEME.mainBg}>
+        <Row padding="1rem 2rem" gap="0 1rem" backgroundColor={CUSTOM_THEME.mainBg}>
           <CursiveMonoHeader
             text="INVENTORY"
             capitalLetterProps={{ width: 'auto', display: 'flex', alignItems: 'center' }}
-            restWordProps={{ fontSize: '3rem' }}
+            restWordProps={{
+              fontSize: '2.6rem',
+              opacity: 0.85,
+              textShadow: '2px 2px 2px #000000b0',
+              fontFamily: 'aria',
+              fontStyle: 'normal'
+            }}
           />
-          <Text.SubHeader fontWeight={300}>
+          <Text.SubHeader fontSize="1.4rem" backgroundColor={MAIN_FG} fontWeight={300} margin={0}>
             {vectors.length}/{vectors.length} COLLECTED
           </Text.SubHeader>
         </Row>

@@ -3,6 +3,7 @@ import { ButtonProps } from '@past3lle/components'
 import { CursiveMonoHeaderProps, CursiveMonoHeader } from 'components/Text'
 import React from 'react'
 import { useSidePanelAtom } from 'state/SidePanel'
+import { MAIN_BG } from 'theme/constants'
 
 interface InventoryButtonProps {
   buttonProps?: ButtonProps
@@ -27,17 +28,19 @@ export function InventoryButton(props: InventoryButtonProps) {
         capitalLetterProps={{
           display: 'inline-flex',
           alignItems: 'center',
-          color: '#77c51b',
-          fontSize: '3rem',
+          color: MAIN_BG,
+          fontSize: '4rem',
           zIndex: 3,
           ...props.capitalLetterProps
         }}
         restWordProps={{
-          color: '#ebebe9',
-          fontSize: '2rem',
-          fontWeight: 300,
           zIndex: -1,
-          marginLeft: '-0.2rem',
+          marginLeft: '0rem',
+          color: '#ebebe9e3',
+          fontFamily: 'aria',
+          fontSize: '1.8rem',
+          fontStyle: 'normal',
+          fontWeight: 100,
           ...props.restWordProps
         }}
       />

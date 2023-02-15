@@ -1,5 +1,6 @@
 import { MediaWidths } from '@past3lle/theme'
 import { GenericImageSrcSet } from '@past3lle/types'
+import BG_LOGO from 'assets/png/back-logo.png'
 import BG_IMAGE from 'assets/png/background.png'
 import { createGlobalStyle, css } from 'styled-components/macro'
 
@@ -10,6 +11,15 @@ export const BACKGROUND_IMAGE_DDPX_URL_MAP: GenericImageSrcSet<MediaWidths> = {
   960: { '1x': BG_IMAGE },
   1280: { '1x': BG_IMAGE },
   1440: { '1x': BG_IMAGE }
+}
+
+export const BG_LOGO_DDPX_URL_MAP: GenericImageSrcSet<MediaWidths> = {
+  defaultUrl: BG_LOGO,
+  500: { '1x': BG_LOGO },
+  720: { '1x': BG_LOGO },
+  960: { '1x': BG_LOGO },
+  1280: { '1x': BG_LOGO },
+  1440: { '1x': BG_LOGO }
 }
 
 // "!important" override on WalletConnect style variables

@@ -16,13 +16,20 @@ export interface BaseProperties {
   rarity: Rarity
 }
 export interface CollectionProperties extends BaseProperties {
-  skills: number
+  size: number
 }
+
+export interface SkillDependencyObject {
+  collection: number
+  required: number
+}
+
 export type SkillId = `${string}-${string}`
+
 export interface SkillProperties extends BaseProperties {
   id: SkillId
   shopifyId: string
-  dependencies: SkillId[]
+  dependencies: (SkillId | SkillDependencyObject)[]
 }
 
 export type CollectionMetadata = SkilltreeMetadata<CollectionProperties>

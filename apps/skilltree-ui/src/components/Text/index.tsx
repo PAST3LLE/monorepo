@@ -45,8 +45,8 @@ export const CursiveHeader = styled(CursiveText)<{ whiteSpace?: string }>`
 export interface CursiveMonoHeaderProps {
   className?: string
   text: string
-  capitalLetterProps?: TextProps & { zIndex?: number }
-  restWordProps?: TextProps & { zIndex?: number }
+  capitalLetterProps?: TextProps & { zIndex?: number; textShadow?: string }
+  restWordProps?: TextProps & { zIndex?: number; textShadow?: string }
 }
 const UnstyledCursiveMonoHeader = ({ text, className, capitalLetterProps, restWordProps }: CursiveMonoHeaderProps) => {
   const textArr = text.split(' ')
@@ -66,7 +66,7 @@ const UnstyledCursiveMonoHeader = ({ text, className, capitalLetterProps, restWo
         <CursiveHeader
           className={className}
           key={idx}
-          style={{ zIndex: capitalLetterProps?.zIndex }}
+          style={{ zIndex: capitalLetterProps?.zIndex, textShadow: capitalLetterProps?.textShadow }}
           {...capitalLetterProps}
           whiteSpace="nowrap"
         >
@@ -77,7 +77,7 @@ const UnstyledCursiveMonoHeader = ({ text, className, capitalLetterProps, restWo
             display="inline-flex"
             margin="0 0 0 -0.4rem"
             padding={0}
-            style={{ position: 'relative', zIndex: restWordProps?.zIndex }}
+            style={{ position: 'relative', zIndex: restWordProps?.zIndex, textShadow: restWordProps?.textShadow }}
             {...restWordProps}
           >
             {restWords[idx]}

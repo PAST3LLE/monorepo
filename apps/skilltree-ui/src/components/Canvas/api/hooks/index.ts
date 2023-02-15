@@ -2,7 +2,7 @@ import { Lightning } from '../lightning'
 import { LightningConfig } from '../types'
 import { Vector } from '../vector'
 import BG_IMAGE from 'assets/png/background.png'
-import { SkillId, SkillMetadata } from 'components/Skills/types'
+import { SkillDependencyObject, SkillId, SkillMetadata, SkillProperties } from 'components/Skills/types'
 import { useEffect, useState } from 'react'
 import { SkillGridPositionList, SkillsState } from 'state/Skills'
 
@@ -90,7 +90,7 @@ function _animate() {
 
   // Clear board
   ctx.shadowBlur = 0
-  ctx.shadowColor = ''
+  ctx.shadowColor = 'transparent'
   ctx.fillStyle = 'rgba(0,0,0,0.15)'
   ctx.fillRect(0, 0, canvas.width, canvas.height)
   ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height)
@@ -105,7 +105,11 @@ function _animate() {
 
   setTimeout(() => {
     _animate()
-  }, 60)
+  }, 480)
+}
+
+function depKeyIsObject(depKey: SkillProperties['dependencies'][0]): depKey is SkillDependencyObject {
+  return Boolean(typeof depKey === 'object' && !!depKey?.collection && depKey?.required)
 }
 
 /**
@@ -114,15 +118,15 @@ function _animate() {
  * @returns Vector object with new location vectors
  */
 const offsetLightningFromSkill = (state: SkillsState) => (key: SkillId) => {
-  const currentSkillState = state.vectorsMap[key]
+  const vectorMapAtKey = state.vectorsMap[key]
 
   return {
-    ...currentSkillState,
+    ...vectorMapAtKey,
     vector: new Vector(
       0,
       0,
-      (currentSkillState.vector?.X1 || 0) + state.sizes.width,
-      (currentSkillState.vector?.Y1 || 0) + state.sizes.height / 2
+      (vectorMapAtKey?.vector?.X1 || 0) + state.sizes.width,
+      (vectorMapAtKey?.vector?.Y1 || 0) + state.sizes.height / 2
     )
   }
 }
@@ -137,10 +141,26 @@ export function toggleSelectedSkill(state?: SkillsState) {
   if (!state || !selectedSkill?.vector) {
     draw = false
   } else {
-    points = (state.activeDependencies || []).map(offsetLightningFromSkill(state))
+    const depsList = flattenDepsArray(state.activeDependencies)
+    points = depsList.map(offsetLightningFromSkill(state))
     draw = true
     target = new Vector(0, 0, selectedSkill.vector.X1, selectedSkill.vector.Y1)
   }
+}
+
+function flattenDepsArray(depsList: SkillsState['activeDependencies']) {
+  return depsList.reduce<SkillId[]>((keyList, nextKey) => {
+    const isKeyObject = depKeyIsObject(nextKey)
+    if (isKeyObject) {
+      const { collection, required } = nextKey
+      const skillId = (idx: number) => (idx + 1) * 1000
+      keyList.push(...Array.from({ length: required }).map((_, idx): SkillId => `${collection}-${skillId(idx)}`))
+    } else {
+      keyList.push(nextKey)
+    }
+
+    return keyList
+  }, [])
 }
 
 /* Uncomment for eventListening

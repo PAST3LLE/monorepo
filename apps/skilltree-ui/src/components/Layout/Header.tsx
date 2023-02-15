@@ -1,5 +1,5 @@
 import { Web3InfoContainer } from './common'
-import { AutoRow, ExternalLink, Header as HeaderPstl, Pastellecon, Row, Text } from '@past3lle/components'
+import { ExternalLink, Header as HeaderPstl, Pastellecon, Row } from '@past3lle/components'
 import { upToSmall } from '@past3lle/theme'
 import { InventoryButton } from 'components/Button'
 import { BlackBoldItalic, BlackHeader, CursiveHeader } from 'components/Text'
@@ -7,6 +7,7 @@ import { UserConnectionStats } from 'components/UserWeb3ConnectionStats'
 import { SHOP_URL } from 'constants/index'
 import React from 'react'
 import styled from 'styled-components/macro'
+import { MAIN_BG } from 'theme/constants'
 
 export const Skilltreecon = styled(Pastellecon)`
   filter: invert(1);
@@ -14,8 +15,8 @@ export const Skilltreecon = styled(Pastellecon)`
   z-index: -1;
   transform: rotate(-11deg);
   position: absolute;
-  top: -16px;
-  left: -20px;
+  top: -23px;
+  left: -8px;
   width: 70%;
 `
 
@@ -24,23 +25,25 @@ const LogoHeader = styled(BlackHeader)`
   z-index: 1;
   color: ghostwhite;
   text-shadow: 4px 2px 3px #00000091;
+  max-width: 27rem;
 `
 
 export const CheckoutForge = ({ className }: { className?: string }) => (
-  <AutoRow
+  <Row
     className={className}
-    display={'inline-flex'}
-    backgroundColor={'ghostwhite'}
-    padding={'1rem'}
-    marginRight="auto"
+    color={MAIN_BG}
+    backgroundColor={'black'}
+    padding={'0.75rem 1rem'}
+    width="13.5rem"
+    justifyContent={'center'}
   >
-    <BlackBoldItalic fontSize={'1.5rem'}>
-      CHECK OUT THE{' '}
-      <ExternalLink color="red" href={SHOP_URL}>
-        THE FORGE
-      </ExternalLink>{' '}
+    <BlackBoldItalic fontSize={'1.5rem'} fontWeight={500}>
+      {/* @ts-ignore */}
+      <ExternalLink $color={MAIN_BG} href={SHOP_URL} style={{ letterSpacing: '0' }}>
+        go to shop
+      </ExternalLink>
     </BlackBoldItalic>
-  </AutoRow>
+  </Row>
 )
 
 const HeaderContainer = styled(HeaderPstl)`
@@ -51,7 +54,7 @@ const HeaderContainer = styled(HeaderPstl)`
   > ${Row} {
     > ${LogoHeader} {
       > ${Skilltreecon} {
-        width: 50%;
+        width: 30%;
         opacity: 0.82;
       }
     }
@@ -67,25 +70,26 @@ const HeaderContainer = styled(HeaderPstl)`
   > ${Row} > ${LogoHeader} {
     width: 100%;
     padding: 0.5rem;
-    margin-left: 6.5rem;
+    margin-left: 4rem;
 
     > ${Skilltreecon} {
-      width: 20%;
-      left: -5.5rem;
+      width: 14%;
+      left: -3rem;
       top: 0;
       opacity: 1;
     }
     > ${Row} {
       display: inline-flex;
-      width: auto;
+      width: 100%;
       margin-left: 0rem;
 
       ${CursiveHeader} {
+        width: auto;
         font-size: 5rem;
       }
       > div:last-child {
-        margin-left: -1.5rem;
         z-index: -1;
+        width: auto;
       }
     }
   }
@@ -102,13 +106,9 @@ export const Header = () => {
       <Row gap="1rem" height="100%" width="100%" justifyContent={'space-between'}>
         <LogoHeader>
           <Skilltreecon />
-          <Row alignItems={'center'}>
-            <CursiveHeader fontSize="4rem" color="darkred">
-              SKILL
-            </CursiveHeader>
-            <Text.SubHeader fontSize="3.4rem" fontWeight={300} padding={0} margin={0} marginLeft={'-1.7rem'}>
-              TREE
-            </Text.SubHeader>
+          <Row alignItems={'center'} width="100%" gap="0 1rem">
+            <CursiveHeader fontSize="5rem">FORGE</CursiveHeader>
+            <CheckoutForge />
           </Row>
         </LogoHeader>
         <Web3InfoContainer>

@@ -7,26 +7,26 @@ import { useGetWindowSize } from 'state/WindowSize'
 
 export function GridPositionUpdater() {
   const metadata = useMetadata()
-  const { skillsMetadata = [] } = metadata
 
   const [{ active, vectors }, setSkillState] = useSkillsAtom()
   const [windowSizeState] = useGetWindowSize()
 
   useEffect(
     () => {
+      const skillsMetadata = metadata.skillsMetadata || []
       const ref = document.getElementById('CANVAS-CONTAINER')
-      setSkillState((state) => ({
-        ...state,
-        vectors: ref
-          ? calculateGridPoints(skillsMetadata, {
-              clientWidth: calculateCanvasWidth(document.body.clientWidth),
-              clientHeight: ref.clientHeight
-            })
-          : []
-      }))
+      if (ref) {
+        setSkillState((state) => ({
+          ...state,
+          vectors: calculateGridPoints(skillsMetadata, {
+            clientWidth: calculateCanvasWidth(document.body.clientWidth),
+            clientHeight: ref.clientHeight
+          })
+        }))
+      }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [skillsMetadata, windowSizeState.height, windowSizeState.width, active]
+    [windowSizeState.height, windowSizeState.width, active]
   )
 
   useEffect(() => {

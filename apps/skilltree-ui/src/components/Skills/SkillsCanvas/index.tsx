@@ -1,7 +1,7 @@
 import { Skillpoint } from '../Skillpoint'
 import { SkillContainerAbsolute, SkillpointHeader } from '../common'
-import { SkillCanvasContainer } from './styleds'
-import { Column, Row } from '@past3lle/components'
+import { SkillCanvasContainer, SkillInnerCanvasContainer } from './styleds'
+import { Row } from '@past3lle/components'
 import {
   PSTLAllCollections__factory
   /* PSTLCollectionBaseSkills__factory */
@@ -52,7 +52,7 @@ export function SkillsCanvas() {
 
   return (
     <SkillCanvasContainer style={{ position: 'relative' }}>
-      <Row width={'100%'} height={'12vh'} justifyContent="space-between" style={{ position: 'relative' }}>
+      <Row width={'100%'} height={'12%'} justifyContent="space-between" style={{ position: 'relative' }}>
         <SkillContainerAbsolute>
           {vectors.slice(0, metadata.length).map(({ vector }, idx) => {
             const idxToRoman = convertToRomanNumerals(idx + 1)
@@ -65,7 +65,7 @@ export function SkillsCanvas() {
           })}
         </SkillContainerAbsolute>
       </Row>
-      <Column height={'100%'} width="100%" style={{ position: 'relative' }} id="CANVAS-CONTAINER">
+      <SkillInnerCanvasContainer height={'100%'} width="100%" style={{ position: 'relative' }} id="CANVAS-CONTAINER">
         <SkillContainerAbsolute>
           {vectors.map(({ skill, vector }) => {
             if (!skill) return null
@@ -74,7 +74,7 @@ export function SkillsCanvas() {
         </SkillContainerAbsolute>
         {/* CANVAS */}
         <LightningCanvas />
-      </Column>
+      </SkillInnerCanvasContainer>
     </SkillCanvasContainer>
   )
 }
