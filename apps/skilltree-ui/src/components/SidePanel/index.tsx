@@ -21,6 +21,7 @@ export function SidePanel({ header, children, onDismiss, styledProps }: SidePane
 
   return (
     <StyledSidePanel {...styledProps}>
+      <div id="bg-tag" />
       <div style={{ position: 'absolute', left: 15, top: 0 }}>
         <Row justifyContent={'space-evenly'} alignItems="center" gap="1rem">
           {panels.length > 1 && <ArrowLeft size={20} onClick={onDismissCallback} cursor="pointer" />}

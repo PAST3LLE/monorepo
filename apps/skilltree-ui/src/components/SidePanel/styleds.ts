@@ -1,7 +1,8 @@
 import { ArticleFadeIn, RowProps } from '@past3lle/components'
-import { upToLarge, upToSmall, upToMedium } from '@past3lle/theme'
+import { upToLarge, upToSmall, upToMedium, setCssBackground } from '@past3lle/theme'
 import { CursiveHeader, MonospaceText } from 'components/Text'
 import styled from 'styled-components/macro'
+import { BG_LOGO_DDPX_URL_MAP } from 'theme/global'
 
 const DEFAULT_SIDE_PANEL_PROPS = {
   background: 'lightgrey',
@@ -35,6 +36,23 @@ export const StyledSidePanel = styled(ArticleFadeIn)<SidePanelCssProps>`
   right: 0;
   bottom: 0;
   height: 100%;
+
+  > div#bg-tag {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+    opacity: 0.4;
+
+    ${({ theme }) =>
+      setCssBackground(theme, {
+        imageUrls: [BG_LOGO_DDPX_URL_MAP],
+        backgroundColor: 'lightgrey',
+        backgroundAttributes: ['bottom/contain no-repeat']
+      })}
+  }
 
   ${CursiveHeader} {
     font-size: 5rem;
