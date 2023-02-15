@@ -5,6 +5,19 @@
  "properties": {
   "rarity": "common",
   "dependencies": [],
-  "shopifyId": "6758874447923"
+  "shopifyId": "6758874447923",
+  "id": "1-1000"
+ },
+ "attributes": {
+  "tags": [
+   "hoodie",
+   "heavy-cotton",
+   "oversized"
+  ],
+  "theme": {
+   "bg": "#575C75",
+   "altBg": "#5A2E56",
+   "color": "#F1F2F1"
+  }
  }
 }

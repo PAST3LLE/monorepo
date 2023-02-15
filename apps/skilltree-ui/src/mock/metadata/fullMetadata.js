@@ -7,9 +7,13 @@ const METADATA = [
       name: 'ASCENDANCE',
       properties: {
         rarity: 'common',
-        dependencies: '',
+        dependencies: [],
         shopifyId: '6758874447923',
         id: '1-1000'
+      },
+      attributes: {
+        tags: ['hoodie', 'heavy-cotton', 'oversized'],
+        theme: { bg: '#575C75', altBg: '#5A2E56', color: '#F1F2F1' }
       }
     },
     {
@@ -18,9 +22,13 @@ const METADATA = [
       name: 'DAYDREAMING',
       properties: {
         rarity: 'common',
-        dependencies: '',
+        dependencies: [],
         shopifyId: '6758884540467',
         id: '1-2000'
+      },
+      attributes: {
+        tags: ['shortsleeve', 'heavy-cotton', 'oversized'],
+        theme: { bg: '#BA96C6', altBg: '#7B649F', color: '#F8D5E0' }
       }
     },
     {
@@ -29,9 +37,13 @@ const METADATA = [
       name: 'ELLEX',
       properties: {
         rarity: 'common',
-        dependencies: '',
+        dependencies: [],
         shopifyId: '6758853771315',
         id: '1-3000'
+      },
+      attributes: {
+        tags: ['shortsleeve', 'heavy-cotton', 'oversized'],
+        theme: { bg: '#DBBBB9', altBg: '#C4D52A', color: '#dadadb' }
       }
     },
     {
@@ -40,9 +52,13 @@ const METADATA = [
       name: 'REBIRTH',
       properties: {
         rarity: 'common',
-        dependencies: '',
+        dependencies: [],
         shopifyId: '6758881984563',
         id: '1-4000'
+      },
+      attributes: {
+        tags: ['shortsleeve', 'heavy-cotton', 'oversized'],
+        theme: { bg: '#2A1927', altBg: '#2C2C2C', color: '#1e1e1e' }
       }
     },
     {
@@ -51,9 +67,13 @@ const METADATA = [
       name: 'VIRGIL',
       properties: {
         rarity: 'common',
-        dependencies: '',
+        dependencies: [],
         shopifyId: '6755479486515',
         id: '1-5000'
+      },
+      attributes: {
+        tags: ['longsleeve', 'heavy-cotton', 'oversized'],
+        theme: { bg: '#1F615D', altBg: '#551D27', color: '#1e1e1e' }
       }
     },
     {
@@ -62,47 +82,58 @@ const METADATA = [
       name: 'VOODOO',
       properties: {
         rarity: 'common',
-        dependencies: '',
+        dependencies: [],
         shopifyId: '6758852821043',
         id: '1-6000'
+      },
+      attributes: {
+        tags: ['longsleeve', 'heavy-cotton', 'oversized'],
+        theme: { bg: '#C2E1CB', altBg: '#26297A', color: '#beb2d5' }
       }
     }
   ],
   // COLLECTION 2
   [
     {
-      description: 'GODLY.LONGSLEEVE.OVERSIZED.HEAVY-COTTON.',
-      image: 'ipfs://QmPTYa4M3dsPQiYDeDfsVu23EmcRx1gxYsX7sVzdwaFz64',
-      name: 'GODLY',
+      description: 'SHIPWRECK.LONGSLEEVE.OVERSIZED.HEAVY-COTTON.',
+      image: 'ipfs://QmaWrhJejBsUYEwDsqiM6Y24gDmskAf54FKhzPXrMT8cTu',
+      name: 'SHIPWRECK',
       properties: {
         rarity: 'rare',
-        dependencies: ['1-1000', '1-3000', '1-4000'],
+        dependencies: [{ collection: 1, required: 3 }],
         shopifyId: 'SOME_SHOPIFY_ID',
         id: '2-1000'
+      },
+      attributes: {
+        tags: ['hoodie', 'heavy-cotton', 'oversized'],
+        theme: { bg: '#756d5e', altBg: '#26297A', color: '#F0E2C7' }
       }
     },
-    undefined,
     {
-      description: 'NIGHTMARE.HOODIE.OVERSIZED.HEAVY-COTTON.',
-      image: 'ipfs://QmVpR9pRosyx6BePoyf2Vc9mK3CtnL2kni4eGSJcLYSRmP',
-      name: 'NIGHTMARE',
+      description: 'HELIO.HOODIE.OVERSIZED.HEAVY-COTTON.',
+      image: 'ipfs://QmcNBdgCFbmFfc6WVJwNv8naMwuxckuABkQrQUPrdbHWzB',
+      name: 'HELIO',
       properties: {
-        rarity: 'epic',
-        dependencies: ['1-5000', '1-1000'],
+        rarity: 'rare',
+        dependencies: ['1-4000'],
         shopifyId: 'SOME_SHOPIFY_ID',
         id: '2-2000'
+      },
+      attributes: {
+        tags: ['hoodie', 'heavy-cotton', 'oversized'],
+        theme: { bg: '#800080', altBg: '#2f4f4f', color: '#38373d' }
       }
     }
   ],
-  // COLLECTION 3
   [
+    // COLLECTION 3
     {
       description: 'CRY.HOODIE.OVERSIZED.HEAVY-COTTON.',
       image: 'ipfs://QmPA7TbY6VS4Y3tMawXnhNj3bLtTKotMEdbjEcbF4vUwH7',
       name: 'CRY',
       properties: {
         rarity: 'common',
-        dependencies: '',
+        dependencies: [],
         shopifyId: '6758874447923',
         id: '3-1000'
       }
@@ -113,7 +144,7 @@ const METADATA = [
       name: 'TREEGLIDE',
       properties: {
         rarity: 'common',
-        dependencies: '',
+        dependencies: [],
         shopifyId: '6758884540467',
         id: '3-2000'
       }
@@ -124,19 +155,19 @@ const METADATA = [
       name: 'SALT',
       properties: {
         rarity: 'common',
-        dependencies: '',
+        dependencies: [],
         shopifyId: '6758853771315',
         id: '3-3000'
       }
     },
-    undefined,
+    null,
     {
       description: 'FADEBLACK.TEE.OVERSIZED.HEAVY-COTTON.',
       image: 'ipfs://QmPTYa4M3dsPQiYDeDfsVu23EmcRx1gxYsX7sVzdwaFz64',
       name: 'FADEBLACK',
       properties: {
         rarity: 'common',
-        dependencies: '',
+        dependencies: [],
         shopifyId: '6758881984563',
         id: '3-4000'
       }
@@ -147,7 +178,7 @@ const METADATA = [
       name: 'GHOSTWHITE',
       properties: {
         rarity: 'common',
-        dependencies: '',
+        dependencies: [],
         shopifyId: '6755479486515',
         id: '3-5000'
       }
@@ -161,12 +192,17 @@ const METADATA = [
       name: 'TRANSCENDANCE',
       properties: {
         rarity: 'legendary',
-        dependencies: ['1-1000', '1-3000', '1-6000', '2-1000', '2-2000', '3-4000', '3-5000'],
+        dependencies: [
+          { collection: 1, required: 2 },
+          '1-6000',
+          { collection: 2, required: 2 },
+          { collection: 3, required: 3 }
+        ],
         shopifyId: '6758874447923',
         id: '4-1000'
       }
     },
-    undefined,
+    null,
     {
       description: 'SENTIENCE.HOODIE.OVERSIZED.HEAVY-COTTON.',
       image: 'ipfs://QmQoQRBM7JTfYHb2skR2UWxrvauiP7iLMrc2eyAvcVhb7e',
@@ -178,7 +214,7 @@ const METADATA = [
         id: '4-2000'
       }
     },
-    undefined,
+    null,
     {
       description: 'TURBOLAG.HOODIE.OVERSIZED.HEAVY-COTTON.',
       image: 'ipfs://QmWB53TDta1wDjMvSCsRtqN3JNZgCnVcp8U6V1Q6t6eDUm',
@@ -192,7 +228,7 @@ const METADATA = [
         id: '4-3000'
       }
     },
-    undefined
+    null
   ]
   // COLLECTION 5
   // [
@@ -202,7 +238,7 @@ const METADATA = [
   //     name: 'ASCENDANCE',
   //     properties: {
   //       rarity: 'common',
-  //       dependencies: '',
+  //       dependencies: [],
   //       shopifyId: '6758874447923',
   //       id: '5-1000',
   //     },
@@ -213,7 +249,7 @@ const METADATA = [
   //     name: 'DAYDREAMING',
   //     properties: {
   //       rarity: 'common',
-  //       dependencies: '',
+  //       dependencies: [],
   //       shopifyId: '6758884540467',
   //       id: '5-2000',
   //     },
@@ -224,7 +260,7 @@ const METADATA = [
   //     name: 'ELLEX',
   //     properties: {
   //       rarity: 'common',
-  //       dependencies: '',
+  //       dependencies: [],
   //       shopifyId: '6758853771315',
   //       id: '5-3000',
   //     },
@@ -235,7 +271,7 @@ const METADATA = [
   //     name: 'REBIRTH',
   //     properties: {
   //       rarity: 'common',
-  //       dependencies: '',
+  //       dependencies: [],
   //       shopifyId: '6758881984563',
   //       id: '5-4000',
   //     },
@@ -246,7 +282,7 @@ const METADATA = [
   //     name: 'VIRGIL',
   //     properties: {
   //       rarity: 'common',
-  //       dependencies: '',
+  //       dependencies: [],
   //       shopifyId: '6755479486515',
   //       id: '5-5000',
   //     },
@@ -257,7 +293,7 @@ const METADATA = [
   //     name: 'VOODOO',
   //     properties: {
   //       rarity: 'common',
-  //       dependencies: '',
+  //       dependencies: [],
   //       shopifyId: '6758852821043',
   //       id: '5-6000',
   //     },
@@ -300,7 +336,7 @@ const METADATA = [
   //     name: 'CRY',
   //     properties: {
   //       rarity: 'common',
-  //       dependencies: '',
+  //       dependencies: [],
   //       shopifyId: '6758874447923',
   //       id: '7-1000',
   //     },
@@ -311,7 +347,7 @@ const METADATA = [
   //     name: 'TREEGLIDE',
   //     properties: {
   //       rarity: 'common',
-  //       dependencies: '',
+  //       dependencies: [],
   //       shopifyId: '6758884540467',
   //       id: '7-2000',
   //     },
@@ -322,7 +358,7 @@ const METADATA = [
   //     name: 'SALT',
   //     properties: {
   //       rarity: 'common',
-  //       dependencies: '',
+  //       dependencies: [],
   //       shopifyId: '6758853771315',
   //       id: '7-3000',
   //     },
@@ -334,7 +370,7 @@ const METADATA = [
   //     name: 'FADEBLACK',
   //     properties: {
   //       rarity: 'common',
-  //       dependencies: '',
+  //       dependencies: [],
   //       shopifyId: '6758881984563',
   //       id: '7-4000',
   //     },
@@ -345,7 +381,7 @@ const METADATA = [
   //     name: 'GHOSTWHITE',
   //     properties: {
   //       rarity: 'common',
-  //       dependencies: '',
+  //       dependencies: [],
   //       shopifyId: '6755479486515',
   //       id: '7-5000',
   //     },
