@@ -24,7 +24,8 @@
     "w3name:key": "node src/scripts/ipns/key.js",
     "w3name:publish": "node src/scripts/ipns/publish.js",
     "w3name:revise": "node src/scripts/ipns/revise.js",
-    "firebase:upload": "node src/scripts/firebase/upload.js"
+    "firebase:upload": "node src/scripts/firebase/upload.js",
+    "metadata:write": "node src/scripts/metadata/writeSkills.js"
   },
   "bugs": {
     "url": "https://github.com/PAST3LLE/past3lle-monorepo/issues"

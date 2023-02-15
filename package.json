@@ -16,7 +16,8 @@
     "test": "yarn jest --coverage",
     "test:watch": "yarn test --watch",
     "install:examples": "cd examples/generic && yarn && cd ../../",
-    "publish:all": "lerna publish"
+    "publish:all": "lerna publish",
+    "nft:write": "lerna run metadata:write --scope @past3lle/skills-nft --"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.18.6",
