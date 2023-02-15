@@ -30,7 +30,14 @@ export function ConnectionInfoButton() {
       onClick={() => handleClick({ route: address ? 'Account' : 'ConnectWallet' })}
     >
       <img src={ICON_INTERNET} />
-      <Text.SubHeader margin={'0 0 1rem 0'} padding={0} fontWeight={300} fontStyle="normal">
+      <Text.SubHeader
+        margin={'0 0 1rem 0'}
+        padding={0}
+        fontWeight={!!address ? 500 : 700}
+        fontStyle="normal"
+        fontFamily={'monospace'}
+        letterSpacing="-1.6px"
+      >
         <ConnectionColorWrapper isConnected={!!address}>
           <small>{`${address ? truncateAddress(address, { type: 'long' }) : '<disconnected>'}`}</small>
         </ConnectionColorWrapper>

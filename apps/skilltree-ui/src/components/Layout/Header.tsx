@@ -38,9 +38,9 @@ export const CheckoutForge = ({ className }: { className?: string }) => (
     width="13.5rem"
     justifyContent={'center'}
   >
-    <BlackBoldItalic fontSize={'1.5rem'} fontWeight={500}>
+    <BlackBoldItalic fontSize={'1.5rem'} fontWeight={500} fontFamily="monospace">
       {/* @ts-ignore */}
-      <ExternalLink $color={MAIN_BG} href={SHOP_URL} style={{ letterSpacing: '0' }}>
+      <ExternalLink $color={MAIN_BG} href={SHOP_URL} style={{ letterSpacing: '-1.6px' }}>
         view shop
       </ExternalLink>
     </BlackBoldItalic>

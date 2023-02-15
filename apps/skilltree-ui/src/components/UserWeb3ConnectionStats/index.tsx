@@ -77,6 +77,6 @@ export const UserConnectionStats = styled(UnstyledUserConnectionStats)``
 export const ConnectionColorWrapper = styled.div<{ isConnected: boolean }>`
   > ${FlashingText}, > i,
   > * {
-    color: ${({ isConnected }) => (isConnected ? 'green' : 'indianred')};
+    color: ${({ isConnected }) => (isConnected ? 'green' : '#52d5b8')};
   }
 `

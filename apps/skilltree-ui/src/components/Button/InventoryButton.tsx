@@ -1,5 +1,6 @@
 import { ThemedButton } from '.'
 import { ButtonProps } from '@past3lle/components'
+import TREASURE_CHEST_GREEN from 'assets/png/icons/icons8-treasure-chest-90-green.png'
 import { CursiveMonoHeaderProps, CursiveMonoHeader } from 'components/Text'
 import React from 'react'
 import { useSidePanelAtom } from 'state/SidePanel'
@@ -17,14 +18,14 @@ export function InventoryButton(props: InventoryButtonProps) {
     <ThemedButton
       display="flex"
       alignItems="center"
-      gap="0.25rem"
+      gap="0.7rem"
       height="100%"
       withBgImage
       {...props.buttonProps}
       onClick={() => openActivePanel('USER STATS')}
     >
       <CursiveMonoHeader
-        text="INVENTORY"
+        text="inventory"
         capitalLetterProps={{
           display: 'inline-flex',
           alignItems: 'center',
@@ -35,15 +36,17 @@ export function InventoryButton(props: InventoryButtonProps) {
         }}
         restWordProps={{
           zIndex: -1,
-          marginLeft: '0rem',
+          marginLeft: '-0.3rem',
           color: '#ebebe9e3',
-          fontFamily: 'aria',
-          fontSize: '1.8rem',
+          fontFamily: 'monospace',
+          fontSize: '1.4rem',
+          letterSpacing: '-1.4px',
           fontStyle: 'normal',
-          fontWeight: 100,
+          fontWeight: 300,
           ...props.restWordProps
         }}
       />
+      <img src={TREASURE_CHEST_GREEN} style={{ maxWidth: '2.3rem' }} />
     </ThemedButton>
   )
 }
