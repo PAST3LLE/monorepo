@@ -1,33 +1,39 @@
 import { SidePanelCssProps, StyledSidePanel } from './styleds'
-import { Row, Text } from '@past3lle/components'
+import { Row } from '@past3lle/components'
 import { CursiveHeader } from 'components/Text'
 import React, { ReactNode, useCallback } from 'react'
 import { ArrowLeft } from 'react-feather'
-import { useSidePanelAtom } from 'state/SidePanel'
+import {
+  /* useSidePanelAtom, */
+  useSidePanelAtomBase
+} from 'state/SidePanel'
 
 export interface SidePanelProps {
   header: string
   children: ReactNode
   onDismiss?: (...args: any[]) => void
+  onBack?: (...args: any[]) => void
   styledProps?: SidePanelCssProps
 }
-export function SidePanel({ header, children, onDismiss, styledProps }: SidePanelProps) {
-  const [panels, setPanelState] = useSidePanelAtom()
+export function SidePanel({ header, children, onBack, onDismiss, styledProps }: SidePanelProps) {
+  const [{ type: panels }, setPanelState] = useSidePanelAtomBase()
+
+  const onBackCallback = useCallback(() => {
+    setPanelState((state) => ({ ...state, type: state.type.slice(1) }))
+    onBack?.()
+  }, [onBack, setPanelState])
 
   const onDismissCallback = useCallback(() => {
-    setPanelState(undefined)
+    setPanelState({ type: [] })
     onDismiss?.()
   }, [onDismiss, setPanelState])
 
   return (
     <StyledSidePanel {...styledProps}>
       <div id="bg-tag" />
-      <div style={{ position: 'absolute', left: 15, top: 0 }}>
+      <div style={{ position: 'absolute', left: 15, top: 20 }}>
         <Row justifyContent={'space-evenly'} alignItems="center" gap="1rem">
-          {panels.length > 1 && <ArrowLeft size={20} onClick={onDismissCallback} cursor="pointer" />}
-          <Text.SubHeader fontWeight={200} fontSize={'0.8rem'}>
-            {panels.slice().reverse().join(' > ')}
-          </Text.SubHeader>
+          {panels.length > 1 && <ArrowLeft size={20} onClick={onBackCallback} cursor="pointer" />}
         </Row>
       </div>
       <div

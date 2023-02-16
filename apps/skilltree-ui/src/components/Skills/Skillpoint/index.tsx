@@ -16,16 +16,19 @@ interface Props {
 export function Skillpoint({ metadata, vector, lightupDependencies }: Props) {
   const [state, setSkillState] = useSkillsAtom()
   const formattedUri = getHash(metadata.image)
+  const {
+    active: [currentlyActive]
+  } = state
 
-  const isCurrentSkillActive = metadata.properties.id === state.active
+  const isCurrentSkillActive = metadata.properties.id === currentlyActive
   const isDependency = state.activeDependencies.includes(metadata.properties.id)
-  const isOtherSkillActive = !isDependency && !isCurrentSkillActive && !!state.active
+  const isOtherSkillActive = !isDependency && !isCurrentSkillActive && !!currentlyActive
 
   const handleClick = () => {
     setSkillState((state) => {
       const newState = {
         ...state,
-        active: isCurrentSkillActive ? undefined : metadata.properties.id,
+        active: isCurrentSkillActive ? state.active.slice(1) : [metadata.properties.id, ...state.active],
         activeDependencies: isCurrentSkillActive ? [] : metadata.properties.dependencies
       }
       // light it up

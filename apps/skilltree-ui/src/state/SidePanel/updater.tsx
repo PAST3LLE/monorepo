@@ -1,10 +1,14 @@
-import { useSidePanelAtom } from '.'
+import { useSidePanelAtomBase } from '.'
 import { ActiveSkillPanel } from 'components/Skills/ActiveSkillPanel'
 import { UserStatsPanel } from 'components/UserStatsPanel'
 import React, { useMemo } from 'react'
 
 export function SidePanelUpdater() {
-  const [[panelType]] = useSidePanelAtom()
+  const [
+    {
+      type: [panelType]
+    }
+  ] = useSidePanelAtomBase()
 
   return useMemo(() => {
     switch (panelType) {

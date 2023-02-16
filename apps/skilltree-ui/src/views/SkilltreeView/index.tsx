@@ -32,7 +32,7 @@ export function SkilltreeView() {
 function SkilltreeBoard() {
   const [state] = useSkillsAtom()
   return (
-    <SkilltreeBoardContainer active={!!state.active}>
+    <SkilltreeBoardContainer active={!!state.active[0]}>
       <SkillsCanvas />
     </SkilltreeBoardContainer>
   )

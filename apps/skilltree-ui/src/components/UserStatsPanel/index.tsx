@@ -19,7 +19,6 @@ export function UserStatsPanel() {
     <SidePanel header="STATS & SKILLS">
       <UserStatsPanelContainer>
         <Row padding="1rem 2rem" gap="0 1rem" backgroundColor={CUSTOM_THEME.mainBg}>
-          <img src={ACCOUNT} style={{ maxWidth: '4rem' }} />
           <CursiveMonoHeader
             text="ACCOUNT"
             capitalLetterProps={{ width: 'auto', display: 'flex', alignItems: 'center' }}
@@ -31,12 +30,12 @@ export function UserStatsPanel() {
               fontStyle: 'normal'
             }}
           />
+          <img className="icon8-icon" src={ACCOUNT} />
         </Row>
 
         <UserConnectionStats containerProps={{ margin: '2rem 0' }} />
 
         <Row padding="1rem 2rem" gap="0 1rem" backgroundColor={CUSTOM_THEME.mainBg}>
-          <img src={TREASURE_CHEST_GREEN} style={{ maxWidth: '4rem' }} />
           <CursiveMonoHeader
             text="INVENTORY"
             capitalLetterProps={{ width: 'auto', display: 'flex', alignItems: 'center' }}
@@ -49,8 +48,9 @@ export function UserStatsPanel() {
             }}
           />
           <Text.SubHeader fontSize="1.4rem" backgroundColor={MAIN_FG} fontWeight={300} margin={0}>
-            {vectors.length}/{vectors.length} COLLECTED
+            {vectors.length}/{vectors.length} SKILLS
           </Text.SubHeader>
+          <img className="icon8-icon" src={TREASURE_CHEST_GREEN} />
         </Row>
         <UserSkillpointsContainer>
           {vectors.map(
@@ -72,7 +72,20 @@ const UserStatsPanelContainer = styled(Column)`
   height: 100%;
   padding: 2rem 0 0;
 
+  img.icon8-icon {
+    max-width: 3rem;
+    margin-left: auto;
+  }
+
   ${() => upToSmall`
+   img.icon8-icon {
+    max-width: 3rem;
+   }
+
+    ${CursiveMonoHeader} > * {
+      font-size: 1.8rem;
+    }
+    
     ${UserConnectionStats} {
       padding: 1.4rem 1rem 1.4rem 1.4rem;
       gap: 0.75rem;
@@ -85,8 +98,7 @@ const UserStatsPanelContainer = styled(Column)`
 
 const UserSkillpointsContainer = styled(Row)`
   flex-flow: row wrap;
-  min-height: 400px;
-  height: 100%;
+
   overflow-y: auto;
   justify-content: space-evenly;
   align-items: center;

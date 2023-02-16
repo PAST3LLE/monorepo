@@ -12,7 +12,7 @@ export type SkillVectorsMap = {
 }
 export interface SkillsState {
   metadata: SkillMetadata[][]
-  active: SkillId | undefined
+  active: SkillId[]
   activeDependencies: SkillProperties['dependencies']
   vectors: SkillGridPositionList
   vectorsMap: SkillVectorsMap
@@ -20,7 +20,7 @@ export interface SkillsState {
 }
 const skillsAtom = atom<SkillsState>({
   metadata: [],
-  active: undefined,
+  active: [],
   activeDependencies: [],
   vectors: [],
   vectorsMap: {},

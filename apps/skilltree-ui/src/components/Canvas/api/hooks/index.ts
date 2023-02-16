@@ -137,7 +137,7 @@ const offsetLightningFromSkill = (state: SkillsState) => (key: SkillId) => {
  * @param state SkillsState
  */
 export function toggleSelectedSkill(state?: SkillsState) {
-  const selectedSkill = state?.active ? state?.vectorsMap[state.active] : null
+  const selectedSkill = state?.active ? state?.vectorsMap[state.active[0]] : null
   if (!state || !selectedSkill?.vector) {
     draw = false
   } else {

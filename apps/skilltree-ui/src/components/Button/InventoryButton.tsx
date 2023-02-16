@@ -3,7 +3,10 @@ import { ButtonProps } from '@past3lle/components'
 import TREASURE_CHEST_GREEN from 'assets/png/icons/icons8-treasure-chest-90-green.png'
 import { CursiveMonoHeaderProps, CursiveMonoHeader } from 'components/Text'
 import React from 'react'
-import { useSidePanelAtom } from 'state/SidePanel'
+import {
+  /* useSidePanelAtom, */
+  useSidePanelAtomBase
+} from 'state/SidePanel'
 import { MAIN_BG } from 'theme/constants'
 
 interface InventoryButtonProps {
@@ -12,7 +15,7 @@ interface InventoryButtonProps {
   restWordProps?: CursiveMonoHeaderProps['restWordProps']
 }
 export function InventoryButton(props: InventoryButtonProps) {
-  const [, openActivePanel] = useSidePanelAtom()
+  const [, openActivePanel] = useSidePanelAtomBase()
 
   return (
     <ThemedButton
@@ -22,7 +25,7 @@ export function InventoryButton(props: InventoryButtonProps) {
       height="100%"
       withBgImage
       {...props.buttonProps}
-      onClick={() => openActivePanel('USER STATS')}
+      onClick={() => openActivePanel((state) => ({ ...state, type: ['USER STATS', ...state.type] }))}
     >
       <CursiveMonoHeader
         text="inventory"

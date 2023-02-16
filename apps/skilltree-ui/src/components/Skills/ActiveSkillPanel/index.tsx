@@ -11,13 +11,16 @@ import { CUSTOM_THEME } from 'theme/customTheme'
 
 export function ActiveSkillPanel() {
   const [skillState, setSkillState] = useSkillsAtom()
-
-  if (!skillState.active) return null
-  const activeSkill = skillState.vectorsMap[skillState.active].skill
+  const {
+    active: [currentlyActive]
+  } = skillState
+  if (!currentlyActive) return null
+  const activeSkill = skillState.vectorsMap[currentlyActive].skill
   return (
     <SidePanel
       header={activeSkill?.name || 'Unknown'}
-      onDismiss={() => setSkillState((state) => ({ ...state, active: undefined }))}
+      onDismiss={() => setSkillState((state) => ({ ...state, active: [] }))}
+      onBack={() => setSkillState((state) => ({ ...state, active: state.active.slice(1) }))}
     >
       <ActiveSkillPanelContainer>
         <Row justifyContent={'center'} margin="0 0 13% 0">
