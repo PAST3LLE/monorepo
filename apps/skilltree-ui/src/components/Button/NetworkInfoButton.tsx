@@ -1,10 +1,12 @@
-import { Column } from '@past3lle/components'
+import { Row } from '@past3lle/components'
+import { MEDIA_WIDTHS } from '@past3lle/theme'
 import { useWeb3Modal } from '@web3modal/react'
 import GOERLI_CHAIN_LOGO from 'assets/png/chains/ethereumChainLogo.webp'
 import POLYGON_MUMBAI_LOGO from 'assets/png/chains/polygonChainLogo.png'
 import DISCONNECTED_LOGO from 'assets/png/icons/icons8-internet-100.png'
 import { MonospaceText } from 'components/Text'
 import React, { useCallback } from 'react'
+import { useGetWindowSize } from 'state/WindowSize'
 import styled from 'styled-components/macro'
 import { useNetwork } from 'wagmi'
 
@@ -13,6 +15,9 @@ export function NetworkInfoButton() {
   const { chain } = useNetwork()
   const chainName = chain?.name
   const chainLogo = _getChainLogo(chain?.id)
+
+  const [{ width = 0 }] = useGetWindowSize()
+  const showShortLogo = width > MEDIA_WIDTHS.upToSmall && width < MEDIA_WIDTHS.upToMedium
 
   const handleClick = useCallback(async () => {
     return open({ route: 'SelectNetwork' })
@@ -30,16 +35,17 @@ export function NetworkInfoButton() {
       }
     >
       <img src={chainLogo} />
-      {/* <MonospaceText>{chainName}</MonospaceText> */}
+      {!showShortLogo && <MonospaceText>{chainName}</MonospaceText>}
     </NetworkInfoButtonContainer>
   )
 }
 
-const NetworkInfoButtonContainer = styled(Column).attrs({ justifyContent: 'center', alignItems: 'center' })`
+const NetworkInfoButtonContainer = styled(Row).attrs({ justifyContent: 'center', alignItems: 'center' })`
   height: 80%;
-  width: 5rem;
+  // width: 5rem;
+  width: auto;
   cursor: pointer;
-  gap: 0.3rem;
+  gap: 0.3rem 0.75rem;
   background-color: #000000d4;
   border-radius: 0.5rem;
   padding: 0.5rem 1rem;
@@ -50,6 +56,7 @@ const NetworkInfoButtonContainer = styled(Column).attrs({ justifyContent: 'cente
   }
   > ${MonospaceText} {
     font-size: 1rem;
+    color: ${({ theme }) => theme.mainFg};
   }
 
   &:hover {

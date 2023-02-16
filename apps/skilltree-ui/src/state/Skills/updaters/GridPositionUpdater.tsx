@@ -33,7 +33,8 @@ export function GridPositionUpdater() {
     const columnWidth = Math.round(gridWidth / columns)
 
     return { rows, columns, rowHeight, columnWidth, gridHeight, gridWidth }
-  }, [metadata])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [metadata, windowSizeState.height, windowSizeState.width])
 
   useEffect(
     () => {

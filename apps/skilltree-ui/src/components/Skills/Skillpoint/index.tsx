@@ -11,9 +11,10 @@ import styled from 'styled-components/macro'
 interface Props {
   metadata: SkillMetadata
   vector?: Vector
+  hasSkill: boolean
   lightupDependencies?: (state: SkillsState) => void
 }
-export function Skillpoint({ metadata, vector, lightupDependencies }: Props) {
+export function Skillpoint({ metadata, vector, hasSkill, lightupDependencies }: Props) {
   const [state, setSkillState] = useSkillsAtom()
   const formattedUri = getHash(metadata.image)
   const {
@@ -44,7 +45,7 @@ export function Skillpoint({ metadata, vector, lightupDependencies }: Props) {
       isEmptySkill={isEmptySkill}
       id={metadata.properties.id}
       rarity={!isEmptySkill ? metadata.properties?.rarity : undefined}
-      dimSkill={isOtherSkillActive}
+      dimSkill={!hasSkill || isOtherSkillActive}
       active={isCurrentSkillActive}
       isDependency={!!isDependency}
       onClick={handleClick}

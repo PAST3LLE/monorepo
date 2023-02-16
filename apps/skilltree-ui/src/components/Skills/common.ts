@@ -31,7 +31,7 @@ export const StyledSkillpoint = styled(StyledGridItem)<{
   background-color: #000000ba;
   box-shadow: ${({ rarity }) => rarity && `0px 0px ${getRarityColours(rarity).boxShadowColor}`};
   ${({ isDependency }) => isDependency && `box-shadow: 5px 5px 10px 0px #d5fb73b8, -5px -5px 10px 0px #00ff7fa8;`}
-  ${({ dimSkill }) => dimSkill && `filter: brightness(0.25) saturate(5);`}
+  ${({ dimSkill }) => dimSkill && `filter: brightness(0.25) grayscale(1);`}
 
   ${({ isEmptySkill }) =>
     isEmptySkill &&

@@ -17,3 +17,5 @@ export const EMPTY_SKILL_IMAGE_HASH_LIST = [
   'QmenaY7aJzts2j1aV8ETVVL7ibh9g1azism7ab5w6qweU2',
   'QmaGSU7fpFXuAsfp7fWdbeWqYfAoyEVdtD6iscts2CFYoN'
 ]
+
+export const SKILL_ID_BASE = 1000

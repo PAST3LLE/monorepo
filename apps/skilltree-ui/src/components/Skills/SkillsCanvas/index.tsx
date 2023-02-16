@@ -7,12 +7,15 @@ import { convertToRomanNumerals } from '@past3lle/utils'
 import { LightningCanvas } from 'components/Canvas'
 import { Vector } from 'components/Canvas/api/vector'
 import { EMPTY_SKILL_IMAGE_HASH_LIST, MINIMUM_COLLECTION_BOARD_SIZE } from 'constants/skills'
+import { BigNumber } from 'ethers'
 import React from 'react'
 import { useSkillsAtom } from 'state/Skills'
+import { useUserAtom } from 'state/User'
 
 export function SkillsCanvas() {
   const [state] = useSkillsAtom()
   const { vectors } = state
+  const [{ balances }] = useUserAtom()
 
   return (
     <SkillCanvasContainer style={{ position: 'relative' }}>
@@ -34,9 +37,15 @@ export function SkillsCanvas() {
           {vectors.map(({ skill, vector }) => {
             if (!vector) return
 
+            const missingSkill = !skill || BigNumber.from(balances[skill.properties.id]).isZero()
+
             const props = skill
-              ? { key: skill.properties.id, metadata: skill }
-              : { key: `EMPTY-${vector.X1}-${vector.Y1}`, metadata: EMPTY_METADATA }
+              ? {
+                  key: skill.properties.id,
+                  metadata: skill,
+                  hasSkill: !missingSkill
+                }
+              : { key: `EMPTY-${vector.X1}-${vector.Y1}`, metadata: EMPTY_METADATA, hasSkill: true }
             return <Skillpoint {...props} vector={vector} />
           })}
         </SkillContainerAbsolute>

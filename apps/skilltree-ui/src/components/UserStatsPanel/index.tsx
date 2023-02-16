@@ -7,14 +7,29 @@ import { Skillpoint } from 'components/Skills/Skillpoint'
 // import { StyledSkillpoint } from 'components/Skills/common'
 import { CursiveMonoHeader, MonospaceText } from 'components/Text'
 import { UserConnectionStats } from 'components/UserWeb3ConnectionStats'
-import React from 'react'
-import { useSkillsAtom } from 'state/Skills'
+import { BigNumber } from 'ethers'
+import React, { useMemo } from 'react'
+import { SkillGridPositionList, useSkillsAtom } from 'state/Skills'
+import { useUserAtom } from 'state/User'
 import styled from 'styled-components/macro'
 import { MAIN_FG } from 'theme/constants'
 import { CUSTOM_THEME } from 'theme/customTheme'
 
 export function UserStatsPanel() {
   const [{ vectors }] = useSkillsAtom()
+  const [{ balances }] = useUserAtom()
+
+  const totalSkills = useMemo(() => vectors.filter((vectorObj) => !!vectorObj.skill).length, [vectors])
+  const ownedSkillsList = useMemo(() => {
+    return vectors.reduce((acc, skill) => {
+      const missingSkill = !skill.skill || BigNumber.from(balances[skill.skill.properties.id]).isZero()
+      if (!missingSkill) {
+        acc.push(skill)
+      }
+      return acc
+    }, [] as SkillGridPositionList)
+  }, [balances, vectors])
+
   return (
     <SidePanel header="STATS & SKILLS">
       <UserStatsPanelContainer>
@@ -48,19 +63,20 @@ export function UserStatsPanel() {
             }}
           />
           <Text.SubHeader fontSize="1.4rem" backgroundColor={MAIN_FG} fontWeight={300} margin={0}>
-            {vectors.length}/{vectors.length} SKILLS
+            {ownedSkillsList.length}/{totalSkills} SKILLS
           </Text.SubHeader>
           <img className="icon8-icon" src={TREASURE_CHEST_GREEN} />
         </Row>
         <UserSkillpointsContainer>
-          {vectors.map(
-            (skill) =>
+          {ownedSkillsList.map((skill) => {
+            return (
               skill.skill && (
                 <Row key={skill.skill.properties.id} justifyContent="center" alignItems="center">
-                  <Skillpoint metadata={skill.skill} />
+                  <Skillpoint metadata={skill.skill} hasSkill />
                 </Row>
               )
-          )}
+            )
+          })}
         </UserSkillpointsContainer>
       </UserStatsPanelContainer>
     </SidePanel>

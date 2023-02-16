@@ -1,16 +1,11 @@
 import { CollectionMetadata, SkillMetadata } from './types'
-import { ipfsToImageUri } from './utils'
-import { MOCK_COLLECTION_ERROR_OFFSET } from 'constants/skills'
+import { get64PaddedSkillId, ipfsToImageUri } from './utils'
+import { MOCK_COLLECTION_ERROR_OFFSET, SKILL_ID_BASE } from 'constants/skills'
 import { BigNumber } from 'ethers'
 import { MOCK_ALL_SKILLS_METADATA } from 'mock/metadata'
 import { useEffect, useState } from 'react'
 import { useContractRead } from 'wagmi'
 import { usePrepareCollectionsContract } from 'web3/hooks/collections/usePrepareCollectionsContract'
-
-const SKILL_BASE = 1000
-function _indexToSkillId(i: number) {
-  return ((i + 1) * SKILL_BASE).toString().padStart(64, '0')
-}
 
 export interface UseMetaData {
   skills: (SkillMetadata[] | undefined)[]
@@ -27,7 +22,7 @@ export function useMetadata(collectionId: number) {
   const { data: skillsMetadataUri } = useContractRead({
     ...config,
     functionName: 'getSkillsMetadataUri',
-    args: [BigNumber.from(collectionId), BigNumber.from(SKILL_BASE)]
+    args: [BigNumber.from(collectionId), BigNumber.from(SKILL_ID_BASE)]
   })
 
   const [skillsMetadata, setSkillsMetadata] = useState<SkillMetadata[] | undefined>([])
@@ -41,7 +36,7 @@ export function useMetadata(collectionId: number) {
 
       const promisedSkillsMetadata: Promise<SkillMetadata>[] = []
       for (let i = 0; i < collectionMetadata.properties.size; i++) {
-        const skillId = _indexToSkillId(i)
+        const skillId = get64PaddedSkillId(i)
         const uri = ipfsToImageUri(skillsMetadataUri.replace('{id}', skillId))
         promisedSkillsMetadata.push(fetch(uri).then((res) => res.json()))
       }

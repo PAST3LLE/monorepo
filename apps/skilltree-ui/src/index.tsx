@@ -6,6 +6,7 @@ import ReactDOM from 'react-dom/client'
 import { MetadataUpdater } from 'state/Metadata/updaters/MetadataUpdater'
 import { SidePanelUpdater } from 'state/SidePanel/updater'
 import { SkillsUpdaters } from 'state/Skills/updaters'
+import { UserBalancesUpdater } from 'state/User/updaters'
 import { WindowSizeUpdater } from 'state/WindowSize/updaters'
 import { CUSTOM_THEME } from 'theme/customTheme'
 import { GothicFontCssProvider } from 'theme/fonts'
@@ -38,6 +39,7 @@ root.render(
       <AtomsDevtools>
         {/* UPDATERS */}
         <MetadataUpdater />
+        <UserBalancesUpdater />
         <SkillsUpdaters />
         <WindowSizeUpdater />
         {/* THEME PROVIDERS */}

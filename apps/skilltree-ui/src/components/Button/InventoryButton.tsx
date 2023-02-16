@@ -1,5 +1,6 @@
 import { ThemedButton } from '.'
 import { ButtonProps } from '@past3lle/components'
+import { MEDIA_WIDTHS } from '@past3lle/theme'
 import TREASURE_CHEST_GREEN from 'assets/png/icons/icons8-treasure-chest-90-green.png'
 import { CursiveMonoHeaderProps, CursiveMonoHeader } from 'components/Text'
 import React from 'react'
@@ -7,6 +8,7 @@ import {
   /* useSidePanelAtom, */
   useSidePanelAtomBase
 } from 'state/SidePanel'
+import { useGetWindowSize } from 'state/WindowSize'
 import { MAIN_BG } from 'theme/constants'
 
 interface InventoryButtonProps {
@@ -16,20 +18,21 @@ interface InventoryButtonProps {
 }
 export function InventoryButton(props: InventoryButtonProps) {
   const [, openActivePanel] = useSidePanelAtomBase()
-
+  const [{ width = 0 }] = useGetWindowSize()
+  const showShortLogo = width > MEDIA_WIDTHS.upToSmall && width < MEDIA_WIDTHS.upToMedium
   return (
     <ThemedButton
       title={'Click to view skills inventory and account information'}
       display="flex"
       alignItems="center"
-      gap="0.7rem"
+      gap="0 1rem"
       height="80%"
       withBgImage
       {...props.buttonProps}
       onClick={() => openActivePanel((state) => ({ ...state, type: ['USER STATS', ...state.type] }))}
     >
       <CursiveMonoHeader
-        text="inventory"
+        text={showShortLogo ? 'I' : 'Inventory'}
         capitalLetterProps={{
           display: 'inline-flex',
           alignItems: 'center',
