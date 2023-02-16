@@ -36,8 +36,8 @@ export function SkillsCanvas() {
         <SkillContainerAbsolute>
           {vectors.map(({ skill, vector }) => {
             if (!vector) return
-
-            const missingSkill = !skill || BigNumber.from(balances[skill.properties.id]).isZero()
+            const skillBalance = skill && balances[skill.properties.id]
+            const missingSkill = !skillBalance || !skill || BigNumber.from(balances[skill.properties.id]).isZero()
 
             const props = skill
               ? {

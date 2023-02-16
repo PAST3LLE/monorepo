@@ -38,7 +38,7 @@ export function UserBalancesUpdater() {
   })
 
   useEffect(() => {
-    const metadataLoaded = !!metadata[0].length
+    const metadataLoaded = !!metadata?.[0]?.length
 
     if (metadataLoaded) {
       // TODO: fix with real balances
