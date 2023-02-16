@@ -1,20 +1,25 @@
 import { useContractAddressesByChain } from '../useContractAddress'
 import { useSupportedChainId } from '../useSupportedChainId'
-import { PSTLCollectionBaseSkills__factory } from '@past3lle/skilltree-contracts'
+import { PSTLAllCollections__factory, PSTLCollectionBaseSkills__factory } from '@past3lle/skilltree-contracts'
 import { BigNumber } from 'ethers'
 import { useMemo } from 'react'
-import { Address, useContract, useProvider } from 'wagmi'
+import { Address, useContract, useContractRead, useProvider } from 'wagmi'
 import { CallOverrides, PayableOverrides } from 'web3/types/functions'
 
-// get SkillURI for collection 1
-export function useSkillsContract() {
-  const { skills } = useContractAddressesByChain()
+export function useSkillsContract(collectionId: number) {
+  const { collections } = useContractAddressesByChain()
+  const { data: address } = useContractRead({
+    abi: PSTLAllCollections__factory.abi,
+    functionName: 'skillsContract',
+    args: [BigNumber.from(collectionId)],
+    address: collections
+  })
 
   const chainId = useSupportedChainId()
   const provider = useProvider({ chainId })
   const skillsContract = useContract({
     abi: PSTLCollectionBaseSkills__factory.abi,
-    address: skills[1],
+    address,
     signerOrProvider: provider
   })
 
