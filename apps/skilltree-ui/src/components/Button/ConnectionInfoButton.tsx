@@ -24,8 +24,10 @@ export function ConnectionInfoButton() {
 
   return (
     <ConnectionInfoContainer
+      title={'Account and connection information. Click to view/change accounts.'}
       width={'26rem'}
       minWidth="24rem"
+      marginTop="0.6rem"
       gap="0.5rem"
       onClick={() => handleClick({ route: address ? 'Account' : 'ConnectWallet' })}
     >
@@ -54,6 +56,9 @@ const ConnectionInfoContainer = styled(Row).attrs({ justifyContent: 'center', al
     max-width: 8%;
     margin-bottom: 0.95rem;
     opacity: 0.8;
+  }
+  small {
+    text-shadow: 3px 2px 1px #ffffffc9;
   }
   filter: invert(1);
   ${({ theme }) =>

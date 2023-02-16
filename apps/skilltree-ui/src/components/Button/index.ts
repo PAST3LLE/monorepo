@@ -8,7 +8,8 @@ export * from './Web3Button'
 
 export const ThemedButton = styled(Button).attrs(() => ({}))<{ invert?: boolean; gap?: string; withBgImage?: boolean }>`
   background-color: ${({ theme }) => theme.mainBg};
-  padding: 2rem 4rem;
+  box-shadow: 4px 4px 1px 0px #000000bd;
+  padding: 0rem 2rem;
   ${({ invert, theme, withBgImage }) =>
     invert &&
     !withBgImage &&
@@ -26,6 +27,13 @@ export const ThemedButton = styled(Button).attrs(() => ({}))<{ invert?: boolean;
         backgroundBlendMode: 'difference'
       })}
     `}
+
+    &:hover {
+    box-shadow: 0px 0px 1px black;
+    transform: translate(4px, 4px);
+  }
+
+  transition: box-shadow 0.1s ease-in-out, transform 0.1s ease-in-out;
 `
 
 export const ThemedButtonExternalLink = styled(ExternalLink)`

@@ -3,6 +3,11 @@ declare module '*.svg' {
   export default src
 }
 
+declare module '*.webp' {
+  export const src: string
+  export default src
+}
+
 declare module '*.png' {
   export const src: string
   export default src

@@ -19,10 +19,11 @@ export function InventoryButton(props: InventoryButtonProps) {
 
   return (
     <ThemedButton
+      title={'Click to view skills inventory and account information'}
       display="flex"
       alignItems="center"
       gap="0.7rem"
-      height="100%"
+      height="80%"
       withBgImage
       {...props.buttonProps}
       onClick={() => openActivePanel((state) => ({ ...state, type: ['USER STATS', ...state.type] }))}
