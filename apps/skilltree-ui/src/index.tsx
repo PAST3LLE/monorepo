@@ -3,6 +3,7 @@ import { AtomsDevtools } from 'dev/devTools'
 import React, { StrictMode } from 'react'
 import 'react-app-polyfill/ie11'
 import ReactDOM from 'react-dom/client'
+import { MetadataUpdater } from 'state/Metadata/updaters/MetadataUpdater'
 import { SidePanelUpdater } from 'state/SidePanel/updater'
 import { SkillsUpdaters } from 'state/Skills/updaters'
 import { WindowSizeUpdater } from 'state/WindowSize/updaters'
@@ -36,6 +37,7 @@ root.render(
       {/* @ts-ignore */}
       <AtomsDevtools>
         {/* UPDATERS */}
+        <MetadataUpdater />
         <SkillsUpdaters />
         <WindowSizeUpdater />
         {/* THEME PROVIDERS */}

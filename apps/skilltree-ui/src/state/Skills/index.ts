@@ -2,6 +2,7 @@ import { Vector } from 'components/Canvas/api/vector'
 import { SkillId, SkillProperties } from 'components/Skills/types'
 import { SkillMetadata } from 'components/Skills/types'
 import { atom, useAtom } from 'jotai'
+import { atomWithStorage } from 'jotai/utils'
 
 export type SkillGridPositionList = {
   vector: Vector | undefined
@@ -11,15 +12,13 @@ export type SkillVectorsMap = {
   [key: SkillId]: SkillGridPositionList[0]
 }
 export interface SkillsState {
-  metadata: SkillMetadata[][]
   active: SkillId[]
   activeDependencies: SkillProperties['dependencies']
   vectors: SkillGridPositionList
   vectorsMap: SkillVectorsMap
   sizes: { width: number; height: number }
 }
-const skillsAtom = atom<SkillsState>({
-  metadata: [],
+const skillsAtom = atomWithStorage<SkillsState>('PSTL_SKILLS_STATE', {
   active: [],
   activeDependencies: [],
   vectors: [],
@@ -35,15 +34,6 @@ const skillSizeWriteAtom = atom<null, SkillsState['sizes']>(null, (get, set, upd
   return set(skillsAtom, { ...state, sizes: update })
 })
 const skillSizeReadAtom = atom<SkillsState['sizes']>((get) => get(skillsAtom).sizes)
-
-const skillMetadataReadAtom = atom((get) => get(skillsAtom).metadata)
-const skillMetadataWriteAtom = atom<null, SkillsState['metadata']>(null, (get, set, update) => {
-  const state = get(skillsAtom)
-  return set(skillsAtom, { ...state, metadata: update })
-})
-
-export const useSkillMetadataReadAtom = () => useAtom(skillMetadataReadAtom)
-export const useSkillMetadataWriteAtom = () => useAtom(skillMetadataWriteAtom)
 
 export const useSkillSizeWriteAtom = () => useAtom(skillSizeWriteAtom)
 export const useSkillSizeReadAtom = () => useAtom(skillSizeReadAtom)

@@ -4,3 +4,5 @@ export const SKILLPOINT_SIZES = {
     return this.width
   }
 }
+export const MINIMUM_COLLECTION_BOARD_SIZE = 4
+export const EMPTY_COLLECTION_ROWS_SIZE = 6

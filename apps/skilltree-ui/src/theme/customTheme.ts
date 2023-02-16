@@ -10,6 +10,10 @@ export const CUSTOM_THEME = {
   lightText: 'ghostwhite',
   // rarity colours
   rarity: {
+    empty: {
+      backgroundColor: 'transparent',
+      boxShadowColor: '0px 0px transparent'
+    },
     common: {
       backgroundColor: '#969696b3',
       boxShadowColor: '12px 2px #969696b3'

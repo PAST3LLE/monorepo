@@ -1,10 +1,11 @@
 import { atom, useAtom } from 'jotai'
+import { atomWithStorage } from 'jotai/utils'
 
 export type ActiveSidePanel = 'ACTIVE SKILL' | 'USER STATS'
 export interface SidePanelState {
   type: (ActiveSidePanel | undefined)[]
 }
-const sidePanelAtom = atom<SidePanelState>({
+const sidePanelAtom = atomWithStorage<SidePanelState>('PSTL_PANELS_STATE', {
   type: []
 })
 

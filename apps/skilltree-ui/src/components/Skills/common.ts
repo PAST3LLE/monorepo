@@ -22,6 +22,7 @@ export const StyledSkillpoint = styled(StyledGridItem)<{
   dimSkill: boolean
   active: boolean
   isDependency: boolean
+  isEmptySkill: boolean
   rarity: Rarity | undefined
 }>`
   z-index: 1;
@@ -29,9 +30,16 @@ export const StyledSkillpoint = styled(StyledGridItem)<{
 
   // background-color: ${({ rarity }) => getRarityColours(rarity).backgroundColor};
   background-color: #000000ba;
-  box-shadow: ${({ rarity }) => `0px 0px ${getRarityColours(rarity).boxShadowColor}`};
+  box-shadow: ${({ rarity }) => rarity && `0px 0px ${getRarityColours(rarity).boxShadowColor}`};
   ${({ isDependency }) => isDependency && `box-shadow: 5px 5px 10px 0px #d5fb73b8, -5px -5px 10px 0px #00ff7fa8;`}
   ${({ dimSkill }) => dimSkill && `filter: brightness(0.25) saturate(5);`}
+
+  ${({ isEmptySkill }) =>
+    isEmptySkill &&
+    `
+    opacity: 0.76;
+    padding: 0;
+  `}
 
   transition: filter 0.4s ease-in-out;
 `

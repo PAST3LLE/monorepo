@@ -20,11 +20,13 @@ export function Skillpoint({ metadata, vector, lightupDependencies }: Props) {
     active: [currentlyActive]
   } = state
 
+  const isEmptySkill = metadata.properties.id === 'EMPTY-EMPTY'
   const isCurrentSkillActive = metadata.properties.id === currentlyActive
   const isDependency = state.activeDependencies.includes(metadata.properties.id)
   const isOtherSkillActive = !isDependency && !isCurrentSkillActive && !!currentlyActive
 
   const handleClick = () => {
+    if (isEmptySkill) return
     setSkillState((state) => {
       const newState = {
         ...state,
@@ -39,8 +41,9 @@ export function Skillpoint({ metadata, vector, lightupDependencies }: Props) {
 
   return (
     <StyledSkillpoint
+      isEmptySkill={isEmptySkill}
       id={metadata.properties.id}
-      rarity={metadata.properties?.rarity}
+      rarity={!isEmptySkill ? metadata.properties?.rarity : undefined}
       dimSkill={isOtherSkillActive}
       active={isCurrentSkillActive}
       isDependency={!!isDependency}

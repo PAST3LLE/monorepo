@@ -1,32 +1,51 @@
 import { SkillVectorsMap, useSkillsAtom } from '..'
 import { MEDIA_WIDTHS } from '@past3lle/theme'
 import { calculateGridPoints } from 'components/Canvas/api/hooks'
-import { useMetadata } from 'components/Skills/hooks'
-import { useEffect } from 'react'
+import { EMPTY_COLLECTION_ROWS_SIZE, MINIMUM_COLLECTION_BOARD_SIZE } from 'constants/skills'
+import { useEffect, useMemo } from 'react'
+import { useMetadataReadAtom } from 'state/Metadata'
 import { useGetWindowSize } from 'state/WindowSize'
 
 export function GridPositionUpdater() {
-  const metadata = useMetadata()
-
+  const [metadata] = useMetadataReadAtom()
   const [{ active, vectors }, setSkillState] = useSkillsAtom()
   const [windowSizeState] = useGetWindowSize()
 
+  const gridConstants = useMemo(() => {
+    const container = document.getElementById('CANVAS-CONTAINER')
+
+    if (!container) return null
+
+    const highestRowCount = !metadata[0].length
+      ? EMPTY_COLLECTION_ROWS_SIZE
+      : metadata.length === 1
+      ? metadata[0].length
+      : metadata.slice().sort((a, b) => b.length - a.length)[0].length
+    const columns =
+      metadata.length >= 1 ? Math.max(MINIMUM_COLLECTION_BOARD_SIZE, metadata.length) : MINIMUM_COLLECTION_BOARD_SIZE
+    const rows = highestRowCount
+
+    const gridHeight = container.clientHeight - 30
+    const gridWidth = container.clientWidth
+
+    // config
+    const rowHeight = Math.round(gridHeight / rows)
+    const columnWidth = Math.round(gridWidth / columns)
+
+    return { rows, columns, rowHeight, columnWidth, gridHeight, gridWidth }
+  }, [metadata])
+
   useEffect(
     () => {
-      const skillsMetadata = metadata.skillsMetadata || []
-      const ref = document.getElementById('CANVAS-CONTAINER')
-      if (ref) {
+      if (gridConstants) {
         setSkillState((state) => ({
           ...state,
-          vectors: calculateGridPoints(skillsMetadata, {
-            clientWidth: calculateCanvasWidth(document.body.clientWidth),
-            clientHeight: ref.clientHeight
-          })
+          vectors: calculateGridPoints(metadata, gridConstants)
         }))
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [windowSizeState.height, windowSizeState.width, active]
+    [windowSizeState.height, windowSizeState.width, active, metadata]
   )
 
   useEffect(() => {

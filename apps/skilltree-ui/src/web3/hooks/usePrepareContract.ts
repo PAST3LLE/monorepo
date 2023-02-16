@@ -4,7 +4,7 @@ import { SupportedChains } from 'web3/types/chains'
 
 export function usePrepareContract<TAbi extends Narrow<Abi | readonly unknown[]> | undefined>(
   abi: TAbi,
-  address: Address
+  address: Address | undefined
 ) {
   const { chain } = useNetwork()
   const chainId = (chain?.id as SupportedChains) || SupportedChains.POLYGON_MUMBAI

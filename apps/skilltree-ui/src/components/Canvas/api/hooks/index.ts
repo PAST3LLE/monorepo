@@ -218,18 +218,15 @@ function _onTouchMove(e: TouchEvent) {
  */
 export function calculateGridPoints(
   metadata: SkillMetadata[][],
-  container: Pick<HTMLElement, 'clientHeight' | 'clientWidth'>
+  gridConstants: {
+    rows: number
+    columns: number
+    columnWidth: number
+    rowHeight: number
+    gridHeight: number
+  }
 ): SkillGridPositionList {
-  const highestRowCount = metadata.slice().sort((a, b) => b.length - a.length)[0].length
-  const columns = metadata.length
-  const rows = highestRowCount
-
-  const gridHeight = container.clientHeight - 30
-  const gridWidth = container.clientWidth
-
-  // config
-  const rowHeight = Math.round(gridHeight / rows)
-  const columnWidth = Math.round(gridWidth / columns)
+  const { rows, columnWidth, columns, rowHeight, gridHeight } = gridConstants
 
   // cache which row we're currently on
   let row = 1
@@ -242,7 +239,7 @@ export function calculateGridPoints(
       row++
     }
 
-    const skillAtPosition = metadata[i % columns][row - 1]
+    const skillAtPosition = metadata?.[i % columns]?.[row - 1]
 
     // e.g i = 2
     // 200cw * 2 = 400aw
@@ -250,7 +247,7 @@ export function calculateGridPoints(
     // 600 - 100hc = 500
     const xAxis = Math.floor(columnWidth * (i % columns) + columnWidth / columns)
     const yAxis = Math.floor((gridHeight / rows) * (row + 0.2) - rowHeight)
-    const vector: Vector | undefined = !!skillAtPosition ? new Vector(0, 0, xAxis, yAxis) : undefined
+    const vector: Vector | undefined = /* !!skillAtPosition ? */ new Vector(0, 0, xAxis, yAxis) /* : undefined */
 
     points.push({ vector, skill: skillAtPosition })
   }
