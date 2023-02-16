@@ -6,15 +6,11 @@ import { Row } from '@past3lle/components'
 import { convertToRomanNumerals } from '@past3lle/utils'
 import { LightningCanvas } from 'components/Canvas'
 import { Vector } from 'components/Canvas/api/vector'
-import { MINIMUM_COLLECTION_BOARD_SIZE } from 'constants/skills'
+import { EMPTY_SKILL_IMAGE_HASH_LIST, MINIMUM_COLLECTION_BOARD_SIZE } from 'constants/skills'
 import React from 'react'
 import { useSkillsAtom } from 'state/Skills'
 
-// import { useSkillsContract } from 'web3/hooks/skills/useSkillsContract'
-
 export function SkillsCanvas() {
-  // const skillContractApi = useSkillsContract(2)
-
   const [state] = useSkillsAtom()
   const { vectors } = state
 
@@ -54,7 +50,11 @@ export function SkillsCanvas() {
 const EMPTY_METADATA = {
   name: 'EMPTY_SKILL',
   description: 'Empty skill',
-  image: 'ipfs://QmYrEBgtKLj9FG2aQzZRSF2BYPnB6XUGXT4qKPGH2dUqFh',
+  get image() {
+    const length = EMPTY_SKILL_IMAGE_HASH_LIST.length
+    const idx = Math.floor(Math.random() * length)
+    return EMPTY_SKILL_IMAGE_HASH_LIST[idx]
+  },
   properties: {
     id: 'EMPTY-EMPTY' as `${string}-${string}`,
     rarity: 'common' as Rarity,
