@@ -1,5 +1,6 @@
 import { CollectionMetadata, SkillMetadata } from './types'
 import { ipfsToImageUri } from './utils'
+import { MOCK_COLLECTION_ERROR_OFFSET } from 'constants/skills'
 import { BigNumber } from 'ethers'
 import { MOCK_ALL_SKILLS_METADATA } from 'mock/metadata'
 import { useEffect, useState } from 'react'
@@ -18,7 +19,11 @@ export interface UseMetaData {
 }
 export function useMetadata(collectionId: number) {
   const config = usePrepareCollectionsContract()
-  const { data: uri } = useContractRead({ ...config, functionName: 'tokenURI', args: [BigNumber.from(1)] })
+  const { data: uri } = useContractRead({
+    ...config,
+    functionName: 'tokenURI',
+    args: [BigNumber.from(collectionId - MOCK_COLLECTION_ERROR_OFFSET)]
+  })
   const { data: skillsMetadataUri } = useContractRead({
     ...config,
     functionName: 'getSkillsMetadataUri',
