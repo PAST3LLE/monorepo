@@ -10,14 +10,16 @@ export function SidePanelUpdater() {
     }
   ] = useSidePanelAtomBase()
 
+  const type = panelType?.split('::')?.[0] as 'ACTIVE_SKILL' | 'USER_STATS' | undefined
+
   return useMemo(() => {
-    switch (panelType) {
-      case 'ACTIVE SKILL':
+    switch (type) {
+      case 'ACTIVE_SKILL':
         return <ActiveSkillPanel />
-      case 'USER STATS':
+      case 'USER_STATS':
         return <UserStatsPanel />
       default:
         return null
     }
-  }, [panelType])
+  }, [type])
 }

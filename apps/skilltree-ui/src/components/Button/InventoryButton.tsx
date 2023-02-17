@@ -29,7 +29,7 @@ export function InventoryButton(props: InventoryButtonProps) {
       height="80%"
       withBgImage
       {...props.buttonProps}
-      onClick={() => openActivePanel((state) => ({ ...state, type: ['USER STATS', ...state.type] }))}
+      onClick={() => openActivePanel((state) => ({ ...state, type: ['USER_STATS', ...state.type] }))}
     >
       <CursiveMonoHeader
         text={showShortLogo ? 'I' : 'Inventory'}
