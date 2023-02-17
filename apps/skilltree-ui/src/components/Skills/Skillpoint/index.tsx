@@ -4,7 +4,7 @@ import { getHash } from '../utils'
 import sprayBg from 'assets/png/spray.png'
 import { Vector } from 'components/Canvas/api/vector'
 import { GATEWAY_URI } from 'constants/ipfs'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { SkillsState, useSkillsAtom } from 'state/Skills'
 import styled from 'styled-components/macro'
 
@@ -16,15 +16,22 @@ interface Props {
 }
 export function Skillpoint({ metadata, vector, hasSkill, lightupDependencies }: Props) {
   const [state, setSkillState] = useSkillsAtom()
-  const formattedUri = getHash(metadata.image)
   const {
     active: [currentlyActive]
   } = state
 
-  const isEmptySkill = metadata.properties.id === 'EMPTY-EMPTY'
-  const isCurrentSkillActive = metadata.properties.id === currentlyActive
-  const isDependency = state.activeDependencies.includes(metadata.properties.id)
-  const isOtherSkillActive = !isDependency && !isCurrentSkillActive && !!currentlyActive
+  const formattedUri = useMemo(() => `${GATEWAY_URI}/${getHash(metadata.image)}`, [metadata.image])
+  const { isEmptySkill, isCurrentSkillActive, isDependency, isOtherSkillActive } = useMemo(
+    () => ({
+      isEmptySkill: metadata.properties.id === 'EMPTY-EMPTY',
+      isCurrentSkillActive: metadata.properties.id === currentlyActive,
+      isDependency: state.activeDependencies.includes(metadata.properties.id),
+      get isOtherSkillActive() {
+        return !this.isDependency && !this.isCurrentSkillActive && !!currentlyActive
+      }
+    }),
+    [currentlyActive, metadata.properties.id, state.activeDependencies]
+  )
 
   const handleClick = () => {
     if (isEmptySkill) return
@@ -51,7 +58,7 @@ export function Skillpoint({ metadata, vector, hasSkill, lightupDependencies }: 
       onClick={handleClick}
       vector={vector}
     >
-      <img src={`${GATEWAY_URI}/${formattedUri}`} style={{ maxWidth: '100%' }} />
+      <img src={formattedUri} style={{ maxWidth: '100%' }} crossOrigin="anonymous" />
       {isCurrentSkillActive && <SprayBg />}
     </StyledSkillpoint>
   )

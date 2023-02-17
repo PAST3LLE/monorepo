@@ -26,7 +26,8 @@ export function UserBalancesUpdater() {
     args: collection2SkillArgs,
     select(data) {
       return reduceBalanceDataToMap(data, 1)
-    }
+    },
+    watch: true
   })
   const { data: balances3 } = useContractRead({
     ...skillConfig3,
@@ -34,7 +35,8 @@ export function UserBalancesUpdater() {
     args: collection3SkillArgs,
     select(data) {
       return reduceBalanceDataToMap(data, 2)
-    }
+    },
+    watch: true
   })
 
   useEffect(() => {

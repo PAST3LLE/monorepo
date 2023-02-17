@@ -1,12 +1,14 @@
 export const PINATA_GATEWAY_URI = 'https://gateway.pinata.cloud/ipfs'
 export const INFURA_GATEWAY_URI = 'https://infura-ipfs.io/ipfs'
 export const GATEWAY_URI = PINATA_GATEWAY_URI
-export const INFURA_IPFS_CONFIG: RequestInit = {
-  mode: 'no-cors',
+export const INFURA_HEADERS: RequestInit = {
   headers: {
-    Accept: 'text/plain',
-    'Content-Type': 'application/json',
-    Authorization: `Basic ${process.env.REACT_APP_PROJECT_ID}`
+    Authorization: `Basic ${process.env.REACT_APP_INFURA_KEY}`
+  }
+}
+export const PINATA_HEADERS: RequestInit = {
+  headers: {
+    Authorization: `Bearer ${process.env.REACT_APP_PINATA_JWT}`
   }
 }
 export const IPNS_CID_MAP = {
