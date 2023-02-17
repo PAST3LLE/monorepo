@@ -9,12 +9,14 @@ import { Vector } from 'components/Canvas/api/vector'
 import { EMPTY_SKILL_IMAGE_HASH_LIST, MINIMUM_COLLECTION_BOARD_SIZE } from 'constants/skills'
 import { BigNumber } from 'ethers'
 import React from 'react'
+import { useMetadataMapReadAtom } from 'state/Metadata'
 import { useSkillsAtom } from 'state/Skills'
 import { useUserAtom } from 'state/User'
 
 export function SkillsCanvas() {
   const [state] = useSkillsAtom()
   const { vectors } = state
+  const [metadataMap] = useMetadataMapReadAtom()
   const [{ balances }] = useUserAtom()
 
   return (
@@ -34,15 +36,15 @@ export function SkillsCanvas() {
       </Row>
       <SkillInnerCanvasContainer height={'100%'} width="100%" style={{ position: 'relative' }} id="CANVAS-CONTAINER">
         <SkillContainerAbsolute>
-          {vectors.map(({ skill, vector }) => {
+          {vectors.map(({ skillId, vector }) => {
             if (!vector) return
-            const skillBalance = skill && balances[skill.properties.id]
-            const missingSkill = !skillBalance || !skill || BigNumber.from(balances[skill.properties.id]).isZero()
+            const skillBalance = skillId && balances[skillId]
+            const missingSkill = !skillBalance || !skillId || BigNumber.from(skillBalance).isZero()
 
-            const props = skill
+            const props = skillId
               ? {
-                  key: skill.properties.id,
-                  metadata: skill,
+                  key: skillId,
+                  metadata: metadataMap[skillId],
                   hasSkill: !missingSkill
                 }
               : { key: `EMPTY-${vector.X1}-${vector.Y1}`, metadata: EMPTY_METADATA, hasSkill: true }

@@ -1,12 +1,11 @@
 import { Vector } from 'components/Canvas/api/vector'
 import { SkillId, SkillProperties } from 'components/Skills/types'
-import { SkillMetadata } from 'components/Skills/types'
 import { atom, useAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 
 export type SkillGridPositionList = {
   vector: Vector | undefined
-  skill: SkillMetadata | undefined
+  skillId: SkillId | undefined
 }[]
 export type SkillVectorsMap = {
   [key: SkillId]: SkillGridPositionList[0]

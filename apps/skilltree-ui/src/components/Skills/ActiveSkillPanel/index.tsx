@@ -4,18 +4,17 @@ import { upToSmall } from '@past3lle/theme'
 import { ThemedButtonExternalLink } from 'components/Button'
 import { SidePanel } from 'components/SidePanel'
 import { MonospaceText } from 'components/Text'
+import { useGetActiveSkill } from 'hooks/skills'
 import React from 'react'
-import { useSkillsAtom } from 'state/Skills'
 import styled from 'styled-components/macro'
 import { CUSTOM_THEME } from 'theme/customTheme'
 
 export function ActiveSkillPanel() {
-  const [skillState, setSkillState] = useSkillsAtom()
-  const {
-    active: [currentlyActive]
-  } = skillState
-  if (!currentlyActive) return null
-  const activeSkill = skillState.vectorsMap[currentlyActive].skill
+  const activeSkillState = useGetActiveSkill()
+
+  if (!activeSkillState) return null
+  const [activeSkill, setSkillState] = activeSkillState
+
   return (
     <SidePanel
       header={activeSkill?.name || 'Unknown'}

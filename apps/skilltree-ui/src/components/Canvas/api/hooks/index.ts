@@ -17,7 +17,7 @@ let canvas: HTMLCanvasElement,
   ctx: CanvasRenderingContext2D | null,
   ltApi: Lightning,
   draw: boolean,
-  points: { vector: Vector | undefined; skill: SkillMetadata | undefined }[] = []
+  points: { vector: Vector | undefined; skillId: SkillId | undefined }[] = []
 
 export function useLightningCanvas({ canvasDOM, config, dimensions }: LightningCanvasProps) {
   const [ready, setReadyStatus] = useState(false)
@@ -239,7 +239,7 @@ export function calculateGridPoints(
       row++
     }
 
-    const skillAtPosition = metadata?.[i % columns]?.[row - 1]
+    const skillAtPosition: SkillMetadata | undefined = metadata?.[i % columns]?.[row - 1]
 
     // e.g i = 2
     // 200cw * 2 = 400aw
@@ -249,7 +249,7 @@ export function calculateGridPoints(
     const yAxis = Math.floor((gridHeight / rows) * (row + 0.2) - rowHeight)
     const vector: Vector | undefined = /* !!skillAtPosition ? */ new Vector(0, 0, xAxis, yAxis) /* : undefined */
 
-    points.push({ vector, skill: skillAtPosition })
+    points.push({ vector, skillId: skillAtPosition?.properties?.id })
   }
 
   return points

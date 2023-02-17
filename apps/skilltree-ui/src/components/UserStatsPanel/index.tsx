@@ -8,6 +8,7 @@ import { Skillpoint } from 'components/Skills/Skillpoint'
 import { CursiveMonoHeader, MonospaceText } from 'components/Text'
 import { UserConnectionStats } from 'components/UserWeb3ConnectionStats'
 import { BigNumber } from 'ethers'
+import { useGetSkillFromIdCallback } from 'hooks/skills'
 import React, { useMemo } from 'react'
 import { SkillGridPositionList, useSkillsAtom } from 'state/Skills'
 import { useUserAtom } from 'state/User'
@@ -19,10 +20,12 @@ export function UserStatsPanel() {
   const [{ vectors }] = useSkillsAtom()
   const [{ balances }] = useUserAtom()
 
-  const totalSkills = useMemo(() => vectors.filter((vectorObj) => !!vectorObj.skill).length, [vectors])
+  const getSkill = useGetSkillFromIdCallback()
+
+  const totalSkills = useMemo(() => vectors.filter((vectorObj) => !!vectorObj.skillId).length, [vectors])
   const ownedSkillsList = useMemo(() => {
     return vectors.reduce((acc, skill) => {
-      const missingSkill = !skill.skill || BigNumber.from(balances[skill.skill.properties.id]).isZero()
+      const missingSkill = !skill.skillId || BigNumber.from(balances[skill.skillId]).isZero()
       if (!missingSkill) {
         acc.push(skill)
       }
@@ -68,11 +71,12 @@ export function UserStatsPanel() {
           <img className="icon8-icon" src={TREASURE_CHEST_GREEN} />
         </Row>
         <UserSkillpointsContainer>
-          {ownedSkillsList.map((skill) => {
+          {ownedSkillsList.map(({ skillId }) => {
+            const skill = skillId ? getSkill(skillId) : null
             return (
-              skill.skill && (
-                <Row key={skill.skill.properties.id} justifyContent="center" alignItems="center">
-                  <Skillpoint metadata={skill.skill} hasSkill />
+              skill && (
+                <Row key={skillId} justifyContent="center" alignItems="center">
+                  <Skillpoint metadata={skill} hasSkill />
                 </Row>
               )
             )

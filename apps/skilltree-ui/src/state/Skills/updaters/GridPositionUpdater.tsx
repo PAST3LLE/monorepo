@@ -52,7 +52,7 @@ export function GridPositionUpdater() {
   useEffect(() => {
     if (vectors.length > 0) {
       const vectorsMap = vectors.reduce((acc, next) => {
-        const id = next.skill?.properties.id
+        const id = next.skillId
         if (id) {
           acc[id] = next
         }
