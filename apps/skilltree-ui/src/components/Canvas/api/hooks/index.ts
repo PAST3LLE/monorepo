@@ -4,6 +4,7 @@ import { Vector } from '../vector'
 import BG_IMAGE from 'assets/png/background.png'
 import { SkillDependencyObject, SkillId, SkillMetadata, SkillProperties } from 'components/Skills/types'
 import { useEffect, useState } from 'react'
+import { MetadataState } from 'state/Metadata'
 import { SkillGridPositionList, SkillsState } from 'state/Skills'
 
 interface LightningCanvasProps {
@@ -217,7 +218,7 @@ function _onTouchMove(e: TouchEvent) {
  * @returns Array (list) of Vectors each containing location Vector data for each square of the grid
  */
 export function calculateGridPoints(
-  metadata: SkillMetadata[][],
+  metadata: MetadataState['metadata'],
   gridConstants: {
     rows: number
     columns: number
@@ -239,7 +240,7 @@ export function calculateGridPoints(
       row++
     }
 
-    const skillAtPosition: SkillMetadata | undefined = metadata?.[i % columns]?.[row - 1]
+    const skillAtPosition: SkillMetadata | undefined = metadata?.[i % columns]?.skillsMetadata?.[row - 1]
 
     // e.g i = 2
     // 200cw * 2 = 400aw

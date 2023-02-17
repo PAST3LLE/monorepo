@@ -1,10 +1,39 @@
 import { UserBalances, useUserAtom } from '..'
+import { PSTLCollectionBaseSkills__factory } from '@past3lle/skilltree-contracts'
 import { getSkillId } from 'components/Skills/utils'
+import { MOCK_COLLECTION_ERROR_OFFSET } from 'constants/skills'
 import { BigNumber } from 'ethers'
 import { useEffect } from 'react'
-import { useMetadataReadAtom } from 'state/Metadata'
-import { Address, useAccount, useContractRead } from 'wagmi'
-import { usePrepareSkillsContract } from 'web3/hooks/skills/usePrepareSkillsContract'
+import { MetadataState, useMetadataReadAtom } from 'state/Metadata'
+import { Address, useAccount, useContractReads } from 'wagmi'
+import { SKILLS_GOERLI, SKILLS_MUMBAI } from 'web3/constants/addresses'
+import { useContractAddressesByChain } from 'web3/hooks/useContractAddress'
+
+function gatherSkillContractConfigParams(
+  skillsAddressList: typeof SKILLS_GOERLI | typeof SKILLS_MUMBAI,
+  metadata: MetadataState['metadata'],
+  balanceOfAddress: Address
+) {
+  // TODO: remove offset
+  const contractConfigList = skillsAddressList.slice(MOCK_COLLECTION_ERROR_OFFSET).flatMap(({ address }, i) => {
+    if (!address) {
+      console.warn(
+        '[UserBalancesUpdater::gatherSkillContractConfigParams]::Address undefined! Check contracts map in constants.'
+      )
+      return undefined
+    }
+
+    const args = getBalanceOfBatchArgs(metadata[i]?.size || 0, balanceOfAddress)
+    return {
+      abi: PSTLCollectionBaseSkills__factory.abi,
+      address,
+      functionName: 'balanceOfBatch',
+      args
+    }
+  })
+
+  return contractConfigList
+}
 
 export function UserBalancesUpdater() {
   const [metadata] = useMetadataReadAtom()
@@ -12,47 +41,27 @@ export function UserBalancesUpdater() {
 
   const { address = '0x0' } = useAccount()
 
-  const skillConfig2 = usePrepareSkillsContract(2)
-  const skillConfig3 = usePrepareSkillsContract(3)
-
-  // TODO: ideally collections sizes should be saved to state early and cached
-  const collection2SkillArgs = getBalanceOfBatchArgs(6, address)
-  const collection3SkillArgs = getBalanceOfBatchArgs(2, address)
-
-  // TODO: ideally these skills addresses would be written to networks.json in @past3lle/skilltree-contracts
-  const { data: balances2 } = useContractRead({
-    ...skillConfig2,
-    functionName: 'balanceOfBatch',
-    args: collection2SkillArgs,
-    select(data) {
-      return reduceBalanceDataToMap(data, 1)
-    },
-    watch: true
-  })
-  const { data: balances3 } = useContractRead({
-    ...skillConfig3,
-    functionName: 'balanceOfBatch',
-    args: collection3SkillArgs,
-    select(data) {
-      return reduceBalanceDataToMap(data, 2)
-    },
+  const { skills } = useContractAddressesByChain()
+  const configList = gatherSkillContractConfigParams(skills, metadata, address)
+  const { data } = useContractReads({
+    contracts: configList,
     watch: true
   })
 
   useEffect(() => {
-    const metadataLoaded = !!metadata?.[0]?.length
+    const metadataLoaded = !!metadata?.[0]?.size
 
     if (metadataLoaded) {
+      const balances = reduceBalanceDataToMap(data as BigNumber[][])
       // TODO: fix with real balances
       updateUserBalances((state) => ({
         balances: {
           ...state.balances,
-          ...balances2,
-          ...balances3
+          ...balances
         }
       }))
     }
-  }, [metadata, balances2, balances3, updateUserBalances])
+  }, [data, metadata, updateUserBalances])
 
   return null
 }
@@ -68,10 +77,15 @@ function getBalanceOfBatchArgs(size: number, address: Address) {
   )
 }
 
-function reduceBalanceDataToMap(data: readonly BigNumber[], collectionId: number) {
-  return data.reduce((acc, nextBn, idx) => {
-    acc[`${collectionId}-${getSkillId(idx)}`] = nextBn.toString()
+function reduceBalanceDataToMap(data: readonly BigNumber[][]) {
+  if (!data) return {}
 
-    return acc
+  return data.reduce((oAcc, bnData, collIdx) => {
+    const obj = bnData.reduce((acc, nextBn, idx) => {
+      acc[`${collIdx + 1}-${getSkillId(idx)}`] = nextBn.toString()
+
+      return acc
+    }, {} as UserBalances)
+    return { ...oAcc, ...obj }
   }, {} as UserBalances)
 }

@@ -1,9 +1,7 @@
 import { useMetadataWriteAtom, useMetadataMapWriteAtom, MetadataState } from '..'
 import { useFetchMetadataCallback } from 'components/Skills/hooks'
-import { SkillMetadata } from 'components/Skills/types'
 import { useEffect, useState } from 'react'
 import { useContractRead } from 'wagmi'
-import { SkillsCollectionIdGoerli } from 'web3/constants/addresses'
 import { usePrepareCollectionsContract } from 'web3/hooks/collections/usePrepareCollectionsContract'
 
 export function MetadataUpdater() {
@@ -15,7 +13,7 @@ export function MetadataUpdater() {
   const [, setMetadataState] = useMetadataWriteAtom()
   const [, setMetadataMapState] = useMetadataMapWriteAtom()
 
-  const [localMetadata, setLocalMetadata] = useState<SkillMetadata[][]>([])
+  const [localMetadata, setLocalMetadata] = useState<MetadataState['metadata']>([])
 
   useEffect(() => {
     async function _fetchMetadata() {
@@ -24,14 +22,14 @@ export function MetadataUpdater() {
 
       const promisedMetadata = []
       for (let i = 1; i < totalCollections; i++) {
-        promisedMetadata.push(fetchMetadata(i as SkillsCollectionIdGoerli))
+        promisedMetadata.push(fetchMetadata(i))
       }
 
       return Promise.all(promisedMetadata)
     }
 
     _fetchMetadata()
-      .then((res) => setLocalMetadata(res?.filter((meta) => !!meta?.length) || []))
+      .then((res) => setLocalMetadata(res?.filter((meta) => !!meta?.size) || []))
       .catch(console.error)
   }, [collections, fetchMetadata])
 
@@ -39,7 +37,7 @@ export function MetadataUpdater() {
     if (!localMetadata?.length) return
 
     const metadataMap = localMetadata
-      .flatMap((item) => item)
+      .flatMap((item) => item.skillsMetadata)
       .reduce((acc, next) => {
         const id = next.properties.id
         acc[id] = next

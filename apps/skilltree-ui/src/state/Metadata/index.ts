@@ -6,7 +6,7 @@ type MetadataMap = {
   [key: SkillId]: SkillMetadata
 }
 export interface MetadataState {
-  metadata: SkillMetadata[][]
+  metadata: { size: number; skillsMetadata: SkillMetadata[] }[]
   metadataMap: MetadataMap
 }
 
