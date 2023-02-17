@@ -16,7 +16,7 @@ export function GridPositionUpdater() {
 
     if (!container) return null
 
-    const highestRowCount = !metadata[0].length
+    const highestRowCount = !metadata?.[0]?.length
       ? EMPTY_COLLECTION_ROWS_SIZE
       : metadata.length === 1
       ? metadata[0].length
