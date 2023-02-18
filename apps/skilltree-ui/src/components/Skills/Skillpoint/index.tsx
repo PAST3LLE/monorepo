@@ -1,20 +1,32 @@
 import { StyledSkillpoint } from '../common'
-import { SkillMetadata } from '../types'
+import { Rarity, SkillMetadata } from '../types'
 import { getHash } from '../utils'
 import sprayBg from 'assets/png/spray.png'
 import { Vector } from 'components/Canvas/api/vector'
 import { GATEWAY_URI } from 'constants/ipfs'
 import React, { useMemo } from 'react'
+import { BoxProps } from 'rebass'
 import { SkillsState, useSkillsAtom } from 'state/Skills'
 import styled from 'styled-components/macro'
 
 interface Props {
+  className?: string
   metadata: SkillMetadata
   vector?: Vector
   hasSkill: boolean
+  forceRarity?: Rarity | 'empty'
+  skillpointStyles?: BoxProps
   lightupDependencies?: (state: SkillsState) => void
 }
-export function Skillpoint({ metadata, vector, hasSkill, lightupDependencies }: Props) {
+export function Skillpoint({
+  className,
+  metadata,
+  vector,
+  forceRarity,
+  hasSkill,
+  skillpointStyles,
+  lightupDependencies
+}: Props) {
   const [state, setSkillState] = useSkillsAtom()
   const {
     active: [currentlyActive]
@@ -49,14 +61,17 @@ export function Skillpoint({ metadata, vector, hasSkill, lightupDependencies }: 
 
   return (
     <StyledSkillpoint
+      title={`${metadata.name}_${metadata.properties.id}`}
+      className={className}
       isEmptySkill={isEmptySkill}
       id={metadata.properties.id}
-      rarity={!isEmptySkill ? metadata.properties?.rarity : undefined}
+      rarity={forceRarity || (!isEmptySkill ? metadata.properties?.rarity : undefined)}
       dimSkill={!hasSkill || isOtherSkillActive}
       active={isCurrentSkillActive}
       isDependency={!!isDependency}
       onClick={handleClick}
       vector={vector}
+      {...skillpointStyles}
     >
       <img src={formattedUri} style={{ maxWidth: '100%' }} crossOrigin="anonymous" />
       {isCurrentSkillActive && <SprayBg />}
@@ -77,5 +92,7 @@ const StyledImg = styled.img`
   overflow-clip-margin: unset;
   max-inline-size: unset;
   max-block-size: unset;
+
+  pointer-events: none;
 `
 const SprayBg = () => <StyledImg src={sprayBg} />

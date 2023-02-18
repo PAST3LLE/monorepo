@@ -81,7 +81,7 @@ function reduceBalanceDataToMap(data: readonly BigNumber[][]) {
   if (!data) return {}
 
   return data.reduce((oAcc, bnData, collIdx) => {
-    const obj = bnData.reduce((acc, nextBn, idx) => {
+    const obj = (bnData || []).reduce((acc, nextBn, idx) => {
       acc[`${collIdx + 1}-${getSkillId(idx)}`] = nextBn.toString()
 
       return acc

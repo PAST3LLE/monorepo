@@ -29,7 +29,8 @@ export type SkillId = `${string}-${string}`
 export interface SkillProperties extends BaseProperties {
   id: SkillId
   shopifyId: string
-  dependencies: (SkillId | SkillDependencyObject)[]
+  // TODO: fix this
+  dependencies: SkillId /* | SkillDependencyObject */[]
 }
 
 export type CollectionMetadata = SkilltreeMetadata<CollectionProperties>

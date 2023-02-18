@@ -44,6 +44,10 @@ export const StyledSkillpoint = styled(StyledGridItem)<{
   `}
 
   transition: filter 0.4s ease-in-out;
+
+  &::hover {
+    cursor: not-allowed;
+  }
 `
 
 export const SkillpointHeader = styled(StyledGridItem)`

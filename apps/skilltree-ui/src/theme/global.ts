@@ -2,6 +2,7 @@ import { MediaWidths } from '@past3lle/theme'
 import { GenericImageSrcSet } from '@past3lle/types'
 import BG_LOGO from 'assets/png/back-logo.png'
 import BG_IMAGE from 'assets/png/background.png'
+import LOCK from 'assets/png/icons/icons8-lock-32.png'
 import SPRAY_ACCOUNT from 'assets/png/spray-account.png'
 import { createGlobalStyle, css } from 'styled-components/macro'
 
@@ -51,6 +52,10 @@ const Web3ModalOverrideVariables = css`
 `
 
 export const CustomStaticGlobalCss = createGlobalStyle`
+  .disabled, :disabled {
+    cursor: url(${LOCK}), not-allowed;
+  }
+  
   body > div#root {
     background: url(${BG_IMAGE}) center/cover no-repeat;
     height: 100vh;

@@ -24,6 +24,11 @@ export const CUSTOM_THEME = {
       boxShadowColor: '12px 8px #8000809e'
     },
     epic: { backgroundColor: '#ffb467', boxShadowColor: '12px 8px #ffb467' }
+  },
+  gradients: {
+    lockedSkill: 'linear-gradient(195deg, lightgrey, darkred)',
+    unlockedSkill: 'linear-gradient(195deg, lightgrey, #ab64ffbd)',
+    ownedSkill: 'linear-gradient(195deg, lightgrey, #208120)'
   }
 } as const
 export type CustomTheme = typeof CUSTOM_THEME

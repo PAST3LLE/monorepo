@@ -2,7 +2,11 @@ import { Lightning } from '../lightning'
 import { LightningConfig } from '../types'
 import { Vector } from '../vector'
 import BG_IMAGE from 'assets/png/background.png'
-import { SkillDependencyObject, SkillId, SkillMetadata, SkillProperties } from 'components/Skills/types'
+import {
+  // SkillDependencyObject,
+  SkillId,
+  SkillMetadata // SkillProperties
+} from 'components/Skills/types'
 import { useEffect, useState } from 'react'
 import { MetadataState } from 'state/Metadata'
 import { SkillGridPositionList, SkillsState } from 'state/Skills'
@@ -109,9 +113,9 @@ function _animate() {
   }, 480)
 }
 
-function depKeyIsObject(depKey: SkillProperties['dependencies'][0]): depKey is SkillDependencyObject {
+/* function depKeyIsObject(depKey: SkillProperties['dependencies'][0]): depKey is SkillDependencyObject {
   return Boolean(typeof depKey === 'object' && !!depKey?.collection && depKey?.required)
-}
+} */
 
 /**
  * Offsets (moves) the lightning start source the same width as a single SkillSquare and half the height
@@ -151,12 +155,12 @@ export function toggleSelectedSkill(state?: SkillsState) {
 
 function flattenDepsArray(depsList: SkillsState['activeDependencies']) {
   return depsList.reduce<SkillId[]>((keyList, nextKey) => {
-    const isKeyObject = depKeyIsObject(nextKey)
+    /* const isKeyObject = depKeyIsObject(nextKey)
     if (isKeyObject) {
       const { collection, required } = nextKey
       const skillId = (idx: number) => (idx + 1) * 1000
       keyList.push(...Array.from({ length: required }).map((_, idx): SkillId => `${collection}-${skillId(idx)}`))
-    } else {
+    } else  */ {
       keyList.push(nextKey)
     }
 
