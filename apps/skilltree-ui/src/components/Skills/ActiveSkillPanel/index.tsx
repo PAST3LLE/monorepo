@@ -62,22 +62,20 @@ export function ActiveSkillPanel() {
           flexWrap={'wrap'}
           gap="1rem 4rem"
         >
-          {activeSkill?.image && (
-            <Skillpoint
-              className={isLocked ? 'disabled' : ''}
-              forceRarity="empty"
-              metadata={activeSkill}
-              hasSkill={!isLocked}
-              skillpointStyles={{
-                height: '80%',
-                flex: 1.4,
-                padding: 0,
-                backgroundColor: 'transparent',
-                justifyContent: 'center',
-                disabled: isLocked
-              }}
-            />
-          )}
+          <Skillpoint
+            className={isLocked ? 'disabled' : ''}
+            forceRarity="empty"
+            metadata={activeSkill}
+            hasSkill={!isLocked}
+            skillpointStyles={{
+              height: '80%',
+              flex: 1.4,
+              padding: 0,
+              backgroundColor: 'transparent',
+              justifyContent: 'center',
+              disabled: isLocked
+            }}
+          />
           <ThemedButtonExternalLink
             className={isLocked ? 'disabled' : ''}
             disabled={isLocked}
@@ -87,22 +85,24 @@ export function ActiveSkillPanel() {
           </ThemedButtonExternalLink>
         </Row>
         {deps.length > 0 && (
-          <Column>
+          <Column marginBottom={'1rem'}>
             <Text.SubHeader fontSize={'2.5rem'} fontWeight={200} margin="0">
-              PREREQUISITES
+              REQUIRES
             </Text.SubHeader>
-            <Row padding="1rem">
+            <Row padding="1rem" gap="0 1.7rem" overflowX={'auto'}>
               {deps.flatMap((skillId) => {
                 // TODO: remove this
                 if (typeof skillId === 'object') return 'COMING SOON...'
                 const skill = metadataMap[skillId]
                 return (
-                  <Skillpoint
-                    // @ts-ignore
-                    title={skill.name}
-                    hasSkill={!BigNumber.from(balances?.[skillId] || 0).isZero()}
-                    metadata={skill}
-                  />
+                  skill && (
+                    <Skillpoint
+                      // @ts-ignore
+                      title={skill.name}
+                      hasSkill={!BigNumber.from(balances?.[skillId] || 0).isZero()}
+                      metadata={skill}
+                    />
+                  )
                 )
               })}
             </Row>

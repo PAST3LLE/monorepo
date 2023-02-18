@@ -51,8 +51,10 @@ export function UserBalancesUpdater() {
   useEffect(() => {
     const metadataLoaded = !!metadata?.[0]?.size
 
+    const derivedData: BigNumber[][] = _getEnvBalances(data as BigNumber[][], metadata)
+
     if (metadataLoaded) {
-      const balances = reduceBalanceDataToMap(data as BigNumber[][])
+      const balances = reduceBalanceDataToMap(derivedData)
       // TODO: fix with real balances
       updateUserBalances((state) => ({
         balances: {
@@ -88,4 +90,14 @@ function reduceBalanceDataToMap(data: readonly BigNumber[][]) {
     }, {} as UserBalances)
     return { ...oAcc, ...obj }
   }, {} as UserBalances)
+}
+
+function _getEnvBalances(realBalances: BigNumber[][], metadata: MetadataState['metadata']): BigNumber[][] {
+  if (process.env.NODE_ENV === 'production') {
+    return realBalances
+  } else {
+    return metadata.map((collection) => {
+      return Array.from({ length: collection.size }).map(() => BigNumber.from(Math.round(Math.random())))
+    })
+  }
 }

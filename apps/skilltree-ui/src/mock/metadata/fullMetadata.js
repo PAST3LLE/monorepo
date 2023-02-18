@@ -160,7 +160,7 @@ const METADATA = [
         id: '3-3000'
       }
     },
-    null,
+
     {
       description: 'FADEBLACK.TEE.OVERSIZED.HEAVY-COTTON.',
       image: 'ipfs://QmPTYa4M3dsPQiYDeDfsVu23EmcRx1gxYsX7sVzdwaFz64',
@@ -202,7 +202,7 @@ const METADATA = [
         id: '4-1000'
       }
     },
-    null,
+
     {
       description: 'SENTIENCE.HOODIE.OVERSIZED.HEAVY-COTTON.',
       image: 'ipfs://QmQoQRBM7JTfYHb2skR2UWxrvauiP7iLMrc2eyAvcVhb7e',
@@ -214,21 +214,18 @@ const METADATA = [
         id: '4-2000'
       }
     },
-    null,
+
     {
       description: 'TURBOLAG.HOODIE.OVERSIZED.HEAVY-COTTON.',
       image: 'ipfs://QmWB53TDta1wDjMvSCsRtqN3JNZgCnVcp8U6V1Q6t6eDUm',
       name: 'TURBOLAG',
       properties: {
         rarity: 'epic',
-        get dependencies() {
-          return [...METADATA[3][2].properties.dependencies, '4-1000']
-        },
+        dependencies: ['3-1000', '3-2000', '3-4000', '4-1000'],
         shopifyId: '6758853771315',
         id: '4-3000'
       }
-    },
-    null
+    }
   ]
   // COLLECTION 5
   // [

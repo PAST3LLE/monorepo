@@ -1,5 +1,7 @@
 import { useMetadataWriteAtom, useMetadataMapWriteAtom, MetadataState } from '..'
 import { useFetchMetadataCallback } from 'components/Skills/hooks'
+import { SkillMetadata } from 'components/Skills/types'
+import mockMetadata from 'mock/metadata/fullMetadata.js'
 import { useEffect, useState } from 'react'
 import { useContractRead } from 'wagmi'
 import { usePrepareCollectionsContract } from 'web3/hooks/collections/usePrepareCollectionsContract'
@@ -29,7 +31,10 @@ export function MetadataUpdater() {
     }
 
     _fetchMetadata()
-      .then((res) => setLocalMetadata(res?.filter((meta) => !!meta?.size) || []))
+      .then((res) => {
+        const data = _getEnvMetadata(res || [])
+        setLocalMetadata(data?.filter((meta) => !!meta?.size) || [])
+      })
       .catch(console.error)
   }, [collections, fetchMetadata])
 
@@ -49,4 +54,20 @@ export function MetadataUpdater() {
   }, [localMetadata, setMetadataMapState, setMetadataState])
 
   return null
+}
+
+function _getEnvMetadata(
+  realMetadata: {
+    size: number
+    skillsMetadata: SkillMetadata[]
+  }[]
+): MetadataState['metadata'] {
+  if (process.env.NODE_ENV === 'production') {
+    return realMetadata
+  } else {
+    return (mockMetadata as any[]).map((coll: SkillMetadata[]) => ({
+      size: coll.length,
+      skillsMetadata: coll
+    }))
+  }
 }

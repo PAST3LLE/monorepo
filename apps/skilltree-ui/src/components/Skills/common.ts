@@ -9,6 +9,7 @@ const StyledGridItem = styled(Row)<{
   vector?: Vector
 }>`
   width: ${SKILLPOINT_SIZES.width};
+  min-width: ${SKILLPOINT_SIZES.width};
   height: ${SKILLPOINT_SIZES.height};
   padding: 6px;
 
@@ -18,7 +19,7 @@ const StyledGridItem = styled(Row)<{
   ${({ vector }) => vector && `transform: translate(${vector.X1}px,${vector.Y1}px);`}
 `
 
-export const StyledSkillpoint = styled(StyledGridItem)<{
+export const StyledSkillpoint = styled(StyledGridItem).attrs({ minWidth: SKILLPOINT_SIZES.width })<{
   dimSkill: boolean
   active: boolean
   isDependency: boolean
