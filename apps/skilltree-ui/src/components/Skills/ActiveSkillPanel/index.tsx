@@ -1,14 +1,15 @@
 import { Skillpoint } from '../Skillpoint'
-import { Row, AutoRow, ExternalLink, Text, Column } from '@past3lle/components'
+import { SkillId } from '../types'
+import { Row, AutoRow, ExternalLink, Text, Column, RowProps } from '@past3lle/components'
 import { upToSmall } from '@past3lle/theme'
 import { ThemedButtonExternalLink } from 'components/Button'
 import { SidePanel } from 'components/SidePanel'
-import { MonospaceText } from 'components/Text'
+import { BlackHeader, MonospaceText } from 'components/Text'
 import { BigNumber } from 'ethers'
 import { useGetActiveSkill } from 'hooks/skills'
 import React, { useMemo } from 'react'
-import { useMetadataMapReadAtom } from 'state/Metadata'
-import { useUserBalancesReadAtom } from 'state/User'
+import { MetadataState, useMetadataMapReadAtom } from 'state/Metadata'
+import { UserBalances, useUserBalancesReadAtom } from 'state/User'
 import styled from 'styled-components/macro'
 import { CUSTOM_THEME } from 'theme/customTheme'
 import { getLockStatus, SkillLockStatus } from 'utils/skills'
@@ -50,7 +51,7 @@ export function ActiveSkillPanel() {
       onBack={() => setSkillState((state) => ({ ...state, active: state.active.slice(1) }))}
     >
       <ActiveSkillPanelContainer>
-        <Row justifyContent={'center'} margin="0 0 8% 0">
+        <Row justifyContent={'center'} margin="0">
           <Text.SubHeader fontSize={'2.5rem'} fontWeight={200}>
             {description}
           </Text.SubHeader>
@@ -85,28 +86,12 @@ export function ActiveSkillPanel() {
           </ThemedButtonExternalLink>
         </Row>
         {deps.length > 0 && (
-          <Column marginBottom={'1rem'}>
-            <Text.SubHeader fontSize={'2.5rem'} fontWeight={200} margin="0">
-              REQUIRES
-            </Text.SubHeader>
-            <Row padding="1rem" gap="0 1.7rem" overflowX={'auto'}>
-              {deps.flatMap((skillId) => {
-                // TODO: remove this
-                if (typeof skillId === 'object') return 'COMING SOON...'
-                const skill = metadataMap[skillId]
-                return (
-                  skill && (
-                    <Skillpoint
-                      // @ts-ignore
-                      title={skill.name}
-                      hasSkill={!BigNumber.from(balances?.[skillId] || 0).isZero()}
-                      metadata={skill}
-                    />
-                  )
-                )
-              })}
-            </Row>
-          </Column>
+          <RequiredDepsContainer marginBottom={'2rem'}>
+            <BlackHeader fontSize={'2.5rem'} fontWeight={300} margin="0">
+              REQUIRED TO UNLOCK
+            </BlackHeader>
+            <SkillsRow balances={balances} deps={deps} metadataMap={metadataMap} />
+          </RequiredDepsContainer>
         )}
         {!isLocked && (
           <AutoRow>
@@ -136,12 +121,48 @@ export function ActiveSkillPanel() {
     </SidePanel>
   )
 }
+const RequiredDepsContainer = styled(Column)`
+  ${BlackHeader} {
+    color: ${({ theme }) => theme.mainFg};
+    background: linear-gradient(90deg, black, transparent 80%);
+    border-radius: 10px;
+  }
+`
+
+interface SkillsRowProps {
+  deps: SkillId[]
+  metadataMap: MetadataState['metadataMap']
+  balances: UserBalances
+  rowProps?: RowProps
+}
+function SkillsRow({ balances, deps, metadataMap, rowProps }: SkillsRowProps) {
+  return (
+    <Row padding="1rem" gap="0 1.7rem" overflowX={'auto'} {...rowProps}>
+      {deps.flatMap((skillId) => {
+        // TODO: remove this
+        if (typeof skillId === 'object') return 'COMING SOON...'
+        const skill = metadataMap[skillId]
+        return (
+          skill && (
+            <Skillpoint
+              // @ts-ignore
+              title={skill.name}
+              hasSkill={!BigNumber.from(balances?.[skillId] || 0).isZero()}
+              metadata={skill}
+            />
+          )
+        )
+      })}
+    </Row>
+  )
+}
 
 const ActiveSkillPanelContainer = styled(Column)`
   height: 100%;
 
   padding: 0 4rem;
   overflow-y: auto;
+  overflow-x: hidden;
 
   ${Row}#skill-image-and-store-button {
     > img {
@@ -163,7 +184,7 @@ const ActiveSkillPanelContainer = styled(Column)`
 function _getSkillDescription(name: string | undefined, lockStatus: SkillLockStatus) {
   switch (lockStatus) {
     case SkillLockStatus.LOCKED:
-      return "You can't get this skill yet. Click and view prerequisite skill(s) below."
+      return "You can't get this skill yet. Click and view required skill(s) below."
     case SkillLockStatus.UNLOCKED:
       return `Buy ${name || 'this skill'} and receive a free NFT SKILLPOINT giving you access to exclusive perks.`
     case SkillLockStatus.OWNED:

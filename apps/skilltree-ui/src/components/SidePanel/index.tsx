@@ -43,7 +43,7 @@ export function SidePanel({ header, children, onBack, onDismiss, styledProps }: 
         <span>x</span>
       </div>
       <Row>
-        <CursiveHeader marginBottom="4rem" justifyContent={'center'}>
+        <CursiveHeader marginBottom="2rem" justifyContent={'center'}>
           {header}
         </CursiveHeader>
       </Row>
