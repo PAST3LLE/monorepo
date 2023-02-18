@@ -1,5 +1,4 @@
 import { Skillpoint } from '../Skillpoint'
-// import { ipfsToImageUri } from '../utils'
 import { Row, AutoRow, ExternalLink, Text, Column } from '@past3lle/components'
 import { upToSmall } from '@past3lle/theme'
 import { ThemedButtonExternalLink } from 'components/Button'
@@ -25,16 +24,10 @@ export function ActiveSkillPanel() {
   const lockStatus = useMemo(() => getLockStatus(activeSkill, balances), [activeSkill, balances])
   const isLocked = lockStatus === SkillLockStatus.LOCKED
   const isOwned = lockStatus === SkillLockStatus.OWNED
-  const isUnlocked = lockStatus === SkillLockStatus.UNLOCKED
 
   const description = useMemo(
-    () =>
-      isLocked
-        ? "You can't get this skill yet. Click and view prerequisite skill(s) below."
-        : isUnlocked
-        ? `Buy ${activeSkill?.name || 'skill'} and receive a free NFT skillpoint giving you access to exclusive perks.`
-        : `Nice, you already own ${activeSkill?.name}. See below for which later skills depend on this skill to level-up, and head to the store to get new ones.`,
-    [activeSkill?.name, isLocked, isUnlocked]
+    () => _getSkillDescription(activeSkill?.name, lockStatus),
+    [activeSkill?.name, lockStatus]
   )
 
   if (!activeSkill || !setSkillState) return null
@@ -57,7 +50,7 @@ export function ActiveSkillPanel() {
       onBack={() => setSkillState((state) => ({ ...state, active: state.active.slice(1) }))}
     >
       <ActiveSkillPanelContainer>
-        <Row justifyContent={'center'} margin="0 0 13% 0">
+        <Row justifyContent={'center'} margin="0 0 8% 0">
           <Text.SubHeader fontSize={'2.5rem'} fontWeight={200}>
             {description}
           </Text.SubHeader>
@@ -166,3 +159,18 @@ const ActiveSkillPanelContainer = styled(Column)`
     }
   }
 `
+
+function _getSkillDescription(name: string | undefined, lockStatus: SkillLockStatus) {
+  switch (lockStatus) {
+    case SkillLockStatus.LOCKED:
+      return "You can't get this skill yet. Click and view prerequisite skill(s) below."
+    case SkillLockStatus.UNLOCKED:
+      return `Buy ${name || 'this skill'} and receive a free NFT SKILLPOINT giving you access to exclusive perks.`
+    case SkillLockStatus.OWNED:
+      return `Nice, you already own ${
+        name || 'this skill'
+      }. See below for which later skills and events depend on this one to level-up. You can also head to the store to get new ones.`
+    default:
+      return 'Skill information missing. Please try again later.'
+  }
+}
