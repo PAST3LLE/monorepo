@@ -93,7 +93,9 @@ function reduceBalanceDataToMap(data: readonly BigNumber[][]) {
 }
 
 function _getEnvBalances(realBalances: BigNumber[][], metadata: MetadataState['metadata']): BigNumber[][] {
-  if (process.env.NODE_ENV === 'production') {
+  // TODO: remove this
+  const SHOW_MOCK_DATA: boolean = JSON.parse(localStorage.getItem('PSTL_SHOW_MOCK_DATA') || 'false')
+  if (!SHOW_MOCK_DATA) {
     return realBalances
   } else {
     return metadata.map((collection) => {

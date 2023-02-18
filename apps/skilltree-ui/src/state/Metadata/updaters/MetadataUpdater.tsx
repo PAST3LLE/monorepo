@@ -62,7 +62,9 @@ function _getEnvMetadata(
     skillsMetadata: SkillMetadata[]
   }[]
 ): MetadataState['metadata'] {
-  if (process.env.NODE_ENV === 'production') {
+  // TODO: remove this
+  const SHOW_MOCK_DATA: boolean = JSON.parse(localStorage.getItem('PSTL_SHOW_MOCK_DATA') || 'false')
+  if (!SHOW_MOCK_DATA) {
     return realMetadata
   } else {
     return (mockMetadata as any[]).map((coll: SkillMetadata[]) => ({
