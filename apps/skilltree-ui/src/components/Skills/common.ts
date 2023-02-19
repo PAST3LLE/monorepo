@@ -25,6 +25,7 @@ export const StyledSkillpoint = styled(StyledGridItem).attrs({ minWidth: SKILLPO
   isDependency: boolean
   isEmptySkill: boolean
   rarity: Rarity | undefined
+  css?: string
 }>`
   z-index: 1;
   cursor: pointer;
@@ -49,6 +50,8 @@ export const StyledSkillpoint = styled(StyledGridItem).attrs({ minWidth: SKILLPO
   &::hover {
     cursor: not-allowed;
   }
+
+  ${({ css }) => css && css}
 `
 
 export const SkillpointHeader = styled(StyledGridItem)`

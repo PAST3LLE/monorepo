@@ -77,7 +77,6 @@ export const StyledSidePanel = styled(ArticleFadeIn)<SidePanelCssProps>`
 
   ${({ useMediaQueries = DEFAULT_SIDE_PANEL_PROPS.useMediaQueries }) => upToSmall`
     width: 100%;
-    // padding: 4rem 2rem;
 
     ${
       useMediaQueries &&

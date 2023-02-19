@@ -63,10 +63,11 @@ function _getEnvMetadata(
   }[]
 ): MetadataState['metadata'] {
   // TODO: remove this
-  const SHOW_MOCK_DATA: boolean = JSON.parse(localStorage.getItem('PSTL_SHOW_MOCK_DATA') || 'false')
+  const SHOW_MOCK_DATA = !!process.env.REACT_APP_MOCK_METADATA
   if (!SHOW_MOCK_DATA) {
     return realMetadata
   } else {
+    console.warn('[MetadataUpdater]::USING MOCK METADATA')
     return (mockMetadata as any[]).map((coll: SkillMetadata[]) => ({
       size: coll.length,
       skillsMetadata: coll

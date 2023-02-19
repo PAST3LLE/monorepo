@@ -1,16 +1,18 @@
 import { Skillpoint } from '../Skillpoint'
+import { SkillpointPoint } from '../Skillpoint/SkillpointPoint'
 import { SkillId } from '../types'
-import { Row, AutoRow, ExternalLink, Text, Column, RowProps } from '@past3lle/components'
-import { upToSmall } from '@past3lle/theme'
+import { Row, AutoRow, ExternalLink, Text, Column, RowProps, RowStart } from '@past3lle/components'
+import { BLACK, upToSmall } from '@past3lle/theme'
 import { ThemedButtonExternalLink } from 'components/Button'
 import { SidePanel } from 'components/SidePanel'
-import { BlackHeader, MonospaceText } from 'components/Text'
+import { AutoColorHeader, BlackHeader, MonospaceText } from 'components/Text'
 import { BigNumber } from 'ethers'
 import { useGetActiveSkill } from 'hooks/skills'
 import React, { useMemo } from 'react'
 import { MetadataState, useMetadataMapReadAtom } from 'state/Metadata'
 import { UserBalances, useUserBalancesReadAtom } from 'state/User'
 import styled from 'styled-components/macro'
+import { RARITY_COLOURS_MAP } from 'theme/constants'
 import { CUSTOM_THEME } from 'theme/customTheme'
 import { getLockStatus, SkillLockStatus } from 'utils/skills'
 
@@ -45,12 +47,26 @@ export function ActiveSkillPanel() {
       header={activeSkill?.name || 'Unknown'}
       styledProps={{
         background: backgroundColor,
-        padding: '4rem 0'
+        padding: '6rem 0 4rem 0'
       }}
       onDismiss={() => setSkillState((state) => ({ ...state, active: [] }))}
       onBack={() => setSkillState((state) => ({ ...state, active: state.active.slice(1) }))}
     >
       <ActiveSkillPanelContainer>
+        <RequiredDepsContainer borderRadius="0 0 10px 0" background={_getLockStatusColour(lockStatus)}>
+          <RowStart letterSpacing="-2.6px" style={{ position: 'absolute', left: 0, top: 0, width: 'auto' }}>
+            <AutoColorHeader
+              bgColour={_getLockStatusColour(lockStatus)}
+              fgColour={BLACK}
+              width={'inherit'}
+              fontWeight={300}
+              fontSize={'2.5rem'}
+              padding="0.25rem 2rem"
+            >
+              {lockStatus}
+            </AutoColorHeader>
+          </RowStart>
+        </RequiredDepsContainer>
         <Row justifyContent={'center'} margin="0">
           <Text.SubHeader fontSize={'2.5rem'} fontWeight={200}>
             {description}
@@ -86,8 +102,8 @@ export function ActiveSkillPanel() {
           </ThemedButtonExternalLink>
         </Row>
         {deps.length > 0 && (
-          <RequiredDepsContainer marginBottom={'2rem'}>
-            <BlackHeader fontSize={'2.5rem'} fontWeight={300} margin="0">
+          <RequiredDepsContainer marginBottom={'2rem'} background="linear-gradient(90deg, black, transparent 80%)">
+            <BlackHeader fontSize={'2.5rem'} fontWeight={300} margin="0" padding="1rem 1rem 0.25rem 1rem">
               REQUIRED TO UNLOCK
             </BlackHeader>
             <SkillsRow balances={balances} deps={deps} metadataMap={metadataMap} />
@@ -121,11 +137,10 @@ export function ActiveSkillPanel() {
     </SidePanel>
   )
 }
-const RequiredDepsContainer = styled(Column)`
-  ${BlackHeader} {
-    color: ${({ theme }) => theme.mainFg};
-    background: linear-gradient(90deg, black, transparent 80%);
-    border-radius: 10px;
+const RequiredDepsContainer = styled(Column)<{ borderRadius?: string; background?: string }>`
+  ${AutoColorHeader} {
+    background: ${({ background = 'transparent' }) => background};
+    border-radius: ${({ borderRadius = '10px' }) => borderRadius};
   }
 `
 
@@ -138,6 +153,7 @@ interface SkillsRowProps {
 function SkillsRow({ balances, deps, metadataMap, rowProps }: SkillsRowProps) {
   return (
     <Row padding="1rem" gap="0 1.7rem" overflowX={'auto'} {...rowProps}>
+      <SkillpointPoint />
       {deps.flatMap((skillId) => {
         // TODO: remove this
         if (typeof skillId === 'object') return 'COMING SOON...'
@@ -193,5 +209,16 @@ function _getSkillDescription(name: string | undefined, lockStatus: SkillLockSta
       }. See below for which later skills and events depend on this one to level-up. You can also head to the store to get new ones.`
     default:
       return 'Skill information missing. Please try again later.'
+  }
+}
+
+function _getLockStatusColour(lockStatus: SkillLockStatus) {
+  switch (lockStatus) {
+    case SkillLockStatus.LOCKED:
+      return 'darkred'
+    case SkillLockStatus.UNLOCKED:
+      return 'darkgreen'
+    case SkillLockStatus.OWNED:
+      return RARITY_COLOURS_MAP.rare
   }
 }

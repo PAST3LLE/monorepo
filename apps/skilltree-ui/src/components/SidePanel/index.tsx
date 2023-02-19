@@ -31,14 +31,14 @@ export function SidePanel({ header, children, onBack, onDismiss, styledProps }: 
   return (
     <StyledSidePanel {...styledProps}>
       <div id="bg-tag" />
-      <div style={{ position: 'absolute', left: 15, top: 20 }}>
+      <div style={{ position: 'absolute', left: 15, top: '6.25rem' }}>
         <Row justifyContent={'space-evenly'} alignItems="center" gap="1rem">
           {panels.length > 1 && <ArrowLeft size={20} onClick={onBackCallback} cursor="pointer" />}
         </Row>
       </div>
       <div
         onClick={onDismissCallback}
-        style={{ position: 'absolute', right: 15, top: 10, fontWeight: 300, fontSize: '3rem', cursor: 'pointer' }}
+        style={{ position: 'absolute', right: 15, top: '0.5rem', fontWeight: 300, fontSize: '3rem', cursor: 'pointer' }}
       >
         <span>x</span>
       </div>

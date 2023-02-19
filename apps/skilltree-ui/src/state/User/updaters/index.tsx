@@ -94,10 +94,11 @@ function reduceBalanceDataToMap(data: readonly BigNumber[][]) {
 
 function _getEnvBalances(realBalances: BigNumber[][], metadata: MetadataState['metadata']): BigNumber[][] {
   // TODO: remove this
-  const SHOW_MOCK_DATA: boolean = JSON.parse(localStorage.getItem('PSTL_SHOW_MOCK_DATA') || 'false')
+  const SHOW_MOCK_DATA = !!process.env.REACT_APP_MOCK_METADATA
   if (!SHOW_MOCK_DATA) {
     return realBalances
   } else {
+    console.warn('[UserBalanceUpdater]::USING MOCK METADATA')
     return metadata.map((collection) => {
       return Array.from({ length: collection.size }).map(() => BigNumber.from(Math.round(Math.random())))
     })

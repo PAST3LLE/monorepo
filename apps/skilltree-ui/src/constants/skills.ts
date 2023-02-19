@@ -1,3 +1,5 @@
+import { SkillMetadata } from 'components/Skills/types'
+
 export const SKILLPOINT_SIZES = {
   width: '10vh',
   get height() {
@@ -19,3 +21,15 @@ export const EMPTY_SKILL_IMAGE_HASH_LIST = [
 ]
 
 export const SKILL_ID_BASE = 1000
+export const SKILLPOINT_IMAGE_HASH = 'QmSMBa8KBK7QCJGVsViqAsUp5FQHQMC3qfmWH3wJxw219f'
+export const SKILLPOINT_METADATA: SkillMetadata = {
+  name: 'PSTL SKILLPOINT',
+  description: 'Skillpoint for upgrading skills',
+  image: SKILLPOINT_IMAGE_HASH,
+  properties: {
+    id: '0-0000',
+    shopifyId: '0',
+    dependencies: [],
+    rarity: 'common'
+  }
+}

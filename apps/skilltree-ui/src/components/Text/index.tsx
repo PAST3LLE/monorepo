@@ -1,4 +1,5 @@
 import { Text } from '@past3lle/components'
+import { setBestContrastingColour } from '@past3lle/theme'
 import React from 'react'
 import { TextProps } from 'rebass'
 import styled from 'styled-components/macro'
@@ -8,6 +9,15 @@ export const BlackBoldItalic = styled(Text.Black).attrs((props) => ({
   fontWeight: 900,
   ...props
 }))``
+
+export const AutoColorHeader = styled(BlackBoldItalic)<{
+  bgColour: string
+  fgColour: string
+}>`
+  background-color: ${({ bgColour }) => bgColour};
+  color: ${({ bgColour, fgColour, theme }) =>
+    setBestContrastingColour({ bgColour, fgColour, lightColour: theme.mainFg, darkColour: theme.black })};
+`
 
 export const BlackHeader = styled(BlackBoldItalic).attrs((props) => ({
   fontSize: '3.5rem',
