@@ -1,7 +1,7 @@
 import { SkillVectorsMap, useSkillsAtom } from '..'
 import { MEDIA_WIDTHS } from '@past3lle/theme'
 import { calculateGridPoints } from 'components/Canvas/api/hooks'
-import { EMPTY_COLLECTION_ROWS_SIZE, MINIMUM_COLLECTION_BOARD_SIZE } from 'constants/skills'
+import { EMPTY_COLLECTION_ROWS_SIZE, MINIMUM_BOARD_WIDTH, MINIMUM_COLLECTION_BOARD_SIZE } from 'constants/skills'
 import { useEffect, useMemo } from 'react'
 import { useMetadataReadAtom } from 'state/Metadata'
 import { useGetWindowSize } from 'state/WindowSize'
@@ -26,7 +26,7 @@ export function GridPositionUpdater() {
     const rows = highestRowCount
 
     const gridHeight = container.clientHeight - 30
-    const gridWidth = container.clientWidth
+    const gridWidth = MINIMUM_BOARD_WIDTH > container.clientWidth ? MINIMUM_BOARD_WIDTH : container.clientWidth
 
     // config
     const rowHeight = Math.round(gridHeight / rows)

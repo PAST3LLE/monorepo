@@ -1,11 +1,12 @@
 import { Skillpoint } from '../Skillpoint'
 import { SkillpointPoint } from '../Skillpoint/SkillpointPoint'
 import { Rarity, SkillId } from '../types'
+import { ActiveSkillPanelContainer, SkillRarityLabel, SkillsRowContainer, SkillStatusLabel } from './styleds'
 import { Row, AutoRow, ExternalLink, Text, Column, RowProps, RowStart } from '@past3lle/components'
-import { BLACK, OFF_WHITE, upToSmall } from '@past3lle/theme'
+import { BLACK, OFF_WHITE } from '@past3lle/theme'
 import { ThemedButtonExternalLink } from 'components/Button'
 import { SidePanel } from 'components/SidePanel'
-import { AutoColorHeader, BlackHeader, MonospaceText } from 'components/Text'
+import { BlackHeader, MonospaceText } from 'components/Text'
 import { BigNumber } from 'ethers'
 import { useGetActiveSkill } from 'hooks/skills'
 import { darken } from 'polished'
@@ -64,35 +65,26 @@ export function ActiveSkillPanel() {
       <ActiveSkillPanelContainer>
         <Column overflow="hidden">
           <RowStart letterSpacing="-2.6px" style={{ position: 'absolute', left: 0, top: 0, width: 'auto' }}>
-            <AutoColorHeader
+            <SkillStatusLabel
               bgColour={_getLockStatusColour(lockStatus, rarity)}
               fgColour={BLACK}
-              width={'inherit'}
               fontWeight={400}
-              fontSize={'2.5rem'}
-              padding="0.25rem 2rem"
               borderRadius="0 0 10px 0"
             >
               {lockStatus}
-            </AutoColorHeader>
-            <BlackHeader
-              width={'inherit'}
+            </SkillStatusLabel>
+            <SkillRarityLabel
               color={OFF_WHITE}
               fontWeight={500}
-              fontSize={'2.5rem'}
-              padding="0.25rem 2rem"
               borderRadius="0"
               textShadow={`1px 1px 1px ${darken(0.3, CUSTOM_THEME.rarity[rarity].backgroundColor)}`}
-              display={'flex'}
-              justifyContent="space-evenly"
-              alignItems={'center'}
             >
               <img
                 src={require(`assets/png/icons/icons8-diamonds-${rarity}-64.png`)}
                 style={{ maxWidth: '2.5rem', marginRight: '0.5rem' }}
               />
               {rarity?.toLocaleUpperCase()} SKILL
-            </BlackHeader>
+            </SkillRarityLabel>
           </RowStart>
         </Column>
         <Row justifyContent={'center'} margin="0">
@@ -127,7 +119,7 @@ export function ActiveSkillPanel() {
             disabled={isLocked}
             href={isLocked ? '#' : `https://pastelle.shop/#/collection/${activeSkill?.name?.toLowerCase()}`}
           >
-            <Text.Black fontWeight={300}>{isLocked ? 'LOCKED' : 'VIEW IN STORE'}</Text.Black>
+            <Text.Black fontWeight={300}>{isLocked ? 'LOCKED' : isOwned ? 'VIEW IN STORE' : 'UNLOCK'}</Text.Black>
           </ThemedButtonExternalLink>
         </Row>
         {!isOwned && deps.length > 0 && (
@@ -204,43 +196,6 @@ function SkillsRow({ balances, deps, metadataMap, rowProps }: SkillsRowProps) {
     </SkillsRowContainer>
   )
 }
-const SkillsRowContainer = styled(Row)`
-  position: relative;
-  z-index: 1;
-  padding-right: 4rem;
-
-  > div#blur-div {
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 6rem;
-    height: 100%;
-    z-index: 5;
-  }
-`
-const ActiveSkillPanelContainer = styled(Column)`
-  height: 100%;
-
-  padding: 0 4rem;
-  overflow-y: auto;
-  overflow-x: hidden;
-
-  ${Row}#skill-image-and-store-button {
-    > img {
-      max-width: 40%;
-    }
-    > ${ThemedButtonExternalLink} {
-      padding: 1.5rem;
-      > * {
-        font-size: 2rem;
-
-        ${upToSmall`
-          font-size: 1.8rem;
-        `}
-      }
-    }
-  }
-`
 
 function _getSkillDescription(name: string | undefined, lockStatus: SkillLockStatus) {
   switch (lockStatus) {

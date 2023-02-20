@@ -8,6 +8,7 @@ export const SKILLPOINT_SIZES = {
 }
 export const MINIMUM_COLLECTION_BOARD_SIZE = 4
 export const EMPTY_COLLECTION_ROWS_SIZE = 6
+export const MINIMUM_BOARD_WIDTH = 500
 // TODO: REMOVE THIS!!!
 export const MOCK_COLLECTION_ERROR_OFFSET = 1
 

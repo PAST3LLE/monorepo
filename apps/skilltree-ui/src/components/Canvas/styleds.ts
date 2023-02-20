@@ -4,8 +4,6 @@ export const StyledCanvas = styled.canvas`
   position: absolute;
   bottom: 0;
   left: 0;
-  // opacity: 0.5;
-  opacity: 1;
 `
 
 export const CanvasContainer = styled.div`
