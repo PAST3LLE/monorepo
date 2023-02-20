@@ -19,6 +19,11 @@ export const Row = styled(Box)<RowProps>`
   ${({ gap }) => gap && `gap: ${gap};`}
 `
 
+export const RowCenter = styled(Row)`
+  justify-content: center;
+  align-items: center;
+`
+
 export const RowBetween = styled(Row)`
   justify-content: space-between;
 `
