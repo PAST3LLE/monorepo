@@ -14,7 +14,7 @@
     "url": "git+https://github.com/PAST3LLE/past3lle-monorepo.git"
   },
   "private": true,
-  "version": "0.0.16",
+  "version": "0.0.17",
   "engines": {
     "node": ">=18.12.0"
   },
@@ -59,14 +59,14 @@
   },
   "dependencies": {
     "@past3lle/assets": "^0.0.9",
-    "@past3lle/components": "^0.0.22",
-    "@past3lle/constants": "^0.0.15",
+    "@past3lle/components": "^0.0.23",
+    "@past3lle/constants": "^0.0.16",
     "@past3lle/hooks": "^0.0.11",
     "@past3lle/skills-nft": "^0.0.5",
     "@past3lle/skilltree-contracts": "^0.0.1-rc.3",
-    "@past3lle/theme": "^0.0.20",
+    "@past3lle/theme": "^0.0.21",
     "@past3lle/types": "^0.0.11",
-    "@past3lle/utils": "^0.0.15",
+    "@past3lle/utils": "^0.0.16",
     "@web3modal/ethereum": "^2.1.0",
     "@web3modal/react": "^2.1.0",
     "ethers": "^5.7.2",
