@@ -8,7 +8,6 @@
   },
   "scripts": {
     "test:generic": "cd examples/generic && rm -rf node_modules .parcel-cache && yarn && yarn start && cd ../..",
-    "prepare": "node ./configure-references.js",
     "build": "lerna run build --stream",
     "lint": "lerna run lint --stream --parallel",
     "lint:examples": "npx prettier --write examples --ignore-file './prettierignore'",
@@ -17,6 +16,7 @@
     "test:watch": "yarn test --watch",
     "install:examples": "cd examples/generic && yarn && cd ../../",
     "publish:all": "lerna publish",
+    "prepare:publish": "node ./configure-references.js && lerna publish",
     "nft:write": "lerna run metadata:write --scope @past3lle/skills-nft --"
   },
   "devDependencies": {
