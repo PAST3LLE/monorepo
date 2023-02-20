@@ -196,9 +196,7 @@ function SkillsRow({ balances, deps, metadataMap, rowProps }: SkillsRowProps) {
               title={skill.name}
               hasSkill={!BigNumber.from(balances?.[skillId] || 0).isZero()}
               metadata={skill}
-              css={`
-                box-shadow: unset;
-              `}
+              css="box-shadow: unset;"
             />
           )
         )
