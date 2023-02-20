@@ -46,7 +46,7 @@ export function Skillpoint({
   )
 
   const handleClick = () => {
-    if (isEmptySkill) return
+    if (isEmptySkill || isCurrentSkillActive) return
     setSkillState((state) => {
       const newState = {
         ...state,

@@ -1,6 +1,6 @@
 import { Skillpoint } from '../Skillpoint'
 import { SkillpointPoint } from '../Skillpoint/SkillpointPoint'
-import { SkillId } from '../types'
+import { Rarity, SkillId } from '../types'
 import { Row, AutoRow, ExternalLink, Text, Column, RowProps, RowStart } from '@past3lle/components'
 import { BLACK, upToSmall } from '@past3lle/theme'
 import { ThemedButtonExternalLink } from 'components/Button'
@@ -33,38 +33,64 @@ export function ActiveSkillPanel() {
     [activeSkill?.name, lockStatus]
   )
 
-  if (!activeSkill || !setSkillState) return null
+  const { rarity, deps, cardColour } = useMemo(
+    () => ({
+      rarity: activeSkill?.properties.rarity,
+      deps: activeSkill?.properties.dependencies,
+      get cardColour() {
+        return isLocked
+          ? CUSTOM_THEME.gradients.lockedSkill
+          : this.rarity
+          ? CUSTOM_THEME.gradients.unlockedSkill + `${CUSTOM_THEME.rarity[this.rarity].backgroundColor})`
+          : null
+      }
+    }),
+    [activeSkill?.properties.dependencies, activeSkill?.properties.rarity, isLocked]
+  )
 
-  const deps = activeSkill.properties.dependencies
-  const backgroundColor = isLocked
-    ? CUSTOM_THEME.gradients.lockedSkill
-    : isOwned
-    ? CUSTOM_THEME.gradients.ownedSkill
-    : CUSTOM_THEME.gradients.unlockedSkill
+  if (!activeSkill || !rarity || !deps || !cardColour || !setSkillState) return null
 
   return (
     <SidePanel
       header={activeSkill?.name || 'Unknown'}
       styledProps={{
-        background: backgroundColor,
+        background: cardColour,
         padding: '6rem 0 4rem 0'
       }}
       onDismiss={() => setSkillState((state) => ({ ...state, active: [] }))}
       onBack={() => setSkillState((state) => ({ ...state, active: state.active.slice(1) }))}
     >
       <ActiveSkillPanelContainer>
-        <RequiredDepsContainer borderRadius="0 0 10px 0" background={_getLockStatusColour(lockStatus)}>
+        <RequiredDepsContainer>
           <RowStart letterSpacing="-2.6px" style={{ position: 'absolute', left: 0, top: 0, width: 'auto' }}>
             <AutoColorHeader
-              bgColour={_getLockStatusColour(lockStatus)}
+              bgColour={_getLockStatusColour(lockStatus, rarity)}
               fgColour={BLACK}
               width={'inherit'}
-              fontWeight={300}
+              fontWeight={400}
               fontSize={'2.5rem'}
               padding="0.25rem 2rem"
+              borderRadius="0 0 10px 0"
             >
               {lockStatus}
             </AutoColorHeader>
+            <BlackHeader
+              width={'inherit'}
+              fontWeight={500}
+              fontSize={'2.5rem'}
+              padding="0.25rem 2rem"
+              borderRadius="0"
+              textShadow={`1px 1px 1px ${CUSTOM_THEME.rarity[rarity].backgroundColor}`}
+              display={'flex'}
+              justifyContent="space-evenly"
+              alignItems={'center'}
+            >
+              <img
+                src={require(`assets/png/icons/icons8-diamonds-${rarity}-64.png`)}
+                style={{ maxWidth: '2.5rem', marginRight: '0.5rem' }}
+              />
+              {rarity?.toLocaleUpperCase()} SKILL
+            </BlackHeader>
           </RowStart>
         </RequiredDepsContainer>
         <Row justifyContent={'center'} margin="0">
@@ -101,7 +127,7 @@ export function ActiveSkillPanel() {
             <Text.Black fontWeight={300}>{isLocked ? 'LOCKED' : 'VIEW IN STORE'}</Text.Black>
           </ThemedButtonExternalLink>
         </Row>
-        {deps.length > 0 && (
+        {!isOwned && deps.length > 0 && (
           <RequiredDepsContainer marginBottom={'2rem'} background="linear-gradient(90deg, black, transparent 80%)">
             <BlackHeader fontSize={'2.5rem'} fontWeight={300} margin="0" padding="1rem 1rem 0.25rem 1rem">
               REQUIRED TO UNLOCK
@@ -138,10 +164,7 @@ export function ActiveSkillPanel() {
   )
 }
 const RequiredDepsContainer = styled(Column)<{ borderRadius?: string; background?: string }>`
-  ${AutoColorHeader} {
-    background: ${({ background = 'transparent' }) => background};
-    border-radius: ${({ borderRadius = '10px' }) => borderRadius};
-  }
+  overflow: hidden;
 `
 
 interface SkillsRowProps {
@@ -154,6 +177,9 @@ function SkillsRow({ balances, deps, metadataMap, rowProps }: SkillsRowProps) {
   return (
     <Row padding="1rem" gap="0 1.7rem" overflowX={'auto'} {...rowProps}>
       <SkillpointPoint />
+      <Row justifyContent={'center'} width="auto" minWidth={'2rem'} fontSize={'4rem'} fontWeight={100}>
+        +
+      </Row>
       {deps.flatMap((skillId) => {
         // TODO: remove this
         if (typeof skillId === 'object') return 'COMING SOON...'
@@ -212,13 +238,13 @@ function _getSkillDescription(name: string | undefined, lockStatus: SkillLockSta
   }
 }
 
-function _getLockStatusColour(lockStatus: SkillLockStatus) {
+function _getLockStatusColour(lockStatus: SkillLockStatus, rarity: Rarity) {
   switch (lockStatus) {
     case SkillLockStatus.LOCKED:
       return 'darkred'
     case SkillLockStatus.UNLOCKED:
       return 'darkgreen'
     case SkillLockStatus.OWNED:
-      return RARITY_COLOURS_MAP.rare
+      return RARITY_COLOURS_MAP[rarity]
   }
 }

@@ -8,7 +8,10 @@ export const BlackBoldItalic = styled(Text.Black).attrs((props) => ({
   fontStyle: 'italic',
   fontWeight: 900,
   ...props
-}))``
+}))<{ borderRadius?: string; textShadow?: string }>`
+  border-radius: ${({ borderRadius = '0' }) => borderRadius};
+  ${({ textShadow }) => textShadow && `text-shadow: ${textShadow};`}
+`
 
 export const AutoColorHeader = styled(BlackBoldItalic)<{
   bgColour: string

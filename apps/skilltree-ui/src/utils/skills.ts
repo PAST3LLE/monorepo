@@ -4,7 +4,7 @@ import { UserBalances } from 'state/User'
 
 export const enum SkillLockStatus {
   LOCKED = 'LOCKED',
-  UNLOCKED = 'UNLOCKED',
+  UNLOCKED = 'UNLOCKABLE',
   OWNED = 'OWNED'
 }
 

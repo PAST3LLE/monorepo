@@ -27,7 +27,7 @@ export const CUSTOM_THEME = {
   },
   gradients: {
     lockedSkill: 'linear-gradient(195deg, lightgrey, darkred)',
-    unlockedSkill: 'linear-gradient(195deg, lightgrey, #ab64ffbd)',
+    unlockedSkill: 'linear-gradient(195deg, lightgrey,',
     ownedSkill: 'linear-gradient(195deg, lightgrey, #208120)'
   }
 } as const
