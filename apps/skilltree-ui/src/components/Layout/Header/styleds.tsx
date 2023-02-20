@@ -1,12 +1,9 @@
-import { Web3InfoContainer } from './common'
-import { ExternalLink, Header as HeaderPstl, Pastellecon, Row } from '@past3lle/components'
+import { Web3InfoContainer } from '../common'
+import { Header as PstlHeader, Pastellecon, Row } from '@past3lle/components'
 import { upToSmall } from '@past3lle/theme'
-import { InventoryButton } from 'components/Button'
-import { ConnectionInfoButton } from 'components/Button/ConnectionInfoButton'
-import { NetworkInfoButton } from 'components/Button/NetworkInfoButton'
-import { BlackBoldItalic, BlackHeader, CursiveHeader } from 'components/Text'
-import { SHOP_URL } from 'constants/index'
+import { BlackHeader, BlackBoldItalic, CursiveHeader } from 'components/Text'
 import React from 'react'
+import { ExternalLink } from 'react-feather'
 import styled from 'styled-components/macro'
 import { MAIN_BG } from 'theme/constants'
 
@@ -21,7 +18,7 @@ export const Skilltreecon = styled(Pastellecon)`
   width: 70%;
 `
 
-const LogoHeader = styled(BlackHeader)`
+export const LogoHeader = styled(BlackHeader)`
   position: relative;
   z-index: 1;
   color: ghostwhite;
@@ -47,7 +44,7 @@ export const CheckoutForge = ({ className }: { className?: string }) => (
   </Row>
 )
 
-const HeaderContainer = styled(HeaderPstl)`
+export const HeaderContainer = styled(PstlHeader)`
   min-height: 8rem;
   height: auto;
   padding: 1.5rem 2.5rem 0;
@@ -71,13 +68,10 @@ const HeaderContainer = styled(HeaderPstl)`
   > ${Row} > ${LogoHeader} {
     width: 100%;
     padding: 0.5rem;
-    margin-left: 4rem;
+    margin-left: 1rem;
 
     > ${Skilltreecon} {
-      width: 14%;
-      left: -3rem;
-      top: 0;
-      opacity: 1;
+      display: none;
     }
     > ${Row} {
       display: inline-flex;
@@ -100,26 +94,3 @@ const HeaderContainer = styled(HeaderPstl)`
     }
   `}
 `
-
-export const Header = () => {
-  return (
-    <HeaderContainer>
-      <Row gap="1rem" height="100%" width="100%" justifyContent={'space-between'}>
-        <LogoHeader>
-          <Skilltreecon />
-          <Row alignItems={'center'} width="100%" gap="0 1rem">
-            <CursiveHeader fontSize="5rem">FORGE</CursiveHeader>
-            <CheckoutForge />
-          </Row>
-        </LogoHeader>
-        <Web3InfoContainer>
-          <Row margin="0.5rem" width="auto" height="52px" gap="0 2rem">
-            <InventoryButton restWordProps={{ fontSize: '1.8rem' }} />
-            <NetworkInfoButton />
-            <ConnectionInfoButton />
-          </Row>
-        </Web3InfoContainer>
-      </Row>
-    </HeaderContainer>
-  )
-}

@@ -1,4 +1,5 @@
 import { useMetadataWriteAtom, useMetadataMapWriteAtom, MetadataState } from '..'
+import { devWarn } from '@past3lle/utils'
 import { useFetchMetadataCallback } from 'components/Skills/hooks'
 import { SkillMetadata } from 'components/Skills/types'
 import mockMetadata from 'mock/metadata/fullMetadata.js'
@@ -67,7 +68,7 @@ function _getEnvMetadata(
   if (!SHOW_MOCK_DATA) {
     return realMetadata
   } else {
-    console.warn('[MetadataUpdater]::USING MOCK METADATA')
+    devWarn('[MetadataUpdater]::USING MOCK METADATA')
     return (mockMetadata as any[]).map((coll: SkillMetadata[]) => ({
       size: coll.length,
       skillsMetadata: coll

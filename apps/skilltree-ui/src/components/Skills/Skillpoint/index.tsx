@@ -64,14 +64,15 @@ export function Skillpoint({
     <StyledSkillpoint
       title={`${metadata.name}_${metadata.properties.id}`}
       className={className}
+      metadataCss={metadata?.attributes?.css}
       isEmptySkill={isEmptySkill}
       id={metadata.properties.id}
       rarity={forceRarity || (!isEmptySkill ? metadata.properties?.rarity : undefined)}
       dimSkill={!hasSkill || isOtherSkillActive}
       active={isCurrentSkillActive}
       isDependency={!!isDependency}
-      onClick={handleClick}
       vector={vector}
+      onClick={handleClick}
       {...skillpointStyles}
     >
       <RowCenter height="100%" borderRadius="5px" overflow={'hidden'}>

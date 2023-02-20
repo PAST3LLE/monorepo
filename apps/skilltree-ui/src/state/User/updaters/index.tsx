@@ -1,5 +1,6 @@
 import { UserBalances, useUserAtom } from '..'
 import { PSTLCollectionBaseSkills__factory } from '@past3lle/skilltree-contracts'
+import { devWarn } from '@past3lle/utils'
 import { getSkillId } from 'components/Skills/utils'
 import { MOCK_COLLECTION_ERROR_OFFSET } from 'constants/skills'
 import { BigNumber } from 'ethers'
@@ -17,7 +18,7 @@ function gatherSkillContractConfigParams(
   // TODO: remove offset
   const contractConfigList = skillsAddressList.slice(MOCK_COLLECTION_ERROR_OFFSET).flatMap(({ address }, i) => {
     if (!address) {
-      console.warn(
+      devWarn(
         '[UserBalancesUpdater::gatherSkillContractConfigParams]::Address undefined! Check contracts map in constants.'
       )
       return undefined
@@ -98,7 +99,7 @@ function _getEnvBalances(realBalances: BigNumber[][], metadata: MetadataState['m
   if (!SHOW_MOCK_DATA) {
     return realBalances
   } else {
-    console.warn('[UserBalanceUpdater]::USING MOCK METADATA')
+    devWarn('[UserBalanceUpdater]::USING MOCK METADATA')
     return metadata.map((collection) => {
       return Array.from({ length: collection.size }).map(() => BigNumber.from(Math.round(Math.random())))
     })

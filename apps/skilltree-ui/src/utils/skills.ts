@@ -1,3 +1,4 @@
+import { devWarn } from '@past3lle/utils'
 import { SkillMetadata } from 'components/Skills/types'
 import { BigNumber } from 'ethers'
 import { UserBalances } from 'state/User'
@@ -17,18 +18,18 @@ export function getLockStatus(skill: SkillMetadata | undefined, balances?: UserB
   const deps = skill.properties.dependencies
 
   let hasDeps = true
-  console.warn(skill.name, ' requires skills', deps.join(' '), 'to unlock. Checking...')
+  devWarn(skill.name, ' requires skills', deps.join(' '), 'to unlock. Checking...')
   for (let i = 0; i < deps.length; i++) {
     if (!balances || !balances[deps[i]] || BigNumber.from(balances[deps[i]]).isZero()) {
-      console.warn('You are missing skillId:', deps[i], '// Skill LOCKED.')
+      devWarn('You are missing skillId:', deps[i], '// Skill LOCKED.')
       hasDeps = false
       break
     }
 
-    console.warn('Has skillId', deps[i], '? YES')
+    devWarn('Has skillId', deps[i], '? YES')
   }
   if (hasDeps) {
-    console.warn('ALL skills owned! Unlocking skill...')
+    devWarn('ALL skills owned! Unlocking skill...')
     return SkillLockStatus.UNLOCKED
   } else {
     return SkillLockStatus.LOCKED

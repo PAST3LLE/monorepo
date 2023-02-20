@@ -57,6 +57,7 @@ const METADATA = [
         id: '1-4000'
       },
       attributes: {
+        css: 'transform: scale(1.3);',
         tags: ['shortsleeve', 'heavy-cotton', 'oversized'],
         theme: { bg: '#2A1927', altBg: '#2C2C2C', color: '#1e1e1e' }
       }
@@ -170,6 +171,11 @@ const METADATA = [
         dependencies: [],
         shopifyId: '6758881984563',
         id: '3-4000'
+      },
+      attributes: {
+        css: 'transform: scale(1.3);',
+        tags: ['shortsleeve', 'heavy-cotton', 'oversized'],
+        theme: { bg: '#2A1927', altBg: '#2C2C2C', color: '#1e1e1e' }
       }
     },
     {
@@ -272,6 +278,11 @@ const METADATA = [
   //       shopifyId: '6758881984563',
   //       id: '5-4000',
   //     },
+  //     attributes: {
+  //      css: "transform: scale(1.3);",
+  //      tags: ['shortsleeve', 'heavy-cotton', 'oversized'],
+  //      theme: { bg: '#2A1927', altBg: '#2C2C2C', color: '#1e1e1e' }
+  //    }
   //   },
   //   {
   //     description: 'VIRGIL.LONGSLEEVE.OVERSIZED.HEAVY-COTTON.',
@@ -308,9 +319,12 @@ const METADATA = [
   //       shopifyId: 'SOME_SHOPIFY_ID',
   //       id: '6-1000',
   //     },
+  //     attributes: {
+  //      css: "transform: scale(1.3);",
+  //      tags: ['shortsleeve', 'heavy-cotton', 'oversized'],
+  //      theme: { bg: '#2A1927', altBg: '#2C2C2C', color: '#1e1e1e' }
+  //    }
   //   },
-  //   undefined,
-  //   undefined,
   //   {
   //     description: 'NIGHTMARE.HOODIE.OVERSIZED.HEAVY-COTTON.',
   //     image: 'ipfs://QmVpR9pRosyx6BePoyf2Vc9mK3CtnL2kni4eGSJcLYSRmP',
@@ -322,8 +336,7 @@ const METADATA = [
   //       id: '6-2000',
   //     },
   //   },
-  //   undefined,
-  //   undefined,
+
   // ],
   // COLLECTION 7
   // [
@@ -360,7 +373,7 @@ const METADATA = [
   //       id: '7-3000',
   //     },
   //   },
-  //   undefined,
+
   //   {
   //     description: 'FADEBLACK.TEE.OVERSIZED.HEAVY-COTTON.',
   //     image: 'ipfs://QmPTYa4M3dsPQiYDeDfsVu23EmcRx1gxYsX7sVzdwaFz64',
@@ -371,6 +384,11 @@ const METADATA = [
   //       shopifyId: '6758881984563',
   //       id: '7-4000',
   //     },
+  //      attributes: {
+  //        css: "transform: scale(1.3);",
+  //        tags: ['shortsleeve', 'heavy-cotton', 'oversized'],
+  //        theme: { bg: '#2A1927', altBg: '#2C2C2C', color: '#1e1e1e' }
+  //      }
   //   },
   //   {
   //     description: 'GHOSTWHITE.LONGSLEEVE.OVERSIZED.HEAVY-COTTON.',
@@ -397,8 +415,7 @@ const METADATA = [
   //       id: '8-1000',
   //     },
   //   },
-  //   undefined,
-  //   undefined,
+
   //   {
   //     description: 'SENTIENCE.HOODIE.OVERSIZED.HEAVY-COTTON.',
   //     image: 'ipfs://QmQoQRBM7JTfYHb2skR2UWxrvauiP7iLMrc2eyAvcVhb7e',

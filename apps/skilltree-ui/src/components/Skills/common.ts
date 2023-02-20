@@ -28,6 +28,7 @@ export const StyledSkillpoint = styled(StyledGridItem).attrs({
   isDependency: boolean
   isEmptySkill: boolean
   rarity: Rarity | undefined
+  metadataCss?: string
   css?: string
 }>`
   z-index: 1;
@@ -54,6 +55,13 @@ export const StyledSkillpoint = styled(StyledGridItem).attrs({
     cursor: not-allowed;
   }
 
+  ${({ metadataCss }) =>
+    metadataCss &&
+    `
+    img {
+      ${metadataCss}
+    }
+  `}
   ${({ css }) => css && css}
 `
 

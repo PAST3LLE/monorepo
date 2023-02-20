@@ -1,9 +1,10 @@
-export interface SkilltreeMetadata<P> {
+export interface SkilltreeMetadata<P, A = Record<any, any>> {
   name: string
   decimals?: number
   description: string
   image: string
   properties: P
+  attributes?: A
 }
 
 export interface SkillProps<T> extends SkilltreeMetadata<T> {
@@ -33,5 +34,11 @@ export interface SkillProperties extends BaseProperties {
   dependencies: SkillId /* | SkillDependencyObject */[]
 }
 
+export interface SkillAttributes {
+  css?: string
+  theme?: { bg: string; altBg: string; color: string }
+  tags?: string[]
+}
+
 export type CollectionMetadata = SkilltreeMetadata<CollectionProperties>
-export type SkillMetadata = SkilltreeMetadata<SkillProperties>
+export type SkillMetadata = SkilltreeMetadata<SkillProperties, SkillAttributes>

@@ -1,5 +1,6 @@
 import { CollectionMetadata, SkillMetadata } from './types'
 import { get64PaddedSkillId, ipfsToImageUri } from './utils'
+import { devWarn } from '@past3lle/utils'
 import { useCallback } from 'react'
 import { MetadataState } from 'state/Metadata'
 import { METADATA_URIS_MAP } from 'web3/constants/addresses'
@@ -32,7 +33,7 @@ export function useFetchMetadataCallback() {
 
         // skip if no uri
         if (!ipfsUri) {
-          console.warn('[useFetchMetadataCallback]::No skills metadata URI found at collectionId', collectionId)
+          devWarn('[useFetchMetadataCallback]::No skills metadata URI found at collectionId', collectionId)
           continue
         }
 
