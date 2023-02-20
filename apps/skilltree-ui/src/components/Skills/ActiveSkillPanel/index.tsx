@@ -2,12 +2,13 @@ import { Skillpoint } from '../Skillpoint'
 import { SkillpointPoint } from '../Skillpoint/SkillpointPoint'
 import { Rarity, SkillId } from '../types'
 import { Row, AutoRow, ExternalLink, Text, Column, RowProps, RowStart } from '@past3lle/components'
-import { BLACK, upToSmall } from '@past3lle/theme'
+import { BLACK, OFF_WHITE, upToSmall } from '@past3lle/theme'
 import { ThemedButtonExternalLink } from 'components/Button'
 import { SidePanel } from 'components/SidePanel'
 import { AutoColorHeader, BlackHeader, MonospaceText } from 'components/Text'
 import { BigNumber } from 'ethers'
 import { useGetActiveSkill } from 'hooks/skills'
+import { darken } from 'polished'
 import React, { useMemo } from 'react'
 import { MetadataState, useMetadataMapReadAtom } from 'state/Metadata'
 import { UserBalances, useUserBalancesReadAtom } from 'state/User'
@@ -61,7 +62,7 @@ export function ActiveSkillPanel() {
       onBack={() => setSkillState((state) => ({ ...state, active: state.active.slice(1) }))}
     >
       <ActiveSkillPanelContainer>
-        <RequiredDepsContainer>
+        <Column overflow="hidden">
           <RowStart letterSpacing="-2.6px" style={{ position: 'absolute', left: 0, top: 0, width: 'auto' }}>
             <AutoColorHeader
               bgColour={_getLockStatusColour(lockStatus, rarity)}
@@ -76,11 +77,12 @@ export function ActiveSkillPanel() {
             </AutoColorHeader>
             <BlackHeader
               width={'inherit'}
+              color={OFF_WHITE}
               fontWeight={500}
               fontSize={'2.5rem'}
               padding="0.25rem 2rem"
               borderRadius="0"
-              textShadow={`1px 1px 1px ${CUSTOM_THEME.rarity[rarity].backgroundColor}`}
+              textShadow={`1px 1px 1px ${darken(0.3, CUSTOM_THEME.rarity[rarity].backgroundColor)}`}
               display={'flex'}
               justifyContent="space-evenly"
               alignItems={'center'}
@@ -92,7 +94,7 @@ export function ActiveSkillPanel() {
               {rarity?.toLocaleUpperCase()} SKILL
             </BlackHeader>
           </RowStart>
-        </RequiredDepsContainer>
+        </Column>
         <Row justifyContent={'center'} margin="0">
           <Text.SubHeader fontSize={'2.5rem'} fontWeight={200}>
             {description}
@@ -116,7 +118,8 @@ export function ActiveSkillPanel() {
               padding: 0,
               backgroundColor: 'transparent',
               justifyContent: 'center',
-              disabled: isLocked
+              disabled: isLocked,
+              css: `img {border-radius: 10px;}`
             }}
           />
           <ThemedButtonExternalLink
@@ -128,7 +131,11 @@ export function ActiveSkillPanel() {
           </ThemedButtonExternalLink>
         </Row>
         {!isOwned && deps.length > 0 && (
-          <RequiredDepsContainer marginBottom={'2rem'} background="linear-gradient(90deg, black, transparent 80%)">
+          <RequiredDepsContainer
+            overflow={'visible'}
+            marginBottom={'2rem'}
+            background="linear-gradient(90deg, black, transparent 80%)"
+          >
             <BlackHeader fontSize={'2.5rem'} fontWeight={300} margin="0" padding="1rem 1rem 0.25rem 1rem">
               REQUIRED TO UNLOCK
             </BlackHeader>
@@ -163,9 +170,7 @@ export function ActiveSkillPanel() {
     </SidePanel>
   )
 }
-const RequiredDepsContainer = styled(Column)<{ borderRadius?: string; background?: string }>`
-  overflow: hidden;
-`
+const RequiredDepsContainer = styled(Column)<{ borderRadius?: string; background?: string }>``
 
 interface SkillsRowProps {
   deps: SkillId[]
@@ -175,7 +180,7 @@ interface SkillsRowProps {
 }
 function SkillsRow({ balances, deps, metadataMap, rowProps }: SkillsRowProps) {
   return (
-    <Row padding="1rem" gap="0 1.7rem" overflowX={'auto'} {...rowProps}>
+    <SkillsRowContainer padding="1rem" gap="0 1.7rem" overflowX={'auto'} {...rowProps}>
       <SkillpointPoint />
       <Row justifyContent={'center'} width="auto" minWidth={'2rem'} fontSize={'4rem'} fontWeight={100}>
         +
@@ -191,14 +196,30 @@ function SkillsRow({ balances, deps, metadataMap, rowProps }: SkillsRowProps) {
               title={skill.name}
               hasSkill={!BigNumber.from(balances?.[skillId] || 0).isZero()}
               metadata={skill}
+              css={`
+                box-shadow: unset;
+              `}
             />
           )
         )
       })}
-    </Row>
+    </SkillsRowContainer>
   )
 }
+const SkillsRowContainer = styled(Row)`
+  position: relative;
+  z-index: 1;
+  padding-right: 4rem;
 
+  > div#blur-div {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 6rem;
+    height: 100%;
+    z-index: 5;
+  }
+`
 const ActiveSkillPanelContainer = styled(Column)`
   height: 100%;
 
@@ -226,13 +247,18 @@ const ActiveSkillPanelContainer = styled(Column)`
 function _getSkillDescription(name: string | undefined, lockStatus: SkillLockStatus) {
   switch (lockStatus) {
     case SkillLockStatus.LOCKED:
-      return "You can't get this skill yet. Click and view required skill(s) below."
+      return "You can't get this skill yet. Click/view required skill(s) below."
     case SkillLockStatus.UNLOCKED:
-      return `Buy ${name || 'this skill'} and receive a free NFT SKILLPOINT giving you access to exclusive perks.`
-    case SkillLockStatus.OWNED:
-      return `Nice, you already own ${
+      return `Buy ${
         name || 'this skill'
-      }. See below for which later skills and events depend on this one to level-up. You can also head to the store to get new ones.`
+      } in the shop and receive a free skill + skillpoint giving you access to exclusive perks.`
+    case SkillLockStatus.OWNED:
+      return (
+        <>
+          Nice, you already own {name || 'this skill'}. <br />
+          What now? Head to the shop to get new pieces and earn more skills + skillpoints!
+        </>
+      )
     default:
       return 'Skill information missing. Please try again later.'
   }

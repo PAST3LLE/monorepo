@@ -1,6 +1,7 @@
 import { StyledSkillpoint } from '../common'
 import { Rarity, SkillMetadata } from '../types'
 import { getHash } from '../utils'
+import { RowCenter } from '@past3lle/components'
 import sprayBg from 'assets/png/spray.png'
 import { Vector } from 'components/Canvas/api/vector'
 import { GATEWAY_URI } from 'constants/ipfs'
@@ -73,7 +74,9 @@ export function Skillpoint({
       vector={vector}
       {...skillpointStyles}
     >
-      <img src={formattedUri} style={{ maxWidth: '100%' }} crossOrigin="anonymous" />
+      <RowCenter height="100%" borderRadius="5px" overflow={'hidden'}>
+        <img src={formattedUri} style={{ maxWidth: '100%' }} />
+      </RowCenter>
       {isCurrentSkillActive && <SprayBg />}
     </StyledSkillpoint>
   )

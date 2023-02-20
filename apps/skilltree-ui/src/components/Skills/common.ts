@@ -11,7 +11,7 @@ const StyledGridItem = styled(Row)<{
   width: ${SKILLPOINT_SIZES.width};
   min-width: ${SKILLPOINT_SIZES.width};
   height: ${SKILLPOINT_SIZES.height};
-  padding: 6px;
+  padding: 2px;
 
   border-radius: 3px;
 
@@ -19,7 +19,10 @@ const StyledGridItem = styled(Row)<{
   ${({ vector }) => vector && `transform: translate(${vector.X1}px,${vector.Y1}px);`}
 `
 
-export const StyledSkillpoint = styled(StyledGridItem).attrs({ minWidth: SKILLPOINT_SIZES.width })<{
+export const StyledSkillpoint = styled(StyledGridItem).attrs({
+  minWidth: SKILLPOINT_SIZES.width,
+  justifyContent: 'center'
+})<{
   dimSkill: boolean
   active: boolean
   isDependency: boolean
@@ -29,17 +32,17 @@ export const StyledSkillpoint = styled(StyledGridItem).attrs({ minWidth: SKILLPO
 }>`
   z-index: 1;
   cursor: pointer;
+  border-radius: 6px;
 
-  background-color: #000000ba;
+  background-color: ${({ rarity }) => rarity && getRarityColours(rarity).backgroundColor};
   box-shadow: ${({ rarity }) => rarity && `0px 0px ${getRarityColours(rarity).boxShadowColor}`};
   ${({ isDependency }) => isDependency && `box-shadow: 5px 5px 10px 0px #d5fb73b8, -5px -5px 10px 0px #00ff7fa8;`}
   ${({ dimSkill }) => dimSkill && `filter: brightness(0.25) grayscale(1);`}
-
+  
   ${({ isEmptySkill }) =>
     isEmptySkill &&
     `
     overflow: hidden;
-    border-radius: 6px;
     opacity: 0.76;
     padding: 0;
     box-shadow: 4px 4px 1px #00000075;

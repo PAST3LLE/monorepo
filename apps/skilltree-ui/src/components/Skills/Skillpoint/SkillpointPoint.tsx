@@ -7,7 +7,7 @@ export function SkillpointPoint() {
     <Skillpoint
       hasSkill
       metadata={SKILLPOINT_METADATA}
-      skillpointStyles={{ css: `overflow: hidden; > img { transform: scale(1.5) translateY(3px); }` }}
+      skillpointStyles={{ css: `overflow: hidden; img { transform: scale(1.5) translateY(3px); }` }}
     />
   )
 }
