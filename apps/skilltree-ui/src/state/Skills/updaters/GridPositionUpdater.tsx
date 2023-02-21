@@ -26,7 +26,7 @@ export function GridPositionUpdater() {
     const rows = highestRowCount
 
     const gridHeight = container.clientHeight - 30
-    const gridWidth = MINIMUM_BOARD_WIDTH > container.clientWidth ? MINIMUM_BOARD_WIDTH : container.clientWidth
+    const gridWidth = (MINIMUM_BOARD_WIDTH > container.clientWidth ? MINIMUM_BOARD_WIDTH : container.clientWidth) * 0.95
 
     // config
     const rowHeight = Math.round(gridHeight / rows)

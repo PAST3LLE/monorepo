@@ -1,7 +1,7 @@
 import { Web3InfoContainer } from '../common'
 import { ExternalLink, Header as PstlHeader, Pastellecon, Row } from '@past3lle/components'
 import { upToSmall } from '@past3lle/theme'
-import MENU_BUTTON from 'assets/png/menu-button.png'
+import MENU_BUTTON from 'assets/png/icons/icons8-treasure-chest-90-green.png'
 import { BlackHeader, BlackBoldItalic, CursiveHeader } from 'components/Text'
 import { SHOP_URL } from 'constants/urls'
 import React from 'react'
