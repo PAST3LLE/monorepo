@@ -4,7 +4,6 @@ import ACCOUNT from 'assets/png/icons/icons8-footman-100.png'
 import TREASURE_CHEST_GREEN from 'assets/png/icons/icons8-treasure-chest-90-green.png'
 import { SidePanel } from 'components/SidePanel'
 import { Skillpoint } from 'components/Skills/Skillpoint'
-// import { StyledSkillpoint } from 'components/Skills/common'
 import { CursiveMonoHeader, MonospaceText } from 'components/Text'
 import { UserConnectionStats } from 'components/UserWeb3ConnectionStats'
 import { BigNumber } from 'ethers'
@@ -34,7 +33,7 @@ export function UserStatsPanel() {
   }, [balances, vectors])
 
   return (
-    <SidePanel header="STATS & SKILLS">
+    <SidePanel header="INVENTORY">
       <UserStatsPanelContainer>
         <Row padding="1rem 2rem" gap="0 1rem" backgroundColor={CUSTOM_THEME.mainBg}>
           <CursiveMonoHeader

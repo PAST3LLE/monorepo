@@ -1,9 +1,10 @@
 import { Web3InfoContainer } from '../common'
-import { Header as PstlHeader, Pastellecon, Row } from '@past3lle/components'
+import { ExternalLink, Header as PstlHeader, Pastellecon, Row } from '@past3lle/components'
 import { upToSmall } from '@past3lle/theme'
+import MENU_BUTTON from 'assets/png/menu-button.png'
 import { BlackHeader, BlackBoldItalic, CursiveHeader } from 'components/Text'
+import { SHOP_URL } from 'constants/urls'
 import React from 'react'
-import { ExternalLink } from 'react-feather'
 import styled from 'styled-components/macro'
 import { MAIN_BG } from 'theme/constants'
 
@@ -44,7 +45,7 @@ export const CheckoutForge = ({ className }: { className?: string }) => (
   </Row>
 )
 
-export const HeaderContainer = styled(PstlHeader)`
+export const HeaderContainer = styled(PstlHeader)<{ isOpen?: boolean }>`
   min-height: 8rem;
   height: auto;
   padding: 1.5rem 2.5rem 0;
@@ -58,10 +59,16 @@ export const HeaderContainer = styled(PstlHeader)`
     }
     > ${Web3InfoContainer} {
       display: flex;
+      > ${Row} {
+        margin: 0.5rem;
+        width: auto;
+        height: 52px;
+        gap: 0 2rem;
+      }
     }
   }
 
-  ${upToSmall`
+  ${({ isOpen }) => upToSmall`
     min-height: 6rem;
     padding: 0;
 
@@ -90,7 +97,16 @@ export const HeaderContainer = styled(PstlHeader)`
   }
 
     > ${Row} > ${Web3InfoContainer} {
-      display: none;
+      // display: none;
+      width: 45px;
+      height: 45px;
+      margin-right: 1rem;
+      background: url(${MENU_BUTTON}) center/cover no-repeat;
+
+      > ${Row} {
+        ${!isOpen && 'display: none;'}
+        overflow: hidden;
+      }
     }
   `}
 `

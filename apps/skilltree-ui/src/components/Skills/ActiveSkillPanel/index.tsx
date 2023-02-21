@@ -64,7 +64,7 @@ export function ActiveSkillPanel() {
     >
       <ActiveSkillPanelContainer>
         <Column overflow="hidden">
-          <RowStart letterSpacing="-2.6px" style={{ position: 'absolute', left: 0, top: 0, width: 'auto' }}>
+          <RowStart letterSpacing="-2.6px" style={{ position: 'absolute', left: 0, top: -1, width: 'auto' }}>
             <SkillStatusLabel
               bgColour={_getLockStatusColour(lockStatus, rarity)}
               fgColour={BLACK}

@@ -15,15 +15,6 @@ export const SkillsRowContainer = styled(Row)`
   position: relative;
   z-index: 1;
   padding-right: 4rem;
-
-  > div#blur-div {
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 6rem;
-    height: 100%;
-    z-index: 5;
-  }
 `
 export const ActiveSkillPanelContainer = styled(Column)`
   height: 100%;
