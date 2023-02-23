@@ -213,7 +213,7 @@ export function CookieBanner(props: CookieProps) {
       >
         <CookiesText id="checkbox_essential">
           ESSENTIALS
-          <CookieCheckbox value="ESSENTIALS" checked disabled />
+          <CookieCheckbox value="ESSENTIALS" defaultChecked checked disabled />
         </CookiesText>
         {props.onAcceptAnalytics && (
           <CookiesText>
@@ -222,15 +222,15 @@ export function CookieBanner(props: CookieProps) {
           </CookiesText>
         )}
         {props.onAcceptMarketing && (
-          <CookiesText onClick={callbacks.marketing}>
+          <CookiesText>
             MARKETING
-            <CookieCheckbox value="MARKETING" checked={cookieState.marketing} />
+            <CookieCheckbox value="MARKETING" checked={cookieState.marketing} onChange={callbacks.marketing} />
           </CookiesText>
         )}
         {props.onAcceptAdvertising && (
-          <CookiesText onClick={callbacks.advertising}>
+          <CookiesText>
             ADVERTISING
-            <CookieCheckbox value="ADVERTISING" checked={cookieState.advertising} />
+            <CookieCheckbox value="ADVERTISING" checked={cookieState.advertising} onChange={callbacks.advertising} />
           </CookiesText>
         )}
       </CheckboxRow>
