@@ -1,10 +1,7 @@
 import { Z_INDICES } from '@past3lle/constants'
 import { fromMedium } from '@past3lle/theme'
-import { useGesture } from '@use-gesture/react'
-import clamp from 'lodash.clamp'
-import React, { ReactNode, useCallback, useRef, useState } from 'react'
+import React, { ReactNode, useMemo, useState } from 'react'
 import { X } from 'react-feather'
-import { animated, useSpring } from 'react-spring'
 import styled from 'styled-components'
 
 import { Button, ButtonVariations } from '../Button'
@@ -23,23 +20,29 @@ const CookieSubDescription = styled(LayoutText.Black)`
 `
 
 const CheckboxRow = styled(Row)``
-const CookieFullText = styled(CookieSubDescription).attrs((props) => ({
-  backgroundColor: props.theme.purple1
-}))``
+const CookieFullText = styled(CookieSubDescription)``
 const CookieCheckbox = styled.input.attrs((props) => ({
   type: 'checkbox',
   ...props
 }))`
+  cursor: pointer;
   z-index: ${Z_INDICES.BEHIND};
 `
 const CookiesText = styled(CookieSubDescription).attrs({
   margin: 0,
   backgroundColor: 'transparent'
 })`
-  gap: 0.5rem;
-  cursor: pointer;
+  gap: 1rem;
 `
-const CookieContainer = styled(animated.div)<{ customCss?: string }>`
+interface CookieStyles {
+  $bg?: string
+  $bgAlt?: string
+  $checkbox?: string
+  $cta?: string
+  $text?: string
+  $customCss?: string
+}
+const CookieContainer = styled.div<CookieStyles>`
   display: grid;
   grid-template-columns: auto;
   position: absolute;
@@ -47,7 +50,7 @@ const CookieContainer = styled(animated.div)<{ customCss?: string }>`
   left: 0;
   width: 100%;
   padding: 2rem;
-  background-color: ${({ theme }) => theme.blackOpaque1};
+  background-color: ${({ theme, $bg = theme.blackOpaque1 }) => $bg};
   z-index: ${Z_INDICES.COOKIE_BANNER};
   touch-action: none;
   height: 80vh;
@@ -55,16 +58,40 @@ const CookieContainer = styled(animated.div)<{ customCss?: string }>`
   overflow: auto;
 
   input[type='checkbox'] {
-    width: 2rem;
-    height: 2rem;
+    z-index: 999;
+    position: relative;
+
+    appearance: none;
+    background-color: ${({ theme, $text = theme.offWhite }) => $text};
+    margin: 0;
+    font: inherit;
+    color: currentColor;
+    width: 1.15em;
+    height: 1.15em;
+    border: 0.15em solid currentColor;
+    border-radius: 0.15em;
+    transform: translateY(-0.075em);
+
+    display: grid;
+    place-content: center;
+
+    &::before {
+      content: '';
+      width: 0.85em;
+      height: 0.85em;
+      transform: scale(0);
+      transition: 120ms transform ease-in-out;
+      box-shadow: ${({ $checkbox = '#713de4' }) => `inset 1em 1em ${$checkbox}`};
+    }
+
+    &:checked::before {
+      transform: scale(1);
+    }
   }
 
   > * {
     padding: 1rem 0;
-  }
-
-  > ${CookieFullText} {
-    padding: 1rem 0;
+    color: ${({ theme, $text = theme.offWhite }) => $text};
   }
 
   ${CookieSubHeader} {
@@ -73,7 +100,10 @@ const CookieContainer = styled(animated.div)<{ customCss?: string }>`
 
   ${CookiesText}, ${CookieSubDescription} {
     font-size: 2rem;
-    text-align: center;
+  }
+
+  ${CookieFullText} {
+    background-color: ${({ theme, $bgAlt = theme.purple1 }) => $bgAlt};
   }
 
   ${CheckboxRow} {
@@ -107,21 +137,19 @@ const CookieContainer = styled(animated.div)<{ customCss?: string }>`
     }
   `}
 
-  ${({ customCss }) => customCss && customCss}
+  ${({ $customCss }) => $customCss && $customCss}
 `
 
 export interface CookieProps {
   storageKey: string
   message: string
   fullText: ReactNode
-  options: {
-    showMarketing: boolean
-    showAnalytics: boolean
-  }
   css?: string
-  onAcceptParameters?: () => void
-  onAcceptStatistic?: () => void
+  theme?: CookieStyles
+  onSaveAndClose?: () => void
+  onAcceptAnalytics?: () => void
   onAcceptMarketing?: () => void
+  onAcceptAdvertising?: () => void
 }
 
 export function CookieBanner(props: CookieProps) {
@@ -130,54 +158,49 @@ export function CookieBanner(props: CookieProps) {
 
   const [cookieState, setCookieState] = useState({
     interacted: false,
-    statistical: false,
-    marketing: false
+    analytics: false,
+    marketing: false,
+    advertising: false
   })
 
-  const [spring, api] = useSpring(() => ({ y: 0, opacity: 1 }))
-  const ref = useRef<HTMLElement | null>(null)
-
-  const onDismiss = useCallback(() => {
-    setBannerOpen(false)
-  }, [])
-
-  const onSubmit = useCallback(() => {
-    setCookieState((state) => {
-      const next = { ...state, interacted: true }
-      localStorage.setItem(props.storageKey, JSON.stringify(next))
-      return next
-    })
-    onDismiss()
-  }, [onDismiss, props.storageKey])
-
-  useGesture(
-    {
-      onDrag: ({ movement: [, my], offset: [, oy], velocity: [, vy], cancel }) => {
-        if (my) {
-          if (Math.abs(my) > 150 || vy > 0.25) {
-            cancel()
-            onDismiss()
-          }
-
-          api.start({
-            y: -oy,
-            opacity: clamp(Math.abs((1 / my) * 50), 0, 1)
-          })
-        }
+  const callbacks = useMemo(
+    () => ({
+      analytics: () => setCookieState((state) => ({ ...state, analytics: !state.analytics })),
+      marketing: () => setCookieState((state) => ({ ...state, marketing: !state.marketing })),
+      advertising: () => setCookieState((state) => ({ ...state, advertising: !state.advertising })),
+      onDismiss: () => setBannerOpen(false),
+      onSaveAndClose: () => {
+        setCookieState((state) => {
+          const next = { ...state, interacted: true }
+          localStorage.setItem(props.storageKey, JSON.stringify(next))
+          return next
+        })
+        // Close modal
+        callbacks.onDismiss()
+        // Call cookie actions callbacks
+        cookieState.analytics && props.onAcceptAnalytics?.()
+        cookieState.marketing && props.onAcceptMarketing?.()
+        cookieState.advertising && props.onAcceptAdvertising?.()
+        props.onSaveAndClose?.()
       }
-    },
-    { target: ref }
+    }),
+    [cookieState.advertising, cookieState.analytics, cookieState.marketing, props]
   )
 
   return isOpen ? (
-    <CookieContainer style={spring} ref={ref as any} customCss={props.css}>
-      <Row width="100%" justifyContent={'space-between'} margin="0" padding="0">
+    <CookieContainer
+      $bg={props?.theme?.$bg}
+      $bgAlt={props?.theme?.$bgAlt}
+      $text={props?.theme?.$text}
+      $customCss={props.css}
+    >
+      <Row height="4rem" width="100%" justifyContent={'space-between'} margin="0" padding="0">
         <CookieSubHeader padding={0} margin={0} fontWeight={500}>
           {props.message}
         </CookieSubHeader>
-        <X onClick={onDismiss} cursor="pointer" />
+        <X size={32} onClick={callbacks.onSaveAndClose} cursor="pointer" color={props?.theme?.$text} />
       </Row>
-      <CookieFullText margin="0" padding="0" fontWeight={100} overflow="auto" alignItems="start">
+      <CookieFullText margin="0" padding="1rem 2rem" fontWeight={300} overflow="auto" alignItems="center">
         {props.fullText}
       </CookieFullText>
       <CheckboxRow
@@ -190,22 +213,34 @@ export function CookieBanner(props: CookieProps) {
       >
         <CookiesText id="checkbox_essential">
           ESSENTIALS
-          <CookieCheckbox checked disabled />
+          <CookieCheckbox value="ESSENTIALS" checked disabled />
         </CookiesText>
-        {props.options.showAnalytics && (
-          <CookiesText onClick={() => setCookieState((state) => ({ ...state, statistical: !state.statistical }))}>
+        {props.onAcceptAnalytics && (
+          <CookiesText>
             ANALYTICS
-            <CookieCheckbox checked={cookieState.statistical} />
+            <CookieCheckbox value="ANALYTICS" checked={cookieState.analytics} onChange={callbacks.analytics} />
           </CookiesText>
         )}
-        {props.options.showMarketing && (
-          <CookiesText onClick={() => setCookieState((state) => ({ ...state, marketing: !state.marketing }))}>
+        {props.onAcceptMarketing && (
+          <CookiesText onClick={callbacks.marketing}>
             MARKETING
-            <CookieCheckbox checked={cookieState.marketing} />
+            <CookieCheckbox value="MARKETING" checked={cookieState.marketing} />
+          </CookiesText>
+        )}
+        {props.onAcceptAdvertising && (
+          <CookiesText onClick={callbacks.advertising}>
+            ADVERTISING
+            <CookieCheckbox value="ADVERTISING" checked={cookieState.advertising} />
           </CookiesText>
         )}
       </CheckboxRow>
-      <Button variant={ButtonVariations.SECONDARY} onClick={onSubmit} margin="0" padding="0">
+      <Button
+        variant={ButtonVariations.SECONDARY}
+        backgroundColor={props?.theme?.$cta}
+        onClick={callbacks.onSaveAndClose}
+        margin="0"
+        padding="0"
+      >
         <CookiesText justifyContent={'center'} padding="0.2rem">
           SAVE AND CLOSE
         </CookiesText>
