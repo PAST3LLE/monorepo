@@ -1,144 +1,10 @@
-import { Z_INDICES } from '@past3lle/constants'
-import { fromMedium } from '@past3lle/theme'
 import React, { ReactNode, useMemo, useState } from 'react'
 import { X } from 'react-feather'
-import styled from 'styled-components'
 
 import { Button, ButtonVariations } from '../Button'
-import { Row } from '../Layout'
-import { Text as LayoutText } from '../Text'
-
-const CookieSubHeader = styled(LayoutText.SubHeader)`
-  color: ${({ theme }) => theme.products.aside.textColor};
-`
-const CookieSubDescription = styled(LayoutText.Black)`
-  color: ${({ theme }) => theme.products.aside.textColor};
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 1rem;
-`
-
-const CheckboxRow = styled(Row)``
-const CookieFullText = styled(CookieSubDescription)``
-const CookieCheckbox = styled.input.attrs((props) => ({
-  type: 'checkbox',
-  ...props
-}))`
-  cursor: pointer;
-  z-index: ${Z_INDICES.BEHIND};
-`
-const CookiesText = styled(CookieSubDescription).attrs({
-  margin: 0,
-  backgroundColor: 'transparent'
-})`
-  gap: 1rem;
-`
-interface CookieStyles {
-  $bg?: string
-  $bgAlt?: string
-  $checkbox?: string
-  $cta?: string
-  $text?: string
-  $customCss?: string
-}
-const CookieContainer = styled.div<CookieStyles>`
-  display: grid;
-  grid-template-columns: auto;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  padding: 2rem;
-  background-color: ${({ theme, $bg = theme.blackOpaque1 }) => $bg};
-  z-index: ${Z_INDICES.COOKIE_BANNER};
-  touch-action: none;
-  height: 80vh;
-
-  overflow: auto;
-
-  input[type='checkbox'] {
-    z-index: 999;
-    position: relative;
-
-    appearance: none;
-    background-color: ${({ theme, $text = theme.offWhite }) => $text};
-    margin: 0;
-    font: inherit;
-    color: currentColor;
-    width: 1.15em;
-    height: 1.15em;
-    border: 0.15em solid currentColor;
-    border-radius: 0.15em;
-    transform: translateY(-0.075em);
-
-    display: grid;
-    place-content: center;
-
-    &::before {
-      content: '';
-      width: 0.85em;
-      height: 0.85em;
-      transform: scale(0);
-      transition: 120ms transform ease-in-out;
-      box-shadow: ${({ $checkbox = '#713de4' }) => `inset 1em 1em ${$checkbox}`};
-    }
-
-    &:checked::before {
-      transform: scale(1);
-    }
-  }
-
-  > * {
-    padding: 1rem 0;
-    color: ${({ theme, $text = theme.offWhite }) => $text};
-  }
-
-  ${CookieSubHeader} {
-    font-size: 2.8rem;
-  }
-
-  ${CookiesText}, ${CookieSubDescription} {
-    font-size: 2rem;
-  }
-
-  ${CookieFullText} {
-    background-color: ${({ theme, $bgAlt = theme.purple1 }) => $bgAlt};
-  }
-
-  ${CheckboxRow} {
-    max-width: min-content;
-    justify-self: center;
-    padding: 4rem;
-
-    > ${CookiesText} {
-      flex: 0 1 22rem;
-      justify-content: space-between;
-
-      &#checkbox_essential {
-        pointer-events: none;
-      }
-    }
-  }
-
-  ${fromMedium`
-    height: 50vh;
-
-    > ${CookieFullText} {
-      font-size: 1.6vw;
-    }
-
-    ${CookieSubHeader} {
-      font-size: 2.2vw;
-    }
-
-    ${CookiesText} {
-      font-size: 1.2vw;
-    }
-  `}
-
-  ${({ $customCss }) => $customCss && $customCss}
-`
+import { ColumnCenter, Row } from '../Layout'
+import * as styleds from './styleds'
+import { CookieStyles } from './types'
 
 export interface CookieProps {
   storageKey: string
@@ -188,63 +54,84 @@ export function CookieBanner(props: CookieProps) {
   )
 
   return isOpen ? (
-    <CookieContainer
+    <styleds.CookieContainer
       $bg={props?.theme?.$bg}
       $bgAlt={props?.theme?.$bgAlt}
       $text={props?.theme?.$text}
       $customCss={props.css}
     >
-      <Row height="4rem" width="100%" justifyContent={'space-between'} margin="0" padding="0">
-        <CookieSubHeader padding={0} margin={0} fontWeight={500}>
-          {props.message}
-        </CookieSubHeader>
-        <X size={32} onClick={callbacks.onSaveAndClose} cursor="pointer" color={props?.theme?.$text} />
-      </Row>
-      <CookieFullText margin="0" padding="1rem 2rem" fontWeight={300} overflow="auto" alignItems="center">
-        {props.fullText}
-      </CookieFullText>
-      <CheckboxRow
-        gap="1rem"
-        flexWrap={'wrap'}
-        alignItems="center"
-        justifyContent={'space-evenly'}
-        margin="0"
-        padding="0"
-      >
-        <CookiesText id="checkbox_essential">
-          ESSENTIALS
-          <CookieCheckbox value="ESSENTIALS" defaultChecked disabled />
-        </CookiesText>
-        {props.onAcceptAnalytics && (
-          <CookiesText>
-            ANALYTICS
-            <CookieCheckbox value="ANALYTICS" checked={cookieState.analytics} onChange={callbacks.analytics} />
-          </CookiesText>
-        )}
-        {props.onAcceptMarketing && (
-          <CookiesText>
-            MARKETING
-            <CookieCheckbox value="MARKETING" checked={cookieState.marketing} onChange={callbacks.marketing} />
-          </CookiesText>
-        )}
-        {props.onAcceptAdvertising && (
-          <CookiesText>
-            ADVERTISING
-            <CookieCheckbox value="ADVERTISING" checked={cookieState.advertising} onChange={callbacks.advertising} />
-          </CookiesText>
-        )}
-      </CheckboxRow>
-      <Button
-        variant={ButtonVariations.SECONDARY}
-        backgroundColor={props?.theme?.$cta}
-        onClick={callbacks.onSaveAndClose}
-        margin="0"
-        padding="0"
-      >
-        <CookiesText justifyContent={'center'} padding="0.2rem">
-          SAVE AND CLOSE
-        </CookiesText>
-      </Button>
-    </CookieContainer>
+      <ColumnCenter>
+        <Row height={40} width="100%" justifyContent="space-between" margin="0" padding="0">
+          <styleds.CookieSubHeader padding={0} margin={0} fontWeight={500}>
+            {props.message}
+          </styleds.CookieSubHeader>
+          <X size={32} onClick={callbacks.onSaveAndClose} cursor="pointer" color={props?.theme?.$text} />
+        </Row>
+        <styleds.CookieFullText
+          margin="0"
+          padding={40}
+          fontWeight={300}
+          overflow="auto"
+          alignItems="start"
+          justifyContent="center"
+        >
+          {props.fullText}
+        </styleds.CookieFullText>
+        <styleds.CheckboxRow
+          width="75%"
+          gap="10px 30px"
+          flexWrap="wrap"
+          alignItems="center"
+          justifyContent="center"
+          margin="0"
+        >
+          <styleds.CookiesText id="checkbox_essential">
+            ESSENTIALS
+            <styleds.CookieCheckbox value="ESSENTIALS" defaultChecked disabled />
+          </styleds.CookiesText>
+          {props.onAcceptAnalytics && (
+            <styleds.CookiesText>
+              ANALYTICS
+              <styleds.CookieCheckbox
+                value="ANALYTICS"
+                checked={cookieState.analytics}
+                onChange={callbacks.analytics}
+              />
+            </styleds.CookiesText>
+          )}
+          {props.onAcceptMarketing && (
+            <styleds.CookiesText>
+              MARKETING
+              <styleds.CookieCheckbox
+                value="MARKETING"
+                checked={cookieState.marketing}
+                onChange={callbacks.marketing}
+              />
+            </styleds.CookiesText>
+          )}
+          {props.onAcceptAdvertising && (
+            <styleds.CookiesText>
+              ADVERTISING
+              <styleds.CookieCheckbox
+                value="ADVERTISING"
+                checked={cookieState.advertising}
+                onChange={callbacks.advertising}
+              />
+            </styleds.CookiesText>
+          )}
+        </styleds.CheckboxRow>
+        <Button
+          variant={ButtonVariations.SECONDARY}
+          backgroundColor={props?.theme?.$cta}
+          onClick={callbacks.onSaveAndClose}
+          margin="0"
+          padding="20px 40px"
+        >
+          <styleds.CookiesText justifyContent={'center'} padding="0.2rem">
+            SAVE AND CLOSE
+          </styleds.CookiesText>
+        </Button>
+      </ColumnCenter>
+    </styleds.CookieContainer>
   ) : null
 }
