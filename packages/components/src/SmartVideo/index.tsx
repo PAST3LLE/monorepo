@@ -26,6 +26,8 @@ export type SmartVideoProps = {
   videoDelay?: boolean
   autoPlayOptions?: AutoPlayOptions
   ctaOverlayProps: CTAOverlayProps
+  onResize?: React.VideoHTMLAttributes<HTMLVideoElement>['onResize'] | undefined
+  onResizeCapture?: React.VideoHTMLAttributes<HTMLVideoElement>['onResizeCapture'] | undefined
 } & WithContainer &
   BoxProps
 

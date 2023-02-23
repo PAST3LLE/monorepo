@@ -2,7 +2,7 @@ import { Z_INDICES } from '@past3lle/constants'
 import { fromMedium } from '@past3lle/theme'
 import { useGesture } from '@use-gesture/react'
 import clamp from 'lodash.clamp'
-import React, { useCallback, useRef, useState } from 'react'
+import React, { ReactNode, useCallback, useRef, useState } from 'react'
 import { X } from 'react-feather'
 import { animated, useSpring } from 'react-spring'
 import styled from 'styled-components'
@@ -39,7 +39,7 @@ const CookiesText = styled(CookieSubDescription).attrs({
   gap: 0.5rem;
   cursor: pointer;
 `
-const CookieContainer = styled(animated.div)`
+const CookieContainer = styled(animated.div)<{ customCss?: string }>`
   display: grid;
   grid-template-columns: auto;
   position: absolute;
@@ -76,22 +76,23 @@ const CookieContainer = styled(animated.div)`
     text-align: center;
   }
 
-  ${CheckboxRow} > ${CookiesText} {
-    flex: 0 1 22rem;
-    justify-content: space-between;
+  ${CheckboxRow} {
+    max-width: min-content;
+    justify-self: center;
+    padding: 4rem;
 
-    &#checkbox_essential {
-      pointer-events: none;
+    > ${CookiesText} {
+      flex: 0 1 22rem;
+      justify-content: space-between;
+
+      &#checkbox_essential {
+        pointer-events: none;
+      }
     }
   }
 
   ${fromMedium`
     height: 50vh;
-
-    > ${CheckboxRow} {
-      max-width: 55%;
-      justify-self: center;
-    }
 
     > ${CookieFullText} {
       font-size: 1.6vw;
@@ -105,11 +106,19 @@ const CookieContainer = styled(animated.div)`
       font-size: 1.2vw;
     }
   `}
+
+  ${({ customCss }) => customCss && customCss}
 `
 
 export interface CookieProps {
   storageKey: string
   message: string
+  fullText: ReactNode
+  options: {
+    showMarketing: boolean
+    showAnalytics: boolean
+  }
+  css?: string
   onAcceptParameters?: () => void
   onAcceptStatistic?: () => void
   onAcceptMarketing?: () => void
@@ -161,7 +170,7 @@ export function CookieBanner(props: CookieProps) {
   )
 
   return isOpen ? (
-    <CookieContainer style={spring} ref={ref as any}>
+    <CookieContainer style={spring} ref={ref as any} customCss={props.css}>
       <Row width="100%" justifyContent={'space-between'} margin="0" padding="0">
         <CookieSubHeader padding={0} margin={0} fontWeight={500}>
           {props.message}
@@ -169,10 +178,7 @@ export function CookieBanner(props: CookieProps) {
         <X onClick={onDismiss} cursor="pointer" />
       </Row>
       <CookieFullText margin="0" padding="0" fontWeight={100} overflow="auto" alignItems="start">
-        C-C-C-COOKIES? C-C-C-COOKIES? C-C-C-COOKIES? C-C-C-COOKIES? C-C-C-COOKIES? C-C-C-COOKIES? C-C-C-COOKIES?
-        C-C-C-COOKIES? C-C-C-COOKIES? C-C-C-COOKIES? C-C-C-COOKIES? C-C-C-COOKIES? C-C-C-COOKIES? C-C-C-COOKIES?
-        C-C-C-COOKIES? C-C-C-COOKIES? C-C-C-COOKIES? C-C-C-COOKIES? C-C-C-COOKIES? C-C-C-COOKIES? C-C-C-COOKIES?
-        C-C-C-COOKIES? C-C-C-COOKIES? C-C-C-COOKIES? C-C-C-COOKIES? C-C-C-COOKIES? C-C-C-COOKIES? C-C-C-COOKIES?
+        {props.fullText}
       </CookieFullText>
       <CheckboxRow
         gap="1rem"
@@ -186,14 +192,18 @@ export function CookieBanner(props: CookieProps) {
           ESSENTIALS
           <CookieCheckbox checked disabled />
         </CookiesText>
-        <CookiesText onClick={() => setCookieState((state) => ({ ...state, statistical: !state.statistical }))}>
-          STATESTICAL
-          <CookieCheckbox checked={cookieState.statistical} />
-        </CookiesText>
-        <CookiesText onClick={() => setCookieState((state) => ({ ...state, marketing: !state.marketing }))}>
-          MARKETING
-          <CookieCheckbox checked={cookieState.marketing} />
-        </CookiesText>
+        {props.options.showAnalytics && (
+          <CookiesText onClick={() => setCookieState((state) => ({ ...state, statistical: !state.statistical }))}>
+            ANALYTICS
+            <CookieCheckbox checked={cookieState.statistical} />
+          </CookiesText>
+        )}
+        {props.options.showMarketing && (
+          <CookiesText onClick={() => setCookieState((state) => ({ ...state, marketing: !state.marketing }))}>
+            MARKETING
+            <CookieCheckbox checked={cookieState.marketing} />
+          </CookiesText>
+        )}
       </CheckboxRow>
       <Button variant={ButtonVariations.SECONDARY} onClick={onSubmit} margin="0" padding="0">
         <CookiesText justifyContent={'center'} padding="0.2rem">
