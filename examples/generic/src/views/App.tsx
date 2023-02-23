@@ -70,8 +70,19 @@ const App = () => {
       </PstlFooter>
       <CookieBanner
         storageKey={process.env.REACT_APP_PASTELLE_COOKIE_SETTINGS || 'PASTELLE_COOKIE_SETTINGS'}
-        message={'PASTELLE COOKIE SETTINGS'}
-        fullText="LOREM IPSUM SUMMIN SUMMIN THERE'S ALWAYS SOMETHING ABOUT COOKIES, GDPR, APPROVE, BLAH BLAH"
+        message={'COOKIES?'}
+        fullText={
+          <div>
+            <p>
+              WE REALLY ONLY HAVE OPT-IN <strong>ANALYTICS</strong> COOKIES FOR 3 REASONS:
+            </p>
+            <div style={{ marginLeft: '2rem' }}>
+              <p>1. See which of our items are most popular</p>
+              <p>2. Assess which parts of our site aren&apos;t working well and/or where you guys are getting stuck</p>
+              <p>3. Get a sense for if you guys like the showcase video option and other new features</p>
+            </div>
+          </div>
+        }
         onAcceptAnalytics={() => console.warn('ANALYTICS COOKIES')}
         onSaveAndClose={() => console.warn('SAVING SETTINGS AND CLOSING')}
       />
