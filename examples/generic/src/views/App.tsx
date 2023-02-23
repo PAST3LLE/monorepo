@@ -5,6 +5,7 @@ import { ThemeModes } from '@past3lle/theme'
 import * as React from 'react'
 import { useTheme } from 'styled-components'
 
+import { CookieBanner } from '../../../../packages/components/src/Cookies'
 import { PstlFooter, PstlHeader, PstlMain, PstlNav } from '../components/Layout'
 
 const App = () => {
@@ -67,6 +68,13 @@ const App = () => {
           <li>Item 4</li>
         </ul>
       </PstlFooter>
+      <CookieBanner
+        storageKey={process.env.REACT_APP_PASTELLE_COOKIE_SETTINGS || 'PASTELLE_COOKIE_SETTINGS'}
+        message={'PASTELLE COOKIE SETTINGS'}
+        fullText="LOREM IPSUM SUMMIN SUMMIN THERE'S ALWAYS SOMETHING ABOUT COOKIES, GDPR, APPROVE, BLAH BLAH"
+        onAcceptAnalytics={() => console.warn('ANALYTICS COOKIES')}
+        onSaveAndClose={() => console.warn('SAVING SETTINGS AND CLOSING')}
+      />
     </>
   )
 }
