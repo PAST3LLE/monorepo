@@ -213,7 +213,7 @@ export function CookieBanner(props: CookieProps) {
       >
         <CookiesText id="checkbox_essential">
           ESSENTIALS
-          <CookieCheckbox value="ESSENTIALS" defaultChecked checked disabled />
+          <CookieCheckbox value="ESSENTIALS" defaultChecked disabled />
         </CookiesText>
         {props.onAcceptAnalytics && (
           <CookiesText>
