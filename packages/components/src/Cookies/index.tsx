@@ -40,16 +40,19 @@ export function CookieBanner(props: CookieProps) {
       onSaveAndClose: () => {
         setCookieState((state) => {
           const next = { ...state, interacted: true }
+
           localStorage.setItem(props.storageKey, JSON.stringify(next))
+          // Call cookie actions callbacks
+          cookieState.analytics && props.onAcceptAnalytics?.(next)
+          cookieState.marketing && props.onAcceptMarketing?.(next)
+          cookieState.advertising && props.onAcceptAdvertising?.(next)
+          props.onSaveAndClose?.(next)
+
           return next
         })
+
         // Close modal
         callbacks.onDismiss()
-        // Call cookie actions callbacks
-        cookieState.analytics && props.onAcceptAnalytics?.(cookieState)
-        cookieState.marketing && props.onAcceptMarketing?.(cookieState)
-        cookieState.advertising && props.onAcceptAdvertising?.(cookieState)
-        props.onSaveAndClose?.(cookieState)
       }
     }),
     [cookieState, props]
