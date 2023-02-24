@@ -6,28 +6,30 @@ import { ColumnCenter, Row } from '../Layout'
 import * as styleds from './styleds'
 import { CookieStyles } from './types'
 
+const DEFAULT_COOKIE_STATE = {
+  interacted: false,
+  analytics: false,
+  marketing: false,
+  advertising: false
+}
+type CookieState = typeof DEFAULT_COOKIE_STATE
 export interface CookieProps {
   storageKey: string
   message: string
   fullText: ReactNode
   css?: string
   theme?: CookieStyles
-  onSaveAndClose?: () => void
-  onAcceptAnalytics?: () => void
-  onAcceptMarketing?: () => void
-  onAcceptAdvertising?: () => void
+  onSaveAndClose?: (cookieState: CookieState) => void
+  onAcceptAnalytics?: (cookieState: CookieState) => void
+  onAcceptMarketing?: (cookieState: CookieState) => void
+  onAcceptAdvertising?: (cookieState: CookieState) => void
 }
 
 export function CookieBanner(props: CookieProps) {
   const storage = localStorage.getItem(props.storageKey)
   const [isOpen, setBannerOpen] = useState(storage === null || !JSON.parse(storage).interacted)
 
-  const [cookieState, setCookieState] = useState({
-    interacted: false,
-    analytics: false,
-    marketing: false,
-    advertising: false
-  })
+  const [cookieState, setCookieState] = useState(DEFAULT_COOKIE_STATE)
 
   const callbacks = useMemo(
     () => ({
@@ -44,13 +46,13 @@ export function CookieBanner(props: CookieProps) {
         // Close modal
         callbacks.onDismiss()
         // Call cookie actions callbacks
-        cookieState.analytics && props.onAcceptAnalytics?.()
-        cookieState.marketing && props.onAcceptMarketing?.()
-        cookieState.advertising && props.onAcceptAdvertising?.()
-        props.onSaveAndClose?.()
+        cookieState.analytics && props.onAcceptAnalytics?.(cookieState)
+        cookieState.marketing && props.onAcceptMarketing?.(cookieState)
+        cookieState.advertising && props.onAcceptAdvertising?.(cookieState)
+        props.onSaveAndClose?.(cookieState)
       }
     }),
-    [cookieState.advertising, cookieState.analytics, cookieState.marketing, props]
+    [cookieState, props]
   )
 
   return isOpen ? (
