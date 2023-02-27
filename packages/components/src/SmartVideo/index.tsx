@@ -46,6 +46,17 @@ const BASE_INTERSECTION_OPTIONS = {
   delay: 300
 }
 
+/**
+ * SmartVideo
+ * @property sourcesProps: List of normal video source props e.g [
+        {
+          src: 'https://123/video.com',
+          type: 'mp4'
+        }
+      ]
+ * @property ctaOverlayProps: CSS props for video overlay, requires $zIndex
+ * @property container: HTMLElement to bind video with, can be document.body
+ */
 export const SmartVideo = forwardRef(function LazyVideo(
   {
     sourcesProps,
@@ -185,5 +196,20 @@ function VideoErrorOverlay(props: CTAOverlayProps & { errorMessage?: string }) {
         {props.errorMessage && <div>{props.errorMessage}</div>}
       </VideoHeader>
     </VideoPlayCTAOverlay>
+  )
+}
+
+export function Test() {
+  return (
+    <SmartVideo
+      sourcesProps={[
+        {
+          src: '123',
+          type: 'mp4'
+        }
+      ]}
+      ctaOverlayProps={{ $zIndex: 1000 }}
+      container={document.body}
+    />
   )
 }

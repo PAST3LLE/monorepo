@@ -224,6 +224,17 @@ function _getLqImageOptions(path: SmartImageProps['path'], lqImageOptions: Smart
   }
 }
 
+/**
+ * SmartImg - required props:
+ * @property path: base object containing defaultPath to image asset e.g path={{ defaultPath: '123' }}
+ * @property pathSrcSet: optional list of srcSets containing mediaWidth sized urls, e.g: {
+        500: { '1x': '123', '2x': optional, '3x': optional },
+        720: { '1x': '123' },
+        960: { '1x': '123' },
+        1280: { '1x': '123' },
+        1440: { '1x': '123' }
+      }
+ */
 const SmartImg = forwardRef((props: SmartImageProps, ref: ForwardedRef<HTMLImageElement>) => (
   <ApiImage {...props} forwardedRef={ref} />
 ))
