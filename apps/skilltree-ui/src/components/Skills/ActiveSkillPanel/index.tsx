@@ -1,6 +1,6 @@
 import { Skillpoint } from '../Skillpoint'
 import { SkillpointPoint } from '../Skillpoint/SkillpointPoint'
-import { Rarity, SkillId } from '../types'
+import { Rarity, SkillId, SkillMetadata } from '../types'
 import { ActiveSkillPanelContainer, SkillRarityLabel, SkillsRowContainer, SkillStatusLabel } from './styleds'
 import { Row, AutoRow, ExternalLink, Text, Column, RowProps, RowStart } from '@past3lle/components'
 import { BLACK, OFF_WHITE } from '@past3lle/theme'
@@ -117,7 +117,7 @@ export function ActiveSkillPanel() {
           <ThemedButtonExternalLink
             className={isLocked ? 'disabled' : ''}
             disabled={isLocked}
-            href={isLocked ? '#' : `https://pastelle.shop/#/collection/${activeSkill?.name?.toLowerCase()}`}
+            href={isLocked ? '#' : _getSkillShopUri(activeSkill)}
           >
             <Text.Black fontWeight={300}>{isLocked ? 'LOCKED' : isOwned ? 'VIEW IN STORE' : 'UNLOCK'}</Text.Black>
           </ThemedButtonExternalLink>
@@ -226,4 +226,12 @@ function _getLockStatusColour(lockStatus: SkillLockStatus, rarity: Rarity) {
     case SkillLockStatus.OWNED:
       return RARITY_COLOURS_MAP[rarity]
   }
+}
+
+const STORE_URL = process.env.NODE_ENV === 'production' ? 'https://pastelle.shop' : 'http://localhost:8080'
+function _getSkillShopUri(activeSkill: SkillMetadata) {
+  return `${STORE_URL}/#/SKILLS/${activeSkill.name.toLowerCase()}?referral=FORGE&id=${activeSkill.properties.shopifyId.replace(
+    'gid://shopify/Product/',
+    ''
+  )}`
 }
