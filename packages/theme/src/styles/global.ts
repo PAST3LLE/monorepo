@@ -1,4 +1,3 @@
-import { transparentize } from 'polished'
 import { createGlobalStyle } from 'styled-components'
 
 import { CommonGlobalCssSnippet, CssResetSnippet } from './snippets'
@@ -24,12 +23,7 @@ export const ThemedGlobalCssProvider = createGlobalStyle`
   }
 
   body {
-    background-image: ${({ theme }): string => `
-      radial-gradient(
-        50% 50% at 50% 50%,
-        ${transparentize(0.9, theme.purple3)} 0%,
-        ${transparentize(1, theme.bg1)} 100%
-      );`}
+    background-image: radial-gradient(50% 50% at 50% 50%, rgb(49 5 33) 0%, rgb(2 2 2) 100%);
 
     transition: background-color, background-image, color 0.3s ease-in-out;
 
