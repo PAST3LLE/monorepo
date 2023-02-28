@@ -8,6 +8,13 @@ export const CUSTOM_THEME = {
   mainFg2: 'red',
   darkText: '#000',
   lightText: 'ghostwhite',
+  // logo
+  logo: {
+    mainBgLight: '#deefe1',
+    mainBg: '#475548',
+    altBgLight: '#b6abb6',
+    altBg: '#281d25'
+  },
   // rarity colours
   rarity: {
     empty: {

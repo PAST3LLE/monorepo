@@ -5,7 +5,7 @@ import { RowCenter } from '@past3lle/components'
 import sprayBg from 'assets/png/spray.png'
 import { Vector } from 'components/Canvas/api/vector'
 import { GATEWAY_URI } from 'constants/ipfs'
-import React, { useMemo } from 'react'
+import React, { memo, useMemo } from 'react'
 import { BoxProps } from 'rebass'
 import { SkillsState, useSkillsAtom } from 'state/Skills'
 import styled from 'styled-components/macro'
@@ -19,7 +19,7 @@ interface Props {
   skillpointStyles?: BoxProps
   lightupDependencies?: (state: SkillsState) => void
 }
-export function Skillpoint({
+function SkillpointUnmemoed({
   className,
   metadata,
   vector,
@@ -82,6 +82,12 @@ export function Skillpoint({
     </StyledSkillpoint>
   )
 }
+
+export const Skillpoint = memo(
+  SkillpointUnmemoed,
+  (prevProps, nextProps) =>
+    prevProps.vector?.X1 !== nextProps.vector?.X1 && prevProps.vector?.Y1 !== nextProps.vector?.Y1
+)
 
 const StyledImg = styled.img`
   z-index: -1;

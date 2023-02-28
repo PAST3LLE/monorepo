@@ -6,8 +6,13 @@ import { BACKGROUND_IMAGE_DDPX_URL_MAP } from 'theme/global'
 export * from './InventoryButton'
 export * from './Web3Button'
 
-export const ThemedButton = styled(Button).attrs(() => ({}))<{ invert?: boolean; gap?: string; withBgImage?: boolean }>`
-  background-color: ${({ theme }) => theme.mainBg};
+export const ThemedButton = styled(Button).attrs(() => ({}))<{
+  invert?: boolean
+  gap?: string
+  withBgImage?: boolean
+  bgColor?: string
+}>`
+  background-color: ${({ theme, bgColor = theme.mainBg }) => bgColor};
   box-shadow: 4px 4px 1px 0px #000000bd;
   padding: 0rem 2rem;
   ${({ invert, theme, withBgImage }) =>
