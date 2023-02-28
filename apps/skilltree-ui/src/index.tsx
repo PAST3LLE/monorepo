@@ -1,8 +1,10 @@
+import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 import { FontCssProvider, StaticGlobalCssProvider, ThemeProvider, ThemedGlobalCssProvider } from '@past3lle/theme'
 import { AtomsDevtools } from 'dev/devTools'
 import React, { StrictMode } from 'react'
 import 'react-app-polyfill/ie11'
 import ReactDOM from 'react-dom/client'
+import reportWebVitals from 'reportWebVitals'
 import { MetadataUpdater } from 'state/Metadata/updaters/MetadataUpdater'
 import { SidePanelUpdater } from 'state/SidePanel/updater'
 import { SkillsUpdaters } from 'state/Skills/updaters'
@@ -56,3 +58,11 @@ root.render(
     </WagmiProvider>
   </StrictMode>
 )
+
+// SERVICE WORKER (e.g USER OFFLINE USE)
+// README: change to unregister to remove SW
+serviceWorkerRegistration.register()
+
+// WEB VITALS REPORTING
+// README: change to unregister to remove web vitals reporting
+reportWebVitals()
