@@ -1,6 +1,6 @@
 import { Web3InfoContainer } from '../common'
 import { ExternalLink, Header as PstlHeader, Pastellecon, Row } from '@past3lle/components'
-import { MediaWidths, MEDIA_WIDTHS, setBackgroundWithDPI, upToSmall } from '@past3lle/theme'
+import { MediaWidths, MEDIA_WIDTHS, setBackgroundWithDPI, upToExtraSmall, upToSmall } from '@past3lle/theme'
 import { GenericImageSrcSet } from '@past3lle/types'
 import HEADER_PNG from 'assets/png/header_bg.png'
 import FOOD from 'assets/png/icons/icons8-food-as-resources-100.png'
@@ -9,7 +9,7 @@ import { ThemedButton } from 'components/Button'
 import { BlackHeader, CursiveHeader, CursiveMonoHeader, CursiveMonoHeaderProps } from 'components/Text'
 import { SHOP_URL } from 'constants/urls'
 import React from 'react'
-import styled from 'styled-components/macro'
+import styled, { DefaultTheme } from 'styled-components/macro'
 import { CUSTOM_THEME } from 'theme/customTheme'
 
 export const Skilltreecon = styled(Pastellecon)`
@@ -75,7 +75,13 @@ export const CheckoutForge = ({
     </ThemedButton>
   </ExternalLink>
 )
-
+const getBaseBgProps = (theme: DefaultTheme) => ({
+  preset: 'header' as const,
+  skipIk: true,
+  backgroundBlendMode: 'unset',
+  backgroundAttributes: ['0px 0px/contain no-repeat'],
+  backgroundColor: theme.logo.mainBgLight
+})
 const HeaderBgImgSet: GenericImageSrcSet<number> = {
   defaultUrl: HEADER_PNG,
   [MEDIA_WIDTHS.upToExtraSmall]: { '1x': HEADER_PNG },
@@ -91,12 +97,16 @@ export const HeaderContainer = styled(PstlHeader)<{ isOpen?: boolean }>`
 
   ${({ theme }) =>
     setBackgroundWithDPI(theme, [HeaderBgImgSet] as GenericImageSrcSet<MediaWidths>[], {
-      preset: 'header',
-      skipIk: true,
-      backgroundBlendMode: 'unset',
-      backgroundAttributes: ['0px 0px/contain no-repeat'],
-      backgroundColor: theme.logo.mainBgLight
+      ...getBaseBgProps(theme),
+      backgroundAttributes: ['0px 0px/contain no-repeat']
     })}
+
+  ${({ theme }) => upToExtraSmall`
+      ${setBackgroundWithDPI(theme, [HeaderBgImgSet] as GenericImageSrcSet<MediaWidths>[], {
+        ...getBaseBgProps(theme),
+        backgroundAttributes: ['0px 0px/cover no-repeat']
+      })}
+    `}
 
   > ${Row} {
     > ${LogoHeader} {
