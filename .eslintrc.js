@@ -1,3 +1,5 @@
+const path = require('path')
+
 module.exports = {
   parser: "@typescript-eslint/parser",
   parserOptions: {
@@ -8,7 +10,7 @@ module.exports = {
       jsx: true
     },
     project: [
-      path.join(__dirname, "tsconfig.eslint.json"),
+      // "./tsconfig.eslint.json",
       "./apps/*/tsconfig.json", "./packages/*/tsconfig.json", "./examples/*/tsconfig.json"]
 
   },

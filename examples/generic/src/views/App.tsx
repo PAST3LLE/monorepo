@@ -7,10 +7,11 @@ import * as React from 'react'
 import { useTheme } from 'styled-components'
 
 import { PstlFooter, PstlHeader, PstlMain, PstlNav } from '../components/Layout'
+import { CUSTOM_THEME } from '../theme/skilltreeTheme'
 
 const SKILLTREE_CONFIG = {
   appName: 'Pastelle Skilltree',
-  appTheme: {}
+  appTheme: CUSTOM_THEME
 }
 
 interface Props {
@@ -35,22 +36,24 @@ const App = ({ showBasic = false }: Props) => {
         <Pastellecon />
       </PstlHeader>
       <PstlNav />
-      {showBasic && <PstlMain>
-        <LayoutText.LargeHeader>EXAMPLE APP</LayoutText.LargeHeader>
-        <LayoutText.SubHeader>Click button for modal!</LayoutText.SubHeader>
-        <Button variant={BV.PRIMARY} onClick={() => setModalOpen(true)}>
-          See modal
-        </Button>
-        <LayoutText.SubHeader>CURRENT THEME: {mode}</LayoutText.SubHeader>
-        <Button
-          variant={BV.THEME}
-          onClick={() => setMode(mode === ThemeModes.DARK ? ThemeModes.LIGHT : ThemeModes.DARK)}
-          bgImage={PNG.LogoCircle_2x}
-          color={'#000'}
-        >
-          CHANGE THEME
-        </Button>
-      </PstlMain>}
+      {showBasic && (
+        <PstlMain>
+          <LayoutText.LargeHeader>EXAMPLE APP</LayoutText.LargeHeader>
+          <LayoutText.SubHeader>Click button for modal!</LayoutText.SubHeader>
+          <Button variant={BV.PRIMARY} onClick={() => setModalOpen(true)}>
+            See modal
+          </Button>
+          <LayoutText.SubHeader>CURRENT THEME: {mode}</LayoutText.SubHeader>
+          <Button
+            variant={BV.THEME}
+            onClick={() => setMode(mode === ThemeModes.DARK ? ThemeModes.LIGHT : ThemeModes.DARK)}
+            bgImage={PNG.LogoCircle_2x}
+            color={'#000'}
+          >
+            CHANGE THEME
+          </Button>
+        </PstlMain>
+      )}
       <PstlMain>
         <SkilltreeBoard config={SKILLTREE_CONFIG} />
       </PstlMain>
