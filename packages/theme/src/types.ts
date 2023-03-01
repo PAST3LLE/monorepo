@@ -1,5 +1,5 @@
 import React from 'react'
-import { ThemedCssFunction } from 'styled-components'
+import { FlattenSimpleInterpolation, ThemedCssFunction } from 'styled-components'
 
 export type BaseThemeTypes =
   | boolean
@@ -12,7 +12,7 @@ export type BaseThemeTypes =
 export type ThemeValueTypes = BaseThemeTypes | Record<string, BaseThemeTypes>
 
 export type Color = string
-export interface Colors {
+export interface PastelleColors {
   // base
   white: Color
   offWhite: Color
@@ -79,7 +79,7 @@ export interface Colors {
   darkModeSvg: Color
 }
 
-export interface Sections {
+export interface PastelleSections {
   // elems
   products: {
     aside: {
@@ -92,7 +92,7 @@ export interface Sections {
   }
 }
 
-export interface Filters {
+export interface PastelleFilters {
   // filters
   darkModeFilter: string
   darkModeLogoFilter: string
@@ -151,24 +151,27 @@ export interface ThemeMediaWidthsBaseRequired {
 
 export interface ThemeBaseRequired<M = ThemeModes> extends ThemeStateBaseRequired<M>, ThemeMediaWidthsBaseRequired {}
 
-declare module 'styled-components' {
-  export interface DefaultTheme extends ThemeBaseRequired, Filters, Colors, Sections {
-    // theming
-    buttons: {
-      font: {
-        size: {
-          small: string
-          normal: string
-          large: string
-        }
+export interface PastelleDefaultTheme extends ThemeBaseRequired, PastelleFilters, PastelleColors, PastelleSections {
+  // theming
+  buttons: {
+    font: {
+      size: {
+        small: string
+        normal: string
+        large: string
       }
-      borderRadius: string
-      border: string
     }
-    // gradient
-    whiteGradient1: FlattenSimpleInterpolation
-
-    // shadows
-    shadow1: string
+    borderRadius: string
+    border: string
   }
+  // gradient
+  whiteGradient1: FlattenSimpleInterpolation
+
+  // shadows
+  shadow1: string
+}
+
+declare module 'styled-components' {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  export interface DefaultTheme extends ThemeBaseRequired {}
 }
