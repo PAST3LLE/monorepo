@@ -1,3 +1,4 @@
+
 export interface SkilltreeMetadata<P, A = Record<any, any>> {
   name: string
   decimals?: number
@@ -26,7 +27,7 @@ export interface SkillDependencyObject {
 }
 
 // TSDX rollup doesn't yet support the template string type
-export type SkillId = string | `${string}-${string}`
+export type SkillId = `${string}-${string}`
 
 export interface SkillProperties extends BaseProperties {
   id: SkillId
@@ -43,3 +44,8 @@ export interface SkillAttributes {
 
 export type CollectionMetadata = SkilltreeMetadata<CollectionProperties>
 export type SkillMetadata = SkilltreeMetadata<SkillProperties, SkillAttributes>
+
+export interface AppConfig {
+  appName: string
+  appTheme?: Record<string, any>
+}

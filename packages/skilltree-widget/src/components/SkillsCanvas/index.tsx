@@ -7,7 +7,7 @@ import { EMPTY_SKILL_IMAGE_HASH_LIST, MINIMUM_COLLECTION_BOARD_SIZE } from '../.
 import { useMetadataMapReadAtom } from '../../state/Metadata'
 import { useSkillsAtom } from '../../state/Skills'
 import { useUserAtom } from '../../state/User'
-import { Rarity } from '../../types'
+import { Rarity, SkillId } from '../../types'
 import { SkillContainerAbsolute, SkillpointHeader } from '../Common'
 import { Skillpoint } from '../Skillpoint'
 import { LightningCanvas } from './Canvas'
@@ -69,7 +69,7 @@ const EMPTY_METADATA = {
     return EMPTY_SKILL_IMAGE_HASH_LIST[idx]
   },
   properties: {
-    id: 'EMPTY-EMPTY',
+    id: 'EMPTY-EMPTY' as SkillId,
     rarity: 'common' as Rarity,
     shopifyId: '0x0',
     dependencies: []

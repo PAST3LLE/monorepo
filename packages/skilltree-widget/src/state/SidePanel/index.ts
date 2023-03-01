@@ -2,6 +2,7 @@ import { atom, useAtom } from 'jotai'
 
 import { SkillId } from '../../types'
 
+// @ts-ignore
 export type ActiveSidePanel = `ACTIVE_SKILL::${SkillId}` | 'USER_STATS'
 export interface SidePanelState {
   type: (ActiveSidePanel | undefined)[]

@@ -8,6 +8,11 @@ import { useTheme } from 'styled-components'
 
 import { PstlFooter, PstlHeader, PstlMain, PstlNav } from '../components/Layout'
 
+const SKILLTREE_CONFIG = {
+  appName: 'Pastelle Skilltree',
+  appTheme: {}
+}
+
 interface Props {
   showBasic?: boolean
 }
@@ -47,7 +52,7 @@ const App = ({ showBasic = false }: Props) => {
         </Button>
       </PstlMain>}
       <PstlMain>
-        <SkilltreeBoard />
+        <SkilltreeBoard config={SKILLTREE_CONFIG} />
       </PstlMain>
       <PstlFooter>
         <ul>

@@ -1,3 +1,3 @@
-import { SkilltreeBoard } from './components/SkilltreeBoard'
+import { PastelleSkilltree, PastelleSkilltreeProps, SkilltreeBoard } from './components'
 
-export { SkilltreeBoard as default }
+export { PastelleSkilltree as default, PastelleSkilltreeProps, SkilltreeBoard }

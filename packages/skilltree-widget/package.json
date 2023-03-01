@@ -3,8 +3,8 @@
   "sideEffects": false,
   "version": "0.0.0-rc.0",
   "description": "PAST3LLE Skilltree as an NPM importable ESM React widget component",
-  "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
+  "main": "dist/esm/index.js",
+  "typings": "dist/types/index.d.ts",
   "files": [
     "dist"
   ],
@@ -15,10 +15,15 @@
   "homepage": "https://github.com/past3lle/schematics-monorepo/tree/main/packages/skilltree-widget#readme",
   "author": "past3lle",
   "license": "MIT",
+  "exports": {
+    "import": "./dist/esm/index.js",
+    "require": "./dist/cjs/index.js",
+    "default": "./dist/esm/index.js"
+  },
   "scripts": {
     "clean": "rm -rf dist && rm -rf tsconfig.tsbuildinfo",
-    "compile": "tsdx build --transpileOnly true && cp \"./package.json\" ./dist/",
-    "compile:tsc": "npx tsc --pretty",
+    "compile:tsdx": "tsdx build --transpileOnly && cp \"./package.json\" ./dist/",
+    "compile": "tsc --emitDeclarationOnly --outDir './dist/types' & tsc --project tsconfig.esm.json & tsc --project tsconfig.cjs.json && cp \"./package.json\" ./dist/",
     "build": "yarn clean && yarn compile",
     "build:tsc": "yarn clean && yarn compile:tsc",
     "prepack": "yarn build",
@@ -45,6 +50,11 @@
     "testMatch": [
       "<rootDir>src/**/__tests__/*.{ts,tsx}"
     ]
+  },
+  "resolutions": {
+    "**/@typescript-eslint/eslint-plugin": "^5.48.2",
+    "**/@typescript-eslint/parser": "^5.48.2",
+    "**/typescript": "^4.9.5"
   },
   "peerDependencies": {
     "react": ">=16",
@@ -80,7 +90,6 @@
     "styled-components": "^5.3.5",
     "@rollup/plugin-image": "^3.0.1",
     "rollup-plugin-svg": "^2.0.0",
-    "tsdx": "^0.14.1",
     "tslib": "^2.5.0"
   },
   "dependencies": {
