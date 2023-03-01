@@ -7,7 +7,9 @@ module.exports = {
       // Allows for the parsing of JSX
       jsx: true
     },
-    project: ["./tsconfig.eslint.json", "./apps/*/tsconfig.json", "./packages/*/tsconfig.json", "./examples/*/tsconfig.json"]
+    project: [
+      path.join(__dirname, "tsconfig.eslint.json"),
+      "./apps/*/tsconfig.json", "./packages/*/tsconfig.json", "./examples/*/tsconfig.json"]
 
   },
   extends: [

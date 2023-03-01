@@ -7,7 +7,7 @@ const TextWrapper = styled(RebassText).attrs((props) => ({ fontSize: '1.2rem', .
   color: ${({ colour, theme }): string => (theme as Colors)[colour]};
 `
 
-export const Text = {
+const Text = {
   Main: styled((props: TextProps) => <TextWrapper fontWeight={500} colour="text2" {...props} />)``,
   Link: styled((props: TextProps) => <TextWrapper fontWeight={500} colour="primary1" {...props} />)``,
   Black: styled((props: TextProps) => <TextWrapper fontWeight={500} colour="black" {...props} />)``,
@@ -31,4 +31,9 @@ export const Text = {
     <TextWrapper fontWeight={500} fontSize={'1.2rem'} fontStyle={'italic'} colour="text2" {...props} />
   ))``,
   Error: styled((props: TextProps) => <TextWrapper fontWeight={500} colour={'red1'} {...props} />)``
+}
+
+export {
+  Text,
+  TextProps
 }

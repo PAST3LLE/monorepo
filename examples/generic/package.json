@@ -12,13 +12,14 @@
     "react-app-polyfill": "^3.0.0"
   },
   "alias": {
-    "@pastelle/assets": "@pastelle/assets",
-    "@pastelle/components": "@pastelle/components",
-    "@pastelle/constants": "@pastelle/constants",
-    "@pastelle/hooks": "@pastelle/hooks",
-    "@pastelle/theme": "@pastelle/theme",
-    "@pastelle/type": "@pastelle/types",
-    "@pastelle/utils": "@pastelle/utils",
+    "@past3lle/assets": "@past3lle/assets",
+    "@past3lle/components": "@past3lle/components",
+    "@past3lle/constants": "@past3lle/constants",
+    "@past3lle/hooks": "@past3lle/hooks",
+    "@past3lle/theme": "@past3lle/theme",
+    "@past3lle/type": "@past3lle/types",
+    "@past3lle/utils": "@past3lle/utils",
+    "@past3lle/skilltree-widget": "@past3lle/skilltree-widget",
     "react": "../../node_modules/react",
     "react-dom": "../../node_modules/react-dom",
     "scheduler/tracing": "../../node_modules/scheduler/tracing-profiling"

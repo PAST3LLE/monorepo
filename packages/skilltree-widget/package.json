@@ -1,0 +1,106 @@
+{
+  "name": "@past3lle/skilltree-widget",
+  "sideEffects": false,
+  "version": "0.0.0-rc.0",
+  "description": "PAST3LLE Skilltree as an NPM importable ESM React widget component",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PAST3LLE/past3lle-monorepo.git"
+  },
+  "homepage": "https://github.com/past3lle/schematics-monorepo/tree/main/packages/skilltree-widget#readme",
+  "author": "past3lle",
+  "license": "MIT",
+  "scripts": {
+    "clean": "rm -rf dist && rm -rf tsconfig.tsbuildinfo",
+    "compile": "tsdx build --transpileOnly true && cp \"./package.json\" ./dist/",
+    "compile:tsc": "npx tsc --pretty",
+    "build": "yarn clean && yarn compile",
+    "build:tsc": "yarn clean && yarn compile:tsc",
+    "prepack": "yarn build",
+    "start": "tsdx watch",
+    "test": "echo 'removed default test' ",
+    "alt-test": "tsc test --env=jsdom",
+    "test:watch": "tsc test --env=jsdom --watchAll",
+    "test:ci": "yarn alt-test --coverage --no-watch --watch=false --watchAll=false --no-watchman --forceExit --detectOpenHandles",
+    "pre-commit": "pretty-quick --staged && yarn test:ci && yarn build",
+    "lint": "prettier --write ./src/** --ignore-path '../../.prettierignore'"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "keywords": [
+    "skilltree"
+  ],
+  "jest": {
+    "moduleNameMapper": {
+      "\\.(css|less)$": "identity-obj-proxy",
+      ".+\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/src/__mocks__/file-mock.js"
+    },
+    "testMatch": [
+      "<rootDir>src/**/__tests__/*.{ts,tsx}"
+    ]
+  },
+  "peerDependencies": {
+    "react": ">=16",
+    "styled-components": ">=5"
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.13.8",
+    "@craco/craco": "^5.7.0",
+    "@trivago/prettier-plugin-sort-imports": "^4.0.0",
+    "@types/jest": "^25.2.1",
+    "@types/node": "^13.13.5",
+    "@types/react": "^18.0.19",
+    "@types/react-dom": "^18.0.6",
+    "@types/styled-components": "^5.1.0",
+    "@typescript-eslint/eslint-plugin": "^5.48.2",
+    "@typescript-eslint/parser": "^5.48.2",
+    "abitype": "^0.3.0",
+    "eslint": "^8.33.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "jotai-devtools": "^0.1.0",
+    "prettier": "^2.8.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-error-overlay": "^6.0.11",
+    "react-scripts": "^5.0.1",
+    "serve": "^11.3.2",
+    "source-map-explorer": "^2.5.3",
+    "typescript": "^4.9.5",
+    "web-vitals": "^3.1.0",
+    "styled-components": "^5.3.5",
+    "@rollup/plugin-image": "^3.0.1",
+    "rollup-plugin-svg": "^2.0.0",
+    "tsdx": "^0.14.1",
+    "tslib": "^2.5.0"
+  },
+  "dependencies": {
+    "@past3lle/assets": "^0.0.10",
+    "@past3lle/components": "^0.0.33",
+    "@past3lle/constants": "^0.0.17",
+    "@past3lle/hooks": "^0.0.12",
+    "@past3lle/skills-nft": "^0.0.6",
+    "@past3lle/skilltree-contracts": "^0.0.1-rc.3",
+    "@past3lle/theme": "^0.0.23",
+    "@past3lle/types": "^0.0.12",
+    "@past3lle/utils": "^0.0.17",
+    "@web3modal/ethereum": "^2.1.0",
+    "@web3modal/react": "^2.1.0",
+    "@ethersproject/bignumber": "5.7.0",
+    "jotai": "^1.13.1",
+    "polished": "^4.2.2",
+    "wagmi": "^0.11.3"
+  },
+  "bugs": {
+    "url": "https://github.com/PAST3LLE/past3lle-monorepo/issues"
+  }
+}

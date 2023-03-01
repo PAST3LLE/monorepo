@@ -1,0 +1,28 @@
+{
+ "description": "SHIPWRECK.LONGSLEEVE.OVERSIZED.HEAVY-COTTON.",
+ "image": "ipfs://QmaWrhJejBsUYEwDsqiM6Y24gDmskAf54FKhzPXrMT8cTu",
+ "name": "SHIPWRECK",
+ "properties": {
+  "rarity": "rare",
+  "dependencies": [
+   {
+    "collection": 1,
+    "required": 3
+   }
+  ],
+  "shopifyId": "SOME_SHOPIFY_ID",
+  "id": "2-1000"
+ },
+ "attributes": {
+  "tags": [
+   "hoodie",
+   "heavy-cotton",
+   "oversized"
+  ],
+  "theme": {
+   "bg": "#756d5e",
+   "altBg": "#26297A",
+   "color": "#F0E2C7"
+  }
+ }
+}

@@ -1,5 +1,6 @@
 export * from './Button'
 export * from './Cookies'
+export * from './Icons'
 export * from './Layout'
 export * from './Links'
 export * from './Modal'

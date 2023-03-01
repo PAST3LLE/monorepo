@@ -1,14 +1,17 @@
 import { PNG } from '@past3lle/assets'
-import { BV, Button, ColumnCenter, Text as LayoutText, Modal, Pastellecon } from '@past3lle/components'
+import { BV, Button, ColumnCenter, CookieBanner, Text as LayoutText, Modal, Pastellecon } from '@past3lle/components'
 import { useOnClickOutside } from '@past3lle/hooks'
+import SkilltreeBoard from '@past3lle/skilltree-widget'
 import { ThemeModes } from '@past3lle/theme'
 import * as React from 'react'
 import { useTheme } from 'styled-components'
 
-import { CookieBanner } from '../../../../packages/components/src/Cookies'
 import { PstlFooter, PstlHeader, PstlMain, PstlNav } from '../components/Layout'
 
-const App = () => {
+interface Props {
+  showBasic?: boolean
+}
+const App = ({ showBasic = false }: Props) => {
   const ref = React.useRef()
   const [modalOpen, setModalOpen] = React.useState(false)
   useOnClickOutside(ref, () => setModalOpen(false))
@@ -27,7 +30,7 @@ const App = () => {
         <Pastellecon />
       </PstlHeader>
       <PstlNav />
-      <PstlMain>
+      {showBasic && <PstlMain>
         <LayoutText.LargeHeader>EXAMPLE APP</LayoutText.LargeHeader>
         <LayoutText.SubHeader>Click button for modal!</LayoutText.SubHeader>
         <Button variant={BV.PRIMARY} onClick={() => setModalOpen(true)}>
@@ -42,6 +45,9 @@ const App = () => {
         >
           CHANGE THEME
         </Button>
+      </PstlMain>}
+      <PstlMain>
+        <SkilltreeBoard />
       </PstlMain>
       <PstlFooter>
         <ul>

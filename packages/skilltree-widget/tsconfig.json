@@ -1,0 +1,42 @@
+{
+    "extends": "../../tsconfig.build.json",
+    "include": [
+        "./src",
+        "src/mock/**/*.json",
+        "src/mock/**/*.js"
+    ],
+    "compilerOptions": {
+        "baseUrl": "./",
+        "module": "esnext",
+        "rootDir": "./src",
+        "outDir": "./dist",
+        "composite": true,
+        "allowJs": true
+    },
+    "references": [
+        {
+            "path": "../assets"
+        },
+        {
+            "path": "../components"
+        },
+        {
+            "path": "../constants"
+        },
+        {
+            "path": "../hooks"
+        },
+        {
+            "path": "../../apps/skills-nft"
+        },
+        {
+            "path": "../theme"
+        },
+        {
+            "path": "../types"
+        },
+        {
+            "path": "../utils"
+        }
+    ]
+}
