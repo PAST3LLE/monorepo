@@ -79,7 +79,7 @@ export interface Colors {
   darkModeSvg: Color
 }
 
-export interface ThemeSections {
+export interface Sections {
   // elems
   products: {
     aside: {
@@ -92,7 +92,7 @@ export interface ThemeSections {
   }
 }
 
-export interface ThemeFilters {
+export interface Filters {
   // filters
   darkModeFilter: string
   darkModeLogoFilter: string
@@ -103,15 +103,56 @@ export enum ThemeModes {
   DARK = 'DARK'
 }
 
-export interface ThemeState {
-  mode: ThemeModes
+export interface ThemeStateBaseRequired<M = ThemeModes> {
+  mode: M
   autoDetect: boolean
   setMode: React.Dispatch<React.SetStateAction<ThemeModes>>
   setAutoDetect: React.Dispatch<React.SetStateAction<boolean>>
 }
 
+export interface ThemeMediaWidthsBaseRequired {
+  // media queries
+  mediaWidth: {
+    upToExtraSmall: ThemedCssFunction<Record<any, any>>
+    upToSmall: ThemedCssFunction<Record<any, any>>
+    upToMedium: ThemedCssFunction<Record<any, any>>
+    upToLarge: ThemedCssFunction<Record<any, any>>
+    upToExtraLarge: ThemedCssFunction<Record<any, any>>
+  }
+
+  // from media size
+  fromMediaWidth: {
+    fromExtraSmall: ThemedCssFunction<Record<any, any>>
+    fromSmall: ThemedCssFunction<Record<any, any>>
+    fromMedium: ThemedCssFunction<Record<any, any>>
+    fromLarge: ThemedCssFunction<Record<any, any>>
+    fromExtraLarge: ThemedCssFunction<Record<any, any>>
+  }
+
+  // between media size
+  betweenMediaWidth: {
+    betweenExtraSmallAndSmall: ThemedCssFunction<Record<any, any>>
+    betweenSmallAndMedium: ThemedCssFunction<Record<any, any>>
+    betweenMediumAndLarge: ThemedCssFunction<Record<any, any>>
+    betweenLargeAndExtraLarge: ThemedCssFunction<Record<any, any>>
+    // random but useful
+    betweenSmallAndLarge: ThemedCssFunction<Record<any, any>>
+  }
+
+  // height
+  mediaHeight: {
+    upToExtraSmallHeight: ThemedCssFunction<Record<any, any>>
+    upToSmallHeight: ThemedCssFunction<Record<any, any>>
+    upToMediumHeight: ThemedCssFunction<Record<any, any>>
+    upToLargeHeight: ThemedCssFunction<Record<any, any>>
+    upToExtraLargeHeight: ThemedCssFunction<Record<any, any>>
+  }
+}
+
+export interface ThemeBaseRequired<M = ThemeModes> extends ThemeStateBaseRequired<M>, ThemeMediaWidthsBaseRequired {}
+
 declare module 'styled-components' {
-  export interface DefaultTheme extends ThemeState, ThemeFilters, Colors, ThemeSections {
+  export interface DefaultTheme extends ThemeBaseRequired, Filters, Colors, Sections {
     // theming
     buttons: {
       font: {
@@ -129,42 +170,5 @@ declare module 'styled-components' {
 
     // shadows
     shadow1: string
-
-    // media queries
-    mediaWidth: {
-      upToExtraSmall: ThemedCssFunction<DefaultTheme>
-      upToSmall: ThemedCssFunction<DefaultTheme>
-      upToMedium: ThemedCssFunction<DefaultTheme>
-      upToLarge: ThemedCssFunction<DefaultTheme>
-      upToExtraLarge: ThemedCssFunction<DefaultTheme>
-    }
-
-    // from media size
-    fromMediaWidth: {
-      fromExtraSmall: ThemedCssFunction<DefaultTheme>
-      fromSmall: ThemedCssFunction<DefaultTheme>
-      fromMedium: ThemedCssFunction<DefaultTheme>
-      fromLarge: ThemedCssFunction<DefaultTheme>
-      fromExtraLarge: ThemedCssFunction<DefaultTheme>
-    }
-
-    // between media size
-    betweenMediaWidth: {
-      betweenExtraSmallAndSmall: ThemedCssFunction<DefaultTheme>
-      betweenSmallAndMedium: ThemedCssFunction<DefaultTheme>
-      betweenMediumAndLarge: ThemedCssFunction<DefaultTheme>
-      betweenLargeAndExtraLarge: ThemedCssFunction<DefaultTheme>
-      // random but useful
-      betweenSmallAndLarge: ThemedCssFunction<DefaultTheme>
-    }
-
-    // height
-    mediaHeight: {
-      upToExtraSmallHeight: ThemedCssFunction<DefaultTheme>
-      upToSmallHeight: ThemedCssFunction<DefaultTheme>
-      upToMediumHeight: ThemedCssFunction<DefaultTheme>
-      upToLargeHeight: ThemedCssFunction<DefaultTheme>
-      upToExtraLargeHeight: ThemedCssFunction<DefaultTheme>
-    }
   }
 }

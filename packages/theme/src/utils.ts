@@ -1,12 +1,12 @@
 import { DDPXImageUrlMap, GenericImageSrcSet } from '@past3lle/types'
 import { transparentize } from 'polished'
-import { CSSObject, DefaultTheme, FlattenSimpleInterpolation, SimpleInterpolation, css } from 'styled-components'
+import { CSSObject, SimpleInterpolation, css } from 'styled-components'
 import { hex } from 'wcag-contrast'
 
 import { MEDIA_WIDTHS, MediaWidths, THEME_COLOURS } from './styles'
-import { Colors, ThemeFilters, ThemeModes, ThemeSections } from './types'
+import { Colors, Filters, Sections, ThemeBaseRequired, ThemeModes } from './types'
 
-export function getThemeColours(mode: ThemeModes): Colors & ThemeFilters & ThemeSections {
+export function getThemeColours(mode: ThemeModes): Colors & Filters & Sections {
   return THEME_COLOURS(mode)
 }
 
@@ -18,28 +18,10 @@ export const BLACK_TRANSPARENT = transparentize(0.15, BLACK)
 export const BLUE = getThemeColours(ThemeModes.DARK).blue1
 export const RED = getThemeColours(ThemeModes.DARK).red1
 
-interface ThemeProps {
-  theme: DefaultTheme
-}
-
-export const setBgColour =
-  (themeColour: keyof Colors) =>
-  ({ theme }: ThemeProps): FlattenSimpleInterpolation =>
-    css`
-      background-color: ${theme[themeColour]};
-    `
-
-export const setTextColour =
-  (themeColour: keyof Colors) =>
-  ({ theme }: ThemeProps): FlattenSimpleInterpolation =>
-    css`
-      color: ${theme[themeColour]};
-    `
-
 const whenMediaSmallerThan =
-  (size: keyof DefaultTheme['mediaWidth']) =>
+  (size: keyof ThemeBaseRequired['mediaWidth']) =>
   (first: CSSObject | TemplateStringsArray, ...interpolations: SimpleInterpolation[]) =>
-  ({ theme }: { theme: DefaultTheme }) =>
+  ({ theme }: { theme: ThemeBaseRequired }) =>
     theme.mediaWidth[size]`${css(first, ...interpolations)}`
 
 export const upToExtraSmall = whenMediaSmallerThan('upToExtraSmall')
@@ -49,9 +31,9 @@ export const upToLarge = whenMediaSmallerThan('upToLarge')
 export const upToExtraLarge = whenMediaSmallerThan('upToExtraLarge')
 
 const whenMediaHeightSmallerThan =
-  (size: keyof DefaultTheme['mediaHeight']) =>
+  (size: keyof ThemeBaseRequired['mediaHeight']) =>
   (first: CSSObject | TemplateStringsArray, ...interpolations: SimpleInterpolation[]) =>
-  ({ theme }: { theme: DefaultTheme }) =>
+  ({ theme }: { theme: ThemeBaseRequired }) =>
     theme.mediaHeight[size]`${css(first, ...interpolations)}`
 
 // height checks
@@ -60,9 +42,9 @@ export const upToSmallHeight = whenMediaHeightSmallerThan('upToSmallHeight')
 export const upToMediumHeight = whenMediaHeightSmallerThan('upToMediumHeight')
 
 const whenMediaLargerThan =
-  (size: keyof DefaultTheme['fromMediaWidth']) =>
+  (size: keyof ThemeBaseRequired['fromMediaWidth']) =>
   (first: CSSObject | TemplateStringsArray, ...interpolations: SimpleInterpolation[]) =>
-  ({ theme }: { theme: DefaultTheme }) =>
+  ({ theme }: { theme: ThemeBaseRequired }) =>
     theme.fromMediaWidth[size]`${css(first, ...interpolations)}`
 
 export const fromExtraSmall = whenMediaLargerThan('fromExtraSmall')
@@ -72,9 +54,9 @@ export const fromLarge = whenMediaLargerThan('fromLarge')
 export const fromExtraLarge = whenMediaLargerThan('fromExtraLarge')
 
 const whenMediaBetween =
-  (size: keyof DefaultTheme['betweenMediaWidth']) =>
+  (size: keyof ThemeBaseRequired['betweenMediaWidth']) =>
   (first: CSSObject | TemplateStringsArray, ...interpolations: SimpleInterpolation[]) =>
-  ({ theme }: { theme: DefaultTheme }) =>
+  ({ theme }: { theme: ThemeBaseRequired }) =>
     theme.betweenMediaWidth[size]`${css(first, ...interpolations)}`
 
 export const betweenExtraSmallAndSmall = whenMediaBetween('betweenExtraSmallAndSmall')
@@ -148,7 +130,7 @@ type SetCssBackgroundParams = {
   lqIkUrlOptions?: Omit<LqIkUrlOptions, 'fallbackUrl'>
 }
 export const setCssBackground = (
-  theme: DefaultTheme,
+  theme: ThemeBaseRequired,
   {
     imageUrls,
     backgroundColor = '',
@@ -224,7 +206,7 @@ export function setBestTextColour(bgColor = transparentize(0.3, getThemeColours(
 }
 
 export function setBackgroundWithDPI(
-  theme: DefaultTheme,
+  theme: ThemeBaseRequired,
   logoUrlSet: GenericImageSrcSet<MediaWidths> | SetCssBackgroundParams['imageUrls'],
   auxOptions: BackgroundWithDPIProps = {}
 ) {
