@@ -1,7 +1,7 @@
 import { Button, ExternalLink } from '@past3lle/components'
-import { setCssBackground } from '@past3lle/theme'
+import { MediaWidths, setCssBackground } from '@past3lle/theme'
+import { GenericImageSrcSet } from '@past3lle/types'
 import styled, { css } from 'styled-components/macro'
-import { BACKGROUND_IMAGE_DDPX_URL_MAP } from 'theme/global'
 
 export * from './InventoryButton'
 export * from './Web3Button'
@@ -9,27 +9,28 @@ export * from './Web3Button'
 export const ThemedButton = styled(Button).attrs(() => ({}))<{
   invert?: boolean
   gap?: string
-  withBgImage?: boolean
+  bgImage?: GenericImageSrcSet<MediaWidths>
   bgColor?: string
+  bgBlendMode?: 'hard-light' | 'difference' | 'exclusion' | 'color-burn' | 'darken' | 'unset'
 }>`
   background-color: ${({ theme, bgColor = theme.mainBg }) => bgColor};
   box-shadow: 4px 4px 1px 0px #000000bd;
   padding: 0rem 2rem;
-  ${({ invert, theme, withBgImage }) =>
+  ${({ invert, theme, bgImage }) =>
     invert &&
-    !withBgImage &&
+    !bgImage &&
     `
     background-color: ${theme.blackOpaque1};
     > * { filter: invert(1); }
   `}
   ${({ gap }) => gap && `gap: ${gap};`}
-  ${({ theme, withBgImage }) =>
-    withBgImage &&
+  ${({ theme, bgColor = 'transparent', bgImage, bgBlendMode = 'difference' }) =>
+    bgImage &&
     css`
       ${setCssBackground(theme, {
-        imageUrls: [BACKGROUND_IMAGE_DDPX_URL_MAP],
-        backgroundColor: '#422548',
-        backgroundBlendMode: 'difference'
+        imageUrls: [bgImage],
+        backgroundColor: bgColor,
+        backgroundBlendMode: bgBlendMode
       })}
     `}
 

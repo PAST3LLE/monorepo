@@ -10,6 +10,7 @@ import {
 } from 'state/SidePanel'
 import { useGetWindowSize } from 'state/WindowSize'
 import { MAIN_BG } from 'theme/constants'
+import { TEXTURE_BG_URL_MAP } from 'theme/global'
 
 interface InventoryButtonProps {
   buttonProps?: ButtonProps
@@ -22,12 +23,14 @@ export function InventoryButton(props: InventoryButtonProps) {
   const showShortLogo = width > MEDIA_WIDTHS.upToSmall && width < MEDIA_WIDTHS.upToMedium
   return (
     <ThemedButton
+      bgColor={'black'}
+      bgImage={TEXTURE_BG_URL_MAP}
+      bgBlendMode="hard-light"
       title={'Click to view skills inventory and account information'}
       display="flex"
       alignItems="center"
-      gap="0 1rem"
+      gap="0 0.5rem"
       height="80%"
-      withBgImage
       {...props.buttonProps}
       onClick={() => openActivePanel((state) => ({ ...state, type: ['USER_STATS', ...state.type] }))}
     >
@@ -46,7 +49,7 @@ export function InventoryButton(props: InventoryButtonProps) {
           marginLeft: '-0.2rem',
           color: '#ebebe9e3',
           fontFamily: 'monospace',
-          fontSize: '1.4rem',
+          fontSize: '1.8rem',
           letterSpacing: '-1.4px',
           fontStyle: 'normal',
           fontWeight: 300,

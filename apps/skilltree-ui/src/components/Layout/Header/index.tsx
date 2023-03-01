@@ -1,11 +1,12 @@
 import { Web3InfoContainer } from '../common'
-import { CheckoutForge, HeaderContainer } from './styleds'
+import { HeaderContainer } from './styleds'
 import { Row } from '@past3lle/components'
 import { MEDIA_WIDTHS } from '@past3lle/theme'
 import { isMobile } from '@past3lle/utils'
 import { InventoryButton } from 'components/Button'
 import { ConnectionInfoButton } from 'components/Button/ConnectionInfoButton'
 import { NetworkInfoButton } from 'components/Button/NetworkInfoButton'
+import { ShopExternalLinkButton } from 'components/Button/ShopExternalLinkButton'
 import React from 'react'
 import { useSidePanelAtomBase } from 'state/SidePanel'
 import { useGetWindowSize } from 'state/WindowSize'
@@ -21,8 +22,8 @@ export const Header = () => {
           onClick={() => isMobileWidth && openSidePanel((state) => ({ type: ['USER_STATS', ...state.type] }))}
         >
           <Row>
-            <CheckoutForge />
-            <InventoryButton restWordProps={{ fontSize: '1.8rem' }} />
+            <ShopExternalLinkButton />
+            <InventoryButton />
             <NetworkInfoButton />
             <ConnectionInfoButton />
           </Row>
