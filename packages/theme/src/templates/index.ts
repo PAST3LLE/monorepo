@@ -13,4 +13,6 @@ const ThemeTemplates = {
   SKILLTREE: SkilltreeThemeTemplate
 } as const
 
+export * from './types'
+
 export { ThemeTemplates, DefaultOptions }

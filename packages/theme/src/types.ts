@@ -111,7 +111,7 @@ export interface ThemeBaseRequired<M = ThemeModesRequired>
     ThemeStateBaseRequired<M>,
     ThemeMediaWidthsBaseRequired {}
 
-// declare module 'styled-components' {
-//   // eslint-disable-next-line @typescript-eslint/no-empty-interface
-//   export interface DefaultTheme extends ThemeBaseRequired {}
-// }
+declare module 'styled-components' {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  export interface DefaultTheme extends ThemeBaseRequired {}
+}
