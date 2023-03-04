@@ -1,5 +1,4 @@
-import { ThemeBaseRequired } from 'src/types'
-
+import { ThemeBaseRequired } from '../types'
 import { PastelleThemeExtension } from './pastelle'
 import { SkilltreeThemeExtension } from './skilltree'
 

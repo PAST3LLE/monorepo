@@ -1,6 +1,7 @@
 import { transparentize } from 'polished'
-import { ThemeMinimumRequired } from 'src/creator'
-import { Color } from 'src/types'
+
+import { ThemeMinimumRequired } from '../creator'
+import { Color } from '../types'
 
 /**
  * Base required colours. Can be imported or replaced
