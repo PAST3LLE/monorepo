@@ -59,13 +59,7 @@ function CreateTheme<T = undefined, K = undefined, M extends BasicUserTheme = Ba
     fromMediaWidth = fromMediaWidth
     betweenMediaWidth = betweenMediaWidth
 
-    constructor(
-      args: T extends ThemeMinimumRequired
-        ? T
-        : K extends AvailableThemeTemplate
-        ? (typeof ThemeTemplates)[K]
-        : ThemeMinimumRequired
-    ) {
+    constructor(args: T extends ThemeByModes<M> ? T : K extends AvailableThemeTemplate ? never : ThemeMinimumRequired) {
       Object.assign(this, args)
     }
   } as CreateTheme<T, K, M>
@@ -130,7 +124,6 @@ export function createCustomTheme<T extends ThemeByModes, M extends BasicUserThe
   // or
   import { PastelleTheme } from '@past3lle/theme'
   declare module 'styled-components' {
-    // eslint-disable-next-line @typescript-eslint/no-empty-interface
     export interface DefaultTheme extends ThemeBaseRequired, PastelleTheme {}
   }
  */

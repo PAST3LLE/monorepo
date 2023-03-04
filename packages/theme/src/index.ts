@@ -1,3 +1,4 @@
+import { createCustomTheme, createTemplateTheme } from './creator'
 import { ThemeTemplates } from './templates'
 import * as ThemeTemplateTypes from './templates/types'
 
@@ -8,4 +9,4 @@ export * from './types'
 
 export * from './templates'
 
-export { ThemeTemplates, ThemeTemplateTypes }
+export { ThemeTemplates, ThemeTemplateTypes, createCustomTheme, createTemplateTheme }
