@@ -1,8 +1,11 @@
-import { DefaultTheme } from 'styled-components'
+import { ThemeTemplates } from './templates'
+import * as ThemeTemplateTypes from './templates/types'
 
-export * from './constants'
 export * from './provider'
 export * from './styles'
 export * from './utils'
 export * from './types'
-export type CustomTheme = DefaultTheme
+
+export * from './templates'
+
+export { ThemeTemplates, ThemeTemplateTypes }

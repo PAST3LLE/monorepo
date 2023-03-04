@@ -3,20 +3,15 @@ import { transparentize } from 'polished'
 import { CSSObject, SimpleInterpolation, css } from 'styled-components'
 import { hex } from 'wcag-contrast'
 
-import { MEDIA_WIDTHS, MediaWidths, THEME_COLOURS } from './styles'
-import { Colors, Filters, Sections, ThemeBaseRequired, ThemeModes } from './types'
+import { MEDIA_WIDTHS, MediaWidths } from './styles'
+import { BaseColours } from './templates/base'
+import { ThemeBaseRequired, ThemeModesRequired } from './types'
 
-export function getThemeColours(mode: ThemeModes): Colors & Filters & Sections {
-  return THEME_COLOURS(mode)
-}
-
-export const WHITE = getThemeColours(ThemeModes.DARK).white
-export const OFF_WHITE = getThemeColours(ThemeModes.DARK).offWhite
-export const BLACK = getThemeColours(ThemeModes.DARK).black
-export const CHARCOAL_BLACK = '#242424'
+export const WHITE = BaseColours.white
+export const OFF_WHITE = BaseColours.offwhite
+export const BLACK = BaseColours.black
+export const OFF_BLACK = BaseColours.offblack
 export const BLACK_TRANSPARENT = transparentize(0.15, BLACK)
-export const BLUE = getThemeColours(ThemeModes.DARK).blue1
-export const RED = getThemeColours(ThemeModes.DARK).red1
 
 const whenMediaSmallerThan =
   (size: keyof ThemeBaseRequired['mediaWidth']) =>
@@ -196,7 +191,7 @@ type BackgroundWithDPIProps = Partial<Omit<SetCssBackgroundParams, 'isLogo' | 'i
   modeColours?: [string, string]
 }
 
-export function setBestTextColour(bgColor = transparentize(0.3, getThemeColours(ThemeModes.DARK).bg1)) {
+export function setBestTextColour(bgColor: string) {
   return setBestContrastingColour({
     bgColour: bgColor,
     fgColour: OFF_WHITE,
@@ -228,9 +223,9 @@ export function setBackgroundWithDPI(
 
 function _getPresetOptions(
   options: BackgroundWithDPIProps,
-  mode: ThemeModes
+  mode: ThemeModesRequired
 ): Partial<SetCssBackgroundParams> | undefined {
-  const isLightMode = mode === ThemeModes.LIGHT
+  const isLightMode = mode === 'LIGHT'
   switch (options.preset) {
     case 'header': {
       const [lmColour, dmColour] = options.modeColours || [OFF_WHITE, BLACK]

@@ -1,112 +1,68 @@
 import React from 'react'
-import { FlattenSimpleInterpolation, ThemedCssFunction } from 'styled-components'
+import { ThemedCssFunction } from 'styled-components'
 
-export type BaseThemeTypes =
-  | boolean
-  | string
-  | number
-  | ((...args: any[]) => any)
-  | React.Dispatch<React.SetStateAction<any>>
-  | ThemedCssFunction<any>
+export type Color = string | [Color, Color]
 
-export type ThemeValueTypes = BaseThemeTypes | Record<string, BaseThemeTypes>
-
-export type Color = string
-export interface PastelleColors {
-  // base
-  white: Color
-  offWhite: Color
-  offWhiteOpaque1: Color
-  offWhiteOpaque2: Color
-  offWhiteOpaque3: Color
-  black: Color
-  blackOpaque1: Color
-  blackOpaque2: Color
-  blackOpaque3: Color
-
-  // text
-  text1: Color
-  text2: Color
-  text3: Color
-  text4: Color
-  text5: Color
-  textDisabled: Color
-
-  // backgrounds / greys
-  bg1: Color
-  bg2: Color
-  bg3: Color
-  bg4: Color
-  bg5: Color
-  bgDisabled: Color
-
-  modalBG: Color
-  advancedBG: Color
-
-  //blues
-  primary1: Color
-  primary2: Color
-  primary3: Color
-  primary4: Color
-  primary5: Color
-
-  primaryText1: Color
-
-  // pinks
-  secondary1: Color
-  secondary2: Color
-  secondary3: Color
-
-  // other
-  red1: Color
-  red2: Color
-  red3: Color
-  green1: Color
-  green2: Color
-  yellow1: Color
-  yellow2: Color
-  blue1: Color
-  purple: Color
-  purple1: Color
-  purple2: Color
-  purple3: Color
-
-  // states
-  dangerLight: Color
-  warningLight: Color
-  inputHoverColor: Color
-  darkModeToggle: Color
-  darkModeSvg: Color
+export interface ThemeBaseColoursRequired {
+  // black
+  readonly black: Color
+  readonly blackOpaque: Color
+  readonly blackOpaqueMore: Color
+  readonly blackOpaqueMost: Color
+  // offblack
+  readonly offblack: Color
+  readonly offblackOpaque: Color
+  readonly offblackOpaqueMore: Color
+  readonly offblackOpaqueMost: Color
+  // whites
+  readonly white: Color
+  readonly whiteOpaque: Color
+  readonly whiteOpaqueMore: Color
+  readonly whiteOpaqueMost: Color
+  // offwhite
+  readonly offwhite: Color
+  readonly offwhiteOpaque: Color
+  readonly offwhiteOpaqueMore: Color
+  readonly offwhiteOpaqueMost: Color
 }
-
-export interface PastelleSections {
-  // elems
-  products: {
-    aside: {
-      itemContainer: Color
-      textColor: Color
-      subItemDescription: Color
-      inputs: Color
-      inputsBorderColor: Color
+export interface ThemeContentPartsRequired {
+  button: {
+    border: {
+      radius: Color
+      colour: Color
+      border: Color
     }
+    hoverColour: Color
+    fontSize: {
+      small: Color
+      normal: Color
+      large: Color
+    }
+  }
+  input: {
+    border: {
+      radius: Color
+      colour: Color
+      border: Color
+    }
+    hoverColour: Color
+  }
+  content: {
+    background: Color // product.aside.itemContainer
+    backgroundAlt: Color
+    text: Color // product.aside.textColour
+    textAlt: Color //product.aside.itemSubHeader
   }
 }
 
-export interface PastelleFilters {
-  // filters
-  darkModeFilter: string
-  darkModeLogoFilter: string
+export type ThemeModesRequired = 'LIGHT' | 'DARK'
+export type ThemeModeColours = {
+  [key in ThemeModesRequired]: Record<string, any>
 }
-
-export enum ThemeModes {
-  LIGHT = 'LIGHT',
-  DARK = 'DARK'
-}
-
-export interface ThemeStateBaseRequired<M = ThemeModes> {
+export interface ThemeStateBaseRequired<M = ThemeModesRequired> {
   mode: M
   autoDetect: boolean
-  setMode: React.Dispatch<React.SetStateAction<ThemeModes>>
+  setMode: React.Dispatch<React.SetStateAction<ThemeModesRequired>>
   setAutoDetect: React.Dispatch<React.SetStateAction<boolean>>
 }
 
@@ -149,29 +105,13 @@ export interface ThemeMediaWidthsBaseRequired {
   }
 }
 
-export interface ThemeBaseRequired<M = ThemeModes> extends ThemeStateBaseRequired<M>, ThemeMediaWidthsBaseRequired {}
+export interface ThemeBaseRequired<M = ThemeModesRequired>
+  extends ThemeBaseColoursRequired,
+    ThemeContentPartsRequired,
+    ThemeStateBaseRequired<M>,
+    ThemeMediaWidthsBaseRequired {}
 
-export interface PastelleDefaultTheme extends ThemeBaseRequired, PastelleFilters, PastelleColors, PastelleSections {
-  // theming
-  buttons: {
-    font: {
-      size: {
-        small: string
-        normal: string
-        large: string
-      }
-    }
-    borderRadius: string
-    border: string
-  }
-  // gradient
-  whiteGradient1: FlattenSimpleInterpolation
-
-  // shadows
-  shadow1: string
-}
-
-declare module 'styled-components' {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  export interface DefaultTheme extends ThemeBaseRequired {}
-}
+// declare module 'styled-components' {
+//   // eslint-disable-next-line @typescript-eslint/no-empty-interface
+//   export interface DefaultTheme extends ThemeBaseRequired {}
+// }

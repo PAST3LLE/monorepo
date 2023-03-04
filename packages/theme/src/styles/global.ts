@@ -1,3 +1,4 @@
+import { ThemeMediaWidthsBaseRequired } from 'src/types'
 import { createGlobalStyle } from 'styled-components'
 
 import { CommonGlobalCssSnippet, CssResetSnippet } from './snippets'
@@ -15,7 +16,9 @@ export const StaticGlobalCssProvider = createGlobalStyle`
  * @name ThemedGlobalCssProvider
  * @description Dynamic global CSS, MUST be placed as a child of the ThemeProvider
  */
-export const ThemedGlobalCssProvider = createGlobalStyle`
+export const ThemedGlobalCssProvider = createGlobalStyle<{
+  theme: ThemeMediaWidthsBaseRequired
+}>`
   * {
     &::-webkit-scrollbar-thumb {
       background: transparent;
@@ -47,6 +50,6 @@ export const ThemedGlobalCssProvider = createGlobalStyle`
   }
 
   a {
-    color: ${({ theme }) => theme.blue1};
+    color: #2172E5;
   }
 `

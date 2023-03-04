@@ -1,7 +1,9 @@
 import { CSSObject, DefaultTheme, FlattenSimpleInterpolation, ThemedCssFunction, css } from 'styled-components'
 
+import { ThemeBaseRequired } from '../types'
+
 export type MediaHeights = 400 | 600 | 768 | 1080 | 2160
-export const MEDIA_HEIGHTS: { [key in keyof DefaultTheme['mediaHeight']]: MediaHeights } = {
+export const MEDIA_HEIGHTS: { [key in keyof ThemeBaseRequired['mediaHeight']]: MediaHeights } = {
   upToExtraSmallHeight: 400,
   upToSmallHeight: 600,
   upToMediumHeight: 768,
@@ -10,7 +12,7 @@ export const MEDIA_HEIGHTS: { [key in keyof DefaultTheme['mediaHeight']]: MediaH
 }
 
 export type MediaWidths = 500 | 720 | 960 | 1280 | 1440
-export const MEDIA_WIDTHS: { [key in keyof DefaultTheme['mediaWidth']]: MediaWidths } = {
+export const MEDIA_WIDTHS: { [key in keyof ThemeBaseRequired['mediaWidth']]: MediaWidths } = {
   upToExtraSmall: 500,
   upToSmall: 720,
   upToMedium: 960,

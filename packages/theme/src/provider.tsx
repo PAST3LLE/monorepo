@@ -8,94 +8,49 @@ import React, {
   useMemo,
   useState
 } from 'react'
-import { DefaultTheme, ThemeProvider as StyledComponentsThemeProvider, css } from 'styled-components'
+import { DefaultTheme, ThemeProvider as StyledComponentsThemeProvider } from 'styled-components'
 
-import {
-  betweenMediaWidthTemplates as betweenMediaWidth,
-  fromMediaWidthTemplates as fromMediaWidth,
-  mediaHeightTemplates as mediaHeight,
-  mediaWidthTemplates as mediaWidth
-} from './styles/mediaQueries'
-import { ThemeModes, ThemeValueTypes } from './types'
-import { getThemeColours } from './utils'
+import { AvailableThemeTemplate, CustomThemeOrTemplate, ThemeByModes, ThemeMinimumRequired } from './creator'
+import { ThemeModesRequired } from './types'
 
-type KeyOmit<T, U extends keyof DefaultTheme> = T & { [P in U]?: never }
-type OverrideableTheme = Partial<DefaultTheme> &
-  KeyOmit<
-    { [key: string]: ThemeValueTypes },
-    | 'mode'
-    | 'autoDetect'
-    | 'setMode'
-    | 'setAutoDetect'
-    | 'mediaHeight'
-    | 'mediaWidth'
-    | 'betweenMediaWidth'
-    | 'fromMediaWidth'
-  >
-
-const DEFAULT_THEME: Pick<
-  DefaultTheme,
-  'buttons' | 'shadow1' | 'whiteGradient1' | 'mediaHeight' | 'mediaWidth' | 'fromMediaWidth' | 'betweenMediaWidth'
-> = {
-  buttons: {
-    font: {
-      size: {
-        small: '1rem',
-        normal: '1.2rem',
-        large: '1.6rem'
-      }
-    },
-    borderRadius: '1rem',
-    border: '0.1rem solid transparent'
-  },
-  // shadows
-  shadow1: '#2F80ED',
-  // gradients
-  whiteGradient1: css`
-    background-image: linear-gradient(to top, ghostwhite, #fff 53%);
-  `,
-  // media queries
-  // height
-  mediaHeight,
-  // width
-  mediaWidth,
-  // from size queries
-  fromMediaWidth,
-  // between size queries
-  betweenMediaWidth
-}
-
-interface ThemeProviderProps {
+interface ThemeProviderProps<T, K> {
   children?: ReactNode
-  themeExtension?: OverrideableTheme
+  defaultMode?: K
+  defaultAutoDetect?: boolean
+  theme: T
 }
 
 // Extension/override of styled-components' ThemeProvider but with our own constructed theme object
-export const ThemeProvider = ({ children, themeExtension = {} }: ThemeProviderProps) => {
-  const [mode, setMode] = useState<ThemeModes>(ThemeModes.DARK)
-  const [autoDetect, setAutoDetect] = useState<boolean>(true)
+export function ThemeProvider<T extends CustomThemeOrTemplate<ThemeByModes, AvailableThemeTemplate>, K>({
+  children,
+  defaultMode,
+  defaultAutoDetect = true,
+  theme
+}: ThemeProviderProps<T, K>) {
+  const [mode, setMode] = useState<keyof typeof theme.modes>(
+    (defaultMode || 'DEFAULT') as ThemeModesRequired | 'DEFAULT' | (() => ThemeModesRequired | 'DEFAULT')
+  )
+  const [autoDetect, setAutoDetect] = useState<boolean>(defaultAutoDetect)
 
   const themeObject = useMemo(() => {
-    const THEME_COLOURS = getThemeColours(mode)
-
+    const {
+      modes: { DEFAULT: DEFAULT_THEME, [mode]: CURRENT_THEME },
+      ...BASE_THEME
+    } = theme
     const computedTheme = {
-      // Compute the app colour pallette using the passed in colourTheme
-      ...THEME_COLOURS,
-      // pass in defaults
+      ...(BASE_THEME as ThemeMinimumRequired),
       ...DEFAULT_THEME,
-      // unfold in any extensions
-      // for example to make big/small buttons -> see src/components/Button ThemeWrappedButtonBase
-      // to see it in action
-      ...themeExtension,
+      // Compute the app colour pallette using the passed in colourTheme
+      ...CURRENT_THEME,
       // state
       mode,
       autoDetect,
       setMode,
       setAutoDetect
-    }
+    } as DefaultTheme
 
     return computedTheme
-  }, [autoDetect, mode, themeExtension])
+  }, [autoDetect, mode])
 
   return (
     <StyledComponentsThemeProvider theme={themeObject}>
