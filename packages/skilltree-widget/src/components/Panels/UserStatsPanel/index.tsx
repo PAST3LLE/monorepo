@@ -1,16 +1,15 @@
+import { BigNumber } from '@ethersproject/bignumber'
 import { Column, Row, Text } from '@past3lle/components'
 import { upToSmall } from '@past3lle/theme'
-import { BigNumber } from '@ethersproject/bignumber'
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
-import ACCOUNT from '../../../assets/png/icons/icons8-footman-100.png'
-import TREASURE_CHEST_GREEN from '../../../assets/png/icons/icons8-treasure-chest-90-green.png'
 import { useGetSkillFromIdCallback } from '../../../hooks/skills'
 import { SkillGridPositionList, useSkillsAtom } from '../../../state/Skills'
 import { useUserAtom } from '../../../state/User'
 import { MAIN_FG } from '../../../theme/constants'
-import { CUSTOM_THEME } from '../../../theme/customTheme'
+import { CUSTOM_THEME } from '../../../theme/exampleCustomTheme'
+import { useAssetsMap } from '../../../theme/utils'
 import { CursiveMonoHeader, MonospaceText } from '../../Common/Text'
 import { Skillpoint } from '../../Skillpoint'
 import { UserConnectionStats } from '../../Web3/UserWeb3ConnectionStats'
@@ -33,6 +32,8 @@ export function UserStatsPanel() {
     }, [] as SkillGridPositionList)
   }, [balances, vectors])
 
+  const assetsMap = useAssetsMap()
+
   return (
     <SidePanel header="INVENTORY">
       <UserStatsPanelContainer>
@@ -48,7 +49,7 @@ export function UserStatsPanel() {
               fontStyle: 'normal'
             }}
           />
-          <img className="icon8-icon" src={ACCOUNT} />
+          <img className="icon8-icon" src={assetsMap.icons.connection} />
         </Row>
 
         <UserConnectionStats containerProps={{ margin: '2rem 0' }} />
@@ -68,7 +69,7 @@ export function UserStatsPanel() {
           <Text.SubHeader fontSize="1.4rem" backgroundColor={MAIN_FG} fontWeight={300} margin={0}>
             {ownedSkillsList.length}/{totalSkills} SKILLS
           </Text.SubHeader>
-          <img className="icon8-icon" src={TREASURE_CHEST_GREEN} />
+          <img className="icon8-icon" src={assetsMap.icons.inventory} />
         </Row>
         <UserSkillpointsContainer>
           {ownedSkillsList.map(({ skillId }) => {

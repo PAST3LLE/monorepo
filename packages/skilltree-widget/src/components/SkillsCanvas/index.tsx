@@ -1,13 +1,13 @@
+import { BigNumber } from '@ethersproject/bignumber'
 import { Row } from '@past3lle/components'
 import { convertToRomanNumerals } from '@past3lle/utils'
-import { BigNumber } from '@ethersproject/bignumber'
 import React from 'react'
 
 import { EMPTY_SKILL_IMAGE_HASH_LIST, MINIMUM_COLLECTION_BOARD_SIZE } from '../../constants/skills'
 import { useMetadataMapReadAtom } from '../../state/Metadata'
 import { useSkillsAtom } from '../../state/Skills'
 import { useUserAtom } from '../../state/User'
-import { Rarity, SkillId } from '../../types'
+import { SkillId, SkillRarity } from '../../types'
 import { SkillContainerAbsolute, SkillpointHeader } from '../Common'
 import { Skillpoint } from '../Skillpoint'
 import { LightningCanvas } from './Canvas'
@@ -70,7 +70,7 @@ const EMPTY_METADATA = {
   },
   properties: {
     id: 'EMPTY-EMPTY' as SkillId,
-    rarity: 'common' as Rarity,
+    rarity: 'common' as SkillRarity,
     shopifyId: '0x0',
     dependencies: []
   }

@@ -1,16 +1,16 @@
+import { BigNumber } from '@ethersproject/bignumber'
 import { AutoRow, Column, ExternalLink, Row, RowProps, RowStart, Text } from '@past3lle/components'
 import { BLACK, OFF_WHITE } from '@past3lle/theme'
-import { BigNumber } from '@ethersproject/bignumber'
 import { darken } from 'polished'
 import React, { useMemo } from 'react'
-import styled from 'styled-components'
+import styled, { useTheme } from 'styled-components'
 
 import { useGetActiveSkill } from '../../../hooks/skills'
 import { MetadataState, useMetadataMapReadAtom } from '../../../state/Metadata'
 import { UserBalances, useUserBalancesReadAtom } from '../../../state/User'
 import { RARITY_COLOURS_MAP } from '../../../theme/constants'
-import { CUSTOM_THEME } from '../../../theme/customTheme'
-import { Rarity, SkillId, SkillMetadata } from '../../../types'
+import { CUSTOM_THEME } from '../../../theme/exampleCustomTheme'
+import { SkillId, SkillMetadata, SkillRarity } from '../../../types'
 import { SkillLockStatus, getLockStatus } from '../../../utils/skills'
 import { ThemedButtonExternalLink } from '../../Common/Button'
 import { BlackHeader, MonospaceText } from '../../Common/Text'
@@ -36,6 +36,8 @@ export function ActiveSkillPanel() {
     [activeSkill?.name, lockStatus]
   )
 
+  const { assetsMap, ...customTheme } = useTheme()
+
   const { rarity, deps, cardColour } = useMemo(
     () => ({
       rarity: activeSkill?.properties.rarity,
@@ -44,11 +46,11 @@ export function ActiveSkillPanel() {
         return isLocked
           ? CUSTOM_THEME.gradients.lockedSkill
           : this.rarity
-          ? CUSTOM_THEME.gradients.unlockedSkill + `${CUSTOM_THEME.rarity[this.rarity].backgroundColor})`
+          ? CUSTOM_THEME.gradients.unlockedSkill + `${customTheme.rarity[this.rarity].backgroundColor})`
           : null
       }
     }),
-    [activeSkill?.properties.dependencies, activeSkill?.properties.rarity, isLocked]
+    [activeSkill?.properties.dependencies, activeSkill?.properties.rarity, customTheme.rarity, isLocked]
   )
 
   if (!activeSkill || !rarity || !deps || !cardColour || !setSkillState) return null
@@ -78,12 +80,9 @@ export function ActiveSkillPanel() {
               color={OFF_WHITE}
               fontWeight={500}
               borderRadius="0"
-              textShadow={`1px 1px 1px ${darken(0.3, CUSTOM_THEME.rarity[rarity].backgroundColor)}`}
+              textShadow={`1px 1px 1px ${darken(0.3, customTheme.rarity[rarity].backgroundColor)}`}
             >
-              <img
-                src={require(`assets/png/icons/icons8-diamonds-${rarity}-64.png`)}
-                style={{ maxWidth: '2.5rem', marginRight: '0.5rem' }}
-              />
+              <img src={assetsMap.icons.rarity[rarity]} style={{ maxWidth: '2.5rem', marginRight: '0.5rem' }} />
               {rarity?.toLocaleUpperCase()} SKILL
             </SkillRarityLabel>
           </RowStart>
@@ -108,7 +107,7 @@ export function ActiveSkillPanel() {
             skillpointStyles={{
               height: '80%',
               flex: 1.4,
-              padding: "0",
+              padding: '0',
               backgroundColor: 'transparent',
               justifyContent: 'center',
               disabled: isLocked,
@@ -218,7 +217,7 @@ function _getSkillDescription(name: string | undefined, lockStatus: SkillLockSta
   }
 }
 
-function _getLockStatusColour(lockStatus: SkillLockStatus, rarity: Rarity) {
+function _getLockStatusColour(lockStatus: SkillLockStatus, rarity: SkillRarity) {
   switch (lockStatus) {
     case SkillLockStatus.LOCKED:
       return 'darkred'

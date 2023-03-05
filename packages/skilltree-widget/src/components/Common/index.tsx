@@ -2,7 +2,7 @@ import { Row } from '@past3lle/components'
 import styled from 'styled-components'
 
 import { SKILLPOINT_SIZES } from '../../constants/skills'
-import { Rarity } from '../../types'
+import { SkillRarity } from '../../types'
 import { getRarityColours } from '../../utils'
 import { Vector } from '../SkillsCanvas/Canvas/api/vector'
 
@@ -28,7 +28,7 @@ export const StyledSkillpoint = styled(StyledGridItem).attrs({
   active: boolean
   isDependency: boolean
   isEmptySkill: boolean
-  rarity: Rarity | undefined
+  rarity: SkillRarity | undefined
   metadataCss?: string
   css?: string
 }>`

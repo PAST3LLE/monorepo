@@ -1,7 +1,7 @@
 import { GATEWAY_URI } from '../constants/ipfs'
 import { SKILL_ID_BASE } from '../constants/skills'
-import { CUSTOM_THEME } from '../theme/customTheme'
-import { Rarity, SkillMetadata } from '../types'
+import { CUSTOM_THEME } from '../theme/exampleCustomTheme'
+import { SkillMetadata, SkillRarity } from '../types'
 
 export const getHash = (uri: string) => (uri.startsWith('ipfs://') ? uri.substring(7) : uri)
 export function ipfsToImageUri(uriHash: string) {
@@ -14,7 +14,7 @@ export async function getTokenUri(imageUri: SkillMetadata['image']) {
   return ipfsToImageUri(skillMetaData.image)
 }
 
-export function getRarityColours(rarity?: Rarity) {
+export function getRarityColours(rarity?: SkillRarity) {
   if (!rarity) return CUSTOM_THEME.rarity.common
 
   return CUSTOM_THEME.rarity[rarity]

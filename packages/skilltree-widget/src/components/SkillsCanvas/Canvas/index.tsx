@@ -4,7 +4,7 @@ import React, { useMemo } from 'react'
 
 import { calculateCanvasWidth } from '../../../state/Skills/updaters/GridPositionUpdater'
 import { useGetWindowSize } from '../../../state/WindowSize'
-import { BG_LOGO_DDPX_URL_MAP } from '../../../theme/global'
+import { useGenericImageSrcSet } from '../../../theme/global'
 import { CONFIG } from './api/config'
 import { useLightningCanvas } from './api/hooks'
 import { CanvasContainer, StyledCanvas } from './styleds'
@@ -36,6 +36,8 @@ export function LightningCanvas() {
     dimensions: { width, height },
     config: CONFIG
   })
+
+  const { BG_LOGO_DDPX_URL_MAP } = useGenericImageSrcSet()
 
   return (
     <CanvasContainer>

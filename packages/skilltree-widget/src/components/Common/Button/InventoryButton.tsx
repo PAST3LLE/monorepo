@@ -3,14 +3,14 @@ import { MEDIA_WIDTHS } from '@past3lle/theme'
 import React from 'react'
 
 import { ThemedButton } from '.'
-import TREASURE_CHEST_GREEN from '../../../assets/png/icons/icons8-treasure-chest-90-green.png'
 import {
   /* useSidePanelAtom, */
   useSidePanelAtomBase
 } from '../../../state/SidePanel'
 import { useGetWindowSize } from '../../../state/WindowSize'
 import { MAIN_BG } from '../../../theme/constants'
-import { TEXTURE_BG_URL_MAP } from '../../../theme/global'
+import { useGenericImageSrcSet } from '../../../theme/global'
+import { useAssetsMap } from '../../../theme/utils'
 import { CursiveMonoHeader, CursiveMonoHeaderProps } from '../Text'
 
 interface InventoryButtonProps {
@@ -20,12 +20,16 @@ interface InventoryButtonProps {
 }
 export function InventoryButton(props: InventoryButtonProps) {
   const [, openActivePanel] = useSidePanelAtomBase()
+  const assetsMap = useAssetsMap()
+  const logoUrlMaps = useGenericImageSrcSet()
+
   const [{ width = 0 }] = useGetWindowSize()
   const showShortLogo = width > MEDIA_WIDTHS.upToSmall && width < MEDIA_WIDTHS.upToMedium
+
   return (
     <ThemedButton
       bgColor={'black'}
-      bgImage={TEXTURE_BG_URL_MAP}
+      bgImage={logoUrlMaps.TEXTURE_BG_URL_MAP}
       bgBlendMode="hard-light"
       title={'Click to view skills inventory and account information'}
       display="flex"
@@ -57,7 +61,7 @@ export function InventoryButton(props: InventoryButtonProps) {
           ...props.restWordProps
         }}
       />
-      <img src={TREASURE_CHEST_GREEN} style={{ maxWidth: '2.3rem' }} />
+      <img src={assetsMap.icons.inventory} style={{ maxWidth: '2.3rem' }} />
     </ThemedButton>
   )
 }

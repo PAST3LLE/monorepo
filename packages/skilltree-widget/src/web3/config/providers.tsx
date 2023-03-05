@@ -1,46 +1,63 @@
 import { EthereumClient, modalConnectors, walletConnectProvider } from '@web3modal/ethereum'
 import { Web3Modal as Web3ModalComponent } from '@web3modal/react'
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useMemo } from 'react'
 import { WagmiConfig, configureChains, createClient } from 'wagmi'
 
+import { AppConfig } from '../../types'
 import { SUPPORTED_CHAINS } from './chains'
 
-if (!process.env.REACT_APP_WALLETCONNECT_KEY) {
-  throw new Error('MISSING OR INVALID WALLET_CONNECT KEY! PLEASE SET ONE IN YOUR ENV FILES')
+export interface WalletConnectProps {
+  appName: AppConfig['appName']
+  walletConnect: {
+    projectId: string
+  }
 }
 
-// Wagmi client
-export const { provider } = configureChains(SUPPORTED_CHAINS, [
-  walletConnectProvider({ projectId: process.env.REACT_APP_WALLETCONNECT_KEY })
-])
-
-const wagmiClient = createClient({
-  autoConnect: true,
-  connectors: modalConnectors({
-    projectId: process.env.REACT_APP_WALLETCONNECT_KEY,
-    version: '2',
-    appName: 'PSTL SKILLTREE',
-    chains: SUPPORTED_CHAINS
-  }),
-  provider
-})
-
 // Web3Modal Ethereum Client
-const ethereumClient = new EthereumClient(wagmiClient, SUPPORTED_CHAINS)
+const createWagmiClient = (props: WalletConnectProps) =>
+  createClient({
+    autoConnect: true,
+    connectors: modalConnectors({
+      projectId: props.walletConnect.projectId,
+      version: '2',
+      appName: props.appName,
+      chains: SUPPORTED_CHAINS
+    }),
+    provider: configureChains(SUPPORTED_CHAINS, [walletConnectProvider({ projectId: props.walletConnect.projectId })])
+      .provider
+  })
 
-export const WagmiProvider: React.FC<{
-  children?: ReactNode
-}> = ({ children }) => <WagmiConfig client={wagmiClient}>{children}</WagmiConfig>
+export const WagmiProvider = ({ children, clientProps }: { children: ReactNode; clientProps: WalletConnectProps }) => (
+  <WagmiConfig client={createWagmiClient(clientProps)}>{children}</WagmiConfig>
+)
 
-export const Web3Modal = () => {
-  if (!process.env.REACT_APP_WALLETCONNECT_KEY) {
-    throw new Error('MISSING OR INVALID WALLET_CONNECT KEY! PLEASE SET ONE IN YOUR ENV FILES')
+export const Web3Modal = (props: WalletConnectProps) => {
+  if (!props.walletConnect.projectId) {
+    throw new Error('MISSING or INVALID WalletConnect options! Please check your config object.')
   }
+
+  const ethereumClient = useMemo(() => new EthereumClient(createWagmiClient(props), SUPPORTED_CHAINS), [props])
+
   return (
     <Web3ModalComponent
       themeBackground="themeColor"
-      projectId={process.env.REACT_APP_WALLETCONNECT_KEY}
+      projectId={props.walletConnect.projectId}
       ethereumClient={ethereumClient}
     />
+  )
+}
+
+export const Web3ModalAndWagmiProvider = ({
+  children,
+  clientProps
+}: {
+  children: ReactNode
+  clientProps: WalletConnectProps
+}) => {
+  return (
+    <>
+      <Web3Modal {...clientProps} />
+      <WagmiProvider clientProps={clientProps}>{children}</WagmiProvider>
+    </>
   )
 }

@@ -1,4 +1,4 @@
-import { SkillMetadata } from '../types'
+import { SkillMetadata, SkillRarity } from '../types'
 
 export const SKILLPOINT_SIZES = {
   width: '10vh',
@@ -31,6 +31,6 @@ export const SKILLPOINT_METADATA: SkillMetadata = {
     id: '0-0000',
     shopifyId: '0',
     dependencies: [],
-    rarity: 'common'
+    rarity: SkillRarity.COMMON
   }
 }

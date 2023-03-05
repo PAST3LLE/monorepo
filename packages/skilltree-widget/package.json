@@ -21,6 +21,7 @@
     "default": "./dist/esm/index.js"
   },
   "scripts": {
+    "check-types": "npx tsc --noEmit",
     "clean": "rm -rf dist && rm -rf tsconfig.tsbuildinfo",
     "compile:tsdx": "tsdx build --transpileOnly && cp \"./package.json\" ./dist/",
     "compile": "tsc --emitDeclarationOnly --outDir './dist/types' & tsc --project tsconfig.esm.json & tsc --project tsconfig.cjs.json && cp \"./package.json\" ./dist/",

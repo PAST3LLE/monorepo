@@ -1,11 +1,11 @@
-import { RowProps, RowCenter } from '@past3lle/components'
+import { RowCenter, RowProps } from '@past3lle/components'
 import React, { memo, useMemo } from 'react'
 import styled from 'styled-components'
 
-import sprayBg from '../../assets/png/spray.png'
 import { GATEWAY_URI } from '../../constants/ipfs'
 import { SkillsState, useSkillsAtom } from '../../state/Skills'
-import { Rarity, SkillMetadata } from '../../types'
+import { useAssetsMap } from '../../theme/utils'
+import { SkillMetadata, SkillRarity } from '../../types'
 import { getHash } from '../../utils'
 import { StyledSkillpoint } from '../Common'
 import { Vector } from '../SkillsCanvas/Canvas/api/vector'
@@ -15,7 +15,7 @@ interface Props {
   metadata: SkillMetadata
   vector?: Vector
   hasSkill: boolean
-  forceRarity?: Rarity | 'empty'
+  forceRarity?: SkillRarity | 'empty'
   skillpointStyles?: RowProps
   lightupDependencies?: (state: SkillsState) => void
 }
@@ -78,7 +78,7 @@ function SkillpointUnmemoed({
       <RowCenter height="100%" borderRadius="5px" overflow={'hidden'}>
         <img src={formattedUri} style={{ maxWidth: '100%' }} />
       </RowCenter>
-      {isCurrentSkillActive && <SprayBg />}
+      {isCurrentSkillActive && <SkillpointHighlight />}
     </StyledSkillpoint>
   )
 }
@@ -105,4 +105,7 @@ const StyledImg = styled.img`
 
   pointer-events: none;
 `
-const SprayBg = () => <StyledImg src={sprayBg} />
+const SkillpointHighlight = memo(() => {
+  const assetsMap = useAssetsMap()
+  return <StyledImg src={assetsMap.images.skillpointHighlight} />
+})

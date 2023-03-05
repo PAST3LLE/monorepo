@@ -1,7 +1,6 @@
 import { Text, TextProps } from '@past3lle/components'
 import { setBestContrastingColour } from '@past3lle/theme'
 import React from 'react'
-
 import styled from 'styled-components'
 
 export const BlackBoldItalic = styled(Text.Black).attrs((props) => ({
@@ -19,7 +18,7 @@ export const AutoColorHeader = styled(BlackBoldItalic)<{
 }>`
   background-color: ${({ bgColour }) => bgColour};
   color: ${({ bgColour, fgColour, theme }) =>
-    setBestContrastingColour({ bgColour, fgColour, lightColour: theme.mainFg, darkColour: theme.black })};
+    setBestContrastingColour({ bgColour, fgColour, lightColour: theme.mainFg, darkColour: 'black' })};
 `
 
 export const BlackHeader = styled(BlackBoldItalic).attrs((props) => ({
@@ -51,7 +50,7 @@ export const CursiveText = styled(Text.Black)`
 `
 
 export const CursiveHeader = styled(CursiveText)<{ whiteSpace?: string }>`
-  color: ${({ theme }) => theme.black};
+  color: ${({ theme }) => theme.mainText};
   font-size: 6rem;
   ${({ whiteSpace }) => whiteSpace && `white-space: ${whiteSpace};`};
 `

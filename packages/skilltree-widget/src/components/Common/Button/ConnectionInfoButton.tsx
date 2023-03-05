@@ -1,5 +1,5 @@
 import { Row, Text } from '@past3lle/components'
-import { setCssBackground } from '@past3lle/theme'
+import { setCssBackground, urlToSimpleGenericImageSrcSet } from '@past3lle/theme'
 import { truncateAddress } from '@past3lle/utils'
 import { useWeb3Modal } from '@web3modal/react'
 import { useCallback } from 'react'
@@ -7,14 +7,15 @@ import React from 'react'
 import styled from 'styled-components'
 import { useAccount } from 'wagmi'
 
-import ICON_INTERNET from '../../../assets/png/icons/icons8-internet-100.png'
-import { SPRAY_ACCOUNT_DDPX_URL_MAP } from '../../../theme/global'
+import { useAssetsMap } from '../../../theme/utils'
 import { ConnectionColorWrapper } from './../../Web3/UserWeb3ConnectionStats'
 import { OpenOptions } from './Web3Button'
 
 export function ConnectionInfoButton() {
   const { address } = useAccount()
   const { open } = useWeb3Modal()
+
+  const assetsMap = useAssetsMap()
 
   const handleClick = useCallback(
     async (openOptions: OpenOptions) => {
@@ -32,7 +33,7 @@ export function ConnectionInfoButton() {
       gap="0.5rem"
       onClick={() => handleClick({ route: address ? 'Account' : 'ConnectWallet' })}
     >
-      <img src={ICON_INTERNET} />
+      <img src={assetsMap.icons.connection} />
       <Text.SubHeader
         margin={'0 0 1rem 0'}
         padding={0}
@@ -64,7 +65,7 @@ const ConnectionInfoContainer = styled(Row).attrs({ justifyContent: 'center', al
   filter: invert(1);
   ${({ theme }) =>
     setCssBackground(theme, {
-      imageUrls: [SPRAY_ACCOUNT_DDPX_URL_MAP],
+      imageUrls: [urlToSimpleGenericImageSrcSet(theme.assetsMap.icons.connection)],
       backgroundAttributes: ['center/contain no-repeat']
     })}
 `

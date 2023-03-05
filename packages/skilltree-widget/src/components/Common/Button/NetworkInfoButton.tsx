@@ -5,17 +5,20 @@ import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import { useNetwork } from 'wagmi'
 
-import GOERLI_CHAIN_LOGO from '../../../assets/png/chains/ethereumChainLogo.webp'
-import POLYGON_MUMBAI_LOGO from '../../../assets/png/chains/polygonChainLogo.png'
-import DISCONNECTED_LOGO from '../../../assets/png/icons/icons8-internet-100.png'
 import { useGetWindowSize } from '../../../state/WindowSize'
+import { AssetsMap } from '../../../theme/types'
+import { useAssetsMap } from '../../../theme/utils'
+import { SupportedChains } from '../../../web3/types/chains'
 import { MonospaceText } from '../Text'
 
 export function NetworkInfoButton() {
+  const assetsMap = useAssetsMap()
+
   const { open } = useWeb3Modal()
   const { chain } = useNetwork()
+
   const chainName = chain?.name
-  const chainLogo = _getChainLogo(chain?.id)
+  const chainLogo = _getChainLogo(chain?.id, assetsMap)
 
   const [{ width = 0 }] = useGetWindowSize()
   const showShortLogo = width > MEDIA_WIDTHS.upToSmall && width < MEDIA_WIDTHS.upToMedium
@@ -68,14 +71,14 @@ const NetworkInfoButtonContainer = styled(Row).attrs({ justifyContent: 'center',
   transition: box-shadow 0.1s ease-in-out, transform 0.1s ease-in-out;
 `
 
-function _getChainLogo(id: number | undefined) {
+function _getChainLogo(id: number | undefined, assetsMap: AssetsMap['assetsMap']) {
   switch (id) {
     // GOERLI
-    case 5:
-      return GOERLI_CHAIN_LOGO
-    case 80001:
-      return POLYGON_MUMBAI_LOGO
+    case SupportedChains.GOERLI:
+      return assetsMap.icons.chains[SupportedChains.GOERLI]
+    case SupportedChains.POLYGON_MUMBAI:
+      return assetsMap.icons.chains[SupportedChains.POLYGON_MUMBAI]
     default:
-      return DISCONNECTED_LOGO
+      return assetsMap.icons.chains.disconnected
   }
 }

@@ -1,4 +1,3 @@
-
 export interface SkilltreeMetadata<P, A = Record<any, any>> {
   name: string
   decimals?: number
@@ -12,10 +11,16 @@ export interface SkillProps<T> extends SkilltreeMetadata<T> {
   collectionMetadataUri: string
 }
 
-export type Rarity = 'common' | 'rare' | 'legendary' | 'epic'
+export enum SkillRarity {
+  EMPTY = 'empty',
+  COMMON = 'common',
+  RARE = 'rare',
+  LEGENDARY = 'legendary',
+  EPIC = 'epic'
+}
 
 export interface BaseProperties {
-  rarity: Rarity
+  rarity: SkillRarity
 }
 export interface CollectionProperties extends BaseProperties {
   size: number
@@ -45,7 +50,4 @@ export interface SkillAttributes {
 export type CollectionMetadata = SkilltreeMetadata<CollectionProperties>
 export type SkillMetadata = SkilltreeMetadata<SkillProperties, SkillAttributes>
 
-export interface AppConfig {
-  appName: string
-  appTheme?: Record<string, any>
-}
+export * from './appConfig'

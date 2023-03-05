@@ -1,6 +1,7 @@
 import { useAtomsDevtools } from 'jotai-devtools'
 import { ReactNode } from 'react'
-import { AppConfig } from '../types'
+
+import { AppConfig } from '../types/appConfig'
 
 interface Props {
   children: ReactNode

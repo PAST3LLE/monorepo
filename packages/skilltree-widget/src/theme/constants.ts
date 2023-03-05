@@ -1,9 +1,9 @@
-import { CUSTOM_THEME } from './customTheme'
+import { CUSTOM_THEME } from './exampleCustomTheme'
 
 export const MAIN_BG = CUSTOM_THEME.mainBg
-export const MAIN_BG_2 = CUSTOM_THEME.mainBg2
+export const MAIN_BG_2 = CUSTOM_THEME.mainBgAlt
 export const MAIN_FG = CUSTOM_THEME.mainFg
-export const MAIN_FG_2 = CUSTOM_THEME.mainFg2
+export const MAIN_FG_2 = CUSTOM_THEME.mainFgAlt
 
 export const RARITY_COLOURS_MAP = {
   empty: CUSTOM_THEME.rarity.empty.backgroundColor,

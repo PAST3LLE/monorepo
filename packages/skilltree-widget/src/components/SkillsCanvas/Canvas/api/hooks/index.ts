@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 
-import BG_IMAGE from '../../../../../assets/png/background.png'
 import { MetadataState } from '../../../../../state/Metadata'
 import { SkillGridPositionList, SkillsState } from '../../../../../state/Skills'
+import { useAssetsMap } from '../../../../../theme/utils'
 import {
   // SkillDependencyObject,
   SkillId,
@@ -28,6 +28,8 @@ let canvas: HTMLCanvasElement,
 export function useLightningCanvas({ canvasDOM, config, dimensions }: LightningCanvasProps) {
   const [ready, setReadyStatus] = useState(false)
 
+  const assetsMap = useAssetsMap()
+
   // ===========================
   // EFFECTS
   // ===========================
@@ -45,6 +47,8 @@ export function useLightningCanvas({ canvasDOM, config, dimensions }: LightningC
   useEffect(() => {
     if (!canvas || !ready || !canvasDOM?.parentElement) return
 
+    const bgImage = new Image()
+    bgImage.src = assetsMap.images.appBackground
     /* Uncomment for event listening
     // when changes we remove listeners
     canvas.removeEventListener('mousedown', _onMouseDown, true)
@@ -65,8 +69,8 @@ export function useLightningCanvas({ canvasDOM, config, dimensions }: LightningC
 
     _buildApi(config)
 
-    window.requestAnimationFrame(_animate)
-  }, [config, ready, height, width, canvasDOM?.parentElement])
+    window.requestAnimationFrame(() => _animate(bgImage))
+  }, [config, ready, height, width, canvasDOM?.parentElement, assetsMap.images.appBackground])
 
   // ========================
   // CLEARS CANVAS ON A TIMER
@@ -89,9 +93,7 @@ function _buildApi(config: LightningConfig) {
   ltApi = new Lightning(config)
 }
 
-const bgImage = new Image()
-bgImage.src = BG_IMAGE
-function _animate() {
+function _animate(bgImage: HTMLImageElement) {
   if (!ctx) return
 
   // Clear board
@@ -110,7 +112,7 @@ function _animate() {
   }
 
   setTimeout(() => {
-    _animate()
+    _animate(bgImage)
   }, 480)
 }
 
