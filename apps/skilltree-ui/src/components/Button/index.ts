@@ -20,7 +20,7 @@ export const ThemedButton = styled(Button).attrs(() => ({}))<{
     invert &&
     !bgImage &&
     `
-    background-color: ${theme.blackOpaque1};
+    background-color: ${theme.blackOpaque};
     > * { filter: invert(1); }
   `}
   ${({ gap }) => gap && `gap: ${gap};`}

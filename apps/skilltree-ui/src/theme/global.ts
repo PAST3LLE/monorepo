@@ -1,5 +1,4 @@
-import { makeSimpleGenericImageSrcSet } from './utils'
-import { MediaWidths } from '@past3lle/theme'
+import { MediaWidths, urlToSimpleGenericImageSrcSet } from '@past3lle/theme'
 import { GenericImageSrcSet } from '@past3lle/types'
 import BG_LOGO from 'assets/png/back-logo.png'
 import BG_IMAGE from 'assets/png/background.png'
@@ -9,12 +8,12 @@ import { ipfsToImageUri } from 'components/Skills/utils'
 import { EMPTY_SKILL_IMAGE_HASH_LIST } from 'constants/skills'
 import { createGlobalStyle, css } from 'styled-components/macro'
 
-export const TEXTURE_BG_URL_MAP: GenericImageSrcSet<MediaWidths> = makeSimpleGenericImageSrcSet(
+export const TEXTURE_BG_URL_MAP: GenericImageSrcSet<MediaWidths> = urlToSimpleGenericImageSrcSet(
   ipfsToImageUri(EMPTY_SKILL_IMAGE_HASH_LIST[0])
 )
-export const BACKGROUND_IMAGE_DDPX_URL_MAP: GenericImageSrcSet<MediaWidths> = makeSimpleGenericImageSrcSet(BG_IMAGE)
-export const BG_LOGO_DDPX_URL_MAP: GenericImageSrcSet<MediaWidths> = makeSimpleGenericImageSrcSet(BG_LOGO)
-export const SPRAY_ACCOUNT_DDPX_URL_MAP: GenericImageSrcSet<MediaWidths> = makeSimpleGenericImageSrcSet(SPRAY_ACCOUNT)
+export const BACKGROUND_IMAGE_DDPX_URL_MAP: GenericImageSrcSet<MediaWidths> = urlToSimpleGenericImageSrcSet(BG_IMAGE)
+export const BG_LOGO_DDPX_URL_MAP: GenericImageSrcSet<MediaWidths> = urlToSimpleGenericImageSrcSet(BG_LOGO)
+export const SPRAY_ACCOUNT_DDPX_URL_MAP: GenericImageSrcSet<MediaWidths> = urlToSimpleGenericImageSrcSet(SPRAY_ACCOUNT)
 
 // "!important" override on WalletConnect style variables
 // this is ugly but currently the only way to style web3modal
