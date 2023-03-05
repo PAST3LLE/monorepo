@@ -13,7 +13,7 @@ export const PopoverContainer = styled.div<{ show: boolean }>`
   border: 1px solid ${({ theme }) => theme.bg3};
   box-shadow: 0 4px 8px 0 ${({ theme }) => transparentize(0.9, theme.shadow1)};
   color: ${({ theme }) => theme.text2};
-  border-radius: ${({ theme }) => theme.buttons.borderRadius};
+  border-radius: ${({ theme }) => theme.button.border.radius};
 `
 
 export const ReferenceElement = styled.div`

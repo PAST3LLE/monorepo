@@ -1,6 +1,6 @@
 import { PNG } from '@past3lle/assets'
 import { useDetectScrollIntoView } from '@past3lle/hooks'
-import { OFF_WHITE, ThemeModes, getThemeColours } from '@past3lle/theme'
+import { OFF_WHITE } from '@past3lle/theme'
 import React, { ForwardedRef, forwardRef, useEffect, useState } from 'react'
 import { Play } from 'react-feather'
 import { BoxProps } from 'rebass'
@@ -188,7 +188,7 @@ export function VideoDelayer(props: CTAOverlayProps) {
 
 function VideoErrorOverlay(props: CTAOverlayProps & { errorMessage?: string }) {
   return (
-    <VideoPlayCTAOverlay {...props} bgColor={getThemeColours(ThemeModes.DARK).red3} $height="100%" $width="120%">
+    <VideoPlayCTAOverlay {...props} $height="100%" $width="120%">
       <VideoHeader letterSpacing={0} fontSize={20} padding="10rem" margin="0 15% 0 auto">
         <p>
           Error loading video! <span style={{ fontStyle: 'normal', fontWeight: 200, whiteSpace: 'pre' }}>ʕ ͡° ʖ̯ ͡°ʔ</span>
@@ -196,20 +196,5 @@ function VideoErrorOverlay(props: CTAOverlayProps & { errorMessage?: string }) {
         {props.errorMessage && <div>{props.errorMessage}</div>}
       </VideoHeader>
     </VideoPlayCTAOverlay>
-  )
-}
-
-export function Test() {
-  return (
-    <SmartVideo
-      sourcesProps={[
-        {
-          src: '123',
-          type: 'mp4'
-        }
-      ]}
-      ctaOverlayProps={{ $zIndex: 1000 }}
-      container={document.body}
-    />
   )
 }

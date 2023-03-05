@@ -5,7 +5,7 @@ import {
   useImageLoadingEvent,
   useStateRef
 } from '@past3lle/hooks'
-import { MediaWidths, ThemeModes, getLqIkUrl } from '@past3lle/theme'
+import { MediaWidths, getLqIkUrl } from '@past3lle/theme'
 import { DDPXImageUrlMap } from '@past3lle/types'
 import { setForwardedRef } from '@past3lle/utils'
 import { IKContext, IKImage } from 'imagekitio-react'
@@ -29,6 +29,7 @@ interface BaseImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   transformation?: ImageKitTransformation
   loadInViewOptions?: LoadInViewOptions
   lqImageOptions?: LqImageOptions
+  placeholderStyleProps?: { bgColor: string }
 }
 
 type ImagePropsWithDefaultImage = BaseImageProps & {
@@ -54,12 +55,12 @@ export const PlaceholderPicture = styled(StyledPicture)<{ bgColor?: string }>`
   width: 100%;
   font-size: 275%;
   font-weight: 100;
-  background-color: ${({ theme, bgColor = theme.blackOpaque1 }) => bgColor};
+  background-color: ${({ theme, bgColor = theme.blackOpaque }) => bgColor};
   filter: brightness(0.7);
   opacity: 0.38;
 
   > div {
-    color: ${({ theme }) => (theme.mode === ThemeModes.DARK ? theme.offWhite : theme.offWhite)};
+    color: ${({ theme }) => theme.offwhite};
     font-weight: 100;
     font-size: 150%;
     letter-spacing: -1px;
@@ -137,7 +138,7 @@ export function ApiImage({
   return (
     <>
       {lqImageOptions.showLoadingIndicator && !imageLoaded && (
-        <PlaceholderPicture>
+        <PlaceholderPicture {...rest.placeholderStyleProps}>
           <ColumnCenter>
             <div>Loading content...</div>
           </ColumnCenter>

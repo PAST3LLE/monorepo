@@ -19,8 +19,7 @@ export const VideoPlayCTAOverlay = styled(Row).attrs((props) => ({
 }))<CTAOverlayProps>`
   position: absolute;
   cursor: pointer;
-  background: ${({ theme, bgColor }) =>
-    `radial-gradient(76.02% 105.41% at 31.84% 0%,${bgColor} 0%,${theme.blackOpaque1} 100%)`};
+  background: ${({ bgColor }) => `radial-gradient(76.02% 105.41% at 31.84% 0%,${bgColor} 0%, rgba(0,0,0,0.6) 100%)`};
   ${({ $width }) => $width && `width: ${$width};`}
   ${({ $height }) => $height && `height: ${$height};`}
   z-index: ${({ $zIndex = 200 }) => $zIndex};

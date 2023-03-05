@@ -8,10 +8,10 @@ import { Text as LayoutText } from '../Text'
 import { CookieStyles } from './types'
 
 export const CookieSubHeader = styled(LayoutText.SubHeader)`
-  color: ${({ theme }) => theme.products.aside.textColor};
+  color: ${({ theme }) => theme.content.text};
 `
 export const CookieSubDescription = styled(LayoutText.Black)`
-  color: ${({ theme }) => theme.products.aside.textColor};
+  color: ${({ theme }) => theme.content.text};
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -50,7 +50,7 @@ export const CookieContainer = styled.div<CookieStyles>`
   > ${ColumnCenter} {
     gap: 2rem;
     padding: 2rem;
-    background-color: ${({ theme, $bg = theme.blackOpaque1 }) => $bg};
+    background-color: ${({ theme, $bg = theme.blackOpaque }) => $bg};
   }
 
   input[type='checkbox'] {
@@ -58,7 +58,7 @@ export const CookieContainer = styled.div<CookieStyles>`
     position: relative;
 
     appearance: none;
-    background-color: ${({ theme, $text = theme.offWhite }) => $text};
+    background-color: ${({ theme, $text = theme.offwhite }) => $text};
     margin: 0;
     font: inherit;
     color: currentColor;
@@ -87,7 +87,7 @@ export const CookieContainer = styled.div<CookieStyles>`
 
   > * {
     padding: 1rem 0;
-    color: ${({ theme, $text = theme.offWhite }) => $text};
+    color: ${({ theme, $text = theme.offwhite }) => $text};
   }
 
   ${CookieSubHeader} {

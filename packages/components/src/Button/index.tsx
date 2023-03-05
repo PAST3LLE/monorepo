@@ -1,13 +1,11 @@
-import { MediaWidths, THEME_LIST, ThemeModes, ThemeProvider, setBackgroundWithDPI } from '@past3lle/theme'
-import { GenericImageSrcSet, Writable } from '@past3lle/types'
+import { MediaWidths, setBackgroundWithDPI } from '@past3lle/theme'
+import { GenericImageSrcSet } from '@past3lle/types'
 import { darken, transparentize } from 'polished'
-import React, { ForwardedRef, forwardRef } from 'react'
 import { BoxProps, Button as RebassButton, ButtonProps as RebassButtonProps } from 'rebass'
-import styled, { DefaultTheme, FlattenInterpolation, ThemeProps, ThemedStyledProps, css } from 'styled-components'
-import { variants } from 'styled-theming'
+import styled, { DefaultTheme, FlattenInterpolation, ThemeProps, css } from 'styled-components'
 
 export interface ButtonBaseProps extends RebassButtonProps {
-  variant?: ButtonVariations
+  $variant?: ButtonVariations
   $size?: ButtonSizeVariations
 }
 
@@ -34,21 +32,19 @@ export enum ButtonSizeVariations {
 export const BV = ButtonVariations
 export const BSV = ButtonSizeVariations
 
-const BUTTON_VARIATION_LIST = Object.entries(ButtonVariations)
-
 const DEFAULT_DARKEN_AMOUNT = 0.2
 
 const PRIMARY_BUTTON_STYLES = css`
-  color: ${({ theme }): string => theme.products.aside.textColor};
-  background: ${({ theme }): string => theme.products.aside.itemContainer};
+  color: ${({ theme }): string => theme.content.text};
+  background: ${({ theme }): string => theme.content.background};
 
   &:hover {
-    background: ${({ theme }): string => darken(DEFAULT_DARKEN_AMOUNT, theme.products.aside.itemContainer)};
+    background: ${({ theme }): string => darken(DEFAULT_DARKEN_AMOUNT, theme.content.background)};
   }
 `
 
 const SECONDARY_BUTTON_STYLES = css`
-  color: ${({ theme }): string => theme.offWhite};
+  color: ${({ theme }): string => theme.offwhite};
   background: ${({ theme }): string => theme.purple3};
 
   &:hover {
@@ -57,7 +53,7 @@ const SECONDARY_BUTTON_STYLES = css`
 `
 
 const DARK_MODE_TOGGLE_STYLES = css`
-  color: ${({ theme }): string => theme.offWhite};
+  color: ${({ theme }): string => theme.offwhite};
   background: ${({ theme }): string => theme.darkModeToggle};
 
   svg {
@@ -82,8 +78,8 @@ const SUCCESS_BUTTON_STYLES = css`
 
   &:hover {
     background: linear-gradient(270deg, #8958ff 0%, #3f77ff 100%);
-    border-color: ${({ theme }): string => theme.offWhite};
-    color: ${({ theme }): string => theme.offWhite};
+    border-color: ${({ theme }): string => theme.offwhite};
+    color: ${({ theme }): string => theme.offwhite};
   }
 
   transition: background, color 0.3s ease-out;
@@ -120,8 +116,8 @@ const DISABLED_BUTTON_STYLES = css`
 `
 
 const THEME_BUTTON_STYLES = css`
-  color: ${({ theme }): string => theme.offWhite};
-  border-color: ${({ theme }): string => theme.offWhite};
+  color: ${({ theme }): string => theme.offwhite};
+  border-color: ${({ theme }): string => theme.offwhite};
 
   filter: contrast(1.5) saturate(10);
 
@@ -129,7 +125,7 @@ const THEME_BUTTON_STYLES = css`
   text-shadow: 0px 0px 12px #fff;
 
   > div {
-    filter: ${({ theme: { mode } }) => `invert(${mode === ThemeModes.DARK ? 1 : 1})`};
+    filter: ${({ theme: { mode } }) => `invert(${mode === 'DARK' ? 1 : 1})`};
 
     border-radius: 0.1rem;
 
@@ -140,104 +136,67 @@ const THEME_BUTTON_STYLES = css`
   }
 
   &:hover {
-    filter: ${({ theme: { mode } }) =>
-      mode === ThemeModes.DARK ? 'contrast(1.5) saturate(10)' : 'contrast(2) saturate(3)'};
+    filter: ${({ theme: { mode } }) => (mode === 'DARK' ? 'contrast(1.5) saturate(10)' : 'contrast(2) saturate(3)')};
 
     border-color: ${({ theme }): string => theme.text1};
 
     > div {
-      filter: ${({ theme: { mode } }) => `invert(${mode === ThemeModes.DARK ? 0 : 1})`};
+      filter: ${({ theme: { mode } }) => `invert(${mode === 'DARK' ? 0 : 1})`};
     }
   }
 
   transition: text-shadow, background-color, filter 0.2s ease-in-out;
 `
 
-type ButtonVariationInterpolationObject = {
-  [key in keyof typeof ButtonVariations]: ThemeInterpolationObject
-}
+const getButtonVariantStyles = ($variant: ButtonVariations): FlattenInterpolation<ThemeProps<DefaultTheme>> => {
+  switch ($variant) {
+    case ButtonVariations.DEFAULT:
+      return PRIMARY_BUTTON_STYLES
 
-type ThemeInterpolationObject = {
-  [key in keyof typeof ThemeModes]: FlattenInterpolation<ThemeProps<DefaultTheme>>
-}
+    case ButtonVariations.PRIMARY:
+      return PRIMARY_BUTTON_STYLES
 
-const ButtonThemeMap: Writable<ButtonVariationInterpolationObject> = BUTTON_VARIATION_LIST.reduce(
-  (accum, [, buttonVariant]) => {
-    // buttonStyle = 'secondary' or 'primary' etc style
-    let buttonStyle: FlattenInterpolation<
-      ThemedStyledProps<{ bgImage?: string; frameBgColor?: string | undefined }, DefaultTheme>
-    >
+    case ButtonVariations.SECONDARY:
+      return SECONDARY_BUTTON_STYLES
 
-    switch (buttonVariant) {
-      case ButtonVariations.DEFAULT:
-        buttonStyle = PRIMARY_BUTTON_STYLES
-        break
-      case ButtonVariations.PRIMARY:
-        buttonStyle = PRIMARY_BUTTON_STYLES
-        break
-      case ButtonVariations.SECONDARY:
-        buttonStyle = SECONDARY_BUTTON_STYLES
-        break
-      case ButtonVariations.DARK_MODE_TOGGLE:
-        buttonStyle = DARK_MODE_TOGGLE_STYLES
-        break
-      case ButtonVariations.DANGER:
-        buttonStyle = DANGER_BUTTON_STYLES
-        break
-      case ButtonVariations.SUCCESS:
-        buttonStyle = SUCCESS_BUTTON_STYLES
-        break
-      case ButtonVariations.WARNING:
-        buttonStyle = WARNING_BUTTON_STYLES
-        break
-      case ButtonVariations.CANCEL:
-        buttonStyle = CANCEL_BUTTON_STYLES
-        break
-      case ButtonVariations.DISABLED:
-        buttonStyle = DISABLED_BUTTON_STYLES
-        break
-      case ButtonVariations.THEME:
-        buttonStyle = THEME_BUTTON_STYLES
-        break
-    }
+    case ButtonVariations.DARK_MODE_TOGGLE:
+      return DARK_MODE_TOGGLE_STYLES
 
-    accum[buttonVariant] = THEME_LIST.reduce<Writable<ThemeInterpolationObject>>((accum2, [, themeName]) => {
-      // { 'LIGHT': css` ... `, 'DARK': css` ... `, ... }
-      accum2[themeName] = buttonStyle
-      return accum2
-    }, {} as ThemeInterpolationObject)
+    case ButtonVariations.DANGER:
+      return DANGER_BUTTON_STYLES
 
-    return accum
-  },
-  {} as Writable<ButtonVariationInterpolationObject>
-)
+    case ButtonVariations.SUCCESS:
+      return SUCCESS_BUTTON_STYLES
 
-export const ButtonTheme = variants('mode', 'variant', ButtonThemeMap)
+    case ButtonVariations.WARNING:
+      return WARNING_BUTTON_STYLES
 
-// name of the key we will look for on our theme object
-// used to target buttons
-const BUTTON_THEME_KEY = 'button'
-// Created a 'size' prop on buttons, default | small | big
-const ButtonSizes = variants('component', '$size', {
-  DEFAULT: {
-    [BUTTON_THEME_KEY]: css`
-      font-size: ${({ theme }) => theme.buttons.font.size.normal};
-      padding: 0.5rem 1rem;
-    `
-  },
-  SMALL: {
-    [BUTTON_THEME_KEY]: css`
-      font-size: ${({ theme }) => theme.buttons.font.size.small};
-      padding: 0.3rem 1rem;
-    `
-  },
-  BIG: {
-    [BUTTON_THEME_KEY]: css`
-      font-size: ${({ theme }) => theme.buttons.font.size.large};
-      padding: 0.65rem 1.2rem;
-    `
+    case ButtonVariations.CANCEL:
+      return CANCEL_BUTTON_STYLES
+
+    case ButtonVariations.DISABLED:
+      return DISABLED_BUTTON_STYLES
+
+    case ButtonVariations.THEME:
+      return THEME_BUTTON_STYLES
   }
-})
+}
+
+// Created a 'size' prop on button, default | small | big
+const ButtonSizes = {
+  DEFAULT: css`
+    font-size: ${({ theme }) => theme.button.fontSize.normal};
+    padding: 0.5rem 1rem;
+  `,
+  SMALL: css`
+    font-size: ${({ theme }) => theme.button.fontSize.small};
+    padding: 0.3rem 1rem;
+  `,
+  BIG: css`
+    font-size: ${({ theme }) => theme.button.fontSize.large};
+    padding: 0.65rem 1.2rem;
+  `
+}
 
 type CustomButtonStyleProps = BoxProps & {
   borderRadius?: string
@@ -264,7 +223,7 @@ const ButtonBase = styled(RebassButton)`
   border: none;
   border-radius: 0.5rem;
   cursor: pointer;
-  font-size: ${({ theme }) => theme.buttons.font.size.normal};
+  font-size: ${({ theme }) => theme.button.fontSize.normal};
   font-weight: 600;
   outline: 0;
 
@@ -279,36 +238,12 @@ const ButtonBase = styled(RebassButton)`
   }
 `
 
-const ColouredButtonBase = styled(ButtonBase)`
+export const Button = styled(ButtonBase)<ButtonProps>`
+  /* Size $variant */
+  ${({ $variant }) => $variant && getButtonVariantStyles($variant)}
   /* Fold in theme css above */
-  ${ButtonTheme}
-`
+  ${({ $size }) => $size && ButtonSizes[$size]};
 
-const ColouredAndSizedButtonBase = styled(ColouredButtonBase)`
-  /* Fold in theme css above */
-  ${ButtonSizes}
-`
-
-// Wrap ColouredAndSizedButtonsBase in it's own ThemeProvider which takes the toplevel app theme
-// ThemeProvider and interpolate over it's props
-const ThemeWrappedButtonBase: React.FC<React.ButtonHTMLAttributes<Element>> = forwardRef(
-  function ThemeWrappedButtonBase({ children, ...restProps }, forwardedRef: ForwardedRef<HTMLButtonElement>) {
-    return (
-      <ThemeProvider themeExtension={{ component: BUTTON_THEME_KEY }}>
-        <ColouredAndSizedButtonBase ref={forwardedRef} {...restProps}>
-          {children}
-        </ColouredAndSizedButtonBase>
-      </ThemeProvider>
-    )
-  }
-)
-
-export const Button = styled(ThemeWrappedButtonBase).attrs<ButtonBaseProps>(
-  ({ $size = BSV.DEFAULT, ...restProps }) => ({
-    ...restProps,
-    $size
-  })
-)<ButtonProps>`
   ${({ backgroundColor, bgImage }) => !bgImage && backgroundColor && `background-color: ${backgroundColor};`}
   ${({
     theme,

@@ -1,10 +1,9 @@
-import { Colors } from '@past3lle/theme'
 import React from 'react'
 import { Text as RebassText, TextProps } from 'rebass'
 import styled from 'styled-components'
 
-const TextWrapper = styled(RebassText).attrs((props) => ({ fontSize: '1.2rem', ...props }))<{ colour: keyof Colors }>`
-  color: ${({ colour, theme }): string => (theme as Colors)[colour]};
+const TextWrapper = styled(RebassText).attrs((props) => ({ fontSize: '1.2rem', ...props }))<{ colour: string }>`
+  color: ${({ colour, theme }): string => (theme as any)[colour]};
 `
 
 const Text = {
@@ -33,7 +32,4 @@ const Text = {
   Error: styled((props: TextProps) => <TextWrapper fontWeight={500} colour={'red1'} {...props} />)``
 }
 
-export {
-  Text,
-  TextProps
-}
+export { Text, TextProps }
