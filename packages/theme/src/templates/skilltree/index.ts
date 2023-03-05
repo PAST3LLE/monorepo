@@ -1,7 +1,7 @@
-import { DefaultOptions } from '..'
 import { ThemeBaseColoursRequired, ThemeContentPartsRequired } from '../../types'
+import { BaseColours } from '../base'
 
-const BaseColoursRequired: ThemeBaseColoursRequired = DefaultOptions.BaseColours
+const BaseColoursRequired: ThemeBaseColoursRequired = BaseColours
 export type SkilltreeThemeExtension = Partial<ThemeContentPartsRequired> & {
   text1: string
   bg1: string

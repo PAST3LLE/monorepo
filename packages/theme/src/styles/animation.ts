@@ -94,7 +94,7 @@ const fadeInAnimation = css`
     }
   }
 `
-const flickerAnimation = css<{ frameBgColor: string }>`
+const flickerAnimation = css<{ frameBgColor?: string }>`
   @keyframes flickerIn {
     0% {
       background-color: ${({ frameBgColor = '#000' }) => transparentize(1, frameBgColor)};

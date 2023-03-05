@@ -1,6 +1,6 @@
 import { transparentize } from 'polished'
 
-import { Color, ThemeMinimumRequired } from '../types'
+import { ThemeMinimumRequired } from '../types'
 
 /**
  * Base required colours. Can be imported or replaced
@@ -30,33 +30,62 @@ export const BaseColours = {
  * Base required content. Can be imported or replaced
  */
 export const BaseContent = {
-  button: {
-    fontSize: {
-      small: '1rem',
-      normal: '1.2rem',
-      large: '1.6rem'
+  DEFAULT: {
+    button: {
+      fontSize: {
+        small: '1rem',
+        normal: '1.2rem',
+        large: '1.6rem'
+      },
+      border: {
+        radius: '1rem',
+        border: '0.1rem solid transparent',
+        colour: 'none'
+      },
+      hoverColour: 'none'
     },
-    border: {
-      radius: '1rem',
-      border: '0.1rem solid transparent',
-      colour: 'none'
+    input: {
+      border: {
+        radius: '1rem',
+        border: 'none',
+        colour: BaseColours.offwhiteOpaque
+      },
+      hoverColour: BaseColours.offwhiteOpaque
     },
-    hoverColour: 'none'
+    content: {
+      background: BaseColours.blackOpaque,
+      backgroundAlt: BaseColours.offwhiteOpaque,
+      text: BaseColours.offwhite,
+      textAlt: BaseColours.blackOpaqueMore
+    }
   },
-  input: {
-    border: {
-      radius: '1rem',
-      border: 'none',
-      colour: [BaseColours.offwhiteOpaque, 'transparent'] as Color
+  LIGHT: {
+    input: {
+      border: {
+        colour: 'transparent'
+      },
+      hoverColour: BaseColours.offblackOpaque
     },
-    hoverColour: [BaseColours.offwhiteOpaque, BaseColours.offblackOpaque] as Color
+    content: {
+      background: BaseColours.offwhiteOpaque,
+      backgroundAlt: BaseColours.blackOpaque,
+      text: BaseColours.black
+    }
   },
-  content: {
-    background: [BaseColours.blackOpaque, BaseColours.offwhiteOpaque] as Color,
-    backgroundAlt: [BaseColours.offwhiteOpaque, BaseColours.blackOpaque] as Color,
-    text: [BaseColours.offwhite, BaseColours.black] as Color,
-    textAlt: [BaseColours.blackOpaqueMore, BaseColours.offwhiteOpaqueMost] as Color
+  DARK: {
+    input: {
+      border: {
+        colour: BaseColours.offwhiteOpaque
+      },
+      hoverColour: BaseColours.offwhiteOpaque
+    },
+    content: {
+      background: BaseColours.blackOpaque,
+      backgroundAlt: BaseColours.offwhiteOpaque,
+      text: BaseColours.offwhite,
+      textAlt: BaseColours.blackOpaqueMore
+    }
   }
 }
 
-export const BaseTheme: ThemeMinimumRequired = { ...BaseColours, ...BaseContent }
+export const BaseTheme: ThemeMinimumRequired = { baseColours: BaseColours, baseContent: { modes: { ...BaseContent } } }

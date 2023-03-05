@@ -4,12 +4,11 @@ import {
   mediaHeightTemplates as mediaHeight,
   mediaWidthTemplates as mediaWidth
 } from './styles/mediaQueries'
-import { DefaultOptions } from './templates'
+import { BaseTheme } from './templates/base'
 import {
   AvailableThemeTemplate,
   BasicUserTheme,
   CustomThemeOrTemplate,
-  ThemeBaseRequired,
   ThemeByModes,
   ThemeMinimumRequired
 } from './types'
@@ -84,7 +83,7 @@ export function createCustomTheme<T extends ThemeByModes, M extends BasicUserThe
 ): CustomThemeOrTemplate<T, undefined, M> {
   const CustomThemeCreator = CreateTheme<T, undefined, M>()
   const auxTheme = {
-    ...DefaultOptions.BaseTheme,
+    ...BaseTheme,
     ...theme
   } as T extends ThemeByModes<M> ? ThemeMinimumRequired & T : ThemeMinimumRequired
 
@@ -113,12 +112,4 @@ export function createTemplateTheme<K extends AvailableThemeTemplate, M extends 
   const theme = new TemplateThemeCreator(undefined as never)
 
   return createCustomTheme(theme)
-}
-
-/* EXAMPLE */
-const customTheme = createCustomTheme({ modes: { DARK: {}, LIGHT: {}, DEFAULT: { red: 'red', blue: 'blue' } } })
-type CustomThemeExtension = typeof customTheme.modes.DEFAULT
-declare module 'styled-components' {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  export interface DefaultTheme extends ThemeBaseRequired, CustomThemeExtension {}
 }

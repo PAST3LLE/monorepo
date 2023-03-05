@@ -1,10 +1,10 @@
 import { FlattenSimpleInterpolation, css } from 'styled-components'
 
-import { DefaultOptions } from '..'
 import { ThemeByModes } from '../../types'
 import { ThemeBaseColoursRequired, ThemeContentPartsRequired } from '../../types'
+import { BaseColours, BaseContent } from '../base'
 
-const BaseColoursRequired: ThemeBaseColoursRequired = DefaultOptions.BaseColours
+const BaseColoursRequired: ThemeBaseColoursRequired = BaseColours
 
 export type PastelleThemeExtension = Partial<ThemeContentPartsRequired> & {
   red1: string
@@ -166,9 +166,9 @@ const PastelleTheme: ThemeByModes<PastelleThemeExtension> = {
       darkModeLogoFilter: 'drop-shadow(0px 0px 12px rgba(0,0,0,1))',
       // content
       input: {
-        ...DefaultOptions.BaseContent.input,
+        ...BaseContent.DEFAULT.input,
         border: {
-          ...DefaultOptions.BaseContent.input.border,
+          ...BaseContent.DEFAULT.input.border,
           colour: 'transparent'
         },
         hoverColour: '#4a002f'
@@ -181,9 +181,9 @@ const PastelleTheme: ThemeByModes<PastelleThemeExtension> = {
       darkModeLogoFilter: 'invert(1) saturate(1.4) hue-rotate(180deg) drop-shadow(0px 0px 12px rgba(0,0,0,1))',
       // content
       input: {
-        ...DefaultOptions.BaseContent.input,
+        ...BaseContent.DARK.input,
         border: {
-          ...DefaultOptions.BaseContent.input.border,
+          ...BaseContent.DARK.input.border,
           colour: '#4a002f'
         },
         hoverColour: '#4a002f'

@@ -3,7 +3,7 @@ import { ThemedCssFunction } from 'styled-components'
 
 import { ThemeTemplates } from './templates'
 
-export type Color = string | [Color, Color]
+export type Color = string
 
 export interface ThemeBaseColoursRequired {
   // black
@@ -57,8 +57,13 @@ export interface ThemeContentPartsRequired {
   }
 }
 
+export type ThemeContentPartsRequiredByMode = ThemeByModes<ThemeContentPartsRequired>
+
 export type AvailableThemeTemplate = keyof typeof ThemeTemplates
-export interface ThemeMinimumRequired extends ThemeBaseColoursRequired, ThemeContentPartsRequired {}
+export interface ThemeMinimumRequired {
+  baseColours: ThemeBaseColoursRequired
+  baseContent: ThemeContentPartsRequiredByMode
+}
 
 export type BasicUserTheme = Record<string, any>
 
@@ -72,13 +77,23 @@ export type CustomThemeOrTemplate<T, K, M extends BasicUserTheme = BasicUserThem
     ? (typeof ThemeTemplates)[K]
     : void)
 
-export type ThemeModesRequired = 'DEFAULT' | 'LIGHT' | 'DARK'
+export type ThemeModesRequired = 'LIGHT' | 'DARK'
+
+type Subset<K> = {
+  [attr in keyof K]?: K[attr] extends object
+    ? Subset<K[attr]>
+    : K[attr] extends object | null
+    ? Subset<K[attr]> | null
+    : K[attr] extends object | null | undefined
+    ? Subset<K[attr]> | null | undefined
+    : K[attr]
+}
 
 export type ThemeByModes<T extends BasicUserTheme = BasicUserTheme> = {
   modes: {
     DEFAULT: T
   } & {
-    [key in ThemeModesRequired]: Partial<T>
+    [key in ThemeModesRequired]: Subset<T>
   }
 }
 export interface ThemeStateBaseRequired<M = ThemeModesRequired> {

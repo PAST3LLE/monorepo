@@ -10,7 +10,7 @@ import React, {
 } from 'react'
 import { DefaultTheme, ThemeProvider as StyledComponentsThemeProvider } from 'styled-components'
 
-import { AvailableThemeTemplate, CustomThemeOrTemplate, ThemeByModes, ThemeMinimumRequired } from './types'
+import { AvailableThemeTemplate, CustomThemeOrTemplate, ThemeByModes } from './types'
 import { ThemeModesRequired } from './types'
 
 interface ThemeProviderProps<T, K> {
@@ -35,12 +35,18 @@ export function ThemeProvider<T extends CustomThemeOrTemplate<ThemeByModes, Avai
   const themeObject = useMemo(() => {
     const {
       modes: { DEFAULT: DEFAULT_THEME, [mode]: CURRENT_THEME },
-      ...BASE_THEME
+      baseColours: BASE_COLOURS,
+      baseContent: {
+        modes: { DEFAULT: DEFAULT_CONTENT, [mode]: CURRENT_CONTENT }
+      },
+      ...REST_THEME
     } = theme
     const computedTheme = {
-      ...(BASE_THEME as ThemeMinimumRequired),
+      ...REST_THEME,
+      ...BASE_COLOURS,
+      ...DEFAULT_CONTENT,
+      ...CURRENT_CONTENT,
       ...DEFAULT_THEME,
-      // Compute the app colour pallette using the passed in colourTheme
       ...CURRENT_THEME,
       // state
       mode,
