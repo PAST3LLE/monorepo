@@ -1,6 +1,8 @@
 import React from 'react'
 import { ThemedCssFunction } from 'styled-components'
 
+import { ThemeTemplates } from './templates'
+
 export type Color = string | [Color, Color]
 
 export interface ThemeBaseColoursRequired {
@@ -55,9 +57,29 @@ export interface ThemeContentPartsRequired {
   }
 }
 
-export type ThemeModesRequired = 'LIGHT' | 'DARK'
-export type ThemeModeColours = {
-  [key in ThemeModesRequired]: Record<string, any>
+export type AvailableThemeTemplate = keyof typeof ThemeTemplates
+export interface ThemeMinimumRequired extends ThemeBaseColoursRequired, ThemeContentPartsRequired {}
+
+export type BasicUserTheme = Record<string, any>
+
+export type CustomThemeOrTemplate<T, K, M extends BasicUserTheme = BasicUserTheme> = ThemeMediaWidthsBaseRequired &
+  ThemeMinimumRequired &
+  (T extends ThemeByModes<M>
+    ? T extends undefined
+      ? ThemeMinimumRequired
+      : T
+    : K extends AvailableThemeTemplate
+    ? (typeof ThemeTemplates)[K]
+    : void)
+
+export type ThemeModesRequired = 'DEFAULT' | 'LIGHT' | 'DARK'
+
+export type ThemeByModes<T extends BasicUserTheme = BasicUserTheme> = {
+  modes: {
+    DEFAULT: T
+  } & {
+    [key in ThemeModesRequired]: Partial<T>
+  }
 }
 export interface ThemeStateBaseRequired<M = ThemeModesRequired> {
   mode: M

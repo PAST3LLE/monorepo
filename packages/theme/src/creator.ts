@@ -4,42 +4,22 @@ import {
   mediaHeightTemplates as mediaHeight,
   mediaWidthTemplates as mediaWidth
 } from './styles/mediaQueries'
-import { DefaultOptions, ThemeTemplates } from './templates'
+import { DefaultOptions } from './templates'
 import {
-  ThemeBaseColoursRequired,
-  ThemeContentPartsRequired,
-  ThemeMediaWidthsBaseRequired,
-  ThemeModesRequired
+  AvailableThemeTemplate,
+  BasicUserTheme,
+  CustomThemeOrTemplate,
+  ThemeBaseRequired,
+  ThemeByModes,
+  ThemeMinimumRequired
 } from './types'
-
-type BasicUserTheme = Record<string, any>
-
-export type ThemeByModes<T extends BasicUserTheme = BasicUserTheme> = {
-  modes: {
-    DEFAULT: T
-  } & {
-    [key in ThemeModesRequired]: Partial<T>
-  }
-}
-
-export type AvailableThemeTemplate = keyof typeof ThemeTemplates
-export interface ThemeMinimumRequired extends ThemeBaseColoursRequired, ThemeContentPartsRequired {}
-
-export type CustomThemeOrTemplate<T, K, M extends BasicUserTheme = BasicUserTheme> = ThemeMediaWidthsBaseRequired &
-  ThemeMinimumRequired &
-  (T extends ThemeByModes<M>
-    ? T extends undefined
-      ? ThemeMinimumRequired
-      : T
-    : K extends AvailableThemeTemplate
-    ? (typeof ThemeTemplates)[K]
-    : void)
 
 interface CreateTheme<T, K, M extends BasicUserTheme = BasicUserTheme> {
   new (
     args: T extends ThemeByModes<M> ? T : K extends AvailableThemeTemplate ? never : ThemeMinimumRequired
   ): CustomThemeOrTemplate<T, K, M>
 }
+
 /**
  * CreateTheme constructor function
  * Function REQUIRES at _least_ a theme Interface OR a template name as defined by the @type {ThemeTemplateKey}
@@ -106,7 +86,7 @@ export function createCustomTheme<T extends ThemeByModes, M extends BasicUserThe
   const auxTheme = {
     ...DefaultOptions.BaseTheme,
     ...theme
-  } as T extends ThemeByModes<M> ? T : ThemeMinimumRequired
+  } as T extends ThemeByModes<M> ? ThemeMinimumRequired & T : ThemeMinimumRequired
 
   return new CustomThemeCreator(auxTheme)
 }
@@ -135,11 +115,10 @@ export function createTemplateTheme<K extends AvailableThemeTemplate, M extends 
   return createCustomTheme(theme)
 }
 
-/* EXAMPLE
-const customTheme = createTemplateTheme('PASTELLE')
+/* EXAMPLE */
+const customTheme = createCustomTheme({ modes: { DARK: {}, LIGHT: {}, DEFAULT: { red: 'red', blue: 'blue' } } })
 type CustomThemeExtension = typeof customTheme.modes.DEFAULT
 declare module 'styled-components' {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
   export interface DefaultTheme extends ThemeBaseRequired, CustomThemeExtension {}
 }
-*/
