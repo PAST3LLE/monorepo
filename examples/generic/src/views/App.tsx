@@ -1,17 +1,25 @@
 import { PNG } from '@past3lle/assets'
 import { BV, Button, ColumnCenter, CookieBanner, Text as LayoutText, Modal, Pastellecon } from '@past3lle/components'
 import { useOnClickOutside } from '@past3lle/hooks'
-import SkilltreeBoard from '@past3lle/skilltree-widget'
-import { ThemeModes } from '@past3lle/theme'
+import SkilltreeBoard, { PastelleSkilltreeProps } from '@past3lle/skilltree-widget'
+import { urlToSimpleGenericImageSrcSet } from '@past3lle/theme'
 import * as React from 'react'
 import { useTheme } from 'styled-components'
 
-import { PstlFooter, PstlHeader, PstlMain, PstlNav } from '../components/Layout'
-import { CUSTOM_THEME } from '../theme/skilltreeTheme'
+import {
+  /* PstlFooter, */
+  PstlHeader,
+  PstlMain,
+  PstlNav
+} from '../components/Layout'
+import { skilltreeThemeCustom } from '../theme/skilltreeTheme'
 
-const SKILLTREE_CONFIG = {
+const SKILLTREE_CONFIG: PastelleSkilltreeProps['config'] = {
   appName: 'Pastelle Skilltree',
-  appTheme: CUSTOM_THEME
+  appTheme: skilltreeThemeCustom,
+  provider: {
+    projectId: process.env.REACT_APP_WALLETCONNECT_KEY || 'STRING'
+  }
 }
 
 interface Props {
@@ -46,8 +54,8 @@ const App = ({ showBasic = false }: Props) => {
           <LayoutText.SubHeader>CURRENT THEME: {mode}</LayoutText.SubHeader>
           <Button
             variant={BV.THEME}
-            onClick={() => setMode(mode === ThemeModes.DARK ? ThemeModes.LIGHT : ThemeModes.DARK)}
-            bgImage={PNG.LogoCircle_2x}
+            onClick={() => setMode(mode === 'DARK' ? 'LIGHT' : 'DARK')}
+            bgImage={urlToSimpleGenericImageSrcSet(PNG.LogoCircle_2x)}
             color={'#000'}
           >
             CHANGE THEME
@@ -57,7 +65,7 @@ const App = ({ showBasic = false }: Props) => {
       <PstlMain>
         <SkilltreeBoard config={SKILLTREE_CONFIG} />
       </PstlMain>
-      <PstlFooter>
+      {/* <PstlFooter>
         <ul>
           <LayoutText.SubHeader>Column 1</LayoutText.SubHeader>
           <li>Item 1</li>
@@ -81,7 +89,7 @@ const App = ({ showBasic = false }: Props) => {
           <li>Item 3</li>
           <li>Item 4</li>
         </ul>
-      </PstlFooter>
+      </PstlFooter> */}
       <CookieBanner
         storageKey={process.env.REACT_APP_PASTELLE_COOKIE_SETTINGS || 'PASTELLE_COOKIE_SETTINGS'}
         message={'COOKIES?'}

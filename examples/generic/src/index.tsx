@@ -1,4 +1,4 @@
-import { FontCssProvider, StaticGlobalCssProvider, ThemeProvider } from '@past3lle/theme'
+import { FontCssProvider, StaticGlobalCssProvider, ThemeProvider, createCustomTheme } from '@past3lle/theme'
 import * as React from 'react'
 import 'react-app-polyfill/ie11'
 import * as ReactDOM from 'react-dom/client'
@@ -13,6 +13,16 @@ const StaticCssProviders = () => (
   </>
 )
 
+const appTheme = createCustomTheme({
+  modes: {
+    LIGHT: {},
+    DARK: {},
+    DEFAULT: {
+      mainBg: 'red'
+    }
+  }
+})
+
 const container = document.getElementById('root') as HTMLElement
 const root = ReactDOM.createRoot(container)
 
@@ -20,7 +30,7 @@ root.render(
   <>
     <FontCssProvider />
     <StaticCssProviders />
-    <ThemeProvider themeExtension={{}}>
+    <ThemeProvider theme={appTheme}>
       <App />
     </ThemeProvider>
   </>

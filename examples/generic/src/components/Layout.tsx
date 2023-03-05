@@ -1,10 +1,10 @@
 import { ArticleFadeIn, Footer, Header, Nav } from '@past3lle/components'
-import { OFF_WHITE, ThemeModes } from '@past3lle/theme'
+import { OFF_WHITE } from '@past3lle/theme'
 import styled from 'styled-components'
 
 const BLACK_TRANSPARENT = '#000007b0'
 export const PstlHeader = styled(Header)`
-  background-color: ${({ theme: { mode } }) => (mode === ThemeModes.DARK ? BLACK_TRANSPARENT : OFF_WHITE)};
+  background-color: ${({ theme: { mode } }) => (mode === 'DARK' ? BLACK_TRANSPARENT : OFF_WHITE)};
   min-height: 80px;
 `
 
