@@ -59,4 +59,4 @@ export const BaseContent = {
   }
 }
 
-export const BaseTheme: ThemeMinimumRequired = Object.assign({}, BaseColours, BaseContent)
+export const BaseTheme: ThemeMinimumRequired = { ...BaseColours, ...BaseContent }
