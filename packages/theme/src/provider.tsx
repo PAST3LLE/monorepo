@@ -10,7 +10,7 @@ import React, {
 } from 'react'
 import { DefaultTheme, ThemeProvider as StyledComponentsThemeProvider } from 'styled-components'
 
-import { AvailableThemeTemplate, CustomThemeOrTemplate, ThemeByModes, ThemeMinimumRequired } from './creator'
+import { AvailableThemeTemplate, CustomThemeOrTemplate, ThemeByModes, ThemeMinimumRequired } from './types'
 import { ThemeModesRequired } from './types'
 
 interface ThemeProviderProps<T, K> {

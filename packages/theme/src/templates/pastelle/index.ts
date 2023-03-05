@@ -1,7 +1,7 @@
 import { FlattenSimpleInterpolation, css } from 'styled-components'
 
 import { DefaultOptions } from '..'
-import { ThemeByModes } from '../../creator'
+import { ThemeByModes } from '../../types'
 import { ThemeBaseColoursRequired, ThemeContentPartsRequired } from '../../types'
 
 const BaseColoursRequired: ThemeBaseColoursRequired = DefaultOptions.BaseColours
