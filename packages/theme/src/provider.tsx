@@ -19,6 +19,7 @@ interface ThemeProviderProps<T, K> {
   children?: ReactNode
   mode?: K
   setMode?: Dispatch<SetStateAction<ThemeModesRequired>>
+  defaultMode?: K
   defaultAutoDetect?: boolean
   theme: T
 }
@@ -46,18 +47,24 @@ export function ThemeProviderSimple({ theme, children }: { theme: DefaultTheme; 
 export function useConstructTheme<
   T extends CustomThemeOrTemplate<ThemeByModes, AvailableThemeTemplate>,
   K extends ThemeModesRequired | 'DEFAULT'
->({ mode: modeCustom, setMode: setModeCustom, defaultAutoDetect = true, theme }: ThemeProviderProps<T, K>) {
-  const [innerMode, setInnerMode] = useState<keyof typeof theme.modes>(modeCustom || 'DEFAULT')
+>({
+  mode: modeCustom,
+  setMode: setModeCustom,
+  defaultAutoDetect = true,
+  defaultMode,
+  theme
+}: ThemeProviderProps<T, K>) {
+  const [innerMode, setInnerMode] = useState<keyof typeof theme.modes>(defaultMode || 'DEFAULT')
   const [mode, setMode] = [(modeCustom || innerMode) as ThemeModesRequired | 'DEFAULT', setModeCustom || setInnerMode]
 
   const [autoDetect, setAutoDetect] = useState<boolean>(defaultAutoDetect)
 
   const staticTheme = useMemo(() => {
     const {
-      modes: { DEFAULT: DEFAULT_THEME },
+      modes: { DEFAULT: DEFAULT_THEME = {} },
       baseColours: BASE_COLOURS,
       baseContent: {
-        modes: { DEFAULT: DEFAULT_CONTENT }
+        modes: { DEFAULT: DEFAULT_CONTENT = {} }
       },
       ...REST_THEME
     } = theme
@@ -72,9 +79,9 @@ export function useConstructTheme<
 
   const dynamicTheme = useMemo(() => {
     const {
-      modes: { [mode]: CURRENT_THEME },
+      modes: { [mode]: CURRENT_THEME = {} },
       baseContent: {
-        modes: { [mode]: CURRENT_CONTENT }
+        modes: { [mode]: CURRENT_CONTENT = {} }
       }
     } = theme
     const computedTheme = {

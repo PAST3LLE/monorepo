@@ -4,6 +4,7 @@ import {
   mediaHeightTemplates as mediaHeight,
   mediaWidthTemplates as mediaWidth
 } from './styles/mediaQueries'
+import { ThemeTemplates } from './templates'
 import { BaseTheme } from './templates/base'
 import {
   AvailableThemeTemplate,
@@ -106,10 +107,8 @@ export function createCustomTheme<T extends ThemeByModes, M extends BasicUserThe
     export interface DefaultTheme extends ThemeBaseRequired, PastelleTheme {}
   }
  */
-export function createTemplateTheme<K extends AvailableThemeTemplate, M extends BasicUserTheme>(template: K) {
-  const TemplateThemeCreator = CreateTheme<void, typeof template, M>()
-
-  const theme = new TemplateThemeCreator(undefined as never)
+export function createTemplateTheme<K extends AvailableThemeTemplate>(template: K) {
+  const theme = ThemeTemplates[template]
 
   return createCustomTheme(theme)
 }
