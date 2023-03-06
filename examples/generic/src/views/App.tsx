@@ -6,7 +6,8 @@ import {
   CookieBanner,
   Text as LayoutText,
   Modal,
-  Pastellecon, // PstlButton
+  Pastellecon,
+  PstlButton, // PstlButton
   Row
 } from '@past3lle/components'
 import { useOnClickOutside } from '@past3lle/hooks'
@@ -59,9 +60,9 @@ const App = ({ showBasic = false }: Props) => {
           <li>ITEM 3</li>
         </ul>
         <LayoutText.SubHeader>Click button for modal!</LayoutText.SubHeader>
-        <Button variant={BV.SECONDARY} onClick={() => setModalOpen(true)}>
+        <PstlButton variant={BV.DANGER} onClick={() => setModalOpen(true)}>
           See modal
-        </Button>
+        </PstlButton>
         {/* <LayoutText.SubHeader>CURRENT THEME: {mode}</LayoutText.SubHeader> */}
         <Button
           variant={BV.THEME}
@@ -76,9 +77,9 @@ const App = ({ showBasic = false }: Props) => {
         <PstlMain>
           <LayoutText.LargeHeader>EXAMPLE APP</LayoutText.LargeHeader>
           <LayoutText.SubHeader>Click button for modal!</LayoutText.SubHeader>
-          <Button variant={BV.PRIMARY} onClick={() => setModalOpen(true)}>
+          <PstlButton variant={BV.DANGER} onClick={() => setModalOpen(true)}>
             See modal
-          </Button>
+          </PstlButton>
         </PstlMain>
       )}
       <PstlMain>

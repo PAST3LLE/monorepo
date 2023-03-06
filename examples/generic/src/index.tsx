@@ -4,6 +4,7 @@ import * as React from 'react'
 import 'react-app-polyfill/ie11'
 import * as ReactDOM from 'react-dom/client'
 
+import THEME_BUTTON_IMAGE from './assets/pixelated-shirt.png'
 import { PstlStaticGlobalCss } from './styles/global'
 import { App } from './views/App'
 
@@ -29,9 +30,16 @@ function AppControl() {
   return (
     <>
       {/* We need a top level ThemeProvider from @past3lle to feed components proper default theme */}
-      <ThemeProvider theme={appTheme}>
+      <ThemeProvider theme={appTheme} defaultMode="DARK">
         <App />
-        <ThemeChangerButton color={'white'} label="Change Skilltree Theme" />
+        <ThemeChangerButton
+          color={'white'}
+          label="Change Skilltree Theme"
+          backgroundColor={'springgreen'}
+          bgBlendMode="exclusion"
+          bgAttributes={['center / cover no-repeat', '5px / cover repeat']}
+          bgImage={THEME_BUTTON_IMAGE}
+        />
       </ThemeProvider>
     </>
   )
