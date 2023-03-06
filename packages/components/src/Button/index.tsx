@@ -1,8 +1,11 @@
-import { MediaWidths, setBackgroundWithDPI } from '@past3lle/theme'
+import { MediaWidths, ThemeProvider, setBackgroundWithDPI } from '@past3lle/theme'
 import { GenericImageSrcSet } from '@past3lle/types'
 import { darken, transparentize } from 'polished'
+import React from 'react'
 import { BoxProps, Button as RebassButton, ButtonProps as RebassButtonProps } from 'rebass'
 import styled, { DefaultTheme, FlattenInterpolation, ThemeProps, css } from 'styled-components'
+
+import { pastelleTheme } from '../theme'
 
 export interface ButtonBaseProps extends RebassButtonProps {
   $variant?: ButtonVariations
@@ -250,7 +253,7 @@ export const Button = styled(ButtonBase)<ButtonProps>`
     bgImage,
     bgAttributes = ['center / cover no-repeat', '5px / cover repeat'],
     bgBlendMode = 'difference',
-    backgroundColor = transparentize(0.3, theme.bg1)
+    backgroundColor = transparentize(0.3, theme.black)
   }) =>
     bgImage &&
     setBackgroundWithDPI(theme, bgImage, {
@@ -261,3 +264,11 @@ export const Button = styled(ButtonBase)<ButtonProps>`
       skipIk: true
     })}
 `
+
+export const PstlButton = ({ children, ...buttonProps }: ButtonProps) => {
+  return (
+    <ThemeProvider theme={pastelleTheme} defaultMode="DARK">
+      <Button {...buttonProps}>{children}</Button>
+    </ThemeProvider>
+  )
+}

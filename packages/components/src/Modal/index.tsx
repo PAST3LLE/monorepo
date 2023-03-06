@@ -8,10 +8,16 @@ import { animated } from 'react-spring'
 import styled from 'styled-components'
 
 const AnimatedDialogOverlay = animated(DialogOverlay)
+interface ModalStyleProps {
+  overlayBackgroundColor?: string
+  zIndex?: number
+  boxShadowColor?: string
+  mainBackgroundColor?: string
+}
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const StyledDialogOverlay = styled(AnimatedDialogOverlay)`
+const StyledDialogOverlay = styled(AnimatedDialogOverlay)<Pick<ModalStyleProps, 'overlayBackgroundColor' | 'zIndex'>>`
   &[data-reach-dialog-overlay] {
-    z-index: ${Z_INDICES.MODALS};
+    z-index: ${({ zIndex = Z_INDICES.MODALS }) => zIndex};
     position: fixed;
     top: 0;
     left: 0;
@@ -25,7 +31,7 @@ const StyledDialogOverlay = styled(AnimatedDialogOverlay)`
     align-items: center;
     justify-content: center;
 
-    background-color: ${({ theme }) => theme.blackOpaque};
+    background-color: ${({ overlayBackgroundColor = 'rgba(0,0,0,0.7)' }) => overlayBackgroundColor};
   }
 `
 
@@ -36,7 +42,7 @@ const StyledDialogContent = styled(({ minHeight, maxHeight, mobile, isOpen, isLa
   <AnimatedDialogContent {...rest} />
 )).attrs({
   'aria-label': 'dialog'
-})`
+})<Omit<ModalStyleProps, 'overlayBackgroundColor' | 'zIndex'>>`
   border: none;
   height: ${({ mobile }) => (mobile ? '100%' : '100%')};
   ${upToExtraSmall`
@@ -47,8 +53,8 @@ const StyledDialogContent = styled(({ minHeight, maxHeight, mobile, isOpen, isLa
     outline: none;
     overflow: auto;
 
-    background-color: ${({ theme }) => theme.bg0};
-    box-shadow: 0px 4px 8px 0px ${({ theme }) => transparentize(0.95, theme.shadow1)};
+    background-color: ${({ mainBackgroundColor = 'darkblue' }) => mainBackgroundColor};
+    box-shadow: 0px 4px 8px 0px ${({ boxShadowColor = 'rgba(0,0,0,0.7)' }) => transparentize(0.95, boxShadowColor)};
 
     display: flex;
     align-self: center;
@@ -72,9 +78,11 @@ interface ModalProps {
   initialFocusRef?: React.RefObject<any>
   className?: string
   children?: React.ReactNode
+  styleProps?: ModalStyleProps
 }
 
 export function Modal({
+  styleProps = {},
   isLargeImageModal = false,
   onDismiss,
   minHeight = false,
@@ -98,6 +106,7 @@ export function Modal({
       onDismiss={onDismiss}
       initialFocusRef={initialFocusRef}
       unstable_lockFocusAcrossFrames={false}
+      {...styleProps}
     >
       <StyledDialogContent
         aria-label="dialog content"
@@ -105,6 +114,7 @@ export function Modal({
         maxHeight={maxHeight}
         mobile={isMobile}
         isLargeImageModal={isLargeImageModal}
+        {...styleProps}
       >
         {/* prevents the automatic focusing of inputs on mobile by the reach dialog */}
         {!initialFocusRef && isMobile ? <div tabIndex={1} /> : null}
