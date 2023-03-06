@@ -241,7 +241,7 @@ const ButtonBase = styled(RebassButton)`
   }
 `
 
-export const Button = styled(ButtonBase)<ButtonProps>`
+const StyledButton = styled(ButtonBase)<ButtonProps>`
   /* Size $variant */
   ${({ $variant }) => $variant && getButtonVariantStyles($variant)}
   /* Fold in theme css above */
@@ -265,10 +265,14 @@ export const Button = styled(ButtonBase)<ButtonProps>`
     })}
 `
 
+export const Button = ({ children, ...buttonProps }: ButtonProps) => (
+  <StyledButton {...buttonProps}>{children}</StyledButton>
+)
+
 export const PstlButton = ({ children, ...buttonProps }: ButtonProps) => {
   return (
     <ThemeProvider theme={pastelleTheme} defaultMode="DARK">
-      <Button {...buttonProps}>{children}</Button>
+      <StyledButton {...buttonProps}>{children}</StyledButton>
     </ThemeProvider>
   )
 }
