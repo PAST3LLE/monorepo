@@ -1,4 +1,4 @@
-import { MediaWidths, ThemeProvider, setBackgroundWithDPI } from '@past3lle/theme'
+import { MediaWidths, ThemeProvider, setBackgroundWithDPI, setBestContrastingColour } from '@past3lle/theme'
 import { GenericImageSrcSet } from '@past3lle/types'
 import { darken, transparentize } from 'polished'
 import React from 'react'
@@ -47,7 +47,13 @@ const PRIMARY_BUTTON_STYLES = css`
 `
 
 const SECONDARY_BUTTON_STYLES = css`
-  color: ${({ theme }): string => theme.offwhite};
+  color: ${({ theme }): string =>
+    setBestContrastingColour({
+      bgColour: theme.purple3,
+      fgColour: theme.offwhite,
+      lightColour: theme.offwhite,
+      darkColour: theme.black
+    })};
   background: ${({ theme }): string => theme.purple3};
 
   &:hover {
@@ -56,7 +62,13 @@ const SECONDARY_BUTTON_STYLES = css`
 `
 
 const DARK_MODE_TOGGLE_STYLES = css`
-  color: ${({ theme }): string => theme.offwhite};
+  color: ${({ theme }): string =>
+    setBestContrastingColour({
+      bgColour: theme.darkModeToggle,
+      fgColour: theme.offwhite,
+      lightColour: theme.offwhite,
+      darkColour: theme.black
+    })};
   background: ${({ theme }): string => theme.darkModeToggle};
 
   svg {
@@ -66,7 +78,13 @@ const DARK_MODE_TOGGLE_STYLES = css`
 `
 
 const DANGER_BUTTON_STYLES = css`
-  color: ${({ theme }): string => theme.red1};
+  color: ${({ theme }): string =>
+    setBestContrastingColour({
+      bgColour: theme.red2,
+      fgColour: theme.red1,
+      lightColour: theme.red1,
+      darkColour: theme.black
+    })};
   background: ${({ theme }): string => theme.red2};
 
   &:hover {
@@ -76,7 +94,13 @@ const DANGER_BUTTON_STYLES = css`
 `
 
 const SUCCESS_BUTTON_STYLES = css`
-  color: ${({ theme }): string => theme.green1};
+  color: ${({ theme }): string =>
+    setBestContrastingColour({
+      bgColour: theme.green2,
+      fgColour: theme.green1,
+      lightColour: theme.green1,
+      darkColour: theme.black
+    })};
   background: ${({ theme }): string => theme.green2};
 
   &:hover {
@@ -89,7 +113,13 @@ const SUCCESS_BUTTON_STYLES = css`
 `
 
 const WARNING_BUTTON_STYLES = css`
-  color: ${({ theme }): string => theme.yellow1};
+  color: ${({ theme }): string =>
+    setBestContrastingColour({
+      bgColour: theme.yellow2,
+      fgColour: theme.yellow1,
+      lightColour: theme.yellow1,
+      darkColour: theme.black
+    })};
   background: ${({ theme }): string => theme.yellow2};
 
   &:hover {
@@ -99,7 +129,13 @@ const WARNING_BUTTON_STYLES = css`
 `
 
 const CANCEL_BUTTON_STYLES = css`
-  color: ${({ theme }): string => theme.text3};
+  color: ${({ theme }): string =>
+    setBestContrastingColour({
+      bgColour: theme.bg1,
+      fgColour: theme.text3,
+      lightColour: theme.text3,
+      darkColour: theme.black
+    })};
   background: ${({ theme }): string => theme.bg1};
 
   &:hover {
@@ -109,7 +145,13 @@ const CANCEL_BUTTON_STYLES = css`
 `
 
 const DISABLED_BUTTON_STYLES = css`
-  color: ${({ theme }): string => theme.textDisabled};
+  color: ${({ theme }): string =>
+    setBestContrastingColour({
+      bgColour: theme.bgDisabled,
+      fgColour: theme.textDisabled,
+      lightColour: theme.textDisabled,
+      darkColour: theme.black
+    })};
   background: ${({ theme }): string => theme.bgDisabled};
 
   &:hover {
@@ -119,7 +161,13 @@ const DISABLED_BUTTON_STYLES = css`
 `
 
 const THEME_BUTTON_STYLES = css`
-  color: ${({ theme }): string => theme.offwhite};
+  color: ${({ theme }): string =>
+    setBestContrastingColour({
+      bgColour: theme.black,
+      fgColour: theme.offwhite,
+      lightColour: theme.offwhite,
+      darkColour: theme.black
+    })};
   border-color: ${({ theme }): string => theme.offwhite};
 
   filter: contrast(1.5) saturate(10);
@@ -132,7 +180,7 @@ const THEME_BUTTON_STYLES = css`
 
     border-radius: 0.1rem;
 
-    background-color: black;
+    background-color: ${({ theme }) => theme.black};
     opacity: 0.66;
 
     transition: background-color, filter, opacity 0.2s ease-out;
