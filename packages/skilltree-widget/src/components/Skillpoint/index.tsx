@@ -8,7 +8,7 @@ import { useAssetsMap } from '../../theme/utils'
 import { SkillMetadata, SkillRarity } from '../../types'
 import { getHash } from '../../utils'
 import { StyledSkillpoint } from '../Common'
-import { Vector } from '../SkillsCanvas/Canvas/api/vector'
+import { Vector } from '../Canvas/canvasApi/api/vector'
 
 interface Props {
   className?: string

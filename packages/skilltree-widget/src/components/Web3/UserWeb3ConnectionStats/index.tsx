@@ -6,7 +6,7 @@ import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import { useAccount, useNetwork } from 'wagmi'
 
-import { OpenOptions } from '../../Common/Button/Web3Button'
+import { OpenOptions } from '../../Common/Button/OpenWeb3ModalButton'
 import { FlashingText } from '../../Common/FlashingText'
 import { MonospaceText } from '../../Common/Text'
 

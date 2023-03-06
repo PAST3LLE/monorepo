@@ -3,7 +3,7 @@ import React from 'react'
 
 import { ThemedButton } from '.'
 import { SHOP_URL } from '../../../constants/index'
-import { CUSTOM_THEME } from '../../../theme/exampleCustomTheme'
+import { baseTheme } from '../../../theme/base'
 import { useGenericImageSrcSet } from '../../../theme/global'
 import { useAssetsMap } from '../../../theme/utils'
 import { CursiveMonoHeader, CursiveMonoHeaderProps } from '../Text'
@@ -44,7 +44,7 @@ export const ShopExternalLinkButton = ({
           }}
           restWordProps={{
             marginLeft: '-0.2rem',
-            color: CUSTOM_THEME.mainFg,
+            color: baseTheme.mainFg,
             fontFamily: 'monospace',
             fontSize: '1.8rem',
             letterSpacing: '-1.4px',

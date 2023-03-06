@@ -1,4 +1,4 @@
-import { devWarn } from '@past3lle/utils'
+import { devError, devWarn } from '@past3lle/utils'
 import { useEffect, useState } from 'react'
 import { useContractRead } from 'wagmi'
 
@@ -37,7 +37,7 @@ export function MetadataUpdater() {
         const data = _getEnvMetadata(res || [])
         setLocalMetadata(data?.filter((meta) => !!meta?.size) || [])
       })
-      .catch(console.error)
+      .catch(devError)
   }, [collections, fetchMetadata])
 
   useEffect(() => {

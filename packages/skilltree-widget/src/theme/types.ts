@@ -20,6 +20,8 @@ export interface AssetsMap {
     }
     readonly images: {
       appBackground: string
+      headerBackground?: string
+      navBackground?: string
       skillpointHighlight: string
     }
     readonly icons: {

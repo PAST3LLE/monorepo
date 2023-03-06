@@ -1,40 +1,42 @@
-import { StaticGlobalCssProvider, ThemeProvider, ThemedGlobalCssProvider } from '@past3lle/theme'
+import { StaticGlobalCssProvider, ThemedGlobalCssProvider } from '@past3lle/theme'
 import React, { StrictMode } from 'react'
+import { useTheme } from 'styled-components'
 
-import { AtomsDevtools } from '../dev/devTools'
-import { MetadataUpdater } from '../state/Metadata/updaters/MetadataUpdater'
-import { SidePanelUpdater } from '../state/SidePanel/updater'
-import { SkillsUpdaters } from '../state/Skills/updaters'
-import { UserBalancesUpdater } from '../state/User/updaters'
-import { WindowSizeUpdater } from '../state/WindowSize/updaters'
+import { SkilltreeCoreUpdaters } from '../state'
 import { CustomStaticGlobalCss, CustomThemeGlobalCss } from '../theme/global'
 import { AppConfig } from '../types/appConfig'
 import { Web3ModalAndWagmiProvider } from '../web3/config'
-import { SkilltreeBoard } from './SkilltreeBoard'
+import { SkilltreeBoard } from './Board'
+import {
+  ConnectionInfoButton,
+  InventoryButton,
+  NetworkInfoButton,
+  OpenWeb3ModalButton,
+  ShopExternalLinkButton,
+  ThemeChangerButton
+} from './Common/Button'
+import { SkilltreeHeader } from './Header'
 
-interface StaticCssProps {
-  backgroundImage: string
-  lockedSkillIcon: string
+const CssProviders = () => {
+  const { assetsMap } = useTheme()
+  return (
+    <>
+      <StaticGlobalCssProvider />
+      <CustomStaticGlobalCss
+        backgroundImage={assetsMap.images.appBackground}
+        lockedSkillIcon={assetsMap.icons.locked}
+      />
+      <ThemedGlobalCssProvider />
+      <CustomThemeGlobalCss />
+    </>
+  )
 }
-const StaticCssProviders = (props: StaticCssProps) => (
-  <>
-    <StaticGlobalCssProvider />
-    <CustomStaticGlobalCss {...props} />
-  </>
-)
 
-const ThemedCssProviders = () => (
-  <>
-    <ThemedGlobalCssProvider />
-    <CustomThemeGlobalCss />
-  </>
-)
-
-interface PastelleSkilltreeProps {
+interface SkilltreeBoardBaseProps {
   config: AppConfig
 }
 
-function PastelleSkilltree({ config }: PastelleSkilltreeProps) {
+function SkilltreeBoardConnected({ config }: SkilltreeBoardBaseProps) {
   return (
     <StrictMode>
       <Web3ModalAndWagmiProvider
@@ -43,27 +45,26 @@ function PastelleSkilltree({ config }: PastelleSkilltreeProps) {
           walletConnect: config.provider
         }}
       >
-        {/* @ts-ignore */}
-        <AtomsDevtools appName={config.appName}>
-          {/* UPDATERS */}
-          <MetadataUpdater />
-          <UserBalancesUpdater />
-          <SkillsUpdaters />
-          <WindowSizeUpdater />
-          {/* THEME PROVIDERS */}
-          <StaticCssProviders
-            backgroundImage={config.appTheme.modes.DEFAULT.assetsMap.images.appBackground}
-            lockedSkillIcon={config.appTheme.modes.DEFAULT.assetsMap.icons.locked}
-          />
-          <ThemeProvider theme={config.appTheme}>
-            <ThemedCssProviders />
-            <SidePanelUpdater />
-            <SkilltreeBoard />
-          </ThemeProvider>
-        </AtomsDevtools>
+        <SkilltreeCoreUpdaters {...config}>
+          <CssProviders />
+          <SkilltreeBoard />
+        </SkilltreeCoreUpdaters>
       </Web3ModalAndWagmiProvider>
     </StrictMode>
   )
 }
 
-export { PastelleSkilltree, PastelleSkilltreeProps, SkilltreeBoard }
+export {
+  SkilltreeBoardConnected,
+  SkilltreeBoard,
+  SkilltreeHeader,
+  // Buttons
+  ConnectionInfoButton,
+  InventoryButton,
+  NetworkInfoButton,
+  OpenWeb3ModalButton,
+  ShopExternalLinkButton,
+  ThemeChangerButton,
+  // Types
+  type SkilltreeBoardBaseProps
+}

@@ -2,7 +2,7 @@ import { MEDIA_WIDTHS } from '@past3lle/theme'
 import { useEffect } from 'react'
 
 import { useSkillsAtom } from '..'
-import { toggleSelectedSkill } from '../../../components/SkillsCanvas/Canvas/api/hooks'
+import { toggleSelectedSkill } from '../../../components/Canvas/canvasApi/api/hooks'
 import { ActiveSidePanel, useSidePanelAtomBase } from '../../../state/SidePanel'
 import { useGetWindowSize } from '../../../state/WindowSize'
 

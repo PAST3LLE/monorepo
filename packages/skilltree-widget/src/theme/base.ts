@@ -1,6 +1,7 @@
 import { SkillRarity } from '../types'
+import { SkilltreeTheme } from './types'
 
-export const CUSTOM_THEME = {
+export const baseTheme: SkilltreeTheme = {
   mainText: '#fff',
   darkText: '#000',
   lightText: 'ghostwhite',
@@ -14,7 +15,14 @@ export const CUSTOM_THEME = {
     mainBg: '#475548',
     mainBgLight: '#deefe1',
     altBg: '#281d25',
-    altBgLight: '#b6abb6'
+    altBgLight: '#b6abb6',
+    border: {
+      radius: '0.5rem',
+      border: '1rem',
+      colour: 'transparent'
+    },
+    fontSize: { small: '1rem', normal: '1.5rem', large: '2rem' },
+    hoverColour: 'cornflowerblue'
   },
   // rarity colours
   rarity: {
@@ -37,6 +45,34 @@ export const CUSTOM_THEME = {
     lockedSkill: 'linear-gradient(195deg, lightgrey, darkred)',
     unlockedSkill: 'linear-gradient(195deg, lightgrey,',
     ownedSkill: 'linear-gradient(195deg, lightgrey, #208120)'
+  },
+  assetsMap: {
+    logos: {
+      companyMain: ''
+    },
+    images: {
+      appBackground: '',
+      headerBackground: undefined,
+      navBackground: undefined,
+      skillpointHighlight: ''
+    },
+    icons: {
+      locked: 'locked.png',
+      connection: 'connection.png',
+      inventory: 'inventory.png',
+      shop: 'shop.png',
+      chains: {
+        disconnected: 'disconnected.png',
+        5: 'goerli.png',
+        80001: 'mumbai.png'
+      },
+      rarity: {
+        empty: 'empty.png',
+        common: 'common.png',
+        rare: 'rare.png',
+        legendary: 'legendary.png',
+        epic: 'epic.png'
+      }
+    }
   }
 } as const
-export type CustomTheme = typeof CUSTOM_THEME

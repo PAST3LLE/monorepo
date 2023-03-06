@@ -4,12 +4,10 @@ import { ActiveSkillUpdater } from './ActiveSkillUpdater'
 import { GridPositionUpdater } from './GridPositionUpdater'
 import { SkillSquareSizeUpdater } from './SkillSquareSizeUpdater'
 
-const SkillsUpdaters = () => (
+export const SkillsUpdaters = () => (
   <>
     <GridPositionUpdater />
     <SkillSquareSizeUpdater />
     <ActiveSkillUpdater />
   </>
 )
-
-export { SkillsUpdaters }

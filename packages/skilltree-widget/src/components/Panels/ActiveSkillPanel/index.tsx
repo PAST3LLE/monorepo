@@ -9,7 +9,7 @@ import { useGetActiveSkill } from '../../../hooks/skills'
 import { MetadataState, useMetadataMapReadAtom } from '../../../state/Metadata'
 import { UserBalances, useUserBalancesReadAtom } from '../../../state/User'
 import { RARITY_COLOURS_MAP } from '../../../theme/constants'
-import { CUSTOM_THEME } from '../../../theme/exampleCustomTheme'
+import { baseTheme } from '../../../theme/base'
 import { SkillId, SkillMetadata, SkillRarity } from '../../../types'
 import { SkillLockStatus, getLockStatus } from '../../../utils/skills'
 import { ThemedButtonExternalLink } from '../../Common/Button'
@@ -44,9 +44,9 @@ export function ActiveSkillPanel() {
       deps: activeSkill?.properties.dependencies,
       get cardColour() {
         return isLocked
-          ? CUSTOM_THEME.gradients.lockedSkill
+          ? baseTheme.gradients.lockedSkill
           : this.rarity
-          ? CUSTOM_THEME.gradients.unlockedSkill + `${customTheme.rarity[this.rarity].backgroundColor})`
+          ? baseTheme.gradients.unlockedSkill + `${customTheme.rarity[this.rarity].backgroundColor})`
           : null
       }
     }),
@@ -140,7 +140,7 @@ export function ActiveSkillPanel() {
               View on{' '}
               <ExternalLink href="#">
                 {' '}
-                <strong style={{ color: CUSTOM_THEME.mainBg }}>OpenSea</strong>{' '}
+                <strong style={{ color: baseTheme.mainBg }}>OpenSea</strong>{' '}
               </ExternalLink>{' '}
             </MonospaceText>
           </AutoRow>
@@ -153,7 +153,7 @@ export function ActiveSkillPanel() {
             Checkout this{' '}
             <ExternalLink href="#">
               {' '}
-              <strong style={{ color: CUSTOM_THEME.mainBg }}>tutorial</strong>{' '}
+              <strong style={{ color: baseTheme.mainBg }}>tutorial</strong>{' '}
             </ExternalLink>{' '}
             to understand how to claim your skillpoint NFT.
           </MonospaceText>

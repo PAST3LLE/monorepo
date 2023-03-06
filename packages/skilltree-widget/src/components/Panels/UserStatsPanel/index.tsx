@@ -8,7 +8,7 @@ import { useGetSkillFromIdCallback } from '../../../hooks/skills'
 import { SkillGridPositionList, useSkillsAtom } from '../../../state/Skills'
 import { useUserAtom } from '../../../state/User'
 import { MAIN_FG } from '../../../theme/constants'
-import { CUSTOM_THEME } from '../../../theme/exampleCustomTheme'
+import { baseTheme } from '../../../theme/base'
 import { useAssetsMap } from '../../../theme/utils'
 import { CursiveMonoHeader, MonospaceText } from '../../Common/Text'
 import { Skillpoint } from '../../Skillpoint'
@@ -37,7 +37,7 @@ export function UserStatsPanel() {
   return (
     <SidePanel header="INVENTORY">
       <UserStatsPanelContainer>
-        <Row padding="1rem 2rem" gap="0 1rem" backgroundColor={CUSTOM_THEME.mainBg}>
+        <Row padding="1rem 2rem" gap="0 1rem" backgroundColor={baseTheme.mainBg}>
           <CursiveMonoHeader
             text="ACCOUNT"
             capitalLetterProps={{ width: 'auto', display: 'flex', alignItems: 'center' }}
@@ -54,7 +54,7 @@ export function UserStatsPanel() {
 
         <UserConnectionStats containerProps={{ margin: '2rem 0' }} />
 
-        <Row padding="1rem 2rem" gap="0 1rem" backgroundColor={CUSTOM_THEME.mainBg}>
+        <Row padding="1rem 2rem" gap="0 1rem" backgroundColor={baseTheme.mainBg}>
           <CursiveMonoHeader
             text="INVENTORY"
             capitalLetterProps={{ width: 'auto', display: 'flex', alignItems: 'center' }}

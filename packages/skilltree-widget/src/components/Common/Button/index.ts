@@ -3,8 +3,12 @@ import { MediaWidths, setCssBackground } from '@past3lle/theme'
 import { GenericImageSrcSet } from '@past3lle/types'
 import styled, { css } from 'styled-components'
 
+export * from './ConnectionInfoButton'
 export * from './InventoryButton'
-export * from './Web3Button'
+export * from './NetworkInfoButton'
+export * from './ShopExternalLinkButton'
+export * from './ThemeChangerButton'
+export * from './OpenWeb3ModalButton'
 
 export const ThemedButton = styled(Button).attrs(() => ({}))<{
   invert?: boolean

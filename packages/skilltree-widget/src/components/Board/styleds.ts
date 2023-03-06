@@ -1,6 +1,7 @@
 import { Row } from '@past3lle/components'
 import styled from 'styled-components'
-import { SkillCanvasContainer } from '../SkillsCanvas/styleds'
+
+import { SkillCanvasContainer } from '../Canvas/styleds'
 
 export const SkilltreeBoardContainer = styled(Row)<{ active: boolean }>`
   height: 100%;

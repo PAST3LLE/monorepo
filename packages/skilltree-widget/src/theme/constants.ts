@@ -1,14 +1,14 @@
-import { CUSTOM_THEME } from './exampleCustomTheme'
+import { baseTheme } from './base'
 
-export const MAIN_BG = CUSTOM_THEME.mainBg
-export const MAIN_BG_2 = CUSTOM_THEME.mainBgAlt
-export const MAIN_FG = CUSTOM_THEME.mainFg
-export const MAIN_FG_2 = CUSTOM_THEME.mainFgAlt
+export const MAIN_BG = baseTheme.mainBg
+export const MAIN_BG_2 = baseTheme.mainBgAlt
+export const MAIN_FG = baseTheme.mainFg
+export const MAIN_FG_2 = baseTheme.mainFgAlt
 
 export const RARITY_COLOURS_MAP = {
-  empty: CUSTOM_THEME.rarity.empty.backgroundColor,
-  common: CUSTOM_THEME.rarity.common.backgroundColor,
-  rare: CUSTOM_THEME.rarity.rare.backgroundColor,
-  legendary: CUSTOM_THEME.rarity.legendary.backgroundColor,
-  epic: CUSTOM_THEME.rarity.epic.backgroundColor
+  empty: baseTheme.rarity.empty.backgroundColor,
+  common: baseTheme.rarity.common.backgroundColor,
+  rare: baseTheme.rarity.rare.backgroundColor,
+  legendary: baseTheme.rarity.legendary.backgroundColor,
+  epic: baseTheme.rarity.epic.backgroundColor
 }

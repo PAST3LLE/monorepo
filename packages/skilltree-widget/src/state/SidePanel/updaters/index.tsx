@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react'
 
-import { useSidePanelAtomBase } from '.'
-import { ActiveSkillPanel } from '../../components/Panels/ActiveSkillPanel'
-import { UserStatsPanel } from '../../components/Panels/UserStatsPanel'
+import { useSidePanelAtomBase } from '..'
+import { ActiveSkillPanel } from '../../../components/Panels/ActiveSkillPanel'
+import { UserStatsPanel } from '../../../components/Panels/UserStatsPanel'
 
 export function SidePanelUpdater() {
   const [

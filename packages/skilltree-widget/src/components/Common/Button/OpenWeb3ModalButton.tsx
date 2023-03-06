@@ -17,7 +17,7 @@ interface Props {
   buttonProps?: ButtonProps
 }
 
-export function SkillsWeb3Button({ logoUri, openOptions, buttonProps, children }: Props) {
+export function OpenWeb3ModalButton({ logoUri, openOptions, buttonProps, children }: Props) {
   const { open, isOpen } = useWeb3Modal()
 
   const handleClick = useCallback(async () => {

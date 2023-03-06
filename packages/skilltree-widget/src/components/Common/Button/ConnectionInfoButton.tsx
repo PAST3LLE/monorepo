@@ -9,7 +9,7 @@ import { useAccount } from 'wagmi'
 
 import { useAssetsMap } from '../../../theme/utils'
 import { ConnectionColorWrapper } from './../../Web3/UserWeb3ConnectionStats'
-import { OpenOptions } from './Web3Button'
+import { OpenOptions } from './OpenWeb3ModalButton'
 
 export function ConnectionInfoButton() {
   const { address } = useAccount()

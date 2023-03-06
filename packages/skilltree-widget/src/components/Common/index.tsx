@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { SKILLPOINT_SIZES } from '../../constants/skills'
 import { SkillRarity } from '../../types'
 import { getRarityColours } from '../../utils'
-import { Vector } from '../SkillsCanvas/Canvas/api/vector'
+import { Vector } from '../Canvas/canvasApi/api/vector'
 
 const StyledGridItem = styled(Row)<{
   vector?: Vector

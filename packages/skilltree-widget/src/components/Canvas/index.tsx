@@ -10,8 +10,8 @@ import { useUserAtom } from '../../state/User'
 import { SkillId, SkillRarity } from '../../types'
 import { SkillContainerAbsolute, SkillpointHeader } from '../Common'
 import { Skillpoint } from '../Skillpoint'
-import { LightningCanvas } from './Canvas'
-import { Vector } from './Canvas/api/vector'
+import { LightningCanvas } from './canvasApi'
+import { Vector } from './canvasApi/api/vector'
 import { SkillCanvasContainer, SkillInnerCanvasContainer } from './styleds'
 
 export function SkillsCanvas() {

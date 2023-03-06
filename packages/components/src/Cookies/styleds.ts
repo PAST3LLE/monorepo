@@ -100,7 +100,7 @@ export const CookieContainer = styled.div<CookieStyles>`
 
   ${CookieFullText} {
     border-radius: 5px;
-    background-color: ${({ theme, $bgAlt = transparentize(0.3, theme.purple1) }) => $bgAlt};
+    background-color: ${({ theme, $bgAlt = transparentize(0.21, theme.content.background) }) => $bgAlt};
     min-height: 250px;
     width: auto;
     max-width: 80%;

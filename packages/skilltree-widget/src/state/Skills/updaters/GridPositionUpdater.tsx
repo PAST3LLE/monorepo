@@ -2,7 +2,7 @@ import { MEDIA_WIDTHS } from '@past3lle/theme'
 import { useEffect, useMemo } from 'react'
 
 import { SkillVectorsMap, useSkillsAtom } from '..'
-import { calculateGridPoints } from '../../../components/SkillsCanvas/Canvas/api/hooks'
+import { calculateGridPoints } from '../../../components/Canvas/canvasApi/api/hooks'
 import {
   EMPTY_COLLECTION_ROWS_SIZE,
   MINIMUM_BOARD_WIDTH,

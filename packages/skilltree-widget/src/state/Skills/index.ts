@@ -1,7 +1,7 @@
 import { atom, useAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 
-import { Vector } from '../../components/SkillsCanvas/Canvas/api/vector'
+import { Vector } from '../../components/Canvas/canvasApi/api/vector'
 import { SkillId, SkillProperties } from '../../types'
 
 export type SkillGridPositionList = {
