@@ -1,7 +1,16 @@
 import { PNG } from '@past3lle/assets'
-import { BV, Button, ColumnCenter, CookieBanner, Text as LayoutText, Modal, Pastellecon } from '@past3lle/components'
+import {
+  BV,
+  Button,
+  ColumnCenter,
+  CookieBanner,
+  Text as LayoutText,
+  Modal,
+  Pastellecon, // PstlButton
+  Row
+} from '@past3lle/components'
 import { useOnClickOutside } from '@past3lle/hooks'
-import SkilltreeBoard, { PastelleSkilltreeProps } from '@past3lle/skilltree-widget'
+import { SkilltreeBoardBaseProps, SkilltreeBoardConnected } from '@past3lle/skilltree-widget'
 import { urlToSimpleGenericImageSrcSet } from '@past3lle/theme'
 import * as React from 'react'
 import { useTheme } from 'styled-components'
@@ -14,7 +23,7 @@ import {
 } from '../components/Layout'
 import { skilltreeThemeCustom } from '../theme/skilltreeTheme'
 
-const SKILLTREE_CONFIG: PastelleSkilltreeProps['config'] = {
+const SKILLTREE_CONFIG: SkilltreeBoardBaseProps['config'] = {
   appName: 'Pastelle Skilltree',
   appTheme: skilltreeThemeCustom,
   provider: {
@@ -30,8 +39,8 @@ const App = ({ showBasic = false }: Props) => {
   const [modalOpen, setModalOpen] = React.useState(false)
   useOnClickOutside(ref, () => setModalOpen(false))
 
-  const { mode, setMode } = useTheme()
-
+  const outerAppTheme = useTheme()
+  console.debug('[[EXAMPLE APP]]::APP::theme', outerAppTheme)
   return (
     <>
       <Modal isOpen={modalOpen} onDismiss={console.debug}>
@@ -40,10 +49,29 @@ const App = ({ showBasic = false }: Props) => {
           <LayoutText.Black>Click anywhere outside modal to close</LayoutText.Black>
         </ColumnCenter>
       </Modal>
-      <PstlHeader>
+      <PstlHeader as={Row}>
         <Pastellecon />
       </PstlHeader>
-      <PstlNav />
+      <PstlNav>
+        <ul style={{ color: 'ghostwhite' }}>
+          <li>ITEM 1</li>
+          <li>ITEM 2</li>
+          <li>ITEM 3</li>
+        </ul>
+        <LayoutText.SubHeader>Click button for modal!</LayoutText.SubHeader>
+        <Button variant={BV.SECONDARY} onClick={() => setModalOpen(true)}>
+          See modal
+        </Button>
+        {/* <LayoutText.SubHeader>CURRENT THEME: {mode}</LayoutText.SubHeader> */}
+        <Button
+          variant={BV.THEME}
+          onClick={() => outerAppTheme.setMode(outerAppTheme.mode === 'DARK' ? 'LIGHT' : 'DARK')}
+          bgImage={urlToSimpleGenericImageSrcSet(PNG.LogoCircle_2x)}
+          color={'#fff'}
+        >
+          CHANGE OUTER APP THEME
+        </Button>
+      </PstlNav>
       {showBasic && (
         <PstlMain>
           <LayoutText.LargeHeader>EXAMPLE APP</LayoutText.LargeHeader>
@@ -51,19 +79,10 @@ const App = ({ showBasic = false }: Props) => {
           <Button variant={BV.PRIMARY} onClick={() => setModalOpen(true)}>
             See modal
           </Button>
-          <LayoutText.SubHeader>CURRENT THEME: {mode}</LayoutText.SubHeader>
-          <Button
-            variant={BV.THEME}
-            onClick={() => setMode(mode === 'DARK' ? 'LIGHT' : 'DARK')}
-            bgImage={urlToSimpleGenericImageSrcSet(PNG.LogoCircle_2x)}
-            color={'#000'}
-          >
-            CHANGE THEME
-          </Button>
         </PstlMain>
       )}
       <PstlMain>
-        <SkilltreeBoard config={SKILLTREE_CONFIG} />
+        <SkilltreeBoardConnected config={SKILLTREE_CONFIG} />
       </PstlMain>
       {/* <PstlFooter>
         <ul>

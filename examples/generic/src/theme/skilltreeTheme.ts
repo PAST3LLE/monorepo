@@ -1,5 +1,8 @@
 import { createCustomTheme } from '@past3lle/theme'
 
+import BG_LOGO from '../assets/back-logo.png'
+import BG from '../assets/background.png'
+
 enum Rarity {
   EMPTY = 'empty',
   COMMON = 'common',
@@ -13,10 +16,10 @@ const SKILLTREE_WIDGET_THEME = {
     DEFAULT: {
       assetsMap: {
         logos: {
-          companyMain: '123'
+          companyMain: BG_LOGO
         },
         images: {
-          appBackground: 'string',
+          appBackground: BG,
           skillpointHighlight: 'string'
         },
         icons: {
@@ -41,7 +44,7 @@ const SKILLTREE_WIDGET_THEME = {
       mainText: 'red',
       darkText: 'red',
       lightText: 'red',
-      mainBg: 'red',
+      mainBg: 'springgreen',
       mainBgDarker: 'red',
       mainBgAlt: 'red',
       mainFg: 'red',
@@ -98,8 +101,26 @@ const SKILLTREE_WIDGET_THEME = {
         ownedSkill: 'red'
       }
     },
-    LIGHT: {},
-    DARK: {}
+    LIGHT: {
+      mainText: 'cornflowerblue',
+      darkText: 'cornflowerblue',
+      lightText: 'cornflowerblue',
+      mainBg: 'cornflowerblue',
+      mainBgDarker: 'cornflowerblue',
+      mainBgAlt: 'cornflowerblue',
+      mainFg: 'cornflowerblue',
+      mainFgAlt: 'cornflowerblue'
+    },
+    DARK: {
+      mainText: 'darkgreen',
+      darkText: 'darkgreen',
+      lightText: 'darkgreen',
+      mainBg: 'darkgreen',
+      mainBgDarker: 'darkgreen',
+      mainBgAlt: 'darkgreen',
+      mainFg: 'darkgreen',
+      mainFgAlt: 'darkgreen'
+    }
   }
 } as const
 
