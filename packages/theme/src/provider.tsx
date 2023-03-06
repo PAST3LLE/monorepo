@@ -24,47 +24,84 @@ interface ThemeProviderProps<T, K> {
 }
 
 // Extension/override of styled-components' ThemeProvider but with our own constructed theme object
-export function ThemeProvider<
-  T extends CustomThemeOrTemplate<ThemeByModes, AvailableThemeTemplate>,
-  K extends ThemeModesRequired
->({ children, mode: modeCustom, setMode: setModeCustom, defaultAutoDetect = true, theme }: ThemeProviderProps<T, K>) {
-  const [innerMode, setInnerMode] = useState<keyof typeof theme.modes>(
-    (modeCustom || 'DEFAULT') as ThemeModesRequired | 'DEFAULT' | (() => ThemeModesRequired | 'DEFAULT')
+export function ThemeProviderSimple({ theme, children }: { theme: DefaultTheme; children: ReactNode }) {
+  return (
+    <StyledComponentsThemeProvider theme={theme}>
+      {Children.map(children, (childElem) => {
+        // make sure child is a valid react element as children by default can be type string|null|number
+        const isValid = isValidElement(childElem) && childElem.type === 'function'
+        return isValid
+          ? cloneElement<{ theme: typeof theme }>(
+              childElem as ReactElement<any, FunctionComponent<{ theme: typeof theme }>>,
+              {
+                theme
+              }
+            )
+          : childElem
+      })}
+    </StyledComponentsThemeProvider>
   )
+}
 
+export function useConstructTheme<
+  T extends CustomThemeOrTemplate<ThemeByModes, AvailableThemeTemplate>,
+  K extends ThemeModesRequired | 'DEFAULT'
+>({ mode: modeCustom, setMode: setModeCustom, defaultAutoDetect = true, theme }: ThemeProviderProps<T, K>) {
+  const [innerMode, setInnerMode] = useState<keyof typeof theme.modes>(modeCustom || 'DEFAULT')
   const [mode, setMode] = [(modeCustom || innerMode) as ThemeModesRequired | 'DEFAULT', setModeCustom || setInnerMode]
 
   const [autoDetect, setAutoDetect] = useState<boolean>(defaultAutoDetect)
 
-  const themeObject = useMemo(() => {
+  const staticTheme = useMemo(() => {
     const {
-      modes: { DEFAULT: DEFAULT_THEME, [mode]: CURRENT_THEME },
+      modes: { DEFAULT: DEFAULT_THEME },
       baseColours: BASE_COLOURS,
       baseContent: {
-        modes: { DEFAULT: DEFAULT_CONTENT, [mode]: CURRENT_CONTENT }
+        modes: { DEFAULT: DEFAULT_CONTENT }
       },
       ...REST_THEME
     } = theme
-    const computedTheme = {
+
+    return {
       ...REST_THEME,
       ...BASE_COLOURS,
       ...DEFAULT_CONTENT,
+      ...DEFAULT_THEME
+    } as const
+  }, [])
+
+  const dynamicTheme = useMemo(() => {
+    const {
+      modes: { [mode]: CURRENT_THEME },
+      baseContent: {
+        modes: { [mode]: CURRENT_CONTENT }
+      }
+    } = theme
+    const computedTheme = {
       ...CURRENT_CONTENT,
-      ...DEFAULT_THEME,
       ...CURRENT_THEME,
       // state
       mode,
       autoDetect,
       setMode,
       setAutoDetect
-    } as DefaultTheme
+    } as const
 
     return computedTheme
   }, [autoDetect, mode])
 
+  return { ...staticTheme, ...dynamicTheme }
+}
+
+export function ThemeProvider<
+  T extends CustomThemeOrTemplate<ThemeByModes, AvailableThemeTemplate>,
+  K extends ThemeModesRequired
+>(props: ThemeProviderProps<T, K> & { children: ReactNode }) {
+  const themeObject = useConstructTheme(props)
+
   return (
-    <StyledComponentsThemeProvider theme={themeObject}>
-      {Children.map(children, (childElem) => {
+    <StyledComponentsThemeProvider theme={themeObject as DefaultTheme}>
+      {Children.map(props.children, (childElem) => {
         // make sure child is a valid react element as children by default can be type string|null|number
         const isValid = isValidElement(childElem) && childElem.type === 'function'
         return isValid
