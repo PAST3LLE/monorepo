@@ -2,7 +2,7 @@ import { ArticleFadeIn, ColumnCenter } from '@past3lle/components'
 import React from 'react'
 import styled from 'styled-components'
 
-import { SkilltreeBoard } from '../components'
+import { SkilltreeBoardComponent } from '../components'
 import { SkilltreeHeader } from '../components/Header'
 
 const StyledMain = styled(ArticleFadeIn)`
@@ -16,7 +16,7 @@ const SkilltreeContainer = styled(ColumnCenter)`
 
 const Main = () => (
   <StyledMain>
-    <SkilltreeBoard />
+    <SkilltreeBoardComponent />
   </StyledMain>
 )
 

@@ -12,7 +12,7 @@ import { ThemeUpdater } from '../../Theme/updaters'
 import { UserBalancesUpdater } from '../../User/updaters'
 import { WindowSizeUpdater } from '../../WindowSize/updaters'
 
-export function SkilltreeCoreUpdaters(props: AppConfig & { children: ReactNode }) {
+export function SkilltreeCoreUpdaters(props: Omit<AppConfig, 'provider'> & { children: ReactNode }) {
   const [mode] = useAppThemeModeRead()
   const theme = useConstructTheme({
     theme: props.appTheme,

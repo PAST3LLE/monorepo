@@ -5,8 +5,10 @@ import {
   OpenWeb3ModalButton,
   ShopExternalLinkButton,
   SkilltreeBoard,
-  SkilltreeBoardBaseProps,
+  SkilltreeBoardComponent,
   SkilltreeBoardConnected,
+  SkilltreeBoardConnectedProps,
+  SkilltreeBoardProps,
   SkilltreeHeader,
   ThemeChangerButton
 } from './components'
@@ -18,6 +20,7 @@ export {
   SkilltreeBoardConnected,
   SkilltreeBoard,
   SkilltreeHeader,
+  SkilltreeBoardComponent,
   // Buttons
   ConnectionInfoButton,
   InventoryButton,
@@ -28,6 +31,7 @@ export {
   // Updaters
   SkilltreeCoreUpdaters,
   // Types
-  type SkilltreeBoardBaseProps,
+  type SkilltreeBoardConnectedProps,
+  type SkilltreeBoardProps,
   type SkillRarity
 }

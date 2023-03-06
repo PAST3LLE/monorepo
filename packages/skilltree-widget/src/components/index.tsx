@@ -1,12 +1,12 @@
 import { StaticGlobalCssProvider, ThemedGlobalCssProvider } from '@past3lle/theme'
-import React, { StrictMode } from 'react'
+import React, { ReactNode, StrictMode } from 'react'
 import { useTheme } from 'styled-components'
 
 import { SkilltreeCoreUpdaters } from '../state'
 import { CustomStaticGlobalCss, CustomThemeGlobalCss } from '../theme/global'
 import { AppConfig } from '../types/appConfig'
 import { Web3ModalAndWagmiProvider } from '../web3/config'
-import { SkilltreeBoard } from './Board'
+import { SkilltreeBoard as SkilltreeBoardComponent } from './Board'
 import {
   ConnectionInfoButton,
   InventoryButton,
@@ -32,11 +32,31 @@ const CssProviders = () => {
   )
 }
 
-interface SkilltreeBoardBaseProps {
+interface SkilltreeBoardConnectedProps {
   config: AppConfig
 }
 
-function SkilltreeBoardConnected({ config }: SkilltreeBoardBaseProps) {
+interface SkilltreeBoardProps {
+  config: Omit<AppConfig, 'provider'>
+}
+
+/**
+ * @name SkilltreeBoardConnected
+ * @description Connected version of the base SkilltreeBoard component. Attaches Web3/Wagmi providers
+ * @param config - configuration object:
+ * @example
+ * // PROPS
+    interface SkilltreeBoardConnectedProps: {
+      config: {
+        appName: string
+        appTheme: SkilltreeThemeByModes // --> see type SkilltreeTheme
+        provider: {
+          projectId: string
+        }
+      }
+    }
+ */
+function SkilltreeBoardConnected({ config, children }: SkilltreeBoardConnectedProps & { children?: ReactNode }) {
   return (
     <StrictMode>
       <Web3ModalAndWagmiProvider
@@ -47,16 +67,47 @@ function SkilltreeBoardConnected({ config }: SkilltreeBoardBaseProps) {
       >
         <SkilltreeCoreUpdaters {...config}>
           <CssProviders />
-          <SkilltreeBoard />
+          {children}
+          <SkilltreeBoardComponent />
         </SkilltreeCoreUpdaters>
       </Web3ModalAndWagmiProvider>
     </StrictMode>
   )
 }
 
+/**
+ * @name SkilltreeBoard
+ * @description Base version of the base SkilltreeBoard component. Requires wrapping with Web3/Wagmi providers
+ * @param config - configuration object:
+ * @example
+ * // PROPS
+    interface SkilltreeBoardBaseProps: {
+      config: {
+        appName: string
+        appTheme: SkilltreeThemeByModes // --> see type SkilltreeTheme
+        provider: {
+          projectId: string
+        }
+      }
+    }
+ */
+function SkilltreeBoard({ config, children }: SkilltreeBoardProps & { children?: ReactNode }) {
+  return (
+    <StrictMode>
+      <SkilltreeCoreUpdaters {...config}>
+        <CssProviders />
+        {children}
+        <SkilltreeBoardComponent />
+      </SkilltreeCoreUpdaters>
+    </StrictMode>
+  )
+}
+
 export {
+  // Core
   SkilltreeBoardConnected,
   SkilltreeBoard,
+  SkilltreeBoardComponent,
   SkilltreeHeader,
   // Buttons
   ConnectionInfoButton,
@@ -66,5 +117,6 @@ export {
   ShopExternalLinkButton,
   ThemeChangerButton,
   // Types
-  type SkilltreeBoardBaseProps
+  type SkilltreeBoardConnectedProps,
+  type SkilltreeBoardProps
 }
