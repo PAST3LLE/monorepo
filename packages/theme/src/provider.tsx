@@ -1,8 +1,10 @@
 import React, {
   Children,
+  Dispatch,
   FunctionComponent,
   ReactElement,
   ReactNode,
+  SetStateAction,
   cloneElement,
   isValidElement,
   useMemo,
@@ -15,21 +17,23 @@ import { ThemeModesRequired } from './types'
 
 interface ThemeProviderProps<T, K> {
   children?: ReactNode
-  defaultMode?: K
+  mode?: K
+  setMode?: Dispatch<SetStateAction<ThemeModesRequired>>
   defaultAutoDetect?: boolean
   theme: T
 }
 
 // Extension/override of styled-components' ThemeProvider but with our own constructed theme object
-export function ThemeProvider<T extends CustomThemeOrTemplate<ThemeByModes, AvailableThemeTemplate>, K>({
-  children,
-  defaultMode,
-  defaultAutoDetect = true,
-  theme
-}: ThemeProviderProps<T, K>) {
-  const [mode, setMode] = useState<keyof typeof theme.modes>(
-    (defaultMode || 'DEFAULT') as ThemeModesRequired | 'DEFAULT' | (() => ThemeModesRequired | 'DEFAULT')
+export function ThemeProvider<
+  T extends CustomThemeOrTemplate<ThemeByModes, AvailableThemeTemplate>,
+  K extends ThemeModesRequired
+>({ children, mode: modeCustom, setMode: setModeCustom, defaultAutoDetect = true, theme }: ThemeProviderProps<T, K>) {
+  const [innerMode, setInnerMode] = useState<keyof typeof theme.modes>(
+    (modeCustom || 'DEFAULT') as ThemeModesRequired | 'DEFAULT' | (() => ThemeModesRequired | 'DEFAULT')
   )
+
+  const [mode, setMode] = [(modeCustom || innerMode) as ThemeModesRequired | 'DEFAULT', setModeCustom || setInnerMode]
+
   const [autoDetect, setAutoDetect] = useState<boolean>(defaultAutoDetect)
 
   const themeObject = useMemo(() => {
