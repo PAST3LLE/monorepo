@@ -313,14 +313,14 @@ const StyledButton = styled(ButtonBase)<ButtonProps>`
     })}
 `
 
-export const Button = ({ children, ...buttonProps }: ButtonProps) => (
+export const Button = styled(({ children, ...buttonProps }: ButtonProps) => (
   <StyledButton {...buttonProps}>{children}</StyledButton>
-)
+))``
 
-export const PstlButton = ({ children, ...buttonProps }: ButtonProps) => {
+export const PstlButton = styled(({ children, ...buttonProps }: ButtonProps) => {
   return (
     <ThemeProvider theme={pastelleTheme} defaultMode="DARK">
-      <StyledButton {...buttonProps}>{children}</StyledButton>
+      <Button {...buttonProps}>{children}</Button>
     </ThemeProvider>
   )
-}
+})``

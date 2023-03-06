@@ -5,7 +5,7 @@ import { hex } from 'wcag-contrast'
 
 import { MEDIA_WIDTHS, MediaWidths } from './styles'
 import { BaseColours } from './templates/base'
-import { ThemeBaseRequired, ThemeModesRequired } from './types'
+import { ThemeBaseRequired, ThemeByModes, ThemeModesRequired } from './types'
 
 export const WHITE = BaseColours.white
 export const OFF_WHITE = BaseColours.offwhite
@@ -271,3 +271,17 @@ export function urlToSimpleGenericImageSrcSet(url: string): GenericImageSrcSet<M
     1440: { '1x': url }
   }
 }
+
+export const getThemeColourByKeyCurried =
+  <T extends ThemeByModes>(theme: T) =>
+  <F>(mode: keyof T['modes'] | 'DEFAULT', key: keyof T['modes']['DEFAULT'], fallback?: F) => {
+    const baseMode = theme.modes as T['modes']
+
+    // try passed mode else go with DEFAULT
+    return baseMode?.[mode]?.[key] || (baseMode['DEFAULT'] as T['modes']['DEFAULT'])?.[key] || fallback
+  }
+
+export const getThemeColoursCurried =
+  <T extends ThemeByModes>(theme: T) =>
+  (mode: keyof T['modes'] | 'DEFAULT') =>
+    (theme.modes as T['modes'])?.[mode]
