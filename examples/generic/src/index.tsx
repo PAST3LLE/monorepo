@@ -1,5 +1,11 @@
 import { ThemeChangerButton } from '@past3lle/skilltree-widget'
-import { FontCssProvider, StaticGlobalCssProvider, ThemeProvider, createCustomTheme } from '@past3lle/theme'
+import {
+  FontCssProvider,
+  StaticGlobalCssProvider,
+  ThemeProvider,
+  createCustomTheme,
+  urlToSimpleGenericImageSrcSet
+} from '@past3lle/theme'
 import * as React from 'react'
 import 'react-app-polyfill/ie11'
 import * as ReactDOM from 'react-dom/client'
@@ -33,12 +39,11 @@ function AppControl() {
       <ThemeProvider theme={appTheme} defaultMode="DARK">
         <App />
         <ThemeChangerButton
-          color={'white'}
           label="Change Skilltree Theme"
           backgroundColor={'springgreen'}
           bgBlendMode="exclusion"
           bgAttributes={['center / cover no-repeat', '5px / cover repeat']}
-          bgImage={THEME_BUTTON_IMAGE}
+          bgImage={urlToSimpleGenericImageSrcSet(THEME_BUTTON_IMAGE)}
         />
       </ThemeProvider>
     </>

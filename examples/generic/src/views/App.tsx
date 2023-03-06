@@ -11,7 +11,7 @@ import {
   Row
 } from '@past3lle/components'
 import { useOnClickOutside } from '@past3lle/hooks'
-import { SkilltreeBoardBaseProps, SkilltreeBoardConnected } from '@past3lle/skilltree-widget'
+import { SkilltreeBoardConnected, SkilltreeBoardConnectedProps, SkilltreeHeader } from '@past3lle/skilltree-widget'
 import { urlToSimpleGenericImageSrcSet } from '@past3lle/theme'
 import * as React from 'react'
 import { useTheme } from 'styled-components'
@@ -24,7 +24,7 @@ import {
 } from '../components/Layout'
 import { skilltreeThemeCustom } from '../theme/skilltreeTheme'
 
-const SKILLTREE_CONFIG: SkilltreeBoardBaseProps['config'] = {
+const SKILLTREE_CONFIG: SkilltreeBoardConnectedProps['config'] = {
   appName: 'Pastelle Skilltree',
   appTheme: skilltreeThemeCustom,
   provider: {
@@ -41,7 +41,6 @@ const App = ({ showBasic = false }: Props) => {
   useOnClickOutside(ref, () => setModalOpen(false))
 
   const outerAppTheme = useTheme()
-  console.debug('[[EXAMPLE APP]]::APP::theme', outerAppTheme)
   return (
     <>
       <Modal isOpen={modalOpen} onDismiss={console.debug}>
@@ -60,11 +59,24 @@ const App = ({ showBasic = false }: Props) => {
           <li>ITEM 3</li>
         </ul>
         <LayoutText.SubHeader>Click button for modal!</LayoutText.SubHeader>
-        <PstlButton variant={BV.DANGER} onClick={() => setModalOpen(true)}>
-          See modal
+        <PstlButton $variant={BV.SECONDARY} onClick={() => setModalOpen(true)} margin="2rem">
+          See modal // SECONDARY
+        </PstlButton>
+        <PstlButton $variant={BV.PRIMARY} onClick={() => setModalOpen(true)} margin="2rem">
+          BUTTON PRIMARY
+        </PstlButton>
+        <PstlButton $variant={BV.DANGER} onClick={() => setModalOpen(true)} margin="2rem">
+          BUTTON DANGER
+        </PstlButton>
+        <PstlButton $variant={BV.WARNING} onClick={() => setModalOpen(true)} margin="2rem">
+          BUTTON WARNING
+        </PstlButton>
+        <PstlButton $variant={BV.DISABLED} onClick={() => setModalOpen(true)} margin="2rem">
+          BUTTON WARNING
         </PstlButton>
         {/* <LayoutText.SubHeader>CURRENT THEME: {mode}</LayoutText.SubHeader> */}
         <Button
+          margin="0rem 2rem"
           variant={BV.THEME}
           onClick={() => outerAppTheme.setMode(outerAppTheme.mode === 'DARK' ? 'LIGHT' : 'DARK')}
           bgImage={urlToSimpleGenericImageSrcSet(PNG.LogoCircle_2x)}
@@ -83,7 +95,9 @@ const App = ({ showBasic = false }: Props) => {
         </PstlMain>
       )}
       <PstlMain>
-        <SkilltreeBoardConnected config={SKILLTREE_CONFIG} />
+        <SkilltreeBoardConnected config={SKILLTREE_CONFIG}>
+          <SkilltreeHeader />
+        </SkilltreeBoardConnected>
       </PstlMain>
       {/* <PstlFooter>
         <ul>
