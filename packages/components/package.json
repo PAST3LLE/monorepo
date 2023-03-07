@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/components",
   "sideEffects": false,
-  "version": "0.0.35",
+  "version": "0.0.36",
   "description": "common components",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
