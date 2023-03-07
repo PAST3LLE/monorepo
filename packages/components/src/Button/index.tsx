@@ -2,12 +2,12 @@ import { MediaWidths, ThemeProvider, setBackgroundWithDPI, setBestContrastingCol
 import { GenericImageSrcSet } from '@past3lle/types'
 import { darken, transparentize } from 'polished'
 import React from 'react'
-import { BoxProps, Button as RebassButton, ButtonProps as RebassButtonProps } from 'rebass'
 import styled, { DefaultTheme, FlattenInterpolation, ThemeProps, css } from 'styled-components'
 
+import { Row, RowProps } from '../Layout'
 import { pastelleTheme } from '../theme'
 
-export interface ButtonBaseProps extends RebassButtonProps {
+export interface ButtonBaseProps {
   buttonVariant?: ButtonVariations
   buttonSize?: ButtonSizeVariations
 }
@@ -249,7 +249,7 @@ const ButtonSizes = {
   `
 }
 
-type CustomButtonStyleProps = BoxProps & {
+type CustomButtonStyleProps = {
   borderRadius?: string
   gradientColours?: string[]
   bgBlendMode?:
@@ -268,14 +268,18 @@ type CustomButtonStyleProps = BoxProps & {
   filter?: string
 }
 
-export type ButtonProps = ButtonBaseProps & CustomButtonStyleProps & { bgImage?: GenericImageSrcSet<MediaWidths> }
+export type ButtonProps = RowProps &
+  ButtonBaseProps &
+  CustomButtonStyleProps & { bgImage?: GenericImageSrcSet<MediaWidths> }
 
-const ButtonBase = styled(RebassButton)`
-  border: none;
-  border-radius: 0.5rem;
+const ButtonBase = styled(Row)`
+  border-radius: ${({ borderRadius = '0.5rem' }) => borderRadius};
+
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+
   cursor: pointer;
-  font-size: ${({ theme }) => theme.button.fontSize.normal};
-  font-weight: 600;
   outline: 0;
 
   transition-duration: 0.2;
@@ -289,7 +293,7 @@ const ButtonBase = styled(RebassButton)`
   }
 `
 
-const StyledButton = styled(ButtonBase)<ButtonProps>`
+export const Button = styled(ButtonBase)<ButtonProps>`
   /* Size buttonVariant */
   ${({ buttonVariant }) => buttonVariant && getButtonVariantStyles(buttonVariant)}
   /* Fold in theme css above */
@@ -311,11 +315,9 @@ const StyledButton = styled(ButtonBase)<ButtonProps>`
       ignoreQueriesWithFixedWidth: 500,
       skipIk: true
     })}
-`
 
-export const Button = styled(({ children, ...buttonProps }: ButtonProps) => (
-  <StyledButton {...buttonProps}>{children}</StyledButton>
-))``
+  filter: ${({ filter = 'unset' }) => `filter: ${filter}`};
+`
 
 export const PstlButton = styled(({ children, ...buttonProps }: ButtonProps) => {
   return (
