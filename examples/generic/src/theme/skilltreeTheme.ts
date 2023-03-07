@@ -55,16 +55,6 @@ const SKILLTREE_WIDGET_THEME = {
         mainBgLight: 'red',
         altBg: 'red',
         altBgLight: 'red',
-        border: {
-          border: '1rem',
-          radius: '1rem',
-          colour: 'red'
-        },
-        fontSize: {
-          small: '1rem',
-          normal: '2rem',
-          large: '3rem'
-        },
         hoverColour: 'red'
       },
       fontSize: {
