@@ -8,8 +8,8 @@ import styled, { DefaultTheme, FlattenInterpolation, ThemeProps, css } from 'sty
 import { pastelleTheme } from '../theme'
 
 export interface ButtonBaseProps extends RebassButtonProps {
-  $variant?: ButtonVariations
-  $size?: ButtonSizeVariations
+  buttonVariant?: ButtonVariations
+  buttonSize?: ButtonSizeVariations
 }
 
 export enum ButtonVariations {
@@ -199,8 +199,8 @@ const THEME_BUTTON_STYLES = css`
   transition: text-shadow, background-color, filter 0.2s ease-in-out;
 `
 
-const getButtonVariantStyles = ($variant: ButtonVariations): FlattenInterpolation<ThemeProps<DefaultTheme>> => {
-  switch ($variant) {
+const getButtonVariantStyles = (buttonVariant: ButtonVariations): FlattenInterpolation<ThemeProps<DefaultTheme>> => {
+  switch (buttonVariant) {
     case ButtonVariations.DEFAULT:
       return PRIMARY_BUTTON_STYLES
 
@@ -290,10 +290,10 @@ const ButtonBase = styled(RebassButton)`
 `
 
 const StyledButton = styled(ButtonBase)<ButtonProps>`
-  /* Size $variant */
-  ${({ $variant }) => $variant && getButtonVariantStyles($variant)}
+  /* Size buttonVariant */
+  ${({ buttonVariant }) => buttonVariant && getButtonVariantStyles(buttonVariant)}
   /* Fold in theme css above */
-  ${({ $size }) => $size && ButtonSizes[$size]};
+  ${({ buttonSize }) => buttonSize && ButtonSizes[buttonSize]};
 
   ${({ backgroundColor, bgImage }) => !bgImage && backgroundColor && `background-color: ${backgroundColor};`}
   ${({

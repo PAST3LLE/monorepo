@@ -1,5 +1,6 @@
 import { PNG } from '@past3lle/assets'
 import {
+  BSV,
   BV,
   Button,
   ColumnCenter,
@@ -14,7 +15,7 @@ import { useOnClickOutside } from '@past3lle/hooks'
 import { SkilltreeBoardConnected, SkilltreeBoardConnectedProps, SkilltreeHeader } from '@past3lle/skilltree-widget'
 import { urlToSimpleGenericImageSrcSet } from '@past3lle/theme'
 import * as React from 'react'
-import { useTheme } from 'styled-components'
+import styled, { useTheme } from 'styled-components'
 
 import {
   /* PstlFooter, */
@@ -31,6 +32,10 @@ const SKILLTREE_CONFIG: SkilltreeBoardConnectedProps['config'] = {
     projectId: process.env.REACT_APP_WALLETCONNECT_KEY || 'STRING'
   }
 }
+
+const WrappedButton = styled(PstlButton)`
+  background: purple;
+`
 
 interface Props {
   showBasic?: boolean
@@ -59,21 +64,31 @@ const App = ({ showBasic = false }: Props) => {
           <li>ITEM 3</li>
         </ul>
         <LayoutText.SubHeader>Click button for modal!</LayoutText.SubHeader>
-        <PstlButton $variant={BV.SECONDARY} onClick={() => setModalOpen(true)} margin="2rem">
+        <PstlButton buttonVariant={BV.SECONDARY} onClick={() => setModalOpen(true)} margin="2rem">
           See modal // SECONDARY
         </PstlButton>
-        <PstlButton $variant={BV.PRIMARY} onClick={() => setModalOpen(true)} margin="2rem">
+        <PstlButton buttonVariant={BV.PRIMARY} onClick={() => setModalOpen(true)} margin="2rem">
           BUTTON PRIMARY
         </PstlButton>
-        <PstlButton $variant={BV.DANGER} onClick={() => setModalOpen(true)} margin="2rem">
+        <PstlButton buttonVariant={BV.DANGER} onClick={() => setModalOpen(true)} margin="2rem">
           BUTTON DANGER
         </PstlButton>
-        <PstlButton $variant={BV.WARNING} onClick={() => setModalOpen(true)} margin="2rem">
+        <PstlButton buttonVariant={BV.WARNING} onClick={() => setModalOpen(true)} margin="2rem">
           BUTTON WARNING
         </PstlButton>
-        <PstlButton $variant={BV.DISABLED} onClick={() => setModalOpen(true)} margin="2rem">
+        <PstlButton buttonVariant={BV.DISABLED} onClick={() => setModalOpen(true)} margin="2rem">
           BUTTON WARNING
         </PstlButton>
+        <WrappedButton
+          buttonVariant={BV.SECONDARY}
+          buttonSize={BSV.BIG}
+          onClick={() => setModalOpen(true)}
+          margin="2rem"
+          fontSize={'2.5rem'}
+        >
+          WRAPPED BUTTON
+        </WrappedButton>
+
         {/* <LayoutText.SubHeader>CURRENT THEME: {mode}</LayoutText.SubHeader> */}
         <Button
           margin="0rem 2rem"
