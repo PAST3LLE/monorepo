@@ -90,7 +90,7 @@ const SkilltreeTheme: ThemeByModes<
 > = {
   modes: {
     DEFAULT: {
-      mainText: '#fff',
+      mainText: '#000',
       darkText: '#000',
       lightText: 'ghostwhite',
       mainBg: '#d5fb73',
