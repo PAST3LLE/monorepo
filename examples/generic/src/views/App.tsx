@@ -1,6 +1,5 @@
 import { PNG } from '@past3lle/assets'
 import {
-  BSV,
   BV,
   Button,
   ColumnCenter,
@@ -33,7 +32,7 @@ const SKILLTREE_CONFIG: SkilltreeBoardConnectedProps['config'] = {
   }
 }
 
-const WrappedButton = styled(PstlButton)`
+const WrappedButton = styled(Button)`
   background: purple;
 `
 
@@ -79,13 +78,7 @@ const App = ({ showBasic = false }: Props) => {
         <PstlButton buttonVariant={BV.DISABLED} onClick={() => setModalOpen(true)} margin="2rem">
           BUTTON WARNING
         </PstlButton>
-        <WrappedButton
-          buttonVariant={BV.SECONDARY}
-          buttonSize={BSV.BIG}
-          onClick={() => setModalOpen(true)}
-          margin="2rem"
-          fontSize={'2.5rem'}
-        >
+        <WrappedButton onClick={() => setModalOpen(true)} margin="2rem" fontSize={'1.7rem'} borderRadius={'10rem'}>
           WRAPPED BUTTON
         </WrappedButton>
 
