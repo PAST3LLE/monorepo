@@ -14,7 +14,16 @@ import {
 } from './components'
 import { SkilltreeCoreUpdaters } from './state'
 import { SkilltreeAssetsMap, SkilltreeTheme, SkilltreeThemeByModes } from './theme/types'
-import { SkillRarity } from './types'
+import {
+  CollectionMetadata,
+  CollectionProperties,
+  SkillAttributes,
+  SkillId,
+  SkillMetadata,
+  SkillProperties,
+  SkillRarity,
+  SkilltreeMetadata
+} from './types'
 
 export {
   // Components
@@ -37,5 +46,12 @@ export {
   type SkilltreeBoardProps,
   type SkilltreeAssetsMap,
   type SkilltreeTheme,
-  type SkilltreeThemeByModes
+  type SkilltreeThemeByModes,
+  type SkillId,
+  type SkillMetadata,
+  type SkillAttributes,
+  type SkillProperties,
+  type SkilltreeMetadata,
+  type CollectionMetadata,
+  type CollectionProperties
 }
