@@ -1,22 +1,26 @@
-import { ThemeContentPartsRequired } from '../../types'
+import { ThemeByModes } from '../../types'
 import { BaseColours } from '../base'
 
-export type SkilltreeThemeExtension = Partial<ThemeContentPartsRequired> & {
-  text1: string
-  bg1: string
-  mainBg: string
-  mainBgDarker: string
-  mainBg2: string
-  mainFg: string
-  mainFg2: string
+export interface SkilltreeThemeExtension {
+  mainText: string
   darkText: string
   lightText: string
-  // logo
-  logo: {
-    mainBgLight: string
+  mainBg: string
+  mainBgDarker: string
+  mainBgAlt: string
+  mainFg: string
+  mainFgAlt: string
+
+  button: {
+    // defaults
+    border: { radius: string; colour: string; border: string }
+    fontSize: { small: string; normal: string; large: string }
+    // custom
     mainBg: string
-    altBgLight: string
+    mainBgLight: string
     altBg: string
+    altBgLight: string
+    hoverColour: string
   }
   // rarity colours
   rarity: {
@@ -46,40 +50,44 @@ export type SkilltreeThemeExtension = Partial<ThemeContentPartsRequired> & {
     unlockedSkill: string
     ownedSkill: string
   }
-  button: {
-    fontSize: {
-      small: string
-      normal: string
-      large: string
+  assetsMap: {
+    logos: {
+      company: {
+        full: string
+        mobile?: string
+      }
     }
-    border: {
-      radius: string
-      border: string
-      colour: string
+    images: {
+      background: {
+        app?: string
+        header?: {
+          background?: string
+          account?: string
+        }
+        nav?: {
+          background?: string
+        }
+      }
+      skills?: {
+        skillpoint?: {
+          highlight?: string
+        }
+      }
     }
-    hoverColour: string
-  }
-  input: {
-    border: {
-      radius: string
-      border: string
-      colour: string
+    icons: {
+      locked: string
+      connection: string
+      inventory: string
+      shop: string
+      chains: Record<string, string>
+      rarity: Record<string, string>
     }
-    hoverColour: string
   }
-  content: {
-    background: string
-    backgroundAlt: string
-    text: string
-    textAlt: string
-  }
-  darkModeToggle: string
-  darkModeSvg: string
-  darkModeFilter: string
-  darkModeLogoFilter: string
 }
 
-const SkilltreeTheme = {
+const SkilltreeTheme: ThemeByModes<
+  Omit<SkilltreeThemeExtension, 'assetsMap'> & { assetsMap?: SkilltreeThemeExtension['assetsMap'] }
+> = {
   modes: {
     DEFAULT: {
       mainText: '#fff',
@@ -108,20 +116,6 @@ const SkilltreeTheme = {
         },
         hoverColour: 'cornflowerblue'
       },
-      input: {
-        border: {
-          radius: '1rem',
-          border: 'none',
-          colour: 'transparent'
-        },
-        hoverColour: '#d5fb73'
-      },
-      content: {
-        background: BaseColours.offwhiteOpaque,
-        backgroundAlt: BaseColours.blackOpaque,
-        text: BaseColours.black,
-        textAlt: BaseColours.offwhiteOpaqueMost
-      },
       // rarity colours
       rarity: {
         empty: {
@@ -143,12 +137,10 @@ const SkilltreeTheme = {
         lockedSkill: 'linear-gradient(195deg, lightgrey, darkred)',
         unlockedSkill: 'linear-gradient(195deg, lightgrey,',
         ownedSkill: 'linear-gradient(195deg, lightgrey, #208120)'
-      },
-      // Asset map - needs filling externally
-      assetsMap: {}
+      }
     },
-    DARK: {},
-    LIGHT: {}
+    DARK: {} as SkilltreeThemeExtension,
+    LIGHT: {} as SkilltreeThemeExtension
   }
 } as const
 

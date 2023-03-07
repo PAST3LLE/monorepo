@@ -71,6 +71,8 @@
     "@past3lle/assets": "^0.0.10",
     "@past3lle/constants": "^0.0.17",
     "@past3lle/types": "^0.0.12",
+    "@types/lodash.merge": "^4.6.7",
+    "lodash.merge": "^4.6.2",
     "polished": "^4.2.2",
     "rebass": "^4.0.7",
     "styled-theming": "^2.2.0",

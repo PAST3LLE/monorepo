@@ -1,3 +1,5 @@
+import merge from 'lodash.merge'
+
 import {
   betweenMediaWidthTemplates as betweenMediaWidth,
   fromMediaWidthTemplates as fromMediaWidth,
@@ -100,7 +102,14 @@ export function createCustomTheme<T extends ThemeByModes, M extends BasicUserThe
  * @param template see @type AvailableThemeTemplate
  *
  * @example
-  const pastelleTheme = createTemplateTheme('PASTELLE')
+  const pastelleTheme = createTemplateTheme('PASTELLE', {
+    DEFAULT: {
+      ...default extensions here
+    },
+    DARK: {
+      ...dark extensions here
+    }
+  })
   type CustomThemeExtension = typeof pastelleTheme.modes.DEFAULT 
   // or
   import { PastelleTheme } from '@past3lle/theme'
@@ -108,12 +117,20 @@ export function createCustomTheme<T extends ThemeByModes, M extends BasicUserThe
     export interface DefaultTheme extends ThemeBaseRequired, PastelleTheme {}
   }
  */
-export function createTemplateTheme<K extends AvailableThemeTemplate, E extends Subset<(typeof ThemeTemplates)[K]>>(
-  template: K,
-  extension?: E
-) {
+export function createTemplateTheme<
+  K extends AvailableThemeTemplate,
+  E extends Subset<(typeof ThemeTemplates)[K]['modes']>
+>(template: K, extension?: E) {
   const theme = ThemeTemplates[template]
 
-  const constructedTheme = Object.assign({}, theme, extension)
-  return createCustomTheme(constructedTheme)
+  let auxThemeModes
+  if (extension) {
+    const mergedThemeModes = merge({}, theme.modes, extension)
+    auxThemeModes = mergedThemeModes
+  }
+  const mergedTheme = {
+    ...theme,
+    modes: auxThemeModes
+  }
+  return createCustomTheme(mergedTheme)
 }
