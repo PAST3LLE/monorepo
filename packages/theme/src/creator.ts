@@ -10,6 +10,7 @@ import {
   AvailableThemeTemplate,
   BasicUserTheme,
   CustomThemeOrTemplate,
+  Subset,
   ThemeByModes,
   ThemeMinimumRequired
 } from './types'
@@ -107,8 +108,12 @@ export function createCustomTheme<T extends ThemeByModes, M extends BasicUserThe
     export interface DefaultTheme extends ThemeBaseRequired, PastelleTheme {}
   }
  */
-export function createTemplateTheme<K extends AvailableThemeTemplate>(template: K) {
+export function createTemplateTheme<K extends AvailableThemeTemplate, E extends Subset<(typeof ThemeTemplates)[K]>>(
+  template: K,
+  extension?: E
+) {
   const theme = ThemeTemplates[template]
 
-  return createCustomTheme(theme)
+  const constructedTheme = Object.assign({}, theme, extension)
+  return createCustomTheme(constructedTheme)
 }

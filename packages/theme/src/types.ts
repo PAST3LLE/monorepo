@@ -79,7 +79,7 @@ export type CustomThemeOrTemplate<T, K, M extends BasicUserTheme = BasicUserThem
 
 export type ThemeModesRequired = 'LIGHT' | 'DARK'
 
-type Subset<K> = {
+export type Subset<K> = {
   [attr in keyof K]?: K[attr] extends object
     ? Subset<K[attr]>
     : K[attr] extends object | null

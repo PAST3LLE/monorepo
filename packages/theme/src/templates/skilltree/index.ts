@@ -1,7 +1,6 @@
-import { ThemeBaseColoursRequired, ThemeContentPartsRequired } from '../../types'
+import { ThemeContentPartsRequired } from '../../types'
 import { BaseColours } from '../base'
 
-const BaseColoursRequired: ThemeBaseColoursRequired = BaseColours
 export type SkilltreeThemeExtension = Partial<ThemeContentPartsRequired> & {
   text1: string
   bg1: string
@@ -83,21 +82,45 @@ export type SkilltreeThemeExtension = Partial<ThemeContentPartsRequired> & {
 const SkilltreeTheme = {
   modes: {
     DEFAULT: {
-      text1: '#fff',
-      bg1: '#d5fb73',
-      mainBg: '#d5fb73',
-      mainBgDarker: '#94c614',
-      mainBg2: '#262528',
-      mainFg: 'ghostwhite',
-      mainFg2: 'red',
+      mainText: '#fff',
       darkText: '#000',
       lightText: 'ghostwhite',
-      // logo
-      logo: {
-        mainBgLight: '#deefe1',
+      mainBg: '#d5fb73',
+      mainBgDarker: '#94c614',
+      mainBgAlt: '#262528',
+      mainFg: 'ghostwhite',
+      mainFgAlt: '#d5fb73',
+
+      button: {
         mainBg: '#475548',
+        mainBgLight: '#deefe1',
+        altBg: '#281d25',
         altBgLight: '#b6abb6',
-        altBg: '#281d25'
+        fontSize: {
+          small: '1rem',
+          normal: '1.2rem',
+          large: '1.6rem'
+        },
+        border: {
+          radius: '1rem',
+          border: '0.1rem solid transparent',
+          colour: 'none'
+        },
+        hoverColour: 'cornflowerblue'
+      },
+      input: {
+        border: {
+          radius: '1rem',
+          border: 'none',
+          colour: 'transparent'
+        },
+        hoverColour: '#d5fb73'
+      },
+      content: {
+        background: BaseColours.offwhiteOpaque,
+        backgroundAlt: BaseColours.blackOpaque,
+        text: BaseColours.black,
+        textAlt: BaseColours.offwhiteOpaqueMost
       },
       // rarity colours
       rarity: {
@@ -121,60 +144,12 @@ const SkilltreeTheme = {
         unlockedSkill: 'linear-gradient(195deg, lightgrey,',
         ownedSkill: 'linear-gradient(195deg, lightgrey, #208120)'
       },
-      button: {
-        fontSize: {
-          small: '1rem',
-          normal: '1.2rem',
-          large: '1.6rem'
-        },
-        border: {
-          radius: '1rem',
-          border: '0.1rem solid transparent',
-          colour: 'none'
-        },
-        hoverColour: 'none'
-      },
-      input: {
-        border: {
-          radius: '1rem',
-          border: 'none',
-          colour: 'transparent'
-        },
-        hoverColour: '#d5fb73'
-      },
-      content: {
-        background: BaseColoursRequired.offwhiteOpaque,
-        backgroundAlt: BaseColoursRequired.blackOpaque,
-        text: BaseColoursRequired.black,
-        textAlt: BaseColoursRequired.offwhiteOpaqueMost
-      },
-      get darkModeToggle() {
-        return this.mainBg
-      },
-      get darkModeSvg() {
-        return this.mainBg
-      },
-      darkModeFilter: '',
-      darkModeLogoFilter: 'drop-shadow(0px 0px 12px rgba(0,0,0,1))'
+      // Asset map - needs filling externally
+      assetsMap: {}
     },
-    DARK: {
-      input: {
-        border: {
-          colour: '#d5fb73'
-        },
-        hoverColour: '#d5fb73'
-      },
-      content: {
-        background: BaseColoursRequired.blackOpaque,
-        backgroundAlt: BaseColoursRequired.offwhiteOpaque,
-        text: BaseColoursRequired.offwhite,
-        textAlt: BaseColoursRequired.blackOpaqueMore
-      },
-      darkModeFilter: 'invert(1) brightness(0.8) hue-rotate(247deg) saturate(2)',
-      darkModeLogoFilter: 'invert(1) saturate(1.4) hue-rotate(180deg) drop-shadow(0px 0px 12px rgba(0,0,0,1))'
-    },
+    DARK: {},
     LIGHT: {}
   }
 } as const
 
-export const Theme = { ...BaseColoursRequired, ...SkilltreeTheme }
+export const Theme = { ...BaseColours, ...SkilltreeTheme }
