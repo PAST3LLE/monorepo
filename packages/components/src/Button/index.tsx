@@ -275,6 +275,7 @@ export type ButtonProps = RowProps &
 const ButtonBase = styled(Row)`
   border-radius: ${({ borderRadius = '0.5rem' }) => borderRadius};
 
+  width: auto;
   justify-content: center;
   align-items: center;
   padding: 1rem;
