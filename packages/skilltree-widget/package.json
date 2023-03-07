@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/skilltree-widget",
   "sideEffects": false,
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "PAST3LLE Skilltree as an NPM importable ESM React widget component",
   "main": "dist/esm/index.js",
   "typings": "dist/types/index.d.ts",
@@ -96,7 +96,7 @@
   "dependencies": {
     "@ethersproject/bignumber": "5.7.0",
     "@past3lle/assets": "^0.0.10",
-    "@past3lle/components": "^0.0.36",
+    "@past3lle/components": "^0.0.37",
     "@past3lle/constants": "^0.0.17",
     "@past3lle/hooks": "^0.0.12",
     "@past3lle/skills-nft": "^0.0.6",
