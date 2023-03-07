@@ -1,7 +1,8 @@
 import { SkilltreeBoardConnected, SkilltreeBoardConnectedProps, SkilltreeHeader } from '@past3lle/skilltree-widget'
-import { createTemplateTheme } from '@past3lle/theme'
+import { createTemplateTheme, FontCssProvider } from '@past3lle/theme'
 import { ASSETS_MAP } from 'assets'
 import React from 'react'
+import { GothicFontCssProvider } from 'theme/fonts'
 
 const skilltreeTheme = createTemplateTheme('SKILLTREE', {
   DEFAULT: {
@@ -22,6 +23,8 @@ const SKILLTREE_CONFIG: SkilltreeBoardConnectedProps = {
 export function App() {
   return (
     <SkilltreeBoardConnected config={SKILLTREE_CONFIG.config}>
+      <FontCssProvider />
+      <GothicFontCssProvider />
       <SkilltreeHeader />
     </SkilltreeBoardConnected>
   )
