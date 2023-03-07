@@ -23,19 +23,23 @@ export const HeaderContainer = styled(PstlHeader)<{ isOpen?: boolean }>`
   padding: 1.5rem 2.5rem 0;
 
   ${({ theme }) =>
-    theme.assetsMap.images.headerBackground &&
-    setBackgroundWithDPI(theme, [urlToSimpleGenericImageSrcSet(theme.assetsMap.images.headerBackground)], {
+    theme.assetsMap.images.background.header?.background &&
+    setBackgroundWithDPI(theme, [urlToSimpleGenericImageSrcSet(theme.assetsMap.images.background.header.background)], {
       ...getBaseBgProps(theme),
       backgroundAttributes: ['0px 0px/contain no-repeat']
     })}
 
   ${({ theme }) =>
-    theme.assetsMap.images.headerBackground &&
+    theme.assetsMap.images.background.header?.background &&
     upToExtraSmall`
-      ${setBackgroundWithDPI(theme, [urlToSimpleGenericImageSrcSet(theme.assetsMap.images.headerBackground)], {
-        ...getBaseBgProps(theme),
-        backgroundAttributes: ['0px 0px/cover no-repeat']
-      })}
+      ${setBackgroundWithDPI(
+        theme,
+        [urlToSimpleGenericImageSrcSet(theme.assetsMap.images.background.header.background)],
+        {
+          ...getBaseBgProps(theme),
+          backgroundAttributes: ['0px 0px/cover no-repeat']
+        }
+      )}
     `}
 
   > ${Row} {

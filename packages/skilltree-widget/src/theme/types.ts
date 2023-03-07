@@ -13,16 +13,30 @@ type RarityIcons = {
   readonly [key in SkillRarity]: string
 }
 
-export interface AssetsMap {
+export interface SkilltreeAssetsMap {
   readonly assetsMap: {
     readonly logos: {
-      companyMain: string
+      company: {
+        full: string
+        mobile?: string
+      }
     }
     readonly images: {
-      appBackground: string
-      headerBackground?: string
-      navBackground?: string
-      skillpointHighlight: string
+      background: {
+        app?: string
+        header?: {
+          background?: string
+          account?: string
+        }
+        nav?: {
+          background?: string
+        }
+      }
+      skills?: {
+        skillpoint?: {
+          highlight?: string
+        }
+      }
     }
     readonly icons: {
       locked: string
@@ -35,7 +49,7 @@ export interface AssetsMap {
   }
 }
 
-export interface SkilltreeTheme extends AssetsMap {
+export interface SkilltreeTheme extends SkilltreeAssetsMap {
   mainText: string
   darkText: string
   lightText: string

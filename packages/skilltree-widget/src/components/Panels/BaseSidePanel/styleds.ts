@@ -48,7 +48,7 @@ export const StyledSidePanel = styled(ArticleFadeIn)<SidePanelCssProps>`
 
     ${({ theme }) =>
       setCssBackground(theme, {
-        imageUrls: [urlToSimpleGenericImageSrcSet(theme.assetsMap.logos.companyMain)],
+        imageUrls: [urlToSimpleGenericImageSrcSet(theme.assetsMap.logos.company.full)],
         backgroundColor: 'lightgrey',
         backgroundAttributes: ['bottom/contain no-repeat']
       })}

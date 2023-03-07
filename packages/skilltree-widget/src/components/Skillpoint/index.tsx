@@ -7,8 +7,8 @@ import { SkillsState, useSkillsAtom } from '../../state/Skills'
 import { useAssetsMap } from '../../theme/utils'
 import { SkillMetadata, SkillRarity } from '../../types'
 import { getHash } from '../../utils'
-import { StyledSkillpoint } from '../Common'
 import { Vector } from '../Canvas/canvasApi/api/vector'
+import { StyledSkillpoint } from '../Common'
 
 interface Props {
   className?: string
@@ -107,5 +107,5 @@ const StyledImg = styled.img`
 `
 const SkillpointHighlight = memo(() => {
   const assetsMap = useAssetsMap()
-  return <StyledImg src={assetsMap.images.skillpointHighlight} />
+  return <StyledImg src={assetsMap.images.skills?.skillpoint?.highlight} />
 })

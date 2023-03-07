@@ -64,8 +64,9 @@ const ConnectionInfoContainer = styled(Row).attrs({ justifyContent: 'center', al
   }
   filter: invert(1);
   ${({ theme }) =>
+    theme.assetsMap.images.background.header?.account &&
     setCssBackground(theme, {
-      imageUrls: [urlToSimpleGenericImageSrcSet(theme.assetsMap.icons.connection)],
+      imageUrls: [urlToSimpleGenericImageSrcSet(theme.assetsMap.images.background.header.account)],
       backgroundAttributes: ['center/contain no-repeat']
     })}
 `

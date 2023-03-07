@@ -1,7 +1,7 @@
 import { SkillRarity } from '../types'
 import { SkilltreeTheme } from './types'
 
-export const baseTheme: SkilltreeTheme = {
+export const baseTheme: Omit<SkilltreeTheme, 'assetsMap'> = {
   mainText: '#fff',
   darkText: '#000',
   lightText: 'ghostwhite',
@@ -9,7 +9,7 @@ export const baseTheme: SkilltreeTheme = {
   mainBgDarker: '#94c614',
   mainBgAlt: '#262528',
   mainFg: 'ghostwhite',
-  mainFgAlt: 'red',
+  mainFgAlt: '#d5fb73',
 
   button: {
     mainBg: '#475548',
@@ -18,10 +18,14 @@ export const baseTheme: SkilltreeTheme = {
     altBgLight: '#b6abb6',
     border: {
       radius: '0.5rem',
-      border: '1rem',
-      colour: 'transparent'
+      colour: 'transparent',
+      border: 'none'
     },
-    fontSize: { small: '1rem', normal: '1.5rem', large: '2rem' },
+    fontSize: {
+      small: '0.8rem',
+      normal: '1rem',
+      large: '1.5rem'
+    },
     hoverColour: 'cornflowerblue'
   },
   // rarity colours
@@ -45,34 +49,5 @@ export const baseTheme: SkilltreeTheme = {
     lockedSkill: 'linear-gradient(195deg, lightgrey, darkred)',
     unlockedSkill: 'linear-gradient(195deg, lightgrey,',
     ownedSkill: 'linear-gradient(195deg, lightgrey, #208120)'
-  },
-  assetsMap: {
-    logos: {
-      companyMain: ''
-    },
-    images: {
-      appBackground: '',
-      headerBackground: undefined,
-      navBackground: undefined,
-      skillpointHighlight: ''
-    },
-    icons: {
-      locked: 'locked.png',
-      connection: 'connection.png',
-      inventory: 'inventory.png',
-      shop: 'shop.png',
-      chains: {
-        disconnected: 'disconnected.png',
-        5: 'goerli.png',
-        80001: 'mumbai.png'
-      },
-      rarity: {
-        empty: 'empty.png',
-        common: 'common.png',
-        rare: 'rare.png',
-        legendary: 'legendary.png',
-        epic: 'epic.png'
-      }
-    }
   }
 } as const

@@ -23,7 +23,7 @@ const CssProviders = () => {
     <>
       <StaticGlobalCssProvider />
       <CustomStaticGlobalCss
-        backgroundImage={assetsMap.images.appBackground}
+        backgroundImage={assetsMap.images.background.app}
         lockedSkillIcon={assetsMap.icons.locked}
       />
       <ThemedGlobalCssProvider />

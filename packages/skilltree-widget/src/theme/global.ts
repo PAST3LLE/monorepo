@@ -11,11 +11,14 @@ export function useGenericImageSrcSet() {
   return useMemo(
     () => ({
       TEXTURE_BG_URL_MAP: urlToSimpleGenericImageSrcSet(ipfsToImageUri(EMPTY_SKILL_IMAGE_HASH_LIST[0])),
-      BACKGROUND_IMAGE_DDPX_URL_MAP: urlToSimpleGenericImageSrcSet(assetsMap.images.appBackground),
-      BG_LOGO_DDPX_URL_MAP: urlToSimpleGenericImageSrcSet(assetsMap.logos.companyMain),
-      SPRAY_ACCOUNT_DDPX_URL_MAP: urlToSimpleGenericImageSrcSet(assetsMap.images.skillpointHighlight)
+      BACKGROUND_IMAGE_DDPX_URL_MAP:
+        assetsMap.images.background.app && urlToSimpleGenericImageSrcSet(assetsMap.images.background.app),
+      BG_LOGO_DDPX_URL_MAP: urlToSimpleGenericImageSrcSet(assetsMap.logos.company.full),
+      SPRAY_ACCOUNT_DDPX_URL_MAP:
+        assetsMap.images.skills?.skillpoint?.highlight &&
+        urlToSimpleGenericImageSrcSet(assetsMap.images.skills.skillpoint.highlight)
     }),
-    [assetsMap.images.appBackground, assetsMap.images.skillpointHighlight, assetsMap.logos.companyMain]
+    [assetsMap.images.background.app, assetsMap.images.skills?.skillpoint?.highlight, assetsMap.logos.company.full]
   )
 }
 
@@ -37,13 +40,13 @@ const Web3ModalOverrideVariables = css`
 `}
 `
 
-export const CustomStaticGlobalCss = createGlobalStyle<{ backgroundImage: string; lockedSkillIcon: string }>`
+export const CustomStaticGlobalCss = createGlobalStyle<{ backgroundImage?: string; lockedSkillIcon: string }>`
   .disabled, :disabled {
     cursor: ${({ lockedSkillIcon }) => `url(${lockedSkillIcon}), not-allowed`};
   }
   
   body > div#root {
-    background: ${({ backgroundImage }) => `url(${backgroundImage}) center/cover no-repeat`};
+    ${({ backgroundImage }) => backgroundImage && `background: url(${backgroundImage}) center/cover no-repeat;`}
     height: 100vh;
     
     > nav {

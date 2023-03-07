@@ -13,6 +13,7 @@ import {
   ThemeChangerButton
 } from './components'
 import { SkilltreeCoreUpdaters } from './state'
+import { SkilltreeAssetsMap, SkilltreeTheme, SkilltreeThemeByModes } from './theme/types'
 import { SkillRarity } from './types'
 
 export {
@@ -31,7 +32,10 @@ export {
   // Updaters
   SkilltreeCoreUpdaters,
   // Types
+  SkillRarity,
   type SkilltreeBoardConnectedProps,
   type SkilltreeBoardProps,
-  type SkillRarity
+  type SkilltreeAssetsMap,
+  type SkilltreeTheme,
+  type SkilltreeThemeByModes
 }

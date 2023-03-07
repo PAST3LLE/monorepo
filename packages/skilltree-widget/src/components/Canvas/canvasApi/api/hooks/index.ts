@@ -48,7 +48,9 @@ export function useLightningCanvas({ canvasDOM, config, dimensions }: LightningC
     if (!canvas || !ready || !canvasDOM?.parentElement) return
 
     const bgImage = new Image()
-    bgImage.src = assetsMap.images.appBackground
+    if (assetsMap.images.background.app) {
+      bgImage.src = assetsMap.images.background.app
+    }
     /* Uncomment for event listening
     // when changes we remove listeners
     canvas.removeEventListener('mousedown', _onMouseDown, true)
@@ -70,7 +72,7 @@ export function useLightningCanvas({ canvasDOM, config, dimensions }: LightningC
     _buildApi(config)
 
     window.requestAnimationFrame(() => _animate(bgImage))
-  }, [config, ready, height, width, canvasDOM?.parentElement, assetsMap.images.appBackground])
+  }, [config, ready, height, width, canvasDOM?.parentElement, assetsMap.images.background.app])
 
   // ========================
   // CLEARS CANVAS ON A TIMER

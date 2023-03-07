@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { useNetwork } from 'wagmi'
 
 import { useGetWindowSize } from '../../../state/WindowSize'
-import { AssetsMap } from '../../../theme/types'
+import { SkilltreeAssetsMap as AssetsMap } from '../../../theme/types'
 import { useAssetsMap } from '../../../theme/utils'
 import { SupportedChains } from '../../../web3/types/chains'
 import { MonospaceText } from '../Text'
