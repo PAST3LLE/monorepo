@@ -3,7 +3,8 @@
   "sideEffects": false,
   "version": "0.0.1",
   "description": "PAST3LLE FORGE web3 hooks and tings",
-  "main": "dist/index.js",
+  "main": "dist/esm/index.js",
+  "typings": "dist/types/index.d.ts",
   "repository": {
     "type": "git",
     "directory": "packages/forge-web3",
@@ -19,7 +20,6 @@
   "author": "pastelle",
   "homepage": "https://github.com/past3lle/schematics-monorepo/tree/main/packages/forge-web3#readme",
   "license": "MIT",
-  "typings": "dist/index.d.ts",
   "files": [
     "dist"
   ],

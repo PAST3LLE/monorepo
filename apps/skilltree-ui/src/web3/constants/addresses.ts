@@ -1,7 +1,8 @@
+import { ContractAddressMap, MetadataUriMap } from '@past3lle/forge-web3'
 import { SupportedChains } from 'web3/types/chains'
 
 export type ContractAddresses = typeof CONTRACT_ADDRESSES_MAP
-export const CONTRACT_ADDRESSES_MAP = {
+export const CONTRACT_ADDRESSES_MAP: ContractAddressMap = {
   [SupportedChains.GOERLI]: {
     collections: '0x25CeF6E76b7b9C7387414bE6245AEd7846Fe74c3',
     skills: [
@@ -19,9 +20,9 @@ export const CONTRACT_ADDRESSES_MAP = {
       { id: 3, address: '0xc0E631d9D5F13d0cb7Df828999cD916A87ab9A71' }
     ]
   }
-} as const
+}
 
-export const METADATA_URIS_MAP = {
+export const METADATA_URIS_MAP: MetadataUriMap = {
   [SupportedChains.GOERLI]: {
     collections: 'https://pstlcollections.s3.eu-south-2.amazonaws.com/collections/{id}.json',
     skills: [
@@ -38,7 +39,7 @@ export const METADATA_URIS_MAP = {
       { id: 3, uri: 'ipfs://QmPVRrcb9jg2dewYC5fBTGYVbBG9ixLnYuz8z2BXammNm1/{id}.json' }
     ]
   }
-} as const
+}
 
 export const SKILLS_MUMBAI = CONTRACT_ADDRESSES_MAP[SupportedChains.POLYGON_MUMBAI].skills
 export const SKILLS_GOERLI = CONTRACT_ADDRESSES_MAP[SupportedChains.GOERLI].skills

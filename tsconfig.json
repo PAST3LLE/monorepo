@@ -18,6 +18,9 @@
             "@past3lle/skilltree-ui/*": [
                 "apps/skilltree-ui/src/*"
             ],
+            "@past3lle/forge-web3/*": [
+                "packages/forge-web3/src/*"
+            ],
             "@past3lle/forge-widget/*": [
                 "packages/forge-widget/src/*"
             ],

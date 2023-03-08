@@ -3,25 +3,32 @@ import { Web3Modal as Web3ModalComponent } from '@web3modal/react'
 import React, { ReactNode, useMemo } from 'react'
 import { WagmiConfig } from 'wagmi'
 
-import { SUPPORTED_CHAINS } from '../config/chains'
-import { WalletConnectProps, createWagmiClient } from './web3Modal'
+import { WalletConnectProps as ForgeWeb3ProviderProps, createWagmiClient } from './web3Modal'
 
-export const WagmiProvider = ({ children, clientProps }: { children: ReactNode; clientProps: WalletConnectProps }) => (
-  <WagmiConfig client={createWagmiClient(clientProps)}>{children}</WagmiConfig>
-)
+export const WagmiProvider = ({
+  children,
+  wagmiClient
+}: {
+  children: ReactNode
+  wagmiClient: ReturnType<typeof createWagmiClient>
+}) => <WagmiConfig client={wagmiClient}>{children}</WagmiConfig>
 
-export const Web3Modal = (props: WalletConnectProps) => {
-  if (!props.walletConnect.projectId) {
+export const Web3Modal = ({
+  wagmiClient,
+  walletConnect: { chains, themeBackground = 'themeColor', projectId, ...restWalletconnectProps }
+}: ForgeWeb3ProviderProps & { wagmiClient: ReturnType<typeof createWagmiClient> }) => {
+  if (!projectId) {
     throw new Error('MISSING or INVALID WalletConnect options! Please check your config object.')
   }
 
-  const ethereumClient = useMemo(() => new EthereumClient(createWagmiClient(props), SUPPORTED_CHAINS), [props])
+  const ethereumClient = useMemo(() => new EthereumClient(wagmiClient, chains), [])
 
   return (
     <Web3ModalComponent
-      themeBackground="themeColor"
-      projectId={props.walletConnect.projectId}
+      themeBackground={themeBackground}
+      projectId={projectId}
       ethereumClient={ethereumClient}
+      {...restWalletconnectProps}
     />
   )
 }
@@ -31,12 +38,15 @@ export const Web3Providers = ({
   walletconnectConfig
 }: {
   children: ReactNode
-  walletconnectConfig: WalletConnectProps
+  walletconnectConfig: ForgeWeb3ProviderProps
 }) => {
+  const wagmiClient = useMemo(() => createWagmiClient(walletconnectConfig), [walletconnectConfig])
   return (
     <>
-      <Web3Modal {...walletconnectConfig} />
-      <WagmiProvider clientProps={walletconnectConfig}>{children}</WagmiProvider>
+      <Web3Modal {...walletconnectConfig} wagmiClient={wagmiClient} />
+      <WagmiProvider wagmiClient={wagmiClient}>{children}</WagmiProvider>
     </>
   )
 }
+
+export { type ForgeWeb3ProviderProps }
