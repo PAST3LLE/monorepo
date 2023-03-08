@@ -58,13 +58,13 @@
     "**/typescript": "^4.9.5"
   },
   "peerDependencies": {
-    "@ethersproject/bignumber": ">=5.7.0",
-    "@web3modal/ethereum": ">=2.1.0",
-    "@web3modal/react": ">=2.1.0",
-    "jotai": ">=1.13.1",
+    "@ethersproject/bignumber": ">=5",
+    "@web3modal/ethereum": ">=2",
+    "@web3modal/react": ">=2",
+    "jotai": ">=1",
     "react": ">=16",
     "styled-components": ">=5",
-    "wagmi": ">=0.11.3"
+    "wagmi": ">=0.11"
   },
   "devDependencies": {
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.13.8",
