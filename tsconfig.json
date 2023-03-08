@@ -18,8 +18,8 @@
             "@past3lle/skilltree-ui/*": [
                 "apps/skilltree-ui/src/*"
             ],
-            "@past3lle/skilltree-widget/*": [
-                "packages/skilltree-widget/src/*"
+            "@past3lle/forge-widget/*": [
+                "packages/forge-widget/src/*"
             ],
             "@past3lle/skills-nft/*": [
                 "apps/skilltree-ui/src/*"
@@ -46,10 +46,13 @@
             "path": "packages/constants"
         },
         {
-            "path": "packages/hooks"
+            "path": "packages/forge-web3"
         },
         {
-            "path": "packages/skilltree-widget"
+            "path": "packages/forge-widget"
+        },
+        {
+            "path": "packages/hooks"
         },
         {
             "path": "packages/theme"

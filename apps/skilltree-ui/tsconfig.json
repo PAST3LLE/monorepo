@@ -31,7 +31,7 @@
             "path": "../skills-nft"
         },
         {
-            "path": "../../packages/skilltree-widget"
+            "path": "../../packages/forge-widget"
         },
         {
             "path": "../../packages/theme"

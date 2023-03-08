@@ -27,7 +27,7 @@ const SKILLTREE_CONFIG: SkilltreeBoardConnectedProps = {
     appName: 'PSTL SKILLTREE',
     appTheme: skilltreeTheme,
     provider: {
-      projectId: process.env.REACT_APP_WALLETCONNECT_KEY || 'BROKEN'
+      projectId: process.env.REACT_APP_WALLETCONNECT_KEY as string
     }
   }
 }

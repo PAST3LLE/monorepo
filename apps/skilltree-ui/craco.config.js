@@ -23,6 +23,7 @@ module.exports = {
         modules: [...webpackConfig.resolve.modules],
         fallback: {
           fs: false,
+          os: false,
           tls: false,
           net: false,
           path: false,
@@ -31,7 +32,6 @@ module.exports = {
           https: false,
           stream: false,
           crypto: false,
-          os: false,
           assert: false
         }
       }

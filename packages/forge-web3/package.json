@@ -1,0 +1,55 @@
+{
+  "name": "@past3lle/forge-web3",
+  "sideEffects": false,
+  "version": "0.0.0",
+  "description": "Past3lle FORGE web3 hooks and things",
+  "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "directory": "packages/forge-web3",
+    "url": "git+https://github.com/PAST3LLE/past3lle-monorepo.git"
+  },
+  "keywords": [
+    "web3",
+    "forge",
+    "past3lle",
+    "skilltree",
+    "skills"
+  ],
+  "author": "pastelle",
+  "homepage": "https://github.com/past3lle/schematics-monorepo/tree/main/packages/forge-web3#readme",
+  "license": "MIT",
+  
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "clean": "rm -rf dist && rm -rf tsconfig.tsbuildinfo",
+    "compile": "tsdx build && cp \"./package.json\" ./dist/",
+    "build": "yarn clean && yarn compile",
+    "prepack": "yarn build",
+    "start": "tsdx watch",
+    "test": "echo 'removed default test' ",
+    "alt-test": "tsc test --env=jsdom",
+    "test:watch": "tsc test --env=jsdom --watchAll",
+    "test:ci": "yarn alt-test --coverage --no-watch --watch=false --watchAll=false --no-watchman --forceExit --detectOpenHandles",
+    "pre-commit": "pretty-quick --staged && yarn test:ci && yarn build",
+    "lint": "prettier --write ./src/** --ignore-path '../../.prettierignore'"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      ".+\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/src/__mocks__/file-mock.js"
+    },
+    "testMatch": [
+      "<rootDir>src/**/__tests__/*.{ts,tsx}"
+    ]
+  },
+  "bugs": {
+    "url": "https://github.com/PAST3LLE/past3lle-monorepo/issues"
+  }
+}
