@@ -4,7 +4,7 @@ import { useContractRead } from 'wagmi'
 
 import { MetadataState, useMetadataMapWriteAtom, useMetadataWriteAtom } from '..'
 import { useFetchMetadataCallback } from '../../../hooks'
-import mockMetadata from '../../../mock/metadata/fullMetadata.js'
+import mockMetadata from '../../../mock/metadata/fullMetadata'
 import { SkillMetadata } from '../../../types'
 import { usePrepareCollectionsContract } from '../../../web3/hooks/collections/usePrepareCollectionsContract'
 

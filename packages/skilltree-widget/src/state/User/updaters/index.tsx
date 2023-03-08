@@ -1,6 +1,6 @@
+import { BigNumber } from '@ethersproject/bignumber'
 import { PSTLCollectionBaseSkills__factory } from '@past3lle/skilltree-contracts'
 import { devWarn } from '@past3lle/utils'
-import { BigNumber } from '@ethersproject/bignumber'
 import { useEffect } from 'react'
 import { Address, useAccount, useContractReads } from 'wagmi'
 
