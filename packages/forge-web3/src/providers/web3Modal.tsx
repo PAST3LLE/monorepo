@@ -1,11 +1,10 @@
 import { modalConnectors, walletConnectProvider } from '@web3modal/ethereum'
 import { configureChains, createClient } from 'wagmi'
 
-import { AppConfig } from '../../../types'
-import { SUPPORTED_CHAINS } from '../chains'
+import { SUPPORTED_CHAINS } from '../config/chains'
 
 export interface WalletConnectProps {
-  appName: AppConfig['appName']
+  appName: string
   walletConnect: {
     projectId: string
   }

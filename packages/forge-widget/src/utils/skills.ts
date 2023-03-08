@@ -1,5 +1,5 @@
-import { devWarn } from '@past3lle/utils'
 import { BigNumber } from '@ethersproject/bignumber'
+import { devWarn } from '@past3lle/utils'
 
 import { UserBalances } from '../state/User'
 import { SkillMetadata } from '../types'

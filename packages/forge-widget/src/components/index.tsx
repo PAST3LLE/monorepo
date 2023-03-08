@@ -5,7 +5,7 @@ import { useTheme } from 'styled-components'
 import { SkilltreeCoreUpdaters } from '../state'
 import { CustomStaticGlobalCss, CustomThemeGlobalCss } from '../theme/global'
 import { AppConfig } from '../types/appConfig'
-import { Web3Providers } from '../web3/config'
+import { Web3Providers } from '../../../forge-web3/src/config'
 import { SkilltreeBoard as SkilltreeBoardComponent } from './Board'
 import {
   ConnectionInfoButton,

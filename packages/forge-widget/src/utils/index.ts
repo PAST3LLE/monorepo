@@ -1,14 +1,9 @@
-import { GATEWAY_URI } from '../constants/ipfs'
+import { ipfsToImageUri } from '@past3lle/forge-web3'
+
 import { SKILL_ID_BASE } from '../constants/skills'
 import { baseTheme } from '../theme/base'
 import { SkillMetadata, SkillRarity } from '../types'
 
-export const getHash = (uri: string) => (uri.startsWith('ipfs://') ? uri.substring(7) : uri)
-export function ipfsToImageUri(uriHash: string) {
-  const skillUriHash = getHash(uriHash)
-
-  return `${GATEWAY_URI}/${skillUriHash}`
-}
 export async function getTokenUri(imageUri: SkillMetadata['image']) {
   const skillMetaData: SkillMetadata = await (await fetch(imageUri)).json()
   return ipfsToImageUri(skillMetaData.image)

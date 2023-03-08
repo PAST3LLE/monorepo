@@ -8,7 +8,7 @@ import { useNetwork } from 'wagmi'
 import { useGetWindowSize } from '../../../state/WindowSize'
 import { SkilltreeAssetsMap as AssetsMap } from '../../../theme/types'
 import { useAssetsMap } from '../../../theme/utils'
-import { SupportedChains } from '../../../web3/types/chains'
+import { SupportedChains } from '../../../../../forge-web3/src/web3/types/chains'
 import { MonospaceText } from '../Text'
 
 export function NetworkInfoButton() {

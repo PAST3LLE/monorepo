@@ -1,14 +1,16 @@
-import { PSTLAllCollections__factory, PSTLCollectionBaseSkills__factory } from '@past3lle/skilltree-contracts'
 import { BigNumber } from '@ethersproject/bignumber'
+import { PSTLAllCollections__factory, PSTLCollectionBaseSkills__factory } from '@past3lle/skilltree-contracts'
 import { useMemo } from 'react'
+import { ContractAddressMap } from 'src/types'
 import { Address, useContract, useContractRead, useProvider } from 'wagmi'
 
 import { CallOverrides, PayableOverrides } from '../../types/functions'
-import { useContractAddressesByChain } from '../useContractAddress'
+import { CommonHooksProps } from '../types'
 import { useSupportedChainId } from '../useSupportedChainId'
+import { useContractAddressesByChain } from './useContractAddress'
 
-export function useSkillsContract(collectionId: number) {
-  const { collections } = useContractAddressesByChain()
+export function useSkillsContract<M extends ContractAddressMap>({ collectionId, addressMap }: CommonHooksProps<M>) {
+  const { collections } = useContractAddressesByChain(addressMap)
   const { data: address } = useContractRead({
     abi: PSTLAllCollections__factory.abi,
     functionName: 'skillsContract',

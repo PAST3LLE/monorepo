@@ -1,11 +1,10 @@
+import { METADATA_URIS_MAP, ipfsToImageUri, useSupportedChainId } from '@past3lle/forge-web3'
 import { devWarn } from '@past3lle/utils'
 import { useCallback } from 'react'
 
 import { MetadataState } from '../state/Metadata'
 import { CollectionMetadata, SkillMetadata } from '../types'
-import { get64PaddedSkillId, ipfsToImageUri } from '../utils'
-import { METADATA_URIS_MAP } from '../web3/constants/addresses'
-import { useSupportedChainId } from '../web3/hooks/useSupportedChainId'
+import { get64PaddedSkillId } from '../utils'
 
 export interface UseMetaData {
   skills: (SkillMetadata[] | undefined)[]

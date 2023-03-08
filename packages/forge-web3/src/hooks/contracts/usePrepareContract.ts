@@ -1,7 +1,7 @@
 import { Abi, Address, Narrow } from 'abitype'
 import { useNetwork, usePrepareContractWrite } from 'wagmi'
 
-import { SupportedChains } from '../types/chains'
+import { SupportedChains } from '../../types'
 
 export function usePrepareContract<TAbi extends Narrow<Abi | readonly unknown[]> | undefined>(
   abi: TAbi,

@@ -3,7 +3,7 @@ import { Web3Modal as Web3ModalComponent } from '@web3modal/react'
 import React, { ReactNode, useMemo } from 'react'
 import { WagmiConfig } from 'wagmi'
 
-import { SUPPORTED_CHAINS } from '../chains'
+import { SUPPORTED_CHAINS } from '../config/chains'
 import { WalletConnectProps, createWagmiClient } from './web3Modal'
 
 export const WagmiProvider = ({ children, clientProps }: { children: ReactNode; clientProps: WalletConnectProps }) => (

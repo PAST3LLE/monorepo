@@ -34,6 +34,9 @@
             "path": "../../packages/forge-widget"
         },
         {
+            "path": "../../packages/forge-web3"
+        },
+        {
             "path": "../../packages/theme"
         },
         {

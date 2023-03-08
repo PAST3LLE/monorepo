@@ -22,6 +22,9 @@
             "path": "../constants"
         },
         {
+            "path": "../forge-web3"
+        },
+        {
             "path": "../hooks"
         },
         {

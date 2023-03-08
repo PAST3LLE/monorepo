@@ -1,4 +1,4 @@
-import { SupportedChains } from '../types/chains'
+import { SupportedChains } from '@past3lle/forge-web3'
 
 export type ContractAddresses = typeof CONTRACT_ADDRESSES_MAP
 export const CONTRACT_ADDRESSES_MAP = {
@@ -42,9 +42,6 @@ export const METADATA_URIS_MAP = {
 
 export const SKILLS_MUMBAI = CONTRACT_ADDRESSES_MAP[SupportedChains.POLYGON_MUMBAI].skills
 export const SKILLS_GOERLI = CONTRACT_ADDRESSES_MAP[SupportedChains.GOERLI].skills
-
-export type SkillsCollectionIdGoerli = keyof typeof SKILLS_GOERLI
-export type SkillsCollectionIdMumbai = keyof typeof SKILLS_MUMBAI
 
 export const SKILLS_URI_MUMBAI = METADATA_URIS_MAP[SupportedChains.POLYGON_MUMBAI].skills
 export const SKILLS_URI_GOERLI = METADATA_URIS_MAP[SupportedChains.GOERLI].skills

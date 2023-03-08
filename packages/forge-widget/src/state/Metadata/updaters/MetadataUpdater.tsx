@@ -6,7 +6,7 @@ import { MetadataState, useMetadataMapWriteAtom, useMetadataWriteAtom } from '..
 import { useFetchMetadataCallback } from '../../../hooks'
 import mockMetadata from '../../../mock/metadata/fullMetadata'
 import { SkillMetadata } from '../../../types'
-import { usePrepareCollectionsContract } from '../../../web3/hooks/collections/usePrepareCollectionsContract'
+import { usePrepareCollectionsContract } from '../../../../../forge-web3/src/web3/hooks/collections/usePrepareCollectionsContract'
 
 export function MetadataUpdater() {
   const fetchMetadata = useFetchMetadataCallback()

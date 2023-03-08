@@ -1,9 +1,9 @@
+import { ipfsToImageUri } from '@past3lle/forge-web3'
 import { urlToSimpleGenericImageSrcSet } from '@past3lle/theme'
 import { useMemo } from 'react'
 import { createGlobalStyle, css } from 'styled-components'
 
 import { EMPTY_SKILL_IMAGE_HASH_LIST } from '../constants/skills'
-import { ipfsToImageUri } from '../utils'
 import { useAssetsMap } from './utils'
 
 export function useGenericImageSrcSet() {

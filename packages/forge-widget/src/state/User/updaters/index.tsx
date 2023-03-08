@@ -8,8 +8,8 @@ import { UserBalances, useUserAtom } from '..'
 import { MOCK_COLLECTION_ERROR_OFFSET } from '../../../constants/skills'
 import { MetadataState, useMetadataReadAtom } from '../../Metadata'
 import { getSkillId } from '../../../utils'
-import { SKILLS_GOERLI, SKILLS_MUMBAI } from '../../../web3/constants/addresses'
-import { useContractAddressesByChain } from '../../../web3/hooks/useContractAddress'
+import { SKILLS_GOERLI, SKILLS_MUMBAI } from '../../../../../forge-web3/src/web3/constants/addresses'
+import { useContractAddressesByChain } from '../../../../../forge-web3/src/web3/hooks/useContractAddress'
 
 function gatherSkillContractConfigParams(
   skillsAddressList: typeof SKILLS_GOERLI | typeof SKILLS_MUMBAI,

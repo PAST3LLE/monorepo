@@ -1,12 +1,11 @@
 import { RowCenter, RowProps } from '@past3lle/components'
+import { GATEWAY_URI, getHash } from '@past3lle/forge-web3'
 import React, { memo, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { GATEWAY_URI } from '../../constants/ipfs'
 import { SkillsState, useSkillsAtom } from '../../state/Skills'
 import { useAssetsMap } from '../../theme/utils'
 import { SkillMetadata, SkillRarity } from '../../types'
-import { getHash } from '../../utils'
 import { Vector } from '../Canvas/canvasApi/api/vector'
 import { StyledSkillpoint } from '../Common'
 
