@@ -1,3 +1,4 @@
+import { ForgeWeb3Providers } from '@past3lle/forge-web3'
 import { StaticGlobalCssProvider, ThemedGlobalCssProvider } from '@past3lle/theme'
 import React, { ReactNode, StrictMode } from 'react'
 import { useTheme } from 'styled-components'
@@ -5,7 +6,6 @@ import { useTheme } from 'styled-components'
 import { SkilltreeCoreUpdaters } from '../state'
 import { CustomStaticGlobalCss, CustomThemeGlobalCss } from '../theme/global'
 import { AppConfig } from '../types/appConfig'
-import { Web3Providers } from '../../../forge-web3/src/config'
 import { SkilltreeBoard as SkilltreeBoardComponent } from './Board'
 import {
   ConnectionInfoButton,
@@ -59,9 +59,9 @@ interface SkilltreeBoardProps {
 function SkilltreeBoardConnected({ config, children }: SkilltreeBoardConnectedProps & { children?: ReactNode }) {
   return (
     <StrictMode>
-      <Web3Providers
+      <ForgeWeb3Providers
         walletconnectConfig={{
-          appName: config.appName,
+          appName: config.name,
           walletConnect: config.provider
         }}
       >
@@ -70,7 +70,7 @@ function SkilltreeBoardConnected({ config, children }: SkilltreeBoardConnectedPr
           {children}
           <SkilltreeBoardComponent />
         </SkilltreeCoreUpdaters>
-      </Web3Providers>
+      </ForgeWeb3Providers>
     </StrictMode>
   )
 }

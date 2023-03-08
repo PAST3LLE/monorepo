@@ -1,4 +1,4 @@
-import { METADATA_URIS_MAP, ipfsToImageUri, useSupportedChainId } from '@past3lle/forge-web3'
+import { MetadataUriMap, ipfsToImageUri, useSupportedChainId } from '@past3lle/forge-web3'
 import { devWarn } from '@past3lle/utils'
 import { useCallback } from 'react'
 
@@ -11,9 +11,9 @@ export interface UseMetaData {
   collection: CollectionMetadata | undefined
   collectionsMetadataList: CollectionMetadata[] | undefined
 }
-export function useFetchMetadataCallback() {
+export function useFetchMetadataCallback(metadataUriMap: MetadataUriMap) {
   const chainId = useSupportedChainId()
-  const metadataUris = METADATA_URIS_MAP[chainId]
+  const metadataUris = metadataUriMap[chainId]
 
   return useCallback(
     async (collectionId: number): Promise<MetadataState['metadata'][0]> => {

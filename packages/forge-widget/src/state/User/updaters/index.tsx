@@ -1,4 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber'
+import { ContractAddressMap, useContractAddressesByChain } from '@past3lle/forge-web3'
 import { PSTLCollectionBaseSkills__factory } from '@past3lle/skilltree-contracts'
 import { devWarn } from '@past3lle/utils'
 import { useEffect } from 'react'
@@ -6,13 +7,12 @@ import { Address, useAccount, useContractReads } from 'wagmi'
 
 import { UserBalances, useUserAtom } from '..'
 import { MOCK_COLLECTION_ERROR_OFFSET } from '../../../constants/skills'
-import { MetadataState, useMetadataReadAtom } from '../../Metadata'
 import { getSkillId } from '../../../utils'
-import { SKILLS_GOERLI, SKILLS_MUMBAI } from '../../../../../forge-web3/src/web3/constants/addresses'
-import { useContractAddressesByChain } from '../../../../../forge-web3/src/web3/hooks/useContractAddress'
+import { MetadataState, useMetadataReadAtom } from '../../Metadata'
+import { MetadataUpdaterProps } from '../../Metadata/updaters/MetadataUpdater'
 
 function gatherSkillContractConfigParams(
-  skillsAddressList: typeof SKILLS_GOERLI | typeof SKILLS_MUMBAI,
+  skillsAddressList: ContractAddressMap[0]['skills'],
   metadata: MetadataState['metadata'],
   balanceOfAddress: Address
 ) {
@@ -37,13 +37,13 @@ function gatherSkillContractConfigParams(
   return contractConfigList
 }
 
-export function UserBalancesUpdater() {
+export function UserBalancesUpdater({ contractAddressMap }: Pick<MetadataUpdaterProps, 'contractAddressMap'>) {
   const [metadata] = useMetadataReadAtom()
   const [, updateUserBalances] = useUserAtom()
 
   const { address = '0x0' } = useAccount()
 
-  const { skills } = useContractAddressesByChain()
+  const { skills } = useContractAddressesByChain(contractAddressMap)
   const configList = gatherSkillContractConfigParams(skills, metadata, address)
   const { data } = useContractReads({
     contracts: configList,

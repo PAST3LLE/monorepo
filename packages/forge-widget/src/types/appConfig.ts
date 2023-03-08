@@ -1,8 +1,11 @@
+import { ContractAddressMap, ForgeWeb3ProviderProps, MetadataUriMap } from '@past3lle/forge-web3'
+
 import { SkilltreeThemeByModes } from '../theme/types'
-import { WalletConnectProps } from '../../../forge-web3/src/providers/web3Modal'
 
 export interface AppConfig {
-  appName: string
-  appTheme: SkilltreeThemeByModes
-  provider: WalletConnectProps['walletConnect']
+  name: string
+  theme: SkilltreeThemeByModes
+  provider: ForgeWeb3ProviderProps['walletConnect']
+  contractAddresses: ContractAddressMap
+  metadataUris: MetadataUriMap
 }

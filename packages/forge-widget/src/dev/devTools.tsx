@@ -1,11 +1,9 @@
 import { useAtomsDevtools } from 'jotai-devtools'
 import { ReactNode } from 'react'
 
-import { AppConfig } from '../types/appConfig'
-
 interface Props {
   children: ReactNode
-  appName: AppConfig['appName']
+  appName: string
 }
 
 // Attach atoms to redux devtools

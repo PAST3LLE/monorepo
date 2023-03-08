@@ -1,4 +1,5 @@
 import { Row } from '@past3lle/components'
+import { SupportedChains } from '@past3lle/forge-web3'
 import { MEDIA_WIDTHS } from '@past3lle/theme'
 import { useWeb3Modal } from '@web3modal/react'
 import React, { useCallback } from 'react'
@@ -8,7 +9,6 @@ import { useNetwork } from 'wagmi'
 import { useGetWindowSize } from '../../../state/WindowSize'
 import { SkilltreeAssetsMap as AssetsMap } from '../../../theme/types'
 import { useAssetsMap } from '../../../theme/utils'
-import { SupportedChains } from '../../../../../forge-web3/src/web3/types/chains'
 import { MonospaceText } from '../Text'
 
 export function NetworkInfoButton() {
