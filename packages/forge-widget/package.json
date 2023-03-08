@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/forge-widget",
   "sideEffects": false,
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "PAST3LLE FORGE as an NPM pkg. ESM React widget component",
   "main": "dist/esm/index.js",
   "typings": "dist/types/index.d.ts",
@@ -105,12 +105,12 @@
   "dependencies": {
     "@ethersproject/bignumber": "5.7.0",
     "@past3lle/assets": "^0.0.10",
-    "@past3lle/components": "^0.0.38",
+    "@past3lle/components": "^0.0.39",
     "@past3lle/constants": "^0.0.17",
     "@past3lle/hooks": "^0.0.12",
     "@past3lle/skills-nft": "^0.0.6",
     "@past3lle/skilltree-contracts": "^0.0.1-rc.3",
-    "@past3lle/theme": "^0.0.26",
+    "@past3lle/theme": "^0.0.27",
     "@past3lle/types": "^0.0.12",
     "@past3lle/utils": "^0.0.17",
     "@web3modal/ethereum": "^2.1.3",

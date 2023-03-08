@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/forge-web3",
   "sideEffects": false,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Past3lle FORGE web3 hooks and things",
   "main": "dist/index.js",
   "repository": {
@@ -19,7 +19,6 @@
   "author": "pastelle",
   "homepage": "https://github.com/past3lle/schematics-monorepo/tree/main/packages/forge-web3#readme",
   "license": "MIT",
-  
   "typings": "dist/index.d.ts",
   "files": [
     "dist"
