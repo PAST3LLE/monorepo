@@ -5,6 +5,11 @@
   "description": "PAST3LLE FORGE web3 hooks and tings",
   "main": "dist/esm/index.js",
   "typings": "dist/types/index.d.ts",
+  "exports": {
+    "import": "./dist/esm/index.js",
+    "require": "./dist/cjs/index.js",
+    "default": "./dist/esm/index.js"
+  },
   "repository": {
     "type": "git",
     "directory": "packages/forge-web3",

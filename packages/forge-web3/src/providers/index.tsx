@@ -21,14 +21,14 @@ export const Web3Modal = ({
     throw new Error('MISSING or INVALID WalletConnect options! Please check your config object.')
   }
 
-  const ethereumClient = useMemo(() => new EthereumClient(wagmiClient, chains), [])
+  const ethereumClient = useMemo(() => new EthereumClient(wagmiClient, chains), [chains, wagmiClient])
 
   return (
     <Web3ModalComponent
-      themeBackground={themeBackground}
+      {...restWalletconnectProps}
       projectId={projectId}
       ethereumClient={ethereumClient}
-      {...restWalletconnectProps}
+      themeBackground={themeBackground}
     />
   )
 }
@@ -43,7 +43,7 @@ export const Web3Providers = ({
   const wagmiClient = useMemo(() => createWagmiClient(walletconnectConfig), [walletconnectConfig])
   return (
     <>
-      <Web3Modal {...walletconnectConfig} wagmiClient={wagmiClient} />
+      <Web3Modal wagmiClient={wagmiClient} {...walletconnectConfig} />
       <WagmiProvider wagmiClient={wagmiClient}>{children}</WagmiProvider>
     </>
   )
