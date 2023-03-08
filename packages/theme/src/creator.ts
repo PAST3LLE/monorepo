@@ -95,11 +95,51 @@ export function createCustomTheme<T extends ThemeByModes, M extends BasicUserThe
 }
 
 /**
+ * createTemplateThemeFactory
+ * @description Accepts a "themeTemplates" object which contains key/value pairs of theme names to themes
+ * @example
+  const appThemeCreators = createTemplateThemeFactory({
+    SALTY_BOI: {
+      modes: {
+        DEFAULT: {
+          saltinessColour: 'pink',
+          ...themeStuff
+        },
+        DARK: {
+          ...darkThemeStuff
+        },
+        LIGHT: {}
+      }
+    }
+  })
+
+  const saltyTheme = appThemeCreators("SALTY_BOI")
+  saltyTheme.modes.DEFAULT.saltinessColour // string
+ * @param templates 
+ * @returns 
+ */
+export const createTemplateThemeFactory = <TE extends { [name: string]: ThemeByModes }>(templates: TE) =>
+  function createTemplateTheme<K extends keyof TE, E extends Subset<TE[K]['modes']>>(template: K, extension?: E) {
+    const theme = templates[template]
+
+    let auxThemeModes
+    if (extension) {
+      const mergedThemeModes = merge({}, theme.modes, extension)
+      auxThemeModes = mergedThemeModes
+    }
+    const mergedTheme = {
+      ...theme,
+      modes: auxThemeModes
+    }
+    return createCustomTheme(mergedTheme)
+  }
+
+/**
  * createTemplateTheme - create a theme based on available templates - see
  * @example
  * createCustomTheme
  *
- * @param template see @type AvailableThemeTemplate
+ * @param template
  *
  * @example
   const pastelleTheme = createTemplateTheme('PASTELLE', {
@@ -134,3 +174,6 @@ export function createTemplateTheme<
   }
   return createCustomTheme(mergedTheme)
 }
+
+// Export pre-created PASTELLE (shop-ui) and SKILLTREE (skilltree-ui) themes as syntactic sugar
+export const createPast3lleTemplateTheme = createTemplateThemeFactory(ThemeTemplates)
