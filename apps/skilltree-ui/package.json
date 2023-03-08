@@ -58,6 +58,7 @@
     "web-vitals": "^3.1.0"
   },
   "dependencies": {
+    "@wagmi/core": "0.10.1",
     "@past3lle/assets": "^0.0.10",
     "@past3lle/components": "^0.0.38",
     "@past3lle/constants": "^0.0.17",
