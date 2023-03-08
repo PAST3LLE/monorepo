@@ -1,4 +1,4 @@
-import { SkilltreeAssetsMap, SkillRarity } from '@past3lle/skilltree-widget'
+import { SkilltreeAssetsMap, SkillRarity } from '@past3lle/forge-widget'
 import COMPANY_LOGO from 'assets/png/back-logo.png'
 import APP_BACKGROUND from 'assets/png/background.png'
 import ETHEREUM_LOGO from 'assets/png/chains/ethereumChainLogo.webp'

@@ -19,7 +19,7 @@
     "@past3lle/theme": "@past3lle/theme",
     "@past3lle/type": "@past3lle/types",
     "@past3lle/utils": "@past3lle/utils",
-    "@past3lle/skilltree-widget": "@past3lle/skilltree-widget",
+    "@past3lle/forge-widget": "@past3lle/forge-widget",
     "react": "../../node_modules/react",
     "react-dom": "../../node_modules/react-dom",
     "scheduler/tracing": "../../node_modules/scheduler/tracing-profiling"

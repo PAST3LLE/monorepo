@@ -10,8 +10,8 @@ import {
   PstlButton, // PstlButton
   Row
 } from '@past3lle/components'
+import { SkilltreeBoardConnected, SkilltreeBoardConnectedProps, SkilltreeHeader } from '@past3lle/forge-widget'
 import { useOnClickOutside } from '@past3lle/hooks'
-import { SkilltreeBoardConnected, SkilltreeBoardConnectedProps, SkilltreeHeader } from '@past3lle/skilltree-widget'
 import { urlToSimpleGenericImageSrcSet } from '@past3lle/theme'
 import * as React from 'react'
 import styled, { useTheme } from 'styled-components'

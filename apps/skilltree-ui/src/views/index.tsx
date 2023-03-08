@@ -1,5 +1,5 @@
 import { ColumnCenter } from '@past3lle/components'
-import { SkilltreeBoardConnected, SkilltreeBoardConnectedProps, SkilltreeHeader } from '@past3lle/skilltree-widget'
+import { SkilltreeBoardConnected, SkilltreeBoardConnectedProps, SkilltreeHeader } from '@past3lle/forge-widget'
 import { FontCssProvider, createPast3lleTemplateTheme } from '@past3lle/theme'
 import { ASSETS_MAP } from 'assets'
 import React from 'react'

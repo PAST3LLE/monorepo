@@ -2,7 +2,7 @@ import Collection1Metadata from './1/1.json'
 import Collection2Metadata from './2/2.json'
 // import Collection3Metadata from './3/metadata.json'
 import AllSkillsMetadata from './fullMetadata.js'
-import { SkillMetadata, CollectionMetadata } from '@past3lle/skilltree-widget'
+import { SkillMetadata, CollectionMetadata } from '@past3lle/forge-widget'
 
 export const MOCK_COLLECTIONS_DATA = [
   Collection1Metadata as CollectionMetadata,

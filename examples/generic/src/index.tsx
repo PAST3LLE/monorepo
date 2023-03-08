@@ -1,4 +1,4 @@
-import { ThemeChangerButton } from '@past3lle/skilltree-widget'
+import { ThemeChangerButton } from '@past3lle/forge-widget'
 import {
   FontCssProvider,
   StaticGlobalCssProvider,

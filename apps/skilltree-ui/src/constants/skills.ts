@@ -1,4 +1,4 @@
-import { SkillMetadata, SkillRarity } from '@past3lle/skilltree-widget'
+import { SkillMetadata, SkillRarity } from '@past3lle/forge-widget'
 
 export const SKILLPOINT_SIZES = {
   width: '10vh',

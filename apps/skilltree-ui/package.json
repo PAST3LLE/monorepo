@@ -64,7 +64,7 @@
     "@past3lle/hooks": "^0.0.12",
     "@past3lle/skills-nft": "^0.0.6",
     "@past3lle/skilltree-contracts": "^0.0.1-rc.3",
-    "@past3lle/skilltree-widget": "^0.0.4",
+    "@past3lle/forge-widget": "^0.0.5",
     "@past3lle/theme": "^0.0.27",
     "@past3lle/types": "^0.0.12",
     "@past3lle/utils": "^0.0.17",
