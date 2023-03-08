@@ -27,6 +27,8 @@ export function NetworkInfoButton() {
     return open({ route: 'SelectNetwork' })
   }, [open])
 
+  if (!chain?.id) return null
+
   return (
     <NetworkInfoButtonContainer
       justifyContent={'center'}

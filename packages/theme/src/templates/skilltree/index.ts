@@ -95,7 +95,7 @@ const SkilltreeTheme: ThemeByModes<
       lightText: 'ghostwhite',
       mainBg: '#d5fb73',
       mainBgDarker: '#94c614',
-      mainBgAlt: '#262528',
+      mainBgAlt: '#deefe1',
       mainFg: 'ghostwhite',
       mainFgAlt: '#d5fb73',
 
