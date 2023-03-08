@@ -1,11 +1,23 @@
+import { ColumnCenter } from '@past3lle/components'
 import { SkilltreeBoardConnected, SkilltreeBoardConnectedProps, SkilltreeHeader } from '@past3lle/skilltree-widget'
-import { createTemplateTheme, FontCssProvider } from '@past3lle/theme'
+import { FontCssProvider, createPast3lleTemplateTheme } from '@past3lle/theme'
 import { ASSETS_MAP } from 'assets'
 import React from 'react'
 import { GothicFontCssProvider } from 'theme/fonts'
 
-const skilltreeTheme = createTemplateTheme('SKILLTREE', {
+const skilltreeTheme = createPast3lleTemplateTheme('SKILLTREE', {
   DEFAULT: {
+    assetsMap: ASSETS_MAP
+  },
+  ALT: {
+    mainBgAlt: 'darkred',
+    mainBg: 'cornflowerblue',
+    mainFg: 'cyan',
+    rarity: {
+      common: {
+        backgroundColor: 'yellow'
+      }
+    },
     assetsMap: ASSETS_MAP
   }
 })
@@ -22,10 +34,14 @@ const SKILLTREE_CONFIG: SkilltreeBoardConnectedProps = {
 
 export function App() {
   return (
-    <SkilltreeBoardConnected config={SKILLTREE_CONFIG.config}>
-      <FontCssProvider />
-      <GothicFontCssProvider />
-      <SkilltreeHeader />
-    </SkilltreeBoardConnected>
+    <ColumnCenter width="100vw" height="100vh" justifyContent="center">
+      <ColumnCenter maxWidth={1200} height={700}>
+        <SkilltreeBoardConnected config={SKILLTREE_CONFIG.config}>
+          <FontCssProvider />
+          <GothicFontCssProvider />
+          <SkilltreeHeader />
+        </SkilltreeBoardConnected>
+      </ColumnCenter>
+    </ColumnCenter>
   )
 }
