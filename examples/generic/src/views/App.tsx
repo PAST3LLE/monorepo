@@ -10,7 +10,7 @@ import {
   PstlButton, // PstlButton
   Row
 } from '@past3lle/components'
-import { SkilltreeBoardConnected, SkilltreeBoardConnectedProps, SkilltreeHeader } from '@past3lle/forge-widget'
+import { SkilltreeConnected, SkilltreeBoardConnectedProps, SkilltreeHeader } from '@past3lle/forge-widget'
 import { useOnClickOutside } from '@past3lle/hooks'
 import { urlToSimpleGenericImageSrcSet } from '@past3lle/theme'
 import * as React from 'react'
@@ -103,9 +103,9 @@ const App = ({ showBasic = false }: Props) => {
         </PstlMain>
       )}
       <PstlMain>
-        <SkilltreeBoardConnected config={SKILLTREE_CONFIG}>
+        <SkilltreeConnected config={SKILLTREE_CONFIG}>
           <SkilltreeHeader />
-        </SkilltreeBoardConnected>
+        </SkilltreeConnected>
       </PstlMain>
       {/* <PstlFooter>
         <ul>

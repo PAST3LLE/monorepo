@@ -1,6 +1,5 @@
-import { ColumnCenter } from '@past3lle/components'
 import { SUPPORTED_CHAINS } from '@past3lle/forge-web3'
-import { SkilltreeBoardConnected, SkilltreeBoardConnectedProps, SkilltreeHeader } from '@past3lle/forge-widget'
+import Skilltree, { SkilltreeProps, SkilltreeConnectedHeader } from '@past3lle/forge-widget'
 import { FontCssProvider, createPast3lleTemplateTheme } from '@past3lle/theme'
 import { ASSETS_MAP } from 'assets'
 import { SKILL_ID_BASE } from 'constants/skills'
@@ -32,12 +31,12 @@ const CLIENT_PROPS = {
   }
 }
 
-const SKILLTREE_CONFIG: SkilltreeBoardConnectedProps = {
+const SKILLTREE_CONFIG: SkilltreeProps = {
   config: {
     name: CLIENT_PROPS.appName,
     theme: skilltreeTheme,
     web3: {
-      standalone: true,
+      standalone: false,
       walletconnectProvider: CLIENT_PROPS.walletConnect
     },
     contractAddresses: CONTRACT_ADDRESSES_MAP,
@@ -50,16 +49,10 @@ const SKILLTREE_CONFIG: SkilltreeBoardConnectedProps = {
 
 export function App() {
   return (
-    <>
-      <ColumnCenter width="100vw" height="100vh" justifyContent="center">
-        <ColumnCenter maxWidth={1200} height={900}>
-          <SkilltreeBoardConnected config={SKILLTREE_CONFIG.config}>
-            <FontCssProvider />
-            <GothicFontCssProvider />
-            <SkilltreeHeader />
-          </SkilltreeBoardConnected>
-        </ColumnCenter>
-      </ColumnCenter>
-    </>
+    <Skilltree config={SKILLTREE_CONFIG.config} maxWidth="1200" height="900">
+      <FontCssProvider />
+      <GothicFontCssProvider />
+      <SkilltreeConnectedHeader />
+    </Skilltree>
   )
 }
