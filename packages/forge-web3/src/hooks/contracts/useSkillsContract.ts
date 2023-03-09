@@ -40,18 +40,13 @@ export function useSkillsContract<M extends ContractAddressMap>({ collectionId, 
     ),
     write: useMemo(
       () => ({
-        mint: async (
-          to: Address,
-          id: BigNumber,
-          amount: BigNumber,
-          data: `0x${string}`,
-          overrides?: PayableOverrides
-        ) => skillsContract?.mint(to, id, amount, data, overrides),
+        mint: async (to: Address, id: BigNumber, amount: BigNumber, data: Address, overrides?: PayableOverrides) =>
+          skillsContract?.mint(to, id, amount, data, overrides),
         mintBatch: async (
           to: Address,
           idBatch: BigNumber[],
           amountBatch: BigNumber[],
-          data: `0x${string}`,
+          data: Address,
           overrides?: PayableOverrides
         ) => skillsContract?.mintBatch(to, idBatch, amountBatch, data, overrides),
         pause: async (overrides?: PayableOverrides) => skillsContract?.pause(overrides),
