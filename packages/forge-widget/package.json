@@ -57,15 +57,18 @@
     ]
   },
   "resolutions": {
-    "**/@typescript-eslint/eslint-plugin": "^5.48.2",
-    "**/@typescript-eslint/parser": "^5.48.2",
-    "**/typescript": "^4.9.5"
+    "@web3modal/ethereum": ">=2.2.0",
+    "@web3modal/react": ">=2.2.0",
+    "wagmi": ">=0.12.1"
   },
   "peerDependencies": {
     "@ethersproject/bignumber": ">=5.7.0",
     "jotai": ">=1",
     "react": ">=16",
-    "styled-components": ">=5"
+    "styled-components": ">=5",
+    "@web3modal/ethereum": ">=2.2.0",
+    "@web3modal/react": ">=2.2.0",
+    "wagmi": ">=0.12.1"
   },
   "devDependencies": {
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.13.8",

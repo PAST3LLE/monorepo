@@ -1,12 +1,12 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { Column, Row, Text } from '@past3lle/components'
+import { useUserAtom } from '@past3lle/forge-web3'
 import { upToSmall } from '@past3lle/theme'
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { useGetSkillFromIdCallback } from '../../../hooks/skills'
 import { SkillGridPositionList, useSkillsAtom } from '../../../state/Skills'
-import { useUserAtom } from '../../../state/User'
 import { baseTheme } from '../../../theme/base'
 import { MAIN_FG } from '../../../theme/constants'
 import { useAssetsMap } from '../../../theme/utils'

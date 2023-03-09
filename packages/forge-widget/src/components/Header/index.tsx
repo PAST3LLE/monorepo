@@ -1,10 +1,10 @@
 import { Row } from '@past3lle/components'
+import { useGetWindowSize } from '@past3lle/forge-web3'
 import { MEDIA_WIDTHS } from '@past3lle/theme'
 import { isMobile } from '@past3lle/utils'
 import React from 'react'
 
 import { useSidePanelAtomBase } from '../../state/SidePanel'
-import { useGetWindowSize } from '../../state/WindowSize'
 import { InventoryButton } from '../Common/Button'
 import { ConnectionInfoButton } from '../Common/Button/ConnectionInfoButton'
 import { NetworkInfoButton } from '../Common/Button/NetworkInfoButton'

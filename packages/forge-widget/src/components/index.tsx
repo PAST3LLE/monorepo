@@ -1,11 +1,10 @@
-import { ForgeWeb3Providers } from '@past3lle/forge-web3'
 import { StaticGlobalCssProvider, ThemedGlobalCssProvider } from '@past3lle/theme'
 import React, { ReactNode, StrictMode } from 'react'
 import { useTheme } from 'styled-components'
 
-import { SkilltreeCoreUpdaters } from '../state'
+import { SkilltreeConnectedDataProviders, SkilltreeDisconnectedDataProviders } from '../state'
 import { CustomStaticGlobalCss, CustomThemeGlobalCss } from '../theme/global'
-import { AppConfig } from '../types/appConfig'
+import { ForgeWidgetAppConfig } from '../types/appConfig'
 import { SkilltreeBoard as SkilltreeBoardComponent } from './Board'
 import {
   ConnectionInfoButton,
@@ -33,11 +32,11 @@ const CssProviders = () => {
 }
 
 interface SkilltreeBoardConnectedProps {
-  config: AppConfig
+  config: ForgeWidgetAppConfig
 }
 
 interface SkilltreeBoardProps {
-  config: Omit<AppConfig, 'provider'>
+  config: Omit<ForgeWidgetAppConfig, 'provider'>
 }
 
 /**
@@ -59,18 +58,11 @@ interface SkilltreeBoardProps {
 function SkilltreeBoardConnected({ config, children }: SkilltreeBoardConnectedProps & { children?: ReactNode }) {
   return (
     <StrictMode>
-      <ForgeWeb3Providers
-        walletconnectConfig={{
-          appName: config.name,
-          walletConnect: config.provider
-        }}
-      >
-        <SkilltreeCoreUpdaters {...config}>
-          <CssProviders />
-          {children}
-          <SkilltreeBoardComponent />
-        </SkilltreeCoreUpdaters>
-      </ForgeWeb3Providers>
+      <SkilltreeConnectedDataProviders {...config}>
+        <CssProviders />
+        {children}
+        <SkilltreeBoardComponent />
+      </SkilltreeConnectedDataProviders>
     </StrictMode>
   )
 }
@@ -94,11 +86,11 @@ function SkilltreeBoardConnected({ config, children }: SkilltreeBoardConnectedPr
 function SkilltreeBoard({ config, children }: SkilltreeBoardProps & { children?: ReactNode }) {
   return (
     <StrictMode>
-      <SkilltreeCoreUpdaters {...config}>
+      <SkilltreeDisconnectedDataProviders {...config}>
         <CssProviders />
         {children}
         <SkilltreeBoardComponent />
-      </SkilltreeCoreUpdaters>
+      </SkilltreeDisconnectedDataProviders>
     </StrictMode>
   )
 }

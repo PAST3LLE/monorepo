@@ -1,8 +1,8 @@
+import { useGetWindowSize } from '@past3lle/forge-web3'
 import { useEffect } from 'react'
 
 import { useSkillSizeWriteAtom } from '..'
 import { SKILLPOINT_SIZES } from '../../../constants/skills'
-import { useGetWindowSize } from '../../WindowSize'
 
 export function SkillSquareSizeUpdater() {
   const [{ width, height }] = useGetWindowSize()

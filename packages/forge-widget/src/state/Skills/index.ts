@@ -1,8 +1,8 @@
+import { SkillId, SkillProperties } from '@past3lle/forge-web3'
 import { atom, useAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 
 import { Vector } from '../../components/Canvas/canvasApi/api/vector'
-import { SkillId, SkillProperties } from '../../types'
 
 export type SkillGridPositionList = {
   vector: Vector | undefined

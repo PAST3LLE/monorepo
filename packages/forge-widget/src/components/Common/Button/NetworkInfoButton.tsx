@@ -1,12 +1,12 @@
 import { Row } from '@past3lle/components'
-import { SupportedChains } from '@past3lle/forge-web3'
+import { SupportedChains, useGetWindowSize } from '@past3lle/forge-web3'
 import { MEDIA_WIDTHS } from '@past3lle/theme'
 import { useWeb3Modal } from '@web3modal/react'
+// import { useWeb3Modal } from '@web3modal/react'
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import { useNetwork } from 'wagmi'
 
-import { useGetWindowSize } from '../../../state/WindowSize'
 import { SkilltreeAssetsMap as AssetsMap } from '../../../theme/types'
 import { useAssetsMap } from '../../../theme/utils'
 import { MonospaceText } from '../Text'
@@ -14,7 +14,6 @@ import { MonospaceText } from '../Text'
 export function NetworkInfoButton() {
   const assetsMap = useAssetsMap()
 
-  const { open } = useWeb3Modal()
   const { chain } = useNetwork()
 
   const chainName = chain?.name
@@ -22,6 +21,8 @@ export function NetworkInfoButton() {
 
   const [{ width = 0 }] = useGetWindowSize()
   const showShortLogo = width > MEDIA_WIDTHS.upToSmall && width < MEDIA_WIDTHS.upToMedium
+
+  const { open } = useWeb3Modal()
 
   const handleClick = useCallback(async () => {
     return open({ route: 'SelectNetwork' })

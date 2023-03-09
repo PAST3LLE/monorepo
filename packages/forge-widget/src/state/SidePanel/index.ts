@@ -1,6 +1,5 @@
+import { SkillId } from '@past3lle/forge-web3'
 import { atom, useAtom } from 'jotai'
-
-import { SkillId } from '../../types'
 
 // @ts-ignore
 export type ActiveSidePanel = `ACTIVE_SKILL::${SkillId}` | 'USER_STATS'

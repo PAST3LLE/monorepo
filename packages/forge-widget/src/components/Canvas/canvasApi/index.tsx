@@ -1,9 +1,9 @@
 import { SmartImg } from '@past3lle/components'
+import { useGetWindowSize } from '@past3lle/forge-web3'
 import { useStateRef } from '@past3lle/hooks'
 import React, { useMemo } from 'react'
 
 import { calculateCanvasWidth } from '../../../state/Skills/updaters/GridPositionUpdater'
-import { useGetWindowSize } from '../../../state/WindowSize'
 import { useGenericImageSrcSet } from '../../../theme/global'
 import { CONFIG } from './api/config'
 import { useLightningCanvas } from './api/hooks'

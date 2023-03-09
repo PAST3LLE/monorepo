@@ -1,17 +1,24 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { AutoRow, Column, ExternalLink, Row, RowProps, RowStart, Text } from '@past3lle/components'
+import {
+  MetadataState,
+  SkillId,
+  SkillLockStatus,
+  SkillMetadata,
+  SkillRarity,
+  UserBalances,
+  getLockStatus,
+  useMetadataMapReadAtom,
+  useUserBalancesReadAtom
+} from '@past3lle/forge-web3'
 import { BLACK, OFF_WHITE } from '@past3lle/theme'
 import { darken } from 'polished'
 import React, { useMemo } from 'react'
 import styled, { useTheme } from 'styled-components'
 
 import { useGetActiveSkill } from '../../../hooks/skills'
-import { MetadataState, useMetadataMapReadAtom } from '../../../state/Metadata'
-import { UserBalances, useUserBalancesReadAtom } from '../../../state/User'
 import { baseTheme } from '../../../theme/base'
 import { RARITY_COLOURS_MAP } from '../../../theme/constants'
-import { SkillId, SkillMetadata, SkillRarity } from '../../../types'
-import { SkillLockStatus, getLockStatus } from '../../../utils/skills'
 import { ThemedButtonExternalLink } from '../../Common/Button'
 import { BlackHeader, MonospaceText } from '../../Common/Text'
 import { Skillpoint } from '../../Skillpoint'

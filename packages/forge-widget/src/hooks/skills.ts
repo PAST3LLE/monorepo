@@ -1,8 +1,7 @@
+import { SkillId, SkillMetadata, useMetadataMapReadAtom } from '@past3lle/forge-web3'
 import { useCallback } from 'react'
 
-import { useMetadataMapReadAtom } from '../state/Metadata'
 import { useSkillsAtom } from '../state/Skills'
-import { SkillId, SkillMetadata } from '../types'
 
 export function useGetSkillFromIdCallback() {
   const [metadataMap] = useMetadataMapReadAtom()
