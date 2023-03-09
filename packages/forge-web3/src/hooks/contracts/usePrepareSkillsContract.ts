@@ -1,8 +1,7 @@
 import { PSTLCollectionBaseSkills__factory } from '@past3lle/skilltree-contracts'
 import { PrepareWriteContractResult } from '@wagmi/core'
-import { ContractAddressMap } from 'src/types'
 
-import { SupportedChains } from '../../types/chains'
+import { ContractAddressMap, SupportedChains } from '../../types'
 import { CommonHooksProps } from '../types'
 import { useContractAddressesByChain } from './useContractAddress'
 import { usePrepareContract } from './usePrepareContract'

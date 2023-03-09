@@ -1,0 +1,23 @@
+{
+ "description": "DAYDREAMING.TEE.OVERSIZED.HEAVY-COTTON.",
+ "image": "ipfs://QmQoQRBM7JTfYHb2skR2UWxrvauiP7iLMrc2eyAvcVhb7e",
+ "name": "DAYDREAMING",
+ "properties": {
+  "rarity": "common",
+  "dependencies": [],
+  "shopifyId": "6758884540467",
+  "id": "1-2000"
+ },
+ "attributes": {
+  "tags": [
+   "shortsleeve",
+   "heavy-cotton",
+   "oversized"
+  ],
+  "theme": {
+   "bg": "#BA96C6",
+   "altBg": "#7B649F",
+   "color": "#F8D5E0"
+  }
+ }
+}

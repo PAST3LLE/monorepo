@@ -1,10 +1,9 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { PSTLAllCollections__factory, PSTLCollectionBaseSkills__factory } from '@past3lle/skilltree-contracts'
 import { useMemo } from 'react'
-import { ContractAddressMap } from 'src/types'
 import { Address, useContract, useContractRead, useProvider } from 'wagmi'
 
-import { CallOverrides, PayableOverrides } from '../../types/functions'
+import { CallOverrides, ContractAddressMap, PayableOverrides } from '../../types'
 import { CommonHooksProps } from '../types'
 import { useSupportedChainId } from '../useSupportedChainId'
 import { useContractAddressesByChain } from './useContractAddress'

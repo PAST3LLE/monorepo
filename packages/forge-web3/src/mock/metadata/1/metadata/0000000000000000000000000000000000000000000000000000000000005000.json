@@ -1,0 +1,23 @@
+{
+ "description": "VIRGIL.LONGSLEEVE.OVERSIZED.HEAVY-COTTON.",
+ "image": "ipfs://QmVpR9pRosyx6BePoyf2Vc9mK3CtnL2kni4eGSJcLYSRmP",
+ "name": "VIRGIL",
+ "properties": {
+  "rarity": "common",
+  "dependencies": [],
+  "shopifyId": "6755479486515",
+  "id": "1-5000"
+ },
+ "attributes": {
+  "tags": [
+   "longsleeve",
+   "heavy-cotton",
+   "oversized"
+  ],
+  "theme": {
+   "bg": "#1F615D",
+   "altBg": "#551D27",
+   "color": "#1e1e1e"
+  }
+ }
+}
