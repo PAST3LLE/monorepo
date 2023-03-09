@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/forge-web3",
   "sideEffects": false,
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "PAST3LLE FORGE web3 hooks and tings",
   "main": "dist/esm/index.js",
   "typings": "dist/types/index.d.ts",
