@@ -1,12 +1,13 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { ContractAddressMap, useContractAddressesByChain } from '@past3lle/forge-web3'
 import { PSTLCollectionBaseSkills__factory } from '@past3lle/skilltree-contracts'
 import { devWarn } from '@past3lle/utils'
 import { useEffect } from 'react'
 import { Address, useAccount, useContractReads } from 'wagmi'
 
 import { UserBalances, useUserAtom } from '..'
-import { MOCK_COLLECTION_ERROR_OFFSET } from '../../../constants/skills'
+import { MOCK_COLLECTION_ERROR_OFFSET } from '../../../constants/temp-to-remove'
+import { useContractAddressesByChain } from '../../../hooks'
+import { ContractAddressMap } from '../../../types'
 import { getSkillId } from '../../../utils'
 import { MetadataState, useMetadataReadAtom } from '../../Metadata'
 import { MetadataUpdaterProps } from '../../Metadata/updaters/MetadataUpdater'
@@ -14,7 +15,8 @@ import { MetadataUpdaterProps } from '../../Metadata/updaters/MetadataUpdater'
 function gatherSkillContractConfigParams(
   skillsAddressList: ContractAddressMap[0]['skills'],
   metadata: MetadataState['metadata'],
-  balanceOfAddress: Address
+  balanceOfAddress: Address,
+  idBase?: number
 ) {
   // TODO: remove offset
   const contractConfigList = skillsAddressList.slice(MOCK_COLLECTION_ERROR_OFFSET).flatMap(({ address }, i) => {
@@ -25,7 +27,7 @@ function gatherSkillContractConfigParams(
       return undefined
     }
 
-    const args = getBalanceOfBatchArgs(metadata[i]?.size || 0, balanceOfAddress)
+    const args = getBalanceOfBatchArgs(metadata[i]?.size || 0, balanceOfAddress, idBase)
     return {
       abi: PSTLCollectionBaseSkills__factory.abi,
       address,
@@ -37,14 +39,15 @@ function gatherSkillContractConfigParams(
   return contractConfigList
 }
 
-export function UserBalancesUpdater({ contractAddressMap }: Pick<MetadataUpdaterProps, 'contractAddressMap'>) {
+type UserBalancesProps = Omit<MetadataUpdaterProps, 'metadataUriMap'>
+export function UserBalancesUpdater({ contractAddressMap, idBase }: UserBalancesProps) {
   const [metadata] = useMetadataReadAtom()
   const [, updateUserBalances] = useUserAtom()
 
   const { address = '0x0' } = useAccount()
 
   const { skills } = useContractAddressesByChain(contractAddressMap)
-  const configList = gatherSkillContractConfigParams(skills, metadata, address)
+  const configList = gatherSkillContractConfigParams(skills, metadata, address, idBase)
   const { data } = useContractReads({
     contracts: configList,
     watch: true
@@ -56,7 +59,7 @@ export function UserBalancesUpdater({ contractAddressMap }: Pick<MetadataUpdater
     const derivedData: BigNumber[][] = _getEnvBalances(data as BigNumber[][], metadata)
 
     if (metadataLoaded) {
-      const balances = reduceBalanceDataToMap(derivedData)
+      const balances = reduceBalanceDataToMap(derivedData, idBase)
       // TODO: fix with real balances
       updateUserBalances((state) => ({
         balances: {
@@ -70,23 +73,23 @@ export function UserBalancesUpdater({ contractAddressMap }: Pick<MetadataUpdater
   return null
 }
 
-function getBalanceOfBatchArgs(size: number, address: Address) {
+function getBalanceOfBatchArgs(size: number, address: Address, idBase?: number) {
   return Array.from({ length: size }).reduce(
     (acc: [Address[], BigNumber[]], _, idx) => {
       acc[0] = [...acc[0], address]
-      acc[1] = [...acc[1], BigNumber.from(getSkillId(idx))]
+      acc[1] = [...acc[1], BigNumber.from(getSkillId(idx, idBase))]
       return acc
     },
     [[], []] as [Address[], BigNumber[]]
   )
 }
 
-function reduceBalanceDataToMap(data: readonly BigNumber[][]) {
+function reduceBalanceDataToMap(data: readonly BigNumber[][], idBase?: number) {
   if (!data) return {}
 
   return data.reduce((oAcc, bnData, collIdx) => {
     const obj = (bnData || []).reduce((acc, nextBn, idx) => {
-      acc[`${collIdx + 1}-${getSkillId(idx)}`] = nextBn.toString()
+      acc[`${collIdx + 1}-${getSkillId(idx, idBase)}`] = nextBn.toString()
 
       return acc
     }, {} as UserBalances)

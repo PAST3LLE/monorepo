@@ -1,4 +1,5 @@
 import { Column, RowProps } from '@past3lle/components'
+import { ForgeW3ModalOpenOptions } from '@past3lle/forge-web3'
 import { BLACK_TRANSPARENT } from '@past3lle/theme'
 import { truncateAddress } from '@past3lle/utils'
 import { useWeb3Modal } from '@web3modal/react'
@@ -6,7 +7,6 @@ import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import { useAccount, useNetwork } from 'wagmi'
 
-import { OpenOptions } from '../../Common/Button/OpenWeb3ModalButton'
 import { FlashingText } from '../../Common/FlashingText'
 import { MonospaceText } from '../../Common/Text'
 
@@ -21,10 +21,11 @@ function UnstyledUserConnectionStats({
 }) {
   const { address } = useAccount()
   const { chain } = useNetwork()
+
   const { open } = useWeb3Modal()
 
   const handleClick = useCallback(
-    async (openOptions: OpenOptions) => {
+    async (openOptions: ForgeW3ModalOpenOptions) => {
       open(openOptions)
     },
     [open]

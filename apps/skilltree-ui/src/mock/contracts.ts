@@ -89,13 +89,13 @@ export const COLLECTION_CONTRACTS_MAP = {
 }
 
 const SKILLS_CONTRACT_MAP: {
-  [key: `0x${string}`]: typeof CONTRACT_SKILLS_1
+  [key: Address]: typeof CONTRACT_SKILLS_1
 } = {
   ['0xaaaaaaaabbbbbbxxccccccc0001']: COLLECTION_CONTRACTS_MAP.CONTRACT_SKILLS_1,
   ['0xaaaaaaaabbbbbbxxccccccc0002']: COLLECTION_CONTRACTS_MAP.CONTRACT_SKILLS_2,
   ['0xaaaaaaaabbbbbbxxccccccc0003']: COLLECTION_CONTRACTS_MAP.CONTRACT_SKILLS_3
 }
 
-export async function mockGetContract(address: `0x${string}`) {
+export async function mockGetContract(address: Address) {
   return SKILLS_CONTRACT_MAP[address]
 }

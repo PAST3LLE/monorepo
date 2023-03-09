@@ -1,4 +1,5 @@
 import { Row, Text } from '@past3lle/components'
+import { ForgeW3ModalOpenOptions } from '@past3lle/forge-web3'
 import { setCssBackground, urlToSimpleGenericImageSrcSet } from '@past3lle/theme'
 import { truncateAddress } from '@past3lle/utils'
 import { useWeb3Modal } from '@web3modal/react'
@@ -9,16 +10,16 @@ import { useAccount } from 'wagmi'
 
 import { useAssetsMap } from '../../../theme/utils'
 import { ConnectionColorWrapper } from '../../Web3/UserWeb3ConnectionStats'
-import { OpenOptions } from './OpenWeb3ModalButton'
 
 export function ConnectionInfoButton() {
   const { address } = useAccount()
-  const { open } = useWeb3Modal()
 
   const assetsMap = useAssetsMap()
 
+  const { open } = useWeb3Modal()
+
   const handleClick = useCallback(
-    async (openOptions: OpenOptions) => {
+    async (openOptions: ForgeW3ModalOpenOptions) => {
       open(openOptions)
     },
     [open]

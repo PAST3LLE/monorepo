@@ -2,7 +2,8 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { devWarn } from '@past3lle/utils'
 
 import { UserBalances } from '../state/User'
-import { SkillMetadata } from '../types'
+import { SkillMetadata, SkillRarity } from '../types'
+import { ipfsToImageUri } from './ipfs'
 
 export const enum SkillLockStatus {
   LOCKED = 'LOCKED',
@@ -35,4 +36,21 @@ export function getLockStatus(skill: SkillMetadata | undefined, balances?: UserB
   } else {
     return SkillLockStatus.LOCKED
   }
+}
+
+export async function getTokenUri(imageUri: SkillMetadata['image']) {
+  const skillMetaData: SkillMetadata = await (await fetch(imageUri)).json()
+  return ipfsToImageUri(skillMetaData.image)
+}
+
+// TODO: fix this with base "forge" type e.g extends ThemeWithRarity
+export function getRarityColours<T extends { rarity: { [key in SkillRarity]: any } }>(theme: T, rarity?: SkillRarity) {
+  if (!rarity) return theme.rarity.common
+
+  return theme.rarity[rarity]
+}
+
+export const getSkillId = (idx: number, idBase = 1) => (idx + 1) * idBase
+export function get64PaddedSkillId(i: number, idBase = 1) {
+  return getSkillId(i, idBase).toString().padStart(64, '0')
 }

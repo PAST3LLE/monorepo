@@ -11,7 +11,7 @@ export interface MetadataState {
   metadataMap: MetadataMap
 }
 
-const metadataAtom = atomWithStorage<MetadataState>('PSTL_METADATA_STATE', {
+const metadataAtom = atomWithStorage<MetadataState>('FORGE_METADATA_STATE', {
   metadata: [],
   metadataMap: {}
 })

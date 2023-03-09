@@ -1,5 +1,4 @@
-import { ContractAddressMap, MetadataUriMap } from '@past3lle/forge-web3'
-import { SupportedChains } from 'web3/types/chains'
+import { ContractAddressMap, MetadataUriMap, SupportedChains } from '@past3lle/forge-web3'
 
 export type ContractAddresses = typeof CONTRACT_ADDRESSES_MAP
 export const CONTRACT_ADDRESSES_MAP: ContractAddressMap = {

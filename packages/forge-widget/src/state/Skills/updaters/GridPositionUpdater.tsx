@@ -1,3 +1,4 @@
+import { useGetWindowSize, useMetadataReadAtom } from '@past3lle/forge-web3'
 import { MEDIA_WIDTHS } from '@past3lle/theme'
 import { useEffect, useMemo } from 'react'
 
@@ -8,8 +9,6 @@ import {
   MINIMUM_BOARD_WIDTH,
   MINIMUM_COLLECTION_BOARD_SIZE
 } from '../../../constants/skills'
-import { useMetadataReadAtom } from '../../Metadata'
-import { useGetWindowSize } from '../../WindowSize'
 
 export function GridPositionUpdater() {
   const [metadata] = useMetadataReadAtom()

@@ -1,19 +1,19 @@
-import { ContractAddressMap, MetadataUriMap, usePrepareCollectionsContract } from '@past3lle/forge-web3'
 import { devError, devWarn } from '@past3lle/utils'
 import { useEffect, useState } from 'react'
 import { useContractRead } from 'wagmi'
 
 import { MetadataState, useMetadataMapWriteAtom, useMetadataWriteAtom } from '..'
-import { useFetchMetadataCallback } from '../../../hooks'
+import { useFetchMetadataCallback, usePrepareCollectionsContract } from '../../../hooks'
 import mockMetadata from '../../../mock/metadata/fullMetadata'
-import { SkillMetadata } from '../../../types'
+import { ContractAddressMap, MetadataUriMap, SkillMetadata } from '../../../types'
 
 export interface MetadataUpdaterProps {
   metadataUriMap: MetadataUriMap
   contractAddressMap: ContractAddressMap
+  idBase?: number
 }
 export function MetadataUpdater(props: MetadataUpdaterProps) {
-  const fetchMetadata = useFetchMetadataCallback(props.metadataUriMap)
+  const fetchMetadata = useFetchMetadataCallback({ metadataUriMap: props.metadataUriMap, idBase: props.idBase })
 
   const collectionsConfig = usePrepareCollectionsContract(props.contractAddressMap)
   const { data: collections } = useContractRead({ ...collectionsConfig, functionName: 'totalSupply' })

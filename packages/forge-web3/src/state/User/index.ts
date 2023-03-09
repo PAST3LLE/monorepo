@@ -9,7 +9,7 @@ export type UserBalances = {
 export interface UserState {
   balances: UserBalances
 }
-const userAtom = atomWithStorage<UserState>('PSTL_USER_STATE', {
+const userAtom = atomWithStorage<UserState>('FORGE_USER_STATE', {
   balances: {}
 })
 userAtom.debugLabel = 'USER ATOM'

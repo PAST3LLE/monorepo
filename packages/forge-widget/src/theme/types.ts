@@ -1,7 +1,5 @@
-import { SupportedChains } from '@past3lle/forge-web3'
+import { SkillRarity, SupportedChains } from '@past3lle/forge-web3'
 import { ThemeBaseRequired, ThemeByModes, ThemeMediaWidthsBaseRequired, ThemeMinimumRequired } from '@past3lle/theme'
-
-import { SkillRarity } from '../types'
 
 type ChainsIcons = {
   readonly disconnected: string

@@ -1,10 +1,10 @@
+import { useGetWindowSize } from '@past3lle/forge-web3'
 import { MEDIA_WIDTHS } from '@past3lle/theme'
 import { useEffect } from 'react'
 
 import { useSkillsAtom } from '..'
 import { toggleSelectedSkill } from '../../../components/Canvas/canvasApi/api/hooks'
 import { ActiveSidePanel, useSidePanelAtomBase } from '../../SidePanel'
-import { useGetWindowSize } from '../../WindowSize'
 
 export function ActiveSkillUpdater() {
   const [state] = useSkillsAtom()

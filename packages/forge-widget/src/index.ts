@@ -4,33 +4,24 @@ import {
   NetworkInfoButton,
   OpenWeb3ModalButton,
   ShopExternalLinkButton,
-  SkilltreeBoard,
-  SkilltreeBoardComponent,
-  SkilltreeBoardConnected,
-  SkilltreeBoardConnectedProps,
-  SkilltreeBoardProps,
-  SkilltreeHeader,
+  Skilltree,
+  SkilltreeComponent,
+  SkilltreeConnectedHeader,
+  SkilltreeProps,
   ThemeChangerButton
 } from './components'
-import { SkilltreeCoreUpdaters } from './state'
-import { SkilltreeAssetsMap, SkilltreeTheme, SkilltreeThemeByModes } from './theme/types'
 import {
-  CollectionMetadata,
-  CollectionProperties,
-  SkillAttributes,
-  SkillId,
-  SkillMetadata,
-  SkillProperties,
-  SkillRarity,
-  SkilltreeMetadata
-} from './types'
+  SkilltreeConnectedDataProviders,
+  SkilltreeDisconnectedDataProviders,
+  SkilltreeThemeAndDataProviders
+} from './state'
+import { SkilltreeAssetsMap, SkilltreeTheme, SkilltreeThemeByModes } from './theme/types'
 
 export {
   // Components
-  SkilltreeBoardConnected,
-  SkilltreeBoard,
-  SkilltreeHeader,
-  SkilltreeBoardComponent,
+  Skilltree as default,
+  SkilltreeConnectedHeader,
+  SkilltreeComponent,
   // Buttons
   ConnectionInfoButton,
   InventoryButton,
@@ -39,19 +30,12 @@ export {
   ShopExternalLinkButton,
   ThemeChangerButton,
   // Updaters
-  SkilltreeCoreUpdaters,
+  SkilltreeConnectedDataProviders,
+  SkilltreeDisconnectedDataProviders,
+  SkilltreeThemeAndDataProviders,
   // Types
-  SkillRarity,
-  type SkilltreeBoardConnectedProps,
-  type SkilltreeBoardProps,
+  type SkilltreeProps,
   type SkilltreeAssetsMap,
   type SkilltreeTheme,
-  type SkilltreeThemeByModes,
-  type SkillId,
-  type SkillMetadata,
-  type SkillAttributes,
-  type SkillProperties,
-  type SkilltreeMetadata,
-  type CollectionMetadata,
-  type CollectionProperties
+  type SkilltreeThemeByModes
 }

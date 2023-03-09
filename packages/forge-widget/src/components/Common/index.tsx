@@ -1,9 +1,8 @@
 import { Row } from '@past3lle/components'
+import { SkillRarity, getRarityColours } from '@past3lle/forge-web3'
 import styled from 'styled-components'
 
 import { SKILLPOINT_SIZES } from '../../constants/skills'
-import { SkillRarity } from '../../types'
-import { getRarityColours } from '../../utils'
 import { Vector } from '../Canvas/canvasApi/api/vector'
 
 const StyledGridItem = styled(Row)<{
@@ -36,8 +35,8 @@ export const StyledSkillpoint = styled(StyledGridItem).attrs({
   cursor: pointer;
   border-radius: 6px;
 
-  background-color: ${({ rarity }) => rarity && getRarityColours(rarity).backgroundColor};
-  box-shadow: ${({ rarity }) => rarity && `0px 0px ${getRarityColours(rarity).boxShadowColor}`};
+  background-color: ${({ theme, rarity }) => rarity && getRarityColours(theme, rarity).backgroundColor};
+  box-shadow: ${({ theme, rarity }) => rarity && `0px 0px ${getRarityColours(theme, rarity).boxShadowColor}`};
   ${({ isDependency }) => isDependency && `box-shadow: 5px 5px 10px 0px #d5fb73b8, -5px -5px 10px 0px #00ff7fa8;`}
   ${({ dimSkill }) => dimSkill && `filter: brightness(0.25) grayscale(1);`}
   

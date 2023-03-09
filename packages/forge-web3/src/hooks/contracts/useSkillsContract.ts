@@ -1,10 +1,9 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { PSTLAllCollections__factory, PSTLCollectionBaseSkills__factory } from '@past3lle/skilltree-contracts'
 import { useMemo } from 'react'
-import { ContractAddressMap } from 'src/types'
 import { Address, useContract, useContractRead, useProvider } from 'wagmi'
 
-import { CallOverrides, PayableOverrides } from '../../types/functions'
+import { CallOverrides, ContractAddressMap, PayableOverrides } from '../../types'
 import { CommonHooksProps } from '../types'
 import { useSupportedChainId } from '../useSupportedChainId'
 import { useContractAddressesByChain } from './useContractAddress'
@@ -41,18 +40,13 @@ export function useSkillsContract<M extends ContractAddressMap>({ collectionId, 
     ),
     write: useMemo(
       () => ({
-        mint: async (
-          to: Address,
-          id: BigNumber,
-          amount: BigNumber,
-          data: `0x${string}`,
-          overrides?: PayableOverrides
-        ) => skillsContract?.mint(to, id, amount, data, overrides),
+        mint: async (to: Address, id: BigNumber, amount: BigNumber, data: Address, overrides?: PayableOverrides) =>
+          skillsContract?.mint(to, id, amount, data, overrides),
         mintBatch: async (
           to: Address,
           idBatch: BigNumber[],
           amountBatch: BigNumber[],
-          data: `0x${string}`,
+          data: Address,
           overrides?: PayableOverrides
         ) => skillsContract?.mintBatch(to, idBatch, amountBatch, data, overrides),
         pause: async (overrides?: PayableOverrides) => skillsContract?.pause(overrides),

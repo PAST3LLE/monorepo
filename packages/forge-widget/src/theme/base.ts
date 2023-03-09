@@ -1,4 +1,3 @@
-import { SkillRarity } from '../types'
 import { SkilltreeTheme } from './types'
 
 export const baseTheme: Omit<SkilltreeTheme, 'assetsMap'> = {
@@ -30,20 +29,20 @@ export const baseTheme: Omit<SkilltreeTheme, 'assetsMap'> = {
   },
   // rarity colours
   rarity: {
-    [SkillRarity.EMPTY]: {
+    empty: {
       backgroundColor: 'transparent',
       boxShadowColor: '0px 0px transparent'
     },
-    [SkillRarity.COMMON]: {
+    common: {
       backgroundColor: '#969696b3',
       boxShadowColor: '12px 2px #969696b3'
     },
-    [SkillRarity.RARE]: { backgroundColor: '#6495ed', boxShadowColor: '12px 2px #6495ed' },
-    [SkillRarity.LEGENDARY]: {
+    rare: { backgroundColor: '#6495ed', boxShadowColor: '12px 2px #6495ed' },
+    legendary: {
       backgroundColor: '#ab64ffbd',
       boxShadowColor: '12px 8px #8000809e'
     },
-    [SkillRarity.EPIC]: { backgroundColor: '#ffb467', boxShadowColor: '12px 8px #ffb467' }
+    epic: { backgroundColor: '#ffb467', boxShadowColor: '12px 8px #ffb467' }
   },
   gradients: {
     lockedSkill: 'linear-gradient(195deg, lightgrey, darkred)',

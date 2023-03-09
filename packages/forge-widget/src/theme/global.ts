@@ -26,10 +26,12 @@ export function useGenericImageSrcSet() {
 // this is ugly but currently the only way to style web3modal
 const Web3ModalOverrideVariables = css`
   ${({ theme }) => `
+    --w3m-background-color: ${theme.blackOpaque} !important;
+    --w3m-accent-color: ${theme.blackOpaque} !important;
     --w3m-color-fg-accent: ${theme.mainBgAlt} !important;
     // --w3m-color-bg-1: ${theme.mainBg} !important;
     --w3m-color-bg-1: ${theme.mainBgDarker} !important;
-    --w3m-color-bg-2: ${theme.mainBgAlt} !important;
+    --w3m-color-bg-2: ${theme.blackOpaque} !important;
     --w3m-color-fg-1: ${theme.mainBgAlt} !important;
     --w3m-color-fg-2: ${theme.mainFg} !important;
     // gradients

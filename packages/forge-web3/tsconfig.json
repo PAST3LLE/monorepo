@@ -7,7 +7,9 @@
         "allowJs": true
     },
     "include": [
-        "./src"
+        "./src",
+        "src/mock/**/*.json",
+        "src/mock/**/*.js"
     ],
     "references": []
 }

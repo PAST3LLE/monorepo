@@ -1,12 +1,12 @@
-import { ForgeWeb3Providers } from '@past3lle/forge-web3'
+import { RowProps } from '@past3lle/components'
 import { StaticGlobalCssProvider, ThemedGlobalCssProvider } from '@past3lle/theme'
-import React, { ReactNode, StrictMode } from 'react'
+import React, { ReactNode, StrictMode, useMemo } from 'react'
 import { useTheme } from 'styled-components'
 
-import { SkilltreeCoreUpdaters } from '../state'
+import { SkilltreeConnectedDataProviders, SkilltreeDisconnectedDataProviders } from '../state'
 import { CustomStaticGlobalCss, CustomThemeGlobalCss } from '../theme/global'
-import { AppConfig } from '../types/appConfig'
-import { SkilltreeBoard as SkilltreeBoardComponent } from './Board'
+import { ForgeWidgetAppConfig } from '../types/appConfig'
+import { Skilltree as SkilltreeComponent } from './Board'
 import {
   ConnectionInfoButton,
   InventoryButton,
@@ -15,7 +15,7 @@ import {
   ShopExternalLinkButton,
   ThemeChangerButton
 } from './Common/Button'
-import { SkilltreeHeader } from './Header'
+import { SkilltreeHeader as SkilltreeConnectedHeader } from './Header'
 
 const CssProviders = () => {
   const { assetsMap } = useTheme()
@@ -32,21 +32,16 @@ const CssProviders = () => {
   )
 }
 
-interface SkilltreeBoardConnectedProps {
-  config: AppConfig
-}
-
-interface SkilltreeBoardProps {
-  config: Omit<AppConfig, 'provider'>
+interface SkilltreeProps {
+  config: ForgeWidgetAppConfig
 }
 
 /**
- * @name SkilltreeBoardConnected
- * @description Connected version of the base SkilltreeBoard component. Attaches Web3/Wagmi providers
- * @param config - configuration object:
+ * @name Skilltree
+ * @description Connected version of the base Skilltree component. Attaches Web3/Wagmi providers
+ * @param SkilltreeProps
  * @example
- * // PROPS
-    interface SkilltreeBoardConnectedProps: {
+    interface SkilltreeProps: {
       config: {
         appName: string
         appTheme: SkilltreeThemeByModes // --> see type SkilltreeTheme
@@ -56,67 +51,34 @@ interface SkilltreeBoardProps {
       }
     }
  */
-function SkilltreeBoardConnected({ config, children }: SkilltreeBoardConnectedProps & { children?: ReactNode }) {
-  return (
-    <StrictMode>
-      <ForgeWeb3Providers
-        walletconnectConfig={{
-          appName: config.name,
-          walletConnect: config.provider
-        }}
-      >
-        <SkilltreeCoreUpdaters {...config}>
-          <CssProviders />
-          {children}
-          <SkilltreeBoardComponent />
-        </SkilltreeCoreUpdaters>
-      </ForgeWeb3Providers>
-    </StrictMode>
+function Skilltree({ config, children, ...boxProps }: SkilltreeProps & RowProps & { children?: ReactNode }) {
+  const Provider = useMemo(
+    () => (config.web3.standalone ? SkilltreeDisconnectedDataProviders : SkilltreeConnectedDataProviders),
+    [config.web3.standalone]
   )
-}
-
-/**
- * @name SkilltreeBoard
- * @description Base version of the base SkilltreeBoard component. Requires wrapping with Web3/Wagmi providers
- * @param config - configuration object:
- * @example
- * // PROPS
-    interface SkilltreeBoardBaseProps: {
-      config: {
-        appName: string
-        appTheme: SkilltreeThemeByModes // --> see type SkilltreeTheme
-        provider: {
-          projectId: string
-        }
-      }
-    }
- */
-function SkilltreeBoard({ config, children }: SkilltreeBoardProps & { children?: ReactNode }) {
   return (
     <StrictMode>
-      <SkilltreeCoreUpdaters {...config}>
+      <Provider {...config}>
         <CssProviders />
         {children}
-        <SkilltreeBoardComponent />
-      </SkilltreeCoreUpdaters>
+        <SkilltreeComponent {...boxProps} />
+      </Provider>
     </StrictMode>
   )
 }
 
 export {
-  // Core
-  SkilltreeBoardConnected,
-  SkilltreeBoard,
-  SkilltreeBoardComponent,
-  SkilltreeHeader,
+  // Core comps
+  Skilltree,
+  SkilltreeComponent,
+  SkilltreeConnectedHeader,
   // Buttons
-  ConnectionInfoButton,
   InventoryButton,
   NetworkInfoButton,
-  OpenWeb3ModalButton,
-  ShopExternalLinkButton,
   ThemeChangerButton,
+  OpenWeb3ModalButton,
+  ConnectionInfoButton,
+  ShopExternalLinkButton,
   // Types
-  type SkilltreeBoardConnectedProps,
-  type SkilltreeBoardProps
+  type SkilltreeProps
 }

@@ -1,17 +1,20 @@
-import { MetadataUriMap, ipfsToImageUri, useSupportedChainId } from '@past3lle/forge-web3'
 import { devWarn } from '@past3lle/utils'
 import { useCallback } from 'react'
 
-import { MetadataState } from '../state/Metadata'
+import { MetadataState, MetadataUpdaterProps } from '../state'
 import { CollectionMetadata, SkillMetadata } from '../types'
-import { get64PaddedSkillId } from '../utils'
+import { get64PaddedSkillId, ipfsToImageUri } from '../utils'
+import { useSupportedChainId } from './useSupportedChainId'
 
 export interface UseMetaData {
   skills: (SkillMetadata[] | undefined)[]
   collection: CollectionMetadata | undefined
   collectionsMetadataList: CollectionMetadata[] | undefined
 }
-export function useFetchMetadataCallback(metadataUriMap: MetadataUriMap) {
+
+type FetchMetadataProps = Omit<MetadataUpdaterProps, 'contractAddressMap'>
+
+export function useFetchMetadataCallback({ metadataUriMap, idBase }: FetchMetadataProps) {
   const chainId = useSupportedChainId()
   const metadataUris = metadataUriMap[chainId]
 
@@ -37,7 +40,7 @@ export function useFetchMetadataCallback(metadataUriMap: MetadataUriMap) {
           continue
         }
 
-        const skillId = get64PaddedSkillId(i)
+        const skillId = get64PaddedSkillId(i, idBase)
         const uri = ipfsToImageUri(ipfsUri.replace('{id}', skillId))
         promisedSkillsMetadata.push(fetch(uri).then((res) => res.json()))
       }

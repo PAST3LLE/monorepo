@@ -1,4 +1,5 @@
 import { ButtonProps } from '@past3lle/components'
+import { useGetWindowSize } from '@past3lle/forge-web3'
 import { MEDIA_WIDTHS } from '@past3lle/theme'
 import React from 'react'
 
@@ -7,7 +8,6 @@ import {
   /* useSidePanelAtom, */
   useSidePanelAtomBase
 } from '../../../state/SidePanel'
-import { useGetWindowSize } from '../../../state/WindowSize'
 import { MAIN_BG } from '../../../theme/constants'
 import { useGenericImageSrcSet } from '../../../theme/global'
 import { useAssetsMap } from '../../../theme/utils'
