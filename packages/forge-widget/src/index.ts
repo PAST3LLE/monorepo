@@ -4,12 +4,10 @@ import {
   NetworkInfoButton,
   OpenWeb3ModalButton,
   ShopExternalLinkButton,
-  SkilltreeBoard,
-  SkilltreeBoardComponent,
-  SkilltreeBoardConnected,
-  SkilltreeBoardConnectedProps,
-  SkilltreeBoardProps,
-  SkilltreeHeader,
+  Skilltree,
+  SkilltreeComponent,
+  SkilltreeConnectedHeader,
+  SkilltreeProps,
   ThemeChangerButton
 } from './components'
 import {
@@ -21,10 +19,9 @@ import { SkilltreeAssetsMap, SkilltreeTheme, SkilltreeThemeByModes } from './the
 
 export {
   // Components
-  SkilltreeBoardConnected,
-  SkilltreeBoard,
-  SkilltreeHeader,
-  SkilltreeBoardComponent,
+  Skilltree as default,
+  SkilltreeConnectedHeader,
+  SkilltreeComponent,
   // Buttons
   ConnectionInfoButton,
   InventoryButton,
@@ -37,8 +34,7 @@ export {
   SkilltreeDisconnectedDataProviders,
   SkilltreeThemeAndDataProviders,
   // Types
-  type SkilltreeBoardConnectedProps,
-  type SkilltreeBoardProps,
+  type SkilltreeProps,
   type SkilltreeAssetsMap,
   type SkilltreeTheme,
   type SkilltreeThemeByModes
