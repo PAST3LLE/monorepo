@@ -1,4 +1,4 @@
-import { SkilltreeAssetsMap, SkillRarity } from '@past3lle/forge-widget'
+import { SkilltreeAssetsMap } from '@past3lle/forge-widget'
 import COMPANY_LOGO from 'assets/png/back-logo.png'
 import APP_BACKGROUND from 'assets/png/background.png'
 import ETHEREUM_LOGO from 'assets/png/chains/ethereumChainLogo.webp'
@@ -44,11 +44,11 @@ export const ASSETS_MAP: SkilltreeAssetsMap['assetsMap'] = {
       80001: POLYGON_LOGO
     },
     rarity: {
-      [SkillRarity.EMPTY]: 'empty',
-      [SkillRarity.COMMON]: COMMON_RARITY_ICON,
-      [SkillRarity.RARE]: RARE_RARITY_ICON,
-      [SkillRarity.LEGENDARY]: LEGENDARY_RARITY_ICON,
-      [SkillRarity.EPIC]: EPIC_RARITY_ICON
+      empty: '',
+      common: COMMON_RARITY_ICON,
+      rare: RARE_RARITY_ICON,
+      legendary: LEGENDARY_RARITY_ICON,
+      epic: EPIC_RARITY_ICON
     }
   }
 }

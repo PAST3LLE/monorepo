@@ -1,4 +1,4 @@
-import { SkillMetadata, SkillRarity } from '@past3lle/forge-widget'
+import { SkillMetadata } from '@past3lle/forge-web3'
 
 export const SKILLPOINT_SIZES = {
   width: '10vh',
@@ -31,6 +31,6 @@ export const SKILLPOINT_METADATA: SkillMetadata = {
     id: '0-0000',
     shopifyId: '0',
     dependencies: [],
-    rarity: SkillRarity.COMMON
+    rarity: 'common'
   }
 }
