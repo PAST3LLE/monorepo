@@ -9,7 +9,7 @@ import { CONFIG } from './api/config'
 import { useLightningCanvas } from './api/hooks'
 import { CanvasContainer, StyledCanvas } from './styleds'
 
-const CANVAS_ID = 'skilltree'
+const CANVAS_ID = 'skillforge'
 
 export function LightningCanvas() {
   const [ref, setRef] = useStateRef<HTMLCanvasElement | null>(null, (node) => node)

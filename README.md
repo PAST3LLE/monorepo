@@ -10,8 +10,8 @@ Packages included:
 5. [theme](github.com/PAST3LLE/past3lle-monorepo/tree/main/packages/theme): ThemeProvider and general theme components, global styles and theme utils
 6. [types](github.com/PAST3LLE/past3lle-monorepo/tree/main/packages/types): common types
 7. [utils](github.com/PAST3LLE/past3lle-monorepo/tree/main/packages/utils): common utils e.g async wait(...) for promisifying and many others
-8. [forge-widget](github.com/PAST3LLE/past3lle-monorepo/tree/main/packages/forge-widget): skilltree/forge widget component for making PAST3LLE LABS skilltree rewards apps
-9. [forge-web3](github.com/PAST3LLE/past3lle-monorepo/tree/main/packages/forge-web3): common skilltree/forge related web3 components/providers/hooks/utils
+8. [skillforge-widget](github.com/PAST3LLE/past3lle-monorepo/tree/main/packages/skillforge-widget): SkillForge widget component for making PAST3LLE LABS SkillForge rewards apps
+9. [skillforge-web3](github.com/PAST3LLE/past3lle-monorepo/tree/main/packages/skillforge-web3): common SkillForge related web3 components/providers/hooks/utils
 
 Apps:
 1. skilltree-ui - the SkillForge/Forge skills upgrade UI - get skills and skins [from the shop](https://pastelle.shop)
