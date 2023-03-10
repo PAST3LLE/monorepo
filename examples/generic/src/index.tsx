@@ -1,4 +1,4 @@
-import { ThemeChangerButton } from '@past3lle/forge-widget'
+import { ThemeChangerButton } from '@past3lle/skillforge-widget'
 import {
   FontCssProvider,
   StaticGlobalCssProvider,
@@ -55,7 +55,7 @@ function AppControl() {
       <ThemeProvider theme={appTheme} defaultMode="DARK">
         <App />
         <ThemeChangerButton
-          label="Change Skilltree Theme"
+          label="Change SkillForge Theme"
           backgroundColor={'springgreen'}
           bgBlendMode="exclusion"
           bgAttributes={['center / cover no-repeat', '5px / cover repeat']}

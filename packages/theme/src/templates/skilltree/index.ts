@@ -1,7 +1,7 @@
 import { ThemeByModes } from '../../types'
 import { BaseColours } from '../base'
 
-export interface SkilltreeThemeExtension {
+export interface SkillForgeThemeExtension {
   mainText: string
   darkText: string
   lightText: string
@@ -85,8 +85,8 @@ export interface SkilltreeThemeExtension {
   }
 }
 
-const SkilltreeTheme: ThemeByModes<
-  Omit<SkilltreeThemeExtension, 'assetsMap'> & { assetsMap?: SkilltreeThemeExtension['assetsMap'] }
+const SkillForgeTheme: ThemeByModes<
+  Omit<SkillForgeThemeExtension, 'assetsMap'> & { assetsMap?: SkillForgeThemeExtension['assetsMap'] }
 > = {
   modes: {
     DEFAULT: {
@@ -139,9 +139,9 @@ const SkilltreeTheme: ThemeByModes<
         ownedSkill: 'linear-gradient(195deg, lightgrey, #208120)'
       }
     },
-    DARK: {} as SkilltreeThemeExtension,
-    LIGHT: {} as SkilltreeThemeExtension
+    DARK: {} as SkillForgeThemeExtension,
+    LIGHT: {} as SkillForgeThemeExtension
   }
 } as const
 
-export const Theme = { ...BaseColours, ...SkilltreeTheme }
+export const Theme = { ...BaseColours, ...SkillForgeTheme }

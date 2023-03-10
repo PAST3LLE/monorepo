@@ -14,7 +14,7 @@ Packages included:
 9. [forge-web3](github.com/PAST3LLE/past3lle-monorepo/tree/main/packages/forge-web3): common skilltree/forge related web3 components/providers/hooks/utils
 
 Apps:
-1. skilltree-ui - the Skilltree/Forge skills upgrade UI - get skills and skins [from the shop](https://pastelle.shop)
+1. skilltree-ui - the SkillForge/Forge skills upgrade UI - get skills and skins [from the shop](https://pastelle.shop)
 2. skills-nft - scripts for uploading metadata and images to IPFS
 
 ## From other projects: installation example

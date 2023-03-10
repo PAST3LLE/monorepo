@@ -1,6 +1,6 @@
 import { BaseColours, BaseContent, BaseTheme } from './base'
 import { Theme as PastelleThemeTemplate } from './pastelle'
-import { Theme as SkilltreeThemeTemplate } from './skilltree'
+import { Theme as SkillForgeThemeTemplate } from './skilltree'
 
 const ThemeDefaultOptions = {
   BaseColours,
@@ -10,7 +10,7 @@ const ThemeDefaultOptions = {
 
 const ThemeTemplates = {
   PASTELLE: PastelleThemeTemplate,
-  SKILLTREE: SkilltreeThemeTemplate
+  SKILLTREE: SkillForgeThemeTemplate
 } as const
 
 export * from './types'
