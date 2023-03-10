@@ -1,4 +1,4 @@
-import { RowProps } from '@past3lle/components'
+import { ColumnCenter, RowProps } from '@past3lle/components'
 import { StaticGlobalCssProvider, ThemedGlobalCssProvider } from '@past3lle/theme'
 import React, { ReactNode, StrictMode, useMemo } from 'react'
 import { useTheme } from 'styled-components'
@@ -60,8 +60,10 @@ function Skilltree({ config, children, ...boxProps }: SkilltreeProps & RowProps 
     <StrictMode>
       <Provider {...config}>
         <CssProviders />
-        {children}
-        <SkilltreeComponent {...boxProps} />
+        <ColumnCenter height="100%" justifyContent="center" margin="auto" {...boxProps}>
+          {children}
+          <SkilltreeComponent {...boxProps} />
+        </ColumnCenter>
       </Provider>
     </StrictMode>
   )

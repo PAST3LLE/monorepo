@@ -50,6 +50,8 @@ export const CustomStaticGlobalCss = createGlobalStyle<{ backgroundImage?: strin
   body > div#root {
     ${({ backgroundImage }) => backgroundImage && `background: url(${backgroundImage}) center/cover no-repeat;`}
     height: 100vh;
+    display: flex;
+    width: 100%;
     
     > nav {
       min-width: 12rem;
