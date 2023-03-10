@@ -1,10 +1,10 @@
 {
-  "name": "@past3lle/skilltree-ui",
-  "description": "SKILLTREE UI",
+  "name": "@past3lle/skillforge-ui",
+  "description": "PASTELLE SKILLFORGE",
   "homepage": ".",
   "sideEffects": false,
-  "main": "build/skilltree.js",
-  "module": "build/skilltree.esm.js",
+  "main": "build/skillforge.js",
+  "module": "build/skillforge.esm.js",
   "types": "build/index.d.ts",
   "files": [
     "build"
