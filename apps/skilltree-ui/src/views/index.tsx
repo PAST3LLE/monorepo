@@ -49,7 +49,7 @@ const SKILLTREE_CONFIG: SkilltreeProps = {
 
 export function App() {
   return (
-    <Skilltree config={SKILLTREE_CONFIG.config} maxWidth="1200" height="900">
+    <Skilltree config={SKILLTREE_CONFIG.config} maxWidth={1200} maxHeight={750}>
       <FontCssProvider />
       <GothicFontCssProvider />
       <SkilltreeConnectedHeader />
