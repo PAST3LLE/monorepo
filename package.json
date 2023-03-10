@@ -11,7 +11,7 @@
     "build": "lerna run build --stream",
     "lint": "lerna run lint --stream --parallel",
     "lint:examples": "npx prettier --write examples --ignore-file './prettierignore'",
-    "start:skilltree": "npx lerna run start --scope @past3lle/skilltree-ui",
+    "start:skillforge": "npx lerna run start --scope @past3lle/skillforge-ui",
     "test": "yarn jest --coverage",
     "test:watch": "yarn test --watch",
     "install:examples": "cd examples/generic && yarn && cd ../../",
