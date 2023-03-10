@@ -7,7 +7,7 @@ import { GothicFontCssProvider } from 'theme/fonts'
 import { SUPPORTED_CHAINS } from 'web3/config'
 import { CONTRACT_ADDRESSES_MAP, METADATA_URIS_MAP } from 'web3/constants/addresses'
 
-const skilltreeTheme = createPast3lleTemplateTheme('SKILLTREE', {
+const skilltreeTheme = createPast3lleTemplateTheme('SKILLFORGE', {
   DEFAULT: {
     assetsMap: ASSETS_MAP
   },
