@@ -1,5 +1,5 @@
-import { SkilltreeTheme, ThemeBaseRequired } from '@past3lle/theme'
+import { SkillForgeTheme, ThemeBaseRequired } from '@past3lle/theme'
 
 declare module 'styled-components' {
-  export interface DefaultTheme extends ThemeBaseRequired, SkilltreeTheme {}
+  export interface DefaultTheme extends ThemeBaseRequired, SkillForgeTheme {}
 }

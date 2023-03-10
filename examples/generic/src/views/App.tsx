@@ -10,8 +10,8 @@ import {
   PstlButton, // PstlButton
   Row
 } from '@past3lle/components'
-import { SkilltreeConnected, SkilltreeBoardConnectedProps, SkilltreeHeader } from '@past3lle/forge-widget'
 import { useOnClickOutside } from '@past3lle/hooks'
+import { SkillForgeBoardConnectedProps, SkillForgeConnected, SkillForgeHeader } from '@past3lle/skillforge-widget'
 import { urlToSimpleGenericImageSrcSet } from '@past3lle/theme'
 import * as React from 'react'
 import styled, { useTheme } from 'styled-components'
@@ -24,8 +24,8 @@ import {
 } from '../components/Layout'
 import { skilltreeThemeCustom } from '../theme/skilltreeTheme'
 
-const SKILLTREE_CONFIG: SkilltreeBoardConnectedProps['config'] = {
-  appName: 'Pastelle Skilltree',
+const SKILLTREE_CONFIG: SkillForgeBoardConnectedProps['config'] = {
+  appName: 'Pastelle SkillForge',
   appTheme: skilltreeThemeCustom,
   provider: {
     projectId: process.env.REACT_APP_WALLETCONNECT_KEY || 'STRING'
@@ -103,9 +103,9 @@ const App = ({ showBasic = false }: Props) => {
         </PstlMain>
       )}
       <PstlMain>
-        <SkilltreeConnected config={SKILLTREE_CONFIG}>
-          <SkilltreeHeader />
-        </SkilltreeConnected>
+        <SkillForgeConnected config={SKILLTREE_CONFIG}>
+          <SkillForgeHeader />
+        </SkillForgeConnected>
       </PstlMain>
       {/* <PstlFooter>
         <ul>

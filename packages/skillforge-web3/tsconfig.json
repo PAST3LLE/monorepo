@@ -1,0 +1,22 @@
+{
+    "extends": "../../tsconfig.build.json",
+    "compilerOptions": {
+        "baseUrl": "./",
+        "rootDir": "./src",
+        "composite": true,
+        "allowJs": true
+    },
+    "include": [
+        "./src",
+        "src/mock/**/*.json",
+        "src/mock/**/*.js"
+    ],
+    "references": [
+        {
+            "path": "../hooks"
+        },
+        {
+            "path": "../utils"
+        }
+    ]
+}

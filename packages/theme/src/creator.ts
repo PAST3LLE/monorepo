@@ -27,8 +27,8 @@ interface CreateTheme<T, K, M extends BasicUserTheme = BasicUserTheme> {
  * CreateTheme constructor function
  * Function REQUIRES at _least_ a theme Interface OR a template name as defined by the @type {ThemeTemplateKey}
  * @example
- * const SkilltreeTheme = CreateTheme<void, "SKILLTREE">()
- * const skilltreeTheme = new SkilltreeTheme()
+ * const SkillForgeTheme = CreateTheme<void, "SKILLFORGE">()
+ * const skilltreeTheme = new SkillForgeTheme()
  * skilltreeTheme.saltySwamys // <-- exists
  * @returns Constructed theme object consisting of the required parts + optionals
  */
@@ -175,5 +175,5 @@ export function createTemplateTheme<
   return createCustomTheme(mergedTheme)
 }
 
-// Export pre-created PASTELLE (shop-ui) and SKILLTREE (skilltree-ui) themes as syntactic sugar
+// Export pre-created PASTELLE (shop-ui) and SKILLFORGE (skilltree-ui) themes as syntactic sugar
 export const createPast3lleTemplateTheme = createTemplateThemeFactory(ThemeTemplates)
