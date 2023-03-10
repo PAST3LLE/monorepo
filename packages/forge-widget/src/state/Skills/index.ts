@@ -18,7 +18,7 @@ export interface SkillsState {
   vectorsMap: SkillVectorsMap
   sizes: { width: number; height: number }
 }
-const skillsAtom = atomWithStorage<SkillsState>('PSTL_SKILLS_STATE', {
+const skillsAtom = atomWithStorage<SkillsState>('FORGE_SKILLS_STATE', {
   active: [],
   activeDependencies: [],
   vectors: [],

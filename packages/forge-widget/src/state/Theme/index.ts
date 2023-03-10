@@ -4,7 +4,7 @@ import { atomWithStorage } from 'jotai/utils'
 
 export type AppThemeMode = ThemeModesRequired | 'DEFAULT'
 
-const themeModeStorageAtom = atomWithStorage<AppThemeMode>('PSTL_SKILLTREE_THEME_MODES', 'DEFAULT')
+const themeModeStorageAtom = atomWithStorage<AppThemeMode>('FORGE_SKILLTREE_THEME_MODES', 'DEFAULT')
 themeModeStorageAtom.debugLabel = 'THEME ATOM'
 
 const themeModeReadAtom = atom((get) => get(themeModeStorageAtom))

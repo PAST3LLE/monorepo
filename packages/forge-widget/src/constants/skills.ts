@@ -24,7 +24,7 @@ export const EMPTY_SKILL_IMAGE_HASH_LIST = [
 export const SKILL_ID_BASE = 1000
 export const SKILLPOINT_IMAGE_HASH = 'QmSMBa8KBK7QCJGVsViqAsUp5FQHQMC3qfmWH3wJxw219f'
 export const SKILLPOINT_METADATA: SkillMetadata = {
-  name: 'PSTL SKILLPOINT',
+  name: 'FORGE SKILLPOINT',
   description: 'Skillpoint for upgrading skills',
   image: SKILLPOINT_IMAGE_HASH,
   properties: {
