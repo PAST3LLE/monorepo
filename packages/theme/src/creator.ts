@@ -122,54 +122,26 @@ export const createTemplateThemeFactory = <TE extends { [name: string]: ThemeByM
   function createTemplateTheme<K extends keyof TE, E extends Subset<TE[K]['modes']>>(template: K, extension?: E) {
     const theme = templates[template]
 
+    // if extension passed, deep merge
+    // and set type accordingly
     if (extension) {
       const mergedThemeModes = merge({}, theme.modes, extension)
       theme.modes = mergedThemeModes
     }
 
-    return createCustomTheme(theme)
+    return createCustomTheme(
+      theme as TE[K] & {
+        modes:
+          | ({
+              DEFAULT: BasicUserTheme
+            } & {
+              LIGHT: Subset<BasicUserTheme>
+              DARK: Subset<BasicUserTheme>
+            } & E)
+          | undefined
+      }
+    )
   }
-
-/**
- * createTemplateTheme - create a theme based on available templates - see
- * @example
- * createCustomTheme
- *
- * @param template
- *
- * @example
-  const pastelleTheme = createTemplateTheme('PASTELLE', {
-    DEFAULT: {
-      ...default extensions here
-    },
-    DARK: {
-      ...dark extensions here
-    }
-  })
-  type CustomThemeExtension = typeof pastelleTheme.modes.DEFAULT 
-  // or
-  import { PastelleTheme } from '@past3lle/theme'
-  declare module 'styled-components' {
-    export interface DefaultTheme extends ThemeBaseRequired, PastelleTheme {}
-  }
- */
-export function createTemplateTheme<
-  K extends AvailableThemeTemplate,
-  E extends Subset<(typeof ThemeTemplates)[K]['modes']>
->(template: K, extension?: E) {
-  const theme = ThemeTemplates[template]
-
-  let auxThemeModes
-  if (extension) {
-    const mergedThemeModes = merge({}, theme.modes, extension)
-    auxThemeModes = mergedThemeModes
-  }
-  const mergedTheme = {
-    ...theme,
-    modes: auxThemeModes
-  }
-  return createCustomTheme(mergedTheme)
-}
 
 // Export pre-created PASTELLE (shop-ui) and SKILLFORGE (skilltree-ui) themes as syntactic sugar
 export const createPast3lleTemplateTheme = createTemplateThemeFactory(ThemeTemplates)
