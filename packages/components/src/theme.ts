@@ -1,3 +1,3 @@
-import { createTemplateTheme } from '@past3lle/theme'
+import { createPast3lleTemplateTheme } from '@past3lle/theme'
 
-export const pastelleTheme = createTemplateTheme('PASTELLE')
+export const pastelleTheme = createPast3lleTemplateTheme('PASTELLE')
