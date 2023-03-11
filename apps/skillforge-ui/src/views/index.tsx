@@ -48,7 +48,7 @@ const SKILLTREE_CONFIG: SkillForgeProps = {
 
 export function App() {
   return (
-    <SkillForge config={SKILLTREE_CONFIG.config} maxWidth={1200} maxHeight={750}>
+    <SkillForge config={SKILLTREE_CONFIG.config} maxWidth="90%" maxHeight="90%">
       <FontCssProvider />
       <GothicFontCssProvider />
       <SkillForgeConnectedHeader />
