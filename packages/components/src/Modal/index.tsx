@@ -53,7 +53,7 @@ const StyledDialogContent = styled(({ minHeight, maxHeight, mobile, isOpen, isLa
     outline: none;
     overflow: auto;
 
-    background-color: ${({ mainBackgroundColor = 'darkblue' }) => mainBackgroundColor};
+    background-color: ${({ mainBackgroundColor = 'transparent' }) => mainBackgroundColor};
     box-shadow: 0px 4px 8px 0px ${({ boxShadowColor = 'rgba(0,0,0,0.7)' }) => transparentize(0.95, boxShadowColor)};
 
     display: flex;
