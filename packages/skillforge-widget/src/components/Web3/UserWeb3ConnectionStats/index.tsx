@@ -3,10 +3,10 @@ import { BLACK_TRANSPARENT } from '@past3lle/theme'
 import { truncateAddress } from '@past3lle/utils'
 import { useWeb3Modal } from '@web3modal/react'
 import React, { useCallback } from 'react'
-import { OpenOptions } from 'src/components/Common/Button/types'
 import styled from 'styled-components'
 import { useAccount, useNetwork } from 'wagmi'
 
+import { OpenOptions } from '../../Common/Button/types'
 import { FlashingText } from '../../Common/FlashingText'
 import { MonospaceText } from '../../Common/Text'
 

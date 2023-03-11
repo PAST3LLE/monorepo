@@ -60,7 +60,14 @@ function SkillForge({ config, children, ...boxProps }: SkillForgeProps & RowProp
     <StrictMode>
       <Provider {...config}>
         <CssProviders />
-        <ColumnCenter height="100%" justifyContent="center" margin="auto" {...boxProps}>
+        <ColumnCenter
+          // Default
+          height="100%"
+          margin="auto"
+          justifyContent="center"
+          // User passed in props
+          {...boxProps}
+        >
           {children}
           <SkillForgeComponent {...boxProps} />
         </ColumnCenter>

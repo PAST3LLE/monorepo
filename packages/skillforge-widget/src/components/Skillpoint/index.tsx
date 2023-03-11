@@ -82,9 +82,9 @@ function SkillpointUnmemoed({
 }
 
 export const Skillpoint = memo(
-  SkillpointUnmemoed,
-  (prevProps, nextProps) =>
-    prevProps.vector?.X1 !== nextProps.vector?.X1 && prevProps.vector?.Y1 !== nextProps.vector?.Y1
+  SkillpointUnmemoed
+  /* (prevProps, nextProps) =>
+    prevProps.vector?.X1 !== nextProps.vector?.X1 && prevProps.vector?.Y1 !== nextProps.vector?.Y1 */
 )
 
 const StyledImg = styled.img`

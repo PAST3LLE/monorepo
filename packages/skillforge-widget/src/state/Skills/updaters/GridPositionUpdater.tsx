@@ -6,6 +6,7 @@ import { SkillVectorsMap, useSkillsAtom } from '..'
 import { calculateGridPoints } from '../../../components/Canvas/canvasApi/api/hooks'
 import {
   EMPTY_COLLECTION_ROWS_SIZE,
+  MINIMUM_BOARD_HEIGHT,
   MINIMUM_BOARD_WIDTH,
   MINIMUM_COLLECTION_BOARD_SIZE
 } from '../../../constants/skills'
@@ -29,8 +30,8 @@ export function GridPositionUpdater() {
       metadata.length >= 1 ? Math.max(MINIMUM_COLLECTION_BOARD_SIZE, metadata.length) : MINIMUM_COLLECTION_BOARD_SIZE
     const rows = highestRowCount
 
-    const gridHeight = container.clientHeight - 30
-    const gridWidth = (MINIMUM_BOARD_WIDTH > container.clientWidth ? MINIMUM_BOARD_WIDTH : container.clientWidth) * 0.95
+    const gridHeight = Math.max(container.clientHeight - 30, MINIMUM_BOARD_HEIGHT)
+    const gridWidth = Math.max(container.clientWidth, MINIMUM_BOARD_WIDTH) * 0.95
 
     // config
     const rowHeight = Math.round(gridHeight / rows)

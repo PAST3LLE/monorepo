@@ -1,7 +1,7 @@
 import { SkillMetadata } from '@past3lle/skillforge-web3'
 
 export const SKILLPOINT_SIZES = {
-  width: '10vh',
+  width: '10vmax',
   get height() {
     return this.width
   }
@@ -9,6 +9,7 @@ export const SKILLPOINT_SIZES = {
 export const MINIMUM_COLLECTION_BOARD_SIZE = 4
 export const EMPTY_COLLECTION_ROWS_SIZE = 6
 export const MINIMUM_BOARD_WIDTH = 500
+export const MINIMUM_BOARD_HEIGHT = 400
 // TODO: REMOVE THIS!!!
 export const MOCK_COLLECTION_ERROR_OFFSET = 1
 
