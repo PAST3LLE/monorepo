@@ -122,16 +122,12 @@ export const createTemplateThemeFactory = <TE extends { [name: string]: ThemeByM
   function createTemplateTheme<K extends keyof TE, E extends Subset<TE[K]['modes']>>(template: K, extension?: E) {
     const theme = templates[template]
 
-    let auxThemeModes
     if (extension) {
       const mergedThemeModes = merge({}, theme.modes, extension)
-      auxThemeModes = mergedThemeModes
+      theme.modes = mergedThemeModes
     }
-    const mergedTheme = {
-      ...theme,
-      modes: auxThemeModes
-    }
-    return createCustomTheme(mergedTheme)
+
+    return createCustomTheme(theme)
   }
 
 /**
