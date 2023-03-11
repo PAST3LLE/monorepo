@@ -1,9 +1,4 @@
-import {
-  createCustomTheme,
-  createPast3lleTemplateTheme,
-  createTemplateTheme,
-  createTemplateThemeFactory
-} from './creator'
+import { createCustomTheme, createPast3lleTemplateTheme, createTemplateThemeFactory } from './creator'
 import * as ThemeTemplateTypes from './templates/types'
 
 export * from './provider'
@@ -12,10 +7,4 @@ export * from './utils'
 export * from './types'
 export * from './templates'
 
-export {
-  ThemeTemplateTypes,
-  createCustomTheme,
-  createTemplateTheme,
-  createTemplateThemeFactory,
-  createPast3lleTemplateTheme
-}
+export { ThemeTemplateTypes, createCustomTheme, createTemplateThemeFactory, createPast3lleTemplateTheme }
