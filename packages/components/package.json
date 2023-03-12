@@ -26,7 +26,9 @@
     "test:watch": "tsc test --env=jsdom --watchAll",
     "test:ci": "yarn alt-test --coverage --no-watch --watch=false --watchAll=false --no-watchman --forceExit --detectOpenHandles",
     "pre-commit": "pretty-quick --staged && yarn test:ci && yarn build",
-    "lint": "prettier --write ./src/** --ignore-path '../../.prettierignore'"
+    "lint": "prettier --write ./src/** --ignore-path '../../.prettierignore'",
+    "cosmos": "cosmos",
+    "cosmos:export": "cosmos-export"
   },
   "publishConfig": {
     "access": "public",
@@ -64,6 +66,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "pretty-quick": "^2.0.1",
     "react": "^18.0.10",
+    "react-cosmos": "^5.7.2",
     "react-dom": "^18.0.10",
     "react-router-dom": "^6.7.0",
     "rollup-plugin-svg": "^2.0.0",
