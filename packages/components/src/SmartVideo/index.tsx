@@ -6,6 +6,7 @@ import { Play } from 'react-feather'
 import { BoxProps } from 'rebass'
 
 import { Text as LayoutText } from '../Text'
+import { useVideoAutoStop, useVideoError, useVideoLoaded } from './hooks'
 import { CTAOverlayProps, VideoContainer, VideoHeader, VideoPlayCTAOverlay } from './styleds'
 
 type WithContainer = {
@@ -69,17 +70,13 @@ export const SmartVideo = forwardRef(function LazyVideo(
     showTapToPlay = false,
     videoDelay = false,
     showError = false,
+    autoPlayOptions,
     ctaOverlayProps,
     container,
     ...boxProps
   }: SmartVideoProps,
   forwardRef: ForwardedRef<HTMLVideoElement>
 ) {
-  const [sourceErrored, setSourceErrored] = useState(false)
-  const [dataLoaded, setDataLoaded] = useState(false)
-  const [metadataLoaded, setMetaDataLoaded] = useState(false)
-  const loading = !metadataLoaded || !dataLoaded
-
   const [lastSourceElem, setLastSourceElem] = useState<HTMLSourceElement | null>(null)
   const [videoElement, setVideoElement] = useState<HTMLVideoElement | null>(null)
 
@@ -90,46 +87,12 @@ export const SmartVideo = forwardRef(function LazyVideo(
     }
   }, [forwardRef, videoElement])
 
-  // capture LAST source error state
-  useEffect(() => {
-    const _handleSourceErrored = () => setSourceErrored(true)
-
-    let source: HTMLSourceElement
-    if (lastSourceElem) {
-      source = lastSourceElem
-      source.addEventListener('error', _handleSourceErrored)
-    }
-
-    return () => {
-      source?.removeEventListener('error', _handleSourceErrored)
-    }
-  }, [lastSourceElem])
-
-  // set VIDEO loading states for forwardRef
-  useEffect(() => {
-    const _handleDataLoad = () => {
-      video?.removeEventListener('loadeddata', _handleDataLoad)
-      setDataLoaded(true)
-    }
-    const _handleMetaDataLoad = () => {
-      video?.removeEventListener('loadedmetadata', _handleMetaDataLoad)
-      setMetaDataLoaded(true)
-    }
-
-    let video: HTMLVideoElement
-    if (videoElement) {
-      video = videoElement
-
-      video.addEventListener('loadeddata', _handleDataLoad)
-      video.addEventListener('loadedmetadata', _handleMetaDataLoad)
-    }
-
-    return () => {
-      video?.removeEventListener('loadeddata', _handleDataLoad)
-      video?.removeEventListener('loadedmetadata', _handleMetaDataLoad)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [videoElement])
+  // Video error listener
+  const { error } = useVideoError(lastSourceElem)
+  // Video load state listeners
+  const { loading } = useVideoLoaded(videoElement)
+  // Video auto stop listener
+  useVideoAutoStop(videoElement, autoPlayOptions)
 
   const isInView = useDetectScrollIntoView(
     loadInView ? videoElement : undefined,
@@ -148,7 +111,7 @@ export const SmartVideo = forwardRef(function LazyVideo(
       {loading ? <LoadingComponent /> : videoDelay ? <VideoDelayer /> : null} 
       */}
       {/* Show delayer comp whether delayed or is loading */}
-      {showError || sourceErrored ? (
+      {showError || error ? (
         <VideoErrorOverlay {...ctaOverlayProps} />
       ) : showDelayer ? (
         <VideoDelayer $zIndex={ctaOverlayProps.$zIndex} />

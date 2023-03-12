@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text as RebassText, TextProps } from 'rebass'
+import { Text as RebassText, type TextProps } from 'rebass'
 import styled from 'styled-components'
 
 const TextWrapper = styled(RebassText).attrs((props) => ({ fontSize: '1.2rem', ...props }))<{ colour: string }>`
@@ -32,4 +32,4 @@ const Text = {
   Error: styled((props: TextProps) => <TextWrapper fontWeight={500} colour={'red1'} {...props} />)``
 }
 
-export { Text, TextProps }
+export { Text, type TextProps }
