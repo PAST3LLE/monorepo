@@ -27,6 +27,7 @@ export default {
       ]}
       forceLoad
       showTapToPlay
+      handleClick={() => alert('Video clicked')}
     />
   ),
   autoStop: (
@@ -42,6 +43,7 @@ export default {
       autoPlayOptions={{
         stopTime: 2
       }}
+      handleClick={() => console.warn('Video paused')}
     />
   )
 }

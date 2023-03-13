@@ -27,6 +27,7 @@ export type SmartVideoProps = {
   videoDelay?: boolean
   autoPlayOptions?: AutoPlayOptions
   ctaOverlayProps: CTAOverlayProps
+  handleClick?: (...params: any[]) => void
   onResize?: React.VideoHTMLAttributes<HTMLVideoElement>['onResize'] | undefined
   onResizeCapture?: React.VideoHTMLAttributes<HTMLVideoElement>['onResizeCapture'] | undefined
 } & WithContainer &
@@ -60,6 +61,7 @@ const BASE_INTERSECTION_OPTIONS = {
  */
 export const SmartVideo = forwardRef(function LazyVideo(
   {
+    handleClick,
     sourcesProps,
     videoProps = {},
     // useful for setting when setup is animated
@@ -92,7 +94,7 @@ export const SmartVideo = forwardRef(function LazyVideo(
   // Video load state listeners
   const { loading } = useVideoLoaded(videoElement)
   // Video auto stop listener
-  useVideoAutoStop(videoElement, autoPlayOptions)
+  useVideoAutoStop(videoElement, autoPlayOptions, handleClick)
 
   const isInView = useDetectScrollIntoView(
     loadInView ? videoElement : undefined,

@@ -1,26 +1,33 @@
+import throttle from 'lodash.throttle'
 import { useEffect, useState } from 'react'
 
 import { SmartVideoProps } from '.'
 
+type ThrottleFn = ReturnType<typeof throttle>
 export function useVideoAutoStop(
   videoElement: HTMLVideoElement | null,
-  autoPlayOptions: SmartVideoProps['autoPlayOptions']
+  autoPlayOptions: SmartVideoProps['autoPlayOptions'],
+  callback?: () => void
 ) {
   // autoplay stop detection logic
   useEffect(() => {
     let video: HTMLVideoElement
-    let _handler: () => void
+    let _handler: ThrottleFn
 
     const stopTime = autoPlayOptions?.stopTime
     if (stopTime && stopTime > 0) {
       if (videoElement) {
         video = videoElement
 
-        _handler = () => {
-          if (videoElement?.currentTime) {
-            videoElement.currentTime >= (stopTime || 0) && videoElement.pause()
-          }
-        }
+        _handler = throttle(
+          () => {
+            if (videoElement?.currentTime) {
+              videoElement.currentTime >= (stopTime || 0) && (callback?.() || videoElement.pause())
+            }
+          },
+          600,
+          { leading: true }
+        )
 
         video.addEventListener('timeupdate', _handler)
       }
@@ -29,7 +36,7 @@ export function useVideoAutoStop(
     return () => {
       video?.removeEventListener('timeupdate', _handler)
     }
-  }, [autoPlayOptions?.stopTime, videoElement])
+  }, [autoPlayOptions?.stopTime, videoElement, callback])
 }
 
 export function useVideoLoaded(videoElement: HTMLVideoElement | null) {
