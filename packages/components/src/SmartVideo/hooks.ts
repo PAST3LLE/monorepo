@@ -9,34 +9,34 @@ export function useVideoAutoStop(
   autoPlayOptions: SmartVideoProps['autoPlayOptions'],
   callback?: () => void
 ) {
+  const [logicRun, setLogicRun] = useState(false)
   // autoplay stop detection logic
   useEffect(() => {
     let video: HTMLVideoElement
     let _handler: ThrottleFn
 
-    const stopTime = autoPlayOptions?.stopTime
-    if (stopTime && stopTime > 0) {
-      if (videoElement) {
-        video = videoElement
+    const stopTime = autoPlayOptions?.stopTime || 0
+    if (videoElement && stopTime > 0) {
+      video = videoElement
 
-        _handler = throttle(
-          () => {
-            if (videoElement?.currentTime) {
-              videoElement.currentTime >= (stopTime || 0) && (callback?.() || videoElement.pause())
-            }
-          },
-          600,
-          { leading: true }
-        )
+      _handler = throttle(
+        () => {
+          if (!logicRun && videoElement.currentTime >= stopTime) {
+            callback?.() || videoElement.pause()
+            setLogicRun(true)
+          }
+        },
+        600,
+        { leading: true }
+      )
 
-        video.addEventListener('timeupdate', _handler)
-      }
+      video.addEventListener('timeupdate', _handler)
     }
 
     return () => {
       video?.removeEventListener('timeupdate', _handler)
     }
-  }, [autoPlayOptions?.stopTime, videoElement, callback])
+  }, [autoPlayOptions?.stopTime, callback, logicRun, videoElement])
 }
 
 export function useVideoLoaded(videoElement: HTMLVideoElement | null) {
