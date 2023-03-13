@@ -1,6 +1,39 @@
-import React from 'react'
+import { useStateRef } from '@past3lle/hooks'
+import React, { useEffect, useState } from 'react'
 
-import { SmartVideo } from './index'
+import { SmartVideo, SmartVideoProps } from './index'
+
+function SmartVideoWrapper(props: SmartVideoProps) {
+  const [playing, setPlaying] = useState(true)
+  const [ref, setRef] = useStateRef<HTMLVideoElement | null>(null, (node) => node)
+
+  const showCtrlBtn = !props.autoPlayOptions || props.autoPlayOptions.stopTime < (ref?.currentTime || 0)
+
+  useEffect(() => {
+    if (!ref) return
+
+    const isPlaying = playing
+    if (isPlaying) {
+      ref.play()
+    } else {
+      ref.pause()
+    }
+  }, [ref, playing])
+
+  return (
+    <>
+      <button
+        disabled={!showCtrlBtn}
+        onClick={() => setPlaying((playing) => !playing)}
+        style={{ padding: '1rem', margin: '1rem' }}
+      >
+        {playing ? 'POZ' : 'PLAY'}
+      </button>
+
+      <SmartVideo ref={setRef} {...props} handleClick={() => setPlaying((playing) => !playing)} />
+    </>
+  )
+}
 
 const container = document.createElement('div')
 export default {
@@ -31,7 +64,7 @@ export default {
     />
   ),
   autoStop: (
-    <SmartVideo
+    <SmartVideoWrapper
       ctaOverlayProps={{ $zIndex: 1000 }}
       container={container}
       sourcesProps={[
@@ -43,7 +76,6 @@ export default {
       autoPlayOptions={{
         stopTime: 2
       }}
-      handleClick={() => console.warn('Video paused')}
     />
   )
 }
