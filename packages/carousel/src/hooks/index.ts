@@ -10,7 +10,7 @@ export interface CarouselSetup {
   imageTransformations: Omit<LqImageOptions, 'showLoadingIndicator'> & { pr: boolean }
   setCarouselContainerRef: (newNode: HTMLElement | null) => void
 }
-export function useCarouselSetup({ fixedSizes }: Pick<BaseCarouselProps, 'fixedSizes'>): CarouselSetup {
+export function useCarouselSetup(dimensions: BaseCarouselProps<any[]>['dimensions']): CarouselSetup {
   const [parentSizes, setParentSizes] = useState<CarouselSetup['parentSizes']>()
 
   // ref to carousel container
@@ -18,42 +18,49 @@ export function useCarouselSetup({ fixedSizes }: Pick<BaseCarouselProps, 'fixedS
 
   // set carouselContainer states and focus carousel
   useEffect(() => {
+    if (dimensions?.fixedSizes?.height && dimensions?.fixedSizes?.width) return
+
     setParentSizes({
       width: carouselContainer?.parentElement?.offsetWidth,
       height: carouselContainer?.parentElement?.offsetHeight
     })
 
     carouselContainer?.focus()
-  }, [carouselContainer])
+  }, [dimensions?.fixedSizes, carouselContainer])
 
   const windowSizes = useWindowSize()
   // adjust refs on window size changes
   useEffect(() => {
+    if (dimensions?.fixedSizes?.height && dimensions?.fixedSizes?.width) return
     setParentSizes({
       width: carouselContainer?.parentElement?.offsetWidth,
       height: carouselContainer?.parentElement?.offsetHeight
     })
   }, [
+    dimensions?.fixedSizes,
     carouselContainer?.parentElement?.offsetWidth,
     carouselContainer?.parentElement?.offsetHeight,
     carouselContainer?.parentElement?.clientHeight,
-    windowSizes.ar
+    windowSizes
   ])
 
   const imageTransformations = useMemo(
     () => ({
-      width: _getTransformationsFromValue(fixedSizes?.width, carouselContainer?.clientWidth || 0),
+      width: _getTransformationsFromValue(dimensions?.fixedSizes?.width, carouselContainer?.clientWidth || 0),
       height: _getTransformationsFromValue(
-        fixedSizes?.height,
+        dimensions?.fixedSizes?.height,
         carouselContainer?.clientHeight || carouselContainer?.clientWidth || 0
       ),
       pr: true
     }),
-    [fixedSizes, carouselContainer?.clientWidth, carouselContainer?.clientHeight]
+    [dimensions?.fixedSizes, carouselContainer?.clientWidth, carouselContainer?.clientHeight]
   )
 
   return {
-    parentSizes: { ...parentSizes, width: fixedSizes?.width || parentSizes?.width } as CarouselSetup['parentSizes'],
+    parentSizes: {
+      height: dimensions?.fixedSizes?.height || parentSizes?.height,
+      width: dimensions?.fixedSizes?.width || parentSizes?.width
+    } as CarouselSetup['parentSizes'],
     carouselContainer,
     imageTransformations,
     setCarouselContainerRef

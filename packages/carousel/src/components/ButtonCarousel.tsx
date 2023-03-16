@@ -4,31 +4,30 @@ import { ForwardedRef, forwardRef, useMemo, useState } from 'react'
 
 import { useCarouselSetup } from '../hooks'
 import { BaseCarouselProps } from '../types'
-import { CarouselContainer, CarouselStep } from './Common'
+import { CarouselStep } from './Common'
+import { CarouselContainer } from './Common/styleds'
 
-export interface ButtonCarouselProps extends BaseCarouselProps {
+export interface ButtonCarouselProps<D extends any[]> extends BaseCarouselProps<D> {
   showButtons?: boolean
   forwardedRef?: ForwardedRef<HTMLDivElement>
   onCarouselChange?: (index: number) => void
 }
 
-export default function ButtonCarousel({
+export default function ButtonCarousel<D extends any[]>({
   data,
   startIndex,
-  fixedSizes,
+  dimensions,
   forwardedRef,
   onCarouselChange,
   children,
   ...rest
-}: ButtonCarouselProps) {
+}: ButtonCarouselProps<D>) {
   const [selectedStep, setSelectedStep] = useState(startIndex)
   const {
-    parentWidth,
+    parentSizes,
     imageTransformations: defaultImageTransforms,
     setCarouselContainerRef
-  } = useCarouselSetup({
-    fixedSizes
-  })
+  } = useCarouselSetup(dimensions)
 
   const { isMultipleCarousel, lastStepIndex } = useMemo(
     () => ({
@@ -46,15 +45,15 @@ export default function ButtonCarousel({
         setCarouselContainerRef(node)
         node && forwardedRef && setForwardedRef(node, forwardedRef)
       }}
-      $fixedHeight={(fixedSizes?.height || parentWidth) + 'px'}
+      $fixedHeight={dimensions?.fixedSizes?.height || parentSizes?.height || parentSizes?.width}
     >
       {/* CAROUSEL CONTENT */}
       {data.map((_, index) => {
-        if (!parentWidth) return null
+        if (!parentSizes?.width) return null
         const isCurrentStep = !isMultipleCarousel || index === selectedStep
         // has multiple steps and is on last item
         const isLastStep = isMultipleCarousel && selectedStep === lastStepIndex
-        const calculatedWidth = isCurrentStep ? 0 : parentWidth
+        const calculatedWidth = isCurrentStep ? 0 : parentSizes.width
 
         const onNext = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
           e.stopPropagation()
@@ -89,8 +88,11 @@ export default function ButtonCarousel({
             {...rest}
             key={index}
             index={index}
+            colors={{
+              background: rest.colors?.background
+            }}
             transformAmount={calculatedWidth}
-            parentWidth={parentWidth}
+            parentWidth={parentSizes.width}
             isMultipleCarousel={!!data.length}
             onPrev={onPrevious}
             onNext={onNext}

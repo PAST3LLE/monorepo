@@ -39,7 +39,8 @@ export const StaticCarouselStep = styled(BaseCarouselStep)<{
 `
 
 export const AnimatedDivContainer = styled(a.div)<{
-  $isVerticalScroll: boolean
+  $axis: AxisDirection
+  $fillContainer?: boolean
   $withBoxShadow?: boolean
   $maxWidth?: string
   $maxHeight?: string
@@ -53,9 +54,21 @@ export const AnimatedDivContainer = styled(a.div)<{
   border-radius: ${({ $borderRadius = '0.9rem' }) => $borderRadius};
   overflow: hidden;
 
-  max-width: ${({ $maxWidth }) => ($maxWidth ? $maxWidth : 'none')};
-  max-height: ${({ $maxHeight }) => ($maxHeight ? $maxHeight : 'none')};
-  ${({ $isVerticalScroll }) => ($isVerticalScroll ? 'width: 100%;' : 'height: 100%;')}
+  width: 100%;
+  height: 100%;
+  max-width: ${({ $maxWidth = 'none' }) => $maxWidth};
+  max-height: ${({ $maxHeight = 'none' }) => $maxHeight};
+
+  ${({ $axis, $fillContainer }) =>
+    $fillContainer
+      ? `
+    width: 100%;
+    height: 100%;
+    `
+      : $axis === 'y'
+      ? 'width: 100%;'
+      : 'height: 100%;'}
+
   ${({ $withBoxShadow = true, theme }) =>
     $withBoxShadow && `box-shadow: 0px 0.1rem 2rem 0.9rem ${transparentize(0.5, theme.black)};`}
 
@@ -145,6 +158,7 @@ export const CarouselIndicator = styled.div<{ isCurrent: boolean; color?: string
   font-weight: 400;
   padding: 0.25rem 0;
 `
+
 export type AbsolutePosition =
   | 'bottom-left'
   | 'middle-left'
@@ -154,6 +168,7 @@ export type AbsolutePosition =
   | 'top-right'
   | 'middle-bottom'
   | 'middle-top'
+
 export function getAbsolutePosition(position: AbsolutePosition) {
   switch (position) {
     case 'bottom-left':

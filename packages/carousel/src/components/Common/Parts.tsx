@@ -2,6 +2,7 @@ import { AxisDirection } from '@past3lle/carousel-hooks'
 import { OFF_WHITE } from '@past3lle/theme'
 import React from 'react'
 import { ChevronLeft, ChevronRight } from 'react-feather'
+import { DEFAULT_CAROUSEL_ACCENT_COLOR } from 'src/constants/config'
 
 import { BaseCarouselProps } from '../../types'
 import {
@@ -13,7 +14,7 @@ import {
   StaticCarouselStep
 } from '../Common/styleds'
 
-export type CarouselStepsProps = Pick<BaseCarouselProps, 'accentColor' | 'onCarouselItemClick'> & {
+export type CarouselStepsProps = Pick<BaseCarouselProps<any[]>, 'colors' | 'onCarouselItemClick'> & {
   children: React.ReactNode
   index: number
   parentWidth: number
@@ -31,7 +32,7 @@ export function CarouselStep(props: CarouselStepsProps) {
   const {
     children,
     index,
-    accentColor,
+    colors,
     transformAmount,
     parentWidth,
     showButtons,
@@ -45,16 +46,17 @@ export function CarouselStep(props: CarouselStepsProps) {
     <StaticCarouselStep
       id={'carousel-step-' + index}
       justifyContent="center"
+      backgroundColor={colors?.background || 'transparent'}
       $transformAmount={transformAmount}
       $width={parentWidth}
     >
       {children}
       {showButtons && isMultipleCarousel && (
         <CarouselButtonContainer onClick={onCarouselItemClick}>
-          <CarouselButton onClick={onPrev ?? undefined} buttonColor={accentColor}>
+          <CarouselButton onClick={onPrev ?? undefined} buttonColor={colors?.accent || DEFAULT_CAROUSEL_ACCENT_COLOR}>
             <ChevronLeft />
           </CarouselButton>
-          <CarouselButton onClick={onNext ?? undefined} buttonColor={accentColor}>
+          <CarouselButton onClick={onNext ?? undefined} buttonColor={colors?.accent || DEFAULT_CAROUSEL_ACCENT_COLOR}>
             <ChevronRight />
           </CarouselButton>
         </CarouselButtonContainer>
@@ -71,7 +73,6 @@ export interface CarouselIndicatorProps {
   position?: AbsolutePosition
   currentIndex: number
 }
-
 export const CarouselIndicators = ({
   color,
   currentIndex,

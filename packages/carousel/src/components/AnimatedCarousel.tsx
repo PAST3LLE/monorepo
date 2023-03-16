@@ -1,26 +1,25 @@
 import React from 'react'
+import { useMemo } from 'react'
 
 import { useCarouselSetup } from '../hooks'
 import { BaseAnimatedCarouselProps } from '../types'
-import { AnimatedDivContainer, CarouselContainer, CarouselIndicators, CarouselStep } from './Common'
+import { CarouselIndicators, CarouselStep } from './Common'
+import { AnimatedDivContainer, CarouselContainer } from './Common/styleds'
 
-export default function AnimatedCarousel({
+export default function AnimatedCarousel<D extends any[]>({
   data,
   axis,
-  fixedSizes,
-  accentColor,
-  touchAction,
   animationProps,
-  indicatorProps = { showIndicators: true },
+  dimensions,
+  colors,
+  touchAction,
   children
-}: BaseAnimatedCarouselProps) {
+}: BaseAnimatedCarouselProps<D>) {
   const {
     parentSizes,
     imageTransformations: defaultImageTransforms,
     setCarouselContainerRef
-  } = useCarouselSetup({
-    fixedSizes
-  })
+  } = useCarouselSetup(dimensions)
 
   const {
     bind,
@@ -29,6 +28,16 @@ export default function AnimatedCarousel({
     refCallbacks: { setItemSizeRef, setScrollingZoneRef }
   } = animationProps
 
+  const calculatedSizes = useMemo(
+    () =>
+      dimensions?.fillContainer
+        ? { height: '100%', width: '100%' }
+        : axis === 'x'
+        ? { width: Math.max(itemSize, parentSizes?.width || 0) }
+        : { height: Math.max(itemSize, parentSizes?.height || 0) },
+    [axis, dimensions?.fillContainer, itemSize, parentSizes?.height, parentSizes?.width]
+  )
+
   return (
     <CarouselContainer
       id="#carousel-container"
@@ -36,40 +45,36 @@ export default function AnimatedCarousel({
         setCarouselContainerRef(node)
         setItemSizeRef(node)
       }}
-      $fixedHeight={fixedSizes?.height || parentSizes?.height || parentSizes?.width}
+      $fixedHeight={dimensions?.fixedSizes?.height || parentSizes?.height || parentSizes?.width}
       $touchAction={touchAction}
     >
-      {indicatorProps.showIndicators ||
-        (indicatorProps?.position && (
-          <CarouselIndicators
-            position={indicatorProps.position}
-            axis={axis}
-            size={data.length}
-            currentIndex={currentIndex}
-            color={accentColor}
-            zIndex={indicatorProps.zIndex}
-          />
-        ))}
+      <CarouselIndicators
+        size={data.length}
+        currentIndex={currentIndex}
+        color={colors?.accent || 'black'}
+        axis={axis}
+      />
       {/* CAROUSEL CONTENT */}
-      {springs.map((props, index, { length }) => {
-        if (!parentSizes?.width) return null
+      {springs.map((interpolatedProps, index, { length }) => {
+        if (!parentSizes?.width || !parentSizes?.height) return null
 
-        const styleProps = axis === 'x' ? { ...props, width: itemSize } : { ...props, height: itemSize }
+        const animatedStyleProps = { ...interpolatedProps, ...calculatedSizes }
 
         return (
           <AnimatedDivContainer
             {...bind(index)}
             key={index}
             ref={setScrollingZoneRef}
-            style={styleProps}
+            style={animatedStyleProps}
+            // custom style props
+            $axis={axis}
             $borderRadius="0px"
-            $withBoxShadow={false}
-            $isVerticalScroll={axis === 'y'}
             $touchAction={touchAction}
+            $withBoxShadow={false}
           >
             <CarouselStep
               index={index}
-              accentColor={accentColor}
+              colors={colors}
               parentWidth={parentSizes.width}
               transformAmount={0}
               showButtons={false}

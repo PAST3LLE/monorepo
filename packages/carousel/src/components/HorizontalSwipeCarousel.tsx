@@ -1,29 +1,30 @@
 import { useLimitedHorizontalSwipe } from '@past3lle/carousel-hooks'
 import React from 'react'
 
+import { DEFAULT_PLACEHOLDER_SIZE } from '../constants/config'
 import { BaseCarouselProps, WithTouchAction } from '../types'
 import AnimatedCarousel from './AnimatedCarousel'
 
-export default function HorizontalSwipeCarousel({
+export default function HorizontalSwipeCarousel<D extends any[]>({
   data,
-  fixedSizes,
-  sizeOptions,
+  dimensions,
   touchAction,
   ...rest
-}: Omit<BaseCarouselProps, 'axis'> & WithTouchAction) {
+}: BaseCarouselProps<D> & WithTouchAction) {
   const animationProps = useLimitedHorizontalSwipe(data, {
-    sizeOptions: { fixedSize: fixedSizes?.width, minSize: sizeOptions.minSize }
+    sizeOptions: {
+      fixedSize: dimensions?.fixedSizes?.width,
+      minSize: dimensions?.placeholderSize || DEFAULT_PLACEHOLDER_SIZE
+    }
   })
 
   return (
     <AnimatedCarousel
       {...rest}
-      axis="x"
-      touchAction={touchAction}
-      fixedSizes={fixedSizes}
-      sizeOptions={sizeOptions}
       data={data}
+      dimensions={dimensions}
       animationProps={animationProps}
+      touchAction={touchAction}
     />
   )
 }
