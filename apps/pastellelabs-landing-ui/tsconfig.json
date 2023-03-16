@@ -1,0 +1,43 @@
+{
+    "extends": "../../tsconfig.build.json",
+    "include": [
+        "src/**/*",
+        "src/web3/old_abis/*.json",
+        "src/mock/**/*.json",
+        "src/mock/**/*.js"
+    ],
+    "compilerOptions": {
+        "baseUrl": "src",
+        "module": "esnext",
+        "rootDir": ".",
+        "outDir": "./build",
+        "composite": true,
+        "allowJs": true
+    },
+    "references": [
+        {
+            "path": "../../packages/assets"
+        },
+        {
+            "path": "../../packages/components"
+        },
+        {
+            "path": "../../packages/constants"
+        },
+        {
+            "path": "../../packages/hooks"
+        },
+        {
+            "path": "../../packages/carousel"
+        },
+        {
+            "path": "../../packages/theme"
+        },
+        {
+            "path": "../../packages/types"
+        },
+        {
+            "path": "../../packages/utils"
+        }
+    ]
+}
