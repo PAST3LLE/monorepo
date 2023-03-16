@@ -25,13 +25,13 @@
             "path": "../../packages/constants"
         },
         {
+            "path": "../../packages/hooks"
+        },
+        {
             "path": "../../packages/skillforge-web3"
         },
         {
             "path": "../../packages/skillforge-widget"
-        },
-        {
-            "path": "../../packages/hooks"
         },
         {
             "path": "../skills-nft"

@@ -6,6 +6,12 @@
             "@past3lle/assets/*": [
                 "packages/assets/src/*"
             ],
+            "@past3lle/carousel/*": [
+                "packages/carousel/src/*"
+            ],
+            "@past3lle/carousel-hooks/*": [
+                "packages/carousel-hooks/src/*"
+            ],
             "@past3lle/components/*": [
                 "packages/components/src/*"
             ],
@@ -14,6 +20,9 @@
             ],
             "@past3lle/hooks/*": [
                 "packages/hooks/src/*"
+            ],
+            "@past3lle/pastellelabs-landing-ui/*": [
+                "apps/pastellelabs-landing-ui/src/*"
             ],
             "@past3lle/skillforge-ui/*": [
                 "apps/skillforge-ui/src/*"
@@ -43,6 +52,12 @@
             "path": "packages/assets"
         },
         {
+            "path": "packages/carousel-hooks"
+        },
+        {
+            "path": "packages/carousel"
+        },
+        {
             "path": "packages/components"
         },
         {
@@ -65,6 +80,9 @@
         },
         {
             "path": "packages/utils"
+        },
+        {
+            "path": "apps/pastellelabs-landing-ui"
         },
         {
             "path": "apps/skillforge-ui"
