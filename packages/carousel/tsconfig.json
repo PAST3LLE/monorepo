@@ -1,0 +1,34 @@
+{
+    "extends": "../../tsconfig.build.json",
+    "compilerOptions": {
+        "baseUrl": "./",
+        "module": "esnext",
+        "rootDir": "./src",
+        "outDir": "./dist",
+        "composite": true
+    },
+    "references": [
+        {
+            "path": "../carousel-hooks"
+        },
+        {
+            "path": "../components"
+        },
+        {
+            "path": "../hooks"
+        },
+        {
+            "path": "../theme"
+        },
+        {
+            "path": "../utils"
+        }
+    ],
+    "include": [
+        "./src/**/*"
+    ],
+    "exclude": [
+        "./src/**/*.fixture.tsx?",
+        "./src/**/*.decorator.tsx?"
+    ]
+}

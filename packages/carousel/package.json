@@ -1,0 +1,100 @@
+{
+  "name": "@past3lle/carousel",
+  "version": "0.0.1",
+  "description": "PAST3LLE animated carousel built with @past3lle/carousel-hooks, usegesture, and react-springs",
+  "keywords": [
+    "springs",
+    "carousel",
+    "animation",
+    "scroll",
+    "swipe"
+  ],
+  "sideEffects": false,
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "directory": "packages/carousel",
+    "url": "https://github.com/PAST3LLE/monorepo.git"
+  },
+  "author": "pas3lle",
+  "license": "MIT",
+  "scripts": {
+    "clean": "rm -rf dist && rm -rf tsconfig.tsbuildinfo",
+    "compile": "tsdx build && cp \"./package.json\" ./dist/",
+    "build": "yarn clean && yarn compile",
+    "prepack": "yarn build",
+    "start": "tsdx watch",
+    "test": "echo 'removed default test' ",
+    "alt-test": "tsc test --env=jsdom",
+    "test:watch": "tsc test --env=jsdom --watchAll",
+    "test:ci": "yarn alt-test --coverage --no-watch --watch=false --watchAll=false --no-watchman --forceExit --detectOpenHandles",
+    "pre-commit": "pretty-quick --staged && yarn test:ci && yarn build",
+    "lint": "prettier --write ./src/** --ignore-path '../../.prettierignore'",
+    "cosmos": "cosmos",
+    "cosmos:export": "cosmos-export"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "\\.(css|less)$": "identity-obj-proxy",
+      ".+\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/src/__mocks__/file-mock.js"
+    },
+    "testMatch": [
+      "<rootDir>src/**/__tests__/*.{ts,tsx}"
+    ]
+  },
+  "peerDependencies": {
+    "react": ">=16",
+    "react-router-dom": ">=6",
+    "styled-components": ">=5"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.12",
+    "@rollup/plugin-image": "^3.0.1",
+    "@testing-library/jest-dom": "^5.1.1",
+    "@testing-library/react": "^13.4.0",
+    "@types/lodash.clamp": "^4.0.7",
+    "@types/react": "^18.0.10",
+    "@types/react-dom": "^18.0.10",
+    "@types/react-router-hash-link": "^2.4.5",
+    "@types/rebass": "^4.0.10",
+    "@types/styled-components": "^5.1.26",
+    "babel-plugin-annotate-pure-calls": "^0.4.0",
+    "babel-plugin-styled-components": "^1.10.6",
+    "eslint-plugin-react": "^7.32.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "pretty-quick": "^2.0.1",
+    "react": "^18.0.10",
+    "react-cosmos": "^5.7.2",
+    "react-dom": "^18.0.10",
+    "react-router-dom": "^6.7.0",
+    "rollup-plugin-svg": "^2.0.0",
+    "styled-components": "^5.3.6",
+    "tsdx": "^0.14.1",
+    "tslib": "^2.4.1",
+    "typescript": "^4.9.4"
+  },
+  "dependencies": {
+    "@past3lle/carousel-hooks": "^0.0.1",
+    "@past3lle/components": "^0.0.44",
+    "@past3lle/hooks": "^0.0.12",
+    "@past3lle/theme": "^0.0.29",
+    "@past3lle/utils": "^0.0.17",
+    "@reach/dialog": "^0.18.0",
+    "@react-spring/web": "^9.4.3",
+    "@use-gesture/react": "^10.2.23",
+    "lodash.clamp": "^4.0.3",
+    "polished": "^4.2.2",
+    "react-feather": "^2.0.10",
+    "react-popper": "^2.3.0",
+    "react-spring": "^9.6.1",
+    "rebass": "^4.0.7"
+  }
+}
