@@ -1,7 +1,4 @@
-import {
-  /* useDrag, */
-  useGesture
-} from '@use-gesture/react'
+import { useDrag } from '@use-gesture/react'
 import { useRef, useState } from 'react'
 import { useSprings } from 'react-spring'
 
@@ -31,16 +28,14 @@ export function useLimitedSwipe(
     }),
     [itemSize]
   )
-  const commonGestureProps = {
-    axis,
-    indexOptions: { current: indexRef, setIndex: setIndexState, last: data.length - 1 },
-    itemSize
-  }
-  const bind = useGesture(
-    {
-      onDrag: utils.drag.limited([, api], commonGestureProps)
-    },
-    { drag: { axis }, wheel: { axis, preventDefault: true } }
+
+  const bind = useDrag(
+    utils.drag.limited([, api], {
+      axis,
+      indexOptions: { current: indexRef, setIndex: setIndexState, last: data.length - 1 },
+      itemSize
+    }),
+    { axis }
   )
 
   return {
