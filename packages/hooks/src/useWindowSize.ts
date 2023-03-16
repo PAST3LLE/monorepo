@@ -1,22 +1,27 @@
 import { useEffect, useState } from 'react'
 
 const IS_CLIENT = window instanceof Window || typeof window === 'object'
+let handler: (() => void) | undefined = undefined
 export function useWindowSize() {
   const [windowSize, setWindowSize] = useState(_getSize)
   useEffect(() => {
-    function handleCheckWindowSize() {
-      setWindowSize(_getSize())
-    }
-    // initial call
-    handleCheckWindowSize()
-    if (IS_CLIENT) {
-      window.addEventListener('resize', handleCheckWindowSize)
-      return () => {
-        window.removeEventListener('resize', handleCheckWindowSize)
+    handler =
+      handler ||
+      function handleCheckWindowSize() {
+        setWindowSize(_getSize())
       }
+
+    if (handler && IS_CLIENT) {
+      handler()
+      window.addEventListener('resize', handler)
     }
-    return undefined
+
+    return () => {
+      handler && window.removeEventListener('resize', handler)
+      handler = undefined
+    }
   }, [])
+
   return windowSize
 }
 
