@@ -8,31 +8,29 @@ import AnimatedCarousel from './AnimatedCarousel'
 
 export default function VerticalSwipeCarousel({
   data,
-  fixedSizes,
-  sizeOptions,
-  infiniteScrollOptions,
+  dimensions,
   touchAction,
-  indicatorProps,
+  indicatorOptions,
+  infiniteScrollOptions,
   ...rest
-}: Omit<BaseCarouselProps, 'axis'> & WithTouchAction & { infiniteScrollOptions: InfiniteScrollOptions }) {
+}: Omit<BaseCarouselProps<any[]>, 'axis'> & WithTouchAction & { infiniteScrollOptions: InfiniteScrollOptions }) {
   const mobileAnimationProps = useLimitedVerticalSwipe(data, {
-    sizeOptions: { fixedSize: fixedSizes?.height, minSize: sizeOptions.minSize }
+    sizeOptions: { fixedSize: dimensions?.fixedSizes?.height, minSize: dimensions?.placeholderSize }
   })
 
   const webAnimationProps = useInfiniteVerticalScroll(data, {
-    sizeOptions: { fixedSize: fixedSizes?.height, minSize: sizeOptions.minSize },
+    sizeOptions: { fixedSize: dimensions?.fixedSizes?.height, minSize: dimensions?.placeholderSize },
     ...infiniteScrollOptions
   })
 
   return (
     <AnimatedCarousel
       {...rest}
-      axis="y"
-      indicatorProps={indicatorProps}
-      touchAction={touchAction}
-      fixedSizes={fixedSizes}
-      sizeOptions={sizeOptions}
       data={data}
+      axis="y"
+      indicatorOptions={indicatorOptions}
+      touchAction={touchAction}
+      dimensions={dimensions}
       animationProps={isMobile ? mobileAnimationProps : webAnimationProps}
     />
   )

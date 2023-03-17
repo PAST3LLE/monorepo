@@ -1,9 +1,8 @@
 import { AxisDirection } from '@past3lle/carousel-hooks'
-import { OFF_WHITE } from '@past3lle/theme'
 import React from 'react'
 import { ChevronLeft, ChevronRight } from 'react-feather'
-import { DEFAULT_CAROUSEL_ACCENT_COLOR } from 'src/constants/config'
 
+import { DEFAULT_CAROUSEL_ACCENT_COLOR } from '../../constants/config'
 import { BaseCarouselProps } from '../../types'
 import {
   AbsolutePosition,
@@ -68,25 +67,25 @@ export function CarouselStep(props: CarouselStepsProps) {
 export interface CarouselIndicatorProps {
   size: number
   axis: AxisDirection
-  color?: string
+  accent?: string
   zIndex?: number
   position?: AbsolutePosition
   currentIndex: number
 }
 export const CarouselIndicators = ({
-  color,
-  currentIndex,
+  axis,
   size,
   zIndex = 900,
-  axis,
-  position = 'bottom-right'
+  accent = DEFAULT_CAROUSEL_ACCENT_COLOR,
+  position = 'bottom-right',
+  currentIndex
 }: CarouselIndicatorProps) => {
   if (size <= 1) return null
 
   return (
     <CarouselIndicatorWrapper axis={axis} zIndex={zIndex} position={position}>
       {Array.from({ length: size }).map((_, index) => (
-        <CarouselIndicator key={index} isCurrent={currentIndex === index} color={OFF_WHITE || color}>
+        <CarouselIndicator key={index} isCurrent={currentIndex === index} color={accent}>
           {index + 1}
         </CarouselIndicator>
       ))}

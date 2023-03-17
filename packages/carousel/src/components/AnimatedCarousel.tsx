@@ -9,10 +9,11 @@ import { AnimatedDivContainer, CarouselContainer } from './Common/styleds'
 export default function AnimatedCarousel<D extends any[]>({
   data,
   axis,
-  animationProps,
-  dimensions,
   colors,
+  dimensions,
   touchAction,
+  animationProps,
+  indicatorOptions = { showIndicators: true },
   children
 }: BaseAnimatedCarouselProps<D>) {
   const {
@@ -48,12 +49,17 @@ export default function AnimatedCarousel<D extends any[]>({
       $fixedHeight={dimensions?.fixedSizes?.height || parentSizes?.height || parentSizes?.width}
       $touchAction={touchAction}
     >
-      <CarouselIndicators
-        size={data.length}
-        currentIndex={currentIndex}
-        color={colors?.accent || 'black'}
-        axis={axis}
-      />
+      {indicatorOptions.showIndicators ||
+        (indicatorOptions?.position && (
+          <CarouselIndicators
+            position={indicatorOptions.position}
+            axis={axis}
+            size={data.length}
+            currentIndex={currentIndex}
+            accent={colors?.accent}
+            zIndex={indicatorOptions.zIndex}
+          />
+        ))}
       {/* CAROUSEL CONTENT */}
       {springs.map((interpolatedProps, index, { length }) => {
         if (!parentSizes?.width || !parentSizes?.height) return null

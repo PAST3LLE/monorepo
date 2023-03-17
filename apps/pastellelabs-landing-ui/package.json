@@ -22,7 +22,7 @@
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "lint": "npx prettier --write src --ignore-path ./.prettierignore --config ./.prettierrc",
     "start:mock": "REACT_APP_IS_MOCK=true && yarn start",
-    "start": "PORT=7070 GENERATE_SOURCEMAP=false craco start",
+    "start": "PORT=7777 GENERATE_SOURCEMAP=false craco start",
     "build": "craco build",
     "build:serve": "DISABLE_ESLINT_PLUGIN='true' craco build && npx serve build -l 666",
     "test": "craco test --env=jsdom",
