@@ -19,6 +19,9 @@
             "path": "../../packages/assets"
         },
         {
+            "path": "../../packages/carousel"
+        },
+        {
             "path": "../../packages/components"
         },
         {
@@ -26,9 +29,6 @@
         },
         {
             "path": "../../packages/hooks"
-        },
-        {
-            "path": "../../packages/carousel"
         },
         {
             "path": "../../packages/theme"
