@@ -4,7 +4,7 @@ import { ForwardedRef, forwardRef, useMemo, useState } from 'react'
 
 import { useCarouselSetup } from '../hooks'
 import { BaseCarouselProps } from '../types'
-import { CarouselStep } from './Common'
+import { CarouselItem } from './Common'
 import { CarouselContainer } from './Common/styleds'
 
 export interface ButtonCarouselProps<D extends any[]> extends BaseCarouselProps<D> {
@@ -84,7 +84,7 @@ export default function ButtonCarousel<D extends any[]>({
         }
 
         return (
-          <CarouselStep
+          <CarouselItem
             {...rest}
             key={index}
             index={index}
@@ -98,7 +98,7 @@ export default function ButtonCarousel<D extends any[]>({
             onNext={onNext}
           >
             {children({ index, defaultImageTransforms, isLast: index === length - 1 })}
-          </CarouselStep>
+          </CarouselItem>
         )
       })}
     </CarouselContainer>

@@ -10,7 +10,7 @@ import {
   CarouselButtonContainer,
   CarouselIndicator,
   CarouselIndicatorWrapper,
-  StaticCarouselStep
+  CarouselItemContainer
 } from '../Common/styleds'
 
 export type CarouselStepsProps = Pick<BaseCarouselProps<any[]>, 'colors' | 'onCarouselItemClick'> & {
@@ -27,7 +27,7 @@ export type CarouselStepsProps = Pick<BaseCarouselProps<any[]>, 'colors' | 'onCa
   onPrev?: ((e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void) | null
 }
 
-export function CarouselStep(props: CarouselStepsProps) {
+export function CarouselItem(props: CarouselStepsProps) {
   const {
     children,
     index,
@@ -42,7 +42,7 @@ export function CarouselStep(props: CarouselStepsProps) {
   } = props
 
   return (
-    <StaticCarouselStep
+    <CarouselItemContainer
       id={'carousel-step-' + index}
       justifyContent="center"
       backgroundColor={colors?.background || 'transparent'}
@@ -60,7 +60,7 @@ export function CarouselStep(props: CarouselStepsProps) {
           </CarouselButton>
         </CarouselButtonContainer>
       )}
-    </StaticCarouselStep>
+    </CarouselItemContainer>
   )
 }
 

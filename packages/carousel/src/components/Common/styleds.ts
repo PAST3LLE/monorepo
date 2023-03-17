@@ -25,8 +25,7 @@ const BaseCarouselStep = styled(Row)<{
   }
 `
 
-export const AnimatedCarouselStep = styled(BaseCarouselStep)``
-export const StaticCarouselStep = styled(BaseCarouselStep)<{
+export const CarouselItemContainer = styled(BaseCarouselStep)<{
   $transformAmount: number
 }>`
   transform: ${({ $transformAmount }) => `translateX(${$transformAmount}px)`};
@@ -107,7 +106,7 @@ export const CarouselContainer = styled(ScrollerContainer).attrs({ $isVerticalSc
   ${({ $fixedWidth }) => $fixedWidth && `width: ${$fixedWidth}px;`}
 
   ${({ theme }) => theme.mediaWidth.upToSmall`
-    > ${StaticCarouselStep} {
+    > ${CarouselItemContainer} {
         max-width: 100%;
         height: auto;
       }

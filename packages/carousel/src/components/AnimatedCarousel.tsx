@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 
 import { useCarouselSetup } from '../hooks'
 import { BaseAnimatedCarouselProps } from '../types'
-import { CarouselIndicators, CarouselStep } from './Common'
+import { CarouselIndicators, CarouselItem } from './Common'
 import { AnimatedDivContainer, CarouselContainer } from './Common/styleds'
 
 export default function AnimatedCarousel<D extends any[]>({
@@ -78,7 +78,7 @@ export default function AnimatedCarousel<D extends any[]>({
             $touchAction={touchAction}
             $withBoxShadow={false}
           >
-            <CarouselStep
+            <CarouselItem
               index={index}
               colors={colors}
               parentWidth={parentSizes.width}
@@ -86,7 +86,7 @@ export default function AnimatedCarousel<D extends any[]>({
               showButtons={false}
             >
               {children({ index, defaultImageTransforms, isLast: index === length - 1 })}
-            </CarouselStep>
+            </CarouselItem>
           </AnimatedDivContainer>
         )
       })}
