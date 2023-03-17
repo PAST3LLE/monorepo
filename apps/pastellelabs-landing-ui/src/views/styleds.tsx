@@ -15,10 +15,14 @@ export const Wrapper = styled(ColumnCenter)<{ bgImage?: string; withHeader?: boo
     css`
       ${setBackgroundWithDPI(theme, urlToSimpleGenericImageSrcSet(bgImage))}
     `}
-  height: 100%;
+  width: 100vw;
   min-height: 100vh;
   gap: 2rem;
   justify-content: center;
+
+  ${upToSmall`
+    justify-content: flex-start;
+  `}
 
   > *:not(header) {
     padding: 2rem;
@@ -47,6 +51,10 @@ export const GridColumnWrapper = styled(ColumnCenter)`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   align-content: center;
+
+  ${upToSmall`
+      align-items: flex-start;
+  `}
 `
 
 export const IconContainer = styled(ColumnCenter)`
@@ -55,6 +63,7 @@ export const IconContainer = styled(ColumnCenter)`
   display: grid;
   grid-template-rows: 0px 230px min-content 80px;
   align-items: start;
+  justify-content: space-evenly;
   gap: 2rem;
 
   text-align: center;
@@ -67,9 +76,9 @@ export const IconContainer = styled(ColumnCenter)`
 
   ${upToSmall`
         grid-template-rows: 0px auto min-content auto;
-        gap: 2rem;
+        gap: 1.5rem;
         picture {
-            width: 20vw;
+            width: 17vw;
           }
     `}
 `

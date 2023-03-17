@@ -1,8 +1,10 @@
 import { DIMENSIONS_MAP } from './dimensions'
+import { Button } from '@past3lle/components'
 import {
   FontCssProvider,
   setBackgroundWithDPI,
   StaticGlobalCssProvider,
+  upToSmall,
   urlToSimpleGenericImageSrcSet
 } from '@past3lle/theme'
 import React from 'react'
@@ -21,11 +23,6 @@ const CustomGlobalStyles = createGlobalStyle`
               'https://cdn.shopify.com/s/files/1/0567/9389/0867/products/ascendance-stairs-2_bd74580f-639a-4688-8398-fbb300c18d01.png?v=1678717686'
             )
           )}
-
-          a {
-            text-decoration: none;
-            color: inherit;
-          }
     }
 
     body > div#root {
@@ -44,6 +41,20 @@ const CustomGlobalStyles = createGlobalStyle`
       }
       > article {
         overflow: revert;
+      }
+
+      a {
+        text-decoration: none;
+        color: cyan;
+      }
+
+      ${Button} {
+        font-size: 3rem;
+        font-weight: 300;
+
+        ${upToSmall`
+          font-size: 2rem;
+        `}
       }
     }
 
