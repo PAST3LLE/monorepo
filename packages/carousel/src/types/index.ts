@@ -2,10 +2,12 @@ import { SpringAnimationHookReturn } from '@past3lle/carousel-hooks'
 import { AxisDirection } from '@past3lle/carousel-hooks'
 import { SmartImageProps } from '@past3lle/components'
 import { ForwardedRef } from 'react'
-import { CarouselIndicatorProps } from 'src/components/Common'
 
+import type { ButtonCarouselProps } from '../components/ButtonCarousel'
+import { CarouselIndicatorProps } from '../components/Common'
 import { CarouselSetup } from '../hooks'
 
+export { ButtonCarouselProps }
 export type TouchActionChoices =
   | 'auto'
   | 'none'

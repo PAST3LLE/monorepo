@@ -1,5 +1,4 @@
-import { useInfiniteVerticalScroll, useLimitedVerticalSwipe } from '@past3lle/carousel-hooks'
-import { InfiniteScrollOptions } from '@past3lle/carousel-hooks/src/types'
+import { InfiniteScrollOptions, useInfiniteVerticalScroll, useLimitedVerticalSwipe } from '@past3lle/carousel-hooks'
 import { isMobile } from '@past3lle/utils'
 import React from 'react'
 
