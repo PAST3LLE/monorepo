@@ -1,4 +1,5 @@
 import * as StyledElems from '../styleds'
+import { ContactContent } from './Contact'
 import {
   Button,
   ButtonSizeVariations,
@@ -8,6 +9,7 @@ import {
   SmartImg,
   Text
 } from '@past3lle/components'
+import { useIsMobile } from '@past3lle/hooks'
 import { upToSmall, urlToSimpleGenericImageSrcSet } from '@past3lle/theme'
 import SkillForge from 'assets/png/skillforge-screen.png'
 import { PastelleLabsHeader } from 'components/Header'
@@ -31,11 +33,8 @@ const AboutContentWrapper = styled(RowCenter)`
   `}
 `
 
-const AboutFooterWrapper = styled(ColumnCenter)`
-  align-items: center;
-  height: 20vh;
-`
 export function About(props: BoxProps) {
+  const isMobile = useIsMobile()
   return (
     <StyledElems.SplashWrapper {...props}>
       <PastelleLabsHeader />
@@ -57,18 +56,7 @@ export function About(props: BoxProps) {
           </a>
         </ColumnCenter>
       </AboutContentWrapper>
-      <AboutFooterWrapper marginTop="auto">
-        <Text.SubHeader>
-          PASTELLE LABS
-          <br />
-          <a style={{ fontWeight: 200 }} href="emailto:hello@pastellelabs.com">
-            hello@pastellelabs.com
-          </a>
-          <br />
-          <br />
-          <small>Copyright {new Date().getFullYear()}</small>
-        </Text.SubHeader>
-      </AboutFooterWrapper>
+      {!isMobile && <ContactContent />}
     </StyledElems.SplashWrapper>
   )
 }

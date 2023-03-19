@@ -1,10 +1,11 @@
 import { About } from './pages/About'
+import { Contact } from './pages/Contact'
 import { Description } from './pages/Description'
 import { Intro } from './pages/Intro'
 import { VerticalSwipeCarousel } from '@past3lle/carousel'
 import { ArticleFadeIn as Main, ColumnCenter } from '@past3lle/components'
-import { useWindowSize } from '@past3lle/hooks'
-import { MEDIA_WIDTHS, ThemeProvider } from '@past3lle/theme'
+import { useIsMobile } from '@past3lle/hooks'
+import { ThemeProvider } from '@past3lle/theme'
 import React, { useCallback } from 'react'
 import { BoxProps } from 'rebass'
 import { GlobalCssProviders } from 'theme/global'
@@ -17,14 +18,14 @@ export const PAGE_CONTENT = [
 ]
 
 export function App() {
-  const sizes = useWindowSize()
-  const isMobileWidth = sizes?.width && sizes.width <= MEDIA_WIDTHS.upToSmall
+  const isMobile = useIsMobile()
 
   const Content = useCallback(() => {
-    if (isMobileWidth) {
+    if (isMobile) {
+      const pagesList = PAGE_CONTENT.concat(() => <Contact />)
       return (
         <VerticalSwipeCarousel
-          data={PAGE_CONTENT}
+          data={pagesList}
           touchAction="none"
           startIndex={0}
           colors={{ accent: 'white' }}
@@ -42,7 +43,7 @@ export function App() {
           }}
         >
           {({ index }) => {
-            const Component = PAGE_CONTENT[index]
+            const Component = pagesList[index]
             return <Component key={index} />
           }}
         </VerticalSwipeCarousel>
@@ -56,7 +57,7 @@ export function App() {
         </ColumnCenter>
       )
     }
-  }, [isMobileWidth])
+  }, [isMobile])
 
   return (
     <ThemeProvider theme={theme}>
