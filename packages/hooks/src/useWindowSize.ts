@@ -15,7 +15,7 @@ interface SpecificEvent<E extends EventTarget> extends Event {
 const IS_CLIENT = window instanceof Window || typeof window === 'object'
 let handler: ((e: SpecificEvent<Window>) => void) | undefined = undefined
 export function useWindowSize() {
-  const [windowSize, setWindowSize] = useState<WindowSize | null>({
+  const [windowSize, setWindowSize] = useState<WindowSize>({
     width: undefined,
     height: undefined,
     ar: undefined
