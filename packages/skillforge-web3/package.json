@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/skillforge-web3",
   "sideEffects": false,
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "PAST3LLE SKILLFORGE web3 hooks and tings",
   "main": "dist/esm/index.js",
   "typings": "dist/types/index.d.ts",
@@ -77,7 +77,7 @@
   },
   "dependencies": {
     "@gnosis.pm/safe-apps-wagmi": "^2.1.0",
-    "@past3lle/hooks": "^0.0.14",
+    "@past3lle/hooks": "^0.0.15",
     "@past3lle/utils": "0.0.17",
     "@web3modal/ethereum": "^2.2.0",
     "@web3modal/html": "^2.2.0",

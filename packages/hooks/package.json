@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/hooks",
   "sideEffects": false,
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "PAST3LLE common hooks e.g useDetectIntoView, useDebounce, etc.",
   "main": "dist/index.js",
   "repository": {
