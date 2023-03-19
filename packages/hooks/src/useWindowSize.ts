@@ -24,7 +24,6 @@ export function useWindowSize() {
     handler =
       handler ||
       function handleCheckWindowSize(e: SpecificEvent<Window>) {
-        console.debug('EVENT', e)
         setWindowSize(_getSize(e))
       }
 
