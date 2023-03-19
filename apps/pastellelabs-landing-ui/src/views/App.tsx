@@ -51,8 +51,8 @@ export function App() {
     } else {
       return (
         <ColumnCenter>
-          {PAGE_CONTENT.map((Content) => (
-            <Content />
+          {PAGE_CONTENT.map((Content, idx) => (
+            <Content key={idx} />
           ))}
         </ColumnCenter>
       )
