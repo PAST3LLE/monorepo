@@ -13,12 +13,14 @@ export default function useScrollZoneRefs(axisDirection: 'x' | 'y', sizeOptions?
   const [scrollingZoneTarget, setScrollingZoneRef] = useStateRef<HTMLElement | null>(null, (node) => node)
   // width or height
   const isVertical = axisDirection === 'y'
-  const [itemSize, setItemSizeRef] = useStateRef<number>(
+  const [nodeSize, setItemSizeRef] = useStateRef<number>(
     0,
-    // width or height
-    (node) =>
-      sizeOptions?.fixedSize || Math.min(isVertical ? node?.clientHeight : node?.clientWidth, sizeOptions?.minSize || 0)
+    // node width or height
+    (node) => (isVertical ? node?.clientHeight : node?.clientWidth)
   )
+
+  const itemSize =
+    sizeOptions?.fixedSize || (sizeOptions?.minSize && Math.min(sizeOptions.minSize, nodeSize)) || nodeSize
 
   useEffect(() => {
     const handler = (e: any) => e.preventDefault()
