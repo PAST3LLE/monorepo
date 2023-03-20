@@ -2,11 +2,13 @@ import { EthereumClient } from '@web3modal/ethereum'
 
 import { SkillForgeW3ProviderProps } from '../providers'
 import { SkillForgeW3WagmiClient } from '../providers/utils'
+import { MetadataFetchOptions } from '../state/Metadata/updaters/MetadataUpdater'
 import { SkillForgeContractAddressMap } from './addresses'
 import { SkillForgeMetadataUriMap } from './metadata'
 
 export interface SkillForgeW3AppConfigSkillOptions {
   idBase?: number
+  metadataFetchOptions?: MetadataFetchOptions
 }
 export interface SkillForgeW3AppConfig {
   name: string

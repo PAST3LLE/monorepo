@@ -10,16 +10,13 @@ export function ActiveSkillUpdater() {
   const [{ type }, openSidePanel] = useSidePanelAtomBase()
   const [{ width = 0 }] = useSkillForgeWindowSizeAtom()
   const [state] = useSkillsAtom()
-  const {
-    active: [currentlyActive]
-  } = state
 
   useEffect(() => {
-    const activeSkillNode = currentlyActive ? document.getElementById(currentlyActive) : null
-    const panelKey: ActiveSidePanel = `ACTIVE_SKILL::${currentlyActive}`
-    const wasBackArrow = type.includes(panelKey) // type.length > 1 && state.active.length <= type.length
-
+    const activeSkillNode = document.getElementById(state.active[0])
     if (activeSkillNode) {
+      const panelKey: ActiveSidePanel = `ACTIVE_SKILL::${state.active[0]}`
+      const wasBackArrow = type.includes(panelKey)
+
       !wasBackArrow && openSidePanel((state) => ({ type: [panelKey, ...state.type] }))
       // only non-mobile (web) sizes
       // 1. show lightning effect
@@ -31,7 +28,7 @@ export function ActiveSkillUpdater() {
     } else {
       toggleSelectedSkill(undefined)
     }
-  }, [currentlyActive, state, width, type, openSidePanel])
+  }, [openSidePanel, state, type, width])
 
   return null
 }

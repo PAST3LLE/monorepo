@@ -15,6 +15,7 @@ export function SkillForgeW3StateUpdaters(props: Omit<SkillForgeW3AppConfig, 'we
         metadataUriMap={props.metadataUris}
         contractAddressMap={props.contractAddresses}
         idBase={props.skillOptions?.idBase}
+        metadataFetchOptions={props.skillOptions?.metadataFetchOptions}
       />
       <SkillForgeBalancesUpdater contractAddressMap={props.contractAddresses} idBase={props.skillOptions?.idBase} />
       <SkillForgeWindowSizeUpdater />

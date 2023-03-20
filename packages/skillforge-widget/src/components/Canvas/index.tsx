@@ -45,12 +45,7 @@ export function SkillsCanvas() {
 
   return (
     <SkillCanvasContainer style={{ position: 'relative' }}>
-      <Row
-        width={'100%'}
-        height={80}
-        /* minHeight="8rem" */ justifyContent="space-between"
-        style={{ position: 'relative' }}
-      >
+      <Row width="100%" height={80} justifyContent="space-between" style={{ position: 'relative' }}>
         <SkillContainerAbsolute>
           {vectors.slice(0, MINIMUM_COLLECTION_BOARD_SIZE).map(({ vector }, idx) => {
             const idxToRoman = convertToRomanNumerals(idx + 1)
@@ -63,7 +58,7 @@ export function SkillsCanvas() {
           })}
         </SkillContainerAbsolute>
       </Row>
-      <SkillInnerCanvasContainer height={'100%'} width="100%" style={{ position: 'relative' }} id="CANVAS-CONTAINER">
+      <SkillInnerCanvasContainer height="100%" width="100%" style={{ position: 'relative' }} id="CANVAS-CONTAINER">
         <SkillContainerAbsolute>{VectorsMap}</SkillContainerAbsolute>
         {/* CANVAS */}
         <LightningCanvas />

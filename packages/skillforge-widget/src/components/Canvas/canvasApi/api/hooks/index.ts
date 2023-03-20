@@ -147,27 +147,32 @@ export function toggleSelectedSkill(state?: SkillsState) {
   if (!state || !selectedSkill?.vector) {
     draw = false
   } else {
-    const depsList = flattenDepsArray(state.activeDependencies)
+    const depsList = state.activeDependencies
     points = depsList.map(offsetLightningFromSkill(state))
     draw = true
-    target = new Vector(0, 0, selectedSkill.vector.X1, selectedSkill.vector.Y1)
+    target = new Vector(
+      0,
+      0,
+      selectedSkill.vector.X1 + state.sizes.width,
+      selectedSkill.vector.Y1 + state.sizes.height / 2
+    )
   }
 }
 
-function flattenDepsArray(depsList: SkillsState['activeDependencies']) {
-  return depsList.reduce<SkillId[]>((keyList, nextKey) => {
-    /* const isKeyObject = depKeyIsObject(nextKey)
-    if (isKeyObject) {
-      const { collection, required } = nextKey
-      const skillId = (idx: number) => (idx + 1) * 1000
-      keyList.push(...Array.from({ length: required }).map((_, idx): SkillId => `${collection}-${skillId(idx)}`))
-    } else  */ {
-      keyList.push(nextKey)
-    }
+// function flattenDepsArray(depsList: SkillsState['activeDependencies']) {
+//   return depsList.reduce<SkillId[]>((keyList, nextKey) => {
+//     /* const isKeyObject = depKeyIsObject(nextKey)
+//     if (isKeyObject) {
+//       const { collection, required } = nextKey
+//       const skillId = (idx: number) => (idx + 1) * 1000
+//       keyList.push(...Array.from({ length: required }).map((_, idx): SkillId => `${collection}-${skillId(idx)}`))
+//     } else  */ {
+//       keyList.push(nextKey)
+//     }
 
-    return keyList
-  }, [])
-}
+//     return keyList
+//   }, [])
+// }
 
 /* Uncomment for eventListening
 function _onMouseDown(e: MouseEvent) {

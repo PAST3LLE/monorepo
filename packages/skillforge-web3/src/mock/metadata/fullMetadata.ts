@@ -101,7 +101,7 @@ const METADATA = [
       name: 'SHIPWRECK',
       properties: {
         rarity: 'rare',
-        dependencies: [{ collection: 1, required: 3 }],
+        dependencies: ['1-1000', '1-3000', '1-5000'],
         shopifyId: 'SOME_SHOPIFY_ID',
         id: '2-1000'
       },
@@ -198,12 +198,7 @@ const METADATA = [
       name: 'TRANSCENDANCE',
       properties: {
         rarity: 'legendary',
-        dependencies: [
-          { collection: 1, required: 2 },
-          '1-6000',
-          { collection: 2, required: 2 },
-          { collection: 3, required: 3 }
-        ],
+        dependencies: ['1-2000', '1-4000', '1-6000', '2-2000', '2-1000', '3-2000', '3-3000', '3-4000'],
         shopifyId: '6758874447923',
         id: '4-1000'
       }
