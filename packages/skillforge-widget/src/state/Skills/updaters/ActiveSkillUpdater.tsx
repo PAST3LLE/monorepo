@@ -28,7 +28,7 @@ export function ActiveSkillUpdater() {
       // 2. auto-scroll to active skill
       if (!isMobileWidthOrDevice) {
         toggleSelectedSkill(vectorsState, skillsState)
-        activeSkillNode.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' })
+        activeSkillNode.scrollIntoView({ block: 'center', inline: 'center' })
       }
     } else {
       toggleSelectedSkill(undefined)
