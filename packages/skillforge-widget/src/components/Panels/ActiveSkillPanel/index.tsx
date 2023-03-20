@@ -16,6 +16,7 @@ import { darken } from 'polished'
 import React, { useMemo } from 'react'
 import styled, { useTheme } from 'styled-components'
 
+import { SHOP_URL } from '../../../constants'
 import { useGetActiveSkill } from '../../../hooks/skills'
 import { baseTheme } from '../../../theme/base'
 import { RARITY_COLOURS_MAP } from '../../../theme/constants'
@@ -235,7 +236,7 @@ function _getLockStatusColour(lockStatus: SkillLockStatus, rarity: SkillRarity) 
   }
 }
 
-const STORE_URL = process.env.NODE_ENV === 'production' ? 'https://pastelle.shop' : 'http://localhost:8080'
+const STORE_URL = process.env.NODE_ENV === 'production' ? SHOP_URL : 'http://localhost:8080'
 function _getSkillShopUri(activeSkill: SkillMetadata) {
   return `${STORE_URL}/#/SKILLS/${activeSkill.name.toLowerCase()}?referral=FORGE&id=${activeSkill.properties.shopifyId.replace(
     'gid://shopify/Product/',
