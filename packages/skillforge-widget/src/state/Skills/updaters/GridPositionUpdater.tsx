@@ -26,8 +26,7 @@ export function GridPositionUpdater() {
       : metadata.length === 1
       ? metadata[0].size
       : metadata.slice().sort((a, b) => b.size - a.size)[0].size
-    const columns =
-      metadata.length >= 1 ? Math.max(MINIMUM_COLLECTION_BOARD_SIZE, metadata.length) : MINIMUM_COLLECTION_BOARD_SIZE
+    const columns = Math.max(MINIMUM_COLLECTION_BOARD_SIZE, metadata.length)
     const rows = highestRowCount
 
     const gridHeight = Math.max(container.clientHeight - 30, MINIMUM_BOARD_HEIGHT)
@@ -38,6 +37,7 @@ export function GridPositionUpdater() {
     const columnWidth = Math.round(gridWidth / columns)
 
     return { rows, columns, rowHeight, columnWidth, gridHeight, gridWidth }
+    // NOTE: TS complains about windowSizeState which we need to re-calc on window size change(s)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [metadata, windowSizeState.height, windowSizeState.width])
 
@@ -54,6 +54,7 @@ export function GridPositionUpdater() {
     [windowSizeState.height, windowSizeState.width, active, metadata]
   )
 
+  // TODO: make this more efficient, e.g only update which vectors we know changed
   useEffect(() => {
     if (vectors.length > 0) {
       const vectorsMap = vectors.reduce((acc, next) => {

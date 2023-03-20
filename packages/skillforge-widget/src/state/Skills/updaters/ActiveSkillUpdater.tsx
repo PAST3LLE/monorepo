@@ -7,30 +7,31 @@ import { toggleSelectedSkill } from '../../../components/Canvas/canvasApi/api/ho
 import { ActiveSidePanel, useSidePanelAtomBase } from '../../SidePanel'
 
 export function ActiveSkillUpdater() {
-  const [state] = useSkillsAtom()
   const [{ type }, openSidePanel] = useSidePanelAtomBase()
   const [{ width = 0 }] = useSkillForgeWindowSizeAtom()
+  const [state] = useSkillsAtom()
   const {
     active: [currentlyActive]
   } = state
 
   useEffect(() => {
-    // TODO: fix. logic here is bad
-    // TODO: maybe make panel type names include skill id in it
     const activeSkillNode = currentlyActive ? document.getElementById(currentlyActive) : null
     const panelKey: ActiveSidePanel = `ACTIVE_SKILL::${currentlyActive}`
     const wasBackArrow = type.includes(panelKey) // type.length > 1 && state.active.length <= type.length
 
     if (activeSkillNode) {
       !wasBackArrow && openSidePanel((state) => ({ type: [panelKey, ...state.type] }))
-      // only show lightning canvas on non-mobile
-      width > MEDIA_WIDTHS.upToSmall && toggleSelectedSkill(state)
-      activeSkillNode.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' })
+      // only non-mobile (web) sizes
+      // 1. show lightning effect
+      // 2. auto-scroll to active skill
+      if (width > MEDIA_WIDTHS.upToSmall) {
+        toggleSelectedSkill(state)
+        activeSkillNode.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' })
+      }
     } else {
       toggleSelectedSkill(undefined)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentlyActive, width])
+  }, [currentlyActive, state, width, type, openSidePanel])
 
   return null
 }

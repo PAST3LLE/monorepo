@@ -10,6 +10,7 @@ export function SkillSquareSizeUpdater() {
 
   useEffect(() => {
     const canvas = document.getElementById('CANVAS-CONTAINER')
+
     if (canvas) {
       const width = canvas.clientHeight / Number(SKILLPOINT_SIZES.width.replace('vh', ''))
       setSkillSize({ width: width || 0, height: width || 0 })
