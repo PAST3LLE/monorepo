@@ -43,8 +43,10 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",
+    "@past3lle/types": "^0.0.12",
     "@rollup/plugin-image": "^3.0.1",
     "@types/jest": "^29.2.5",
+    "@types/lodash.merge": "^4.6.7",
     "@types/react": "^18.0.10",
     "@types/react-dom": "^18.0.10",
     "@types/rebass": "^4.0.10",
@@ -70,8 +72,6 @@
   "dependencies": {
     "@past3lle/assets": "^0.0.10",
     "@past3lle/constants": "^0.0.17",
-    "@past3lle/types": "^0.0.12",
-    "@types/lodash.merge": "^4.6.7",
     "lodash.merge": "^4.6.2",
     "polished": "^4.2.2",
     "rebass": "^4.0.7",
