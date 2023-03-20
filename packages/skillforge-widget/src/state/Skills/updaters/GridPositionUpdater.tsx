@@ -2,7 +2,7 @@ import { useSkillForgeMetadataReadAtom, useSkillForgeWindowSizeAtom } from '@pas
 import { MEDIA_WIDTHS } from '@past3lle/theme'
 import { useEffect, useMemo } from 'react'
 
-import { SkillVectorsMap, useSkillsAtom } from '..'
+import { SkillVectorsMap, useActiveSkillReadAtom, useVectorsAtom } from '..'
 import { calculateGridPoints } from '../../../components/Canvas/canvasApi/api/hooks'
 import {
   EMPTY_COLLECTION_ROWS_SIZE,
@@ -13,7 +13,8 @@ import {
 
 export function GridPositionUpdater() {
   const [metadata] = useSkillForgeMetadataReadAtom()
-  const [{ active, vectors }, setSkillState] = useSkillsAtom()
+  const [active] = useActiveSkillReadAtom()
+  const [{ vectors }, setVectorsState] = useVectorsAtom()
   const [windowSizeState] = useSkillForgeWindowSizeAtom()
 
   const gridConstants = useMemo(() => {
@@ -44,10 +45,7 @@ export function GridPositionUpdater() {
   useEffect(
     () => {
       if (gridConstants) {
-        setSkillState((state) => ({
-          ...state,
-          vectors: calculateGridPoints(metadata, gridConstants)
-        }))
+        setVectorsState((vectorsState) => ({ ...vectorsState, vectors: calculateGridPoints(metadata, gridConstants) }))
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -64,9 +62,9 @@ export function GridPositionUpdater() {
         }
         return acc
       }, {} as SkillVectorsMap)
-      setSkillState((state) => ({ ...state, vectorsMap }))
+      setVectorsState((state) => ({ ...state, vectorsMap }))
     }
-  }, [setSkillState, vectors])
+  }, [setVectorsState, vectors])
 
   return null
 }

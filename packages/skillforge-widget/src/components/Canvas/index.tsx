@@ -10,7 +10,7 @@ import { convertToRomanNumerals } from '@past3lle/utils'
 import React, { useMemo } from 'react'
 
 import { EMPTY_SKILL_IMAGE_HASH_LIST, MINIMUM_COLLECTION_BOARD_SIZE } from '../../constants/skills'
-import { useSkillsAtom } from '../../state/Skills'
+import { useVectorsAtom } from '../../state/Skills'
 import { SkillContainerAbsolute, SkillpointHeader } from '../Common'
 import { Skillpoint } from '../Skillpoint'
 import { LightningCanvas } from './canvasApi'
@@ -18,8 +18,7 @@ import { Vector } from './canvasApi/api/vector'
 import { SkillCanvasContainer, SkillInnerCanvasContainer } from './styleds'
 
 export function SkillsCanvas() {
-  const [state] = useSkillsAtom()
-  const { vectors } = state
+  const [{ vectors }] = useVectorsAtom()
   const [metadataMap] = useSkillForgeMetadataMapReadAtom()
   const [{ balances }] = useSkillForgeBalancesAtom()
 

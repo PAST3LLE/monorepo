@@ -6,7 +6,7 @@ import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { useGetSkillFromIdCallback } from '../../../hooks/skills'
-import { SkillGridPositionList, useSkillsAtom } from '../../../state/Skills'
+import { SkillGridPositionList, useVectorsAtom } from '../../../state/Skills'
 import { baseTheme } from '../../../theme/base'
 import { MAIN_FG } from '../../../theme/constants'
 import { useAssetsMap } from '../../../theme/utils'
@@ -16,7 +16,7 @@ import { UserConnectionStats } from '../../Web3/UserWeb3ConnectionStats'
 import { SidePanel } from '../BaseSidePanel'
 
 export function UserStatsPanel() {
-  const [{ vectors }] = useSkillsAtom()
+  const [{ vectors }] = useVectorsAtom()
   const [{ balances }] = useSkillForgeBalancesAtom()
 
   const getSkill = useGetSkillFromIdCallback()

@@ -24,14 +24,13 @@ export function LightningCanvas() {
   const { width, height } = useMemo(() => {
     const height = Math.max(canvasDOM?.parentElement?.clientHeight || 0, MINIMUM_BOARD_HEIGHT - 30)
     // const width = useWindowWidth ? window.innerWidth : canvasDOM?.parentElement?.clientWidth || 0
-    const width = calculateCanvasWidth(document.body.clientWidth)
+    const width = widgetWidth || calculateCanvasWidth(document.body.clientWidth)
     return { height, width }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     canvasDOM?.parentElement?.clientHeight,
     canvasDOM?.parentElement?.clientWidth,
     windowSize.height,
-    // eslint-disable-next-line prettier/prettier
     windowSize.width
   ])
 
@@ -46,7 +45,7 @@ export function LightningCanvas() {
 
   return (
     <CanvasContainer>
-      <StyledCanvas id={CANVAS_ID} ref={setRef} width={widgetWidth || width} height={height}></StyledCanvas>
+      <StyledCanvas id={CANVAS_ID} ref={setRef} width={width} height={height}></StyledCanvas>
 
       <SmartImg
         path={{ defaultPath: BG_LOGO_DDPX_URL_MAP.defaultUrl }}

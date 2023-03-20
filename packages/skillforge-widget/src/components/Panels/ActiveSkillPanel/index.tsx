@@ -192,6 +192,7 @@ function SkillsRow({ balances, deps, metadataMap, rowProps }: SkillsRowProps) {
         return (
           skill && (
             <Skillpoint
+              key={skill.properties.id}
               // @ts-ignore
               title={skill.name}
               hasSkill={!BigNumber.from(balances?.[skillId] || 0).isZero()}

@@ -1,7 +1,7 @@
 import { SkillForgeMetadataState, SkillId, SkillMetadata } from '@past3lle/skillforge-web3'
 import { useEffect, useState } from 'react'
 
-import { SkillGridPositionList, SkillsState } from '../../../../../state/Skills'
+import { SkillGridPositionList, SkillsState, VectorsState } from '../../../../../state/Skills'
 import { useAssetsMap } from '../../../../../theme/utils'
 import '../../../../../types'
 import { Lightning } from '../lightning'
@@ -123,16 +123,16 @@ function _animate(bgImage: HTMLImageElement) {
  * @param state SkillsState
  * @returns Vector object with new location vectors
  */
-const offsetLightningFromSkill = (state: SkillsState) => (key: SkillId) => {
-  const vectorMapAtKey = state.vectorsMap[key]
+const offsetLightningFromSkill = (vectorsState: VectorsState, skillsState: SkillsState) => (key: SkillId) => {
+  const vectorMapAtKey = vectorsState.vectorsMap[key]
 
   return {
     ...vectorMapAtKey,
     vector: new Vector(
       0,
       0,
-      (vectorMapAtKey?.vector?.X1 || 0) + state.sizes.width,
-      (vectorMapAtKey?.vector?.Y1 || 0) + state.sizes.height / 2
+      (vectorMapAtKey?.vector?.X1 || 0) + skillsState.sizes.width,
+      (vectorMapAtKey?.vector?.Y1 || 0) + skillsState.sizes.height / 2
     )
   }
 }
@@ -142,19 +142,19 @@ const offsetLightningFromSkill = (state: SkillsState) => (key: SkillId) => {
  * @param id SkillId - from metadata
  * @param state SkillsState
  */
-export function toggleSelectedSkill(state?: SkillsState) {
-  const selectedSkill = state?.active ? state?.vectorsMap[state.active[0]] : null
-  if (!state || !selectedSkill?.vector) {
+export function toggleSelectedSkill(vectorsState?: VectorsState, skillsState?: SkillsState) {
+  const selectedSkill = skillsState?.active ? vectorsState?.vectorsMap[skillsState.active[0]] : null
+  if (!vectorsState || !skillsState || !selectedSkill?.vector) {
     draw = false
   } else {
-    const depsList = state.activeDependencies
-    points = depsList.map(offsetLightningFromSkill(state))
+    const depsList = skillsState?.activeDependencies || []
+    points = depsList.map(offsetLightningFromSkill(vectorsState, skillsState))
     draw = true
     target = new Vector(
       0,
       0,
-      selectedSkill.vector.X1 + state.sizes.width,
-      selectedSkill.vector.Y1 + state.sizes.height / 2
+      selectedSkill.vector.X1 + skillsState.sizes.width,
+      selectedSkill.vector.Y1 + skillsState.sizes.height / 2
     )
   }
 }
