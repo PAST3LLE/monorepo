@@ -1,7 +1,7 @@
 import { SkillMetadata } from '@past3lle/skillforge-web3'
 
 export const SKILLPOINT_SIZES = {
-  width: '9.7vmin',
+  width: '10vmax',
   get height() {
     return this.width
   }
