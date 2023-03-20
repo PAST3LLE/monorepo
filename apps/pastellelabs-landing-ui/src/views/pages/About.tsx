@@ -38,8 +38,8 @@ export function About(props: BoxProps) {
   return (
     <StyledElems.SplashWrapper {...props}>
       <PastelleLabsHeader />
-      <AboutContentWrapper>
-        <Text.SubHeader fontWeight={300} padding="2rem" flex="1 1 200px">
+      <AboutContentWrapper width="100%">
+        <Text.SubHeader fontWeight={300} padding="2rem" width="40%">
           We are a team of experienced Web3 developers and entrepreneurs utilising this loyalty system for our own
           streetwear label, PASTELLE APPAREL.
           <br />
@@ -47,7 +47,7 @@ export function About(props: BoxProps) {
           Check out how PASTELLE APPAREL has integrated its Web3-enabled rewards program by visiting PASTELLE's
           SkillForge interface or read about other examples in our blog!
         </Text.SubHeader>
-        <ColumnCenter flex="1 1 500px">
+        <ColumnCenter width="60%">
           <SmartImg path={{ defaultPath: SkillForge }} pathSrcSet={urlToSimpleGenericImageSrcSet(SkillForge)} />
           <a href="https://skills.pastelle.shop" target="_blank">
             <Button buttonSize={ButtonSizeVariations.BIG} buttonVariant={ButtonVariations.SECONDARY}>
