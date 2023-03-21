@@ -1,7 +1,6 @@
 import { useLimitedHorizontalSwipe } from '@past3lle/carousel-hooks'
 import React from 'react'
 
-import { DEFAULT_PLACEHOLDER_SIZE } from '../constants/config'
 import { BaseCarouselProps, WithTouchAction } from '../types'
 import AnimatedCarousel from './AnimatedCarousel'
 
@@ -14,7 +13,7 @@ export default function HorizontalSwipeCarousel<D extends any[]>({
   const animationProps = useLimitedHorizontalSwipe(data, {
     sizeOptions: {
       fixedSize: dimensions?.fixedSizes?.width,
-      minSize: dimensions?.placeholderSize || DEFAULT_PLACEHOLDER_SIZE
+      minSize: dimensions?.placeholderSize
     }
   })
 

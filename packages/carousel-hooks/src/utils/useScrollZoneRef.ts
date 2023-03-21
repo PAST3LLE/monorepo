@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 import { SizeOptions } from '../types'
 
 export default function useScrollZoneRefs(axisDirection: 'x' | 'y', sizeOptions?: SizeOptions) {
-  if (!sizeOptions?.minSize)
+  if (sizeOptions?.minSize === 0)
     devWarn(
       '[ScrollRef] Setup warning! Size 0 (ZERO) minSize passed. This could cause layout issues! Check the options object passed to your useScroll animation hooks.'
     )
