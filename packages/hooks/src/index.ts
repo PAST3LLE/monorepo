@@ -23,5 +23,6 @@ export {
   useIsMediumMediaWidth,
   useIsLargeMediaWidth,
   useIsExtraLargeMediaWidth,
-  Past3lleHooksProvider
+  Past3lleHooksProvider,
+  Past3lleHooksProviderOptions
 } from './useWindowSize'
