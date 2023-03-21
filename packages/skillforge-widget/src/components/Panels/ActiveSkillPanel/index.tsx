@@ -237,10 +237,10 @@ function _getLockStatusColour(lockStatus: SkillLockStatus, rarity: SkillRarity) 
   }
 }
 
+// TODO: this fn should be local to the project using SkillForge Widget
 const STORE_URL = process.env.NODE_ENV === 'production' ? SHOP_URL : 'http://localhost:8080'
 function _getSkillShopUri(activeSkill: SkillMetadata) {
-  return `${STORE_URL}/#/SKILLS/${activeSkill.name.toLowerCase()}?referral=FORGE&id=${activeSkill.properties.shopifyId.replace(
-    'gid://shopify/Product/',
-    ''
-  )}`
+  return `${STORE_URL}/#/SKILLS/${(
+    activeSkill?.attributes?.handle || activeSkill.name
+  ).toLowerCase()}?referral=FORGE&id=${activeSkill.properties.shopifyId.replace('gid://shopify/Product/', '')}`
 }

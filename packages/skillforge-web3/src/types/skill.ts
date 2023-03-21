@@ -36,9 +36,10 @@ export interface SkillProperties extends BaseProperties {
 }
 
 export interface SkillAttributes {
+  handle?: string
   css?: string
-  theme?: { bg: string; altBg: string; color: string }
   tags?: string[]
+  theme?: { bg: string; altBg: string; color: string }
 }
 
 export type CollectionMetadata = SkilltreeMetadata<CollectionProperties>

@@ -73,6 +73,7 @@ const METADATA = [
         id: '1-5000'
       },
       attributes: {
+        handle: 'virgil-longsleeve',
         tags: ['longsleeve', 'heavy-cotton', 'oversized'],
         theme: { bg: '#1F615D', altBg: '#551D27', color: '#1e1e1e' }
       }
