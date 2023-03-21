@@ -1,4 +1,4 @@
-import { PNG } from '@past3lle/assets'
+import { PNG_LogoCircle_2x } from '@past3lle/assets'
 import { useDetectScrollIntoView } from '@past3lle/hooks'
 import { OFF_WHITE } from '@past3lle/theme'
 import React, { ForwardedRef, forwardRef, useEffect, useState } from 'react'
@@ -146,7 +146,7 @@ export const SmartVideo = forwardRef(function LazyVideo(
 export function VideoDelayer(props: CTAOverlayProps) {
   return (
     <VideoPlayCTAOverlay {...props} $height="100%" $width="120%">
-      <img src={PNG.LogoCircle_2x} />
+      <img src={PNG_LogoCircle_2x} />
     </VideoPlayCTAOverlay>
   )
 }
