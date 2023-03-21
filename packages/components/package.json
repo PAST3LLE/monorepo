@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/components",
   "sideEffects": false,
-  "version": "0.0.49",
+  "version": "0.0.50",
   "description": "common components",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -78,7 +78,7 @@
   "dependencies": {
     "@past3lle/assets": "^0.0.10",
     "@past3lle/constants": "^0.0.17",
-    "@past3lle/hooks": "^0.0.17",
+    "@past3lle/hooks": "^0.0.18",
     "@past3lle/theme": "^0.0.30",
     "@past3lle/types": "^0.0.12",
     "@past3lle/utils": "^0.0.17",
