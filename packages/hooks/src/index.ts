@@ -14,4 +14,14 @@ export * from './useLast'
 export * from './useOnClickOutside'
 export * from './useOnResize'
 export * from './usePrevious'
-export * from './useWindowSize'
+export {
+  WindowSizes,
+  useWindowSize,
+  useWindowSmallerThan,
+  useIsExtraSmallMediaWidth,
+  useIsSmallMediaWidth,
+  useIsMediumMediaWidth,
+  useIsLargeMediaWidth,
+  useIsExtraLargeMediaWidth,
+  Past3lleHooksProvider
+} from './useWindowSize'

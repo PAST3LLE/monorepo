@@ -1,29 +1,24 @@
-import debounce from 'lodash.debounce'
 import { useEffect, useState } from 'react'
 
 import { useDebouncedChangeHandler } from './useDebouncedChangeHandler'
+import { UseWindowSizeOptions, useWindowSize } from './useWindowSize'
 
-type ElemOrParentHeightProps = { findParent: boolean; elem: HTMLElement | null | undefined }
+type ElemOrParentHeightProps = { findParent: boolean; elem: HTMLElement | null | undefined } & UseWindowSizeOptions
 
-export function useElemOrParentHeight({ elem, findParent }: ElemOrParentHeightProps) {
+export function useElemOrParentHeight({ elem, findParent, debounceMs }: ElemOrParentHeightProps) {
+  const windowSizes = useWindowSize()
   const [pHeight, setpHeight] = useState<number>()
-  const [dpHeight, setdpHeight] = useDebouncedChangeHandler(pHeight, setpHeight, 300)
+  const [dpHeight, setdpHeight] = useDebouncedChangeHandler(pHeight, setpHeight, debounceMs)
 
   useEffect(() => {
     function handleWindowResize() {
       setdpHeight(findParent ? elem?.parentElement?.clientHeight : elem?.clientHeight)
     }
     if (elem) {
-      // attach listener to reset size if resized
-      window.addEventListener('resize', debounce(handleWindowResize, 400))
       // set it once
       dpHeight === undefined && handleWindowResize()
     }
-
-    return () => {
-      window.removeEventListener('resize', handleWindowResize)
-    }
-  }, [elem, elem?.parentElement, dpHeight, setdpHeight, findParent])
+  }, [elem, elem?.parentElement, windowSizes, dpHeight, findParent, setdpHeight])
 
   return dpHeight
 }
