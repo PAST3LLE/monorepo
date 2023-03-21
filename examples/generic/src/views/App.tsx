@@ -1,4 +1,4 @@
-import { PNG } from '@past3lle/assets'
+import { PNG_LogoCircle_2x } from '@past3lle/assets'
 import {
   BV,
   Button,
@@ -87,7 +87,7 @@ const App = ({ showBasic = false }: Props) => {
           margin="0rem 2rem"
           variant={BV.THEME}
           onClick={() => outerAppTheme.setMode(outerAppTheme.mode === 'DARK' ? 'LIGHT' : 'DARK')}
-          bgImage={urlToSimpleGenericImageSrcSet(PNG.LogoCircle_2x)}
+          bgImage={urlToSimpleGenericImageSrcSet(PNG_LogoCircle_2x)}
           color={'#fff'}
         >
           CHANGE OUTER APP THEME
