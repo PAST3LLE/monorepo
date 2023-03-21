@@ -45,13 +45,27 @@ function _getSize(): WindowSizes {
   }
 }
 
+/**
+ * @name useWindowSize
+ * @description Listens to window resize events and updates via CONTEXT. This requires you to FIRST place the Past3lleHooksProvider somewhere in your app ABOVE your intended use of this hook
+ * @example
+ // somewhere in app architecture
+ // e.g render
+  root.render(
+    // Provider goes here, hook used in "App", below
+    <Past3lleHooksProvider>
+      <App />
+    </Past3lleHooksProvider>
+  )
+ * @returns void
+ */
 export function useWindowSize() {
   const context = useContext(WindowSizeContext)
 
   const isInstantiated = !!context?.windowSizes
   if (!isInstantiated) {
     throw new Error(
-      '[@past3lle/hooks]::useWindowSize::Error! Cannot use "useWindowSize" outside of the Past3lleHooksProvider. Please add one to the root of your app.'
+      '[@past3lle/hooks]::useWindowSize::Error! Cannot use <useWindowSize> hook outside of the Past3lleHooksProvider. Please add one to the root of your app, ABOVE where you are intending to use the hook. Hover over hook for example use-case.'
     )
   }
 
@@ -78,6 +92,29 @@ interface ProviderOptions {
     debounceMs?: number
   }
 }
+/**
+ * @name Past3lleHooksProvider
+ * @description required to place ABOVE intended use of useWindowSize hook
+ * @param providerOptions
+ * @example
+ // OPTIONS INTERFACE
+ interface ProviderOptions {
+    children?: ReactNode
+    windowSizes?: {
+      debounceMs?: number
+    }
+  }
+  // EXAMPLE USE
+ // somewhere in app architecture
+ // e.g render
+  root.render(
+    // Provider goes here, hook used in "App", below
+    <Past3lleHooksProvider>
+      <App />
+    </Past3lleHooksProvider>
+  )
+ * @returns
+ */
 export function Past3lleHooksProvider(providerOptions?: ProviderOptions) {
   const windowSizes = useWindowSizeSetup(providerOptions?.windowSizes)
 
