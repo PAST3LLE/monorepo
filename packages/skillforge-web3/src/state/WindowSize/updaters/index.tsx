@@ -10,7 +10,7 @@ export function SkillForgeWindowSizeUpdater() {
   const [, setWindowSize] = useAtom(windowSizeAtom)
 
   useEffect(() => {
-    setWindowSize(debouncedWindowSizes)
+    debouncedWindowSizes && setWindowSize(debouncedWindowSizes)
   }, [setWindowSize, debouncedWindowSizes])
 
   return null

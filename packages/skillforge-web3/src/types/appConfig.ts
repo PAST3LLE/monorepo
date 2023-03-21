@@ -1,3 +1,4 @@
+import { Past3lleHooksProviderOptions } from '@past3lle/hooks'
 import { EthereumClient } from '@web3modal/ethereum'
 
 import { SkillForgeW3ProviderProps } from '../providers'
@@ -21,4 +22,5 @@ export interface SkillForgeW3AppConfig {
   contractAddresses: SkillForgeContractAddressMap
   metadataUris: SkillForgeMetadataUriMap
   skillOptions?: SkillForgeW3AppConfigSkillOptions
+  hooksProviderOptions?: Past3lleHooksProviderOptions
 }
