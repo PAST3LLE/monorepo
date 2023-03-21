@@ -30,7 +30,7 @@ export interface OptionalCarouselProps {
     background?: string
   }
   dimensions?: {
-    placeholderSize?: number
+    minSize?: number
     fixedSizes?: { width: number; height: number } | undefined
     fillContainer?: boolean
     fullSizeContent?: boolean

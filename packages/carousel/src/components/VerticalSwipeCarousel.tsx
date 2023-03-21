@@ -14,11 +14,11 @@ export default function VerticalSwipeCarousel({
   ...rest
 }: Omit<BaseCarouselProps<any[]>, 'axis'> & WithTouchAction & { infiniteScrollOptions: InfiniteScrollOptions }) {
   const mobileAnimationProps = useLimitedVerticalSwipe(data, {
-    sizeOptions: { fixedSize: dimensions?.fixedSizes?.height, minSize: dimensions?.placeholderSize }
+    sizeOptions: { fixedSize: dimensions?.fixedSizes?.height, minSize: dimensions?.minSize }
   })
 
   const webAnimationProps = useInfiniteVerticalScroll(data, {
-    sizeOptions: { fixedSize: dimensions?.fixedSizes?.height, minSize: dimensions?.placeholderSize },
+    sizeOptions: { fixedSize: dimensions?.fixedSizes?.height, minSize: dimensions?.minSize },
     ...infiniteScrollOptions
   })
 

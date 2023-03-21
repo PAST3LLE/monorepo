@@ -33,7 +33,7 @@ export function App() {
             position: 'top-right'
           }}
           dimensions={{
-            placeholderSize: 1200
+            minSize: 1200
           }}
           infiniteScrollOptions={{
             visible: 1,

@@ -13,7 +13,7 @@ export default function HorizontalSwipeCarousel<D extends any[]>({
   const animationProps = useLimitedHorizontalSwipe(data, {
     sizeOptions: {
       fixedSize: dimensions?.fixedSizes?.width,
-      minSize: dimensions?.placeholderSize
+      minSize: dimensions?.minSize
     }
   })
 
