@@ -2,7 +2,7 @@ import * as StyledElems from '../styleds'
 import { RowCenter, SmartImg } from '@past3lle/components'
 import { upToSmall, urlToSimpleGenericImageSrcSet } from '@past3lle/theme'
 import PastelleLabsLogo from 'assets/png/main-logo.png'
-import SkillForge from 'assets/png/skillforge-screen.png'
+import SkillForgeLocked from 'assets/png/skillforge-locked.png'
 import React from 'react'
 import { BoxProps } from 'rebass'
 import styled from 'styled-components/macro'
@@ -31,7 +31,10 @@ export function Intro(props: BoxProps) {
           pathSrcSet={urlToSimpleGenericImageSrcSet(PastelleLabsLogo)}
           width="40%"
         />
-        <SmartImg path={{ defaultPath: SkillForge }} pathSrcSet={urlToSimpleGenericImageSrcSet(SkillForge)} />
+        <SmartImg
+          path={{ defaultPath: SkillForgeLocked }}
+          pathSrcSet={urlToSimpleGenericImageSrcSet(SkillForgeLocked)}
+        />
       </ImageRow>
       <RowCenter height="20vh">
         <StyledElems.HugeHeader textAlign="center" fontWeight={300}>
