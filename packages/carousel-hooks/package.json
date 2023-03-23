@@ -1,6 +1,6 @@
 {
   "name": "@past3lle/carousel-hooks",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "PASTELLE carousel animation hooks built on top of @usegesture and react-springs",
   "sideEffects": false,
   "keywords": [
