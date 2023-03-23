@@ -4,6 +4,7 @@ import { ASSETS_MAP } from 'assets'
 import { SKILL_ID_BASE } from 'constants/skills'
 import React from 'react'
 import { GothicFontCssProvider } from 'theme/fonts'
+import { W3aStyles } from 'theme/w3aStyles'
 import { SUPPORTED_CHAINS } from 'web3/config'
 import Web3AuthConnectorInstance from 'web3/connectors/web3auth'
 import { CONTRACT_ADDRESSES_MAP, METADATA_URIS_MAP } from 'web3/constants/addresses'
@@ -60,6 +61,7 @@ const SKILLTREE_CONFIG: SkillForgeProps = {
 export function App() {
   return (
     <SkillForge config={SKILLTREE_CONFIG.config} maxWidth="90%" maxHeight="90%">
+      <W3aStyles />
       <FontCssProvider />
       <GothicFontCssProvider />
       <SkillForgeConnectedHeader />

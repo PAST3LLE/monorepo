@@ -40,8 +40,8 @@ export default function Web3AuthConnectorInstance(chains: Chain[]) {
       uxMode: 'popup',
       whiteLabel: {
         name: 'SKILLFORGE',
-        logoLight: LOGO,
-        logoDark: LOGO,
+        logoLight: TorusLogo,
+        logoDark: TorusLogo,
         defaultLanguage: 'en',
         dark: true // whether to enable dark mode. defaultValue: false
       }
@@ -56,7 +56,7 @@ export default function Web3AuthConnectorInstance(chains: Chain[]) {
     },
     walletInitOptions: {
       whiteLabel: {
-        theme: { isDark: true, colors: { primary: skilltreeTheme.modes.DEFAULT.mainBg } },
+        theme: { isDark: true, colors: { torusBrand1: skilltreeTheme.modes.DEFAULT.mainBg } },
         logoDark: TorusLogo,
         logoLight: TorusLogo
       },
