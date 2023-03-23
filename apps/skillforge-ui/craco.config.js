@@ -2,6 +2,7 @@
 // const path = require('path')
 
 // see https://github.com/gsoft-inc/craco/blob/master/packages/craco/README.md#configuration-overview
+const webpack = require("webpack")
 
 module.exports = {
   babel: {
@@ -10,31 +11,35 @@ module.exports = {
   webpack: {
     plugins: [],
     // https://webpack.js.org/configuration
-    configure: webpackConfig => ({
-      ...webpackConfig,
-      resolve: {
-        ...webpackConfig.resolve,
-        // alias: {
-        //   react: path.resolve('./node_modules/react'),
-        //   'react-dom': path.resolve('./node_modules/react-dom'),
-        //   // adjust this path as needed depending on where your webpack config is
-        //   'styled-components': path.resolve('./node_modules/styled-components')
-        // },
-        modules: [...webpackConfig.resolve.modules],
-        fallback: {
-          fs: false,
-          os: false,
-          tls: false,
-          net: false,
-          path: false,
-          zlib: false,
-          http: false,
-          https: false,
-          stream: false,
-          crypto: false,
-          assert: false
-        }
-      }
-    })
+    configure: config => {
+      const fallback = config.resolve.fallback || {};
+      Object.assign(fallback, {
+        crypto: require.resolve("crypto-browserify"),
+        stream: require.resolve("stream-browserify"),
+        assert: require.resolve("assert"),
+        http: require.resolve("stream-http"),
+        https: require.resolve("https-browserify"),
+        os: require.resolve("os-browserify"),
+        url: require.resolve("url"),
+      });
+      config.resolve.fallback = fallback;
+      config.plugins = (config.plugins || []).concat([
+        new webpack.ProvidePlugin({
+          process: "process/browser",
+          Buffer: ["buffer", "Buffer"],
+        }),
+      ]);
+      config.ignoreWarnings = [/Failed to parse source map/];
+      config.module.rules.push({
+        test: /\.(js|mjs|jsx)$/,
+        enforce: "pre",
+        loader: require.resolve("source-map-loader"),
+        resolve: {
+          fullySpecified: false,
+        },
+      });
+
+      return config
+    }
   }
 }
