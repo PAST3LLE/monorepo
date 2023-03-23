@@ -5,6 +5,8 @@ import { OpenloginAdapter } from '@web3auth/openlogin-adapter'
 import { TorusWalletConnectorPlugin } from '@web3auth/torus-wallet-connector-plugin'
 import { Web3AuthConnector } from '@web3auth/web3auth-wagmi-connector'
 import LOGO from 'assets/png/forge.png'
+import TorusLogo from 'assets/png/icons/icons8-wi-fi-router-100.png'
+import { skilltreeTheme } from 'views'
 import { Chain } from 'wagmi'
 
 export default function Web3AuthConnectorInstance(chains: Chain[]) {
@@ -34,7 +36,7 @@ export default function Web3AuthConnectorInstance(chains: Chain[]) {
   // Add openlogin adapter for customisations
   const openloginAdapterInstance = new OpenloginAdapter({
     adapterSettings: {
-      network: 'testnet',
+      network: process.env.NODE_ENV !== 'production' ? 'testnet' : 'mainnet',
       uxMode: 'popup',
       whiteLabel: {
         name: 'SKILLFORGE',
@@ -54,9 +56,9 @@ export default function Web3AuthConnectorInstance(chains: Chain[]) {
     },
     walletInitOptions: {
       whiteLabel: {
-        theme: { isDark: true, colors: { primary: '#00a8ff' } },
-        logoDark: LOGO,
-        logoLight: LOGO
+        theme: { isDark: true, colors: { primary: skilltreeTheme.modes.DEFAULT.mainBg } },
+        logoDark: TorusLogo,
+        logoLight: TorusLogo
       },
       useWalletConnect: true,
       enableLogging: true

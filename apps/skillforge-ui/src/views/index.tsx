@@ -8,7 +8,7 @@ import { SUPPORTED_CHAINS } from 'web3/config'
 import Web3AuthConnectorInstance from 'web3/connectors/web3auth'
 import { CONTRACT_ADDRESSES_MAP, METADATA_URIS_MAP } from 'web3/constants/addresses'
 
-const skilltreeTheme = createPast3lleTemplateTheme('SKILLFORGE', {
+export const skilltreeTheme = createPast3lleTemplateTheme('SKILLFORGE', {
   DEFAULT: {
     assetsMap: ASSETS_MAP
   },
