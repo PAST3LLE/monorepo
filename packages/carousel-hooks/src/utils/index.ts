@@ -162,7 +162,6 @@ const runLimitedSwipe =
       ]
 
       if (active && Math.abs(mAxis) > itemSize / 10) {
-        console.debug('here', active, mAxis, itemSize / 10)
         const clampedIdx = clamp(current.current + -gestDir, ...bounds)
         current.current = clampedIdx
         cancel?.()
