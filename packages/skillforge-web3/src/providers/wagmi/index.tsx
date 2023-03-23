@@ -1,12 +1,10 @@
 import React, { ReactNode } from 'react'
-import { WagmiConfig } from 'wagmi'
-
-import { SkillForgeW3WagmiClient } from '../utils'
+import { WagmiConfig, WagmiConfigProps } from 'wagmi'
 
 export const SkillForgeW3WagmiProvider = ({
   children,
   wagmiClient
 }: {
   children: ReactNode
-  wagmiClient: SkillForgeW3WagmiClient
+  wagmiClient: WagmiConfigProps['client']
 }) => <WagmiConfig client={wagmiClient}>{children}</WagmiConfig>

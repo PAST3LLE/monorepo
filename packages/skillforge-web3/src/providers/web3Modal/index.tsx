@@ -5,7 +5,7 @@ import { SkillForgeW3ProviderProps } from '../types'
 
 export const SkillForgeW3Modal = ({
   ethereumClient,
-  walletConnect: { projectId, ...restWalletconnectProps }
+  web3Modal: { projectId, ...restWalletconnectProps }
 }: SkillForgeW3ProviderProps) => {
   if (!projectId) {
     throw new Error('MISSING or INVALID WalletConnect options! Please check your config object.')

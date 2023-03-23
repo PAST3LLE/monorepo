@@ -5,23 +5,13 @@ import { useSkillForgeW3EthereumClient, useSkillForgeWagmiClient } from './utils
 import { SkillForgeW3WagmiProvider } from './wagmi'
 import { SkillForgeW3Modal } from './web3Modal'
 
-const SkillForgeW3Providers = ({
-  children,
-  walletconnectConfig
-}: {
-  children: ReactNode
-  walletconnectConfig: SkillForgeWeb3ProviderProps
-}) => {
-  const wagmiClient = useSkillForgeWagmiClient(walletconnectConfig)
-  const ethereumClient = useSkillForgeW3EthereumClient(
-    walletconnectConfig.ethereumClient,
-    wagmiClient,
-    walletconnectConfig.walletConnect.chains
-  )
+const SkillForgeW3Providers = ({ children, config }: { children: ReactNode; config: SkillForgeWeb3ProviderProps }) => {
+  const wagmiClient = useSkillForgeWagmiClient(config)
+  const ethereumClient = useSkillForgeW3EthereumClient(config.ethereumClient, wagmiClient, config.web3Modal.chains)
 
   return (
     <>
-      <SkillForgeW3Modal ethereumClient={ethereumClient} {...walletconnectConfig} />
+      <SkillForgeW3Modal ethereumClient={ethereumClient} {...config} />
       <SkillForgeW3WagmiProvider wagmiClient={wagmiClient}>{children}</SkillForgeW3WagmiProvider>
     </>
   )

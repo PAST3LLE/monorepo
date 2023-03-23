@@ -2,7 +2,7 @@ import { Past3lleHooksProviderOptions } from '@past3lle/hooks'
 import { EthereumClient } from '@web3modal/ethereum'
 
 import { SkillForgeW3ProviderProps } from '../providers'
-import { SkillForgeW3WagmiClient } from '../providers/utils'
+import { SkillForgeW3WagmiClientOptions } from '../providers/utils'
 import { MetadataFetchOptions } from '../state/Metadata/updaters/MetadataUpdater'
 import { SkillForgeContractAddressMap } from './addresses'
 import { SkillForgeMetadataUriMap } from './metadata'
@@ -15,8 +15,8 @@ export interface SkillForgeW3AppConfig {
   name: string
   web3: {
     standalone?: boolean
-    walletconnectProvider: SkillForgeW3ProviderProps['walletConnect']
-    wagmiClient?: SkillForgeW3WagmiClient
+    web3Modal: SkillForgeW3ProviderProps['web3Modal']
+    wagmiClient?: SkillForgeW3WagmiClientOptions
     ethereumClient?: EthereumClient
   }
   contractAddresses: SkillForgeContractAddressMap

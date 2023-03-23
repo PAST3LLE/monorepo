@@ -5,10 +5,48 @@
   "description": "PAST3LLE SKILLFORGE web3 hooks and tings",
   "main": "dist/esm/index.js",
   "typings": "dist/types/index.d.ts",
-  "exports": {
+  "old_exports": {
     "import": "./dist/esm/index.js",
     "require": "./dist/cjs/index.js",
     "default": "./dist/esm/index.js"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "types": "./dist/types/index.d.ts",
+      "require": "./dist/cjs/index.js",
+      "default": "./dist/esm/index.js"
+    },
+    "./components": {
+      "import": "./dist/esm/components/index.js",
+      "types": "./dist/components/index.d.ts",
+      "require": "./dist/cjs/components/index.js",
+      "default": "./dist/esm/components/index.js"
+    },
+    "./hooks": {
+      "import": "./dist/esm/hooks/index.js",
+      "types": "./dist/hooks/index.d.ts",
+      "require": "./dist/cjs/hooks/index.js",
+      "default": "./dist/esm/hooks/index.js"
+    },
+    "./providers": {
+      "import": "./dist/esm/providers/index.js",
+      "types": "./dist/providers/index.d.ts",
+      "require": "./dist/cjs/providers/index.js",
+      "default": "./dist/esm/providers/index.js"
+    },
+    "./state": {
+      "import": "./dist/esm/state/index.js",
+      "types": "./dist/state/index.d.ts",
+      "require": "./dist/cjs/state/index.js",
+      "default": "./dist/esm/state/index.js"
+    },
+    "./utils": {
+      "import": "./dist/esm/utils/index.js",
+      "types": "./dist/utils/index.d.ts",
+      "require": "./dist/cjs/utils/index.js",
+      "default": "./dist/esm/utils/index.js"
+    }
   },
   "repository": {
     "type": "git",
@@ -35,6 +73,7 @@
     "clean": "rm -rf dist && rm -rf tsconfig.tsbuildinfo",
     "compile:tsdx": "tsdx build --transpileOnly && cp \"./package.json\" ./dist/",
     "compile": "tsc --emitDeclarationOnly --outDir './dist/types' & tsc --project tsconfig.esm.json & tsc --project tsconfig.cjs.json && cp \"./package.json\" ./dist/",
+    "cosmos": "cosmos",
     "build": "yarn clean && yarn compile",
     "build:tsc": "yarn clean && yarn compile:tsc",
     "prepack": "yarn build",
@@ -62,32 +101,42 @@
     "url": "https://github.com/PAST3LLE/past3lle-monorepo/issues"
   },
   "resolutions": {
-    "@web3modal/ethereum": ">=2.2.0",
-    "@web3modal/react": ">=2.2.0",
-    "wagmi": ">=0.12.1"
+    "**/@web3modal/ethereum": ">=2.2.0",
+    "**/@web3modal/react": ">=2.2.0",
+    "**/*/@wagmi/core": "0.10.1"
   },
   "peerDependencies": {
-    "@ethersproject/bignumber": ">=5.7.0",
-    "@web3modal/ethereum": ">=2.1.3",
-    "@web3modal/react": ">=2.1.3",
-    "jotai": ">=1",
     "react": ">=16",
-    "styled-components": ">=5",
-    "wagmi": ">=0.12.1"
+    "styled-components": ">=5"
   },
   "dependencies": {
+    "@ethersproject/bignumber": ">=5.7.0",
     "@gnosis.pm/safe-apps-wagmi": "^2.1.0",
     "@past3lle/hooks": "^0.0.20",
     "@past3lle/utils": "0.0.17",
-    "@web3modal/ethereum": "^2.2.0",
-    "@web3modal/html": "^2.2.0",
-    "@web3modal/react": "^2.2.0",
-    "@web3modal/standalone": "^2.2.0",
+    "@web3modal/ethereum": "^2.2.2",
+    "@web3modal/html": "^2.2.2",
+    "@web3modal/react": "^2.2.2",
+    "@web3modal/standalone": "^2.2.2",
     "jotai": "^1.13.0",
-    "wagmi": "^0.12.1"
+    "wagmi": "0.12.1"
   },
   "devDependencies": {
-    "react": "^18.2.0"
+    "json-loader": "^0.5.7",
+    "react-cosmos": "^5.7.2",
+    "typescript": "^5.0.2"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   },
   "gitHead": "2bcc1e8d445933a2c17832d4b8183c3f8ebc61d0"
 }

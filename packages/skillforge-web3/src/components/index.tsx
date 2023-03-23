@@ -21,9 +21,9 @@ function ForgeW3ConnectedProviders({ config, children }: ForgeW3CoreProvidersPro
   return (
     <StrictMode>
       <SkillForgeW3Providers
-        walletconnectConfig={{
+        config={{
           appName: config.name,
-          walletConnect: config.web3.walletconnectProvider
+          ...config.web3
         }}
       >
         <SkillForgeW3StateUpdaters {...config}>{children}</SkillForgeW3StateUpdaters>
