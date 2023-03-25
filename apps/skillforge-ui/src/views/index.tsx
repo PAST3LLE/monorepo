@@ -25,10 +25,17 @@ export const skilltreeTheme = createPast3lleTemplateTheme('SKILLFORGE', {
     assetsMap: ASSETS_MAP
   }
 })
+const APP_NAME = 'PSTL SKILLTREE'
 const CLIENT_PROPS = {
-  appName: 'PSTL SKILLTREE',
+  appName: APP_NAME,
+  web3Auth: {
+    appName: APP_NAME,
+    chains: SUPPORTED_CHAINS,
+    w3aId: process.env.REACT_APP_WEB3AUTH_ID as string
+  },
   web3Modal: {
-    projectId: process.env.REACT_APP_WALLETCONNECT_KEY as string,
+    w3mId: process.env.REACT_APP_WEB3MODAL_ID as string,
+    w3aId: process.env.REACT_APP_WEB3AUTH_ID as string,
     chains: SUPPORTED_CHAINS,
     walletImages: {
       web3auth: 'https://web3auth.io/images/w3a-L-Favicon-1.svg',
@@ -43,6 +50,7 @@ const SKILLTREE_CONFIG: SkillForgeProps = {
     theme: skilltreeTheme,
     web3: {
       web3Modal: CLIENT_PROPS.web3Modal,
+      web3Auth: CLIENT_PROPS.web3Auth,
       wagmiClient: {
         options: {
           autoConnect: true,
