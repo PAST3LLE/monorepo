@@ -38,6 +38,9 @@
         },
         {
             "path": "../utils"
+        },
+        {
+            "path": "../web3-modal"
         }
     ]
 }

@@ -8,9 +8,7 @@
         "module": "ESNext"
     },
     "include": [
-        "./src/**/*",
-        "src/mock/**/*.json",
-        "src/mock/**/*.js"
+        "./src/**/*"
     ],
     "references": [
         {
@@ -24,9 +22,6 @@
         },
         {
             "path": "../utils"
-        },
-        {
-            "path": "../web3-modal"
         }
     ]
 }

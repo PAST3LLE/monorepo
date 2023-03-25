@@ -86,7 +86,7 @@ export const useIsExtraLargeMediaWidth = () => useWindowSmallerThan(MEDIA_WIDTHS
 
 export const WindowSizeContext = React.createContext<{ windowSizes: WindowSizes } | null>(null)
 
-export interface Past3lleHooksProviderOptions {
+export interface PstlHooksProviderOptions {
   windowSizes?: {
     debounceMs?: number
   }
@@ -114,7 +114,7 @@ export interface Past3lleHooksProviderOptions {
   )
  * @returns
  */
-export function Past3lleHooksProvider(props?: { children?: ReactNode } & Past3lleHooksProviderOptions) {
+export function Past3lleHooksProvider(props?: { children?: ReactNode } & PstlHooksProviderOptions) {
   const windowSizes = useWindowSizeSetup(props?.windowSizes)
 
   return <WindowSizeContext.Provider value={{ windowSizes }}>{props?.children}</WindowSizeContext.Provider>

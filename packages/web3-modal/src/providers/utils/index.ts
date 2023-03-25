@@ -4,13 +4,21 @@ import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
 import { useMemo } from 'react'
 import { WagmiConfigProps, createClient } from 'wagmi'
 
+import Web3AuthConnectorInstance, { PstlWeb3AuthConnectorProps } from '../../connectors/web3auth'
+import { ConnectorEnhanced } from '../../types'
 import { Web3ModalProps } from '../types'
+
+interface ClientConfigEnhanced extends Omit<ClientConfig, 'connectors'> {
+  connectors?: (() => ConnectorEnhanced<any, any, any>[]) | ConnectorEnhanced<any, any, any>[]
+}
 
 interface CreateWagmiClientProps {
   appName: string
   chains: Chain[]
-  projectId: string
-  options?: Partial<Pick<ClientConfig, 'connectors' | 'provider' | 'autoConnect'>>
+  w3aId: string
+  w3mId: string
+  w3aConnectorProps: PstlWeb3AuthConnectorProps
+  options?: Partial<Pick<ClientConfigEnhanced, 'connectors' | 'provider' | 'autoConnect'>>
 }
 export type WagmiClient = ReturnType<typeof createClient>
 const createWagmiClient = ({ options, ...props }: CreateWagmiClientProps): WagmiConfigProps['client'] => {
@@ -18,45 +26,54 @@ const createWagmiClient = ({ options, ...props }: CreateWagmiClientProps): Wagmi
   return createClient({
     autoConnect: true,
     connectors: [
-      ...(connectors || []),
+      // Web3Auth aka social login
+      Web3AuthConnectorInstance(props.w3aConnectorProps),
+      // Web3Modal
       ...w3mConnectors({
-        projectId: props.projectId,
+        projectId: props.w3mId,
         version: 2,
         chains: props.chains
       }),
-      new SafeConnector(props)
+      // Safe integration (in-safe-app only)
+      new SafeConnector(props),
+      // any use custom modals
+      ...(connectors || [])
     ],
-    provider: options?.provider || configureChains(props.chains, [w3mProvider({ projectId: props.projectId })]).provider
+    provider: options?.provider || configureChains(props.chains, [w3mProvider({ projectId: props.w3mId })]).provider
   })
 }
 const createEthereumClient = (wagmiClient: ReturnType<typeof createWagmiClient>, chains: Chain[]) =>
   new EthereumClient(wagmiClient, chains)
 
-export type SkillForgeW3WagmiClientOptions = {
+export type PstlW3WagmiClientOptions = {
   client?: WagmiClient
   options?: Partial<CreateWagmiClientProps['options']>
 }
-export function useSkillForgeWagmiClient(props: Web3ModalProps) {
+export function usePstlWagmiClient(props: Web3ModalProps) {
   return useMemo(
     () =>
       !props.wagmiClient?.client
         ? createWagmiClient({
             appName: props.appName,
             chains: props.web3Modal.chains,
-            projectId: props.web3Modal.projectId,
+            w3mId: props.web3Modal.w3mId,
+            w3aId: props.web3Modal.w3aId,
+            w3aConnectorProps: props.web3Auth,
             options: props.wagmiClient?.options
           })
         : props.wagmiClient.client,
     [props]
   )
 }
-export function useSkillForgeW3EthereumClient(
+export function usePstlW3EthereumClient(
   ethereumClient: EthereumClient | undefined,
   wagmiClient: ReturnType<typeof createWagmiClient>,
   chains: Chain[]
 ) {
-  return useMemo(
+  const client = useMemo(
     () => (!ethereumClient ? createEthereumClient(wagmiClient, chains) : ethereumClient),
     [chains, wagmiClient]
   )
+
+  return client
 }

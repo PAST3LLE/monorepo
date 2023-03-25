@@ -69,7 +69,7 @@ const StyledDialogContent = styled(({ minHeight, maxHeight, mobile, isOpen, isLa
   }
 `
 
-interface ModalProps {
+export interface ModalProps {
   isLargeImageModal?: boolean
   isOpen: boolean
   onDismiss: () => void
@@ -82,15 +82,15 @@ interface ModalProps {
 }
 
 export function Modal({
-  styleProps = {},
-  isLargeImageModal = false,
+  isOpen,
+  children,
+  className,
   onDismiss,
   minHeight = false,
   maxHeight = 90,
+  styleProps = {},
   initialFocusRef,
-  isOpen,
-  className,
-  children
+  isLargeImageModal = false
 }: ModalProps) {
   useEffect(() => {
     return () => {

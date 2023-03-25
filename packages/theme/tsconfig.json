@@ -9,13 +9,13 @@
     },
     "references": [
         {
+            "path": "../types"
+        },
+        {
             "path": "../assets"
         },
         {
             "path": "../constants"
-        },
-        {
-            "path": "../types"
         }
     ],
     "include": [

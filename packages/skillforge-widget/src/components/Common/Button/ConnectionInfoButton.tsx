@@ -1,7 +1,7 @@
 import { Row, Text } from '@past3lle/components'
 import { setCssBackground, urlToSimpleGenericImageSrcSet } from '@past3lle/theme'
 import { truncateAddress } from '@past3lle/utils'
-import { useWeb3Modal } from '@web3modal/react'
+import { useConnection } from '@past3lle/web3-modal'
 import { useCallback } from 'react'
 import React from 'react'
 import styled from 'styled-components'
@@ -13,16 +13,15 @@ import { OpenOptions } from './types'
 
 export function ConnectionInfoButton() {
   const { address } = useAccount()
+  const [, { openW3Modal }] = useConnection()
 
   const assetsMap = useAssetsMap()
 
-  const { open } = useWeb3Modal()
-
   const handleClick = useCallback(
     async (openOptions: OpenOptions) => {
-      open(openOptions)
+      openW3Modal(openOptions)
     },
-    [open]
+    [openW3Modal]
   )
 
   return (

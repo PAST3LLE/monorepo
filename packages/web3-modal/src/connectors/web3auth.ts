@@ -2,22 +2,59 @@
 import { CHAIN_NAMESPACES } from '@web3auth/base'
 import { Web3Auth } from '@web3auth/modal'
 import { OpenloginAdapter } from '@web3auth/openlogin-adapter'
-import { TorusWalletConnectorPlugin } from '@web3auth/torus-wallet-connector-plugin'
 import { Web3AuthConnector } from '@web3auth/web3auth-wagmi-connector'
 import { Chain } from 'wagmi'
 
 const LOGO = 'https://raw.githubusercontent.com/PAST3LLE/monorepo/main/apps/skillforge-ui/public/512_logo.png'
+const NET = process.env.NODE_ENV !== 'production' ? 'testnet' : 'mainnet'
 
-// TESTING KEY DO NOT USE IN PROD
-const AUTH_ID = 'BHloyoLW113nGn-mIfeeNqj2U0wNCXa4y83xLnR6d3FELPMz_oZ7rbY4ZEO3r0MVjQ_LX92obu1ta0NknOwfvtU'
-export default function Web3AuthConnectorInstance(chains: Chain[]) {
-  if (!AUTH_ID) throw new Error('Missing REACT_APP_WEB3AUTH_ID! Check env.')
+class Web3AuthEnhancedConnector extends Web3AuthConnector {
+  public customName: string
+  public logo: string
+
+  constructor({
+    name,
+    logo,
+    ...rest
+  }: {
+    name: string
+    logo: string
+    chains?: Chain[] | undefined
+    options: Web3AuthConnector['options']
+  }) {
+    super(rest)
+    this.customName = name
+    this.logo = logo
+  }
+}
+
+export interface PstlWeb3AuthConnectorProps {
+  appName: string
+  appLogoLight?: string
+  appLogoDark?: string
+  theme?: 'light' | 'dark'
+  chains: Chain[]
+  loginMethodsOrder?: string[]
+  modalZIndex?: string
+  w3aId: string
+}
+
+export default function Web3AuthConnectorInstance({
+  appName,
+  appLogoDark,
+  appLogoLight,
+  chains,
+  loginMethodsOrder = ['google', 'github', 'twitter', 'discord'],
+  modalZIndex = '2147483647',
+  theme = 'dark',
+  w3aId
+}: PstlWeb3AuthConnectorProps) {
+  if (!w3aId) throw new Error('Missing REACT_APP_WEB3AUTH_ID! Check env.')
   // Create Web3Auth Instance
-  const name = 'SKILLFORGE'
   const web3AuthInstance = new Web3Auth({
-    clientId: AUTH_ID,
+    clientId: w3aId,
     chainConfig: {
-      chainNamespace: CHAIN_NAMESPACES.EIP155,
+      chainNamespace: CHAIN_NAMESPACES.OTHER,
       chainId: '0x' + chains[0].id.toString(16),
       rpcTarget: chains[0].rpcUrls.default.http[0], // This is the public RPC we have added, please pass on your own endpoint while creating an app
       displayName: chains[0].name,
@@ -25,18 +62,18 @@ export default function Web3AuthConnectorInstance(chains: Chain[]) {
       ticker: chains[0].nativeCurrency?.symbol
     },
     uiConfig: {
-      appName: name,
-      theme: 'dark',
-      loginMethodsOrder: ['google', 'github', 'facebook'],
+      appName,
+      theme,
+      loginMethodsOrder,
       defaultLanguage: 'en',
-      appLogo: LOGO,
-      modalZIndex: '2147483647'
+      appLogo: appLogoLight || appLogoDark,
+      modalZIndex
     }
   })
   // Add openlogin adapter for customisations
   const openloginAdapterInstance = new OpenloginAdapter({
     adapterSettings: {
-      network: 'testnet',
+      network: NET,
       uxMode: 'popup',
       whiteLabel: {
         name: 'SKILLFORGE',
@@ -49,24 +86,9 @@ export default function Web3AuthConnectorInstance(chains: Chain[]) {
   })
   web3AuthInstance.configureAdapter(openloginAdapterInstance)
 
-  // Add Torus Wallet Plugin (optional)
-  const torusPlugin = new TorusWalletConnectorPlugin({
-    torusWalletOpts: {
-      buttonPosition: 'bottom-left'
-    },
-    walletInitOptions: {
-      whiteLabel: {
-        theme: { isDark: true, colors: { primary: '#00a8ff' } },
-        logoDark: LOGO,
-        logoLight: LOGO
-      },
-      useWalletConnect: true,
-      enableLogging: true
-    }
-  })
-  web3AuthInstance.addPlugin(torusPlugin)
-
-  return new Web3AuthConnector({
+  return new Web3AuthEnhancedConnector({
+    name: 'Social Login',
+    logo: LOGO,
     chains,
     options: {
       web3AuthInstance

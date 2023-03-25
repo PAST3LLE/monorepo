@@ -101,6 +101,7 @@
     "@past3lle/skilltree-contracts": "^0.0.1-rc.3",
     "@past3lle/theme": "^0.0.31",
     "@past3lle/utils": "^0.0.17",
+    "@past3lle/web3-modal": "^0.0.1",
     "jotai": "^1.13.1",
     "polished": "^4.2.2"
   },

@@ -1,73 +1,35 @@
 {
-  "name": "@past3lle/skillforge-web3",
+  "name": "@past3lle/web3-modal",
+  "version": "0.0.0",
   "sideEffects": false,
-  "version": "0.0.16",
-  "description": "PAST3LLE SKILLFORGE web3 hooks and tings",
-  "main": "dist/esm/index.js",
-  "typings": "dist/types/index.d.ts",
-  "old_exports": {
-    "import": "./dist/esm/index.js",
-    "require": "./dist/cjs/index.js",
-    "default": "./dist/esm/index.js"
-  },
-  "exports": {
-    ".": {
-      "import": "./dist/esm/index.js",
-      "types": "./dist/types/index.d.ts",
-      "require": "./dist/cjs/index.js",
-      "default": "./dist/esm/index.js"
-    },
-    "./components": {
-      "import": "./dist/esm/components/index.js",
-      "types": "./dist/components/index.d.ts",
-      "require": "./dist/cjs/components/index.js",
-      "default": "./dist/esm/components/index.js"
-    },
-    "./hooks": {
-      "import": "./dist/esm/hooks/index.js",
-      "types": "./dist/hooks/index.d.ts",
-      "require": "./dist/cjs/hooks/index.js",
-      "default": "./dist/esm/hooks/index.js"
-    },
-    "./providers": {
-      "import": "./dist/esm/providers/index.js",
-      "types": "./dist/providers/index.d.ts",
-      "require": "./dist/cjs/providers/index.js",
-      "default": "./dist/esm/providers/index.js"
-    },
-    "./state": {
-      "import": "./dist/esm/state/index.js",
-      "types": "./dist/state/index.d.ts",
-      "require": "./dist/cjs/state/index.js",
-      "default": "./dist/esm/state/index.js"
-    },
-    "./utils": {
-      "import": "./dist/esm/utils/index.js",
-      "types": "./dist/utils/index.d.ts",
-      "require": "./dist/cjs/utils/index.js",
-      "default": "./dist/esm/utils/index.js"
-    }
-  },
-  "repository": {
-    "type": "git",
-    "directory": "packages/skillforge-web3",
-    "url": "git+https://github.com/PAST3LLE/past3lle-monorepo.git"
-  },
+  "description": "PAST3LLE's Web3 connection modal",
   "keywords": [
     "web3",
-    "forge",
     "past3lle",
-    "skilltree",
-    "skillforge",
+    "pastelle",
+    "pstl",
+    "wallets",
+    "connection",
+    "modal",
+    "blockchain",
     "crypto",
-    "skills"
+    "social-login"
   ],
-  "author": "pastelle",
-  "homepage": "https://github.com/past3lle/schematics-monorepo/tree/main/packages/skillforge-web3#readme",
+  "author": "w3stside <david.sato64@gmail.com>",
+  "homepage": "https://github.com/past3lle/monorepo/tree/main/packages/web3-modal#readme",
   "license": "MIT",
+  "main": "dist/esm/index.js",
+  "typings": "dist/types/index.d.ts",
   "files": [
     "dist"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PAST3LLE/past3lle-monorepo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/PAST3LLE/past3lle-monorepo/issues"
+  },
   "scripts": {
     "check-types": "npx tsc --noEmit",
     "clean": "rm -rf dist && rm -rf tsconfig.tsbuildinfo",
@@ -97,9 +59,6 @@
       "<rootDir>src/**/__tests__/*.{ts,tsx}"
     ]
   },
-  "bugs": {
-    "url": "https://github.com/PAST3LLE/past3lle-monorepo/issues"
-  },
   "resolutions": {
     "**/@web3modal/ethereum": ">=2.2.0",
     "**/@web3modal/react": ">=2.2.0",
@@ -116,7 +75,6 @@
     "@past3lle/hooks": "^0.0.20",
     "@past3lle/theme": "^0.0.31",
     "@past3lle/utils": "0.0.17",
-    "@past3lle/web3-modal": "0.0.0",
     "@web3modal/ethereum": "^2.2.2",
     "@web3modal/html": "^2.2.2",
     "@web3modal/react": "^2.2.2",
@@ -139,6 +97,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "gitHead": "2bcc1e8d445933a2c17832d4b8183c3f8ebc61d0"
+  }
 }

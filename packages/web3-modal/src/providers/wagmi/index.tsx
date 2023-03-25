@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react'
 import { WagmiConfig, WagmiConfigProps } from 'wagmi'
 
-export const SkillForgeW3WagmiProvider = ({
+export const PstlW3WagmiProvider = ({
   children,
   wagmiClient
 }: {
