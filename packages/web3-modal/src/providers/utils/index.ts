@@ -4,7 +4,7 @@ import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
 import { useMemo } from 'react'
 import { WagmiConfigProps, createClient } from 'wagmi'
 
-import Web3AuthConnectorInstance, { PstlWeb3AuthConnectorProps } from '../../connectors/web3auth'
+import PstlWeb3AuthConnector, { PstlWeb3AuthConnectorProps } from '../../connectors/web3auth'
 import { ConnectorEnhanced } from '../../types'
 import { Web3ModalProps } from '../types'
 
@@ -27,7 +27,7 @@ const createWagmiClient = ({ options, ...props }: CreateWagmiClientProps): Wagmi
     autoConnect: true,
     connectors: [
       // Web3Auth aka social login
-      Web3AuthConnectorInstance(props.w3aConnectorProps),
+      PstlWeb3AuthConnector(props.w3aConnectorProps),
       // Web3Modal
       ...w3mConnectors({
         projectId: props.w3mId,

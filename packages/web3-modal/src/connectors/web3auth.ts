@@ -2,13 +2,13 @@
 import { CHAIN_NAMESPACES } from '@web3auth/base'
 import { Web3Auth } from '@web3auth/modal'
 import { OpenloginAdapter } from '@web3auth/openlogin-adapter'
-import { Web3AuthConnector } from '@web3auth/web3auth-wagmi-connector'
+import { Web3AuthConnector as Web3AuthConnectorCreator } from '@web3auth/web3auth-wagmi-connector'
 import { Chain } from 'wagmi'
 
 const LOGO = 'https://raw.githubusercontent.com/PAST3LLE/monorepo/main/apps/skillforge-ui/public/512_logo.png'
 const NET = process.env.NODE_ENV !== 'production' ? 'testnet' : 'mainnet'
 
-class Web3AuthEnhancedConnector extends Web3AuthConnector {
+class Web3AuthEnhancedConnector extends Web3AuthConnectorCreator {
   public customName: string
   public logo: string
 
@@ -20,7 +20,7 @@ class Web3AuthEnhancedConnector extends Web3AuthConnector {
     name: string
     logo: string
     chains?: Chain[] | undefined
-    options: Web3AuthConnector['options']
+    options: Web3AuthConnectorCreator['options']
   }) {
     super(rest)
     this.customName = name
@@ -34,16 +34,18 @@ export interface PstlWeb3AuthConnectorProps {
   appLogoDark?: string
   theme?: 'light' | 'dark'
   chains: Chain[]
+  listingName?: string
   loginMethodsOrder?: string[]
   modalZIndex?: string
   w3aId: string
 }
 
-export default function Web3AuthConnectorInstance({
+export default function Web3AuthConnector({
   appName,
   appLogoDark,
   appLogoLight,
   chains,
+  listingName = 'Social',
   loginMethodsOrder = ['google', 'github', 'twitter', 'discord'],
   modalZIndex = '2147483647',
   theme = 'dark',
@@ -87,7 +89,7 @@ export default function Web3AuthConnectorInstance({
   web3AuthInstance.configureAdapter(openloginAdapterInstance)
 
   return new Web3AuthEnhancedConnector({
-    name: 'Social Login',
+    name: listingName,
     logo: LOGO,
     chains,
     options: {
