@@ -4,7 +4,7 @@ import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
 import { useMemo } from 'react'
 import { WagmiConfigProps, createClient } from 'wagmi'
 
-import PstlWeb3AuthConnector, { PstlWeb3AuthConnectorProps } from '../../connectors/web3auth'
+import { PstlWeb3AuthConnector, PstlWeb3AuthConnectorProps } from '../../connectors/web3auth'
 import { ConnectorEnhanced } from '../../types'
 import { Web3ModalProps } from '../types'
 
@@ -45,7 +45,7 @@ const createWagmiClient = ({ options, ...props }: CreateWagmiClientProps): Wagmi
 const createEthereumClient = (wagmiClient: ReturnType<typeof createWagmiClient>, chains: Chain[]) =>
   new EthereumClient(wagmiClient, chains)
 
-export type PstlW3WagmiClientOptions = {
+export type PstlWagmiClientOptions = {
   client?: WagmiClient
   options?: Partial<CreateWagmiClientProps['options']>
 }
@@ -65,7 +65,7 @@ export function usePstlWagmiClient(props: Web3ModalProps) {
     [props]
   )
 }
-export function usePstlW3EthereumClient(
+export function usePstlEthereumClient(
   ethereumClient: EthereumClient | undefined,
   wagmiClient: ReturnType<typeof createWagmiClient>,
   chains: Chain[]

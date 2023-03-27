@@ -1,30 +1,34 @@
 import React, { ReactNode } from 'react'
 
+import { PstlWeb3ConnectionModal } from '../components'
 import type { PstlW3ProviderProps } from './types'
-import { PstlW3WagmiClientOptions, usePstlW3EthereumClient, usePstlWagmiClient } from './utils'
-import { PstlW3WagmiProvider } from './wagmi'
-import { PstlW3Modal } from './web3Modal'
+import { PstlWagmiClientOptions, usePstlEthereumClient, usePstlWagmiClient } from './utils'
+import { PstlWagmiProvider } from './wagmi'
+import { PstlWeb3Modal } from './web3Modal'
 
 const PstlW3Providers = ({ children, config }: { children: ReactNode; config: PstlW3ProviderProps }) => {
   const wagmiClient = usePstlWagmiClient(config)
-  const ethereumClient = usePstlW3EthereumClient(config.ethereumClient, wagmiClient, config.web3Modal.chains)
+  const ethereumClient = usePstlEthereumClient(config.ethereumClient, wagmiClient, config.web3Modal.chains)
 
   return (
     <>
-      <PstlW3Modal {...config} ethereumClient={ethereumClient} />
-      <PstlW3WagmiProvider wagmiClient={wagmiClient}>{children}</PstlW3WagmiProvider>
+      <PstlWeb3Modal {...config} ethereumClient={ethereumClient} />
+      <PstlWagmiProvider wagmiClient={wagmiClient}>
+        <PstlWeb3ConnectionModal {...config.pstlW3Modal} />
+        {children}
+      </PstlWagmiProvider>
     </>
   )
 }
 
 export {
   PstlW3Providers,
-  PstlW3WagmiProvider,
-  PstlW3Modal,
+  PstlWagmiProvider,
+  PstlWeb3Modal,
   // hooks
-  usePstlW3EthereumClient,
+  usePstlEthereumClient,
   usePstlWagmiClient,
   // types
   type PstlW3ProviderProps,
-  type PstlW3WagmiClientOptions
+  type PstlWagmiClientOptions
 }

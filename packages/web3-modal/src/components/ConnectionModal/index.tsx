@@ -1,28 +1,28 @@
 import { Button, ButtonProps, CloseIcon, Modal, ModalProps } from '@past3lle/components'
 import { BasicUserTheme, ThemeByModes, ThemeProvider } from '@past3lle/theme'
 import { devWarn } from '@past3lle/utils'
-import React from 'react'
+import React, { memo } from 'react'
 
-import { useConnection, useModalTheme } from '../../hooks'
+import { useConnection, useModalTheme, useWeb3Modal } from '../../hooks'
 import { getConnectorInfo } from '../../utils'
 import { InnerContainer } from './styled'
 
-export interface ConnectionModalProps extends ModalProps {
+interface PstlWeb3ConnectionModalProps extends Omit<ModalProps, 'isOpen' | 'onDismiss'> {
   buttonProps?: ButtonProps
   title?: string
   modalTheme?: ThemeByModes<BasicUserTheme>
 }
 
-export function ConnectionModal({
+function PreMemoModal({
   title = 'WALLET CONNECTION',
   buttonProps,
   modalTheme,
   ...modalProps
-}: ConnectionModalProps) {
-  const [connectors, { connect, openW3Modal }] = useConnection()
+}: PstlWeb3ConnectionModalProps) {
+  const [connectors, { connect, openW3Modal }, { address, chainId, currentConnector }] = useConnection()
+  const { isOpen, close } = useWeb3Modal()
 
   const theme = useModalTheme(modalTheme)
-
   if (!theme) {
     devWarn('[@past3lle/web3-modal::ConnectionModal] No theme detected!')
     return null
@@ -30,16 +30,26 @@ export function ConnectionModal({
 
   return (
     <ThemeProvider theme={theme}>
-      <Modal className={modalProps.className} isOpen={modalProps.isOpen} onDismiss={console.debug}>
+      <Modal className={modalProps.className} isOpen={isOpen} onDismiss={close}>
         <InnerContainer justifyContent="flex-start" gap="0.75rem">
-          <CloseIcon style={{ position: 'absolute', right: '0.5rem', top: '0.5rem' }} onClick={modalProps.onDismiss} />
+          <CloseIcon style={{ position: 'absolute', right: '0.5rem', top: '0.5rem' }} onClick={close} />
           <h1>{title}</h1>
           {connectors.slice(0, 2).map((connector, index) => {
-            const [{ label, logo }, callback] = getConnectorInfo(connector, { connect, openW3Modal })
+            const [{ label, logo, connected }, callback] = getConnectorInfo(
+              connector,
+              currentConnector,
+              {
+                connect,
+                openW3Modal
+              },
+              chainId,
+              address
+            )
+
             return (
-              <Button key={connector.id + '_' + index} onClick={callback} {...buttonProps}>
+              <Button key={connector.id + '_' + index} onClick={() => callback().then(close)} {...buttonProps}>
                 <img style={{ maxWidth: 50 }} src={logo} />
-                Connect with {label}
+                {connected ? `Connected to ${label}` : `Connect with ${label}`}
               </Button>
             )
           })}
@@ -48,3 +58,6 @@ export function ConnectionModal({
     </ThemeProvider>
   )
 }
+const PstlWeb3ConnectionModal = memo(PreMemoModal)
+
+export { PstlWeb3ConnectionModal, type PstlWeb3ConnectionModalProps }

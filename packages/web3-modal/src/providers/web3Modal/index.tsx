@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 
 import { PstlW3ProviderProps } from '../types'
 
-export const PstlW3Modal = ({
+export const PstlWeb3Modal = ({
   ethereumClient,
   web3Modal: { w3mId, ...restWalletconnectProps }
 }: PstlW3ProviderProps) => {
@@ -18,18 +18,7 @@ export const PstlW3Modal = ({
       devDebug('[[PSTL_W3_WEB3_MODAL]]::IMPORTING WEB3MODAL')
       import('@web3modal/react')
         .then(({ Web3Modal }) =>
-          setModal(
-            <Web3Modal
-              {...restWalletconnectProps}
-              themeVariables={{
-                // same as w3a modal
-                '--w3m-z-index': '2147483647',
-                ...restWalletconnectProps.themeVariables
-              }}
-              projectId={w3mId}
-              ethereumClient={ethereumClient}
-            />
-          )
+          setModal(<Web3Modal {...restWalletconnectProps} projectId={w3mId} ethereumClient={ethereumClient} />)
         )
         .catch(console.error)
     }

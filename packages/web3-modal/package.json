@@ -1,6 +1,6 @@
 {
   "name": "@past3lle/web3-modal",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "sideEffects": false,
   "description": "PAST3LLE's Web3 connection modal",
   "keywords": [
@@ -69,6 +69,7 @@
     "styled-components": ">=5"
   },
   "dependencies": {
+    "valtio": "1.10.3",
     "@ethersproject/bignumber": ">=5.7.0",
     "@gnosis.pm/safe-apps-wagmi": "^2.1.0",
     "@past3lle/components": "^0.0.52",

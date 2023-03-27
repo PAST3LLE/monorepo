@@ -40,29 +40,32 @@ export interface PstlWeb3AuthConnectorProps {
   w3aId: string
 }
 
-export default function Web3AuthConnector({
+export function PstlWeb3AuthConnector({
   appName,
   appLogoDark,
   appLogoLight,
   chains,
   listingName = 'Social',
-  loginMethodsOrder = ['google', 'github', 'twitter', 'discord'],
+  loginMethodsOrder,
   modalZIndex = '2147483647',
   theme = 'dark',
   w3aId
 }: PstlWeb3AuthConnectorProps) {
   if (!w3aId) throw new Error('Missing REACT_APP_WEB3AUTH_ID! Check env.')
+  const chainConfig = {
+    chainNamespace: CHAIN_NAMESPACES.EIP155,
+    chainId: '0x' + chains[0].id.toString(16),
+    rpcTarget: chains[0].rpcUrls.default.http[0], // This is the public RPC we have added, please pass on your own endpoint while creating an app
+    displayName: chains[0].name,
+    tickerName: chains[0].nativeCurrency?.name,
+    ticker: chains[0].nativeCurrency?.symbol
+  }
+
+  console.debug('CHAIN CONFIG', chainConfig)
   // Create Web3Auth Instance
   const web3AuthInstance = new Web3Auth({
     clientId: w3aId,
-    chainConfig: {
-      chainNamespace: CHAIN_NAMESPACES.OTHER,
-      chainId: '0x' + chains[0].id.toString(16),
-      rpcTarget: chains[0].rpcUrls.default.http[0], // This is the public RPC we have added, please pass on your own endpoint while creating an app
-      displayName: chains[0].name,
-      tickerName: chains[0].nativeCurrency?.name,
-      ticker: chains[0].nativeCurrency?.symbol
-    },
+    chainConfig,
     uiConfig: {
       appName,
       theme,
@@ -75,6 +78,7 @@ export default function Web3AuthConnector({
   // Add openlogin adapter for customisations
   const openloginAdapterInstance = new OpenloginAdapter({
     adapterSettings: {
+      clientId: w3aId,
       network: NET,
       uxMode: 'popup',
       whiteLabel: {
@@ -82,7 +86,7 @@ export default function Web3AuthConnector({
         logoLight: LOGO,
         logoDark: LOGO,
         defaultLanguage: 'en',
-        dark: true // whether to enable dark mode. defaultValue: false
+        dark: theme === 'dark' // whether to enable dark mode. defaultValue: false
       }
     }
   })
@@ -90,7 +94,7 @@ export default function Web3AuthConnector({
 
   return new Web3AuthEnhancedConnector({
     name: listingName,
-    logo: LOGO,
+    logo: (theme === 'dark' ? appLogoDark : appLogoLight) || '',
     chains,
     options: {
       web3AuthInstance

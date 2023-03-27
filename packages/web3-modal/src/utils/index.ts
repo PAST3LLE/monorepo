@@ -1,5 +1,4 @@
 import { css } from 'styled-components'
-import { useConnect } from 'wagmi'
 
 import { useConnection } from '../hooks'
 import { ConnectorEnhanced, DefaultWallets } from '../types'
@@ -10,38 +9,47 @@ const WALLETCONNECT_LOGO =
 
 export function getConnectorInfo(
   connector: ConnectorEnhanced<any, any, any>,
+  currentConnector: ConnectorEnhanced<any, any, any> | undefined,
   {
     connect,
     openW3Modal
   }: {
-    connect: ReturnType<typeof useConnection>[1]['connect']
+    connect: (...params: any[]) => Promise<any>
     openW3Modal: ReturnType<typeof useConnection>[1]['openW3Modal']
-  }
-): [{ label: string; logo?: string }, ReturnType<typeof useConnect>['connect']] {
+  },
+  chainId?: number,
+  address?: string
+): [
+  { label: string; logo?: string; connected: boolean },
+  ReturnType<typeof useConnection>[1]['connect'] | ReturnType<typeof useConnection>[1]['openW3Modal']
+] {
   switch (connector.id) {
     case DefaultWallets.WEB3AUTH:
       return [
         {
           label: connector?.customName || 'Social',
-          logo: connector?.logo || SOCIAL_LOGO
+          logo: connector?.logo || SOCIAL_LOGO,
+          connected: currentConnector?.id === DefaultWallets.WEB3AUTH
         },
-        () => connect({ connector })
+        () => (!address ? connect({ connector, chainId }) : openW3Modal({ route: 'Account' }))
       ]
     case DefaultWallets.WEB3MODAL:
       return [
         {
           label: connector?.customName || 'Wallets',
-          logo: connector?.logo || WALLETCONNECT_LOGO
+          logo: connector?.logo || WALLETCONNECT_LOGO,
+          connected: currentConnector?.id === DefaultWallets.WEB3MODAL || !!currentConnector?.ready
         },
-        () => openW3Modal({ route: 'ConnectWallet' })
+        () => openW3Modal({ route: !!address ? 'Account' : 'ConnectWallet' })
       ]
     default:
       return [
         {
-          label: connector?.customName || 'Unknown Option',
-          logo: connector?.logo || WALLETCONNECT_LOGO
+          label: connector?.customName || connector?.name || connector?.id || 'Unknown option',
+          logo: connector?.logo || WALLETCONNECT_LOGO,
+          connected: currentConnector?.id === connector.id
         },
-        () => connect({ connector })
+        () => (!address ? connect({ connector, chainId }) : openW3Modal({ route: 'Account' }))
       ]
   }
 }
