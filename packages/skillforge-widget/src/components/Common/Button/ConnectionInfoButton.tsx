@@ -1,7 +1,7 @@
 import { Row, Text } from '@past3lle/components'
 import { setCssBackground, urlToSimpleGenericImageSrcSet } from '@past3lle/theme'
 import { truncateAddress } from '@past3lle/utils'
-import { useConnection } from '@past3lle/web3-modal'
+import { usePstlConnection } from '@past3lle/web3-modal'
 import { useCallback } from 'react'
 import React from 'react'
 import styled from 'styled-components'
@@ -13,7 +13,7 @@ import { OpenOptions } from './types'
 
 export function ConnectionInfoButton() {
   const { address } = useAccount()
-  const [, { openW3Modal }] = useConnection()
+  const [, { openW3Modal }] = usePstlConnection()
 
   const assetsMap = useAssetsMap()
 

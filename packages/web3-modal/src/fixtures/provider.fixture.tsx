@@ -2,7 +2,7 @@ import { ButtonVariations, ColumnCenter, PstlButton } from '@past3lle/components
 import React, { ReactNode } from 'react'
 import { useAccount } from 'wagmi'
 
-import { useWeb3Modal } from '../hooks'
+import { usePstlWeb3Modal } from '../hooks'
 import { PstlW3Providers } from '../providers'
 import { commonProps } from './config'
 
@@ -20,7 +20,7 @@ interface Web3ButtonProps {
 }
 const Web3Button = ({ children = <div>Show PSTL Wallet Modal</div> }: Web3ButtonProps) => {
   const { address } = useAccount()
-  const { open } = useWeb3Modal()
+  const { open } = usePstlWeb3Modal()
 
   return (
     <ColumnCenter>
@@ -34,13 +34,22 @@ const Web3Button = ({ children = <div>Show PSTL Wallet Modal</div> }: Web3Button
     </ColumnCenter>
   )
 }
-
+const LOGO = 'https://raw.githubusercontent.com/PAST3LLE/monorepo/main/apps/skillforge-ui/public/512_logo.png'
 export default {
   ConnectedModal: (
     <PstlW3Providers
       config={{
         ...commonProps,
-        appName: 'TEST COSMOS'
+        appName: 'COSMOS APP',
+        chains: commonProps.chains,
+        web3Auth: {
+          appName: 'COSMOS APP',
+          listingName: 'SOCIAL',
+          w3aId: commonProps.web3Modal.w3aId,
+          appLogoLight: LOGO,
+          appLogoDark: LOGO,
+          modalZIndex: '99999999999'
+        }
       }}
     >
       <Web3Button />

@@ -7,7 +7,7 @@ import { PstlWeb3AuthConnectorProps } from '../connectors'
 import { PstlWagmiClientOptions } from './utils'
 
 export type Web3ModalConfig = Omit<ConfigCtrlState, 'projectId' | 'enableStandaloneMode' | 'walletConnectVersion'> & {
-  chains: Chain[]
+  chains?: Chain[]
   w3mId: string
   w3aId: string
   themeVariables?: Web3ModalConfigOriginal['themeVariables']
@@ -15,8 +15,9 @@ export type Web3ModalConfig = Omit<ConfigCtrlState, 'projectId' | 'enableStandal
 
 export interface Web3ModalProps {
   appName: string
+  chains: Chain[]
   web3Modal: Web3ModalConfig
-  web3Auth: PstlWeb3AuthConnectorProps
+  web3Auth: Omit<PstlWeb3AuthConnectorProps, 'chains'> & { chains?: Chain[] }
   wagmiClient?: PstlWagmiClientOptions
   ethereumClient?: EthereumClient
   pstlW3Modal?: Omit<PstlWeb3ConnectionModalProps, 'isOpen' | 'onDismiss'>

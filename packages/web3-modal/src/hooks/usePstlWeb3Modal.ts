@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 
 import { ModalCtrl, OptionsCtrl } from '../controllers'
 
-export function useWeb3Modal() {
+export function usePstlWeb3Modal() {
   const [modal, setModal] = useState(ModalCtrl.state)
 
   useEffect(() => {

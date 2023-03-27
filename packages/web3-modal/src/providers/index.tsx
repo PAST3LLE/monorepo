@@ -8,7 +8,7 @@ import { PstlWeb3Modal } from './web3Modal'
 
 const PstlW3Providers = ({ children, config }: { children: ReactNode; config: PstlW3ProviderProps }) => {
   const wagmiClient = usePstlWagmiClient(config)
-  const ethereumClient = usePstlEthereumClient(config.ethereumClient, wagmiClient, config.web3Modal.chains)
+  const ethereumClient = usePstlEthereumClient(config.ethereumClient, wagmiClient, config.chains)
 
   return (
     <>

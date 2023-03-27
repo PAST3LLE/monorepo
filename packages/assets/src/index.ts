@@ -23,6 +23,7 @@ import PNG_LogoFull_3x from './png/pastelle-logo-full@3x.png'
 import PNG_LogoShort_1x from './png/pastelle-logo-short.png'
 import PNG_LogoShort_2x from './png/pastelle-logo-short@2x.png'
 import PNG_LogoShort_3x from './png/pastelle-logo-short@3x.png'
+import SVG_LoadingCircleLight from './svg/loading-circle-light.svg'
 // SVGs
 import SVG_LogoCircle from './svg/pastelle-logo-circle.svg'
 import SVG_LogoFull from './svg/pastelle-logo-full.svg'
@@ -33,6 +34,7 @@ export {
   SVG_LogoCircle,
   SVG_LogoFull,
   SVG_LogoShort,
+  SVG_LoadingCircleLight,
   // PNG circle logo
   PNG_LogoCircle_1x,
   PNG_LogoCircle_2x,

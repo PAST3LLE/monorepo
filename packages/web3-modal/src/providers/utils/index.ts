@@ -17,7 +17,7 @@ interface CreateWagmiClientProps {
   chains: Chain[]
   w3aId: string
   w3mId: string
-  w3aConnectorProps: PstlWeb3AuthConnectorProps
+  w3aConnectorProps: Omit<PstlWeb3AuthConnectorProps, 'chains'>
   options?: Partial<Pick<ClientConfigEnhanced, 'connectors' | 'provider' | 'autoConnect'>>
 }
 export type WagmiClient = ReturnType<typeof createClient>
@@ -27,7 +27,7 @@ const createWagmiClient = ({ options, ...props }: CreateWagmiClientProps): Wagmi
     autoConnect: true,
     connectors: [
       // Web3Auth aka social login
-      PstlWeb3AuthConnector(props.w3aConnectorProps),
+      PstlWeb3AuthConnector({ chains: props.chains, ...props.w3aConnectorProps }),
       // Web3Modal
       ...w3mConnectors({
         projectId: props.w3mId,
@@ -55,7 +55,7 @@ export function usePstlWagmiClient(props: Web3ModalProps) {
       !props.wagmiClient?.client
         ? createWagmiClient({
             appName: props.appName,
-            chains: props.web3Modal.chains,
+            chains: props.chains,
             w3mId: props.web3Modal.w3mId,
             w3aId: props.web3Modal.w3aId,
             w3aConnectorProps: props.web3Auth,

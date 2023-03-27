@@ -1,11 +1,11 @@
 // Web3Auth Libraries
-import { CHAIN_NAMESPACES } from '@web3auth/base'
+import { CHAIN_NAMESPACES, WALLET_ADAPTERS } from '@web3auth/base'
 import { Web3Auth } from '@web3auth/modal'
 import { OpenloginAdapter } from '@web3auth/openlogin-adapter'
 import { Web3AuthConnector as Web3AuthConnectorCreator } from '@web3auth/web3auth-wagmi-connector'
 import { Chain } from 'wagmi'
 
-const LOGO = 'https://raw.githubusercontent.com/PAST3LLE/monorepo/main/apps/skillforge-ui/public/512_logo.png'
+const SOCIAL_LOGO = 'https://www.getopensocial.com/wp-content/uploads/2020/12/social-login-COLOR_2.png'
 const NET = process.env.NODE_ENV !== 'production' ? 'testnet' : 'mainnet'
 
 class Web3AuthEnhancedConnector extends Web3AuthConnectorCreator {
@@ -35,9 +35,11 @@ export interface PstlWeb3AuthConnectorProps {
   theme?: 'light' | 'dark'
   chains: Chain[]
   listingName?: string
+  listingLogo?: string
   loginMethodsOrder?: string[]
   modalZIndex?: string
   w3aId: string
+  preset?: 'DISALLOW_EXTERNAL_WALLETS' | 'ALLOW_EXTERNAL_WALLETS'
 }
 
 export function PstlWeb3AuthConnector({
@@ -46,12 +48,15 @@ export function PstlWeb3AuthConnector({
   appLogoLight,
   chains,
   listingName = 'Social',
+  listingLogo = SOCIAL_LOGO,
   loginMethodsOrder,
   modalZIndex = '2147483647',
+  preset = 'ALLOW_EXTERNAL_WALLETS',
   theme = 'dark',
   w3aId
 }: PstlWeb3AuthConnectorProps) {
   if (!w3aId) throw new Error('Missing REACT_APP_WEB3AUTH_ID! Check env.')
+
   const chainConfig = {
     chainNamespace: CHAIN_NAMESPACES.EIP155,
     chainId: '0x' + chains[0].id.toString(16),
@@ -61,7 +66,6 @@ export function PstlWeb3AuthConnector({
     ticker: chains[0].nativeCurrency?.symbol
   }
 
-  console.debug('CHAIN CONFIG', chainConfig)
   // Create Web3Auth Instance
   const web3AuthInstance = new Web3Auth({
     clientId: w3aId,
@@ -71,20 +75,19 @@ export function PstlWeb3AuthConnector({
       theme,
       loginMethodsOrder,
       defaultLanguage: 'en',
-      appLogo: appLogoLight || appLogoDark,
+      appLogo: theme === 'light' ? appLogoLight : appLogoDark,
       modalZIndex
     }
   })
   // Add openlogin adapter for customisations
   const openloginAdapterInstance = new OpenloginAdapter({
     adapterSettings: {
-      clientId: w3aId,
       network: NET,
       uxMode: 'popup',
       whiteLabel: {
-        name: 'SKILLFORGE',
-        logoLight: LOGO,
-        logoDark: LOGO,
+        name: appName,
+        logoLight: appLogoLight,
+        logoDark: appLogoDark,
         defaultLanguage: 'en',
         dark: theme === 'dark' // whether to enable dark mode. defaultValue: false
       }
@@ -94,10 +97,39 @@ export function PstlWeb3AuthConnector({
 
   return new Web3AuthEnhancedConnector({
     name: listingName,
-    logo: (theme === 'dark' ? appLogoDark : appLogoLight) || '',
+    logo: listingLogo,
     chains,
     options: {
-      web3AuthInstance
+      web3AuthInstance,
+      modalConfig:
+        preset === 'DISALLOW_EXTERNAL_WALLETS'
+          ? {
+              [WALLET_ADAPTERS.METAMASK]: {
+                label: 'MetaMask',
+                showOnDesktop: false,
+                showOnModal: false,
+                showOnMobile: false
+              },
+              [WALLET_ADAPTERS.TORUS_EVM]: {
+                label: 'Torus',
+                showOnDesktop: false,
+                showOnModal: false,
+                showOnMobile: false
+              },
+              [WALLET_ADAPTERS.WALLET_CONNECT_V1]: {
+                label: 'WalletConnect [v1]',
+                showOnDesktop: false,
+                showOnModal: false,
+                showOnMobile: false
+              },
+              [WALLET_ADAPTERS.WALLET_CONNECT_V2]: {
+                label: 'WalletConnect [v2]',
+                showOnDesktop: false,
+                showOnModal: false,
+                showOnMobile: false
+              }
+            }
+          : undefined
     }
   })
 }
