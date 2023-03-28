@@ -79,6 +79,7 @@ export const InnerContainer = styled(ColumnCenter)`
     font-weight: ${({ theme }) => theme.modals?.connection?.title?.fontWeight || 200};
     letter-spacing: ${({ theme }) => theme.modals?.connection?.title?.letterSpacing || '0px'};
     line-height: ${({ theme }) => theme.modals?.connection?.title?.lineHeight || 1};
+    margin-bottom: 0.1em;
   }
 
   border-radius: ${({ theme: { modals } }) => modals?.connection?.button?.border?.radius || '1em'};

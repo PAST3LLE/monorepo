@@ -38,6 +38,7 @@ export function getConnectorInfo(
   { label: string; logo?: string; connected: boolean },
   ReturnType<typeof useConnection>[1]['connect'] | ReturnType<typeof useConnection>[1]['openW3Modal']
 ] {
+  console.debug('currentConnector', currentConnector)
   switch (connector.id) {
     case DefaultWallets.WEB3AUTH:
       return [
@@ -53,12 +54,12 @@ export function getConnectorInfo(
               return !address ? connect({ connector, chainId }) : openW3Modal({ route: 'Account' })
             } else {
               // Web3Auth modal is async imported on use
-              // we need to wait ~4/5 seconds for modal to load and show loader in meantime
+              // we need to wait ~20 seconds for modal to load and show loader in meantime
               setW3aModalLoading(true)
 
               await Promise.race([
                 // timeout and thow after N seconds if we can't find the modal
-                loopFindElementById('w3a-modal', 8).catch((error) => {
+                loopFindElementById('w3a-modal', 20).catch((error) => {
                   throw new Error(error)
                 }),
                 !address ? connect({ connector, chainId }) : openW3Modal({ route: 'Account' })
@@ -75,12 +76,11 @@ export function getConnectorInfo(
         }
       ]
     case DefaultWallets.WEB3MODAL: {
-      console.debug('WEB3MODAL', connector)
       return [
         {
           label: connector?.customName || 'Wallets',
           logo: connector?.logo || WALLETCONNECT_LOGO,
-          connected: currentConnector?.id === DefaultWallets.WEB3MODAL
+          connected: !!currentConnector && currentConnector?.id !== DefaultWallets.WEB3AUTH
         },
         async () => {
           try {
