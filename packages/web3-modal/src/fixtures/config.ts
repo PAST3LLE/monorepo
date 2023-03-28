@@ -13,11 +13,13 @@ const pstlModalTheme = createCustomTheme<ThemeByModes<Theme>>({
     DEFAULT: {
       modals: {
         connection: {
+          baseFontSize: 20,
+          helpers: { show: true },
           background: `url(${BG_LOGO}) center/cover`,
-          title: { color: '#cbb9ee', fontSize: '2.5rem', fontWeight: 700, letterSpacing: '-1.4px', lineHeight: 0.72 },
+          title: { color: '#cbb9ee', fontWeight: 700, letterSpacing: '-1.4px', lineHeight: 0.82 },
           button: {
             background: '#301d4ea1',
-            border: { border: 'none', radius: '1rem' },
+            border: { border: 'none', radius: '1em' },
             color: 'ghostwhite',
             fontStyle: 'italic',
             fontWeight: 600,
@@ -54,7 +56,7 @@ const DEFAULT_PROPS: PstlW3ProviderProps = {
     w3aId: WEB3AUTH_TEST_ID
   },
   pstlW3Modal: {
-    modalTheme: pstlModalTheme,
+    theme: pstlModalTheme,
     loaderProps: {
       spinnerProps: {
         size: 80

@@ -6,22 +6,23 @@ import { getPosition } from '../../utils'
 
 export const InnerContainer = styled(ColumnCenter)`
   position: relative;
-  font-weight: 200;
+  font-size: ${({ theme }) => theme.modals?.connection?.baseFontSize || 16}px;
   font-style: italic;
+  font-weight: 200;
   font-family: 'Roboto', system-ui;
 
   background: ${({ theme }) => theme.modals?.connection?.background || 'rgb(201 172 172)'};
-  padding: ${({ theme: { modals } }) => modals?.connection?.padding || '1rem'};
+  padding: ${({ theme: { modals } }) => modals?.connection?.padding || '1em'};
 
   > ${CloseIcon} {
     color: ${({ theme }) => theme.modals?.connection?.closeIcon?.color || 'ghostwhite'};
     ${({ theme }) => getPosition(theme.modals?.connection?.closeIcon?.position)};
-    width: ${({ theme }) => theme.modals?.connection?.closeIcon?.size || '1rem'};
+    width: ${({ theme }) => theme.modals?.connection?.closeIcon?.size || '1em'};
   }
 
   > h1 {
     color: ${({ theme }) => theme.modals?.connection?.title?.color || 'ghostwhite'};
-    font-size: ${({ theme }) => theme.modals?.connection?.title?.fontSize || 'initial'};
+    font-size: ${({ theme }) => theme.modals?.connection?.title?.fontSize || '2em'};
     font-weight: ${({ theme }) => theme.modals?.connection?.title?.fontWeight || 200};
     letter-spacing: ${({ theme }) => theme.modals?.connection?.title?.letterSpacing || '0px'};
     line-height: ${({ theme }) => theme.modals?.connection?.title?.lineHeight || 1};
@@ -50,7 +51,7 @@ export const InnerContainer = styled(ColumnCenter)`
     
     ${({ theme }) => `text-transform: ${theme.modals?.connection?.button?.textTransform || 'none'};`}
     
-    gap: 1rem;
+    gap: 1em;
 
     &:hover {
       ${({ theme }) =>
@@ -63,5 +64,5 @@ export const InnerContainer = styled(ColumnCenter)`
 
     transition: transform 0.3s ease-in-out;
   }
-  border-radius: ${({ theme: { modals } }) => modals?.connection?.button?.border?.radius || '1rem'};
+  border-radius: ${({ theme: { modals } }) => modals?.connection?.button?.border?.radius || '1em'};
 `

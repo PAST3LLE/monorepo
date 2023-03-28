@@ -1,7 +1,7 @@
 import { Row, Text } from '@past3lle/components'
 import { setCssBackground, urlToSimpleGenericImageSrcSet } from '@past3lle/theme'
 import { truncateAddress } from '@past3lle/utils'
-import { usePstlConnection } from '@past3lle/web3-modal'
+import { usePstlWeb3Modal } from '@past3lle/web3-modal'
 import { useCallback } from 'react'
 import React from 'react'
 import styled from 'styled-components'
@@ -13,15 +13,15 @@ import { OpenOptions } from './types'
 
 export function ConnectionInfoButton() {
   const { address } = useAccount()
-  const [, { openW3Modal }] = usePstlConnection()
+  const { open } = usePstlWeb3Modal()
 
   const assetsMap = useAssetsMap()
 
   const handleClick = useCallback(
     async (openOptions: OpenOptions) => {
-      openW3Modal(openOptions)
+      open(openOptions)
     },
-    [openW3Modal]
+    [open]
   )
 
   return (
@@ -35,11 +35,11 @@ export function ConnectionInfoButton() {
     >
       <img src={assetsMap.icons.connection} />
       <Text.SubHeader
-        margin={'0 0 1rem 0'}
+        margin="0 0 1rem 0"
         padding={0}
         fontWeight={!!address ? 500 : 700}
         fontStyle="normal"
-        fontFamily={'monospace'}
+        fontFamily="monospace"
         letterSpacing="-1.6px"
       >
         <ConnectionColorWrapper isConnected={!!address}>

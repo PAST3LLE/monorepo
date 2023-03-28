@@ -3,6 +3,11 @@ import { ThemeBaseRequired } from '@past3lle/theme'
 export interface Theme {
   modals?: {
     connection?: {
+      baseFontSize?: number
+      helpers?: {
+        show?: boolean
+        color?: string
+      }
       closeIcon?: {
         color?: string
         position?: 'top-left' | 'top-right' | 'bottom-right' | 'bottom-left'
