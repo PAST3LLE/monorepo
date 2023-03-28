@@ -19,6 +19,7 @@ export default {
         ...contractProps,
         name: commonProps.appName,
         web3: {
+          chains: commonProps.chains,
           web3Modal: commonProps.web3Modal,
           web3Auth: commonProps.web3Auth
         }
@@ -34,12 +35,9 @@ export default {
         ...contractProps,
         name: commonProps.appName,
         web3: {
+          chains: commonProps.chains,
           web3Modal: commonProps.web3Modal,
-          web3Auth: commonProps.web3Auth,
-          wagmiClient: {
-            ...commonProps.wagmiClient
-          },
-          ethereumClient: commonProps.ethereumClient
+          web3Auth: commonProps.web3Auth
         }
       }}
     >

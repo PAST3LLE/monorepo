@@ -30,13 +30,10 @@ const CLIENT_PROPS = {
   appName: APP_NAME,
   web3Auth: {
     appName: APP_NAME,
-    chains: SUPPORTED_CHAINS,
     w3aId: process.env.REACT_APP_WEB3AUTH_ID as string
   },
   web3Modal: {
     w3mId: process.env.REACT_APP_WEB3MODAL_ID as string,
-    w3aId: process.env.REACT_APP_WEB3AUTH_ID as string,
-    chains: SUPPORTED_CHAINS,
     walletImages: {
       web3auth: 'https://web3auth.io/images/w3a-L-Favicon-1.svg',
       safe: 'https://user-images.githubusercontent.com/3975770/212338977-5968eae5-bb1b-4e71-8f82-af5282564c66.png'
@@ -49,6 +46,7 @@ const SKILLTREE_CONFIG: SkillForgeProps = {
     name: CLIENT_PROPS.appName,
     theme: skilltreeTheme,
     web3: {
+      chains: SUPPORTED_CHAINS,
       web3Modal: CLIENT_PROPS.web3Modal,
       web3Auth: CLIENT_PROPS.web3Auth,
       wagmiClient: {

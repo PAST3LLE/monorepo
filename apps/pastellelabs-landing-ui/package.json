@@ -62,6 +62,7 @@
     "@past3lle/components": "^0.0.52",
     "@past3lle/constants": "^0.0.17",
     "@past3lle/hooks": "^0.0.20",
+    "@past3lle/skillforge-widget": "^0.0.23",
     "@past3lle/theme": "^0.0.31",
     "@past3lle/types": "^0.0.12",
     "@past3lle/utils": "^0.0.17",

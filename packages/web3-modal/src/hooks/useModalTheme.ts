@@ -23,10 +23,7 @@ export function useModalTheme(customModalThemeByModes?: ThemeByModes<BasicUserTh
   >()
 
   useEffect(() => {
-    if (
-      !currentTheme?.content?.modals?.connection ||
-      !customModalThemeByModes?.modes.DEFAULT?.content?.modals?.connection
-    ) {
+    if (!currentTheme?.modals?.connection || !customModalThemeByModes?.modes.DEFAULT?.modals?.connection) {
       devWarn(
         '[Past3lle-Web3-Modal] Missing top-level theme; building new, simplified theme. Please check that you are properly passing a Past3lle ThemeProvider with a built theme via <createCustomModalThemeByModes> or others. See @past3lle/theme'
       )
