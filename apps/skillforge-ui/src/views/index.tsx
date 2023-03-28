@@ -36,7 +36,25 @@ const SKILLTREE_CONFIG: SkillForgeProps = {
       pstlW3Modal: {
         theme: pstlModalTheme,
         maxHeight: '650px',
-        maxWidth: '360px'
+        maxWidth: '360px',
+        closeModalOnConnect: false,
+        infoTextMap: {
+          general: {
+            title: 'What can I do on this modal?',
+            content:
+              "This is some helper filler text to describe wtf is going on in this connection modal. It is useful to learn these things while browsing apps as users can get confused when having to exit apps to read info somewhere else that isn't the current screent they are on."
+          },
+          web3auth: {
+            title: 'What is social login?',
+            content:
+              'Social login is done via Web3Auth - a non-custodial social login protocol (i.e they never actually know, or hold your data) - which facilitates logging into dApps (decentralised apps) via familiar social login choices'
+          },
+          walletConnect: {
+            title: 'What is wallets login?',
+            content:
+              'Web3Modal/WalletConnect is a simple blockchain wallet aggregator modal that facilitates the choice of selecting preferred blockchain wallet(s) for connecting to dApps (decentralised apps). This generally requires more blockchain knowledge.'
+          }
+        }
       }
     },
     contractAddresses: CONTRACT_ADDRESSES_MAP,
