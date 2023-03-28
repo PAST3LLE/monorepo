@@ -1,6 +1,6 @@
 import { ThemeBaseRequired } from '@past3lle/theme'
 
-export interface Theme {
+export interface PstlModalTheme {
   modals?: {
     connection?: {
       baseFontSize?: number
@@ -44,5 +44,5 @@ export interface Theme {
 
 declare module 'styled-components' {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  export interface DefaultTheme extends Theme, ThemeBaseRequired {}
+  export interface DefaultTheme extends PstlModalTheme, ThemeBaseRequired {}
 }

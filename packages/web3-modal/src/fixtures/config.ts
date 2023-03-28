@@ -2,11 +2,11 @@ import { ThemeByModes, createCustomTheme } from '@past3lle/theme'
 
 import { chains } from '../connectors/config'
 import { PstlW3ProviderProps } from '../providers'
-import { Theme } from '../theme/types'
+import { PstlModalTheme } from '../theme/types'
 
 const BG_LOGO =
   'https://raw.githubusercontent.com/PAST3LLE/monorepo/main/apps/skillforge-ui/src/assets/png/background.png'
-const pstlModalTheme = createCustomTheme<ThemeByModes<Theme>>({
+const pstlModalTheme = createCustomTheme<ThemeByModes<PstlModalTheme>>({
   modes: {
     LIGHT: {},
     DARK: {},

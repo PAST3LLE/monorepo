@@ -1,7 +1,7 @@
 import { Row, Text } from '@past3lle/components'
 import { setCssBackground, urlToSimpleGenericImageSrcSet } from '@past3lle/theme'
 import { truncateAddress } from '@past3lle/utils'
-import { usePstlWeb3Modal } from '@past3lle/web3-modal'
+import { usePstlConnection, usePstlWeb3Modal } from '@past3lle/web3-modal'
 import { useCallback } from 'react'
 import React from 'react'
 import styled from 'styled-components'
@@ -9,20 +9,17 @@ import { useAccount } from 'wagmi'
 
 import { useAssetsMap } from '../../../theme/utils'
 import { ConnectionColorWrapper } from '../../Web3/UserWeb3ConnectionStats'
-import { OpenOptions } from './types'
 
 export function ConnectionInfoButton() {
   const { address } = useAccount()
   const { open } = usePstlWeb3Modal()
+  const [, { openW3Modal }] = usePstlConnection()
 
   const assetsMap = useAssetsMap()
 
-  const handleClick = useCallback(
-    async (openOptions: OpenOptions) => {
-      open(openOptions)
-    },
-    [open]
-  )
+  const handleClick = useCallback(async () => {
+    address ? openW3Modal({ route: 'Account' }) : open({ route: 'ConnectWallet' })
+  }, [address, open, openW3Modal])
 
   return (
     <ConnectionInfoContainer
@@ -31,7 +28,7 @@ export function ConnectionInfoButton() {
       minWidth="24rem"
       marginTop="0.6rem"
       gap="0.5rem"
-      onClick={() => handleClick({ route: address ? 'Account' : 'ConnectWallet' })}
+      onClick={handleClick}
     >
       <img src={assetsMap.icons.connection} />
       <Text.SubHeader

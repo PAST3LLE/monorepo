@@ -1,4 +1,5 @@
 import { MEDIA_WIDTHS, MediaWidths } from '@past3lle/theme'
+import { devWarn } from '@past3lle/utils'
 import debounce from 'lodash.debounce'
 import React, { ReactNode } from 'react'
 import { useContext, useEffect, useState } from 'react'
@@ -64,12 +65,12 @@ export function useWindowSize(): WindowSizes | undefined {
 
   const isInstantiated = !!context?.windowSizes
   if (!isInstantiated) {
-    throw new Error(
-      '[@past3lle/hooks]::useWindowSize::Error! Cannot use <useWindowSize> hook outside of the Past3lleHooksProvider. Please add one to the root of your app, ABOVE where you are intending to use the hook. Hover over hook for example use-case.'
+    devWarn(
+      '[@past3lle/hooks]::useWindowSize::Error! Cannot use <useWindowSize> hook outside of the Past3lleHooksProvider. Please add one to the root of your app, ABOVE where you are intending to use the hook. Hover over hook for example use-case. For now, calling window.clientWidth directly (not optimum).'
     )
   }
 
-  return context?.windowSizes
+  return context?.windowSizes || _getSize()
 }
 
 export function useWindowSmallerThan(media: MediaWidths) {

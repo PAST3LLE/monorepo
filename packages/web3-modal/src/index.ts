@@ -5,6 +5,7 @@ import { ConnectionHookProps, useConnection as usePstlConnection, usePstlWeb3Mod
 export * from './constants'
 export * from './types'
 export * from './providers'
+export * from './theme'
 
 export { type PstlWeb3AuthConnectorProps } from './connectors'
 export {

@@ -1,6 +1,6 @@
 import { Z_INDICES } from '@past3lle/constants'
+import { useIsMobile } from '@past3lle/hooks'
 import { upToExtraSmall } from '@past3lle/theme'
-import { isMobile } from '@past3lle/utils'
 import { DialogContent, DialogOverlay } from '@reach/dialog'
 import { transparentize } from 'polished'
 import React, { useEffect } from 'react'
@@ -38,7 +38,7 @@ const StyledDialogOverlay = styled(AnimatedDialogOverlay)<Pick<ModalStyleProps, 
 const AnimatedDialogContent = animated(DialogContent)
 // destructure to not pass custom props to Dialog DOM element
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const StyledDialogContent = styled(({ minHeight, maxHeight, mobile, isOpen, isLargeImageModal, ...rest }) => (
+const StyledDialogContent = styled(({ minHeight, maxHeight, maxWidth, mobile, isOpen, isLargeImageModal, ...rest }) => (
   <AnimatedDialogContent {...rest} />
 )).attrs({
   'aria-label': 'dialog'
@@ -63,9 +63,10 @@ const StyledDialogContent = styled(({ minHeight, maxHeight, mobile, isOpen, isLa
     margin: 0 0 auto 0;
     padding-top: 2rem;
     width: ${({ isLargeImageModal }) => (isLargeImageModal ? '90' : '50')}vh;
-    max-width: ${({ maxHeight, isLargeImageModal = false }) => `${isLargeImageModal ? maxHeight + 'vh' : '42rem'}`};
-    ${({ maxHeight }) => maxHeight && `max-height: ${maxHeight}vh;`}
-    ${({ minHeight }) => minHeight && `min-height: ${minHeight}vh;`}
+    max-width: ${({ maxHeight, maxWidth = '42rem', isLargeImageModal = false }) =>
+      `${isLargeImageModal ? maxHeight + 'vh' : maxWidth}`};
+    ${({ maxHeight }) => maxHeight && `max-height: ${maxHeight};`}
+    ${({ minHeight }) => minHeight && `min-height: ${minHeight};`}
   }
 `
 
@@ -73,8 +74,10 @@ export interface ModalProps {
   isLargeImageModal?: boolean
   isOpen: boolean
   onDismiss: () => void
-  minHeight?: number | false
-  maxHeight?: number
+  minHeight?: string
+  maxHeight?: string
+  maxWidth?: string
+  stopInputFocus?: boolean
   initialFocusRef?: React.RefObject<any>
   className?: string
   children?: React.ReactNode
@@ -86,12 +89,16 @@ export function Modal({
   children,
   className,
   onDismiss,
-  minHeight = false,
-  maxHeight = 90,
+  minHeight,
+  maxHeight = '90vh',
+  maxWidth,
+  stopInputFocus = true,
   styleProps = {},
   initialFocusRef,
   isLargeImageModal = false
 }: ModalProps) {
+  const isMobile = useIsMobile()
+
   useEffect(() => {
     return () => {
       onDismiss()
@@ -112,12 +119,13 @@ export function Modal({
         aria-label="dialog content"
         minHeight={minHeight}
         maxHeight={maxHeight}
+        maxWidth={maxWidth}
         mobile={isMobile}
         isLargeImageModal={isLargeImageModal}
         {...styleProps}
       >
         {/* prevents the automatic focusing of inputs on mobile by the reach dialog */}
-        {!initialFocusRef && isMobile ? <div tabIndex={1} /> : null}
+        {stopInputFocus && !initialFocusRef && isMobile ? <div tabIndex={1} /> : null}
         {children}
       </StyledDialogContent>
     </StyledDialogOverlay>

@@ -21,7 +21,9 @@ function ModalWithoutThemeProvider({
   title = 'WALLET CONNECTION',
   buttonProps,
   loaderProps,
-  ...modalProps
+  maxWidth = '360px',
+  maxHeight = '600px',
+  ...restModalProps
 }: Omit<PstlWeb3ConnectionModalProps, 'theme'>) {
   const [connectors, { connect, openW3Modal }, { address, chainId, currentConnector }] = useConnection()
   const { isOpen, close } = usePstlWeb3Modal()
@@ -76,7 +78,14 @@ function ModalWithoutThemeProvider({
   )
 
   return (
-    <Modal className={modalProps.className} isOpen={isOpen} onDismiss={close}>
+    <Modal
+      className={restModalProps.className}
+      isOpen={isOpen}
+      onDismiss={close}
+      maxWidth={maxWidth}
+      maxHeight={maxHeight}
+      {...restModalProps}
+    >
       <InnerContainer justifyContent="flex-start" gap="0.75rem">
         <CloseIcon style={{ position: 'absolute', right: '0.5rem', top: '0.5rem' }} onClick={close} />
         <h1>{title}</h1>
