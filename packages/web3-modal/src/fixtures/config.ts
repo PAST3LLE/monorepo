@@ -6,7 +6,7 @@ import { PstlModalTheme } from '../theme/types'
 
 const BG_LOGO =
   'https://raw.githubusercontent.com/PAST3LLE/monorepo/main/apps/skillforge-ui/src/assets/png/background.png'
-const pstlModalTheme = createCustomTheme<ThemeByModes<PstlModalTheme>>({
+export const pstlModalTheme = createCustomTheme<ThemeByModes<PstlModalTheme>>({
   modes: {
     LIGHT: {},
     DARK: {},
@@ -54,14 +54,6 @@ const DEFAULT_PROPS: PstlW3ProviderProps = {
   web3Auth: {
     appName: 'SKILLFORGE TEST',
     w3aId: WEB3AUTH_TEST_ID
-  },
-  pstlW3Modal: {
-    theme: pstlModalTheme,
-    loaderProps: {
-      spinnerProps: {
-        size: 80
-      }
-    }
   }
 }
 

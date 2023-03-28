@@ -39,8 +39,8 @@ const AnimatedDialogContent = animated(DialogContent)
 // destructure to not pass custom props to Dialog DOM element
 const StyledDialogContent = styled(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  ({ margin, minHeight, maxHeight, maxWidth, mobile, isOpen, isLargeImageModal, ...rest }) => (
-    <AnimatedDialogContent {...rest} />
+  ({ margin, minHeight, maxHeight, maxWidth, mobile, isOpen, isLargeImageModal, tabIndex, ...rest }) => (
+    <AnimatedDialogContent {...rest} tabIndex={tabIndex} />
   )
 ).attrs({
   'aria-label': 'dialog'
@@ -75,12 +75,12 @@ const StyledDialogContent = styled(
 export interface ModalProps {
   isLargeImageModal?: boolean
   isOpen: boolean
+  tabIndex?: 0 | -1
   onDismiss: () => void
   minHeight?: string
   maxHeight?: string
   maxWidth?: string
   margin?: string
-  stopInputFocus?: boolean
   initialFocusRef?: React.RefObject<any>
   className?: string
   children?: React.ReactNode
@@ -91,12 +91,12 @@ export function Modal({
   isOpen,
   children,
   className,
+  tabIndex,
   onDismiss,
   margin,
   minHeight,
   maxHeight = '90vh',
   maxWidth,
-  stopInputFocus = true,
   styleProps = {},
   initialFocusRef,
   isLargeImageModal = false
@@ -126,11 +126,12 @@ export function Modal({
         maxHeight={maxHeight}
         maxWidth={maxWidth}
         mobile={isMobile}
+        tabIndex={tabIndex}
         isLargeImageModal={isLargeImageModal}
         {...styleProps}
       >
         {/* prevents the automatic focusing of inputs on mobile by the reach dialog */}
-        {stopInputFocus && !initialFocusRef && isMobile ? <div tabIndex={1} /> : null}
+        {tabIndex === undefined || initialFocusRef || !isMobile ? null : <div tabIndex={1} />}
         {children}
       </StyledDialogContent>
     </StyledDialogOverlay>

@@ -4,7 +4,7 @@ import { useAccount } from 'wagmi'
 
 import { usePstlWeb3Modal } from '../hooks'
 import { PstlW3Providers } from '../providers'
-import { commonProps } from './config'
+import { commonProps, pstlModalTheme } from './config'
 
 /* 
     interface Web3ModalProps {
@@ -50,6 +50,15 @@ export default {
           appLogoLight: LOGO,
           appLogoDark: LOGO,
           modalZIndex: '99999999999'
+        },
+        pstlW3Modal: {
+          theme: pstlModalTheme,
+          closeModalOnConnect: false,
+          loaderProps: {
+            spinnerProps: {
+              size: 80
+            }
+          }
         }
       }}
     >

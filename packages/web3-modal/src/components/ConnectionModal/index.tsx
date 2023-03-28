@@ -15,6 +15,7 @@ interface PstlWeb3ConnectionModalProps extends Omit<ModalProps, 'isOpen' | 'onDi
   theme?: ThemeByModes<BasicUserTheme>
   loaderProps?: LoadingScreenProps
   buttonProps?: ButtonProps
+  closeModalOnConnect?: boolean
 }
 
 function ModalWithoutThemeProvider({
@@ -23,6 +24,7 @@ function ModalWithoutThemeProvider({
   loaderProps,
   maxWidth = '360px',
   maxHeight = '600px',
+  closeModalOnConnect = false,
   ...restModalProps
 }: Omit<PstlWeb3ConnectionModalProps, 'theme'>) {
   const [connectors, { connect, openW3Modal }, { address, chainId, currentConnector }] = useConnection()
@@ -48,9 +50,7 @@ function ModalWithoutThemeProvider({
             setW3aModalMounted,
             setW3aModalLoading
           },
-          chainId,
-          address,
-          w3aModalMounted
+          { chainId, address, isW3aModalMounted: w3aModalMounted, closeOnConnect: closeModalOnConnect }
         )
 
         return (
@@ -67,6 +67,7 @@ function ModalWithoutThemeProvider({
       address,
       buttonProps,
       chainId,
+      closeModalOnConnect,
       connectors,
       currentConnector,
       theme?.modals?.connection?.helpers?.show,
@@ -84,6 +85,8 @@ function ModalWithoutThemeProvider({
       onDismiss={close}
       maxWidth={maxWidth}
       maxHeight={maxHeight}
+      // to prevent locking of focus on modal (with web3auth this blocks using their modal e.g)
+      tabIndex={undefined}
       {...restModalProps}
     >
       <InnerContainer justifyContent="flex-start" gap="0.75rem">

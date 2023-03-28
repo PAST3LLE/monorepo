@@ -23,9 +23,17 @@ export function getConnectorInfo(
     setW3aModalMounted: (val: boolean) => void
     setW3aModalLoading: (val: boolean) => void
   },
-  chainId?: number,
-  address?: string,
-  w3aModalMounted?: boolean
+  {
+    chainId,
+    address,
+    isW3aModalMounted,
+    closeOnConnect
+  }: {
+    chainId?: number
+    address?: string
+    isW3aModalMounted?: boolean
+    closeOnConnect?: boolean
+  }
 ): [
   { label: string; logo?: string; connected: boolean },
   ReturnType<typeof useConnection>[1]['connect'] | ReturnType<typeof useConnection>[1]['openW3Modal']
@@ -41,8 +49,7 @@ export function getConnectorInfo(
         async () => {
           try {
             // Web3Auth modal has already mounted, skip timeout
-            if (w3aModalMounted) {
-              closePstlModal()
+            if (isW3aModalMounted) {
               return !address ? connect({ connector, chainId }) : openW3Modal({ route: 'Account' })
             } else {
               // Web3Auth modal is async imported on use
@@ -61,7 +68,7 @@ export function getConnectorInfo(
             await connector.disconnect()
             console.error('[PstlWeb3ConnectionModal::getProviderInfo] - Error in loading modal:', error)
           } finally {
-            closePstlModal()
+            closeOnConnect && closePstlModal()
             setW3aModalLoading(false)
             setW3aModalMounted(true)
           }
@@ -80,7 +87,7 @@ export function getConnectorInfo(
           } catch (error) {
             console.error('[PstlWeb3ConnectionModal::getConnectorInfo] Web3Modal error!', error)
           } finally {
-            closePstlModal()
+            closeOnConnect && closePstlModal()
           }
         }
       ]
@@ -97,7 +104,7 @@ export function getConnectorInfo(
           } catch (error) {
             console.error('[PstlWeb3ConnectionModal::getConnectorInfo] WalletConnect error!', error)
           } finally {
-            closePstlModal()
+            closeOnConnect && closePstlModal()
           }
         }
       ]

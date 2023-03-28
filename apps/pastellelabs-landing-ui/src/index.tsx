@@ -1,5 +1,5 @@
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
-import { Past3lleHooksProvider } from '@past3lle/hooks'
+import { PstlHooksProvider } from '@past3lle/hooks'
 import React from 'react'
 import 'react-app-polyfill/ie11'
 import ReactDOM from 'react-dom/client'
@@ -10,9 +10,9 @@ const container = document.getElementById('root') as HTMLElement
 const root = ReactDOM.createRoot(container)
 
 root.render(
-  <Past3lleHooksProvider>
+  <PstlHooksProvider>
     <App />
-  </Past3lleHooksProvider>
+  </PstlHooksProvider>
 )
 
 // SERVICE WORKER (e.g USER OFFLINE USE)
