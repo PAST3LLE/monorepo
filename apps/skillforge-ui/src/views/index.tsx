@@ -37,6 +37,7 @@ const SKILLTREE_CONFIG: SkillForgeProps = {
         theme: pstlModalTheme,
         maxHeight: '650px',
         maxWidth: '360px',
+        margin: 'auto',
         closeModalOnConnect: false,
         infoTextMap: {
           general: {
