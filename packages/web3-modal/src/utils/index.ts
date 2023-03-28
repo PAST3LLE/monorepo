@@ -74,12 +74,13 @@ export function getConnectorInfo(
           }
         }
       ]
-    case DefaultWallets.WEB3MODAL:
+    case DefaultWallets.WEB3MODAL: {
+      console.debug('WEB3MODAL', connector)
       return [
         {
           label: connector?.customName || 'Wallets',
           logo: connector?.logo || WALLETCONNECT_LOGO,
-          connected: currentConnector?.id === DefaultWallets.WEB3MODAL || !!currentConnector?.ready
+          connected: currentConnector?.id === DefaultWallets.WEB3MODAL
         },
         async () => {
           try {
@@ -91,6 +92,7 @@ export function getConnectorInfo(
           }
         }
       ]
+    }
     default:
       return [
         {

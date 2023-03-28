@@ -1,4 +1,4 @@
-import { Button, ButtonProps, CloseIcon, Modal, ModalProps } from '@past3lle/components'
+import { ButtonProps, CloseIcon, Modal, ModalProps } from '@past3lle/components'
 import { BasicUserTheme, ThemeByModes, ThemeProvider } from '@past3lle/theme'
 import { devWarn } from '@past3lle/utils'
 import React, { Fragment, memo, useMemo, useState } from 'react'
@@ -8,7 +8,12 @@ import { useConnection, useModalTheme, usePstlWeb3Modal } from '../../hooks'
 import { getConnectorInfo } from '../../utils'
 import { LoadingScreen, LoadingScreenProps } from '../LoadingScreen'
 import { ConnectorHelper } from './ConnectorHelper'
-import { InnerContainer } from './styled'
+import { InnerContainer, ModalButton } from './styled'
+
+type DefaultWalletNames = 'general' | 'web3auth' | 'walletConnect'
+type InfoTextMap = {
+  [key in DefaultWalletNames]?: { title: string; content: string }
+}
 
 interface PstlWeb3ConnectionModalProps extends Omit<ModalProps, 'isOpen' | 'onDismiss'> {
   title?: string
@@ -16,6 +21,7 @@ interface PstlWeb3ConnectionModalProps extends Omit<ModalProps, 'isOpen' | 'onDi
   loaderProps?: LoadingScreenProps
   buttonProps?: ButtonProps
   closeModalOnConnect?: boolean
+  infoTextMap?: InfoTextMap
 }
 
 function ModalWithoutThemeProvider({
@@ -25,6 +31,7 @@ function ModalWithoutThemeProvider({
   maxWidth = '360px',
   maxHeight = '600px',
   closeModalOnConnect = false,
+  infoTextMap,
   ...restModalProps
 }: Omit<PstlWeb3ConnectionModalProps, 'theme'>) {
   const [connectors, { connect, openW3Modal }, { address, chainId, currentConnector }] = useConnection()
@@ -55,11 +62,15 @@ function ModalWithoutThemeProvider({
 
         return (
           <Fragment key={connector.id + '_' + index}>
-            <Button onClick={callback} {...buttonProps}>
+            <ModalButton onClick={callback} connected={connected} {...buttonProps}>
               <img style={{ maxWidth: 50 }} src={logo} />
-              {connected ? `Connected to ${label}` : `Connect with ${label}`}
-            </Button>
-            {theme?.modals?.connection?.helpers?.show && <ConnectorHelper connector={connector} />}
+              {connected ? `Connected: ${label}` : `${label} login`}
+            </ModalButton>
+            {theme?.modals?.connection?.helpers?.show && (
+              <ConnectorHelper title={infoTextMap?.[connector.id as DefaultWalletNames]?.title} connector={connector}>
+                {infoTextMap?.[connector.id as DefaultWalletNames]?.content}
+              </ConnectorHelper>
+            )}
           </Fragment>
         )
       }),
@@ -70,6 +81,7 @@ function ModalWithoutThemeProvider({
       closeModalOnConnect,
       connectors,
       currentConnector,
+      infoTextMap,
       theme?.modals?.connection?.helpers?.show,
       w3aModalMounted,
       close,
@@ -92,6 +104,9 @@ function ModalWithoutThemeProvider({
       <InnerContainer justifyContent="flex-start" gap="0.75rem">
         <CloseIcon style={{ position: 'absolute', right: '0.5rem', top: '0.5rem' }} onClick={close} />
         <h1>{title}</h1>
+        {infoTextMap?.general && (
+          <ConnectorHelper title={infoTextMap.general.title}>{infoTextMap.general.content}</ConnectorHelper>
+        )}
         {w3aModalLoading ? <LoadingScreen {...loaderProps} /> : data}
       </InnerContainer>
     </Modal>

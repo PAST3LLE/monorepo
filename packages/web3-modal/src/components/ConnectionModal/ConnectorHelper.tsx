@@ -1,13 +1,13 @@
 import { ColumnCenter } from '@past3lle/components'
 import { useStateRef } from '@past3lle/hooks'
-import React, { useState } from 'react'
+import React, { ReactNode, useState } from 'react'
 import styled from 'styled-components'
 import { Connector } from 'wagmi'
 
 import { ConnectorEnhanced } from '../../types'
 
 const ConnectorHelperContainer = styled(ColumnCenter)<{ open: boolean; contentHeight?: number }>`
-  overflow: hidden;
+  overflow: ${({ open }) => (open ? 'revert' : 'hidden')};
   cursor: pointer;
   color: ${({ theme }) => theme.modals?.connection?.helpers?.color || 'ghostwhite'};
   > p {
@@ -20,12 +20,12 @@ const ConnectorHelperContainer = styled(ColumnCenter)<{ open: boolean; contentHe
       ${({ open, contentHeight = 0 }) =>
         open
           ? `
-      height: ${contentHeight}px;
-      margin: 1em 0;
+        height: ${contentHeight}px;
+        margin: 1em 0;
       `
           : `
-      height: 0px;
-      margin: 0;
+        height: 0px;
+        margin: 0;
       `}
       transition: margin 0.6s ease-in-out, height 0.3s ease-in-out;
     }
@@ -36,22 +36,32 @@ const ConnectorHelperContainer = styled(ColumnCenter)<{ open: boolean; contentHe
   }
 `
 
-export function ConnectorHelper(props: { color?: string; connector: Connector<any, any, any> }) {
+export function ConnectorHelper({
+  title = 'View more info',
+  ...props
+}: {
+  title?: string
+  children?: ReactNode
+  color?: string
+  connector?: Connector<any, any, any>
+}) {
   const [open, setOpen] = useState(false)
   const handleClick = () => setOpen((state) => !state)
   const [height, setRef] = useStateRef<number | undefined>(undefined, (node: HTMLElement | null) => node?.offsetHeight)
   return (
     <ConnectorHelperContainer width="100%" textAlign="left" open={open} contentHeight={height}>
-      <p onClick={handleClick}>[{open ? '-' : '+'}] View more info</p>
+      <p onClick={handleClick}>
+        [{open ? '-' : '+'}] {title}
+      </p>
       <p>
-        <span ref={setRef}>{_getConnectorHelperText(props.connector)}</span>
+        <span ref={setRef}>{props.children || _getConnectorHelperText(props.connector)}</span>
       </p>
     </ConnectorHelperContainer>
   )
 }
 
-function _getConnectorHelperText(connector: ConnectorEnhanced<any, any, any>) {
-  switch (connector.id) {
+function _getConnectorHelperText(connector?: ConnectorEnhanced<any, any, any>) {
+  switch (connector?.id) {
     case 'web3auth':
       return (
         connector?.details ||

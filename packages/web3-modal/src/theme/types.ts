@@ -26,6 +26,7 @@ export interface PstlModalTheme {
         color?: string
         textShadow?: string
         background?: string
+        connectedBackgroundColor?: string
         fontSize?: string
         fontStyle?: string
         fontWeight?: number

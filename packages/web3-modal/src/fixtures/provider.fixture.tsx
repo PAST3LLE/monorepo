@@ -6,15 +6,6 @@ import { usePstlWeb3Modal } from '../hooks'
 import { PstlW3Providers } from '../providers'
 import { commonProps, pstlModalTheme } from './config'
 
-/* 
-    interface Web3ModalProps {
-        appName: string
-        web3Modal: Web3ModalConfig
-        wagmiClient?: SkillForgeW3WagmiClientOptions
-        ethereumClient?: EthereumClient
-    }
-*/
-
 interface Web3ButtonProps {
   children?: ReactNode
 }
@@ -54,6 +45,23 @@ export default {
         pstlW3Modal: {
           theme: pstlModalTheme,
           closeModalOnConnect: false,
+          infoTextMap: {
+            general: {
+              title: 'What can I do on this modal?',
+              content:
+                "This is some helper filler text to describe wtf is going on in this connection modal. It is useful to learn these things while browsing apps as users can get confused when having to exit apps to read info somewhere else that isn't the current screent they are on."
+            },
+            web3auth: {
+              title: 'What is social login?',
+              content:
+                'Social login is done via Web3Auth - a non-custodial social login protocol (i.e they never actually know, or hold your data) - which facilitates logging into dApps (decentralised apps) via familiar social login choices'
+            },
+            walletConnect: {
+              title: 'What is wallets login?',
+              content:
+                'Web3Modal/WalletConnect is a simple blockchain wallet aggregator modal that facilitates the choice of selecting preferred blockchain wallet(s) for connecting to dApps (decentralised apps). This generally requires more blockchain knowledge.'
+            }
+          },
           loaderProps: {
             spinnerProps: {
               size: 80
