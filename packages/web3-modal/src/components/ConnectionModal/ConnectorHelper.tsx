@@ -10,7 +10,7 @@ const ConnectorHelperContainer = styled(ColumnCenter)<{ open: boolean; contentHe
   color: ${({ theme }) => theme.modals?.connection?.helpers?.color || 'ghostwhite'};
   > p {
     font-size: 0.55em;
-    margin: 0;
+    margin: 0 0 0 2em;
     width: 100%;
     &:last-child {
       margin: 1em;
