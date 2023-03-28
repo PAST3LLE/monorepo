@@ -1,3 +1,4 @@
+import { PstlHooksProvider } from '@past3lle/hooks'
 import { PstlW3Providers } from '@past3lle/web3-modal'
 import React, { ReactNode, StrictMode } from 'react'
 
@@ -21,7 +22,9 @@ interface ForgeW3CoreProvidersProps {
 function ForgeW3DataProviders({ config, children }: ForgeW3CoreProvidersProps) {
   return (
     <StrictMode>
-      <SkillForgeW3StateUpdaters {...config}>{children}</SkillForgeW3StateUpdaters>
+      <PstlHooksProvider {...config.hooksProviderOptions}>
+        <SkillForgeW3StateUpdaters {...config}>{children}</SkillForgeW3StateUpdaters>
+      </PstlHooksProvider>
     </StrictMode>
   )
 }
@@ -29,16 +32,16 @@ function ForgeW3DataProviders({ config, children }: ForgeW3CoreProvidersProps) {
 function ForgeW3ConnectedProviders({ config, children }: ForgeW3CoreProvidersProps) {
   return (
     <StrictMode>
-      <SkillForgeW3StateUpdaters {...config}>
+      <PstlHooksProvider {...config.hooksProviderOptions}>
         <PstlW3Providers
           config={{
             ...config.web3,
             appName: config.name
           }}
         >
-          {children}
+          <SkillForgeW3StateUpdaters {...config}>{children}</SkillForgeW3StateUpdaters>
         </PstlW3Providers>
-      </SkillForgeW3StateUpdaters>
+      </PstlHooksProvider>
     </StrictMode>
   )
 }

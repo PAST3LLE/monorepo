@@ -48,15 +48,15 @@ function _getSize(): WindowSizes {
 
 /**
  * @name useWindowSize
- * @description Listens to window resize events and updates via CONTEXT. This requires you to FIRST place the Past3lleHooksProvider somewhere in your app ABOVE your intended use of this hook
+ * @description Listens to window resize events and updates via CONTEXT. This requires you to FIRST place the PstlHooksProvider somewhere in your app ABOVE your intended use of this hook
  * @example
  // somewhere in app architecture
  // e.g render
   root.render(
     // Provider goes here, hook used in "App", below
-    <Past3lleHooksProvider>
+    <PstlHooksProvider>
       <App />
-    </Past3lleHooksProvider>
+    </PstlHooksProvider>
   )
  * @returns void
  */
@@ -66,7 +66,7 @@ export function useWindowSize(): WindowSizes | undefined {
   const isInstantiated = !!context?.windowSizes
   if (!isInstantiated) {
     devWarn(
-      '[@past3lle/hooks]::useWindowSize::Error! Cannot use <useWindowSize> hook outside of the Past3lleHooksProvider. Please add one to the root of your app, ABOVE where you are intending to use the hook. Hover over hook for example use-case. For now, calling window.clientWidth directly (not optimum).'
+      '[@past3lle/hooks]::useWindowSize::Error! Cannot use <useWindowSize> hook outside of the PstlHooksProvider. Please add one to the root of your app, ABOVE where you are intending to use the hook. Hover over hook for example use-case. For now, calling window.clientWidth directly (not optimum).'
     )
   }
 
@@ -93,7 +93,7 @@ export interface PstlHooksProviderOptions {
   }
 }
 /**
- * @name Past3lleHooksProvider
+ * @name PstlHooksProvider
  * @description required to place ABOVE intended use of useWindowSize hook
  * @param providerOptions
  * @example
@@ -109,13 +109,13 @@ export interface PstlHooksProviderOptions {
  // e.g render
   root.render(
     // Provider goes here, hook used in "App", below
-    <Past3lleHooksProvider>
+    <PstlHooksProvider>
       <App />
-    </Past3lleHooksProvider>
+    </PstlHooksProvider>
   )
  * @returns
  */
-export function Past3lleHooksProvider(props?: { children?: ReactNode } & PstlHooksProviderOptions) {
+export function PstlHooksProvider(props?: { children?: ReactNode } & PstlHooksProviderOptions) {
   const windowSizes = useWindowSizeSetup(props?.windowSizes)
 
   return <WindowSizeContext.Provider value={{ windowSizes }}>{props?.children}</WindowSizeContext.Provider>
