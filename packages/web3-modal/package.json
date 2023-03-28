@@ -1,6 +1,6 @@
 {
   "name": "@past3lle/web3-modal",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "sideEffects": false,
   "description": "PAST3LLE's Web3 connection modal",
   "keywords": [
@@ -69,18 +69,18 @@
     "styled-components": ">=5"
   },
   "dependencies": {
-    "valtio": "1.10.3",
     "@ethersproject/bignumber": ">=5.7.0",
     "@gnosis.pm/safe-apps-wagmi": "^2.1.0",
-    "@past3lle/components": "^0.0.52",
-    "@past3lle/hooks": "^0.0.20",
-    "@past3lle/theme": "^0.0.31",
+    "@past3lle/components": "^0.0.53",
+    "@past3lle/hooks": "^0.0.21",
+    "@past3lle/theme": "^0.0.32",
     "@past3lle/utils": "0.0.17",
     "@web3modal/ethereum": "^2.2.2",
     "@web3modal/html": "^2.2.2",
     "@web3modal/react": "^2.2.2",
     "@web3modal/standalone": "^2.2.2",
     "jotai": "^1.13.0",
+    "valtio": "1.10.3",
     "wagmi": "0.12.1"
   },
   "devDependencies": {
