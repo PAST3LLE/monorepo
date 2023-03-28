@@ -9,10 +9,11 @@
   "scripts": {
     "test:generic": "cd examples/generic && rm -rf node_modules .parcel-cache && yarn && yarn start && cd ../..",
     "build": "lerna run build --stream",
+    "build:public": "lerna run build --no-private --stream",
     "lint": "lerna run lint --stream --parallel",
     "lint:examples": "npx prettier --write examples --ignore-file './prettierignore'",
-    "start:skillforge": "npx lerna run start --scope @past3lle/skillforge-ui",
-    "start:landing-ui": "npx lerna run start --scope @past3lle/pastellelabs-landing-ui",
+    "start:skillforge": "lerna run start --scope @past3lle/skillforge-ui",
+    "start:landing-ui": "lerna run start --scope @past3lle/pastellelabs-landing-ui",
     "test": "yarn jest --coverage",
     "test:watch": "yarn test --watch",
     "install:examples": "cd examples/generic && yarn && cd ../../",
