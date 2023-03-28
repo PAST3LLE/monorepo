@@ -37,10 +37,12 @@ const StyledDialogOverlay = styled(AnimatedDialogOverlay)<Pick<ModalStyleProps, 
 
 const AnimatedDialogContent = animated(DialogContent)
 // destructure to not pass custom props to Dialog DOM element
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const StyledDialogContent = styled(({ minHeight, maxHeight, maxWidth, mobile, isOpen, isLargeImageModal, ...rest }) => (
-  <AnimatedDialogContent {...rest} />
-)).attrs({
+const StyledDialogContent = styled(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  ({ margin, minHeight, maxHeight, maxWidth, mobile, isOpen, isLargeImageModal, ...rest }) => (
+    <AnimatedDialogContent {...rest} />
+  )
+).attrs({
   'aria-label': 'dialog'
 })<Omit<ModalStyleProps, 'overlayBackgroundColor' | 'zIndex'>>`
   border: none;
@@ -60,7 +62,7 @@ const StyledDialogContent = styled(({ minHeight, maxHeight, maxWidth, mobile, is
     align-self: center;
 
     border-radius: 0;
-    margin: 0 0 auto 0;
+    margin: ${({ margin = '0 0 auto 0' }) => margin};
     padding-top: 2rem;
     width: ${({ isLargeImageModal }) => (isLargeImageModal ? '90' : '50')}vh;
     max-width: ${({ maxHeight, maxWidth = '42rem', isLargeImageModal = false }) =>
@@ -77,6 +79,7 @@ export interface ModalProps {
   minHeight?: string
   maxHeight?: string
   maxWidth?: string
+  margin?: string
   stopInputFocus?: boolean
   initialFocusRef?: React.RefObject<any>
   className?: string
@@ -89,6 +92,7 @@ export function Modal({
   children,
   className,
   onDismiss,
+  margin,
   minHeight,
   maxHeight = '90vh',
   maxWidth,
@@ -117,6 +121,7 @@ export function Modal({
     >
       <StyledDialogContent
         aria-label="dialog content"
+        margin={margin}
         minHeight={minHeight}
         maxHeight={maxHeight}
         maxWidth={maxWidth}

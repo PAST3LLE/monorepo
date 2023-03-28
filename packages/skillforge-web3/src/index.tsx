@@ -29,14 +29,16 @@ function ForgeW3DataProviders({ config, children }: ForgeW3CoreProvidersProps) {
 function ForgeW3ConnectedProviders({ config, children }: ForgeW3CoreProvidersProps) {
   return (
     <StrictMode>
-      <PstlW3Providers
-        config={{
-          ...config.web3,
-          appName: config.name
-        }}
-      >
-        <SkillForgeW3StateUpdaters {...config}>{children}</SkillForgeW3StateUpdaters>
-      </PstlW3Providers>
+      <SkillForgeW3StateUpdaters {...config}>
+        <PstlW3Providers
+          config={{
+            ...config.web3,
+            appName: config.name
+          }}
+        >
+          {children}
+        </PstlW3Providers>
+      </SkillForgeW3StateUpdaters>
     </StrictMode>
   )
 }
