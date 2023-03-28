@@ -39,6 +39,7 @@ export interface PstlWeb3AuthConnectorProps {
   chains: Chain[]
   listingName?: string
   listingLogo?: string
+  listingDetails?: string
   loginMethodsOrder?: string[]
   modalZIndex?: string
   w3aId: string
@@ -52,6 +53,7 @@ export function PstlWeb3AuthConnector({
   chains,
   listingName = 'Social',
   listingLogo = SOCIAL_LOGO,
+  listingDetails,
   loginMethodsOrder,
   modalZIndex = '2147483647',
   preset = 'ALLOW_EXTERNAL_WALLETS',
@@ -101,7 +103,7 @@ export function PstlWeb3AuthConnector({
   return new Web3AuthEnhancedConnector({
     customName: listingName,
     logo: listingLogo,
-    details: 'Web3Auth is fucking gangster fam. Blud innit.',
+    details: listingDetails,
     chains,
     options: {
       web3AuthInstance,
