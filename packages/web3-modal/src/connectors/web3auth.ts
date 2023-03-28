@@ -5,25 +5,28 @@ import { OpenloginAdapter } from '@web3auth/openlogin-adapter'
 import { Web3AuthConnector as Web3AuthConnectorCreator } from '@web3auth/web3auth-wagmi-connector'
 import { Chain } from 'wagmi'
 
+import { ConnectorEnhancedExtras } from '../types'
+
 const SOCIAL_LOGO = 'https://www.getopensocial.com/wp-content/uploads/2020/12/social-login-COLOR_2.png'
 const NET = process.env.NODE_ENV !== 'production' ? 'testnet' : 'mainnet'
 
 class Web3AuthEnhancedConnector extends Web3AuthConnectorCreator {
-  public customName: string
-  public logo: string
+  public customName?: string
+  public logo?: string
+  public details?: string
 
   constructor({
-    name,
+    customName,
     logo,
+    details,
     ...rest
   }: {
-    name: string
-    logo: string
     chains?: Chain[] | undefined
     options: Web3AuthConnectorCreator['options']
-  }) {
+  } & ConnectorEnhancedExtras) {
     super(rest)
-    this.customName = name
+    this.details = details
+    this.customName = customName
     this.logo = logo
   }
 }
@@ -96,8 +99,9 @@ export function PstlWeb3AuthConnector({
   web3AuthInstance.configureAdapter(openloginAdapterInstance)
 
   return new Web3AuthEnhancedConnector({
-    name: listingName,
+    customName: listingName,
     logo: listingLogo,
+    details: 'Web3Auth is fucking gangster fam. Blud innit.',
     chains,
     options: {
       web3AuthInstance,
