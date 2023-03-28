@@ -9,12 +9,13 @@ export const pstlModalTheme = createCustomTheme<ThemeByModes<PstlModalTheme>>({
     DEFAULT: {
       modals: {
         connection: {
+          background: `url(${ASSETS_MAP.images.background.app}) center/cover`,
           baseFontSize: 20,
           helpers: { show: true },
-          background: `url(${ASSETS_MAP.images.background.app}) center/cover`,
           title: { color: '#cbb9ee', fontWeight: 700, letterSpacing: '-1.4px', lineHeight: 0.82 },
           button: {
             background: '#301d4ea1',
+            connectedBackgroundColor: '#37b9927d',
             border: { border: 'none', radius: '1em' },
             color: 'ghostwhite',
             fontStyle: 'italic',

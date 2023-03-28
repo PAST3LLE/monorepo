@@ -99,6 +99,10 @@ function ModalWithoutThemeProvider({
       maxHeight={maxHeight}
       // to prevent locking of focus on modal (with web3auth this blocks using their modal e.g)
       tabIndex={undefined}
+      styleProps={{
+        zIndex: 88,
+        ...restModalProps.styleProps
+      }}
       {...restModalProps}
     >
       <InnerContainer justifyContent="flex-start" gap="0.75rem">

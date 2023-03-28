@@ -31,7 +31,9 @@ const SKILLTREE_CONFIG: SkillForgeProps = {
     theme: skillforgeTheme,
     web3: {
       chains: SUPPORTED_CHAINS,
-      web3Modal: CLIENT_PROPS.web3Modal,
+      web3Modal: {
+        ...CLIENT_PROPS.web3Modal
+      },
       web3Auth: CLIENT_PROPS.web3Auth,
       pstlW3Modal: {
         theme: pstlModalTheme,
