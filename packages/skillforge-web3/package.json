@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/skillforge-web3",
   "sideEffects": false,
-  "version": "0.0.17",
+  "version": "0.0.18",
   "description": "PAST3LLE SKILLFORGE web3 hooks and tings",
   "main": "dist/esm/index.js",
   "typings": "dist/types/index.d.ts",
@@ -116,7 +116,7 @@
     "@past3lle/hooks": "^0.0.21",
     "@past3lle/theme": "^0.0.32",
     "@past3lle/utils": "0.0.17",
-    "@past3lle/web3-modal": "^0.0.2",
+    "@past3lle/web3-modal": "^0.0.3",
     "@web3modal/ethereum": "^2.2.2",
     "@web3modal/html": "^2.2.2",
     "@web3modal/react": "^2.2.2",
