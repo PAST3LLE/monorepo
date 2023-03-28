@@ -10,53 +10,58 @@ export const InnerContainer = styled(ColumnCenter)`
   font-style: italic;
   font-family: 'Roboto', system-ui;
 
-  background: ${({ theme }) => theme.content.modals?.connection?.background || 'rgb(201 172 172)'};
-  padding: ${({
-    theme: {
-      content: { modals }
-    }
-  }) => modals?.connection?.padding || '1rem'};
+  background: ${({ theme }) => theme.modals?.connection?.background || 'rgb(201 172 172)'};
+  padding: ${({ theme: { modals } }) => modals?.connection?.padding || '1rem'};
 
   > ${CloseIcon} {
-    color: ${({ theme }) => theme.content.modals?.connection?.closeIcon?.color || 'ghostwhite'};
-    ${({ theme }) => getPosition(theme.content.modals?.connection?.closeIcon?.position)};
-    width: ${({ theme }) => theme.content.modals?.connection?.closeIcon?.size || '1rem'};
+    color: ${({ theme }) => theme.modals?.connection?.closeIcon?.color || 'ghostwhite'};
+    ${({ theme }) => getPosition(theme.modals?.connection?.closeIcon?.position)};
+    width: ${({ theme }) => theme.modals?.connection?.closeIcon?.size || '1rem'};
   }
 
   > h1 {
-    color: ${({ theme }) => theme.content.modals?.connection?.title?.color || 'ghostwhite'};
-    font-weight: ${({ theme }) => theme.content.modals?.connection?.title?.fontWeight || 200};
-    letter-spacing: ${({ theme }) => theme.content.modals?.connection?.title?.letterSpacing || '0px'};
+    color: ${({ theme }) => theme.modals?.connection?.title?.color || 'ghostwhite'};
+    font-size: ${({ theme }) => theme.modals?.connection?.title?.fontSize || 'initial'};
+    font-weight: ${({ theme }) => theme.modals?.connection?.title?.fontWeight || 200};
+    letter-spacing: ${({ theme }) => theme.modals?.connection?.title?.letterSpacing || '0px'};
+    line-height: ${({ theme }) => theme.modals?.connection?.title?.lineHeight || 1};
   }
 
   > ${Button} {
     width: 100%;
     justify-content: flex-start;
-    background: ${({ theme }) => theme.content.modals?.connection?.button?.background || 'rgba(0,0,0,0.9)'};
+    background: ${({ theme }) => theme.modals?.connection?.button?.background || 'rgba(0,0,0,0.9)'};
 
-    border: ${({ theme }) => theme.content.modals?.connection?.button?.border?.border || '1px solid black'};
-    border-color: ${({ theme }) => theme.content.modals?.connection?.button?.border?.color};
+    border: ${({ theme }) => theme.modals?.connection?.button?.border?.border || '1px solid black'};
+    border-color: ${({ theme }) => theme.modals?.connection?.button?.border?.color};
 
-    font-weight: ${({ theme }) => theme.content.modals?.connection?.button?.fontWeight || 300};
+    font-style: ${({ theme }) => theme.modals?.connection?.button?.fontStyle || 'inherit'};
+    font-weight: ${({ theme }) => theme.modals?.connection?.button?.fontWeight || 300};
     color: ${({ theme }) =>
-      theme.content.modals?.connection?.button?.color ||
-      setBestTextColour(theme.content.modals?.connection?.button?.background || 'ghostwhite')};
+      theme.modals?.connection?.button?.color ||
+      setBestTextColour(theme.modals?.connection?.button?.background || 'ghostwhite')};
+
+    letter-spacing: ${({ theme }) => theme.modals?.connection?.button?.letterSpacing || '0px'};
+    ${({ theme }) =>
+      theme.modals?.connection?.button?.textShadow && `text-shadow: ${theme.modals?.connection?.button?.textShadow};`}
 
     ${({ theme }) =>
-      theme.content.modals?.connection?.button?.textShadow &&
-      `text-shadow: ${theme.content.modals?.connection?.button?.textShadow};`}
-
-    ${({ theme }) =>
-      theme.content.modals?.connection?.button?.fontSize &&
-      `font-size: ${theme.content.modals?.connection?.button?.fontSize};`}
+      theme.modals?.connection?.button?.fontSize && `font-size: ${theme.modals?.connection?.button?.fontSize};`}
     
-    ${({ theme }) => `text-transform: ${theme.content.modals?.connection?.button?.textTransform || 'none'};`}
+    ${({ theme }) => `text-transform: ${theme.modals?.connection?.button?.textTransform || 'none'};`}
     
     gap: 1rem;
-  }
-  border-radius: ${({
-    theme: {
-      content: { modals }
+
+    &:hover {
+      ${({ theme }) =>
+        !!theme.modals?.connection?.button?.hoverAnimations &&
+        `
+        transform: scale(1.05);
+        filter: saturate(2);
+      `}
     }
-  }) => modals?.connection?.button?.border?.radius || '1rem'};
+
+    transition: transform 0.3s ease-in-out;
+  }
+  border-radius: ${({ theme: { modals } }) => modals?.connection?.button?.border?.radius || '1rem'};
 `

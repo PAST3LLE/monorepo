@@ -16,7 +16,7 @@ export type Web3ModalConfig = Omit<ConfigCtrlState, 'projectId' | 'enableStandal
 export interface Web3ModalProps {
   appName: string
   chains: Chain[]
-  web3Modal: Web3ModalConfig
+  web3Modal: Omit<Web3ModalConfig, 'w3aId'>
   web3Auth: Omit<PstlWeb3AuthConnectorProps, 'chains'> & { chains?: Chain[] }
   wagmiClient?: PstlWagmiClientOptions
   ethereumClient?: EthereumClient

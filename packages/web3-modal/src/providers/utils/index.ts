@@ -6,7 +6,7 @@ import { WagmiConfigProps, createClient } from 'wagmi'
 
 import { PstlWeb3AuthConnector, PstlWeb3AuthConnectorProps } from '../../connectors/web3auth'
 import { ConnectorEnhanced } from '../../types'
-import { Web3ModalProps } from '../types'
+import { PstlW3ProviderProps } from '../types'
 
 interface ClientConfigEnhanced extends Omit<ClientConfig, 'connectors'> {
   connectors?: (() => ConnectorEnhanced<any, any, any>[]) | ConnectorEnhanced<any, any, any>[]
@@ -15,8 +15,7 @@ interface ClientConfigEnhanced extends Omit<ClientConfig, 'connectors'> {
 interface CreateWagmiClientProps {
   appName: string
   chains: Chain[]
-  w3aId: string
-  w3mId: string
+  w3mConnectorProps: PstlW3ProviderProps['web3Modal']
   w3aConnectorProps: Omit<PstlWeb3AuthConnectorProps, 'chains'>
   options?: Partial<Pick<ClientConfigEnhanced, 'connectors' | 'provider' | 'autoConnect'>>
 }
@@ -30,7 +29,7 @@ const createWagmiClient = ({ options, ...props }: CreateWagmiClientProps): Wagmi
       PstlWeb3AuthConnector({ chains: props.chains, ...props.w3aConnectorProps }),
       // Web3Modal
       ...w3mConnectors({
-        projectId: props.w3mId,
+        projectId: props.w3mConnectorProps.w3mId,
         version: 2,
         chains: props.chains
       }),
@@ -39,7 +38,9 @@ const createWagmiClient = ({ options, ...props }: CreateWagmiClientProps): Wagmi
       // any use custom modals
       ...(connectors || [])
     ],
-    provider: options?.provider || configureChains(props.chains, [w3mProvider({ projectId: props.w3mId })]).provider
+    provider:
+      options?.provider ||
+      configureChains(props.chains, [w3mProvider({ projectId: props.w3mConnectorProps.w3mId })]).provider
   })
 }
 const createEthereumClient = (wagmiClient: ReturnType<typeof createWagmiClient>, chains: Chain[]) =>
@@ -49,15 +50,14 @@ export type PstlWagmiClientOptions = {
   client?: WagmiClient
   options?: Partial<CreateWagmiClientProps['options']>
 }
-export function usePstlWagmiClient(props: Web3ModalProps) {
+export function usePstlWagmiClient(props: PstlW3ProviderProps) {
   return useMemo(
     () =>
       !props.wagmiClient?.client
         ? createWagmiClient({
             appName: props.appName,
             chains: props.chains,
-            w3mId: props.web3Modal.w3mId,
-            w3aId: props.web3Modal.w3aId,
+            w3mConnectorProps: props.web3Modal,
             w3aConnectorProps: props.web3Auth,
             options: props.wagmiClient?.options
           })
@@ -72,7 +72,7 @@ export function usePstlEthereumClient(
 ) {
   const client = useMemo(
     () => (!ethereumClient ? createEthereumClient(wagmiClient, chains) : ethereumClient),
-    [chains, wagmiClient]
+    [chains, ethereumClient, wagmiClient]
   )
 
   return client

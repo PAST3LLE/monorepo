@@ -54,31 +54,6 @@ export interface ThemeContentPartsRequired {
     backgroundAlt: Color
     text: Color
     textAlt: Color
-    modals?: {
-      connection?: {
-        closeIcon?: {
-          color?: string
-          position?: 'top-left' | 'top-right' | 'bottom-right' | 'bottom-left'
-          size?: string
-        }
-        title?: { color?: string; fontWeight?: number; letterSpacing?: string }
-        background?: string
-        padding?: string
-        button?: {
-          color?: string
-          textShadow?: string
-          background?: string
-          fontSize?: string
-          fontWeight?: number
-          textTransform?: string
-          border?: {
-            border?: string
-            color?: string
-            radius?: string
-          }
-        }
-      }
-    }
   }
 }
 

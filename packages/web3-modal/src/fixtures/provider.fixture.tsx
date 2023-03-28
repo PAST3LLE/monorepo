@@ -42,10 +42,11 @@ export default {
         ...commonProps,
         appName: 'COSMOS APP',
         chains: commonProps.chains,
+        web3Modal: commonProps.web3Modal,
         web3Auth: {
           appName: 'COSMOS APP',
           listingName: 'SOCIAL',
-          w3aId: commonProps.web3Modal.w3aId,
+          w3aId: commonProps.web3Auth.w3aId,
           appLogoLight: LOGO,
           appLogoDark: LOGO,
           modalZIndex: '99999999999'

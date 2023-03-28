@@ -1,26 +1,30 @@
-import { createCustomTheme } from '@past3lle/theme'
+import { ThemeByModes, createCustomTheme } from '@past3lle/theme'
 
 import { chains } from '../connectors/config'
 import { PstlW3ProviderProps } from '../providers'
+import { Theme } from '../theme/types'
 
-const pstlModalTheme = createCustomTheme({
+const BG_LOGO =
+  'https://raw.githubusercontent.com/PAST3LLE/monorepo/main/apps/skillforge-ui/src/assets/png/background.png'
+const pstlModalTheme = createCustomTheme<ThemeByModes<Theme>>({
   modes: {
     LIGHT: {},
     DARK: {},
     DEFAULT: {
-      content: {
-        modals: {
-          connection: {
-            button: {
-              background: 'rgb(196 152 152 / 90%)',
-              border: { border: '1px solid #e6b8b8' },
-              color: '#373131',
-              fontStyle: 'normal',
-              fontWeight: 600,
-              letterSpacing: '-1px',
-              textShadow: '2px 2px 3px #0000005c',
-              textTransform: 'uppercase'
-            }
+      modals: {
+        connection: {
+          background: `url(${BG_LOGO}) center/cover`,
+          title: { color: '#cbb9ee', fontSize: '2.5rem', fontWeight: 700, letterSpacing: '-1.4px', lineHeight: 0.72 },
+          button: {
+            background: '#301d4ea1',
+            border: { border: 'none', radius: '1rem' },
+            color: 'ghostwhite',
+            fontStyle: 'italic',
+            fontWeight: 600,
+            letterSpacing: '-1px',
+            textShadow: '2px 2px 3px #0000005c',
+            textTransform: 'uppercase',
+            hoverAnimations: true
           }
         }
       }
@@ -37,7 +41,6 @@ const DEFAULT_PROPS: PstlW3ProviderProps = {
   chains,
   web3Modal: {
     w3mId: WALLETCONNECT_TEST_ID,
-    w3aId: WEB3AUTH_TEST_ID,
     walletImages: {
       web3auth: 'https://web3auth.io/images/w3a-L-Favicon-1.svg',
       safe: 'https://user-images.githubusercontent.com/3975770/212338977-5968eae5-bb1b-4e71-8f82-af5282564c66.png'
@@ -51,7 +54,12 @@ const DEFAULT_PROPS: PstlW3ProviderProps = {
     w3aId: WEB3AUTH_TEST_ID
   },
   pstlW3Modal: {
-    modalTheme: pstlModalTheme
+    modalTheme: pstlModalTheme,
+    loaderProps: {
+      spinnerProps: {
+        size: 80
+      }
+    }
   }
 }
 
