@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/theme",
   "sideEffects": false,
-  "version": "0.0.32",
+  "version": "0.0.33",
   "description": "common theme parts",
   "main": "dist/index.js",
   "repository": {
@@ -46,11 +46,11 @@
     "@babel/core": "^7.20.12",
     "@past3lle/types": "^0.0.12",
     "@rollup/plugin-image": "^3.0.1",
-    "@types/react-helmet": "^6.1.6",
     "@types/jest": "^29.2.5",
     "@types/lodash.merge": "^4.6.7",
     "@types/react": "^18.0.10",
     "@types/react-dom": "^18.0.10",
+    "@types/react-helmet": "^6.1.6",
     "@types/rebass": "^4.0.10",
     "@types/styled-components": "^5.1.26",
     "@types/styled-theming": "^2.2.5",
@@ -72,11 +72,11 @@
     "styled-components": ">=5"
   },
   "dependencies": {
-    "@past3lle/assets": "^0.0.12",
-    "@past3lle/constants": "^0.0.17",
-    "react-helmet": "^6.1.0",
+    "@past3lle/assets": "^0.0.13",
+    "@past3lle/constants": "^0.0.18",
     "lodash.merge": "^4.6.2",
     "polished": "^4.2.2",
+    "react-helmet": "^6.1.0",
     "wcag-contrast": "^3.0.0"
   },
   "gitHead": "b30e4bcc5d99d3441002974c8068b55f19614142"
