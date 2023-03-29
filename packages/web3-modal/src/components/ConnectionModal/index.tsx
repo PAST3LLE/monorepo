@@ -110,7 +110,12 @@ function ModalWithoutThemeProvider({
       {...restModalProps}
     >
       <InnerContainer justifyContent="flex-start" gap="0.75rem">
-        <CloseIcon style={{ position: 'absolute', right: '0.5rem', top: '0.5rem' }} onClick={close} />
+        <CloseIcon
+          height={30}
+          width={100}
+          style={{ position: 'absolute', right: '0.75em', top: '0.75em' }}
+          onClick={close}
+        />
         <h1>{title}</h1>
         {infoTextMap?.general && (
           <ConnectorHelper title={infoTextMap.general.title}>{infoTextMap.general.content}</ConnectorHelper>

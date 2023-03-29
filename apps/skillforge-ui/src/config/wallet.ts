@@ -12,6 +12,9 @@ export const pstlModalTheme = createCustomTheme<ThemeByModes<PstlModalTheme>>({
           background: `url(${ASSETS_MAP.images.background.app}) center/cover`,
           baseFontSize: 20,
           helpers: { show: true },
+          closeIcon: {
+            size: '40px'
+          },
           title: { color: '#cbb9ee', fontWeight: 700, letterSpacing: '-1.4px', lineHeight: 0.82 },
           button: {
             background: '#301d4ea1',

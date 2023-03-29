@@ -49,6 +49,9 @@ const WEB3_PROPS: PstlWeb3ModalProps = {
           content:
             'Web3Modal/WalletConnect is a simple blockchain wallet aggregator modal that facilitates the choice of selecting preferred blockchain wallet(s) for connecting to dApps (decentralised apps). This generally requires more blockchain knowledge.'
         }
+      },
+      loaderProps: {
+        spinnerProps: { size: 100 }
       }
     }
   }
