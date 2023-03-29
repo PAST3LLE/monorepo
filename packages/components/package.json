@@ -28,7 +28,8 @@
     "pre-commit": "pretty-quick --staged && yarn test:ci && yarn build",
     "lint": "prettier --write ./src/** --ignore-path '../../.prettierignore'",
     "cosmos": "cosmos",
-    "cosmos:export": "cosmos-export"
+    "cosmos:export": "cosmos-export",
+    "depcheck": "npx npm-check"
   },
   "publishConfig": {
     "access": "public",
@@ -84,9 +85,8 @@
     "@past3lle/utils": "^0.0.17",
     "@popperjs/core": "^2.11.6",
     "@reach/dialog": "^0.18.0",
-    "@use-gesture/react": "^10.2.23",
     "imagekitio-react": "^2.0.0",
-    "lodash.clamp": "^4.0.3",
+    "lodash.throttle": "^4.1.1",
     "polished": "^4.2.2",
     "react-feather": "^2.0.10",
     "react-ga": "^3.3.1",

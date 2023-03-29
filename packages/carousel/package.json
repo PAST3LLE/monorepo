@@ -35,7 +35,8 @@
     "pre-commit": "pretty-quick --staged && yarn test:ci && yarn build",
     "lint": "prettier --write ./src/** --ignore-path '../../.prettierignore'",
     "cosmos": "cosmos",
-    "cosmos:export": "cosmos-export"
+    "cosmos:export": "cosmos-export",
+    "depcheck": "npx npm-check"
   },
   "publishConfig": {
     "access": "public",
@@ -87,15 +88,9 @@
     "@past3lle/hooks": "^0.0.22",
     "@past3lle/theme": "^0.0.32",
     "@past3lle/utils": "^0.0.17",
-    "@reach/dialog": "^0.18.0",
     "@react-spring/web": "^9.4.3",
-    "@use-gesture/react": "^10.2.23",
-    "lodash.clamp": "^4.0.3",
     "polished": "^4.2.2",
-    "react-feather": "^2.0.10",
-    "react-popper": "^2.3.0",
-    "react-spring": "^9.6.1",
-    "rebass": "^4.0.7"
+    "react-feather": "^2.0.10"
   },
   "gitHead": "2bcc1e8d445933a2c17832d4b8183c3f8ebc61d0"
 }

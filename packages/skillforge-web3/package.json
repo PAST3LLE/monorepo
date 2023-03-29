@@ -83,7 +83,8 @@
     "test:watch": "tsc test --env=jsdom --watchAll",
     "test:ci": "yarn alt-test --coverage --no-watch --watch=false --watchAll=false --no-watchman --forceExit --detectOpenHandles",
     "pre-commit": "pretty-quick --staged && yarn test:ci && yarn build",
-    "lint": "prettier --write ./src/** --ignore-path '../../.prettierignore'"
+    "lint": "prettier --write ./src/** --ignore-path '../../.prettierignore'",
+    "depcheck": "npx npm-check"
   },
   "publishConfig": {
     "access": "public",
@@ -111,21 +112,15 @@
   },
   "dependencies": {
     "@ethersproject/bignumber": ">=5.7.0",
-    "@gnosis.pm/safe-apps-wagmi": "^2.1.0",
-    "@past3lle/components": "^0.0.54",
+    "@past3lle/skilltree-contracts": "^0.0.1-rc.3",
+
     "@past3lle/hooks": "^0.0.22",
-    "@past3lle/theme": "^0.0.32",
     "@past3lle/utils": "0.0.17",
     "@past3lle/web3-modal": "^0.0.4",
-    "@web3modal/ethereum": "^2.2.2",
-    "@web3modal/html": "^2.2.2",
-    "@web3modal/react": "^2.2.2",
-    "@web3modal/standalone": "^2.2.2",
     "jotai": "^1.13.0",
     "wagmi": "0.12.1"
   },
   "devDependencies": {
-    "json-loader": "^0.5.7",
     "react-cosmos": "^5.7.2"
   },
   "browserslist": {
