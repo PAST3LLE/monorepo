@@ -5,6 +5,7 @@ import { OpenloginAdapter } from '@web3auth/openlogin-adapter'
 import { Web3AuthConnector as Web3AuthConnectorCreator } from '@web3auth/web3auth-wagmi-connector'
 import { Chain } from 'wagmi'
 
+import { Z_INDICES } from '../constants'
 import { ConnectorEnhancedExtras } from '../types'
 
 const SOCIAL_LOGO = 'https://www.getopensocial.com/wp-content/uploads/2020/12/social-login-COLOR_2.png'
@@ -39,7 +40,7 @@ export interface PstlWeb3AuthConnectorProps {
   listingLogo?: string
   listingDetails?: string
   loginMethodsOrder?: string[]
-  modalZIndex?: string
+  zIndex?: number
   network: 'mainnet' | 'testnet' | 'development' | 'cyan'
   w3aId: string
   preset?: 'DISALLOW_EXTERNAL_WALLETS' | 'ALLOW_EXTERNAL_WALLETS'
@@ -54,7 +55,7 @@ export function PstlWeb3AuthConnector({
   listingLogo = SOCIAL_LOGO,
   listingDetails,
   loginMethodsOrder,
-  modalZIndex = '2147483647',
+  zIndex = Z_INDICES.W3A,
   network,
   preset = 'ALLOW_EXTERNAL_WALLETS',
   theme = 'dark',
@@ -82,7 +83,7 @@ export function PstlWeb3AuthConnector({
       loginMethodsOrder,
       defaultLanguage: 'en',
       appLogo: theme === 'light' ? appLogoLight : appLogoDark,
-      modalZIndex
+      modalZIndex: zIndex.toString()
     }
   })
   // Add openlogin adapter for customisations

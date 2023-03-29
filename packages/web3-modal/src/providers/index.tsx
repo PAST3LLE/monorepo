@@ -14,7 +14,7 @@ const PstlW3Providers = ({ children, config }: { children: ReactNode; config: Ps
     <>
       <PstlWeb3Modal {...config} ethereumClient={ethereumClient} />
       <PstlWagmiProvider wagmiClient={wagmiClient}>
-        <PstlWeb3ConnectionModal {...config.pstlW3Modal} />
+        <PstlWeb3ConnectionModal {...config.modals.pstl} />
         {children}
       </PstlWagmiProvider>
     </>

@@ -10,17 +10,20 @@ export type Web3ModalConfig = Omit<ConfigCtrlState, 'projectId' | 'enableStandal
   chains?: Chain[]
   w3mId: string
   w3aId: string
+  zIndex?: number
   themeVariables?: Web3ModalConfigOriginal['themeVariables']
 }
 
 export interface Web3ModalProps {
   appName: string
   chains: Chain[]
-  web3Modal: Omit<Web3ModalConfig, 'w3aId'>
-  web3Auth: Omit<PstlWeb3AuthConnectorProps, 'chains'> & { chains?: Chain[] }
   wagmiClient?: PstlWagmiClientOptions
   ethereumClient?: EthereumClient
-  pstlW3Modal?: Omit<PstlWeb3ConnectionModalProps, 'isOpen' | 'onDismiss'>
+  modals: {
+    pstl?: Omit<PstlWeb3ConnectionModalProps, 'isOpen' | 'onDismiss'>
+    w3m: Omit<Web3ModalConfig, 'w3aId'>
+    w3a: Omit<PstlWeb3AuthConnectorProps, 'chains'> & { chains?: Chain[] }
+  }
 }
 
 export type PstlW3ProviderProps = Web3ModalProps

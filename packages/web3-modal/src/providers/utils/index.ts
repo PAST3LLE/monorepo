@@ -15,7 +15,7 @@ interface ClientConfigEnhanced extends Omit<ClientConfig, 'connectors'> {
 interface CreateWagmiClientProps {
   appName: string
   chains: Chain[]
-  w3mConnectorProps: PstlW3ProviderProps['web3Modal']
+  w3mConnectorProps: PstlW3ProviderProps['modals']['w3m']
   w3aConnectorProps: Omit<PstlWeb3AuthConnectorProps, 'chains'>
   options?: Partial<Pick<ClientConfigEnhanced, 'connectors' | 'provider' | 'autoConnect'>>
 }
@@ -57,8 +57,8 @@ export function usePstlWagmiClient(props: PstlW3ProviderProps) {
         ? createWagmiClient({
             appName: props.appName,
             chains: props.chains,
-            w3mConnectorProps: props.web3Modal,
-            w3aConnectorProps: props.web3Auth,
+            w3mConnectorProps: props.modals.w3m,
+            w3aConnectorProps: props.modals.w3a,
             options: props.wagmiClient?.options
           })
         : props.wagmiClient.client,

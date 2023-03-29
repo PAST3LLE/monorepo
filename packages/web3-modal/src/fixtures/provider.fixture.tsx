@@ -33,54 +33,56 @@ export default {
         ...commonProps,
         appName: 'COSMOS APP',
         chains: commonProps.chains,
-        web3Modal: commonProps.web3Modal,
-        web3Auth: {
-          appName: 'COSMOS APP',
-          network: 'mainnet',
-          listingName: 'SOCIAL',
-          w3aId: commonProps.web3Auth.w3aId,
-          appLogoLight: LOGO,
-          appLogoDark: LOGO,
-          modalZIndex: '88'
-        },
-        pstlW3Modal: {
-          theme: pstlModalTheme,
-          closeModalOnConnect: false,
-          infoTextMap: {
-            general: {
-              title: 'What is this?',
-              content: (
-                <strong>
-                  This is some helper filler text to describe wtf is going on in this connection modal. It is useful to
-                  learn these things while browsing apps as users can get confused when having to exit apps to read info
-                  somewhere else that isn't the current screent they are on.
-                </strong>
-              )
-            },
-            web3auth: {
-              title: 'What is social login?',
-              content: (
-                <strong>
-                  Social login is done via Web3Auth - a non-custodial social login protocol (i.e they never actually
-                  know, or hold your data) - which facilitates logging into dApps (decentralised apps) via familiar
-                  social login choices
-                </strong>
-              )
-            },
-            walletConnect: {
-              title: 'What is wallets login?',
-              content: (
-                <strong>
-                  Web3Modal/WalletConnect is a simple blockchain wallet aggregator modal that facilitates the choice of
-                  selecting preferred blockchain wallet(s) for connecting to dApps (decentralised apps). This generally
-                  requires more blockchain knowledge.
-                </strong>
-              )
-            }
+        modals: {
+          w3m: commonProps.modals.w3m,
+          w3a: {
+            appName: 'COSMOS APP',
+            network: 'mainnet',
+            listingName: 'SOCIAL',
+            w3aId: commonProps.modals.w3a.w3aId,
+            appLogoLight: LOGO,
+            appLogoDark: LOGO
           },
-          loaderProps: {
-            spinnerProps: {
-              size: 80
+          pstl: {
+            ...commonProps.modals.pstl,
+            theme: pstlModalTheme,
+            closeModalOnConnect: false,
+            infoTextMap: {
+              general: {
+                title: 'What is this?',
+                content: (
+                  <strong>
+                    This is some helper filler text to describe wtf is going on in this connection modal. It is useful
+                    to learn these things while browsing apps as users can get confused when having to exit apps to read
+                    info somewhere else that isn't the current screent they are on.
+                  </strong>
+                )
+              },
+              web3auth: {
+                title: 'What is social login?',
+                content: (
+                  <strong>
+                    Social login is done via Web3Auth - a non-custodial social login protocol (i.e they never actually
+                    know, or hold your data) - which facilitates logging into dApps (decentralised apps) via familiar
+                    social login choices
+                  </strong>
+                )
+              },
+              walletConnect: {
+                title: 'What is wallets login?',
+                content: (
+                  <strong>
+                    Web3Modal/WalletConnect is a simple blockchain wallet aggregator modal that facilitates the choice
+                    of selecting preferred blockchain wallet(s) for connecting to dApps (decentralised apps). This
+                    generally requires more blockchain knowledge.
+                  </strong>
+                )
+              }
+            },
+            loaderProps: {
+              spinnerProps: {
+                size: 80
+              }
             }
           }
         }

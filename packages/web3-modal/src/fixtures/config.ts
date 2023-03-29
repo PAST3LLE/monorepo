@@ -42,20 +42,24 @@ const WEB3AUTH_TEST_ID = 'BHloyoLW113nGn-mIfeeNqj2U0wNCXa4y83xLnR6d3FELPMz_oZ7rb
 const DEFAULT_PROPS: PstlW3ProviderProps = {
   appName: 'COSMOS APP',
   chains,
-  web3Modal: {
-    w3mId: WALLETCONNECT_TEST_ID,
-    walletImages: {
-      web3auth: 'https://web3auth.io/images/w3a-L-Favicon-1.svg',
-      safe: 'https://user-images.githubusercontent.com/3975770/212338977-5968eae5-bb1b-4e71-8f82-af5282564c66.png'
+  modals: {
+    w3m: {
+      w3mId: WALLETCONNECT_TEST_ID,
+      walletImages: {
+        web3auth: 'https://web3auth.io/images/w3a-L-Favicon-1.svg',
+        safe: 'https://user-images.githubusercontent.com/3975770/212338977-5968eae5-bb1b-4e71-8f82-af5282564c66.png'
+      }
+      // zIndex: 901
     },
-    themeVariables: {
-      '--w3m-z-index': '99999'
+    w3a: {
+      appName: 'SKILLFORGE TEST',
+      w3aId: WEB3AUTH_TEST_ID,
+      network: 'mainnet'
+      // zIndex: 901
     }
-  },
-  web3Auth: {
-    appName: 'SKILLFORGE TEST',
-    w3aId: WEB3AUTH_TEST_ID,
-    network: 'mainnet'
+    // pstl: {
+    //   zIndex: 900
+    // }
   }
 }
 

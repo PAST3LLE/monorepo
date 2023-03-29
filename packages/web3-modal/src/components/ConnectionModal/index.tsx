@@ -4,6 +4,7 @@ import { devWarn } from '@past3lle/utils'
 import React, { Fragment, ReactNode, memo, useMemo, useState } from 'react'
 import { useTheme } from 'styled-components'
 
+import { Z_INDICES } from '../../constants'
 import { useConnection, useModalTheme, usePstlWeb3Modal } from '../../hooks'
 import { getConnectorInfo } from '../../utils'
 import { LoadingScreen, LoadingScreenProps } from '../LoadingScreen'
@@ -22,6 +23,7 @@ interface PstlWeb3ConnectionModalProps extends Omit<ModalProps, 'isOpen' | 'onDi
   buttonProps?: ButtonProps
   closeModalOnConnect?: boolean
   infoTextMap?: InfoTextMap
+  zIndex?: number
 }
 
 function ModalWithoutThemeProvider({
@@ -32,6 +34,7 @@ function ModalWithoutThemeProvider({
   maxHeight = '600px',
   closeModalOnConnect = false,
   infoTextMap,
+  zIndex = Z_INDICES.PSTL,
   ...restModalProps
 }: Omit<PstlWeb3ConnectionModalProps, 'theme'>) {
   const [connectors, { connect, openW3Modal }, { address, chainId, currentConnector }] = useConnection()
@@ -101,7 +104,7 @@ function ModalWithoutThemeProvider({
       tabIndex={undefined}
       styleProps={{
         // w3modal has 89 zindex
-        zIndex: 88,
+        zIndex,
         ...restModalProps.styleProps
       }}
       {...restModalProps}
