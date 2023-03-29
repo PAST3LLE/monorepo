@@ -11,9 +11,12 @@ const ConnectorHelperContainer = styled(ColumnCenter)<{ open: boolean; contentHe
   cursor: pointer;
   color: ${({ theme }) => theme.modals?.connection?.helpers?.color || 'ghostwhite'};
   > p {
+    font-weight: 400;
     font-size: 0.55em;
+
     margin: 0 0 0 2em;
     width: 100%;
+
     &:last-child {
       margin: 1em;
       overflow: hidden;
@@ -51,7 +54,7 @@ export function ConnectorHelper({
   return (
     <ConnectorHelperContainer width="100%" textAlign="left" open={open} contentHeight={height}>
       <p onClick={handleClick}>
-        [{open ? '-' : '+'}] {title}
+        [{open ? ' - ' : ' + '}] {title}
       </p>
       <p>
         <span ref={setRef}>{props.children || _getConnectorHelperText(props.connector)}</span>
