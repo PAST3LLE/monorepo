@@ -16,31 +16,13 @@
     },
     "references": [
         {
-            "path": "../../packages/assets"
-        },
-        {
-            "path": "../../packages/components"
-        },
-        {
-            "path": "../../packages/constants"
-        },
-        {
-            "path": "../../packages/hooks"
-        },
-        {
             "path": "../../packages/skillforge-web3"
         },
         {
             "path": "../../packages/skillforge-widget"
         },
         {
-            "path": "../skills-nft"
-        },
-        {
             "path": "../../packages/theme"
-        },
-        {
-            "path": "../../packages/types"
         },
         {
             "path": "../../packages/utils"

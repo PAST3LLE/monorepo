@@ -14,13 +14,7 @@
     ],
     "references": [
         {
-            "path": "../components"
-        },
-        {
             "path": "../hooks"
-        },
-        {
-            "path": "../theme"
         },
         {
             "path": "../utils"

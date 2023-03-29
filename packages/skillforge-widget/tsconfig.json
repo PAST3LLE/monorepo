@@ -16,13 +16,7 @@
             "path": "../types"
         },
         {
-            "path": "../assets"
-        },
-        {
             "path": "../components"
-        },
-        {
-            "path": "../constants"
         },
         {
             "path": "../hooks"
