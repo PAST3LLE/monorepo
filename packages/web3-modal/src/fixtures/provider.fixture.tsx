@@ -39,7 +39,7 @@ export default {
             appName: 'COSMOS APP',
             network: 'mainnet',
             listingName: 'SOCIAL',
-            w3aId: commonProps.modals.w3a.w3aId,
+            projectId: commonProps.modals.w3a.projectId,
             appLogoLight: LOGO,
             appLogoDark: LOGO
           },

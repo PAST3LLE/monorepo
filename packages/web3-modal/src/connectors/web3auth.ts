@@ -42,7 +42,7 @@ export interface PstlWeb3AuthConnectorProps {
   loginMethodsOrder?: string[]
   zIndex?: number
   network: 'mainnet' | 'testnet' | 'development' | 'cyan'
-  w3aId: string
+  projectId: string
   preset?: 'DISALLOW_EXTERNAL_WALLETS' | 'ALLOW_EXTERNAL_WALLETS'
 }
 
@@ -59,9 +59,9 @@ export function PstlWeb3AuthConnector({
   network,
   preset = 'ALLOW_EXTERNAL_WALLETS',
   theme = 'dark',
-  w3aId
+  projectId
 }: PstlWeb3AuthConnectorProps) {
-  if (!w3aId) throw new Error('Missing REACT_APP_WEB3AUTH_ID! Check env.')
+  if (!projectId) throw new Error('Missing REACT_APP_WEB3AUTH_ID! Check env.')
 
   const chainConfig = {
     chainNamespace: CHAIN_NAMESPACES.EIP155,
@@ -74,7 +74,7 @@ export function PstlWeb3AuthConnector({
 
   // Create Web3Auth Instance
   const web3AuthInstance = new Web3Auth({
-    clientId: w3aId,
+    clientId: projectId,
     chainConfig,
     web3AuthNetwork: network,
     uiConfig: {

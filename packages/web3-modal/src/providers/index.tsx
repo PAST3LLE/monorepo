@@ -1,12 +1,12 @@
 import React, { ReactNode } from 'react'
 
 import { PstlWeb3ConnectionModal } from '../components'
-import type { PstlW3ProviderProps } from './types'
+import type { PstlWeb3ModalProps } from './types'
 import { PstlWagmiClientOptions, usePstlEthereumClient, usePstlWagmiClient } from './utils'
 import { PstlWagmiProvider } from './wagmi'
 import { PstlWeb3Modal } from './web3Modal'
 
-const PstlW3Providers = ({ children, config }: { children: ReactNode; config: PstlW3ProviderProps }) => {
+const PstlW3Providers = ({ children, config }: { children: ReactNode; config: PstlWeb3ModalProps }) => {
   const wagmiClient = usePstlWagmiClient(config)
   const ethereumClient = usePstlEthereumClient(config.ethereumClient, wagmiClient, config.chains)
 
@@ -29,6 +29,6 @@ export {
   usePstlEthereumClient,
   usePstlWagmiClient,
   // types
-  type PstlW3ProviderProps,
+  type PstlWeb3ModalProps,
   type PstlWagmiClientOptions
 }

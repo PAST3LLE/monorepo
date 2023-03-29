@@ -1,7 +1,7 @@
 import { ThemeByModes, createCustomTheme } from '@past3lle/theme'
 
 import { chains } from '../connectors/config'
-import { PstlW3ProviderProps } from '../providers'
+import { PstlWeb3ModalProps } from '../providers'
 import { PstlModalTheme } from '../theme/types'
 
 const BG_LOGO =
@@ -39,12 +39,12 @@ export const pstlModalTheme = createCustomTheme<ThemeByModes<PstlModalTheme>>({
 const WALLETCONNECT_TEST_ID = 'a01e2f3b7c64ff495f9cb28e4e2d4b49'
 // TESTING KEY DO NOT USE IN PROD
 const WEB3AUTH_TEST_ID = 'BHloyoLW113nGn-mIfeeNqj2U0wNCXa4y83xLnR6d3FELPMz_oZ7rbY4ZEO3r0MVjQ_LX92obu1ta0NknOwfvtU'
-const DEFAULT_PROPS: PstlW3ProviderProps = {
+const DEFAULT_PROPS: PstlWeb3ModalProps = {
   appName: 'COSMOS APP',
   chains,
   modals: {
     w3m: {
-      w3mId: WALLETCONNECT_TEST_ID,
+      projectId: WALLETCONNECT_TEST_ID,
       walletImages: {
         web3auth: 'https://web3auth.io/images/w3a-L-Favicon-1.svg',
         safe: 'https://user-images.githubusercontent.com/3975770/212338977-5968eae5-bb1b-4e71-8f82-af5282564c66.png'
@@ -53,7 +53,7 @@ const DEFAULT_PROPS: PstlW3ProviderProps = {
     },
     w3a: {
       appName: 'SKILLFORGE TEST',
-      w3aId: WEB3AUTH_TEST_ID,
+      projectId: WEB3AUTH_TEST_ID,
       network: 'mainnet'
       // zIndex: 901
     }

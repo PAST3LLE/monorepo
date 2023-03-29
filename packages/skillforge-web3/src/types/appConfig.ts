@@ -1,5 +1,5 @@
 import { PstlHooksProviderOptions } from '@past3lle/hooks'
-import { PstlW3ProviderProps } from '@past3lle/web3-modal'
+import { PstlWeb3ModalProps } from '@past3lle/web3-modal'
 
 import { MetadataFetchOptions } from '../state/Metadata/updaters/MetadataUpdater'
 import { SkillForgeContractAddressMap } from './addresses'
@@ -11,7 +11,7 @@ export interface SkillForgeW3AppConfigSkillOptions {
 }
 export interface SkillForgeW3AppConfig {
   name: string
-  web3: Omit<PstlW3ProviderProps, 'appName'> & {
+  web3: Omit<PstlWeb3ModalProps, 'appName'> & {
     standalone?: boolean
   }
   contractAddresses: SkillForgeContractAddressMap

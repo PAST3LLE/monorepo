@@ -6,7 +6,7 @@ import { WagmiConfigProps, createClient } from 'wagmi'
 
 import { PstlWeb3AuthConnector, PstlWeb3AuthConnectorProps } from '../../connectors/web3auth'
 import { ConnectorEnhanced } from '../../types'
-import { PstlW3ProviderProps } from '../types'
+import { PstlWeb3ModalProps } from '../types'
 
 interface ClientConfigEnhanced extends Omit<ClientConfig, 'connectors'> {
   connectors?: (() => ConnectorEnhanced<any, any, any>[]) | ConnectorEnhanced<any, any, any>[]
@@ -15,7 +15,7 @@ interface ClientConfigEnhanced extends Omit<ClientConfig, 'connectors'> {
 interface CreateWagmiClientProps {
   appName: string
   chains: Chain[]
-  w3mConnectorProps: PstlW3ProviderProps['modals']['w3m']
+  w3mConnectorProps: PstlWeb3ModalProps['modals']['w3m']
   w3aConnectorProps: Omit<PstlWeb3AuthConnectorProps, 'chains'>
   options?: Partial<Pick<ClientConfigEnhanced, 'connectors' | 'provider' | 'autoConnect'>>
 }
@@ -29,7 +29,7 @@ const createWagmiClient = ({ options, ...props }: CreateWagmiClientProps): Wagmi
       PstlWeb3AuthConnector({ chains: props.chains, ...props.w3aConnectorProps }),
       // Web3Modal
       ...w3mConnectors({
-        projectId: props.w3mConnectorProps.w3mId,
+        projectId: props.w3mConnectorProps.projectId,
         version: 2,
         chains: props.chains
       }),
@@ -40,7 +40,7 @@ const createWagmiClient = ({ options, ...props }: CreateWagmiClientProps): Wagmi
     ],
     provider:
       options?.provider ||
-      configureChains(props.chains, [w3mProvider({ projectId: props.w3mConnectorProps.w3mId })]).provider
+      configureChains(props.chains, [w3mProvider({ projectId: props.w3mConnectorProps.projectId })]).provider
   })
 }
 const createEthereumClient = (wagmiClient: ReturnType<typeof createWagmiClient>, chains: Chain[]) =>
@@ -50,7 +50,7 @@ export type PstlWagmiClientOptions = {
   client?: WagmiClient
   options?: Partial<CreateWagmiClientProps['options']>
 }
-export function usePstlWagmiClient(props: PstlW3ProviderProps) {
+export function usePstlWagmiClient(props: PstlWeb3ModalProps) {
   return useMemo(
     () =>
       !props.wagmiClient?.client

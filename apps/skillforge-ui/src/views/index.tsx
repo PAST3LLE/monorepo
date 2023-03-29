@@ -1,6 +1,6 @@
 import SkillForge, { SkillForgeProps, SkillForgeConnectedHeader } from '@past3lle/skillforge-widget'
 import { FontCssProvider } from '@past3lle/theme'
-import { PstlW3ProviderProps } from '@past3lle/web3-modal'
+import { PstlWeb3ModalProps } from '@past3lle/web3-modal'
 import { skillforgeTheme } from 'config/skillforge'
 import { pstlModalTheme } from 'config/wallet'
 import { SKILL_ID_BASE } from 'constants/skills'
@@ -11,17 +11,17 @@ import { SUPPORTED_CHAINS } from 'web3/config'
 import { CONTRACT_ADDRESSES_MAP, METADATA_URIS_MAP } from 'web3/constants/addresses'
 
 const APP_NAME = 'PSTL SKILLFORGE'
-const WEB3_PROPS: PstlW3ProviderProps = {
+const WEB3_PROPS: PstlWeb3ModalProps = {
   appName: APP_NAME,
   chains: SUPPORTED_CHAINS,
   modals: {
     w3a: {
       appName: APP_NAME,
       network: 'mainnet',
-      w3aId: process.env.REACT_APP_WEB3AUTH_ID as string
+      projectId: process.env.REACT_APP_WEB3AUTH_ID as string
     },
     w3m: {
-      w3mId: process.env.REACT_APP_WEB3MODAL_ID as string,
+      projectId: process.env.REACT_APP_WEB3MODAL_ID as string,
       walletImages: {
         web3auth: 'https://web3auth.io/images/w3a-L-Favicon-1.svg',
         safe: 'https://user-images.githubusercontent.com/3975770/212338977-5968eae5-bb1b-4e71-8f82-af5282564c66.png'
@@ -62,6 +62,9 @@ const SKILLTREE_CONFIG: SkillForgeProps = {
     contractAddresses: CONTRACT_ADDRESSES_MAP,
     metadataUris: METADATA_URIS_MAP,
     skillOptions: {
+      // some id's may NOT be simply 1,2,3...N
+      // and instead 1000,2000,3000...N*1000
+      // idBase is the base e.g 1000
       idBase: SKILL_ID_BASE
     }
   }
