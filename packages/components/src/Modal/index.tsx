@@ -39,7 +39,7 @@ const AnimatedDialogContent = animated(DialogContent)
 // destructure to not pass custom props to Dialog DOM element
 const StyledDialogContent = styled(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  ({ margin, minHeight, maxHeight, maxWidth, mobile, isOpen, isLargeImageModal, tabIndex, ...rest }) => (
+  ({ margin, minHeight, maxHeight, maxWidth, mobile, isOpen, isLargeImageModal, tabIndex, zIndex, ...rest }) => (
     <AnimatedDialogContent {...rest} tabIndex={tabIndex} />
   )
 ).attrs({
