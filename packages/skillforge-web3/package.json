@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/skillforge-web3",
   "sideEffects": false,
-  "version": "0.0.16",
+  "version": "0.0.19",
   "description": "PAST3LLE SKILLFORGE web3 hooks and tings",
   "main": "dist/esm/index.js",
   "typings": "dist/types/index.d.ts",
@@ -75,7 +75,7 @@
     "compile": "tsc --emitDeclarationOnly --outDir './dist/types' & tsc --project tsconfig.esm.json & tsc --project tsconfig.cjs.json && cp \"./package.json\" ./dist/",
     "cosmos": "cosmos",
     "build": "yarn clean && yarn compile",
-    "build:tsc": "yarn clean && yarn compile:tsc",
+    "build:tsdx": "yarn clean && yarn compile:tsdx",
     "prepack": "yarn build",
     "start": "tsdx watch",
     "test": "echo 'removed default test' ",
@@ -83,7 +83,8 @@
     "test:watch": "tsc test --env=jsdom --watchAll",
     "test:ci": "yarn alt-test --coverage --no-watch --watch=false --watchAll=false --no-watchman --forceExit --detectOpenHandles",
     "pre-commit": "pretty-quick --staged && yarn test:ci && yarn build",
-    "lint": "prettier --write ./src/** --ignore-path '../../.prettierignore'"
+    "lint": "prettier --write ./src/** --ignore-path '../../.prettierignore'",
+    "depcheck": "npx npm-check"
   },
   "publishConfig": {
     "access": "public",
@@ -111,20 +112,16 @@
   },
   "dependencies": {
     "@ethersproject/bignumber": ">=5.7.0",
-    "@gnosis.pm/safe-apps-wagmi": "^2.1.0",
-    "@past3lle/hooks": "^0.0.20",
+    "@past3lle/skilltree-contracts": "^0.0.1-rc.3",
+
+    "@past3lle/hooks": "^0.0.22",
     "@past3lle/utils": "0.0.17",
-    "@web3modal/ethereum": "^2.2.2",
-    "@web3modal/html": "^2.2.2",
-    "@web3modal/react": "^2.2.2",
-    "@web3modal/standalone": "^2.2.2",
+    "@past3lle/web3-modal": "^0.0.4",
     "jotai": "^1.13.0",
     "wagmi": "0.12.1"
   },
   "devDependencies": {
-    "json-loader": "^0.5.7",
-    "react-cosmos": "^5.7.2",
-    "typescript": "^5.0.2"
+    "react-cosmos": "^5.7.2"
   },
   "browserslist": {
     "production": [

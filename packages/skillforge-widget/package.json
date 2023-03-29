@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/skillforge-widget",
   "sideEffects": false,
-  "version": "0.0.23",
+  "version": "0.0.26",
   "description": "PAST3LLE SKILLFORGE component as an NPM ESM pkg.",
   "main": "dist/esm/index.js",
   "typings": "dist/types/index.d.ts",
@@ -35,7 +35,8 @@
     "test:watch": "tsc test --env=jsdom --watchAll",
     "test:ci": "yarn alt-test --coverage --no-watch --watch=false --watchAll=false --no-watchman --forceExit --detectOpenHandles",
     "pre-commit": "pretty-quick --staged && yarn test:ci && yarn build",
-    "lint": "prettier --write ./src/** --ignore-path '../../.prettierignore'"
+    "lint": "prettier --write ./src/** --ignore-path '../../.prettierignore'",
+    "depcheck": "npx npm-check"
   },
   "publishConfig": {
     "access": "public",
@@ -92,15 +93,13 @@
   },
   "dependencies": {
     "@ethersproject/bignumber": "5.7.0",
-    "@past3lle/assets": "^0.0.11",
-    "@past3lle/components": "^0.0.52",
-    "@past3lle/constants": "^0.0.17",
-    "@past3lle/hooks": "^0.0.20",
-    "@past3lle/skillforge-web3": "^0.0.16",
+    "@past3lle/components": "^0.0.54",
+    "@past3lle/hooks": "^0.0.22",
+    "@past3lle/skillforge-web3": "^0.0.19",
     "@past3lle/skills-nft": "^0.0.8",
-    "@past3lle/skilltree-contracts": "^0.0.1-rc.3",
-    "@past3lle/theme": "^0.0.31",
+    "@past3lle/theme": "^0.0.32",
     "@past3lle/utils": "^0.0.17",
+    "@past3lle/web3-modal": "^0.0.4",
     "jotai": "^1.13.1",
     "polished": "^4.2.2"
   },

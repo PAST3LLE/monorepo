@@ -1,0 +1,107 @@
+{
+  "name": "@past3lle/web3-modal",
+  "version": "0.0.4",
+  "sideEffects": false,
+  "description": "PAST3LLE's Web3 connection modal",
+  "keywords": [
+    "web3",
+    "past3lle",
+    "pastelle",
+    "pstl",
+    "wallets",
+    "connection",
+    "modal",
+    "blockchain",
+    "crypto",
+    "social-login"
+  ],
+  "author": "w3stside <david.sato64@gmail.com>",
+  "homepage": "https://github.com/past3lle/monorepo/tree/main/packages/web3-modal#readme",
+  "license": "MIT",
+  "main": "dist/esm/index.js",
+  "typings": "dist/types/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PAST3LLE/past3lle-monorepo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/PAST3LLE/past3lle-monorepo/issues"
+  },
+  "scripts": {
+    "check-types": "npx tsc --noEmit",
+    "clean": "rm -rf dist && rm -rf tsconfig.tsbuildinfo",
+    "compile:tsdx": "tsdx build --transpileOnly && cp \"./package.json\" ./dist/",
+    "compile": "tsc --emitDeclarationOnly --outDir './dist/types' & tsc --project tsconfig.esm.json & tsc --project tsconfig.cjs.json && cp \"./package.json\" ./dist/",
+    "cosmos": "cosmos",
+    "build": "yarn clean && yarn compile",
+    "build:tsdx": "yarn clean && yarn compile:tsdx",
+    "prepack": "yarn build",
+    "start": "tsdx watch",
+    "test": "echo 'removed default test' ",
+    "alt-test": "tsc test --env=jsdom",
+    "test:watch": "tsc test --env=jsdom --watchAll",
+    "test:ci": "yarn alt-test --coverage --no-watch --watch=false --watchAll=false --no-watchman --forceExit --detectOpenHandles",
+    "pre-commit": "pretty-quick --staged && yarn test:ci && yarn build",
+    "lint": "prettier --write ./src/** --ignore-path '../../.prettierignore'",
+    "depcheck": "npx npm-check"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      ".+\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/src/__mocks__/file-mock.js"
+    },
+    "testMatch": [
+      "<rootDir>src/**/__tests__/*.{ts,tsx}"
+    ]
+  },
+  "resolutions": {
+    "**/@web3modal/ethereum": ">=2.2.0",
+    "**/@web3modal/react": ">=2.2.0",
+    "**/*/@wagmi/core": "0.10.1"
+  },
+  "peerDependencies": {
+    "react": ">=16",
+    "styled-components": ">=5"
+  },
+  "dependencies": {
+    "@ethersproject/bignumber": ">=5.7.0",
+    "@gnosis.pm/safe-apps-wagmi": "^2.1.0",
+    "@past3lle/components": "^0.0.54",
+    "@past3lle/hooks": "^0.0.22",
+    "@past3lle/theme": "^0.0.32",
+    "@past3lle/utils": "0.0.17",
+    "@walletconnect/client": "^1.8.0",
+    "@web3auth/modal": "^5.1.0",
+    "@web3auth/openlogin-adapter": "^5.1.0",
+    "@web3auth/web3auth-wagmi-connector": "^3.0.0",
+    "@web3modal/ethereum": "^2.2.2",
+    "@web3modal/html": "^2.2.2",
+    "@web3modal/react": "^2.2.2",
+    "@web3modal/standalone": "^2.2.2",
+    "jotai": "^1.13.0",
+    "valtio": "1.10.3",
+    "wagmi": "0.12.1"
+  },
+  "devDependencies": {
+    "json-loader": "^0.5.7",
+    "react-cosmos": "^5.7.2"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/theme",
   "sideEffects": false,
-  "version": "0.0.31",
+  "version": "0.0.32",
   "description": "common theme parts",
   "main": "dist/index.js",
   "repository": {
@@ -27,7 +27,8 @@
     "test:watch": "tsc test --env=jsdom --watchAll",
     "test:ci": "yarn alt-test --coverage --no-watch --watch=false --watchAll=false --no-watchman --forceExit --detectOpenHandles",
     "pre-commit": "pretty-quick --staged && yarn test:ci && yarn build",
-    "lint": "prettier --write ./src/** --ignore-path '../../.prettierignore'"
+    "lint": "prettier --write ./src/** --ignore-path '../../.prettierignore'",
+    "depcheck": "npx npm-check"
   },
   "publishConfig": {
     "access": "public",
@@ -45,6 +46,7 @@
     "@babel/core": "^7.20.12",
     "@past3lle/types": "^0.0.12",
     "@rollup/plugin-image": "^3.0.1",
+    "@types/react-helmet": "^6.1.6",
     "@types/jest": "^29.2.5",
     "@types/lodash.merge": "^4.6.7",
     "@types/react": "^18.0.10",
@@ -70,12 +72,11 @@
     "styled-components": ">=5"
   },
   "dependencies": {
-    "@past3lle/assets": "^0.0.11",
+    "@past3lle/assets": "^0.0.12",
     "@past3lle/constants": "^0.0.17",
+    "react-helmet": "^6.1.0",
     "lodash.merge": "^4.6.2",
     "polished": "^4.2.2",
-    "rebass": "^4.0.7",
-    "styled-theming": "^2.2.0",
     "wcag-contrast": "^3.0.0"
   },
   "gitHead": "b30e4bcc5d99d3441002974c8068b55f19614142"

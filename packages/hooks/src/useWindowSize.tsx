@@ -1,4 +1,5 @@
 import { MEDIA_WIDTHS, MediaWidths } from '@past3lle/theme'
+import { devWarn } from '@past3lle/utils'
 import debounce from 'lodash.debounce'
 import React, { ReactNode } from 'react'
 import { useContext, useEffect, useState } from 'react'
@@ -47,15 +48,15 @@ function _getSize(): WindowSizes {
 
 /**
  * @name useWindowSize
- * @description Listens to window resize events and updates via CONTEXT. This requires you to FIRST place the Past3lleHooksProvider somewhere in your app ABOVE your intended use of this hook
+ * @description Listens to window resize events and updates via CONTEXT. This requires you to FIRST place the PstlHooksProvider somewhere in your app ABOVE your intended use of this hook
  * @example
  // somewhere in app architecture
  // e.g render
   root.render(
     // Provider goes here, hook used in "App", below
-    <Past3lleHooksProvider>
+    <PstlHooksProvider>
       <App />
-    </Past3lleHooksProvider>
+    </PstlHooksProvider>
   )
  * @returns void
  */
@@ -64,12 +65,12 @@ export function useWindowSize(): WindowSizes | undefined {
 
   const isInstantiated = !!context?.windowSizes
   if (!isInstantiated) {
-    throw new Error(
-      '[@past3lle/hooks]::useWindowSize::Error! Cannot use <useWindowSize> hook outside of the Past3lleHooksProvider. Please add one to the root of your app, ABOVE where you are intending to use the hook. Hover over hook for example use-case.'
+    devWarn(
+      '[@past3lle/hooks]::useWindowSize::Error! Cannot use <useWindowSize> hook outside of the PstlHooksProvider. Please add one to the root of your app, ABOVE where you are intending to use the hook. Hover over hook for example use-case. For now, calling window.clientWidth directly (not optimum).'
     )
   }
 
-  return context?.windowSizes
+  return context?.windowSizes || _getSize()
 }
 
 export function useWindowSmallerThan(media: MediaWidths) {
@@ -86,13 +87,13 @@ export const useIsExtraLargeMediaWidth = () => useWindowSmallerThan(MEDIA_WIDTHS
 
 export const WindowSizeContext = React.createContext<{ windowSizes: WindowSizes } | null>(null)
 
-export interface Past3lleHooksProviderOptions {
+export interface PstlHooksProviderOptions {
   windowSizes?: {
     debounceMs?: number
   }
 }
 /**
- * @name Past3lleHooksProvider
+ * @name PstlHooksProvider
  * @description required to place ABOVE intended use of useWindowSize hook
  * @param providerOptions
  * @example
@@ -108,13 +109,13 @@ export interface Past3lleHooksProviderOptions {
  // e.g render
   root.render(
     // Provider goes here, hook used in "App", below
-    <Past3lleHooksProvider>
+    <PstlHooksProvider>
       <App />
-    </Past3lleHooksProvider>
+    </PstlHooksProvider>
   )
  * @returns
  */
-export function Past3lleHooksProvider(props?: { children?: ReactNode } & Past3lleHooksProviderOptions) {
+export function PstlHooksProvider(props?: { children?: ReactNode } & PstlHooksProviderOptions) {
   const windowSizes = useWindowSizeSetup(props?.windowSizes)
 
   return <WindowSizeContext.Provider value={{ windowSizes }}>{props?.children}</WindowSizeContext.Provider>

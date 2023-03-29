@@ -14,12 +14,13 @@
     "url": "git+https://github.com/PAST3LLE/past3lle-monorepo.git"
   },
   "private": true,
-  "version": "0.0.57",
+  "version": "0.0.60",
   "engines": {
     "node": ">=18.12.0"
   },
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
+    "depcheck": "npx npm-check",
     "lint": "npx prettier --write src --ignore-path ./.prettierignore --config ./.prettierrc",
     "start:mock": "REACT_APP_IS_MOCK=true && yarn start",
     "start": "PORT=7777 GENERATE_SOURCEMAP=false craco start",
@@ -57,12 +58,13 @@
     "web-vitals": "^3.1.0"
   },
   "dependencies": {
-    "@past3lle/assets": "^0.0.11",
-    "@past3lle/carousel": "^0.0.17",
-    "@past3lle/components": "^0.0.52",
+    "@past3lle/assets": "^0.0.12",
+    "@past3lle/carousel": "^0.0.19",
+    "@past3lle/components": "^0.0.54",
     "@past3lle/constants": "^0.0.17",
-    "@past3lle/hooks": "^0.0.20",
-    "@past3lle/theme": "^0.0.31",
+    "@past3lle/hooks": "^0.0.22",
+    "@past3lle/skillforge-widget": "^0.0.26",
+    "@past3lle/theme": "^0.0.32",
     "@past3lle/types": "^0.0.12",
     "@past3lle/utils": "^0.0.17",
     "polished": "^4.2.2",

@@ -101,24 +101,21 @@ export const CommonGlobalCssSnippet = css`
   textarea,
   button {
     border: none;
-    font-family: 'Roboto', 'Inter', sans-serif;
-    font-display: fallback;
-  }
-
-  @supports (font-variation-settings: normal) {
-    html,
-    input,
-    textarea,
-    button {
-      font-family: 'Roboto', 'Inter var', sans-serif;
-    }
   }
 
   html,
   body {
+    font-family: sans-serif;
     font-size: ${BASE_FONT_SIZE_PX}px;
     margin: 0;
     padding: 0;
+  }
+
+  @supports (font-variation-settings: normal) {
+    html,
+    body {
+      font-family: 'Roboto Flex';
+    }
   }
 
   html {

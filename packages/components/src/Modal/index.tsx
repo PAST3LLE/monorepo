@@ -1,6 +1,6 @@
 import { Z_INDICES } from '@past3lle/constants'
+import { useIsMobile } from '@past3lle/hooks'
 import { upToExtraSmall } from '@past3lle/theme'
-import { isMobile } from '@past3lle/utils'
 import { DialogContent, DialogOverlay } from '@reach/dialog'
 import { transparentize } from 'polished'
 import React, { useEffect } from 'react'
@@ -15,7 +15,9 @@ interface ModalStyleProps {
   mainBackgroundColor?: string
 }
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const StyledDialogOverlay = styled(AnimatedDialogOverlay)<Pick<ModalStyleProps, 'overlayBackgroundColor' | 'zIndex'>>`
+const StyledDialogOverlay = styled(({ zIndex, ...props }) => <AnimatedDialogOverlay {...props} />)<
+  Pick<ModalStyleProps, 'overlayBackgroundColor' | 'zIndex'>
+>`
   &[data-reach-dialog-overlay] {
     z-index: ${({ zIndex = Z_INDICES.MODALS }) => zIndex};
     position: fixed;
@@ -37,10 +39,12 @@ const StyledDialogOverlay = styled(AnimatedDialogOverlay)<Pick<ModalStyleProps, 
 
 const AnimatedDialogContent = animated(DialogContent)
 // destructure to not pass custom props to Dialog DOM element
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const StyledDialogContent = styled(({ minHeight, maxHeight, mobile, isOpen, isLargeImageModal, ...rest }) => (
-  <AnimatedDialogContent {...rest} />
-)).attrs({
+const StyledDialogContent = styled(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  ({ margin, minHeight, maxHeight, maxWidth, mobile, isOpen, isLargeImageModal, tabIndex, zIndex, ...rest }) => (
+    <AnimatedDialogContent {...rest} tabIndex={tabIndex} />
+  )
+).attrs({
   'aria-label': 'dialog'
 })<Omit<ModalStyleProps, 'overlayBackgroundColor' | 'zIndex'>>`
   border: none;
@@ -60,21 +64,25 @@ const StyledDialogContent = styled(({ minHeight, maxHeight, mobile, isOpen, isLa
     align-self: center;
 
     border-radius: 0;
-    margin: 0 0 auto 0;
+    margin: ${({ margin = '0 0 auto 0' }) => margin};
     padding-top: 2rem;
     width: ${({ isLargeImageModal }) => (isLargeImageModal ? '90' : '50')}vh;
-    max-width: ${({ maxHeight, isLargeImageModal = false }) => `${isLargeImageModal ? maxHeight + 'vh' : '42rem'}`};
-    ${({ maxHeight }) => maxHeight && `max-height: ${maxHeight}vh;`}
-    ${({ minHeight }) => minHeight && `min-height: ${minHeight}vh;`}
+    max-width: ${({ maxHeight, maxWidth = '42rem', isLargeImageModal = false }) =>
+      `${isLargeImageModal ? maxHeight + 'vh' : maxWidth}`};
+    ${({ maxHeight }) => maxHeight && `max-height: ${maxHeight};`}
+    ${({ minHeight }) => minHeight && `min-height: ${minHeight};`}
   }
 `
 
-interface ModalProps {
+export interface ModalProps {
   isLargeImageModal?: boolean
   isOpen: boolean
+  tabIndex?: 0 | -1
   onDismiss: () => void
-  minHeight?: number | false
-  maxHeight?: number
+  minHeight?: string
+  maxHeight?: string
+  maxWidth?: string
+  margin?: string
   initialFocusRef?: React.RefObject<any>
   className?: string
   children?: React.ReactNode
@@ -82,16 +90,21 @@ interface ModalProps {
 }
 
 export function Modal({
-  styleProps = {},
-  isLargeImageModal = false,
-  onDismiss,
-  minHeight = false,
-  maxHeight = 90,
-  initialFocusRef,
   isOpen,
+  children,
   className,
-  children
+  tabIndex,
+  onDismiss,
+  margin,
+  minHeight,
+  maxHeight = '90vh',
+  maxWidth,
+  styleProps = {},
+  initialFocusRef,
+  isLargeImageModal = false
 }: ModalProps) {
+  const isMobile = useIsMobile()
+
   useEffect(() => {
     return () => {
       onDismiss()
@@ -110,14 +123,17 @@ export function Modal({
     >
       <StyledDialogContent
         aria-label="dialog content"
+        margin={margin}
         minHeight={minHeight}
         maxHeight={maxHeight}
+        maxWidth={maxWidth}
         mobile={isMobile}
+        tabIndex={tabIndex}
         isLargeImageModal={isLargeImageModal}
         {...styleProps}
       >
         {/* prevents the automatic focusing of inputs on mobile by the reach dialog */}
-        {!initialFocusRef && isMobile ? <div tabIndex={1} /> : null}
+        {tabIndex === undefined || initialFocusRef || !isMobile ? null : <div tabIndex={1} />}
         {children}
       </StyledDialogContent>
     </StyledDialogOverlay>

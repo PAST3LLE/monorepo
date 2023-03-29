@@ -1,0 +1,27 @@
+{
+    "extends": "../../tsconfig.build.json",
+    "compilerOptions": {
+        "baseUrl": "./",
+        "rootDir": "./src",
+        "composite": true,
+        "allowJs": true,
+        "module": "ESNext"
+    },
+    "include": [
+        "./src/**/*"
+    ],
+    "references": [
+        {
+            "path": "../components"
+        },
+        {
+            "path": "../hooks"
+        },
+        {
+            "path": "../theme"
+        },
+        {
+            "path": "../utils"
+        }
+    ]
+}

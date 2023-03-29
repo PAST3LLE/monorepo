@@ -16,13 +16,7 @@
             "path": "../types"
         },
         {
-            "path": "../assets"
-        },
-        {
             "path": "../components"
-        },
-        {
-            "path": "../constants"
         },
         {
             "path": "../hooks"
@@ -38,6 +32,9 @@
         },
         {
             "path": "../utils"
+        },
+        {
+            "path": "../web3-modal"
         }
     ]
 }

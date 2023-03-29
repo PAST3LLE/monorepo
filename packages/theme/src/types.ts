@@ -50,10 +50,10 @@ export interface ThemeContentPartsRequired {
     hoverColour: Color
   }
   content: {
-    background: Color // product.aside.itemContainer
+    background: Color
     backgroundAlt: Color
-    text: Color // product.aside.textColour
-    textAlt: Color //product.aside.itemSubHeader
+    text: Color
+    textAlt: Color
   }
 }
 
