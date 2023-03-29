@@ -1,6 +1,7 @@
 import SkillForge, { SkillForgeProps, SkillForgeConnectedHeader } from '@past3lle/skillforge-widget'
 import { RobotoVariableFontProvider } from '@past3lle/theme'
 import { PstlWeb3ModalProps } from '@past3lle/web3-modal'
+import { ASSETS_MAP } from 'assets'
 import { skillforgeTheme } from 'config/skillforge'
 import { pstlModalTheme } from 'config/wallet'
 import { SKILL_ID_BASE } from 'constants/skills'
@@ -28,9 +29,12 @@ const WEB3_PROPS: PstlWeb3ModalProps = {
         safe: 'https://user-images.githubusercontent.com/3975770/212338977-5968eae5-bb1b-4e71-8f82-af5282564c66.png'
       },
       themeVariables: {
-        '--w3m-background-color': skillforgeTheme.modes.DEFAULT.blackOpaque,
-        '--w3m-accent-color': skillforgeTheme.modes.DEFAULT.blackOpaque,
-        '--w3m-accent-fill-color': skillforgeTheme.modes.DEFAULT.mainBgAlt
+        '--w3m-background-color': skillforgeTheme.blackOpaque,
+        '--w3m-accent-color': skillforgeTheme.offwhiteOpaque,
+        '--w3m-accent-fill-color': skillforgeTheme.modes.DEFAULT.mainBgAlt,
+        '--w3m-background-image-url': ASSETS_MAP.images.background.app,
+        '--w3m-color-bg-1': skillforgeTheme.blackOpaque,
+        '--w3m-color-fg-1': skillforgeTheme.offwhiteOpaqueMore
       }
     },
     pstl: {
