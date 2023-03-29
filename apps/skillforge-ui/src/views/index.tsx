@@ -1,11 +1,12 @@
 import SkillForge, { SkillForgeProps, SkillForgeConnectedHeader } from '@past3lle/skillforge-widget'
-import { FontCssProvider } from '@past3lle/theme'
+import { RobotoVariableFontProvider } from '@past3lle/theme'
 import { PstlWeb3ModalProps } from '@past3lle/web3-modal'
 import { skillforgeTheme } from 'config/skillforge'
 import { pstlModalTheme } from 'config/wallet'
 import { SKILL_ID_BASE } from 'constants/skills'
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { GothicFontCssProvider } from 'theme/fonts'
+import { GlobalStyles } from 'theme/global'
 import { W3aStyles } from 'theme/w3aStyles'
 import { SUPPORTED_CHAINS } from 'web3/config'
 import { CONTRACT_ADDRESSES_MAP, METADATA_URIS_MAP } from 'web3/constants/addresses'
@@ -25,6 +26,11 @@ const WEB3_PROPS: PstlWeb3ModalProps = {
       walletImages: {
         web3auth: 'https://web3auth.io/images/w3a-L-Favicon-1.svg',
         safe: 'https://user-images.githubusercontent.com/3975770/212338977-5968eae5-bb1b-4e71-8f82-af5282564c66.png'
+      },
+      themeVariables: {
+        '--w3m-background-color': skillforgeTheme.modes.DEFAULT.blackOpaque,
+        '--w3m-accent-color': skillforgeTheme.modes.DEFAULT.blackOpaque,
+        '--w3m-accent-fill-color': skillforgeTheme.modes.DEFAULT.mainBgAlt
       }
     },
     pstl: {
@@ -71,14 +77,22 @@ const SKILLTREE_CONFIG: SkillForgeProps = {
     }
   }
 }
+const FontsAndCssProviders = ({ children }: { children?: ReactNode }) => (
+  <>
+    <RobotoVariableFontProvider />
+    <GothicFontCssProvider />
+    <GlobalStyles />
+    {children}
+  </>
+)
 
 export function App() {
   return (
-    <SkillForge config={SKILLTREE_CONFIG.config} maxWidth="90%" maxHeight="90%">
-      <W3aStyles />
-      <FontCssProvider />
-      <GothicFontCssProvider />
-      <SkillForgeConnectedHeader />
-    </SkillForge>
+    <FontsAndCssProviders>
+      <SkillForge config={SKILLTREE_CONFIG.config} maxWidth="90%" maxHeight="90%">
+        <W3aStyles />
+        <SkillForgeConnectedHeader />
+      </SkillForge>
+    </FontsAndCssProviders>
   )
 }

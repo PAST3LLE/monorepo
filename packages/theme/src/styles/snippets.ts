@@ -105,9 +105,17 @@ export const CommonGlobalCssSnippet = css`
 
   html,
   body {
+    font-family: sans-serif;
     font-size: ${BASE_FONT_SIZE_PX}px;
     margin: 0;
     padding: 0;
+  }
+
+  @supports (font-variation-settings: normal) {
+    html,
+    body {
+      font-family: 'Roboto Flex';
+    }
   }
 
   html {

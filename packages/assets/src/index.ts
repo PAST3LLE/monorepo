@@ -1,5 +1,3 @@
-// FONT
-import FONT_RobotoVariable from './fonts/Roboto/RobotoVariable.ttf'
 // PNG circle logo
 import PNG_LogoCircle_1x from './png/pastelle-logo-circle.png'
 import PNG_LogoCircle_2x from './png/pastelle-logo-circle@2x.png'
@@ -35,7 +33,5 @@ export {
   // PNG short logo
   PNG_LogoShort_1x,
   PNG_LogoShort_2x,
-  PNG_LogoShort_3x,
-  // FONTS
-  FONT_RobotoVariable
+  PNG_LogoShort_3x
 }
