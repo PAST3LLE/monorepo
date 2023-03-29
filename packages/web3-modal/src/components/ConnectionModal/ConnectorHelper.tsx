@@ -1,4 +1,4 @@
-import { ColumnCenter } from '@past3lle/components'
+import { ChevronDown, ChevronUp, ColumnCenter } from '@past3lle/components'
 import { useStateRef } from '@past3lle/hooks'
 import React, { ReactNode, useState } from 'react'
 import styled from 'styled-components'
@@ -16,6 +16,12 @@ const ConnectorHelperContainer = styled(ColumnCenter)<{ open: boolean; contentHe
 
     margin: 0 0 0 2em;
     width: 100%;
+
+    &:first-child {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
 
     &:last-child {
       margin: 1em;
@@ -54,7 +60,7 @@ export function ConnectorHelper({
   return (
     <ConnectorHelperContainer width="100%" textAlign="left" open={open} contentHeight={height}>
       <p onClick={handleClick}>
-        [{open ? ' - ' : ' + '}] {title}
+        {open ? <ChevronUp width={'1.2em'} /> : <ChevronDown width={'1.2em'} />} {title}
       </p>
       <p>
         <span ref={setRef}>{props.children || _getConnectorHelperText(props.connector)}</span>
