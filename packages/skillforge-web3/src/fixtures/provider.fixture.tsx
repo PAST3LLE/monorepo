@@ -20,8 +20,10 @@ export default {
         name: commonProps.appName,
         web3: {
           chains: commonProps.chains,
-          web3Modal: commonProps.web3Modal,
-          web3Auth: commonProps.web3Auth
+          modals: {
+            w3m: commonProps.modals.w3m,
+            w3a: commonProps.modals.w3a
+          }
         }
       }}
     >
@@ -36,8 +38,10 @@ export default {
         name: commonProps.appName,
         web3: {
           chains: commonProps.chains,
-          web3Modal: commonProps.web3Modal,
-          web3Auth: commonProps.web3Auth
+          modals: {
+            w3m: commonProps.modals.w3m,
+            w3a: commonProps.modals.w3a
+          }
         }
       }}
     >

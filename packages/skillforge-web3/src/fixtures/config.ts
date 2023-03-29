@@ -20,7 +20,8 @@ const DEFAULT_PROPS: PstlW3ProviderProps = {
     },
     w3a: {
       appName: 'SKILLFORGE TEST',
-      w3aId: WEB3AUTH_TEST_ID
+      w3aId: WEB3AUTH_TEST_ID,
+      network: 'mainnet'
     }
   }
 }
