@@ -40,7 +40,7 @@ export function ConnectorHelper({
   title = 'View more info',
   ...props
 }: {
-  title?: string
+  title?: ReactNode
   children?: ReactNode
   color?: string
   connector?: Connector<any, any, any>

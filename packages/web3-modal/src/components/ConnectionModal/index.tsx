@@ -1,7 +1,7 @@
 import { ButtonProps, CloseIcon, Modal, ModalProps } from '@past3lle/components'
 import { BasicUserTheme, ThemeByModes, ThemeProvider } from '@past3lle/theme'
 import { devWarn } from '@past3lle/utils'
-import React, { Fragment, memo, useMemo, useState } from 'react'
+import React, { Fragment, ReactNode, memo, useMemo, useState } from 'react'
 import { useTheme } from 'styled-components'
 
 import { useConnection, useModalTheme, usePstlWeb3Modal } from '../../hooks'
@@ -12,7 +12,7 @@ import { InnerContainer, ModalButton } from './styled'
 
 type DefaultWalletNames = 'general' | 'web3auth' | 'walletConnect'
 type InfoTextMap = {
-  [key in DefaultWalletNames]?: { title: string; content: string }
+  [key in DefaultWalletNames]?: { title: ReactNode; content: ReactNode }
 }
 
 interface PstlWeb3ConnectionModalProps extends Omit<ModalProps, 'isOpen' | 'onDismiss'> {
