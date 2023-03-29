@@ -30,6 +30,11 @@ declare module '*.otf' {
   export default src
 }
 
+declare module '*.ttf' {
+  export const src: string
+  export default src
+}
+
 declare module '*.json' {
   export const src: string
   export default src

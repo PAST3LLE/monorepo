@@ -53,7 +53,7 @@ export const InnerContainer = styled(ColumnCenter)`
   font-size: ${({ theme }) => theme.modals?.connection?.baseFontSize || 16}px;
   font-style: italic;
   font-weight: 200;
-  font-family: 'Roboto', system-ui;
+  font-family: 'RobotoVariable', 'Inter', system-ui;
 
   &::-webkit-scrollbar {
     display: none;
