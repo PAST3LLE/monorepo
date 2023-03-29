@@ -15,7 +15,9 @@ interface ModalStyleProps {
   mainBackgroundColor?: string
 }
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const StyledDialogOverlay = styled(AnimatedDialogOverlay)<Pick<ModalStyleProps, 'overlayBackgroundColor' | 'zIndex'>>`
+const StyledDialogOverlay = styled(({ zIndex, ...props }) => <AnimatedDialogOverlay {...props} />)<
+  Pick<ModalStyleProps, 'overlayBackgroundColor' | 'zIndex'>
+>`
   &[data-reach-dialog-overlay] {
     z-index: ${({ zIndex = Z_INDICES.MODALS }) => zIndex};
     position: fixed;
