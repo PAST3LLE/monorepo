@@ -41,7 +41,7 @@ const WEB3_PROPS: PstlWeb3ModalProps = {
       closeModalOnConnect: false,
       infoTextMap: {
         general: {
-          title: 'What can I do on this modal?',
+          title: 'What can I do on this screen?',
           content: `${APP_NAME} has an opt-in Web3 feature which allows you to collect SKILLS and SKILLPOINTS in exchange for completely new, and unique drop items. Clicking on SKILLS (the squares on the board) shows you the prerequisites for each new skill. To get started, please select a wallet choice below and connect! If you are new to Web3/blockchain, please select "Social Login" below.`
         },
         web3auth: {
