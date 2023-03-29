@@ -100,6 +100,7 @@ function ModalWithoutThemeProvider({
       // to prevent locking of focus on modal (with web3auth this blocks using their modal e.g)
       tabIndex={undefined}
       styleProps={{
+        // w3modal has 89 zindex
         zIndex: 88,
         ...restModalProps.styleProps
       }}

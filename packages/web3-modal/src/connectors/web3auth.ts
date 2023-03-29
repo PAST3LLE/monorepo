@@ -8,7 +8,6 @@ import { Chain } from 'wagmi'
 import { ConnectorEnhancedExtras } from '../types'
 
 const SOCIAL_LOGO = 'https://www.getopensocial.com/wp-content/uploads/2020/12/social-login-COLOR_2.png'
-const NET = process.env.NODE_ENV !== 'production' ? 'testnet' : 'mainnet'
 
 class Web3AuthEnhancedConnector extends Web3AuthConnectorCreator {
   public customName?: string
@@ -30,7 +29,6 @@ class Web3AuthEnhancedConnector extends Web3AuthConnectorCreator {
     this.logo = logo
   }
 }
-
 export interface PstlWeb3AuthConnectorProps {
   appName: string
   appLogoLight?: string
@@ -42,6 +40,7 @@ export interface PstlWeb3AuthConnectorProps {
   listingDetails?: string
   loginMethodsOrder?: string[]
   modalZIndex?: string
+  network: 'mainnet' | 'testnet' | 'development' | 'cyan'
   w3aId: string
   preset?: 'DISALLOW_EXTERNAL_WALLETS' | 'ALLOW_EXTERNAL_WALLETS'
 }
@@ -56,6 +55,7 @@ export function PstlWeb3AuthConnector({
   listingDetails,
   loginMethodsOrder,
   modalZIndex = '2147483647',
+  network,
   preset = 'ALLOW_EXTERNAL_WALLETS',
   theme = 'dark',
   w3aId
@@ -75,6 +75,7 @@ export function PstlWeb3AuthConnector({
   const web3AuthInstance = new Web3Auth({
     clientId: w3aId,
     chainConfig,
+    web3AuthNetwork: network,
     uiConfig: {
       appName,
       theme,
@@ -87,7 +88,7 @@ export function PstlWeb3AuthConnector({
   // Add openlogin adapter for customisations
   const openloginAdapterInstance = new OpenloginAdapter({
     adapterSettings: {
-      network: NET,
+      network,
       uxMode: 'popup',
       whiteLabel: {
         name: appName,
