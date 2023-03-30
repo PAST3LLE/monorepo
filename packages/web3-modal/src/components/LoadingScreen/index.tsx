@@ -3,6 +3,8 @@ import { setCssBackground, urlToSimpleGenericImageSrcSet } from '@past3lle/theme
 import React from 'react'
 import styled from 'styled-components'
 
+import { ModalTitleText } from '../ConnectionModal/styled'
+
 interface LoadingContainerProps {
   backgroundColor?: string
   backgroundImg?: string
@@ -14,6 +16,10 @@ const LoadingContainerFadeIn = styled(ArticleFadeIn)<LoadingContainerProps>`
   align-items: center;
   height: 100%;
   width: 100%;
+
+  > img {
+    margin-top: 2em;
+  }
 
   background-color: ${({ backgroundColor = 'transparent' }) => backgroundColor};
 
@@ -35,6 +41,14 @@ export interface LoadingScreenProps {
 export function LoadingScreen({ containerProps, spinnerProps }: LoadingScreenProps) {
   return (
     <LoadingContainerFadeIn {...containerProps}>
+      <ModalTitleText
+        fontSize="1.5em"
+        fvs={{
+          wght: 100
+        }}
+      >
+        GETTING LOGIN...
+      </ModalTitleText>
       <SpinnerCircle {...spinnerProps} />
     </LoadingContainerFadeIn>
   )

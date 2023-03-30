@@ -38,7 +38,6 @@ export function getConnectorInfo(
   { label: string; logo?: string; connected: boolean },
   ReturnType<typeof useConnection>[1]['connect'] | ReturnType<typeof useConnection>[1]['openW3Modal']
 ] {
-  console.debug('currentConnector', currentConnector)
   switch (connector.id) {
     case DefaultWallets.WEB3AUTH:
       return [

@@ -1,5 +1,5 @@
-import { Button, CloseIcon, ColumnCenter } from '@past3lle/components'
-import { setBestTextColour } from '@past3lle/theme'
+import { Button, CloseIcon, ColumnCenter, Modal, Text } from '@past3lle/components'
+import { setBestTextColour, upToSmall } from '@past3lle/theme'
 import styled from 'styled-components'
 
 import { getPosition } from '../../utils'
@@ -48,6 +48,15 @@ export const ModalButton = styled(Button)<{ connected: boolean }>`
   `}
 `
 
+export const ModalTitleText = styled(Text.Main)`
+  color: ${({ theme }) => theme.modals?.connection?.title?.color || 'ghostwhite'};
+  font-size: ${({ theme }) => theme.modals?.connection?.title?.fontSize || '2em'};
+  font-weight: ${({ theme }) => theme.modals?.connection?.title?.fontWeight || 200};
+  letter-spacing: ${({ theme }) => theme.modals?.connection?.title?.letterSpacing || '0px'};
+  line-height: ${({ theme }) => theme.modals?.connection?.title?.lineHeight || 1};
+  margin-bottom: 0.1em;
+`
+
 export const InnerContainer = styled(ColumnCenter)`
   position: relative;
   font-size: ${({ theme }) => theme.modals?.connection?.baseFontSize || 16}px;
@@ -73,14 +82,22 @@ export const InnerContainer = styled(ColumnCenter)`
     width: ${({ theme }) => theme.modals?.connection?.closeIcon?.size || '1em'};
   }
 
-  > h1 {
-    color: ${({ theme }) => theme.modals?.connection?.title?.color || 'ghostwhite'};
-    font-size: ${({ theme }) => theme.modals?.connection?.title?.fontSize || '2em'};
-    font-weight: ${({ theme }) => theme.modals?.connection?.title?.fontWeight || 200};
-    letter-spacing: ${({ theme }) => theme.modals?.connection?.title?.letterSpacing || '0px'};
-    line-height: ${({ theme }) => theme.modals?.connection?.title?.lineHeight || 1};
-    margin-bottom: 0.1em;
-  }
-
   border-radius: ${({ theme: { modals } }) => modals?.connection?.button?.border?.radius || '1em'};
+`
+
+export const StyledConnectionModal = styled(Modal)`
+  ${upToSmall`
+    div {
+      &[data-reach-dialog-content] {
+        max-width: unset;
+        width: 100%;
+        margin: auto 0 0;
+        
+        > ${InnerContainer}{
+          border-bottom-left-radius: 0;
+          border-bottom-right-radius: 0;
+        }
+      }
+    }
+  `}
 `

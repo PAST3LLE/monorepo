@@ -1,4 +1,4 @@
-import { ButtonProps, CloseIcon, Modal, ModalProps } from '@past3lle/components'
+import { ButtonProps, CloseIcon, ModalProps } from '@past3lle/components'
 import { BasicUserTheme, ThemeByModes, ThemeProvider } from '@past3lle/theme'
 import { devWarn } from '@past3lle/utils'
 import React, { Fragment, ReactNode, memo, useMemo, useState } from 'react'
@@ -9,7 +9,7 @@ import { useConnection, useModalTheme, usePstlWeb3Modal } from '../../hooks'
 import { getConnectorInfo } from '../../utils'
 import { LoadingScreen, LoadingScreenProps } from '../LoadingScreen'
 import { ConnectorHelper } from './ConnectorHelper'
-import { InnerContainer, ModalButton } from './styled'
+import { InnerContainer, ModalButton, ModalTitleText, StyledConnectionModal } from './styled'
 
 type DefaultWalletNames = 'general' | 'web3auth' | 'walletConnect'
 type InfoTextMap = {
@@ -94,7 +94,7 @@ function ModalWithoutThemeProvider({
   )
 
   return (
-    <Modal
+    <StyledConnectionModal
       className={restModalProps.className}
       isOpen={isOpen}
       onDismiss={close}
@@ -116,13 +116,13 @@ function ModalWithoutThemeProvider({
           style={{ position: 'absolute', right: '0.75em', top: '0.75em' }}
           onClick={close}
         />
-        <h1>{title}</h1>
-        {infoTextMap?.general && (
+        <ModalTitleText as="h1">{title}</ModalTitleText>
+        {infoTextMap?.general && !w3aModalLoading && (
           <ConnectorHelper title={infoTextMap.general.title}>{infoTextMap.general.content}</ConnectorHelper>
         )}
         {w3aModalLoading ? <LoadingScreen {...loaderProps} /> : data}
       </InnerContainer>
-    </Modal>
+    </StyledConnectionModal>
   )
 }
 
