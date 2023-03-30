@@ -1,7 +1,7 @@
 import { DIMENSIONS_MAP } from './dimensions'
 import { Button } from '@past3lle/components'
 import {
-  FontCssProvider,
+  RobotoVariableFontProvider,
   setBackgroundWithDPI,
   StaticGlobalCssProvider,
   upToSmall,
@@ -62,7 +62,7 @@ const CustomGlobalStyles = createGlobalStyle`
 
 export const GlobalCssProviders = () => (
   <>
-    <FontCssProvider />
+    <RobotoVariableFontProvider />
     <StaticGlobalCssProvider />
     <CustomGlobalStyles />
   </>
