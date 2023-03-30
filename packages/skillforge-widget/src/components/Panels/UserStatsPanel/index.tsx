@@ -110,6 +110,7 @@ const UserStatsPanelContainer = styled(Column)`
     ${UserConnectionStats} {
       padding: 1.4rem 1rem 1.4rem 1.4rem;
       gap: 0.75rem;
+      border-radius: 0;
       > ${MonospaceText} {
         font-size: 1.5rem;
       }

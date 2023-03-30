@@ -7,6 +7,7 @@ import { CursiveHeader, MonospaceText } from '../../Common/Text'
 const DEFAULT_SIDE_PANEL_PROPS = {
   background: 'lightgrey',
   padding: '4rem',
+  paddingMobile: '4rem 0',
   width: '40%',
   borderRadius: '0px',
   flexDir: 'column' as RowProps['flexDirection'],
@@ -75,8 +76,12 @@ export const StyledSidePanel = styled(ArticleFadeIn)<SidePanelCssProps>`
     width: 65%;
   `}
 
-  ${({ useMediaQueries = DEFAULT_SIDE_PANEL_PROPS.useMediaQueries }) => upToSmall`
+  ${({
+    useMediaQueries = DEFAULT_SIDE_PANEL_PROPS.useMediaQueries,
+    paddingMobile = DEFAULT_SIDE_PANEL_PROPS.paddingMobile
+  }) => upToSmall`
     width: 100%;
+    padding: ${paddingMobile};
 
     ${
       useMediaQueries &&
