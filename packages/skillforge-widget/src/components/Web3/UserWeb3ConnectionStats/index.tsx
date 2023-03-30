@@ -1,7 +1,7 @@
 import { Column, RowProps } from '@past3lle/components'
 import { BLACK_TRANSPARENT } from '@past3lle/theme'
 import { truncateAddress } from '@past3lle/utils'
-import { useWeb3Modal } from '@web3modal/react'
+import { usePstlConnection, usePstlWeb3Modal } from '@past3lle/web3-modal'
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import { useAccount, useNetwork } from 'wagmi'
@@ -22,13 +22,14 @@ function UnstyledUserConnectionStats({
   const { address } = useAccount()
   const { chain } = useNetwork()
 
-  const { open } = useWeb3Modal()
+  const { open } = usePstlWeb3Modal()
+  const [, { openW3Modal }] = usePstlConnection()
 
   const handleClick = useCallback(
-    async (openOptions: OpenOptions) => {
-      open(openOptions)
+    async (connectedRoute: OpenOptions['route'], disConnectedRoute: OpenOptions['route']) => {
+      address ? openW3Modal({ route: connectedRoute }) : open({ route: disConnectedRoute })
     },
-    [open]
+    [address, open, openW3Modal]
   )
 
   return (
@@ -46,7 +47,7 @@ function UnstyledUserConnectionStats({
         fontSize={fontSize}
         title={address || 'disconnected'}
         color={'#f8f8ffed'}
-        onClick={() => handleClick({ route: address ? 'Account' : 'ConnectWallet' })}
+        onClick={() => handleClick('Account', 'ConnectWallet')}
       >
         <ConnectionColorWrapper isConnected={!!address}>
           <FlashingText>{`> `}</FlashingText>
@@ -60,7 +61,7 @@ function UnstyledUserConnectionStats({
         cursor="pointer"
         fontSize={fontSize}
         color={'#f8f8ffed'}
-        onClick={() => handleClick({ route: 'SelectNetwork' })}
+        onClick={() => handleClick('SelectNetwork', 'SelectNetwork')}
       >
         <ConnectionColorWrapper isConnected={!!address}>
           <FlashingText>{`> `}</FlashingText>
