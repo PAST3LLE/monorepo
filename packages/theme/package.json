@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/theme",
   "sideEffects": false,
-  "version": "0.0.33",
+  "version": "0.0.34",
   "description": "common theme parts",
   "main": "dist/index.js",
   "repository": {
@@ -72,8 +72,8 @@
     "styled-components": ">=5"
   },
   "dependencies": {
-    "@past3lle/assets": "^0.0.13",
-    "@past3lle/constants": "^0.0.18",
+    "@past3lle/assets": "^0.0.14",
+    "@past3lle/constants": "^0.0.19",
     "lodash.merge": "^4.6.2",
     "polished": "^4.2.2",
     "react-helmet": "^6.1.0",
