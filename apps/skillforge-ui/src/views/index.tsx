@@ -19,7 +19,8 @@ const WEB3_PROPS: PstlWeb3ModalProps = {
   modals: {
     w3a: {
       appName: APP_NAME,
-      network: 'mainnet',
+      // TODO: change this once ready for production
+      network: 'testnet',
       projectId: process.env.REACT_APP_WEB3AUTH_ID as string
     },
     w3m: {
@@ -30,7 +31,7 @@ const WEB3_PROPS: PstlWeb3ModalProps = {
       },
       themeVariables: {
         '--w3m-background-color': skillforgeTheme.blackOpaque,
-        '--w3m-accent-color': skillforgeTheme.offwhiteOpaque,
+        '--w3m-accent-color': '#525291',
         '--w3m-accent-fill-color': skillforgeTheme.modes.DEFAULT.mainBgAlt,
         '--w3m-background-image-url': ASSETS_MAP.images.background.app,
         '--w3m-color-bg-1': skillforgeTheme.blackOpaque,
@@ -74,9 +75,8 @@ const SKILLTREE_CONFIG: SkillForgeProps = {
     contractAddresses: CONTRACT_ADDRESSES_MAP,
     metadataUris: METADATA_URIS_MAP,
     skillOptions: {
-      // some id's may NOT be simply 1,2,3...N
-      // and instead 1000,2000,3000...N*1000
-      // idBase is the base e.g 1000
+      // some id's may NOT be simply [1,2,3...N] and instead 1000,2000,3000...N*1000
+      // idBases in PSTL SkillForge = 1000
       idBase: SKILL_ID_BASE
     }
   }
