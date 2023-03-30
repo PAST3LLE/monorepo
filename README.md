@@ -10,12 +10,14 @@ Packages included:
 5. [theme](/packages/theme): ThemeProvider and general theme components, global styles and theme utils
 6. [types](/packages/types): common types
 7. [utils](/packages/utils): common utils e.g async wait(...) for promisifying and many others
-8. [skillforge-widget](/packages/skillforge-widget): skillforge widget component for making PAST3LLE LABS skilltree rewards apps
+8. [skillforge-widget](/packages/skillforge-widget): skillforge widget component for making PAST3LLE LABS rewards dapps
 9. [skillforge-web3](/packages/skillforge-web3): common skillforge related web3 components/providers/hooks/utils
+9. [web3-modal](/packages/web3-modal): Extensible Web3 connection modal exposing social login via web3auth and web3modal by default
 
 Apps:
 1. skillforge-ui - the SkillForge skills upgrade UI - get skills and skins [from the shop](https://pastelle.shop)
 2. skills-nft - scripts for uploading metadata and images to IPFS
+3. pastellelabs-landing-ui: PastelleLabs landing page
 
 ## From other projects: installation example
 ```bash
