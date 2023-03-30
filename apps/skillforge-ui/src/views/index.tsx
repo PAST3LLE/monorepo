@@ -1,3 +1,4 @@
+import { useIsMobile } from '@past3lle/hooks'
 import SkillForge, { SkillForgeProps, SkillForgeConnectedHeader } from '@past3lle/skillforge-widget'
 import { RobotoVariableFontProvider } from '@past3lle/theme'
 import { PstlWeb3ModalProps } from '@past3lle/web3-modal'
@@ -91,9 +92,14 @@ const FontsAndCssProviders = ({ children }: { children?: ReactNode }) => (
 )
 
 export function App() {
+  const isMobile = useIsMobile()
   return (
     <FontsAndCssProviders>
-      <SkillForge config={SKILLTREE_CONFIG.config} maxWidth="90%" maxHeight="90%">
+      <SkillForge
+        config={SKILLTREE_CONFIG.config}
+        maxWidth={isMobile ? '100%' : '90%'}
+        maxHeight={isMobile ? '100%' : '90%'}
+      >
         <W3aStyles />
         <SkillForgeConnectedHeader />
       </SkillForge>
