@@ -13,7 +13,7 @@ export const ModalButton = styled(Button)<{ connected: boolean }>`
   border-color: ${({ theme }) => theme.modals?.connection?.button?.border?.color};
 
   font-style: ${({ theme }) => theme.modals?.connection?.button?.fontStyle || 'inherit'};
-  font-weight: ${({ theme }) => theme.modals?.connection?.button?.fontWeight || 300};
+  font-variation-settings: ${({ theme }) => `'wght' ${theme.modals?.connection?.button?.fontWeight || 300}`};
   color: ${({ theme }) =>
     theme.modals?.connection?.button?.color ||
     setBestTextColour(theme.modals?.connection?.button?.background || 'ghostwhite')};
@@ -51,7 +51,7 @@ export const ModalButton = styled(Button)<{ connected: boolean }>`
 export const ModalTitleText = styled(Text.Main)`
   color: ${({ theme }) => theme.modals?.connection?.title?.color || 'ghostwhite'};
   font-size: ${({ theme }) => theme.modals?.connection?.title?.fontSize || '2em'};
-  font-weight: ${({ theme }) => theme.modals?.connection?.title?.fontWeight || 200};
+  font-variation-settings: ${({ theme }) => `'wght' ${theme.modals?.connection?.title?.fontWeight || 200}`};
   letter-spacing: ${({ theme }) => theme.modals?.connection?.title?.letterSpacing || '0px'};
   line-height: ${({ theme }) => theme.modals?.connection?.title?.lineHeight || 1};
   margin-bottom: 0.1em;
