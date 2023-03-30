@@ -12,13 +12,13 @@ interface LoadingContainerProps {
 const LoadingContainerFadeIn = styled(ArticleFadeIn)<LoadingContainerProps>`
   display: flex;
   flex-flow: column nowrap;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
   height: 100%;
   width: 100%;
 
   > img {
-    margin-top: 2em;
+    margin-top: 1em;
   }
 
   background-color: ${({ backgroundColor = 'transparent' }) => backgroundColor};
@@ -43,6 +43,7 @@ export function LoadingScreen({ containerProps, spinnerProps }: LoadingScreenPro
     <LoadingContainerFadeIn {...containerProps}>
       <ModalTitleText
         fontSize="1.5em"
+        marginTop="2em"
         fvs={{
           wght: 100
         }}

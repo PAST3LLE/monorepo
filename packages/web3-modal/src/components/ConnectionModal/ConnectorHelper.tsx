@@ -7,7 +7,6 @@ import { Connector } from 'wagmi'
 import { ConnectorEnhanced } from '../../types'
 
 const ConnectorHelperContainer = styled(ColumnCenter)<{ open: boolean; contentHeight?: number }>`
-  overflow: ${({ open }) => (open ? 'revert' : 'hidden')};
   cursor: pointer;
   color: ${({ theme }) => theme.modals?.connection?.helpers?.color || 'ghostwhite'};
   > p {

@@ -116,7 +116,15 @@ function ModalWithoutThemeProvider({
           style={{ position: 'absolute', right: '0.75em', top: '0.75em' }}
           onClick={close}
         />
-        <ModalTitleText as="h1">{title}</ModalTitleText>
+        <ModalTitleText
+          fontSize={theme.modals?.connection?.title?.fontSize || '2em'}
+          fvs={{
+            wght: theme?.modals?.connection?.title?.fontWeight || 200
+          }}
+          margin="0.2em 0"
+        >
+          {title}
+        </ModalTitleText>
         {infoTextMap?.general && !w3aModalLoading && (
           <ConnectorHelper title={infoTextMap.general.title}>{infoTextMap.general.content}</ConnectorHelper>
         )}

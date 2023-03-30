@@ -48,13 +48,10 @@ export const ModalButton = styled(Button)<{ connected: boolean }>`
   `}
 `
 
-export const ModalTitleText = styled(Text.Main)`
+export const ModalTitleText = styled(Text.SubHeader)`
   color: ${({ theme }) => theme.modals?.connection?.title?.color || 'ghostwhite'};
-  font-size: ${({ theme }) => theme.modals?.connection?.title?.fontSize || '2em'};
-  font-variation-settings: ${({ theme }) => `'wght' ${theme.modals?.connection?.title?.fontWeight || 200}`};
   letter-spacing: ${({ theme }) => theme.modals?.connection?.title?.letterSpacing || '0px'};
   line-height: ${({ theme }) => theme.modals?.connection?.title?.lineHeight || 1};
-  margin-bottom: 0.1em;
 `
 
 export const InnerContainer = styled(ColumnCenter)`
@@ -89,15 +86,16 @@ export const StyledConnectionModal = styled(Modal)`
   ${upToSmall`
     div {
       &[data-reach-dialog-content] {
-        max-width: unset;
-        width: 100%;
-        margin: auto 0 0;
-        
-        > ${InnerContainer}{
-          border-bottom-left-radius: 0;
-          border-bottom-right-radius: 0;
+          max-height: 500px;
+          max-width: unset;
+          width: 100%;
+          margin: auto 0 0;
+          
+          > ${InnerContainer}{
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+          }
         }
       }
-    }
   `}
 `
