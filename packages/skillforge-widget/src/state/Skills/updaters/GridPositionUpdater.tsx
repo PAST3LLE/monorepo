@@ -5,6 +5,7 @@ import { useEffect, useMemo } from 'react'
 import { SkillVectorsMap, useActiveSkillReadAtom, useVectorsAtom } from '..'
 import { calculateGridPoints } from '../../../components/Canvas/canvasApi/api/hooks'
 import {
+  CANVAS_CONTAINER_ID,
   EMPTY_COLLECTION_ROWS_SIZE,
   MINIMUM_BOARD_HEIGHT,
   MINIMUM_BOARD_WIDTH,
@@ -18,7 +19,7 @@ export function GridPositionUpdater() {
   const [windowSizeState] = useSkillForgeWindowSizeAtom()
 
   const gridConstants = useMemo(() => {
-    const container = document.getElementById('CANVAS-CONTAINER')
+    const container = document.getElementById(CANVAS_CONTAINER_ID)
 
     if (!container) return null
 
@@ -34,8 +35,8 @@ export function GridPositionUpdater() {
     const gridWidth = Math.max(container.clientWidth, MINIMUM_BOARD_WIDTH) * 0.95
 
     // config
-    const rowHeight = Math.round(gridHeight / rows)
-    const columnWidth = Math.round(gridWidth / columns)
+    const rowHeight = Math.floor(gridHeight / rows)
+    const columnWidth = Math.floor(gridWidth / columns)
 
     return { rows, columns, rowHeight, columnWidth, gridHeight, gridWidth }
     // NOTE: TS complains about windowSizeState which we need to re-calc on window size change(s)
@@ -45,7 +46,10 @@ export function GridPositionUpdater() {
   useEffect(
     () => {
       if (gridConstants) {
-        setVectorsState((vectorsState) => ({ ...vectorsState, vectors: calculateGridPoints(metadata, gridConstants) }))
+        setVectorsState((vectorsState) => ({
+          ...vectorsState,
+          vectors: calculateGridPoints(metadata, gridConstants)
+        }))
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -9,7 +9,7 @@ import {
 import { convertToRomanNumerals } from '@past3lle/utils'
 import React, { useMemo } from 'react'
 
-import { EMPTY_SKILL_IMAGE_HASH_LIST, MINIMUM_COLLECTION_BOARD_SIZE } from '../../constants/skills'
+import { CANVAS_CONTAINER_ID, EMPTY_SKILL_IMAGE_HASH_LIST, MINIMUM_COLLECTION_BOARD_SIZE } from '../../constants/skills'
 import { useVectorsAtom } from '../../state/Skills'
 import { SkillContainerAbsolute, SkillpointHeader } from '../Common'
 import { Skillpoint } from '../Skillpoint'
@@ -57,7 +57,7 @@ export function SkillsCanvas() {
           })}
         </SkillContainerAbsolute>
       </Row>
-      <SkillInnerCanvasContainer height="100%" width="100%" style={{ position: 'relative' }} id="CANVAS-CONTAINER">
+      <SkillInnerCanvasContainer height="100%" width="100%" style={{ position: 'relative' }} id={CANVAS_CONTAINER_ID}>
         <SkillContainerAbsolute>{VectorsMap}</SkillContainerAbsolute>
         {/* CANVAS */}
         <LightningCanvas />

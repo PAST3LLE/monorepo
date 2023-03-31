@@ -23,11 +23,12 @@ export function LightningCanvas() {
 
   const { width, height } = useMemo(() => {
     const height = Math.max(canvasDOM?.parentElement?.clientHeight || 0, MINIMUM_BOARD_HEIGHT - 30)
-    // const width = useWindowWidth ? window.innerWidth : canvasDOM?.parentElement?.clientWidth || 0
     const width = widgetWidth || calculateCanvasWidth(document.body.clientWidth)
+
     return { height, width }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
+    widgetWidth,
     canvasDOM?.parentElement?.clientHeight,
     canvasDOM?.parentElement?.clientWidth,
     windowSize.height,
