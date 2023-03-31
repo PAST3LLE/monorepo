@@ -19,7 +19,10 @@
     "install:examples": "cd examples/generic && yarn && cd ../../",
     "publish:all": "lerna publish",
     "prepare:publish": "node ./configure-references.js && lerna publish",
-    "nft:write": "lerna run metadata:write --scope @past3lle/skills-nft --"
+    "nft:write": "lerna run metadata:write --scope @past3lle/skills-nft --",
+    "build:scope": "lerna run build --scope",
+    "start:scope": "lerna run start --scope",
+    "cosmos:scope": "lerna run cosmos --scope"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.18.6",
