@@ -22,6 +22,7 @@ const WEB3_PROPS: PstlWeb3ModalProps = {
       appName: APP_NAME,
       // TODO: change this once ready for production
       network: 'testnet',
+      listingName: 'Email/SMS/Social',
       projectId: process.env.REACT_APP_WEB3AUTH_ID as string
     },
     w3m: {
@@ -47,18 +48,35 @@ const WEB3_PROPS: PstlWeb3ModalProps = {
       closeModalOnConnect: false,
       infoTextMap: {
         general: {
-          title: 'What can I do on this screen?',
-          content: `${APP_NAME} has an opt-in Web3 feature which allows you to collect SKILLS and SKILLPOINTS in exchange for completely new, and unique drop items. Clicking on SKILLS (the squares on the board) shows you the prerequisites for each new skill. To get started, please select a wallet choice below and connect! If you are new to Web3/blockchain, please select "Social Login" below.`
+          title: <strong>What can I do on this screen?</strong>,
+          content: (
+            <strong>
+              {APP_NAME} has an opt-in Web3 feature which allows you to collect SKILLS and SKILLPOINTS in exchange for
+              completely new, and unique drop items. Clicking on SKILLS (the squares on the board) shows you the
+              prerequisites for each new skill. To get started, please select a wallet choice below and connect! If you
+              are new to Web3/blockchain, please select "Social Login" below.
+            </strong>
+          )
         },
         web3auth: {
-          title: 'What is social login?',
-          content:
-            'Social login is done via Web3Auth - a non-custodial social login protocol (i.e they never actually know, or hold your data) - which facilitates logging into dApps (decentralised apps) via familiar social login choices'
+          title: <strong>How does this login work?</strong>,
+          content: (
+            <strong>
+              Social login is done via Web3Auth - a non-custodial social login protocol (i.e they never actually know,
+              or hold your data) - which facilitates logging into Dapps (decentralised apps) via familiar social media
+              login choices.
+            </strong>
+          )
         },
         walletConnect: {
-          title: 'What is wallets login?',
-          content:
-            'Web3Modal/WalletConnect is a simple blockchain wallet aggregator modal that facilitates the choice of selecting preferred blockchain wallet(s) for connecting to dApps (decentralised apps). This generally requires more blockchain knowledge.'
+          title: <strong>What is WalletConnect?</strong>,
+          content: (
+            <strong>
+              WalletConnect (presented here as Web3Modal) is a simple blockchain wallet aggregator modal that
+              facilitates the choice of selecting preferred blockchain wallet(s) for connecting to Dapps (decentralised
+              apps). This generally requires more blockchain knowledge.
+            </strong>
+          )
         }
       },
       loaderProps: {
