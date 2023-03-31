@@ -8,6 +8,7 @@ import { Z_INDICES } from '../../constants'
 import { useConnection, useModalTheme, usePstlWeb3Modal } from '../../hooks'
 import { getConnectorInfo } from '../../utils'
 import { LoadingScreen, LoadingScreenProps } from '../LoadingScreen'
+import { ConnectedCheckMark } from './ConnectedCheckMark'
 import { ConnectorHelper } from './ConnectorHelper'
 import { InnerContainer, ModalButton, ModalTitleText, StyledConnectionModal } from './styled'
 
@@ -67,7 +68,8 @@ function ModalWithoutThemeProvider({
           <Fragment key={connector.id + '_' + index}>
             <ModalButton onClick={callback} connected={connected} {...buttonProps}>
               <img style={{ maxWidth: 50 }} src={logo} />
-              {connected ? `Connected: ${label}` : `${label} login`}
+              {label}
+              {connected && <ConnectedCheckMark />}
             </ModalButton>
             {theme?.modals?.connection?.helpers?.show && (
               <ConnectorHelper title={infoTextMap?.[connector.id as DefaultWalletNames]?.title} connector={connector}>

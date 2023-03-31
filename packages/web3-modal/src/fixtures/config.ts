@@ -22,8 +22,8 @@ export const pstlModalTheme = createCustomTheme<ThemeByModes<PstlModalTheme>>({
             connectedBackgroundColor: '#37b9927d',
             border: { border: 'none', radius: '1em' },
             color: 'ghostwhite',
-            fontStyle: 'italic',
-            fontWeight: 600,
+            fontStyle: 'normal',
+            fontWeight: 200,
             letterSpacing: '-1px',
             textShadow: '2px 2px 3px #0000005c',
             textTransform: 'uppercase',
@@ -54,7 +54,7 @@ const DEFAULT_PROPS: PstlWeb3ModalProps = {
     w3a: {
       appName: 'SKILLFORGE TEST',
       projectId: WEB3AUTH_TEST_ID,
-      network: 'mainnet'
+      network: 'testnet'
       // zIndex: 901
     }
     // pstl: {

@@ -27,7 +27,7 @@ export const ModalButton = styled(Button)<{ connected: boolean }>`
     
     ${({ theme }) => `text-transform: ${theme.modals?.connection?.button?.textTransform || 'none'};`}
     
-    gap: 1em;
+    gap: 10px;
 
   transition: transform 0.3s ease-in-out;
   &:hover {

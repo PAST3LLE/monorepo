@@ -77,7 +77,7 @@ export function getConnectorInfo(
     case DefaultWallets.WEB3MODAL: {
       return [
         {
-          label: connector?.customName || 'Wallets',
+          label: connector?.customName || 'WalletConnect',
           logo: connector?.logo || WALLETCONNECT_LOGO,
           connected: !!currentConnector && currentConnector?.id !== DefaultWallets.WEB3AUTH
         },

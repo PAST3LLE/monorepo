@@ -37,8 +37,8 @@ export default {
           w3m: commonProps.modals.w3m,
           w3a: {
             appName: 'COSMOS APP',
-            network: 'mainnet',
-            listingName: 'SOCIAL',
+            network: 'testnet',
+            listingName: 'Email/SMS/Social',
             projectId: commonProps.modals.w3a.projectId,
             appLogoLight: LOGO,
             appLogoDark: LOGO
@@ -59,7 +59,7 @@ export default {
                 )
               },
               web3auth: {
-                title: 'What is social login?',
+                title: 'How does this login work?',
                 content: (
                   <strong>
                     Social login is done via Web3Auth - a non-custodial social login protocol (i.e they never actually
@@ -69,7 +69,7 @@ export default {
                 )
               },
               walletConnect: {
-                title: 'What is wallets login?',
+                title: 'What is WalletConnect?',
                 content: (
                   <strong>
                     Web3Modal/WalletConnect is a simple blockchain wallet aggregator modal that facilitates the choice
