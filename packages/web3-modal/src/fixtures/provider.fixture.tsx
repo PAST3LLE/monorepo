@@ -1,4 +1,5 @@
 import { ButtonVariations, ColumnCenter, PstlButton } from '@past3lle/components'
+import { TorusWalletConnectorPlugin } from '@web3auth/torus-wallet-connector-plugin'
 import React, { ReactNode } from 'react'
 import { useAccount } from 'wagmi'
 
@@ -25,6 +26,7 @@ const Web3Button = ({ children = <div>Show PSTL Wallet Modal</div> }: Web3Button
     </ColumnCenter>
   )
 }
+const TORUS_LOGO = 'https://web3auth.io/docs/contents/logo-ethereum.png'
 const LOGO = 'https://raw.githubusercontent.com/PAST3LLE/monorepo/main/apps/skillforge-ui/public/512_logo.png'
 export default {
   ConnectedModal: (
@@ -41,7 +43,26 @@ export default {
             listingName: 'Email/SMS/Social',
             projectId: commonProps.modals.w3a.projectId,
             appLogoLight: LOGO,
-            appLogoDark: LOGO
+            appLogoDark: LOGO,
+            configureAdditionalConnectors() {
+              // Add Torus Wallet Plugin (optional)
+              const torusPlugin = new TorusWalletConnectorPlugin({
+                torusWalletOpts: {
+                  buttonPosition: 'bottom-left'
+                },
+                walletInitOptions: {
+                  whiteLabel: {
+                    theme: { isDark: true, colors: { primary: '#00a8ff' } },
+                    logoDark: TORUS_LOGO,
+                    logoLight: TORUS_LOGO
+                  },
+                  useWalletConnect: true,
+                  enableLogging: true
+                }
+              })
+
+              return [torusPlugin]
+            }
           },
           pstl: {
             ...commonProps.modals.pstl,

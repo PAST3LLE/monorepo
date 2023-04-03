@@ -1,5 +1,5 @@
 import { Button, CloseIcon, ColumnCenter, Modal, Text } from '@past3lle/components'
-import { setBestTextColour, upToSmall } from '@past3lle/theme'
+import { setBackgroundOrDefault, setBestTextColour, upToSmall } from '@past3lle/theme'
 import styled from 'styled-components'
 
 import { getPosition } from '../../utils'
@@ -7,7 +7,13 @@ import { getPosition } from '../../utils'
 export const ModalButton = styled(Button)<{ connected: boolean }>`
   width: 100%;
   justify-content: flex-start;
-  background: ${({ theme }) => theme.modals?.connection?.button?.background || 'rgba(0,0,0,0.9)'};
+  ${({ theme }) =>
+    setBackgroundOrDefault(theme, {
+      bgValue: theme.modals?.connection?.button?.backgroundImg,
+      defaultValue: 'rgba(0,0,0,0.9)'
+    })};
+
+  background-color: ${({ theme }) => theme.modals?.connection?.button?.backgroundColor};
 
   border: ${({ theme }) => theme.modals?.connection?.button?.border?.border || '1px solid black'};
   border-color: ${({ theme }) => theme.modals?.connection?.button?.border?.color};
@@ -16,7 +22,7 @@ export const ModalButton = styled(Button)<{ connected: boolean }>`
   font-variation-settings: ${({ theme }) => `'wght' ${theme.modals?.connection?.button?.fontWeight || 300}`};
   color: ${({ theme }) =>
     theme.modals?.connection?.button?.color ||
-    setBestTextColour(theme.modals?.connection?.button?.background || 'ghostwhite')};
+    setBestTextColour(theme.modals?.connection?.button?.backgroundColor || 'ghostwhite')};
 
   letter-spacing: ${({ theme }) => theme.modals?.connection?.button?.letterSpacing || '0px'};
   ${({ theme }) =>
@@ -68,7 +74,6 @@ export const InnerContainer = styled(ColumnCenter)`
   -ms-overflow-style: none;
   scrollbar-width: none;
 
-  background: ${({ theme }) => theme.modals?.connection?.background || 'rgb(201 172 172)'};
   padding: ${({ theme: { modals } }) => modals?.connection?.padding || '1em'};
 
   overflow-y: auto;
@@ -80,6 +85,11 @@ export const InnerContainer = styled(ColumnCenter)`
   }
 
   border-radius: ${({ theme: { modals } }) => modals?.connection?.button?.border?.radius || '1em'};
+  ${({ theme }) =>
+    setBackgroundOrDefault(theme, {
+      bgValue: theme.modals?.connection?.backgroundImg,
+      defaultValue: theme.modals?.connection?.backgroundColor || 'rgb(201 172 172)'
+    })};
 `
 
 export const StyledConnectionModal = styled(Modal)`
