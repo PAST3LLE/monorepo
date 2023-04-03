@@ -1,4 +1,4 @@
-import { ThemeByModes } from '../../types'
+import { BackgroundPropertyFull, ThemeByModes } from '../../types'
 import { BaseColours } from '../base'
 
 export interface SkillForgeThemeExtension {
@@ -53,24 +53,24 @@ export interface SkillForgeThemeExtension {
   assetsMap: {
     logos: {
       company: {
-        full: string
-        mobile?: string
+        full: BackgroundPropertyFull
+        mobile?: BackgroundPropertyFull
       }
     }
     images: {
       background: {
-        app?: string
+        app?: BackgroundPropertyFull
         header?: {
-          background?: string
-          account?: string
+          background?: BackgroundPropertyFull
+          account?: BackgroundPropertyFull
         }
         nav?: {
-          background?: string
+          background?: BackgroundPropertyFull
         }
       }
       skills?: {
         skillpoint?: {
-          highlight?: string
+          highlight?: BackgroundPropertyFull
         }
       }
     }

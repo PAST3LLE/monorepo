@@ -1,11 +1,11 @@
 import { DDPXImageUrlMap, GenericImageSrcSet } from '@past3lle/types'
 import { transparentize } from 'polished'
-import { CSSObject, SimpleInterpolation, css } from 'styled-components'
+import { CSSObject, DefaultTheme, SimpleInterpolation, css } from 'styled-components'
 import { hex } from 'wcag-contrast'
 
 import { MEDIA_WIDTHS, MediaWidths } from './styles'
 import { BaseColours } from './templates/base'
-import { ThemeBaseRequired, ThemeByModes, ThemeModesRequired } from './types'
+import { BackgroundPropertyFull, ImageKitUrl, ThemeBaseRequired, ThemeByModes, ThemeModesRequired } from './types'
 
 export const WHITE = BaseColours.white
 export const OFF_WHITE = BaseColours.offwhite
@@ -77,14 +77,18 @@ type BestContrastingColourParams = CheckHexColourContrastParams & {
   darkColour: string
 }
 const CONTRAST_THRESHOLD = 10
-export function setBestContrastingColour({ bgColour, fgColour, lightColour, darkColour }: BestContrastingColourParams) {
+export function setBestContrastingColour(
+  { bgColour, fgColour, lightColour, darkColour }: BestContrastingColourParams,
+  threshold = CONTRAST_THRESHOLD
+) {
   const contrastLevel = checkHexColourContrast({
     bgColour,
     fgColour
   })
 
-  return contrastLevel < CONTRAST_THRESHOLD ? lightColour : darkColour
+  return contrastLevel < threshold ? lightColour : darkColour
 }
+
 type LqIkUrlOptions = {
   fallbackUrl: string
   dpi?: keyof DDPXImageUrlMap
@@ -191,13 +195,16 @@ type BackgroundWithDPIProps = Partial<Omit<SetCssBackgroundParams, 'isLogo' | 'i
   modeColours?: [string, string]
 }
 
-export function setBestTextColour(bgColor: string) {
-  return setBestContrastingColour({
-    bgColour: bgColor,
-    fgColour: OFF_WHITE,
-    darkColour: BLACK,
-    lightColour: OFF_WHITE
-  })
+export function setBestTextColour(bgColor: string, threshold = CONTRAST_THRESHOLD) {
+  return setBestContrastingColour(
+    {
+      bgColour: bgColor,
+      fgColour: OFF_WHITE,
+      darkColour: BLACK,
+      lightColour: OFF_WHITE
+    },
+    threshold
+  )
 }
 
 export function setBackgroundWithDPI(
@@ -261,6 +268,25 @@ function _getPresetOptions(
   }
 }
 
+export function isImageSrcSet(data?: any): data is GenericImageSrcSet<MediaWidths> {
+  return Boolean(typeof data === 'object' && data?.defaultUrl)
+}
+
+export function isImageKitUrl(url?: any): url is ImageKitUrl {
+  return Boolean(url?.match('ik.imagekit.io'))
+}
+
+export function urlMapToFullSrcSet(urlMap: GenericImageSrcSet<MediaWidths>['1440']): GenericImageSrcSet<MediaWidths> {
+  return {
+    defaultUrl: urlMap['1x'],
+    500: urlMap,
+    720: urlMap,
+    960: urlMap,
+    1280: urlMap,
+    1440: urlMap
+  }
+}
+
 export function urlToSimpleGenericImageSrcSet(url: string): GenericImageSrcSet<MediaWidths> {
   return {
     defaultUrl: url,
@@ -270,6 +296,50 @@ export function urlToSimpleGenericImageSrcSet(url: string): GenericImageSrcSet<M
     1280: { '1x': url },
     1440: { '1x': url }
   }
+}
+
+const setSizeParam = (size: number) => `w-${size}`
+export function ikUrlToSimpleImageSrcSet(url: ImageKitUrl): GenericImageSrcSet<MediaWidths> {
+  const [fUrl1x, fUrl2x, fUrl3x] = [new URL(url), new URL(url), new URL(url)]
+  const pSearchParams = fUrl1x.searchParams.get('tr')
+
+  const sizeUrlMap = Object.values(MEDIA_WIDTHS).reduce((acc, size) => {
+    fUrl1x.searchParams.set('tr', pSearchParams ? `${pSearchParams},${setSizeParam(size)}` : setSizeParam(size))
+    fUrl2x.searchParams.set('tr', pSearchParams ? `${pSearchParams},${setSizeParam(size * 2)}` : setSizeParam(size * 2))
+    fUrl3x.searchParams.set('tr', pSearchParams ? `${pSearchParams},${setSizeParam(size * 3)}` : setSizeParam(size * 3))
+
+    acc[size] = { '1x': fUrl1x.href, '2x': fUrl2x.href, '3x': fUrl3x.href }
+
+    return acc
+  }, {} as GenericImageSrcSet<MediaWidths>)
+
+  sizeUrlMap.defaultUrl = url
+
+  return sizeUrlMap
+}
+
+export function getProperBackgroundType(type?: BackgroundPropertyFull) {
+  if (!type) return null
+
+  const isSrcSet = isImageSrcSet(type)
+  const isIkProp = !isSrcSet && isImageKitUrl(type)
+
+  return isSrcSet ? type : isIkProp ? ikUrlToSimpleImageSrcSet(type) : urlToSimpleGenericImageSrcSet(type)
+}
+
+export function setBackgroundOrDefault(
+  theme: DefaultTheme,
+  {
+    bgValue,
+    defaultValue
+  }: {
+    bgValue?: BackgroundPropertyFull
+    defaultValue: string
+  },
+  auxOptions: BackgroundWithDPIProps = {}
+) {
+  const value = getProperBackgroundType(bgValue)
+  return value ? setBackgroundWithDPI(theme, [value], auxOptions) : `background: ${bgValue || defaultValue};`
 }
 
 export const getThemeColourByKeyCurried =
