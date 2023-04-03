@@ -273,7 +273,7 @@ export function isImageSrcSet(data?: any): data is GenericImageSrcSet<MediaWidth
 }
 
 export function isImageKitUrl(url?: any): url is ImageKitUrl {
-  return Boolean(url?.match('ik.imagekit.io'))
+  return Boolean(url?.match(/^(https:\/\/)?ik\.imagekit\.io/))
 }
 
 export function urlMapToFullSrcSet(urlMap: GenericImageSrcSet<MediaWidths>['1440']): GenericImageSrcSet<MediaWidths> {
