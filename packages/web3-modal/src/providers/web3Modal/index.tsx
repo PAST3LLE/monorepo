@@ -1,7 +1,7 @@
 import { devDebug } from '@past3lle/utils'
 import React, { useEffect, useState } from 'react'
 
-import { Z_INDICES } from '../../constants'
+import { CHAIN_IMAGES, WALLET_IMAGES, Z_INDICES } from '../../constants'
 import { PstlWeb3ModalProps } from '../types'
 
 export const PstlWeb3Modal = ({
@@ -24,6 +24,14 @@ export const PstlWeb3Modal = ({
           setModal(
             <Web3Modal
               {...w3mProps}
+              chainImages={{
+                ...CHAIN_IMAGES,
+                ...w3mProps.chainImages
+              }}
+              walletImages={{
+                ...WALLET_IMAGES,
+                ...w3mProps.walletImages
+              }}
               themeVariables={{ ...themeVariables, '--w3m-z-index': zIndex?.toString() }}
               projectId={projectId}
               ethereumClient={ethereumClient}
