@@ -1,5 +1,5 @@
 import { Header as PstlHeader, Row } from '@past3lle/components'
-import { setBackgroundWithDPI, upToExtraSmall, upToSmall, urlToSimpleGenericImageSrcSet } from '@past3lle/theme'
+import { setBackgroundOrDefault, upToExtraSmall, upToSmall } from '@past3lle/theme'
 import styled, { DefaultTheme } from 'styled-components'
 
 export const Web3InfoContainer = styled(Row)`
@@ -24,17 +24,21 @@ export const HeaderContainer = styled(PstlHeader)<{ isOpen?: boolean }>`
 
   ${({ theme }) =>
     theme.assetsMap.images.background.header?.background &&
-    setBackgroundWithDPI(theme, [urlToSimpleGenericImageSrcSet(theme.assetsMap.images.background.header.background)], {
-      ...getBaseBgProps(theme),
-      backgroundAttributes: ['0px 0px/contain no-repeat']
-    })}
+    setBackgroundOrDefault(
+      theme,
+      { bgValue: theme.assetsMap.images.background.header.background, defaultValue: 'transparent' },
+      {
+        ...getBaseBgProps(theme),
+        backgroundAttributes: ['0px 0px/contain no-repeat']
+      }
+    )}
 
   ${({ theme }) =>
     theme.assetsMap.images.background.header?.background &&
     upToExtraSmall`
-      ${setBackgroundWithDPI(
+      ${setBackgroundOrDefault(
         theme,
-        [urlToSimpleGenericImageSrcSet(theme.assetsMap.images.background.header.background)],
+        { bgValue: theme.assetsMap.images.background.header.background, defaultValue: 'transparent' },
         {
           ...getBaseBgProps(theme),
           backgroundAttributes: ['0px 0px/cover no-repeat']

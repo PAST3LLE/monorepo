@@ -44,6 +44,8 @@ export function LightningCanvas() {
 
   const { BG_LOGO_DDPX_URL_MAP } = useGenericImageSrcSet()
 
+  if (!BG_LOGO_DDPX_URL_MAP) return null
+
   return (
     <CanvasContainer>
       <StyledCanvas id={CANVAS_ID} ref={setRef} width={width} height={height}></StyledCanvas>

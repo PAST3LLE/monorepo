@@ -5,6 +5,11 @@
   "description": "PAST3LLE SKILLFORGE component as an NPM ESM pkg.",
   "main": "dist/esm/index.js",
   "typings": "dist/types/index.d.ts",
+  "exports": {
+    "import": "./dist/esm/index.js",
+    "require": "./dist/cjs/index.js",
+    "default": "./dist/esm/index.js"
+  },
   "files": [
     "dist"
   ],
@@ -15,11 +20,6 @@
   "homepage": "https://github.com/past3lle/schematics-monorepo/tree/main/packages/skillforge-widget#readme",
   "author": "past3lle",
   "license": "MIT",
-  "exports": {
-    "import": "./dist/esm/index.js",
-    "require": "./dist/cjs/index.js",
-    "default": "./dist/esm/index.js"
-  },
   "scripts": {
     "check-types": "npx tsc --noEmit",
     "clean": "rm -rf dist && rm -rf tsconfig.tsbuildinfo",

@@ -1,5 +1,11 @@
 import { SkillRarity, SupportedChains } from '@past3lle/skillforge-web3'
-import { ThemeBaseRequired, ThemeByModes, ThemeMediaWidthsBaseRequired, ThemeMinimumRequired } from '@past3lle/theme'
+import {
+  BackgroundPropertyFull,
+  ThemeBaseRequired,
+  ThemeByModes,
+  ThemeMediaWidthsBaseRequired,
+  ThemeMinimumRequired
+} from '@past3lle/theme'
 
 type ChainsIcons = {
   readonly disconnected: string
@@ -15,24 +21,24 @@ export interface SkillForgeAssetsMap {
   readonly assetsMap: {
     readonly logos: {
       company: {
-        full: string
-        mobile?: string
+        full: BackgroundPropertyFull
+        mobile?: BackgroundPropertyFull
       }
     }
     readonly images: {
       background: {
-        app?: string
+        app?: BackgroundPropertyFull
         header?: {
-          background?: string
-          account?: string
+          background?: BackgroundPropertyFull
+          account?: BackgroundPropertyFull
         }
         nav?: {
-          background?: string
+          background?: BackgroundPropertyFull
         }
       }
       skills?: {
         skillpoint?: {
-          highlight?: string
+          highlight?: BackgroundPropertyFull
         }
       }
     }

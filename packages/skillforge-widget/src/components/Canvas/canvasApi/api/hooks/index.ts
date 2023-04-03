@@ -45,7 +45,10 @@ export function useLightningCanvas({ canvasDOM, config, dimensions }: LightningC
 
     const bgImage = new Image()
     if (assetsMap.images.background.app) {
-      bgImage.src = assetsMap.images.background.app
+      bgImage.src =
+        typeof assetsMap.images.background.app === 'string'
+          ? assetsMap.images.background.app
+          : assetsMap.images.background.app?.defaultUrl
     }
     /* Uncomment for event listening
     // when changes we remove listeners

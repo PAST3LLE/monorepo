@@ -1,5 +1,6 @@
-import { RowCenter, RowProps } from '@past3lle/components'
+import { RowCenter, RowProps, SmartImg } from '@past3lle/components'
 import { GATEWAY_URI, SkillMetadata, SkillRarity, getHash } from '@past3lle/skillforge-web3'
+import { isImageKitUrl, isImageSrcSet } from '@past3lle/theme'
 import React, { memo, useMemo } from 'react'
 import styled from 'styled-components'
 
@@ -83,6 +84,23 @@ function SkillpointUnmemoed({
 
 export const Skillpoint = memo(SkillpointUnmemoed)
 
+const StyledSmartImg = styled(SmartImg)`
+  z-index: -1;
+  position: absolute;
+
+  width: 280%;
+  height: 280%;
+
+  top: -100%;
+  left: -76%;
+
+  overflow-clip-margin: unset;
+  max-inline-size: unset;
+  max-block-size: unset;
+
+  pointer-events: none;
+`
+
 const StyledImg = styled.img`
   z-index: -1;
   position: absolute;
@@ -99,7 +117,26 @@ const StyledImg = styled.img`
 
   pointer-events: none;
 `
+
 const SkillpointHighlight = memo(() => {
   const assetsMap = useAssetsMap()
-  return <StyledImg src={assetsMap.images.skills?.skillpoint?.highlight} />
+
+  const assetUrl = assetsMap.images.skills?.skillpoint?.highlight
+  if (!assetUrl) return null
+
+  const isIkImg = isImageKitUrl(assetUrl)
+  const isSrcSet = !isIkImg && isImageSrcSet(assetUrl)
+
+  return isSrcSet ? (
+    <StyledSmartImg
+      path={{
+        ikPath: isIkImg ? assetUrl : undefined,
+        defaultUrl: isSrcSet ? assetUrl.defaultUrl : undefined
+      }}
+      pathSrcSet={isSrcSet ? assetUrl : undefined}
+      loadInViewOptions={undefined}
+    />
+  ) : (
+    <StyledImg src={assetUrl} />
+  )
 })
