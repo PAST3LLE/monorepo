@@ -1,7 +1,13 @@
+import { GenericImageSrcSet } from '@past3lle/types'
 import React from 'react'
 import { ThemedCssFunction } from 'styled-components'
 
+import { MediaWidths } from './styles'
 import { ThemeTemplates } from './templates'
+
+export type ImageKitUrl = `https://ik.imagekit.io/${string}/${string}`
+
+export type BackgroundPropertyFull = GenericImageSrcSet<MediaWidths> | ImageKitUrl | string
 
 export type Color = string
 

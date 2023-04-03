@@ -1,5 +1,5 @@
 import { Row, Text } from '@past3lle/components'
-import { setCssBackground, urlToSimpleGenericImageSrcSet } from '@past3lle/theme'
+import { setBackgroundOrDefault } from '@past3lle/theme'
 import { truncateAddress } from '@past3lle/utils'
 import { usePstlConnection, usePstlWeb3Modal } from '@past3lle/web3-modal'
 import { useCallback } from 'react'
@@ -62,8 +62,9 @@ const ConnectionInfoContainer = styled(Row).attrs({ justifyContent: 'center', al
   filter: invert(1);
   ${({ theme }) =>
     theme.assetsMap.images.background.header?.account &&
-    setCssBackground(theme, {
-      imageUrls: [urlToSimpleGenericImageSrcSet(theme.assetsMap.images.background.header.account)],
-      backgroundAttributes: ['center/contain no-repeat']
-    })}
+    setBackgroundOrDefault(
+      theme,
+      { bgValue: theme.assetsMap.images.background.header.account, defaultValue: 'transparent' },
+      { backgroundAttributes: ['center/contain no-repeat'], backgroundColor: 'transparent' }
+    )}
 `

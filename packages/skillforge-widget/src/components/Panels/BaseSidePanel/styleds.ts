@@ -1,5 +1,5 @@
 import { ArticleFadeIn, RowProps } from '@past3lle/components'
-import { setCssBackground, upToLarge, upToMedium, upToSmall, urlToSimpleGenericImageSrcSet } from '@past3lle/theme'
+import { setBackgroundOrDefault, upToLarge, upToMedium, upToSmall } from '@past3lle/theme'
 import styled from 'styled-components'
 
 import { CursiveHeader, MonospaceText } from '../../Common/Text'
@@ -48,11 +48,14 @@ export const StyledSidePanel = styled(ArticleFadeIn)<SidePanelCssProps>`
     opacity: 0.4;
 
     ${({ theme }) =>
-      setCssBackground(theme, {
-        imageUrls: [urlToSimpleGenericImageSrcSet(theme.assetsMap.logos.company.full)],
-        backgroundColor: 'lightgrey',
-        backgroundAttributes: ['bottom/contain no-repeat']
-      })}
+      setBackgroundOrDefault(
+        theme,
+        {
+          bgValue: theme.assetsMap.logos.company.full,
+          defaultValue: 'lightgrey'
+        },
+        { backgroundColor: 'lightgrey', backgroundAttributes: ['bottom/contain no-repeat'] }
+      )}
   }
 
   ${CursiveHeader} {

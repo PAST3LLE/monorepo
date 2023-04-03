@@ -4,8 +4,7 @@ import { chains } from '../connectors/config'
 import { PstlWeb3ModalProps } from '../providers'
 import { PstlModalTheme } from '../theme/types'
 
-const BG_LOGO =
-  'https://raw.githubusercontent.com/PAST3LLE/monorepo/main/apps/skillforge-ui/src/assets/png/background.png'
+const BG_LOGO = 'https://ik.imagekit.io/pastelle/SKILLFORGE/forge-background.png'
 export const pstlModalTheme = createCustomTheme<ThemeByModes<PstlModalTheme>>({
   modes: {
     LIGHT: {},
@@ -15,10 +14,10 @@ export const pstlModalTheme = createCustomTheme<ThemeByModes<PstlModalTheme>>({
         connection: {
           baseFontSize: 20,
           helpers: { show: true },
-          background: `url(${BG_LOGO}) center/cover`,
+          backgroundImg: BG_LOGO,
           title: { color: '#cbb9ee', fontWeight: 700, letterSpacing: '-1.4px', lineHeight: 0.82 },
           button: {
-            background: '#301d4ea1',
+            backgroundColor: '#301d4ea1',
             connectedBackgroundColor: '#37b9927d',
             border: { border: 'none', radius: '1em' },
             color: 'ghostwhite',

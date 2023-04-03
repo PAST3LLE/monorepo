@@ -34,27 +34,80 @@ const TextWrapper = styled(RebassText).attrs((props) => ({ fontSize: '1.2rem', .
 `
 export type TextProps = RebaseTextProps & AuxProps
 export const Text = {
-  Main: styled((props: TextProps) => <TextWrapper fontWeight={500} {...props} colour="text2" />)``,
-  Link: styled((props: TextProps) => <TextWrapper fontWeight={500} {...props} colour="primary1" />)``,
-  Black: styled((props: TextProps) => <TextWrapper fontWeight={500} {...props} colour="black" />)``,
-  White: styled((props: TextProps) => <TextWrapper fontWeight={500} {...props} colour="white" />)``,
-  Body: styled((props: TextProps) => <TextWrapper fontWeight={400} fontSize={'1.6rem'} {...props} colour="text1" />)``,
-  Basic: styled((props: TextProps) => <TextWrapper {...props} />)``,
-  Header: styled((props: TextProps) => (
-    <TextWrapper fontSize={'10rem'} letterSpacing={7} fontWeight={500} fontStyle={'italic'} {...props} />
+  Main: styled(({ fontWeight, ...props }: TextProps) => (
+    <TextWrapper fvs={{ wght: fontWeight || 500, ...props.fvs }} {...props} colour="text2" />
   ))``,
-  SubHeader: styled((props: TextProps) => (
-    <TextWrapper fontSize={'1.8rem'} padding={2} margin={'2rem 0'} fontWeight={500} fontStyle={'italic'} {...props} />
+  Link: styled(({ fontWeight, ...props }: TextProps) => (
+    <TextWrapper fvs={{ wght: fontWeight || 500, ...props.fvs }} {...props} colour="primary1" />
   ))``,
-  LargeHeader: styled((props: TextProps) => <TextWrapper fontWeight={600} fontSize={'2.4rem'} {...props} />)``,
-  MediumHeader: styled((props: TextProps) => <TextWrapper fontWeight={500} fontSize={'2rem'} {...props} />)``,
-  Small: styled((props: TextProps) => <TextWrapper fontWeight={500} fontSize={'1.1rem'} {...props} />)``,
-  Blue: styled((props: TextProps) => <TextWrapper fontWeight={500} {...props} colour="primary1" />)``,
-  Yellow: styled((props: TextProps) => <TextWrapper fontWeight={500} {...props} colour="yellow1" />)``,
-  DarkGray: styled((props: TextProps) => <TextWrapper fontWeight={500} {...props} colour="text3" />)``,
-  Gray: styled((props: TextProps) => <TextWrapper fontWeight={500} {...props} colour="bg3" />)``,
-  Italic: styled((props: TextProps) => (
-    <TextWrapper fontWeight={500} fontSize={'1.2rem'} fontStyle={'italic'} {...props} colour="text2" />
+  Black: styled(({ fontWeight, ...props }: TextProps) => (
+    <TextWrapper fvs={{ wght: fontWeight || 500, ...props.fvs }} {...props} colour="black" />
   ))``,
-  Error: styled((props: TextProps) => <TextWrapper fontWeight={500} {...props} colour={'red1'} />)``
+  White: styled(({ fontWeight, ...props }: TextProps) => (
+    <TextWrapper fvs={{ wght: fontWeight || 500, ...props.fvs }} {...props} colour="white" />
+  ))``,
+  Body: styled(({ fontWeight, ...props }: TextProps) => (
+    <TextWrapper fvs={{ wght: fontWeight || 400, ...props.fvs }} fontSize={'1.6rem'} {...props} colour="text1" />
+  ))``,
+  Basic: styled(({ fontWeight, ...props }: TextProps) => (
+    <TextWrapper
+      fvs={{
+        wght: fontWeight,
+        ...props.fvs
+      }}
+      {...props}
+    />
+  ))``,
+  Header: styled(({ fontWeight, ...props }: TextProps) => (
+    <TextWrapper
+      fontSize={'10rem'}
+      letterSpacing={7}
+      fvs={{ wght: fontWeight || 500, ...props.fvs }}
+      fontStyle={'italic'}
+      {...props}
+    />
+  ))``,
+  SubHeader: styled(({ fontWeight, ...props }: TextProps) => (
+    <TextWrapper
+      fontSize={'1.8rem'}
+      padding={2}
+      margin={'2rem 0'}
+      fvs={{ wght: fontWeight || 500, ...props.fvs }}
+      fontStyle={'italic'}
+      {...props}
+    />
+  ))``,
+  LargeHeader: styled(({ fontWeight, ...props }: TextProps) => (
+    <TextWrapper fvs={{ wght: fontWeight || 600, ...props.fvs }} fontSize={'2.4rem'} {...props} />
+  ))``,
+  MediumHeader: styled(({ fontWeight, ...props }: TextProps) => (
+    <TextWrapper fvs={{ wght: fontWeight || 500, ...props.fvs }} fontSize={'2rem'} {...props} />
+  ))``,
+  Small: styled(({ fontWeight, ...props }: TextProps) => (
+    <TextWrapper fvs={{ wght: fontWeight || 500, ...props.fvs }} fontSize={'1.1rem'} {...props} />
+  ))``,
+  Blue: styled(({ fontWeight, ...props }: TextProps) => (
+    <TextWrapper fvs={{ wght: fontWeight || 500, ...props.fvs }} {...props} colour="primary1" />
+  ))``,
+  Yellow: styled(({ fontWeight, ...props }: TextProps) => (
+    <TextWrapper fvs={{ wght: fontWeight || 500, ...props.fvs }} {...props} colour="yellow1" />
+  ))``,
+  DarkGray: styled(({ fontWeight, ...props }: TextProps) => (
+    <TextWrapper fvs={{ wght: fontWeight || 500, ...props.fvs }} {...props} colour="text3" />
+  ))``,
+  Gray: styled(({ fontWeight, ...props }: TextProps) => (
+    <TextWrapper fvs={{ wght: fontWeight || 500, ...props.fvs }} {...props} colour="bg3" />
+  ))``,
+  Italic: styled(({ fontWeight, ...props }: TextProps) => (
+    <TextWrapper
+      fvs={{ wght: fontWeight || 500, ...props.fvs }}
+      fontSize={'1.2rem'}
+      fontStyle={'italic'}
+      {...props}
+      colour="text2"
+    />
+  ))``,
+  Error: styled(({ fontWeight, ...props }: TextProps) => (
+    <TextWrapper fvs={{ wght: fontWeight || 500, ...props.fvs }} {...props} colour={'red1'} />
+  ))``
 }

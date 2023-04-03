@@ -2,9 +2,9 @@ import { useIsMobile } from '@past3lle/hooks'
 import SkillForge, { SkillForgeProps, SkillForgeConnectedHeader } from '@past3lle/skillforge-widget'
 import { RobotoVariableFontProvider } from '@past3lle/theme'
 import { PstlWeb3ModalProps } from '@past3lle/web3-modal'
-import { ASSETS_MAP } from 'assets'
+import { TorusWalletConnectorPlugin } from '@web3auth/torus-wallet-connector-plugin'
 import { skillforgeTheme } from 'config/skillforge'
-import { pstlModalTheme } from 'config/wallet'
+import { FORGE_LOGO_URL_MAP, pstlModalTheme } from 'config/wallet'
 import { SKILL_ID_BASE } from 'constants/skills'
 import React, { ReactNode } from 'react'
 import { GothicFontCssProvider } from 'theme/fonts'
@@ -23,19 +23,41 @@ const WEB3_PROPS: PstlWeb3ModalProps = {
       // TODO: change this once ready for production
       network: 'testnet',
       listingName: 'Email/SMS/Social',
-      projectId: process.env.REACT_APP_WEB3AUTH_ID as string
+      projectId: process.env.REACT_APP_WEB3AUTH_ID as string,
+      configureAdditionalConnectors() {
+        // Add Torus Wallet Plugin (optional)
+        const torusPlugin = new TorusWalletConnectorPlugin({
+          torusWalletOpts: {
+            buttonPosition: 'bottom-left'
+          },
+          walletInitOptions: {
+            whiteLabel: {
+              theme: {
+                isDark: true,
+                colors: {
+                  torusBrand1: skillforgeTheme.modes.ALT.mainBg,
+                  torusBrand2: skillforgeTheme.modes.DEFAULT.mainBg
+                }
+              },
+              logoDark: FORGE_LOGO_URL_MAP[500]['1x'],
+              logoLight: FORGE_LOGO_URL_MAP[500]['1x']
+            },
+            useWalletConnect: false
+          }
+        })
+
+        return [torusPlugin]
+      }
     },
     w3m: {
       projectId: process.env.REACT_APP_WEB3MODAL_ID as string,
-      walletImages: {
-        web3auth: 'https://web3auth.io/images/w3a-L-Favicon-1.svg',
-        safe: 'https://user-images.githubusercontent.com/3975770/212338977-5968eae5-bb1b-4e71-8f82-af5282564c66.png'
-      },
       themeVariables: {
         '--w3m-background-color': skillforgeTheme.blackOpaque,
         '--w3m-accent-color': '#525291',
         '--w3m-accent-fill-color': skillforgeTheme.modes.DEFAULT.mainBgAlt,
-        '--w3m-background-image-url': ASSETS_MAP.images.background.app,
+        // TODO: either host image on IK and call using params to set height/width
+        // TODO: OR just save a formatted image W x H somewhere here
+        '--w3m-background-image-url': 'https://ik.imagekit.io/pastelle/SKILLFORGE/forge-background.png?tr=h-103,w-0.99',
         '--w3m-color-bg-1': skillforgeTheme.blackOpaque,
         '--w3m-color-fg-1': skillforgeTheme.offwhiteOpaqueMore
       }

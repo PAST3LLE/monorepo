@@ -1,5 +1,6 @@
 // Web3Auth Libraries
 import { CHAIN_NAMESPACES, WALLET_ADAPTERS } from '@web3auth/base'
+import { IPlugin } from '@web3auth/base-plugin'
 import { Web3Auth } from '@web3auth/modal'
 import { OpenloginAdapter } from '@web3auth/openlogin-adapter'
 import { Web3AuthConnector as Web3AuthConnectorCreator } from '@web3auth/web3auth-wagmi-connector'
@@ -31,35 +32,37 @@ class Web3AuthEnhancedConnector extends Web3AuthConnectorCreator {
   }
 }
 export interface PstlWeb3AuthConnectorProps {
+  theme?: 'light' | 'dark'
+  chains: Chain[]
+  zIndex?: number
+  network: 'mainnet' | 'testnet' | 'development' | 'cyan'
+  preset?: 'DISALLOW_EXTERNAL_WALLETS' | 'ALLOW_EXTERNAL_WALLETS'
+  projectId: string
   appName: string
   appLogoLight?: string
   appLogoDark?: string
-  theme?: 'light' | 'dark'
-  chains: Chain[]
   listingName?: string
   listingLogo?: string
   listingDetails?: string
   loginMethodsOrder?: string[]
-  zIndex?: number
-  network: 'mainnet' | 'testnet' | 'development' | 'cyan'
-  projectId: string
-  preset?: 'DISALLOW_EXTERNAL_WALLETS' | 'ALLOW_EXTERNAL_WALLETS'
+  configureAdditionalConnectors?: () => IPlugin[] | undefined
 }
 
 export function PstlWeb3AuthConnector({
+  chains,
+  network,
   appName,
+  projectId,
+  theme = 'dark',
   appLogoDark,
   appLogoLight,
-  chains,
-  listingName = 'Social',
-  listingLogo = SOCIAL_LOGO,
   listingDetails,
   loginMethodsOrder,
   zIndex = Z_INDICES.W3A,
-  network,
+  listingName = 'Social',
+  listingLogo = SOCIAL_LOGO,
   preset = 'ALLOW_EXTERNAL_WALLETS',
-  theme = 'dark',
-  projectId
+  configureAdditionalConnectors
 }: PstlWeb3AuthConnectorProps) {
   if (!projectId) throw new Error('Missing REACT_APP_WEB3AUTH_ID! Check env.')
 
@@ -101,6 +104,12 @@ export function PstlWeb3AuthConnector({
     }
   })
   web3AuthInstance.configureAdapter(openloginAdapterInstance)
+
+  // custom connector callback
+  const pluginsList = configureAdditionalConnectors?.()
+  if (!!pluginsList?.length) {
+    pluginsList?.forEach((plugin) => web3AuthInstance.addPlugin(plugin))
+  }
 
   return new Web3AuthEnhancedConnector({
     customName: listingName,

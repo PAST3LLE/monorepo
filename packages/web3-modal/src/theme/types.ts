@@ -1,4 +1,4 @@
-import { ThemeBaseRequired } from '@past3lle/theme'
+import { BackgroundPropertyFull, ThemeBaseRequired } from '@past3lle/theme'
 
 export interface PstlModalTheme {
   modals?: {
@@ -20,12 +20,14 @@ export interface PstlModalTheme {
         letterSpacing?: string
         lineHeight?: number
       }
-      background?: string
+      backgroundImg?: BackgroundPropertyFull
+      backgroundColor?: string
       padding?: string
       button?: {
         color?: string
         textShadow?: string
-        background?: string
+        backgroundImg?: BackgroundPropertyFull
+        backgroundColor?: string
         connectedBackgroundColor?: string
         fontSize?: string
         fontStyle?: string
