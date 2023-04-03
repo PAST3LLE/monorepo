@@ -7,7 +7,7 @@ export const skillforgeTheme = createPast3lleTemplateTheme('SKILLFORGE', {
   },
   ALT: {
     mainBgAlt: 'darkred',
-    mainBg: 'cornflowerblue',
+    mainBg: '#794b79',
     mainFg: 'cyan',
     rarity: {
       common: {

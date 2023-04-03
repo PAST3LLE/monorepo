@@ -1,8 +1,8 @@
 import { SkillForgeAssetsMap } from '@past3lle/skillforge-widget'
 import COMPANY_LOGO from 'assets/png/back-logo.png'
-import APP_BACKGROUND from 'assets/png/background.png'
 import ETHEREUM_LOGO from 'assets/png/chains/ethereumChainLogo.webp'
 import POLYGON_LOGO from 'assets/png/chains/polygonChainLogo.png'
+import FORGE_512 from 'assets/png/forge-logo-512.png'
 import HEADER_BACKGROUND from 'assets/png/header_bg.png'
 import COMMON_RARITY_ICON from 'assets/png/icons/icons8-diamonds-common-64.png'
 import EPIC_RARITY_ICON from 'assets/png/icons/icons8-diamonds-epic-64.png'
@@ -15,13 +15,16 @@ import SHOP_ICON from 'assets/png/icons/pixelated-shirt.png'
 import ACCOUNT_BACKGROUND from 'assets/png/spray-account.png'
 import HIGHLIGHT from 'assets/png/spray.png'
 
-export const ASSETS_MAP: SkillForgeAssetsMap['assetsMap'] = {
+export const ASSETS_MAP: SkillForgeAssetsMap['assetsMap'] & {
+  logos: { company: SkillForgeAssetsMap['assetsMap']['logos']['company']; forge: { 512: string } }
+} = {
   logos: {
-    company: { full: COMPANY_LOGO }
+    company: { full: COMPANY_LOGO },
+    forge: { '512': FORGE_512 }
   },
   images: {
     background: {
-      app: APP_BACKGROUND,
+      app: 'https://ik.imagekit.io/pastelle/SKILLFORGE/forge-background.png',
       header: {
         background: HEADER_BACKGROUND,
         account: ACCOUNT_BACKGROUND
