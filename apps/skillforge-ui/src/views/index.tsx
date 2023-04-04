@@ -102,7 +102,7 @@ const WEB3_PROPS: PstlWeb3ModalProps = {
         }
       },
       loaderProps: {
-        spinnerProps: { size: 100 }
+        spinnerProps: { size: 85 }
       }
     }
   }
