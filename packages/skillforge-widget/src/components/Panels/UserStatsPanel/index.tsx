@@ -24,7 +24,7 @@ export function UserStatsPanel() {
   const totalSkills = useMemo(() => vectors.filter((vectorObj) => !!vectorObj.skillId).length, [vectors])
   const ownedSkillsList = useMemo(() => {
     return vectors.reduce((acc, skill) => {
-      const missingSkill = !skill.skillId || BigNumber.from(balances[skill.skillId]).isZero()
+      const missingSkill = !skill.skillId || BigNumber.from(balances?.[skill.skillId] || '0').isZero()
       if (!missingSkill) {
         acc.push(skill)
       }
