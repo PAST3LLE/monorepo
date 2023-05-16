@@ -18,7 +18,7 @@ export const PstlWeb3Modal = ({
 
   useEffect(() => {
     if (projectId && ethereumClient?.walletConnectVersion) {
-      devDebug('[[PSTL_W3_WEB3_MODAL]]::IMPORTING WEB3MODAL')
+      devDebug('[@past3lle/web3-modal]::IMPORTING WEB3MODAL')
       import('@web3modal/react')
         .then(({ Web3Modal }) =>
           setModal(
