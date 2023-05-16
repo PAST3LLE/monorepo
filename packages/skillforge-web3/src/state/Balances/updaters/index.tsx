@@ -33,7 +33,7 @@ export function SkillForgeBalancesUpdater({
 
     if (metadataLoaded) {
       const balances = reduceBalanceDataToMap(derivedData, idBase)
-      // TODO: fix with real balances
+
       updateSkillForgeBalances((state) => ({
         balances: {
           ...state.balances,

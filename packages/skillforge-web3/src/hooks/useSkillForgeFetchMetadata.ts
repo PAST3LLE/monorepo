@@ -24,6 +24,7 @@ export function useSkillForgeFetchMetadata({
   })
 
   return useMemo(async (): Promise<SkillForgeMetadataState['metadata']> => {
+    // reverse array as we loop down
     const filteredSkillErc1155MetadataUris = skillErc1155MetadataUris.filter(Boolean).reverse() as string[]
     if (!filteredSkillErc1155MetadataUris.length || !metadataUris?.collectionsManager)
       return [{ size: 0, skillsMetadata: [] }]

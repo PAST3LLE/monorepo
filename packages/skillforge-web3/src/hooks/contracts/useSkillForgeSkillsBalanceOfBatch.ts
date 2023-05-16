@@ -25,24 +25,22 @@ function gatherSkillContractConfigParams(
   balanceOfAddress: Address,
   idBase?: number
 ) {
-  // TODO: remove offset
-  const contractConfigList = skillsAddressList /* .slice(MOCK_COLLECTION_ERROR_OFFSET) */
-    .flatMap((address, i) => {
-      if (!address) {
-        devWarn(
-          '[SkillForgeBalancesUpdater::gatherSkillContractConfigParams]::Address undefined! Check contracts map in constants.'
-        )
-        return undefined
-      }
+  const contractConfigList = skillsAddressList.flatMap((address, i) => {
+    if (!address) {
+      devWarn(
+        '[SkillForgeBalancesUpdater::gatherSkillContractConfigParams]::Address undefined! Check contracts map in constants.'
+      )
+      return undefined
+    }
 
-      const args = getBalanceOfBatchArgs(metadata[i]?.size || 0, balanceOfAddress, idBase)
-      return {
-        abi: Skills__factory.abi,
-        address,
-        functionName: 'balanceOfBatch',
-        args
-      }
-    })
+    const args = getBalanceOfBatchArgs(metadata[i]?.size || 0, balanceOfAddress, idBase)
+    return {
+      abi: Skills__factory.abi,
+      address,
+      functionName: 'balanceOfBatch',
+      args
+    }
+  })
 
   return contractConfigList
 }
