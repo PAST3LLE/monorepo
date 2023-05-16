@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useContractRead } from 'wagmi'
 
 import { SkillForgeMetadataState, useSkillForgeMetadataMapWriteAtom, useSkillForgeMetadataWriteAtom } from '..'
-import { useSkillForgeFetchMetadataCallback, useSkillForgePrepareCollectionsContract } from '../../../hooks'
+import { useSkillForgeFetchMetadata, useSkillForgePrepareCollectionsContract } from '../../../hooks'
 import { MOCK_ALL_SKILLS_METADATA } from '../../../mock/metadata'
 import { SkillForgeContractAddressMap, SkillForgeMetadataUriMap, SkillMetadata } from '../../../types'
 
@@ -15,16 +15,19 @@ export interface SkillForgeMetadataUpdaterProps {
   metadataUriMap: SkillForgeMetadataUriMap
   contractAddressMap: SkillForgeContractAddressMap
   idBase?: number
+  loadAmount?: number
   metadataFetchOptions?: MetadataFetchOptions
 }
 export function SkillForgeMetadataUpdater(props: SkillForgeMetadataUpdaterProps) {
-  const fetchMetadata = useSkillForgeFetchMetadataCallback({
-    metadataUriMap: props.metadataUriMap,
-    idBase: props.idBase
-  })
-
   const collectionsConfig = useSkillForgePrepareCollectionsContract(props.contractAddressMap)
   const { data: collections } = useContractRead({ ...collectionsConfig, functionName: 'totalSupply' })
+
+  const metadataList = useSkillForgeFetchMetadata({
+    loadAmount: collections?.toNumber() || 0,
+    metadataUriMap: props.metadataUriMap,
+    contractAddressMap: props.contractAddressMap,
+    idBase: props.idBase
+  })
 
   const [, setMetadataState] = useSkillForgeMetadataWriteAtom()
   const [, setMetadataMapState] = useSkillForgeMetadataMapWriteAtom()
@@ -32,25 +35,13 @@ export function SkillForgeMetadataUpdater(props: SkillForgeMetadataUpdaterProps)
   const [localMetadata, setLocalMetadata] = useState<SkillForgeMetadataState['metadata']>([])
 
   useEffect(() => {
-    async function _fetchMetadata() {
-      const totalCollections = collections?.toNumber()
-      if (!totalCollections) return null
-
-      const promisedMetadata = []
-      for (let i = 1; i < totalCollections; i++) {
-        promisedMetadata.push(fetchMetadata(i))
-      }
-
-      return Promise.all(promisedMetadata)
-    }
-
-    _fetchMetadata()
+    metadataList
       .then((res) => {
         const data = _getEnvMetadata(res || [], props?.metadataFetchOptions)
         setLocalMetadata(data?.filter((meta) => !!meta?.size) || [])
       })
       .catch(devError)
-  }, [collections, fetchMetadata])
+  }, [collections?.toNumber(), props.loadAmount])
 
   useEffect(() => {
     if (!localMetadata?.length) return

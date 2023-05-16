@@ -1,5 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { PSTLAllCollections__factory, PSTLCollectionBaseSkills__factory } from '@past3lle/skilltree-contracts'
+import { CollectionsManager__factory, Skills__factory } from '@past3lle/skilltree-contracts'
 import { useMemo } from 'react'
 import { Address, useContract, useContractRead, useProvider } from 'wagmi'
 
@@ -12,18 +12,18 @@ export function useSkillForgeSkillsContract<M extends SkillForgeContractAddressM
   collectionId,
   addressMap
 }: CommonHooksProps<M>) {
-  const { collections } = useSkillForgeContractAddressesByChain(addressMap)
+  const { collectionsManager } = useSkillForgeContractAddressesByChain(addressMap)
   const { data: address } = useContractRead({
-    abi: PSTLAllCollections__factory.abi,
+    abi: CollectionsManager__factory.abi,
     functionName: 'skillsContract',
     args: [BigNumber.from(collectionId)],
-    address: collections
+    address: collectionsManager
   })
 
   const chainId = useSupportedChainId()
   const provider = useProvider({ chainId })
   const skillsContract = useContract({
-    abi: PSTLCollectionBaseSkills__factory.abi,
+    abi: Skills__factory.abi,
     address,
     signerOrProvider: provider
   })

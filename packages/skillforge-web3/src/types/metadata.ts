@@ -1,7 +1,7 @@
 export type SkillForgeMetadataUriMap = {
   [key: number]: {
-    collections: string
-    skills: {
+    collectionsManager: string
+    skills?: {
       id: number
       uri: `ipfs://${string}`
     }[]

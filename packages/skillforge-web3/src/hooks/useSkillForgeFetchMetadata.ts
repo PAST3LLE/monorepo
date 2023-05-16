@@ -1,47 +1,53 @@
-import { devWarn } from '@past3lle/utils'
-import { useCallback } from 'react'
+import { useMemo } from 'react'
 
 import { SkillForgeMetadataState } from '../state'
 import { SkillForgeMetadataUpdaterProps } from '../state/Metadata/updaters/MetadataUpdater'
-import { CollectionMetadata, SkillMetadata } from '../types'
+import { SkillMetadata } from '../types'
 import { get64PaddedSkillId, ipfsToImageUri } from '../utils'
+import { useSkillForgeGetBatchSkillMetadataUris } from './contracts/useSkillForgeGetBatchSkillMetadataUris'
 import { useSupportedChainId } from './useSkillForgeSupportedChainId'
 
-type FetchMetadataProps = Omit<SkillForgeMetadataUpdaterProps, 'contractAddressMap'>
-
-export function useSkillForgeFetchMetadataCallback({ metadataUriMap, idBase }: FetchMetadataProps) {
+export function useSkillForgeFetchMetadata({
+  contractAddressMap,
+  metadataUriMap,
+  idBase,
+  loadAmount = 10
+}: SkillForgeMetadataUpdaterProps) {
   const chainId = useSupportedChainId()
   const metadataUris = metadataUriMap[chainId]
 
-  return useCallback(
-    async (collectionId: number): Promise<SkillForgeMetadataState['metadata'][0]> => {
-      if (!metadataUris?.skills || !metadataUris?.collections) return { size: 0, skillsMetadata: [] }
+  // get a list of all the skill erc1155 token URIs
+  // starting from LATEST collectionId, and counting down <loadAmount> times
+  const { data: skillErc1155MetadataUris = [] } = useSkillForgeGetBatchSkillMetadataUris({
+    loadAmount,
+    contractAddressMap
+  })
 
-      const { skills, collections } = metadataUris
+  return useMemo(async (): Promise<SkillForgeMetadataState['metadata']> => {
+    const filteredSkillErc1155MetadataUris = skillErc1155MetadataUris.filter(Boolean).reverse() as string[]
+    if (!filteredSkillErc1155MetadataUris.length || !metadataUris?.collectionsManager)
+      return [{ size: 0, skillsMetadata: [] }]
 
-      const collectionMetadata: CollectionMetadata = await (
-        await fetch(collections.replace('{id}', collectionId.toString()))
-      ).json()
+    const promisedCollectionMetadata = []
+    for (let i = 1; i < filteredSkillErc1155MetadataUris.length + 1; i++) {
+      promisedCollectionMetadata.push(
+        (await fetch(metadataUris.collectionsManager.replace('{id}', i.toString()))).json()
+      )
+    }
+    const collectionMetadata = await Promise.all(promisedCollectionMetadata)
 
-      const size = collectionMetadata.properties.size
+    const allMetadata = []
+    for (let i = 0; i < collectionMetadata.length; i++) {
+      const size = collectionMetadata[i].properties.size
       const promisedSkillsMetadata: Promise<SkillMetadata>[] = []
-
-      for (let i = 0; i < size; i++) {
-        const ipfsUri = skills[collectionId]?.uri
-
-        // skip if no uri
-        if (!ipfsUri) {
-          devWarn('[useFetchMetadataCallback]::No skills metadata URI found at collectionId', collectionId)
-          continue
-        }
-
-        const skillId = get64PaddedSkillId(i, idBase)
-        const uri = ipfsToImageUri(ipfsUri.replace('{id}', skillId))
+      for (let j = 0; j < size; j++) {
+        const skillId = get64PaddedSkillId(j, idBase)
+        const uri = ipfsToImageUri(filteredSkillErc1155MetadataUris[i].replace('{id}', skillId))
         promisedSkillsMetadata.push(fetch(uri).then((res) => res.json()))
       }
+      allMetadata.push({ size, skillsMetadata: await Promise.all(promisedSkillsMetadata) })
+    }
 
-      return { size, skillsMetadata: await Promise.all(promisedSkillsMetadata) }
-    },
-    [metadataUris]
-  )
+    return allMetadata
+  }, [metadataUris, loadAmount])
 }
