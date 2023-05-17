@@ -24,7 +24,7 @@ import { RARITY_COLOURS_MAP } from '../../../theme/constants'
 import { ThemedButtonExternalLink } from '../../Common/Button'
 import { BlackHeader, MonospaceText } from '../../Common/Text'
 import { Skillpoint } from '../../Skillpoint'
-import { SkillpointPoint } from '../../Skillpoint/SkillpointPoint'
+// import { SkillpointPoint } from '../../Skillpoint/SkillpointPoint'
 import { SidePanel } from '../BaseSidePanel'
 import { ActiveSkillPanelContainer, SkillRarityLabel, SkillStatusLabel, SkillsRowContainer } from './styleds'
 
@@ -182,10 +182,12 @@ interface SkillsRowProps {
 function SkillsRow({ balances, deps, metadataMap, rowProps }: SkillsRowProps) {
   return (
     <SkillsRowContainer padding="1rem" gap="0 1.7rem" overflowX={'auto'} {...rowProps}>
+      {/* 
+      // TODO: review - right now disabled as not required in contracts
       <SkillpointPoint />
       <Row justifyContent={'center'} width="auto" minWidth={'2rem'} fontSize={'4rem'} fontWeight={100}>
         +
-      </Row>
+      </Row> */}
       {deps.flatMap(({ token, id }) => {
         const skillId: SkillId = `${token}-${id}`
         const skill = metadataMap[skillId]
