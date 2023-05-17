@@ -1,7 +1,17 @@
+import { SVG_LoadingCircleLight } from '@past3lle/assets'
 import { RowCenter, RowProps, SmartImg } from '@past3lle/components'
-import { GATEWAY_URI, SkillId, SkillMetadata, SkillRarity, getHash } from '@past3lle/skillforge-web3'
+import {
+  INFURA_GATEWAY_URI,
+  PINATA_GATEWAY_URI,
+  SkillId,
+  SkillMetadata,
+  SkillRarity,
+  chainFetchIpfsUriBlob,
+  getHash
+} from '@past3lle/skillforge-web3'
 import { isImageKitUrl, isImageSrcSet } from '@past3lle/theme'
-import React, { memo, useMemo } from 'react'
+import { devError } from '@past3lle/utils'
+import React, { memo, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { SkillsState, useSkillsAtom } from '../../state/Skills'
@@ -32,7 +42,23 @@ function SkillpointUnmemoed({
     active: [currentlyActive]
   } = state
 
-  const formattedUri = useMemo(() => `${GATEWAY_URI}/${getHash(metadata.image)}`, [metadata.image])
+  const [formattedUri, setImageBlob] = useState<string>()
+  useEffect(() => {
+    chainFetchIpfsUriBlob(
+      getHash(metadata.image),
+      // TODO: fix this uri - shouldn't be default
+      'https://pastelle.infura-ipfs.io/ipfs',
+      INFURA_GATEWAY_URI,
+      PINATA_GATEWAY_URI
+    )
+      .then(setImageBlob)
+      .catch((error) => {
+        devError('[SkillForge-Widget::Skillpoint/index.tsx] Error in fetching IPFS Uri Blob!', error)
+        setImageBlob(undefined)
+      })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [metadata])
+
   const { isEmptySkill, isCurrentSkillActive, isDependency, isOtherSkillActive } = useMemo(
     () => ({
       isEmptySkill: (metadata.properties.id as `${string}-${string}`) === 'EMPTY-EMPTY',
@@ -77,7 +103,7 @@ function SkillpointUnmemoed({
       {...skillpointStyles}
     >
       <RowCenter height="100%" borderRadius="5px" overflow={'hidden'}>
-        <img src={formattedUri} style={{ maxWidth: '100%' }} />
+        <img src={formattedUri ? formattedUri : SVG_LoadingCircleLight} style={{ maxWidth: '100%' }} />
       </RowCenter>
       {isCurrentSkillActive && <SkillpointHighlight />}
     </StyledSkillpoint>
