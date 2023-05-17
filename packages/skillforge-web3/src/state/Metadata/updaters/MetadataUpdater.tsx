@@ -10,6 +10,7 @@ import { SkillForgeContractAddressMap, SkillForgeMetadataUriMap, SkillMetadata }
 export interface MetadataFetchOptions {
   mock?: boolean
   mockData?: SkillMetadata[][]
+  gatewayUris?: string[]
 }
 export interface SkillForgeMetadataUpdaterProps {
   metadataUriMap: SkillForgeMetadataUriMap
