@@ -1,3 +1,6 @@
+import { BigNumber } from '@ethersproject/bignumber'
+import { Address } from 'wagmi'
+
 export interface SkilltreeMetadata<P, A = Record<any, any>> {
   name: string
   decimals?: number
@@ -21,18 +24,14 @@ interface CollectionProperties extends BaseProperties {
 }
 
 export interface SkillDependencyObject {
-  collection: number
-  required: number
+  token: Address
+  id: BigNumber
 }
-
-// TSDX rollup doesn't yet support the template string type
-export type SkillId = `${string}-${string}`
-
+export type SkillId = `${Address}-${string}`
 export interface SkillProperties extends BaseProperties {
   id: SkillId
   shopifyId: string
-  // TODO: fix this
-  dependencies: SkillId /* | SkillDependencyObject */[]
+  dependencies: SkillDependencyObject[]
 }
 
 export interface SkillAttributes {

@@ -1,6 +1,7 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { AutoRow, Column, ExternalLink, Row, RowProps, RowStart, Text } from '@past3lle/components'
 import {
+  SkillDependencyObject,
   SkillForgeBalances,
   SkillForgeMetadataState,
   SkillId,
@@ -173,7 +174,7 @@ export function ActiveSkillPanel() {
 const RequiredDepsContainer = styled(Column)<{ borderRadius?: string; background?: string }>``
 
 interface SkillsRowProps {
-  deps: SkillId[]
+  deps: SkillDependencyObject[]
   metadataMap: SkillForgeMetadataState['metadataMap']
   balances: SkillForgeBalances
   rowProps?: RowProps
@@ -185,9 +186,8 @@ function SkillsRow({ balances, deps, metadataMap, rowProps }: SkillsRowProps) {
       <Row justifyContent={'center'} width="auto" minWidth={'2rem'} fontSize={'4rem'} fontWeight={100}>
         +
       </Row>
-      {deps.flatMap((skillId) => {
-        // TODO: remove this
-        if (typeof skillId === 'object') return 'COMING SOON...'
+      {deps.flatMap(({ token, id }) => {
+        const skillId: SkillId = `${token}-${id}`
         const skill = metadataMap[skillId]
         return (
           skill && (
