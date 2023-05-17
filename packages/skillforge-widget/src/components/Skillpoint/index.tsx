@@ -1,19 +1,12 @@
 import { SVG_LoadingCircleLight } from '@past3lle/assets'
 import { RowCenter, RowProps, SmartImg } from '@past3lle/components'
-import {
-  INFURA_GATEWAY_URI,
-  PINATA_GATEWAY_URI,
-  SkillId,
-  SkillMetadata,
-  SkillRarity,
-  chainFetchIpfsUriBlob,
-  getHash
-} from '@past3lle/skillforge-web3'
+import { SkillId, SkillMetadata, SkillRarity, chainFetchIpfsUriBlob, getHash } from '@past3lle/skillforge-web3'
 import { isImageKitUrl, isImageSrcSet } from '@past3lle/theme'
 import { devError } from '@past3lle/utils'
 import React, { memo, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
+import { BASE_GATEWAY_URIS } from '../../constants'
 import { SkillsState, useSkillsAtom } from '../../state/Skills'
 import { useAssetsMap } from '../../theme/utils'
 import { Vector } from '../Canvas/canvasApi/api/vector'
@@ -26,6 +19,7 @@ interface Props {
   hasSkill: boolean
   forceRarity?: SkillRarity | 'empty'
   skillpointStyles?: RowProps
+  gatewayUris?: string[]
   lightupDependencies?: (state: SkillsState) => void
 }
 function SkillpointUnmemoed({
@@ -35,6 +29,7 @@ function SkillpointUnmemoed({
   forceRarity,
   hasSkill,
   skillpointStyles,
+  gatewayUris = BASE_GATEWAY_URIS,
   lightupDependencies
 }: Props) {
   const [state, setSkillState] = useSkillsAtom()
@@ -44,13 +39,7 @@ function SkillpointUnmemoed({
 
   const [formattedUri, setImageBlob] = useState<string>()
   useEffect(() => {
-    chainFetchIpfsUriBlob(
-      getHash(metadata.image),
-      // TODO: fix this uri - shouldn't be default
-      'https://pastelle.infura-ipfs.io/ipfs',
-      INFURA_GATEWAY_URI,
-      PINATA_GATEWAY_URI
-    )
+    chainFetchIpfsUriBlob(getHash(metadata.image), ...gatewayUris)
       .then(setImageBlob)
       .catch((error) => {
         devError('[SkillForge-Widget::Skillpoint/index.tsx] Error in fetching IPFS Uri Blob!', error)

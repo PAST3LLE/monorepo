@@ -69,7 +69,7 @@ function SkillForge({ config, children, ...boxProps }: SkillForgeProps & RowProp
           {...boxProps}
         >
           {children}
-          <SkillForgeComponent {...boxProps} />
+          <SkillForgeComponent {...boxProps} options={config.skillOptions} />
         </ColumnCenter>
       </Provider>
     </StrictMode>

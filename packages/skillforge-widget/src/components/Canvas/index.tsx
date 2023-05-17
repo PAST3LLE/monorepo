@@ -1,6 +1,7 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { Row } from '@past3lle/components'
 import {
+  SkillForgeW3AppConfig,
   SkillId,
   SkillRarity,
   useSkillForgeBalancesAtom,
@@ -17,7 +18,10 @@ import { LightningCanvas } from './canvasApi'
 import { Vector } from './canvasApi/api/vector'
 import { SkillCanvasContainer, SkillInnerCanvasContainer } from './styleds'
 
-export function SkillsCanvas() {
+export interface SkillsCanvasProps {
+  options?: SkillForgeW3AppConfig['skillOptions']
+}
+export function SkillsCanvas(props: SkillsCanvasProps) {
   const [{ vectors }] = useVectorsAtom()
   const [metadataMap] = useSkillForgeMetadataMapReadAtom()
   const [{ balances }] = useSkillForgeBalancesAtom()
@@ -30,16 +34,22 @@ export function SkillsCanvas() {
         const missingSkill = !skillBalance || !skillId
         const zeroBalance = !!skillBalance && BigNumber.from(skillBalance).isZero()
 
-        const props = !missingSkill
+        const skillpointProps = !missingSkill
           ? {
               key: skillId,
               metadata: metadataMap[skillId],
               hasSkill: !zeroBalance
             }
           : { key: `EMPTY-${vector.X1}-${vector.Y1}`, metadata: EMPTY_METADATA, hasSkill: true }
-        return <Skillpoint {...props} vector={vector} />
+        return (
+          <Skillpoint
+            {...skillpointProps}
+            vector={vector}
+            gatewayUris={props.options?.metadataFetchOptions?.gatewayUris}
+          />
+        )
       }),
-    [balances, metadataMap, vectors]
+    [balances, metadataMap, props.options?.metadataFetchOptions?.gatewayUris, vectors]
   )
 
   return (
