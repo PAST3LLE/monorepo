@@ -1,5 +1,5 @@
 import { RowCenter, RowProps, SmartImg } from '@past3lle/components'
-import { GATEWAY_URI, SkillMetadata, SkillRarity, getHash } from '@past3lle/skillforge-web3'
+import { GATEWAY_URI, SkillId, SkillMetadata, SkillRarity, getHash } from '@past3lle/skillforge-web3'
 import { isImageKitUrl, isImageSrcSet } from '@past3lle/theme'
 import React, { memo, useMemo } from 'react'
 import styled from 'styled-components'
@@ -35,7 +35,7 @@ function SkillpointUnmemoed({
   const formattedUri = useMemo(() => `${GATEWAY_URI}/${getHash(metadata.image)}`, [metadata.image])
   const { isEmptySkill, isCurrentSkillActive, isDependency, isOtherSkillActive } = useMemo(
     () => ({
-      isEmptySkill: metadata.properties.id === 'EMPTY-EMPTY',
+      isEmptySkill: (metadata.properties.id as `${string}-${string}`) === 'EMPTY-EMPTY',
       isCurrentSkillActive: metadata.properties.id === currentlyActive,
       isDependency: state.activeDependencies.includes(metadata.properties.id),
       get isOtherSkillActive() {
@@ -51,7 +51,9 @@ function SkillpointUnmemoed({
       const newState = {
         ...state,
         active: isCurrentSkillActive ? state.active.slice(1) : [metadata.properties.id, ...state.active],
-        activeDependencies: isCurrentSkillActive ? [] : metadata.properties.dependencies
+        activeDependencies: isCurrentSkillActive
+          ? []
+          : metadata.properties.dependencies.map(({ token, id }) => `${token}-${id}` as SkillId)
       }
       // light it up
       lightupDependencies && lightupDependencies(newState)

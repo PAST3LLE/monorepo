@@ -1,9 +1,9 @@
-import { SkillId, SkillProperties } from '@past3lle/skillforge-web3'
+import { SkillId } from '@past3lle/skillforge-web3'
 import { atom, useAtom } from 'jotai'
 
 export interface SkillsState {
   active: SkillId[]
-  activeDependencies: SkillProperties['dependencies']
+  activeDependencies: SkillId[]
   sizes: { width: number; height: number }
 }
 const skillsAtom = atom<SkillsState>({

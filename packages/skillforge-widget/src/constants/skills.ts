@@ -30,7 +30,7 @@ export const SKILLPOINT_METADATA: SkillMetadata = {
   description: 'Skillpoint for upgrading skills',
   image: SKILLPOINT_IMAGE_HASH,
   properties: {
-    id: '0-0000',
+    id: '0x0-0000',
     shopifyId: '0',
     dependencies: [],
     rarity: 'common'
