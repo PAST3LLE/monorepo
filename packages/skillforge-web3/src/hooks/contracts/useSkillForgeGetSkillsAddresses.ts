@@ -3,6 +3,7 @@ import { CollectionsManager__factory } from '@past3lle/skilltree-contracts'
 import { useContractReads } from 'wagmi'
 
 import { SkillForgeContractAddressMap } from '../../types'
+import { WAGMI_SCOPE_KEYS } from '../constants'
 import { useRefetchOnAddress } from '../useRefetchOnAddress'
 import { useSkillForgeContractAddressesByChain } from './useSkillForgeContractAddress'
 import { useSkillForgeGetLatestCollectionId } from './useSkillForgeGetLatestCollectionId'
@@ -39,6 +40,7 @@ export function useSkillForgeGetSkillsAddresses(props: FetchSkillAddressesProps)
   return useContractReads({
     // reverse as we loop backwards
     contracts: derivedArgs.reverse(),
-    watch: true
+    watch: true,
+    scopeKey: WAGMI_SCOPE_KEYS.SKILLS_CONTRACT
   })
 }

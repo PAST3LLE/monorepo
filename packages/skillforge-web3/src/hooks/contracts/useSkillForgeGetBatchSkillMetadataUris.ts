@@ -3,6 +3,7 @@ import { Skills__factory } from '@past3lle/skilltree-contracts'
 import { SkillForgeMetadataUpdaterProps } from 'src/state/Metadata/updaters/MetadataUpdater'
 import { Address, useContractReads } from 'wagmi'
 
+import { WAGMI_SCOPE_KEYS } from '../constants'
 import { useSkillForgeGetSkillsAddresses } from './useSkillForgeGetSkillsAddresses'
 
 type GetSkillMetadataUriProps = Pick<SkillForgeMetadataUpdaterProps, 'contractAddressMap' | 'loadAmount'>
@@ -27,7 +28,8 @@ export function useSkillForgeGetBatchSkillMetadataUris({
   return {
     uris: useContractReads({
       contracts: paramsList,
-      watch: true
+      watch: true,
+      scopeKey: WAGMI_SCOPE_KEYS.SKILLS_URI
     }),
     addresses: skillErc1155Addresses
   }

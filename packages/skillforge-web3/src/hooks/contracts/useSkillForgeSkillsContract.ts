@@ -4,6 +4,7 @@ import { useMemo } from 'react'
 import { Address, useContract, useContractRead, useProvider } from 'wagmi'
 
 import { CallOverrides, PayableOverrides, SkillForgeContractAddressMap } from '../../types'
+import { WAGMI_SCOPE_KEYS } from '../constants'
 import { CommonHooksProps } from '../types'
 import { useSupportedChainId } from '../useSkillForgeSupportedChainId'
 import { useSkillForgeContractAddressesByChain } from './useSkillForgeContractAddress'
@@ -17,7 +18,8 @@ export function useSkillForgeSkillsContract<M extends SkillForgeContractAddressM
     abi: CollectionsManager__factory.abi,
     functionName: 'skillsContract',
     args: [BigNumber.from(collectionId)],
-    address: collectionsManager
+    address: collectionsManager,
+    scopeKey: WAGMI_SCOPE_KEYS.SKILLS_CONTRACT
   })
 
   const chainId = useSupportedChainId()

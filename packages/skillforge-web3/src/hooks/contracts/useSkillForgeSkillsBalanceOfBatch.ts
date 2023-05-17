@@ -5,6 +5,7 @@ import { Address, useContractReads } from 'wagmi'
 
 import { SkillForgeMetadataState } from '../../state'
 import { getSkillId } from '../../utils'
+import { WAGMI_SCOPE_KEYS } from '../constants'
 
 export function useSkillForgeSkillsBalanceOfBatch(
   skills: Address[] | undefined = [],
@@ -15,7 +16,8 @@ export function useSkillForgeSkillsBalanceOfBatch(
   const configList = gatherSkillContractConfigParams(skills as Address[], metadata, address, idBase)
   return useContractReads({
     contracts: configList,
-    watch: true
+    watch: true,
+    scopeKey: WAGMI_SCOPE_KEYS.SKILLS_BALANCE_OF_BATCH
   })
 }
 

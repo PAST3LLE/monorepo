@@ -3,6 +3,7 @@ import { CollectionsManager__factory } from '@past3lle/skilltree-contracts'
 import { useContractRead } from 'wagmi'
 
 import { SkillForgeContractAddressMap } from '../../types'
+import { WAGMI_SCOPE_KEYS } from '../constants'
 import { useSkillForgeContractAddressesByChain } from './useSkillForgeContractAddress'
 
 interface FetchSkillAddressesProps {
@@ -19,6 +20,7 @@ export function useSkillForgeGetSkillAddress(props: FetchSkillAddressesProps) {
     address: collectionsManager,
     functionName: 'skillsContract',
     args: [BigNumber.from(collectionId)],
-    watch: true
+    watch: true,
+    scopeKey: WAGMI_SCOPE_KEYS.SKILLS_CONTRACT
   })
 }

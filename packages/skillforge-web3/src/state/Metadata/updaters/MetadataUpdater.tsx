@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { useContractRead } from 'wagmi'
 
 import { SkillForgeMetadataState, useSkillForgeMetadataMapWriteAtom, useSkillForgeMetadataWriteAtom } from '..'
+import { WAGMI_SCOPE_KEYS } from '../../..//hooks/constants'
 import { useSkillForgeFetchMetadata, useSkillForgePrepareCollectionsContract } from '../../../hooks'
 import { MOCK_ALL_SKILLS_METADATA } from '../../../mock/metadata'
 import { SkillForgeContractAddressMap, SkillForgeMetadataUriMap, SkillMetadata } from '../../../types'
@@ -21,7 +22,11 @@ export interface SkillForgeMetadataUpdaterProps {
 }
 export function SkillForgeMetadataUpdater(props: SkillForgeMetadataUpdaterProps) {
   const collectionsConfig = useSkillForgePrepareCollectionsContract(props.contractAddressMap)
-  const { data: collections } = useContractRead({ ...collectionsConfig, functionName: 'totalSupply' })
+  const { data: collections } = useContractRead({
+    ...collectionsConfig,
+    functionName: 'totalSupply',
+    scopeKey: WAGMI_SCOPE_KEYS.COLLECTIONS_MANAGER_TOTAL_SUPPLY
+  })
 
   const metadataList = useSkillForgeFetchMetadata({
     loadAmount: collections?.toNumber() || 0,
