@@ -61,7 +61,7 @@ export function useSkillForgeFetchMetadata({
     }
 
     return allMetadata
-  }, [metadataUris, loadAmount])
+  }, [metadataUris, loadAmount, skillErc1155MetadataUris])
 }
 
 export function deriveMetadataId(metadata: SkillMetadata, address: Address): `${Address}-${string}` {
