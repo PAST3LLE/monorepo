@@ -24,8 +24,11 @@ export function useSkillForgeGetBatchSkillMetadataUris({
     // ERC1155 shares same base URL, this param is required but irrelevant...
     args: [BigNumber.from(0)]
   }))
-  return useContractReads({
-    contracts: paramsList,
-    watch: true
-  })
+  return {
+    uris: useContractReads({
+      contracts: paramsList,
+      watch: true
+    }),
+    addresses: skillErc1155Addresses
+  }
 }

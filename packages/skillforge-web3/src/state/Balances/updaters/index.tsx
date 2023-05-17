@@ -32,7 +32,7 @@ export function SkillForgeBalancesUpdater({
     const derivedData: BigNumber[][] = _getEnvBalances(balancesBatch as BigNumber[][], metadata)
 
     if (metadataLoaded) {
-      const balances = reduceBalanceDataToMap(derivedData, idBase)
+      const balances = reduceBalanceDataToMap(derivedData, skills as Address[], idBase)
 
       updateSkillForgeBalances((state) => ({
         balances: {
@@ -46,12 +46,13 @@ export function SkillForgeBalancesUpdater({
   return null
 }
 
-function reduceBalanceDataToMap(data: readonly BigNumber[][], idBase?: number) {
+function reduceBalanceDataToMap(data: readonly BigNumber[][], skills: Address[], idBase?: number) {
   if (!data) return {}
 
   return data.reduce((oAcc, bnData, collIdx) => {
     const obj = (bnData || []).reduce((acc, nextBn, idx) => {
-      acc[`${collIdx + 1}-${getSkillId(idx, idBase)}`] = nextBn.toString()
+      // acc[`${collIdx + 1}-${getSkillId(idx, idBase)}`] = nextBn.toString()
+      acc[`${skills[collIdx]}-${getSkillId(idx, idBase)}`] = nextBn.toString()
 
       return acc
     }, {} as SkillForgeBalances)

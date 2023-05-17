@@ -50,7 +50,9 @@ export function SkillForgeMetadataUpdater(props: SkillForgeMetadataUpdaterProps)
       .flatMap((item) => item.skillsMetadata)
       .reduce((acc, next) => {
         const id = next.properties.id
-        acc[id] = next
+        if (id) {
+          acc[id] = next
+        }
         return acc
       }, {} as SkillForgeMetadataState['metadataMap'])
 
