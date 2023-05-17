@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import { Address, useAccount } from 'wagmi'
 
 import { SkillForgeBalances, useSkillForgeBalancesAtom } from '..'
-import { useSkillForgeGetSkillsAddresses, useSkillForgeSkillsBalanceOfBatch } from '../../../hooks'
+import { useRefetchOnAddress, useSkillForgeGetSkillsAddresses, useSkillForgeSkillsBalanceOfBatch } from '../../../hooks'
 import { getSkillId } from '../../../utils'
 import { SkillForgeMetadataState, useSkillForgeMetadataReadAtom } from '../../Metadata'
 import { SkillForgeMetadataUpdaterProps } from '../../Metadata/updaters/MetadataUpdater'
@@ -24,7 +24,14 @@ export function SkillForgeBalancesUpdater({
   const { address = '0x0' } = useAccount()
 
   const { data: skills = [] } = useSkillForgeGetSkillsAddresses({ loadAmount, contractAddressMap })
-  const { data: balancesBatch } = useSkillForgeSkillsBalanceOfBatch(skills as Address[], metadata, address, idBase)
+  const { data: balancesBatch, refetch: refetchBalances } = useSkillForgeSkillsBalanceOfBatch(
+    skills as Address[],
+    metadata,
+    address,
+    idBase
+  )
+
+  useRefetchOnAddress(refetchBalances)
 
   useEffect(() => {
     const metadataLoaded = !!metadata?.[0]?.size

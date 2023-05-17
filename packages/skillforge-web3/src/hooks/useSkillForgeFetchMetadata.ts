@@ -1,10 +1,11 @@
 import { useMemo } from 'react'
-import { Address, useAccount } from 'wagmi'
+import { Address } from 'wagmi'
 
 import { SkillForgeMetadataUpdaterProps } from '../state/Metadata/updaters/MetadataUpdater'
 import { SkillMetadata } from '../types'
 import { get64PaddedSkillId, ipfsToImageUri } from '../utils'
 import { useSkillForgeGetBatchSkillMetadataUris } from './contracts/useSkillForgeGetBatchSkillMetadataUris'
+import { useRefetchOnAddress } from './useRefetchOnAddress'
 import { useSupportedChainId } from './useSkillForgeSupportedChainId'
 
 export function useSkillForgeFetchMetadata({
@@ -16,17 +17,17 @@ export function useSkillForgeFetchMetadata({
   const chainId = useSupportedChainId()
   const metadataUris = metadataUriMap[chainId]
 
-  const { address } = useAccount()
-
   // get a list of all the skill erc1155 token URIs
   // starting from LATEST collectionId, and counting down <loadAmount> times
   const {
-    uris: { data: skillErc1155MetadataUris = [] },
+    uris: { data: skillErc1155MetadataUris = [], refetch: refetchSkills },
     addresses: skill1155Addresses
   } = useSkillForgeGetBatchSkillMetadataUris({
     loadAmount,
     contractAddressMap
   })
+
+  useRefetchOnAddress(refetchSkills)
 
   return useMemo(async (): Promise<{ size: number; skillsMetadata: SkillMetadata[] }[]> => {
     // reverse array as we loop down
@@ -60,7 +61,7 @@ export function useSkillForgeFetchMetadata({
     }
 
     return allMetadata
-  }, [metadataUris, loadAmount, address])
+  }, [metadataUris, loadAmount])
 }
 
 export function deriveMetadataId(metadata: SkillMetadata, address: Address): `${Address}-${string}` {

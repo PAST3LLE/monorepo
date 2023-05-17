@@ -3,6 +3,7 @@ import { CollectionsManager__factory } from '@past3lle/skilltree-contracts'
 import { useContractReads } from 'wagmi'
 
 import { SkillForgeContractAddressMap } from '../../types'
+import { useRefetchOnAddress } from '../useRefetchOnAddress'
 import { useSkillForgeContractAddressesByChain } from './useSkillForgeContractAddress'
 import { useSkillForgeGetLatestCollectionId } from './useSkillForgeGetLatestCollectionId'
 
@@ -14,7 +15,11 @@ export function useSkillForgeGetSkillsAddresses(props: FetchSkillAddressesProps)
   const { loadAmount, contractAddressMap } = props
 
   const { collectionsManager } = useSkillForgeContractAddressesByChain(contractAddressMap)
-  const { data: latestCollectionId = BigNumber.from(0) } = useSkillForgeGetLatestCollectionId(contractAddressMap)
+  const { data: latestCollectionId = BigNumber.from(1), refetch: refetchCollectionId } =
+    useSkillForgeGetLatestCollectionId(contractAddressMap)
+
+  useRefetchOnAddress(refetchCollectionId)
+
   const commonArgs = {
     abi: CollectionsManager__factory.abi,
     address: collectionsManager,

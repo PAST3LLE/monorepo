@@ -41,7 +41,7 @@ export function SkillForgeMetadataUpdater(props: SkillForgeMetadataUpdaterProps)
         setLocalMetadata(data?.filter((meta) => !!meta?.size) || [])
       })
       .catch(devError)
-  }, [collections?.toNumber(), props.loadAmount])
+  }, [collections?.toNumber(), props.loadAmount, metadataList])
 
   useEffect(() => {
     if (!localMetadata?.length) return
