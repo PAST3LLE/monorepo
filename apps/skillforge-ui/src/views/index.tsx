@@ -3,6 +3,7 @@ import SkillForge, { SkillForgeProps, SkillForgeConnectedHeader } from '@past3ll
 import { RobotoVariableFontProvider } from '@past3lle/theme'
 import { PstlWeb3ModalProps } from '@past3lle/web3-modal'
 import { TorusWalletConnectorPlugin } from '@web3auth/torus-wallet-connector-plugin'
+import { AppVersion } from 'components/AppVersion'
 import { skillforgeTheme as SKILLFORGE_THEME } from 'config/skillforge'
 import { FORGE_LOGO_URL_MAP, pstlModalTheme } from 'config/wallet'
 import { GATEWAY_URIS } from 'constants/ipfs'
@@ -147,6 +148,7 @@ export function App() {
       >
         <W3aStyles />
         <SkillForgeConnectedHeader />
+        <AppVersion />
       </SkillForge>
     </FontsAndCssProviders>
   )
