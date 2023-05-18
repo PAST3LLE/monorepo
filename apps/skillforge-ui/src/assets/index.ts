@@ -2,6 +2,7 @@ import { SkillForgeAssetsMap } from '@past3lle/skillforge-widget'
 import COMPANY_LOGO from 'assets/png/back-logo.png'
 import ETHEREUM_LOGO from 'assets/png/chains/ethereumChainLogo.webp'
 import POLYGON_LOGO from 'assets/png/chains/polygonChainLogo.png'
+import EMPTY_SKILL from 'assets/png/empty-skill.png'
 import FORGE_512 from 'assets/png/forge-logo-512.png'
 import HEADER_BACKGROUND from 'assets/png/header_bg.png'
 import COMMON_RARITY_ICON from 'assets/png/icons/icons8-diamonds-common-64.png'
@@ -32,7 +33,8 @@ export const ASSETS_MAP: SkillForgeAssetsMap['assetsMap'] & {
     },
     skills: {
       skillpoint: {
-        highlight: HIGHLIGHT
+        highlight: HIGHLIGHT,
+        empty: EMPTY_SKILL
       }
     }
   },
