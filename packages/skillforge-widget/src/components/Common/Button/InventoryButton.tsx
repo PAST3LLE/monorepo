@@ -4,10 +4,7 @@ import { MEDIA_WIDTHS } from '@past3lle/theme'
 import React from 'react'
 
 import { ThemedButton } from '.'
-import {
-  /* useSidePanelAtom, */
-  useSidePanelAtomBase
-} from '../../../state/SidePanel'
+import { useSidePanelAtomBase } from '../../../state/SidePanel'
 import { MAIN_BG } from '../../../theme/constants'
 import { useGenericImageSrcSet } from '../../../theme/global'
 import { useAssetsMap } from '../../../theme/utils'
@@ -29,7 +26,7 @@ export function InventoryButton(props: InventoryButtonProps) {
   return (
     <ThemedButton
       bgColor={'black'}
-      bgImage={logoUrlMaps.TEXTURE_BG_URL_MAP}
+      bgImage={logoUrlMaps.EMPTY_SKILL_DDPX_URL_MAP ?? undefined}
       bgBlendMode="hard-light"
       title={'Click to view skills inventory and account information'}
       display="flex"

@@ -1,13 +1,14 @@
 import { PstlHooksProviderOptions } from '@past3lle/hooks'
 import { PstlWeb3ModalProps } from '@past3lle/web3-modal'
 
-import { MetadataFetchOptions } from '../state/Metadata/updaters/MetadataUpdater'
+import { MetadataFetchOptions as SkillForgeMetadataFetchOptions } from '../state/Metadata/updaters/MetadataUpdater'
 import { SkillForgeContractAddressMap } from './addresses'
 import { SkillForgeMetadataUriMap } from './metadata'
 
+export { type SkillForgeMetadataFetchOptions }
 export interface SkillForgeW3AppConfigSkillOptions {
   idBase?: number
-  metadataFetchOptions?: MetadataFetchOptions
+  metadataFetchOptions?: SkillForgeMetadataFetchOptions
 }
 export interface SkillForgeW3AppConfig {
   name: string

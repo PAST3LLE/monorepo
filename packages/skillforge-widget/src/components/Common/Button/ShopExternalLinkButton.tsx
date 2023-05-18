@@ -18,12 +18,12 @@ export const ShopExternalLinkButton = ({
   restWordProps?: CursiveMonoHeaderProps['restWordProps']
 }) => {
   const assetsMap = useAssetsMap()
-  const { TEXTURE_BG_URL_MAP } = useGenericImageSrcSet()
+  const { EMPTY_SKILL_DDPX_URL_MAP } = useGenericImageSrcSet()
   return (
     <ExternalLink href={SHOP_URL} style={{ textDecoration: 'none', height: '80%', letterSpacing: '-1.6px' }}>
       <ThemedButton
         bgColor={'black'}
-        bgImage={TEXTURE_BG_URL_MAP}
+        bgImage={EMPTY_SKILL_DDPX_URL_MAP ?? undefined}
         bgBlendMode="hard-light"
         className={className}
         title={'Click to view skills inventory and account information'}

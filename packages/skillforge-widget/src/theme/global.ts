@@ -1,26 +1,24 @@
-import { ipfsToImageUri } from '@past3lle/skillforge-web3'
-import {
-  BackgroundPropertyFull,
-  getProperBackgroundType,
-  setBackgroundOrDefault,
-  urlToSimpleGenericImageSrcSet
-} from '@past3lle/theme'
+import { BackgroundPropertyFull, getProperBackgroundType, setBackgroundOrDefault } from '@past3lle/theme'
 import { useMemo } from 'react'
 import { createGlobalStyle } from 'styled-components'
 
-import { EMPTY_SKILL_IMAGE_HASH_LIST } from '../constants/skills'
 import { useAssetsMap } from './utils'
 
 export function useGenericImageSrcSet() {
   const assetsMap = useAssetsMap()
   return useMemo(
     () => ({
-      TEXTURE_BG_URL_MAP: urlToSimpleGenericImageSrcSet(ipfsToImageUri(EMPTY_SKILL_IMAGE_HASH_LIST[0])),
+      EMPTY_SKILL_DDPX_URL_MAP: getProperBackgroundType(assetsMap.images.skills?.skillpoint?.empty),
       BACKGROUND_IMAGE_DDPX_URL_MAP: getProperBackgroundType(assetsMap.images.background.app),
       BG_LOGO_DDPX_URL_MAP: getProperBackgroundType(assetsMap.logos.company.full),
       SPRAY_ACCOUNT_DDPX_URL_MAP: getProperBackgroundType(assetsMap.images.skills?.skillpoint?.highlight)
     }),
-    [assetsMap.images.background.app, assetsMap.images.skills?.skillpoint?.highlight, assetsMap.logos.company.full]
+    [
+      assetsMap.images.background.app,
+      assetsMap.images.skills?.skillpoint?.highlight,
+      assetsMap.images.skills?.skillpoint?.empty,
+      assetsMap.logos.company.full
+    ]
   )
 }
 

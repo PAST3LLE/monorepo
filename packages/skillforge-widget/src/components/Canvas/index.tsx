@@ -1,6 +1,7 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { Row } from '@past3lle/components'
 import {
+  SkillForgeW3AppConfig,
   SkillId,
   SkillRarity,
   useSkillForgeBalancesAtom,
@@ -9,7 +10,7 @@ import {
 import { convertToRomanNumerals } from '@past3lle/utils'
 import React, { useMemo } from 'react'
 
-import { CANVAS_CONTAINER_ID, EMPTY_SKILL_IMAGE_HASH_LIST, MINIMUM_COLLECTION_BOARD_SIZE } from '../../constants/skills'
+import { CANVAS_CONTAINER_ID, MINIMUM_COLLECTION_BOARD_SIZE } from '../../constants/skills'
 import { useVectorsAtom } from '../../state/Skills'
 import { SkillContainerAbsolute, SkillpointHeader } from '../Common'
 import { Skillpoint } from '../Skillpoint'
@@ -17,7 +18,10 @@ import { LightningCanvas } from './canvasApi'
 import { Vector } from './canvasApi/api/vector'
 import { SkillCanvasContainer, SkillInnerCanvasContainer } from './styleds'
 
-export function SkillsCanvas() {
+export interface SkillsCanvasProps {
+  options?: SkillForgeW3AppConfig['skillOptions']
+}
+export function SkillsCanvas(props: SkillsCanvasProps) {
   const [{ vectors }] = useVectorsAtom()
   const [metadataMap] = useSkillForgeMetadataMapReadAtom()
   const [{ balances }] = useSkillForgeBalancesAtom()
@@ -26,20 +30,26 @@ export function SkillsCanvas() {
     () =>
       vectors.map(({ skillId, vector }) => {
         if (!vector) return
-        const skillBalance = skillId && balances[skillId]
+        const skillBalance = skillId && balances?.[skillId]
         const missingSkill = !skillBalance || !skillId
         const zeroBalance = !!skillBalance && BigNumber.from(skillBalance).isZero()
 
-        const props = !missingSkill
+        const skillpointProps = !missingSkill
           ? {
               key: skillId,
               metadata: metadataMap[skillId],
               hasSkill: !zeroBalance
             }
           : { key: `EMPTY-${vector.X1}-${vector.Y1}`, metadata: EMPTY_METADATA, hasSkill: true }
-        return <Skillpoint {...props} vector={vector} />
+        return (
+          <Skillpoint
+            {...skillpointProps}
+            vector={vector}
+            gatewayUris={props.options?.metadataFetchOptions?.gatewayUris}
+          />
+        )
       }),
-    [balances, metadataMap, vectors]
+    [balances, metadataMap, props.options?.metadataFetchOptions?.gatewayUris, vectors]
   )
 
   return (
@@ -69,11 +79,7 @@ export function SkillsCanvas() {
 const EMPTY_METADATA = {
   name: 'EMPTY_SKILL',
   description: 'Empty skill',
-  get image() {
-    const length = EMPTY_SKILL_IMAGE_HASH_LIST.length
-    const idx = Math.floor(Math.random() * length)
-    return EMPTY_SKILL_IMAGE_HASH_LIST[idx]
-  },
+  image: '',
   properties: {
     id: 'EMPTY-EMPTY' as SkillId,
     rarity: 'common' as SkillRarity,

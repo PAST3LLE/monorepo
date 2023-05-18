@@ -27,17 +27,18 @@ const DEFAULT_PROPS: PstlWeb3ModalProps = {
 }
 const DEFAULT_CONFIG_PROPS = {
   metadataUris: {
-    [5]: { collections: 'www.google.com', skills: [{ id: 1, uri: 'ipfs://skills.io' }] },
-    [80001]: { collections: 'www.google.com', skills: [{ id: 1, uri: 'ipfs://skills.io' }] }
+    [5]: { collectionsManager: 'www.google.com' },
+    [80001]: { collectionsManager: 'www.google.com' }
   } as SkillForgeMetadataUriMap,
   contractAddresses: {
     [5]: {
-      collections: '0x25CeF6E76b7b9C7387414bE6245AEd7846Fe74c3',
-      skills: [{ id: 1, address: '0x25CeF6E76b7b9C7387414bE6245AEd7846Fe74c3' }]
+      collectionsManager: '0x9e8e103ed51A18E92c0938573f9b7fB4A393083a',
+      unlockManager: '0x0B397B88C96E22E63D6D9b802df62fe40bB1B544'
     },
+    // TODO: change to mumbai addresses
     [80001]: {
-      collections: '0x25CeF6E76b7b9C7387414bE6245AEd7846Fe74c3',
-      skills: [{ id: 1, address: '0x25CeF6E76b7b9C7387414bE6245AEd7846Fe74c3' }]
+      collectionsManager: '0x9e8e103ed51A18E92c0938573f9b7fB4A393083a',
+      unlockManager: '0x0B397B88C96E22E63D6D9b802df62fe40bB1B544'
     }
   } as SkillForgeContractAddressMap
 }

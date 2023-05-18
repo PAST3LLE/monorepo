@@ -2,7 +2,7 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { devWarn } from '@past3lle/utils'
 
 import { SkillForgeBalances } from '../state/Balances'
-import { SkillMetadata, SkillRarity } from '../types'
+import { SkillId, SkillMetadata, SkillRarity } from '../types'
 import { ipfsToImageUri } from './ipfs'
 
 export const enum SkillLockStatus {
@@ -22,7 +22,8 @@ export function getLockStatus(skill: SkillMetadata | undefined, balances?: Skill
   let hasDeps = true
   devWarn(skill.name, ' requires skills', deps.join(' '), 'to unlock. Checking...')
   for (let i = 0; i < deps.length; i++) {
-    if (!balances || !balances[deps[i]] || BigNumber.from(balances[deps[i]]).isZero()) {
+    const tokenId: SkillId = `${deps[i].token}-${deps[i].id.toString()}`
+    if (!balances || !balances[tokenId] || BigNumber.from(balances[tokenId]).isZero()) {
       devWarn('You are missing skillId:', deps[i], '// Skill LOCKED.')
       hasDeps = false
       break

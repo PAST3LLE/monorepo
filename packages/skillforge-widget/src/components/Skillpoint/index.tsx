@@ -1,9 +1,19 @@
+import { SVG_LoadingCircleLight } from '@past3lle/assets'
 import { RowCenter, RowProps, SmartImg } from '@past3lle/components'
-import { GATEWAY_URI, SkillMetadata, SkillRarity, getHash } from '@past3lle/skillforge-web3'
+import {
+  SkillForgeMetadataFetchOptions,
+  SkillId,
+  SkillMetadata,
+  SkillRarity,
+  chainFetchIpfsUriBlob,
+  getHash
+} from '@past3lle/skillforge-web3'
 import { isImageKitUrl, isImageSrcSet } from '@past3lle/theme'
-import React, { memo, useMemo } from 'react'
+import { devError } from '@past3lle/utils'
+import React, { memo, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
+import { BASE_GATEWAY_URIS } from '../../constants'
 import { SkillsState, useSkillsAtom } from '../../state/Skills'
 import { useAssetsMap } from '../../theme/utils'
 import { Vector } from '../Canvas/canvasApi/api/vector'
@@ -16,6 +26,7 @@ interface Props {
   hasSkill: boolean
   forceRarity?: SkillRarity | 'empty'
   skillpointStyles?: RowProps
+  gatewayUris?: SkillForgeMetadataFetchOptions['gatewayUris']
   lightupDependencies?: (state: SkillsState) => void
 }
 function SkillpointUnmemoed({
@@ -25,17 +36,29 @@ function SkillpointUnmemoed({
   forceRarity,
   hasSkill,
   skillpointStyles,
+  gatewayUris = BASE_GATEWAY_URIS,
   lightupDependencies
 }: Props) {
   const [state, setSkillState] = useSkillsAtom()
   const {
-    active: [currentlyActive]
+    active: [currentlyActive],
+    sizes: { height }
   } = state
 
-  const formattedUri = useMemo(() => `${GATEWAY_URI}/${getHash(metadata.image)}`, [metadata.image])
+  const [formattedUri, setImageBlob] = useState<string>()
+  useEffect(() => {
+    if (!metadata.image) return
+    chainFetchIpfsUriBlob(getHash(metadata.image), ...gatewayUris)
+      .then(setImageBlob)
+      .catch((error) => {
+        devError('[SkillForge-Widget::Skillpoint/index.tsx] Error in fetching IPFS Uri Blob!', error)
+        setImageBlob(undefined)
+      })
+  }, [gatewayUris, metadata])
+
   const { isEmptySkill, isCurrentSkillActive, isDependency, isOtherSkillActive } = useMemo(
     () => ({
-      isEmptySkill: metadata.properties.id === 'EMPTY-EMPTY',
+      isEmptySkill: (metadata.properties.id as `${string}-${string}`) === 'EMPTY-EMPTY',
       isCurrentSkillActive: metadata.properties.id === currentlyActive,
       isDependency: state.activeDependencies.includes(metadata.properties.id),
       get isOtherSkillActive() {
@@ -45,13 +68,20 @@ function SkillpointUnmemoed({
     [currentlyActive, metadata.properties.id, state.activeDependencies]
   )
 
+  const emptySkillYOffset = useMemo(
+    () => (isEmptySkill ? getSkillPlaceholderYOffset(height) : undefined),
+    [height, isEmptySkill]
+  )
+
   const handleClick = () => {
     if (isEmptySkill || isCurrentSkillActive) return
     setSkillState((state) => {
       const newState = {
         ...state,
         active: isCurrentSkillActive ? state.active.slice(1) : [metadata.properties.id, ...state.active],
-        activeDependencies: isCurrentSkillActive ? [] : metadata.properties.dependencies
+        activeDependencies: isCurrentSkillActive
+          ? []
+          : metadata.properties.dependencies.map(({ token, id }) => `${token}-${id}` as SkillId)
       }
       // light it up
       lightupDependencies && lightupDependencies(newState)
@@ -64,18 +94,21 @@ function SkillpointUnmemoed({
       title={`${metadata.name}_${metadata.properties.id}`}
       className={className}
       metadataCss={metadata?.attributes?.css}
-      isEmptySkill={isEmptySkill}
+      yOffset={emptySkillYOffset}
       id={metadata.properties.id}
       rarity={forceRarity || (!isEmptySkill ? metadata.properties?.rarity : undefined)}
       dimSkill={!hasSkill || isOtherSkillActive}
       active={isCurrentSkillActive}
       isDependency={!!isDependency}
+      isEmptySkill={isEmptySkill}
       vector={vector}
       onClick={handleClick}
       {...skillpointStyles}
     >
       <RowCenter height="100%" borderRadius="5px" overflow={'hidden'}>
-        <img src={formattedUri} style={{ maxWidth: '100%' }} />
+        {!isEmptySkill && (
+          <img src={formattedUri ? formattedUri : SVG_LoadingCircleLight} style={{ maxWidth: '100%' }} />
+        )}
       </RowCenter>
       {isCurrentSkillActive && <SkillpointHighlight />}
     </StyledSkillpoint>
@@ -140,3 +173,11 @@ const SkillpointHighlight = memo(() => {
     <StyledImg src={assetUrl} />
   )
 })
+
+// TODO: fix this, 6 is magic, doesn't really make sense
+// when using the assetMap in theme...
+export function getSkillPlaceholderYOffset(skillYSize: number) {
+  const length = 6
+  const idx = Math.ceil(Math.random() * length)
+  return skillYSize * idx
+}

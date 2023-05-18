@@ -1,6 +1,7 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { AutoRow, Column, ExternalLink, Row, RowProps, RowStart, Text } from '@past3lle/components'
 import {
+  SkillDependencyObject,
   SkillForgeBalances,
   SkillForgeMetadataState,
   SkillId,
@@ -23,7 +24,7 @@ import { RARITY_COLOURS_MAP } from '../../../theme/constants'
 import { ThemedButtonExternalLink } from '../../Common/Button'
 import { BlackHeader, MonospaceText } from '../../Common/Text'
 import { Skillpoint } from '../../Skillpoint'
-import { SkillpointPoint } from '../../Skillpoint/SkillpointPoint'
+// import { SkillpointPoint } from '../../Skillpoint/SkillpointPoint'
 import { SidePanel } from '../BaseSidePanel'
 import { ActiveSkillPanelContainer, SkillRarityLabel, SkillStatusLabel, SkillsRowContainer } from './styleds'
 
@@ -173,7 +174,7 @@ export function ActiveSkillPanel() {
 const RequiredDepsContainer = styled(Column)<{ borderRadius?: string; background?: string }>``
 
 interface SkillsRowProps {
-  deps: SkillId[]
+  deps: SkillDependencyObject[]
   metadataMap: SkillForgeMetadataState['metadataMap']
   balances: SkillForgeBalances
   rowProps?: RowProps
@@ -181,13 +182,14 @@ interface SkillsRowProps {
 function SkillsRow({ balances, deps, metadataMap, rowProps }: SkillsRowProps) {
   return (
     <SkillsRowContainer padding="1rem" gap="0 1.7rem" overflowX={'auto'} {...rowProps}>
+      {/* 
+      // TODO: review - right now disabled as not required in contracts
       <SkillpointPoint />
       <Row justifyContent={'center'} width="auto" minWidth={'2rem'} fontSize={'4rem'} fontWeight={100}>
         +
-      </Row>
-      {deps.flatMap((skillId) => {
-        // TODO: remove this
-        if (typeof skillId === 'object') return 'COMING SOON...'
+      </Row> */}
+      {deps.flatMap(({ token, id }) => {
+        const skillId: SkillId = `${token}-${id}`
         const skill = metadataMap[skillId]
         return (
           skill && (

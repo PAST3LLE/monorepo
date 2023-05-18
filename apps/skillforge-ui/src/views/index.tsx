@@ -3,15 +3,17 @@ import SkillForge, { SkillForgeProps, SkillForgeConnectedHeader } from '@past3ll
 import { RobotoVariableFontProvider } from '@past3lle/theme'
 import { PstlWeb3ModalProps } from '@past3lle/web3-modal'
 import { TorusWalletConnectorPlugin } from '@web3auth/torus-wallet-connector-plugin'
-import { skillforgeTheme } from 'config/skillforge'
+import { skillforgeTheme as SKILLFORGE_THEME } from 'config/skillforge'
 import { FORGE_LOGO_URL_MAP, pstlModalTheme } from 'config/wallet'
+import { GATEWAY_URIS } from 'constants/ipfs'
 import { SKILL_ID_BASE } from 'constants/skills'
 import React, { ReactNode } from 'react'
 import { GothicFontCssProvider } from 'theme/fonts'
 import { GlobalStyles } from 'theme/global'
 import { W3aStyles } from 'theme/w3aStyles'
 import { SUPPORTED_CHAINS } from 'web3/config'
-import { CONTRACT_ADDRESSES_MAP, METADATA_URIS_MAP } from 'web3/constants/addresses'
+import { CONTRACT_ADDRESSES_MAP } from 'web3/constants/addresses'
+import { METADATA_URIS_MAP } from 'web3/constants/metadata'
 
 const APP_NAME = 'PSTL SKILLFORGE'
 const WEB3_PROPS: PstlWeb3ModalProps = {
@@ -35,8 +37,8 @@ const WEB3_PROPS: PstlWeb3ModalProps = {
               theme: {
                 isDark: true,
                 colors: {
-                  torusBrand1: skillforgeTheme.modes.ALT.mainBg,
-                  torusBrand2: skillforgeTheme.modes.DEFAULT.mainBg
+                  torusBrand1: SKILLFORGE_THEME.modes.ALT.mainBg,
+                  torusBrand2: SKILLFORGE_THEME.modes.DEFAULT.mainBg
                 }
               },
               logoDark: FORGE_LOGO_URL_MAP[500]['1x'],
@@ -52,14 +54,14 @@ const WEB3_PROPS: PstlWeb3ModalProps = {
     w3m: {
       projectId: process.env.REACT_APP_WEB3MODAL_ID as string,
       themeVariables: {
-        '--w3m-background-color': skillforgeTheme.blackOpaque,
+        '--w3m-background-color': SKILLFORGE_THEME.blackOpaque,
         '--w3m-accent-color': '#525291',
-        '--w3m-accent-fill-color': skillforgeTheme.modes.DEFAULT.mainBgAlt,
+        '--w3m-accent-fill-color': SKILLFORGE_THEME.modes.DEFAULT.mainBgAlt,
         // TODO: either host image on IK and call using params to set height/width
         // TODO: OR just save a formatted image W x H somewhere here
         '--w3m-background-image-url': 'https://ik.imagekit.io/pastelle/SKILLFORGE/forge-background.png?tr=h-103,w-0.99',
-        '--w3m-color-bg-1': skillforgeTheme.blackOpaque,
-        '--w3m-color-fg-1': skillforgeTheme.offwhiteOpaqueMore
+        '--w3m-color-bg-1': SKILLFORGE_THEME.blackOpaque,
+        '--w3m-color-fg-1': SKILLFORGE_THEME.offwhiteOpaqueMore
       }
     },
     pstl: {
@@ -67,7 +69,7 @@ const WEB3_PROPS: PstlWeb3ModalProps = {
       maxHeight: '650px',
       maxWidth: '360px',
       margin: 'auto',
-      closeModalOnConnect: false,
+      closeModalOnConnect: true,
       infoTextMap: {
         general: {
           title: <strong>What can I do on this screen?</strong>,
@@ -102,7 +104,7 @@ const WEB3_PROPS: PstlWeb3ModalProps = {
         }
       },
       loaderProps: {
-        spinnerProps: { size: 100 }
+        spinnerProps: { size: 85 }
       }
     }
   }
@@ -111,14 +113,17 @@ const WEB3_PROPS: PstlWeb3ModalProps = {
 const SKILLTREE_CONFIG: SkillForgeProps = {
   config: {
     name: APP_NAME,
-    theme: skillforgeTheme,
+    theme: SKILLFORGE_THEME,
     web3: WEB3_PROPS,
     contractAddresses: CONTRACT_ADDRESSES_MAP,
     metadataUris: METADATA_URIS_MAP,
     skillOptions: {
       // some id's may NOT be simply [1,2,3...N] and instead 1000,2000,3000...N*1000
       // idBases in PSTL SkillForge = 1000
-      idBase: SKILL_ID_BASE
+      idBase: SKILL_ID_BASE,
+      metadataFetchOptions: {
+        gatewayUris: GATEWAY_URIS
+      }
     }
   }
 }
