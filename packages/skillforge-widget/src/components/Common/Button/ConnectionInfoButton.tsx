@@ -40,7 +40,7 @@ export function ConnectionInfoButton() {
         letterSpacing="-1.6px"
       >
         <ConnectionColorWrapper isConnected={!!address}>
-          <small>{`${address ? truncateAddress(address, { type: 'long' }) : '<disconnected>'}`}</small>
+          <small>{`${address ? truncateAddress(address, { type: 'long' }) : 'LOGIN TO VIEW SKILLS'}`}</small>
         </ConnectionColorWrapper>
       </Text.SubHeader>
     </ConnectionInfoContainer>
