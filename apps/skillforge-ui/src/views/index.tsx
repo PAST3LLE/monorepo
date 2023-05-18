@@ -69,7 +69,7 @@ const WEB3_PROPS: PstlWeb3ModalProps = {
       maxHeight: '650px',
       maxWidth: '360px',
       margin: 'auto',
-      closeModalOnConnect: false,
+      closeModalOnConnect: true,
       infoTextMap: {
         general: {
           title: <strong>What can I do on this screen?</strong>,
