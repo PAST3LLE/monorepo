@@ -1,6 +1,13 @@
 import { SVG_LoadingCircleLight } from '@past3lle/assets'
 import { RowCenter, RowProps, SmartImg } from '@past3lle/components'
-import { SkillId, SkillMetadata, SkillRarity, chainFetchIpfsUriBlob, getHash } from '@past3lle/skillforge-web3'
+import {
+  SkillForgeMetadataFetchOptions,
+  SkillId,
+  SkillMetadata,
+  SkillRarity,
+  chainFetchIpfsUriBlob,
+  getHash
+} from '@past3lle/skillforge-web3'
 import { isImageKitUrl, isImageSrcSet } from '@past3lle/theme'
 import { devError } from '@past3lle/utils'
 import React, { memo, useEffect, useMemo, useState } from 'react'
@@ -19,7 +26,7 @@ interface Props {
   hasSkill: boolean
   forceRarity?: SkillRarity | 'empty'
   skillpointStyles?: RowProps
-  gatewayUris?: string[]
+  gatewayUris?: SkillForgeMetadataFetchOptions['gatewayUris']
   lightupDependencies?: (state: SkillsState) => void
 }
 function SkillpointUnmemoed({
@@ -34,19 +41,20 @@ function SkillpointUnmemoed({
 }: Props) {
   const [state, setSkillState] = useSkillsAtom()
   const {
-    active: [currentlyActive]
+    active: [currentlyActive],
+    sizes: { height }
   } = state
 
   const [formattedUri, setImageBlob] = useState<string>()
   useEffect(() => {
+    if (!metadata.image) return
     chainFetchIpfsUriBlob(getHash(metadata.image), ...gatewayUris)
       .then(setImageBlob)
       .catch((error) => {
         devError('[SkillForge-Widget::Skillpoint/index.tsx] Error in fetching IPFS Uri Blob!', error)
         setImageBlob(undefined)
       })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [metadata])
+  }, [gatewayUris, metadata])
 
   const { isEmptySkill, isCurrentSkillActive, isDependency, isOtherSkillActive } = useMemo(
     () => ({
@@ -58,6 +66,11 @@ function SkillpointUnmemoed({
       }
     }),
     [currentlyActive, metadata.properties.id, state.activeDependencies]
+  )
+
+  const emptySkillYOffset = useMemo(
+    () => (isEmptySkill ? getSkillPlaceholderYOffset(height) : undefined),
+    [height, isEmptySkill]
   )
 
   const handleClick = () => {
@@ -81,7 +94,7 @@ function SkillpointUnmemoed({
       title={`${metadata.name}_${metadata.properties.id}`}
       className={className}
       metadataCss={metadata?.attributes?.css}
-      isEmptySkill={isEmptySkill}
+      emptySkillData={isEmptySkill ? { yOffset: emptySkillYOffset } : undefined}
       id={metadata.properties.id}
       rarity={forceRarity || (!isEmptySkill ? metadata.properties?.rarity : undefined)}
       dimSkill={!hasSkill || isOtherSkillActive}
@@ -92,7 +105,9 @@ function SkillpointUnmemoed({
       {...skillpointStyles}
     >
       <RowCenter height="100%" borderRadius="5px" overflow={'hidden'}>
-        <img src={formattedUri ? formattedUri : SVG_LoadingCircleLight} style={{ maxWidth: '100%' }} />
+        {!isEmptySkill && (
+          <img src={formattedUri ? formattedUri : SVG_LoadingCircleLight} style={{ maxWidth: '100%' }} />
+        )}
       </RowCenter>
       {isCurrentSkillActive && <SkillpointHighlight />}
     </StyledSkillpoint>
@@ -157,3 +172,11 @@ const SkillpointHighlight = memo(() => {
     <StyledImg src={assetUrl} />
   )
 })
+
+// TODO: fix this, 6 is magic, doesn't really make sense
+// when using the assetMap in theme...
+export function getSkillPlaceholderYOffset(skillYSize: number) {
+  const length = 6
+  const idx = Math.ceil(Math.random() * length)
+  return skillYSize * idx
+}

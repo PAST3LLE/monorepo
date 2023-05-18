@@ -10,7 +10,7 @@ import {
 import { convertToRomanNumerals } from '@past3lle/utils'
 import React, { useMemo } from 'react'
 
-import { CANVAS_CONTAINER_ID, EMPTY_SKILL_IMAGE_HASH_LIST, MINIMUM_COLLECTION_BOARD_SIZE } from '../../constants/skills'
+import { CANVAS_CONTAINER_ID, MINIMUM_COLLECTION_BOARD_SIZE } from '../../constants/skills'
 import { useVectorsAtom } from '../../state/Skills'
 import { SkillContainerAbsolute, SkillpointHeader } from '../Common'
 import { Skillpoint } from '../Skillpoint'
@@ -79,11 +79,7 @@ export function SkillsCanvas(props: SkillsCanvasProps) {
 const EMPTY_METADATA = {
   name: 'EMPTY_SKILL',
   description: 'Empty skill',
-  get image() {
-    const length = EMPTY_SKILL_IMAGE_HASH_LIST.length
-    const idx = Math.floor(Math.random() * length)
-    return EMPTY_SKILL_IMAGE_HASH_LIST[idx]
-  },
+  image: '',
   properties: {
     id: 'EMPTY-EMPTY' as SkillId,
     rarity: 'common' as SkillRarity,

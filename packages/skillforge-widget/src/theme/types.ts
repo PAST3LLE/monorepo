@@ -39,6 +39,7 @@ export interface SkillForgeAssetsMap {
       skills?: {
         skillpoint?: {
           highlight?: BackgroundPropertyFull
+          empty?: BackgroundPropertyFull
         }
       }
     }
