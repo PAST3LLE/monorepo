@@ -94,12 +94,13 @@ function SkillpointUnmemoed({
       title={`${metadata.name}_${metadata.properties.id}`}
       className={className}
       metadataCss={metadata?.attributes?.css}
-      emptySkillData={isEmptySkill ? { yOffset: emptySkillYOffset } : undefined}
+      yOffset={emptySkillYOffset}
       id={metadata.properties.id}
       rarity={forceRarity || (!isEmptySkill ? metadata.properties?.rarity : undefined)}
       dimSkill={!hasSkill || isOtherSkillActive}
       active={isCurrentSkillActive}
       isDependency={!!isDependency}
+      isEmptySkill={isEmptySkill}
       vector={vector}
       onClick={handleClick}
       {...skillpointStyles}

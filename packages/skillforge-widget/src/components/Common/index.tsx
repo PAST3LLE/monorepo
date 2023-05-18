@@ -26,7 +26,8 @@ export const StyledSkillpoint = styled(StyledGridItem).attrs({
   dimSkill: boolean
   active: boolean
   isDependency: boolean
-  emptySkillData?: { uri?: string; yOffset?: number }
+  isEmptySkill: boolean
+  yOffset?: number
   rarity: SkillRarity | undefined
   metadataCss?: string
   css?: string
@@ -40,16 +41,16 @@ export const StyledSkillpoint = styled(StyledGridItem).attrs({
   ${({ isDependency }) => isDependency && `box-shadow: 5px 5px 10px 0px #d5fb73b8, -5px -5px 10px 0px #00ff7fa8;`}
   ${({ dimSkill }) => dimSkill && `filter: brightness(0.25) grayscale(1);`}
   
-  ${({ emptySkillData, theme }) =>
+  ${({ isEmptySkill, yOffset = 0, theme }) =>
+    isEmptySkill &&
     `
     overflow: hidden;
     opacity: 0.76;
     padding: 0;
     box-shadow: 4px 4px 1px #00000075;
     ${
-      !!emptySkillData?.yOffset &&
       theme.assetsMap.images.skills?.skillpoint?.empty &&
-      `background: url(${theme.assetsMap.images.skills.skillpoint.empty}) 0px ${emptySkillData.yOffset}px/cover;`
+      `background: url(${theme.assetsMap.images.skills.skillpoint.empty}) 0px ${yOffset}px/cover;`
     }
   `}
 
