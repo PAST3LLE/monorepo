@@ -3,7 +3,7 @@ import { Address } from 'wagmi'
 
 import { SkillForgeMetadataUpdaterProps } from '../state/Metadata/updaters/MetadataUpdater'
 import { SkillMetadata } from '../types'
-import { get64PaddedSkillId, ipfsToImageUri } from '../utils'
+import { chainFetchIpfsUri, get64PaddedSkillId } from '../utils'
 import { useSkillForgeGetBatchSkillMetadataUris } from './contracts/useSkillForgeGetBatchSkillMetadataUris'
 import { useRefetchOnAddress } from './useRefetchOnAddress'
 import { useSupportedChainId } from './useSkillForgeSupportedChainId'
@@ -12,7 +12,8 @@ export function useSkillForgeFetchMetadata({
   contractAddressMap,
   metadataUriMap,
   idBase,
-  loadAmount = 10
+  loadAmount = 3,
+  metadataFetchOptions
 }: SkillForgeMetadataUpdaterProps) {
   const chainId = useSupportedChainId()
   const metadataUris = metadataUriMap[chainId]
@@ -49,8 +50,13 @@ export function useSkillForgeFetchMetadata({
       const promisedSkillsMetadata: Promise<SkillMetadata>[] = []
       for (let j = 0; j < size; j++) {
         const skillId = get64PaddedSkillId(j, idBase)
-        const uri = ipfsToImageUri(filteredSkillErc1155MetadataUris[i].replace('{id}', skillId))
-        promisedSkillsMetadata.push(fetch(uri).then((res) => res.json()))
+
+        promisedSkillsMetadata.push(
+          chainFetchIpfsUri(
+            filteredSkillErc1155MetadataUris[i].replace('{id}', skillId),
+            ...(metadataFetchOptions?.gatewayUris || [])
+          ).then((res) => res?.json())
+        )
       }
       allMetadata.push({
         size,

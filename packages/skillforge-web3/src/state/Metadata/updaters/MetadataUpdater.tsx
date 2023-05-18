@@ -7,11 +7,12 @@ import { WAGMI_SCOPE_KEYS } from '../../..//hooks/constants'
 import { useSkillForgeFetchMetadata, useSkillForgePrepareCollectionsContract } from '../../../hooks'
 import { MOCK_ALL_SKILLS_METADATA } from '../../../mock/metadata'
 import { SkillForgeContractAddressMap, SkillForgeMetadataUriMap, SkillMetadata } from '../../../types'
+import { CustomIpfsGatewayConfig } from '../../../utils/ipfs'
 
 export interface MetadataFetchOptions {
   mock?: boolean
   mockData?: SkillMetadata[][]
-  gatewayUris?: string[]
+  gatewayUris?: CustomIpfsGatewayConfig[]
 }
 export interface SkillForgeMetadataUpdaterProps {
   metadataUriMap: SkillForgeMetadataUriMap
@@ -32,7 +33,8 @@ export function SkillForgeMetadataUpdater(props: SkillForgeMetadataUpdaterProps)
     loadAmount: collections?.toNumber() || 0,
     metadataUriMap: props.metadataUriMap,
     contractAddressMap: props.contractAddressMap,
-    idBase: props.idBase
+    idBase: props.idBase,
+    metadataFetchOptions: props.metadataFetchOptions
   })
 
   const [, setMetadataState] = useSkillForgeMetadataWriteAtom()

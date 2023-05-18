@@ -58,8 +58,10 @@ function reduceBalanceDataToMap(data: readonly BigNumber[][], skills: Address[],
 
   return data.reduce((oAcc, bnData, collIdx) => {
     const obj = (bnData || []).reduce((acc, nextBn, idx) => {
-      // acc[`${collIdx + 1}-${getSkillId(idx, idBase)}`] = nextBn.toString()
-      acc[`${skills[collIdx]}-${getSkillId(idx, idBase)}`] = nextBn.toString()
+      const id = skills?.[collIdx]
+      if (!!id) {
+        acc[`${id}-${getSkillId(idx, idBase)}`] = nextBn.toString()
+      }
 
       return acc
     }, {} as SkillForgeBalances)
