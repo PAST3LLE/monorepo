@@ -1,10 +1,8 @@
 import { ArrowLeft, Row } from '@past3lle/components'
-import React, { ReactNode, useCallback } from 'react'
+import { useOnClickOutside, useOnKeyPress } from '@past3lle/hooks'
+import React, { ReactNode, useCallback, useRef } from 'react'
 
-import {
-  /* useSidePanelAtom, */
-  useSidePanelAtomBase
-} from '../../../state/SidePanel'
+import { useSidePanelAtomBase } from '../../../state/SidePanel'
 import { CursiveHeader } from '../../Common/Text'
 import { SidePanelCssProps, StyledSidePanel } from './styleds'
 
@@ -15,6 +13,7 @@ export interface SidePanelProps {
   onBack?: (...args: any[]) => void
   styledProps?: SidePanelCssProps
 }
+
 export function SidePanel({ header, children, onBack, onDismiss, styledProps }: SidePanelProps) {
   const [{ type: panels }, setPanelState] = useSidePanelAtomBase()
 
@@ -28,8 +27,13 @@ export function SidePanel({ header, children, onBack, onDismiss, styledProps }: 
     onDismiss?.()
   }, [onDismiss, setPanelState])
 
+  const ref = useRef(null)
+  useOnClickOutside(ref, onDismissCallback)
+
+  useOnKeyPress(['Escape', 'Esc'], onDismissCallback)
+
   return (
-    <StyledSidePanel {...styledProps}>
+    <StyledSidePanel {...styledProps} ref={ref}>
       <div id="bg-tag" />
       <div style={{ position: 'absolute', left: 15, top: '6.25rem' }}>
         <Row justifyContent={'space-evenly'} alignItems="center" gap="1rem">
