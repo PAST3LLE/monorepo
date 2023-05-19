@@ -17,7 +17,7 @@ import { SUPPORTED_CHAINS } from 'web3/config'
 import { CONTRACT_ADDRESSES_MAP } from 'web3/constants/addresses'
 import { METADATA_URIS_MAP } from 'web3/constants/metadata'
 
-const APP_NAME = 'PSTL SKILLFORGE'
+const APP_NAME = 'SKILLFORGE'
 const WEB3_PROPS: PstlWeb3ModalProps = {
   appName: APP_NAME,
   chains: SUPPORTED_CHAINS,
@@ -67,42 +67,51 @@ const WEB3_PROPS: PstlWeb3ModalProps = {
       }
     },
     pstl: {
+      title: APP_NAME + ' LOGIN',
       theme: pstlModalTheme,
       maxHeight: '650px',
       maxWidth: '360px',
       margin: 'auto',
       closeModalOnConnect: true,
-      infoTextMap: {
+      connectorDisplayOverrides: {
         general: {
-          title: <strong>What can I do on this screen?</strong>,
-          content: (
-            <strong>
-              {APP_NAME} has an opt-in Web3 feature which allows you to collect SKILLS and SKILLPOINTS in exchange for
-              completely new, and unique drop items. Clicking on SKILLS (the squares on the board) shows you the
-              prerequisites for each new skill. To get started, please select a wallet choice below and connect! If you
-              are new to Web3/blockchain, please select "Social Login" below.
-            </strong>
-          )
+          infoText: {
+            title: <strong>What can I do on this screen?</strong>,
+            content: (
+              <strong>
+                {APP_NAME} has an opt-in Web3 feature which allows you to collect SKILLS and SKILLPOINTS in exchange for
+                completely new, and unique drop items. Clicking on SKILLS (the squares on the board) shows you the
+                prerequisites for each new skill. To get started, please select a wallet choice below and connect! If
+                you are new to Web3/blockchain, please select "Social Login" below.
+              </strong>
+            )
+          }
         },
         web3auth: {
-          title: <strong>How does this login work?</strong>,
-          content: (
-            <strong>
-              Social login is done via Web3Auth - a non-custodial social login protocol (i.e they never actually know,
-              or hold your data) - which facilitates logging into Dapps (decentralised apps) via familiar social media
-              login choices.
-            </strong>
-          )
+          customName: 'Email/SMS/Social',
+          infoText: {
+            title: <strong>How does Email/SMS/Social login work?</strong>,
+            content: (
+              <strong>
+                Social login is done via Web3Auth - a non-custodial social login protocol (i.e they never actually know,
+                or hold your data) - which facilitates logging into Dapps (decentralised apps) via familiar social media
+                login choices.
+              </strong>
+            )
+          }
         },
         walletConnect: {
-          title: <strong>What is WalletConnect?</strong>,
-          content: (
-            <strong>
-              WalletConnect (presented here as Web3Modal) is a simple blockchain wallet aggregator modal that
-              facilitates the choice of selecting preferred blockchain wallet(s) for connecting to Dapps (decentralised
-              apps). This generally requires more blockchain knowledge.
-            </strong>
-          )
+          customName: 'Web3',
+          infoText: {
+            title: <strong>What is web3?</strong>,
+            content: (
+              <strong>
+                Web3 wallets are digital currency storage apps (or more simply called, wallets), used for storing
+                cryptocurrency as well as connecting to Dapps (decentralised apps). This generally requires more
+                blockchain knowledge.
+              </strong>
+            )
+          }
         }
       },
       loaderProps: {
