@@ -21,6 +21,8 @@
     "prepare:publish": "node ./configure-references.js && lerna publish",
     "nft:write": "lerna run metadata:write --scope @past3lle/skills-nft --",
     "build:scope": "lerna run build --scope",
+    "build-serve:scope": "lerna run build:serve --scope",
+    "serve:scope": "lerna run serve --scope",
     "start:scope": "lerna run start --scope",
     "cosmos:scope": "lerna run cosmos --scope"
   },
