@@ -14,7 +14,7 @@
     "url": "git+https://github.com/PAST3LLE/past3lle-monorepo.git"
   },
   "private": true,
-  "version": "0.0.70",
+  "version": "0.0.71",
   "engines": {
     "node": ">=18.12.0"
   },
@@ -59,11 +59,11 @@
   },
   "dependencies": {
     "@past3lle/assets": "^0.0.14",
-    "@past3lle/carousel": "^0.0.24",
-    "@past3lle/components": "^0.0.59",
+    "@past3lle/carousel": "^0.0.25",
+    "@past3lle/components": "^0.0.60",
     "@past3lle/constants": "^0.0.19",
-    "@past3lle/hooks": "^0.0.27",
-    "@past3lle/skillforge-widget": "^0.0.36",
+    "@past3lle/hooks": "^0.0.28",
+    "@past3lle/skillforge-widget": "^0.0.37",
     "@past3lle/theme": "^0.0.37",
     "@past3lle/types": "^0.0.12",
     "@past3lle/utils": "^0.0.19",
