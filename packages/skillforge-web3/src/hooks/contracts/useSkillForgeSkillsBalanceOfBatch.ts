@@ -1,6 +1,7 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { Skills__factory } from '@past3lle/skilltree-contracts'
 import { devWarn } from '@past3lle/utils'
+import { useMemo } from 'react'
 import { Address, useContractReads } from 'wagmi'
 
 import { SkillForgeMetadataState } from '../../state'
@@ -13,9 +14,13 @@ export function useSkillForgeSkillsBalanceOfBatch(
   address: Address,
   idBase?: number
 ) {
-  const configList = gatherSkillContractConfigParams(skills as Address[], metadata, address, idBase)
+  const contractReadsArgs = useMemo(
+    () => gatherSkillContractConfigParams(skills as Address[], metadata, address, idBase),
+    [skills, metadata, address, idBase]
+  )
+
   return useContractReads({
-    contracts: configList,
+    contracts: contractReadsArgs,
     watch: true,
     scopeKey: WAGMI_SCOPE_KEYS.SKILLS_BALANCE_OF_BATCH
   })

@@ -8,7 +8,6 @@ import styled from 'styled-components'
 import { useAccount } from 'wagmi'
 
 import { useAssetsMap } from '../../../theme/utils'
-import { ConnectionColorWrapper } from '../../Web3/UserWeb3ConnectionStats'
 
 export function ConnectionInfoButton() {
   const { address } = useAccount()
@@ -39,9 +38,10 @@ export function ConnectionInfoButton() {
         fontFamily="monospace"
         letterSpacing="-1.6px"
       >
-        <ConnectionColorWrapper isConnected={!!address}>
-          <small>{`${address ? truncateAddress(address, { type: 'long' }) : 'LOGIN TO VIEW SKILLS'}`}</small>
-        </ConnectionColorWrapper>
+        <ConnectionStatusWrapper isConnected={!!address}>
+          {!address && <span>LOGIN</span>}{' '}
+          <small>{`${address ? truncateAddress(address, { type: 'long' }) : 'TO VIEW SKILLS'}`}</small>
+        </ConnectionStatusWrapper>
       </Text.SubHeader>
     </ConnectionInfoContainer>
   )
@@ -67,4 +67,26 @@ const ConnectionInfoContainer = styled(Row).attrs({ justifyContent: 'center', al
       { bgValue: theme.assetsMap.images.background.header.account, defaultValue: 'transparent' },
       { backgroundAttributes: ['center/contain no-repeat'], backgroundColor: 'transparent' }
     )}
+`
+
+const ConnectionStatusWrapper = styled.div<{ isConnected: boolean }>`
+  color: #000;
+  > span {
+    font-size: 2rem;
+    font-weight: 900;
+    text-shadow: 3px 2px 1px #ffffffc9;
+  }
+  > small {
+    font-size: 1.3rem;
+    font-weight: 100;
+    margin-left: -0.3rem;
+
+    ${({ isConnected }) =>
+      isConnected &&
+      `
+      color: #49a749;
+      font-size: 1.6rem;
+      margin-left: 0;
+    `}
+  }
 `

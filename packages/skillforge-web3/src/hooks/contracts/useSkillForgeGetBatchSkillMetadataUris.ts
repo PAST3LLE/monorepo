@@ -1,8 +1,9 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { Skills__factory } from '@past3lle/skilltree-contracts'
-import { SkillForgeMetadataUpdaterProps } from 'src/state/Metadata/updaters/MetadataUpdater'
+import { useMemo } from 'react'
 import { Address, useContractReads } from 'wagmi'
 
+import { SkillForgeMetadataUpdaterProps } from '../../state/Metadata/updaters/MetadataUpdater'
 import { WAGMI_SCOPE_KEYS } from '../constants'
 import { useSkillForgeGetSkillsAddresses } from './useSkillForgeGetSkillsAddresses'
 
@@ -18,16 +19,21 @@ export function useSkillForgeGetBatchSkillMetadataUris({
     contractAddressMap
   })
 
-  const paramsList = (skillErc1155Addresses as Address[]).map((address) => ({
-    abi: Skills__factory.abi,
-    functionName: 'uri',
-    address,
-    // ERC1155 shares same base URL, this param is required but irrelevant...
-    args: [BigNumber.from(0)]
-  }))
+  const contractsReadsArgs = useMemo(
+    () =>
+      (skillErc1155Addresses as Address[]).map((address) => ({
+        abi: Skills__factory.abi,
+        functionName: 'uri',
+        address,
+        // ERC1155 shares same base URL, this param is required but irrelevant...
+        args: [BigNumber.from(0)]
+      })),
+    [skillErc1155Addresses]
+  )
+
   return {
     uris: useContractReads({
-      contracts: paramsList,
+      contracts: contractsReadsArgs,
       watch: true,
       scopeKey: WAGMI_SCOPE_KEYS.SKILLS_URI
     }),

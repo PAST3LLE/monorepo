@@ -1,5 +1,6 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { CollectionsManager__factory } from '@past3lle/skilltree-contracts'
+import { useMemo } from 'react'
 import { useContractReads } from 'wagmi'
 
 import { SkillForgeContractAddressMap } from '../../types'
@@ -21,26 +22,34 @@ export function useSkillForgeGetSkillsAddresses(props: FetchSkillAddressesProps)
 
   useRefetchOnAddress(refetchCollectionId)
 
-  const commonArgs = {
-    abi: CollectionsManager__factory.abi,
-    address: collectionsManager,
-    functionName: 'skillsContract'
-  } as const
+  const contractsReadsArgs = useMemo(() => {
+    const commonArgs = {
+      abi: CollectionsManager__factory.abi,
+      address: collectionsManager,
+      functionName: 'skillsContract'
+    } as const
 
-  const limit = Math.max(latestCollectionId.sub(BigNumber.from(loadAmount)).toNumber(), 0)
-  const derivedArgs: (typeof commonArgs & { args: [number] })[] = []
+    const derivedArgs: (typeof commonArgs & { args: [number] })[] = []
+    const limit = Math.max(latestCollectionId.sub(BigNumber.from(loadAmount)).toNumber(), 0)
 
-  for (let i = latestCollectionId.toNumber(); i > limit; i--) {
-    derivedArgs.push({
-      ...commonArgs,
-      args: [i]
-    })
-  }
+    for (let i = latestCollectionId.toNumber(); i > limit; i--) {
+      derivedArgs.push({
+        ...commonArgs,
+        args: [i]
+      })
+    }
+
+    return derivedArgs
+  }, [latestCollectionId?.toString(), loadAmount])
 
   return useContractReads({
     // reverse as we loop backwards
-    contracts: derivedArgs.reverse(),
+    contracts: contractsReadsArgs.reverse(),
     watch: true,
-    scopeKey: WAGMI_SCOPE_KEYS.SKILLS_CONTRACT
+    scopeKey: WAGMI_SCOPE_KEYS.SKILLS_CONTRACT,
+    // Bug on the wagmi side is throwing (in prod) when `contracts` is an empty array
+    // as it is attempting to destructure during `contracts.map(({ address <--- throws }))`
+    // disable hook here if derivedArgs is an empty array
+    enabled: contractsReadsArgs.length > 0
   })
 }
