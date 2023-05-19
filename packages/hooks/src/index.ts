@@ -14,6 +14,7 @@ export * from './useLast'
 export * from './useOnClickOutside'
 export * from './useOnResize'
 export * from './usePrevious'
+export * from './useOnKeyPress'
 export {
   WindowSizes,
   useWindowSize,
