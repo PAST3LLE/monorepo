@@ -7,15 +7,14 @@ import styled from 'styled-components/macro'
 const packageJson = require('../../../package.json')
 
 const AppVersionContainer = styled(Column)`
-  position: fixed;
+  position: absolute;
   bottom: 0;
   right: 0;
   padding: 0.5rem 1rem 0.75rem;
-  border-radius: 0.5rem 0 0;
-  width: auto;
+  width: 100%;
   gap: 0.15rem;
-  opacity: 0.2;
-  background-color: ${({ theme }) => theme?.mainBg};
+  opacity: 0.4;
+  background-color: #d5fb73;
   cursor: pointer;
 
   &:hover {
@@ -26,8 +25,7 @@ const AppVersionContainer = styled(Column)`
 
   > ${Row} {
     gap: 0.25rem 0.75rem;
-    width: 100%;
-    justify-content: space-between;
+    justify-content: flex-end;
 
     > a {
       color: inherit;

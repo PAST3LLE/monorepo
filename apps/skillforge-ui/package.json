@@ -25,7 +25,7 @@
     "start:mock": "REACT_APP_IS_MOCK=true && yarn start",
     "start": "PORT=6969 GENERATE_SOURCEMAP=false craco start",
     "build": "DISABLE_ESLINT_PLUGIN=true craco build",
-    "serve": "npx serve build -l 666",
+    "serve": "npx serve build -l 7766",
     "build:serve": "yarn build && yarn serve",
     "test": "craco test --env=jsdom",
     "test:debug": "craco --inspect-brk test --runInBand --no-cache",

@@ -1,3 +1,4 @@
+import { Column, Row } from '@past3lle/components'
 import { useIsMobile } from '@past3lle/hooks'
 import SkillForge, { SkillForgeProps, SkillForgeConnectedHeader } from '@past3lle/skillforge-widget'
 import { RobotoVariableFontProvider } from '@past3lle/theme'
@@ -141,15 +142,21 @@ export function App() {
   const isMobile = useIsMobile()
   return (
     <FontsAndCssProviders>
-      <SkillForge
-        config={SKILLTREE_CONFIG.config}
-        maxWidth={isMobile ? '100%' : '90%'}
-        maxHeight={isMobile ? '100%' : '90%'}
-      >
-        <W3aStyles />
-        <SkillForgeConnectedHeader />
-        <AppVersion />
-      </SkillForge>
+      <Column width="100%">
+        <Row height={'100vh'}>
+          <SkillForge
+            config={SKILLTREE_CONFIG.config}
+            maxWidth={isMobile ? '100%' : '90%'}
+            maxHeight={isMobile ? '100%' : '90%'}
+          >
+            <W3aStyles />
+            <SkillForgeConnectedHeader />
+          </SkillForge>
+        </Row>
+        <Row marginBottom={-100} height={100} style={{ position: 'relative' }}>
+          <AppVersion />
+        </Row>
+      </Column>
     </FontsAndCssProviders>
   )
 }
