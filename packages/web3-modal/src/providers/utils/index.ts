@@ -11,7 +11,6 @@ import { PstlWeb3ModalProps } from '../types'
 interface ClientConfigEnhanced extends Omit<ClientConfig, 'connectors'> {
   connectors?: (() => ConnectorEnhanced<any, any, any>[]) | ConnectorEnhanced<any, any, any>[]
 }
-
 interface CreateWagmiClientProps {
   appName: string
   chains: Chain[]
@@ -22,6 +21,7 @@ interface CreateWagmiClientProps {
 export type WagmiClient = ReturnType<typeof createClient>
 const createWagmiClient = ({ options, ...props }: CreateWagmiClientProps): WagmiConfigProps['client'] => {
   const connectors = Array.isArray(options?.connectors) ? options?.connectors : options?.connectors?.()
+
   return createClient({
     autoConnect: true,
     connectors: [

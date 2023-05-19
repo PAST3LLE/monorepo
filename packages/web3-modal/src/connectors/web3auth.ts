@@ -3,34 +3,11 @@ import { CHAIN_NAMESPACES, WALLET_ADAPTERS } from '@web3auth/base'
 import { IPlugin } from '@web3auth/base-plugin'
 import { Web3Auth } from '@web3auth/modal'
 import { OpenloginAdapter } from '@web3auth/openlogin-adapter'
-import { Web3AuthConnector as Web3AuthConnectorCreator } from '@web3auth/web3auth-wagmi-connector'
+import { Web3AuthConnector } from '@web3auth/web3auth-wagmi-connector'
 import { Chain } from 'wagmi'
 
 import { Z_INDICES } from '../constants'
-import { ConnectorEnhancedExtras } from '../types'
 
-const SOCIAL_LOGO = 'https://www.getopensocial.com/wp-content/uploads/2020/12/social-login-COLOR_2.png'
-
-class Web3AuthEnhancedConnector extends Web3AuthConnectorCreator {
-  public customName?: string
-  public logo?: string
-  public details?: string
-
-  constructor({
-    customName,
-    logo,
-    details,
-    ...rest
-  }: {
-    chains?: Chain[] | undefined
-    options: Web3AuthConnectorCreator['options']
-  } & ConnectorEnhancedExtras) {
-    super(rest)
-    this.details = details
-    this.customName = customName
-    this.logo = logo
-  }
-}
 export interface PstlWeb3AuthConnectorProps {
   theme?: 'light' | 'dark'
   chains: Chain[]
@@ -56,11 +33,8 @@ export function PstlWeb3AuthConnector({
   theme = 'dark',
   appLogoDark,
   appLogoLight,
-  listingDetails,
   loginMethodsOrder,
   zIndex = Z_INDICES.W3A,
-  listingName = 'Social',
-  listingLogo = SOCIAL_LOGO,
   preset = 'ALLOW_EXTERNAL_WALLETS',
   configureAdditionalConnectors
 }: PstlWeb3AuthConnectorProps) {
@@ -111,10 +85,7 @@ export function PstlWeb3AuthConnector({
     pluginsList?.forEach((plugin) => web3AuthInstance.addPlugin(plugin))
   }
 
-  return new Web3AuthEnhancedConnector({
-    customName: listingName,
-    logo: listingLogo,
-    details: listingDetails,
+  return new Web3AuthConnector({
     chains,
     options: {
       web3AuthInstance,

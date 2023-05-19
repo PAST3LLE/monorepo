@@ -1,7 +1,7 @@
 import { css } from 'styled-components'
 
 import { useConnection, usePstlWeb3Modal } from '../hooks'
-import { ConnectorEnhanced, DefaultWallets } from '../types'
+import { ConnectorEnhanced, ConnectorEnhancedExtras, DefaultWallets } from '../types'
 
 const SOCIAL_LOGO = 'https://www.getopensocial.com/wp-content/uploads/2020/12/social-login-COLOR_2.png'
 const WALLETCONNECT_LOGO =
@@ -27,12 +27,14 @@ export function getConnectorInfo(
     chainId,
     address,
     isW3aModalMounted,
-    closeOnConnect
+    closeOnConnect,
+    connectorDisplayOverrides
   }: {
     chainId?: number
     address?: string
     isW3aModalMounted?: boolean
     closeOnConnect?: boolean
+    connectorDisplayOverrides?: { [id: string]: ConnectorEnhancedExtras | undefined }
   }
 ): [
   { label: string; logo?: string; connected: boolean },
@@ -42,8 +44,8 @@ export function getConnectorInfo(
     case DefaultWallets.WEB3AUTH:
       return [
         {
-          label: connector?.customName || 'Social',
-          logo: connector?.logo || SOCIAL_LOGO,
+          label: connectorDisplayOverrides?.[connector.id]?.customName || 'Social',
+          logo: connectorDisplayOverrides?.[connector.id]?.logo || connector?.logo || SOCIAL_LOGO,
           connected: currentConnector?.id === DefaultWallets.WEB3AUTH
         },
         async () => {
@@ -77,8 +79,8 @@ export function getConnectorInfo(
     case DefaultWallets.WEB3MODAL: {
       return [
         {
-          label: connector?.customName || 'WalletConnect',
-          logo: connector?.logo || WALLETCONNECT_LOGO,
+          label: connectorDisplayOverrides?.[connector.id]?.customName || 'WalletConnect',
+          logo: connectorDisplayOverrides?.[connector.id]?.logo || connector?.logo || WALLETCONNECT_LOGO,
           connected: !!currentConnector && currentConnector?.id !== DefaultWallets.WEB3AUTH
         },
         async () => {

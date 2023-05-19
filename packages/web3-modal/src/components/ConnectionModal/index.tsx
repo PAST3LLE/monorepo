@@ -1,21 +1,17 @@
 import { ButtonProps, CloseIcon, ModalProps } from '@past3lle/components'
 import { BasicUserTheme, ThemeByModes, ThemeProvider } from '@past3lle/theme'
 import { devWarn } from '@past3lle/utils'
-import React, { Fragment, ReactNode, memo, useMemo, useState } from 'react'
+import React, { Fragment, memo, useMemo, useState } from 'react'
 import { useTheme } from 'styled-components'
 
 import { Z_INDICES } from '../../constants'
 import { useConnection, useModalTheme, usePstlWeb3Modal } from '../../hooks'
+import { ConnectorEnhancedExtras } from '../../types'
 import { getConnectorInfo } from '../../utils'
 import { LoadingScreen, LoadingScreenProps } from '../LoadingScreen'
 import { ConnectedCheckMark } from './ConnectedCheckMark'
 import { ConnectorHelper } from './ConnectorHelper'
 import { InnerContainer, ModalButton, ModalTitleText, StyledConnectionModal } from './styled'
-
-type DefaultWalletNames = 'general' | 'web3auth' | 'walletConnect'
-type InfoTextMap = {
-  [key in DefaultWalletNames]?: { title: ReactNode; content: ReactNode }
-}
 
 interface PstlWeb3ConnectionModalProps extends Omit<ModalProps, 'isOpen' | 'onDismiss'> {
   title?: string
@@ -23,7 +19,7 @@ interface PstlWeb3ConnectionModalProps extends Omit<ModalProps, 'isOpen' | 'onDi
   loaderProps?: LoadingScreenProps
   buttonProps?: ButtonProps
   closeModalOnConnect?: boolean
-  infoTextMap?: InfoTextMap
+  connectorDisplayOverrides?: { [id: string]: ConnectorEnhancedExtras | undefined }
   zIndex?: number
 }
 
@@ -34,7 +30,7 @@ function ModalWithoutThemeProvider({
   maxWidth = '360px',
   maxHeight = '600px',
   closeModalOnConnect = false,
-  infoTextMap,
+  connectorDisplayOverrides,
   zIndex = Z_INDICES.PSTL,
   ...restModalProps
 }: Omit<PstlWeb3ConnectionModalProps, 'theme'>) {
@@ -61,7 +57,13 @@ function ModalWithoutThemeProvider({
             setW3aModalMounted,
             setW3aModalLoading
           },
-          { chainId, address, isW3aModalMounted: w3aModalMounted, closeOnConnect: closeModalOnConnect }
+          {
+            chainId,
+            address,
+            isW3aModalMounted: w3aModalMounted,
+            closeOnConnect: closeModalOnConnect,
+            connectorDisplayOverrides
+          }
         )
 
         return (
@@ -72,8 +74,8 @@ function ModalWithoutThemeProvider({
               {connected && <ConnectedCheckMark />}
             </ModalButton>
             {theme?.modals?.connection?.helpers?.show && (
-              <ConnectorHelper title={infoTextMap?.[connector.id as DefaultWalletNames]?.title} connector={connector}>
-                {infoTextMap?.[connector.id as DefaultWalletNames]?.content}
+              <ConnectorHelper title={connectorDisplayOverrides?.[connector.id]?.infoText?.title} connector={connector}>
+                {connectorDisplayOverrides?.[connector.id]?.infoText?.content}
               </ConnectorHelper>
             )}
           </Fragment>
@@ -86,7 +88,7 @@ function ModalWithoutThemeProvider({
       closeModalOnConnect,
       connectors,
       currentConnector,
-      infoTextMap,
+      connectorDisplayOverrides,
       theme?.modals?.connection?.helpers?.show,
       w3aModalMounted,
       close,
@@ -127,8 +129,10 @@ function ModalWithoutThemeProvider({
         >
           {title}
         </ModalTitleText>
-        {infoTextMap?.general && !w3aModalLoading && (
-          <ConnectorHelper title={infoTextMap.general.title}>{infoTextMap.general.content}</ConnectorHelper>
+        {connectorDisplayOverrides?.general?.infoText?.content && !w3aModalLoading && (
+          <ConnectorHelper title={connectorDisplayOverrides.general.infoText?.title || 'What is this?'}>
+            {connectorDisplayOverrides?.general.infoText.content}
+          </ConnectorHelper>
         )}
         {w3aModalLoading ? <LoadingScreen {...loaderProps} /> : data}
       </InnerContainer>
