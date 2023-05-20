@@ -113,7 +113,7 @@
   "dependencies": {
     "@ethersproject/bignumber": ">=5.7.0",
     "@past3lle/hooks": "^0.0.28",
-    "@past3lle/skilltree-contracts": "^0.0.1-rc.4",
+    "@past3lle/skilltree-contracts": "^0.0.1-rc.5",
     "@past3lle/utils": "^0.0.19",
     "@past3lle/web3-modal": "^0.0.12",
     "jotai": "^1.13.0",

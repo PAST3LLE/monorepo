@@ -1,12 +1,11 @@
 import { PstlHooksProvider } from '@past3lle/hooks'
+import CONTRACTS_NETWORKS from '@past3lle/skilltree-contracts/networks.json'
+import packageJSON from '@past3lle/skilltree-contracts/package.json'
 import { PstlW3Providers } from '@past3lle/web3-modal'
 import React, { ReactNode, StrictMode } from 'react'
 
 import { SkillForgeW3StateUpdaters } from './state/Combined/updaters'
 import { SkillForgeW3AppConfig } from './types'
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const skillforgeContractsVersion = require('../package.json').dependencies['@past3lle/skilltree-contracts']
 
 // Utilities & Types & Contract Hooks
 export * from './utils'
@@ -18,7 +17,8 @@ export * from './constants'
 export * from './state'
 
 // Skilltree-contracts version
-export { skillforgeContractsVersion }
+const CONTRACTS_VERSIONS: string = packageJSON.version
+export { CONTRACTS_VERSIONS, CONTRACTS_NETWORKS }
 
 interface ForgeW3CoreProvidersProps {
   children: ReactNode
