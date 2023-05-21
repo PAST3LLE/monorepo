@@ -26,13 +26,13 @@ const WEB3_PROPS: PstlWeb3ModalProps = {
       appName: APP_NAME,
       // TODO: change this once ready for production
       network: 'testnet',
-      listingName: 'Email/SMS/Social',
       projectId: process.env.REACT_APP_WEB3AUTH_ID as string,
       configureAdditionalConnectors() {
         // Add Torus Wallet Plugin (optional)
         const torusPlugin = new TorusWalletConnectorPlugin({
           torusWalletOpts: {
-            buttonPosition: 'bottom-left'
+            buttonPosition: 'bottom-right',
+            modalZIndex: 999
           },
           walletInitOptions: {
             whiteLabel: {
