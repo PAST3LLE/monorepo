@@ -22,7 +22,9 @@ export function useSkillForgeSkillsBalanceOfBatch(
   return useContractReads({
     contracts: contractReadsArgs,
     watch: true,
-    scopeKey: WAGMI_SCOPE_KEYS.SKILLS_BALANCE_OF_BATCH
+    scopeKey: WAGMI_SCOPE_KEYS.SKILLS_BALANCE_OF_BATCH,
+    // Don't run if our contract reads args list is 0
+    enabled: contractReadsArgs?.length > 0
   })
 }
 

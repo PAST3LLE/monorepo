@@ -35,7 +35,8 @@ export function useSkillForgeGetBatchSkillMetadataUris({
     uris: useContractReads({
       contracts: contractsReadsArgs,
       watch: true,
-      scopeKey: WAGMI_SCOPE_KEYS.SKILLS_URI
+      scopeKey: WAGMI_SCOPE_KEYS.SKILLS_URI,
+      enabled: contractsReadsArgs?.length > 0
     }),
     addresses: skillErc1155Addresses
   }
