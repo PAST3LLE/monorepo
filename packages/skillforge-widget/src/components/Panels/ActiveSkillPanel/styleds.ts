@@ -10,6 +10,12 @@ export const SkillRarityLabel = styled(BlackHeader)`
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+  font-style: unset;
+  > strong {
+    font-variation-settings: 'wght' 450;
+    margin-right: 0.5rem;
+    letter-spacing: -1.5px;
+  }
 `
 
 export const SkillsRowContainer = styled(Row)`
@@ -27,7 +33,7 @@ export const ActiveSkillPanelContainer = styled(Column)`
   ${SkillStatusLabel}, ${SkillRarityLabel} {
     width: inherit;
     font-size: 2.5rem;
-    padding: 0.25rem 2rem;
+    padding: 0.5rem 1.5rem 0.5rem 0.8rem;
   }
 
   ${upToSmall`

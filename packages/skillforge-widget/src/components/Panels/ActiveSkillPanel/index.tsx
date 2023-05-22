@@ -1,5 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { AutoRow, Column, ExternalLink, Row, RowProps, RowStart, Text } from '@past3lle/components'
+import { AutoRow, Column, ExternalLink, Row, RowProps, Text } from '@past3lle/components'
 import {
   SkillDependencyObject,
   SkillForgeBalances,
@@ -69,33 +69,12 @@ export function ActiveSkillPanel() {
       header={activeSkill?.name || 'Unknown'}
       styledProps={{
         background: cardColour,
-        padding: '6rem 0 4rem 0'
+        padding: '2.5rem 0 4rem 0'
       }}
       onDismiss={() => setSkillState((state) => ({ ...state, active: [] }))}
       onBack={() => setSkillState((state) => ({ ...state, active: state.active.slice(1) }))}
     >
-      <ActiveSkillPanelContainer>
-        <Column overflow="hidden">
-          <RowStart letterSpacing="-2.6px" style={{ position: 'absolute', left: 0, top: -1, width: 'auto' }}>
-            <SkillStatusLabel
-              bgColour={_getLockStatusColour(lockStatus, rarity)}
-              fgColour={BLACK}
-              fontWeight={400}
-              borderRadius="0 0 10px 0"
-            >
-              {lockStatus}
-            </SkillStatusLabel>
-            <SkillRarityLabel
-              color={OFF_WHITE}
-              fontWeight={500}
-              borderRadius="0"
-              textShadow={`1px 1px 1px ${darken(0.3, customTheme.rarity[rarity].backgroundColor)}`}
-            >
-              <img src={assetsMap.icons.rarity[rarity]} style={{ maxWidth: '2.5rem', marginRight: '0.5rem' }} />
-              {rarity?.toLocaleUpperCase()} SKILL
-            </SkillRarityLabel>
-          </RowStart>
-        </Column>
+      <ActiveSkillPanelContainer gap="1rem">
         <Row justifyContent={'center'} margin="0">
           <Text.SubHeader fontSize={'2.5rem'} fontWeight={200}>
             {description}
@@ -104,7 +83,7 @@ export function ActiveSkillPanel() {
         <Row
           id="skill-image-and-store-button"
           justifyContent={'space-around'}
-          marginBottom="auto"
+          marginBottom="12%"
           flexWrap={'wrap'}
           gap="1rem 4rem"
         >
@@ -130,6 +109,28 @@ export function ActiveSkillPanel() {
           >
             <Text.Black fontWeight={300}>{isLocked ? 'LOCKED' : isOwned ? 'VIEW IN STORE' : 'UNLOCK'}</Text.Black>
           </ThemedButtonExternalLink>
+        </Row>
+        <Row alignSelf="flex-start" width="auto">
+          <SkillStatusLabel
+            bgColour={_getLockStatusColour(lockStatus, rarity)}
+            fgColour={BLACK}
+            fontWeight={400}
+            borderRadius="0.3rem"
+            letterSpacing={-2.2}
+          >
+            {lockStatus}
+          </SkillStatusLabel>
+          <SkillRarityLabel
+            backgroundColor={darken(0.02, customTheme.rarity[rarity].backgroundColor)}
+            color={OFF_WHITE}
+            fontWeight={100}
+            borderRadius="0.3rem"
+            marginLeft="0.75rem"
+            textShadow={`1px 1px 1px ${darken(0.3, customTheme.rarity[rarity].backgroundColor)}`}
+          >
+            <img src={assetsMap.icons.rarity[rarity]} style={{ maxWidth: '2.5rem', marginRight: '0.3rem' }} />
+            <strong>{rarity?.toLocaleUpperCase()}</strong> SKILL
+          </SkillRarityLabel>
         </Row>
         {!isOwned && deps.length > 0 && (
           <RequiredDepsContainer
