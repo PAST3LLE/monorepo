@@ -1,7 +1,13 @@
 import { PstlHooksProvider } from '@past3lle/hooks'
 import CONTRACTS_NETWORKS from '@past3lle/skilltree-contracts/networks.json'
 import packageJSON from '@past3lle/skilltree-contracts/package.json'
-import { PstlW3Providers } from '@past3lle/web3-modal'
+import {
+  PstlW3Providers,
+  usePstlConnection as useConnection,
+  usePstlEthereumClient as useEthereumClient,
+  usePstlWagmiClient as useWagmiClient,
+  usePstlWeb3Modal as useWeb3Modal
+} from '@past3lle/web3-modal'
 import React, { ReactNode, StrictMode } from 'react'
 
 import { SkillForgeW3StateUpdaters } from './state/Combined/updaters'
@@ -52,4 +58,12 @@ function ForgeW3ConnectedProviders({ config, children }: ForgeW3CoreProvidersPro
   )
 }
 
-export { type ForgeW3CoreProvidersProps, ForgeW3DataProviders, ForgeW3ConnectedProviders }
+export {
+  type ForgeW3CoreProvidersProps,
+  ForgeW3DataProviders,
+  ForgeW3ConnectedProviders,
+  useConnection,
+  useWeb3Modal,
+  useEthereumClient,
+  useWagmiClient
+}
