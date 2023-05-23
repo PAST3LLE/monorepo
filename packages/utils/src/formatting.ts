@@ -255,7 +255,7 @@ export type CurrencyCode =
 
 export function truncateAddress(address: Address, opt?: { type: 'long' | 'short' }) {
   const options = opt || { type: 'short' }
-  const numbers = options.type === 'short' ? [7, 37] : [10, 32]
+  const numbers = options.type === 'short' ? [6, 38] : [10, 32]
   const firstPart = address.slice(0, numbers[0])
   const lastPart = address.slice(numbers[1])
 
