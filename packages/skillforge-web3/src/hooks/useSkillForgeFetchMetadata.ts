@@ -1,5 +1,5 @@
+import { Address } from '@past3lle/types'
 import { useMemo } from 'react'
-import { Address } from 'wagmi'
 
 import { SkillForgeMetadataUpdaterProps } from '../state/Metadata/updaters/MetadataUpdater'
 import { SkillMetadata } from '../types'
@@ -71,9 +71,7 @@ export function useSkillForgeFetchMetadata({
 }
 
 export function deriveMetadataId(metadata: SkillMetadata, address: Address): `${Address}-${string}` {
-  const rawId = metadata?.properties?.id?.toString()
-
-  if (!rawId) throw new Error('Missing Skill ID in skill metadata!')
+  const rawId = metadata.properties.id.toString()
 
   let cleanedId
   if (rawId.match(/^(.*?)-/)) {
@@ -86,7 +84,7 @@ export function deriveMetadataId(metadata: SkillMetadata, address: Address): `${
 }
 
 function _overrideMetadataObject(metadata: SkillMetadata, address: Address) {
-  const newId = deriveMetadataId(metadata, address)
+  const newId = metadata?.properties?.id ? deriveMetadataId(metadata, address) : '0x-0000'
 
   return {
     ...metadata,
