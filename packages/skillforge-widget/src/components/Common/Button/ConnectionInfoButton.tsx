@@ -1,18 +1,16 @@
 import { Row, Text } from '@past3lle/components'
+import { useConnection as usePstlConnection, useWeb3Modal as usePstlWeb3Modal } from '@past3lle/skillforge-web3'
 import { setBackgroundOrDefault } from '@past3lle/theme'
 import { truncateAddress } from '@past3lle/utils'
-import { usePstlConnection, usePstlWeb3Modal } from '@past3lle/web3-modal'
 import { useCallback } from 'react'
 import React from 'react'
 import styled from 'styled-components'
-import { useAccount } from 'wagmi'
 
 import { useAssetsMap } from '../../../theme/utils'
 
 export function ConnectionInfoButton() {
-  const { address } = useAccount()
   const { open } = usePstlWeb3Modal()
-  const [, { openW3Modal }] = usePstlConnection()
+  const [, { openW3Modal }, { address }] = usePstlConnection()
 
   const assetsMap = useAssetsMap()
 

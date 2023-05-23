@@ -1,7 +1,7 @@
 import { Column, RowProps } from '@past3lle/components'
+import { useConnection as usePstlConnection, useWeb3Modal as usePstlWeb3Modal } from '@past3lle/skillforge-web3'
 import { BLACK_TRANSPARENT } from '@past3lle/theme'
 import { truncateAddress } from '@past3lle/utils'
-import { usePstlConnection, usePstlWeb3Modal } from '@past3lle/web3-modal'
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import { useAccount, useNetwork } from 'wagmi'

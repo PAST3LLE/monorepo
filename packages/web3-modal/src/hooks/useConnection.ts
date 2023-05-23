@@ -1,5 +1,5 @@
 import { useWeb3Modal } from '@web3modal/react'
-import { Connector, useAccount, useChainId, useConnect, useDisconnect } from 'wagmi'
+import { Address, Connector, useAccount, useChainId, useConnect, useDisconnect } from 'wagmi'
 
 type Callbacks = Pick<ReturnType<typeof useDisconnect>, 'disconnect'> & {
   openW3Modal: ReturnType<typeof useWeb3Modal>['open']
@@ -10,7 +10,7 @@ export type ConnectionHookProps = [
   Connector<any, any, any>[],
   Callbacks,
   {
-    address?: string
+    address?: Address
     chainId?: number
     currentConnector: ReturnType<typeof useAccount>['connector']
     error: Error | null

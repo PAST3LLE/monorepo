@@ -89,6 +89,7 @@
     "jotai-devtools": "^0.1.0",
     "prettier": "^2.8.3",
     "react": "^18.2.0",
+    "react-cosmos": "^5.7.2",
     "styled-components": "^5.3.5"
   },
   "dependencies": {
@@ -99,7 +100,6 @@
     "@past3lle/skills-nft": "^0.0.8",
     "@past3lle/theme": "^0.0.38",
     "@past3lle/utils": "^0.0.20",
-    "@past3lle/web3-modal": "^0.0.13",
     "jotai": "^1.13.1",
     "polished": "^4.2.2"
   },
