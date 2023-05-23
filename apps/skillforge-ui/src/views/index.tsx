@@ -1,8 +1,8 @@
 import { Column, Row } from '@past3lle/components'
 import { useIsMobile } from '@past3lle/hooks'
+import { ForgeW3CoreProvidersProps } from '@past3lle/skillforge-web3'
 import SkillForge, { SkillForgeProps, SkillForgeConnectedHeader } from '@past3lle/skillforge-widget'
 import { RobotoVariableFontProvider } from '@past3lle/theme'
-import { PstlWeb3ModalProps } from '@past3lle/web3-modal'
 import { TorusWalletConnectorPlugin } from '@web3auth/torus-wallet-connector-plugin'
 import { AppVersion } from 'components/AppVersion'
 import { skillforgeTheme as SKILLFORGE_THEME } from 'config/skillforge'
@@ -18,8 +18,7 @@ import { CONTRACT_ADDRESSES_MAP } from 'web3/constants/addresses'
 import { METADATA_URIS_MAP } from 'web3/constants/metadata'
 
 const APP_NAME = 'SKILLFORGE'
-const WEB3_PROPS: PstlWeb3ModalProps = {
-  appName: APP_NAME,
+const WEB3_PROPS: ForgeW3CoreProvidersProps['config']['web3'] = {
   chains: SUPPORTED_CHAINS,
   modals: {
     w3a: {

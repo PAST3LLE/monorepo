@@ -46,7 +46,6 @@
     "@past3lle/skilltree-contracts": "^0.0.1-rc.5",
     "@past3lle/theme": "^0.0.38",
     "@past3lle/utils": "^0.0.20",
-    "@past3lle/web3-modal": "^0.0.13",
     "@trivago/prettier-plugin-sort-imports": "^4.0.0",
     "@types/jest": "^25.2.1",
     "@types/node": "^13.13.5",

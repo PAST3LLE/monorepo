@@ -1,11 +1,11 @@
+import { ModalTheme } from '@past3lle/skillforge-web3'
 import { createCustomTheme, ikUrlToSimpleImageSrcSet, ThemeByModes } from '@past3lle/theme'
-import { PstlModalTheme } from '@past3lle/web3-modal'
 import { ASSETS_MAP } from 'assets'
 
 const FORGE_LOGO_URL = 'https://ik.imagekit.io/pastelle/SKILLFORGE/forge-512-logo.png'
 export const FORGE_LOGO_URL_MAP = ikUrlToSimpleImageSrcSet(FORGE_LOGO_URL)
 
-export const pstlModalTheme = createCustomTheme<ThemeByModes<PstlModalTheme>>({
+export const pstlModalTheme = createCustomTheme<ThemeByModes<ModalTheme>>({
   modes: {
     LIGHT: {},
     DARK: {},
