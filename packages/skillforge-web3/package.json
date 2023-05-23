@@ -117,6 +117,7 @@
     "@past3lle/utils": "^0.0.20",
     "@past3lle/web3-modal": "^0.0.13",
     "jotai": "^1.13.0",
+    "jotai-devtools": "0.1.0",
     "wagmi": "0.12.1"
   },
   "devDependencies": {
