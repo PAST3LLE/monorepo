@@ -1,7 +1,7 @@
 import { Web3Button } from '@web3modal/react'
 import React from 'react'
 
-import { ForgeW3ConnectedProviders, useConnection, useWeb3Modal } from '..'
+import { ForgeW3Providers, useW3Connection, useW3Modal } from '..'
 import { commonProps, contractProps } from './config'
 
 /* 
@@ -14,8 +14,8 @@ import { commonProps, contractProps } from './config'
 */
 
 function InnerApp() {
-  const { open } = useWeb3Modal()
-  const [, , { address }] = useConnection()
+  const { open } = useW3Modal()
+  const [, , { address }] = useW3Connection()
 
   return (
     <div>
@@ -29,7 +29,7 @@ function InnerApp() {
 
 function App() {
   return (
-    <ForgeW3ConnectedProviders
+    <ForgeW3Providers
       config={{
         ...contractProps,
         name: commonProps.appName,
@@ -43,13 +43,13 @@ function App() {
       }}
     >
       <InnerApp />
-    </ForgeW3ConnectedProviders>
+    </ForgeW3Providers>
   )
 }
 
 export default {
   default: (
-    <ForgeW3ConnectedProviders
+    <ForgeW3Providers
       config={{
         ...contractProps,
         name: commonProps.appName,
@@ -64,10 +64,10 @@ export default {
     >
       <h1>Default Web3Modal selections</h1>
       <Web3Button label="Click and select a wallet in the modal!" />
-    </ForgeW3ConnectedProviders>
+    </ForgeW3Providers>
   ),
   web3Auth: (
-    <ForgeW3ConnectedProviders
+    <ForgeW3Providers
       config={{
         ...contractProps,
         name: commonProps.appName,
@@ -82,7 +82,7 @@ export default {
     >
       <h1>Web3Auth in the Web3Modal</h1>
       <Web3Button label="Click and try selecting Web3Auth in the modal!" />
-    </ForgeW3ConnectedProviders>
+    </ForgeW3Providers>
   ),
   app: <App />
 }

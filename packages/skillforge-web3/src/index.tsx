@@ -2,11 +2,12 @@ import { PstlHooksProvider } from '@past3lle/hooks'
 import CONTRACTS_NETWORKS from '@past3lle/skilltree-contracts/networks.json'
 import packageJSON from '@past3lle/skilltree-contracts/package.json'
 import {
+  PstlModalTheme as ModalTheme,
   PstlW3Providers,
-  usePstlConnection as useConnection,
   usePstlEthereumClient as useEthereumClient,
-  usePstlWagmiClient as useWagmiClient,
-  usePstlWeb3Modal as useWeb3Modal
+  usePstlConnection as useW3Connection,
+  usePstlWeb3Modal as useW3Modal,
+  usePstlWagmiClient as useWagmiClient
 } from '@past3lle/web3-modal'
 import React, { ReactNode, StrictMode } from 'react'
 
@@ -31,7 +32,7 @@ interface ForgeW3CoreProvidersProps {
   config: SkillForgeW3AppConfig
 }
 
-function ForgeW3DataProviders({ config, children }: ForgeW3CoreProvidersProps) {
+function ForgeStateProviders({ config, children }: ForgeW3CoreProvidersProps) {
   return (
     <StrictMode>
       <PstlHooksProvider {...config.hooksProviderOptions}>
@@ -41,7 +42,7 @@ function ForgeW3DataProviders({ config, children }: ForgeW3CoreProvidersProps) {
   )
 }
 
-function ForgeW3ConnectedProviders({ config, children }: ForgeW3CoreProvidersProps) {
+function ForgeW3Providers({ config, children }: ForgeW3CoreProvidersProps) {
   return (
     <StrictMode>
       <PstlHooksProvider {...config.hooksProviderOptions}>
@@ -59,11 +60,12 @@ function ForgeW3ConnectedProviders({ config, children }: ForgeW3CoreProvidersPro
 }
 
 export {
-  type ForgeW3CoreProvidersProps,
-  ForgeW3DataProviders,
-  ForgeW3ConnectedProviders,
-  useConnection,
-  useWeb3Modal,
+  ForgeW3Providers,
+  ForgeStateProviders,
+  useW3Connection,
+  useW3Modal,
   useEthereumClient,
-  useWagmiClient
+  useWagmiClient,
+  type ModalTheme,
+  type ForgeW3CoreProvidersProps
 }
