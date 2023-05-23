@@ -1,4 +1,4 @@
-import { ForgeW3ConnectedProviders, ForgeW3DataProviders } from '@past3lle/skillforge-web3'
+import { ForgeStateProviders, ForgeW3Providers } from '@past3lle/skillforge-web3'
 import { ThemeProviderSimple, useConstructTheme } from '@past3lle/theme'
 import React, { ReactNode } from 'react'
 import { DefaultTheme } from 'styled-components'
@@ -33,9 +33,9 @@ export function SkillForgeDisconnectedDataProviders({
   ...props
 }: SkillForgeWidgetConfig & { children: ReactNode }) {
   return (
-    <ForgeW3DataProviders config={props}>
+    <ForgeStateProviders config={props}>
       <SkillForgeThemeAndDataProviders {...props}>{children}</SkillForgeThemeAndDataProviders>
-    </ForgeW3DataProviders>
+    </ForgeStateProviders>
   )
 }
 
@@ -44,8 +44,8 @@ export function SkillForgeConnectedDataProviders({
   ...props
 }: SkillForgeWidgetConfig & { children: ReactNode }) {
   return (
-    <ForgeW3ConnectedProviders config={props}>
+    <ForgeW3Providers config={props}>
       <SkillForgeThemeAndDataProviders {...props}>{children}</SkillForgeThemeAndDataProviders>
-    </ForgeW3ConnectedProviders>
+    </ForgeW3Providers>
   )
 }

@@ -1,4 +1,4 @@
-import { useConnection, useWeb3Modal } from '@past3lle/skillforge-web3'
+import { useW3Connection, useW3Modal } from '@past3lle/skillforge-web3'
 import { createPast3lleTemplateTheme } from '@past3lle/theme'
 import React from 'react'
 
@@ -15,8 +15,8 @@ import { commonProps, contractProps } from './config'
 */
 
 function InnerApp() {
-  const { open } = useWeb3Modal()
-  const [, , { address }] = useConnection()
+  const { open } = useW3Modal()
+  const [, , { address }] = useW3Connection()
 
   return (
     <div>

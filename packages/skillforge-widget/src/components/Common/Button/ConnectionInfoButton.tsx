@@ -1,5 +1,5 @@
 import { Row, Text } from '@past3lle/components'
-import { useConnection as usePstlConnection, useWeb3Modal as usePstlWeb3Modal } from '@past3lle/skillforge-web3'
+import { useW3Connection as usePstlConnection, useW3Modal as usePstlWeb3Modal } from '@past3lle/skillforge-web3'
 import { setBackgroundOrDefault } from '@past3lle/theme'
 import { truncateAddress } from '@past3lle/utils'
 import { useCallback } from 'react'
