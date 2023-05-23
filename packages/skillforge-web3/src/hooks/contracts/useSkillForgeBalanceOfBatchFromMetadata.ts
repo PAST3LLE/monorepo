@@ -7,18 +7,20 @@ import { SkillMetadata } from '../../types/skill'
 import { WAGMI_SCOPE_KEYS } from '../constants'
 
 type TokenDepsMap = { [key: Address]: BigNumber[] }
-export function useSkillForgeBalanceOfBatchFromMetadata(skillMetadata: SkillMetadata, address?: Address) {
-  const depsList = skillMetadata?.properties.dependencies || []
-  const tokenDepsMap = depsList.reduce((acc, dep) => {
-    if (dep) {
-      if (Array.isArray(acc[dep.token])) {
-        acc[dep.token].push(dep.id)
-      } else {
-        acc[dep.token] = []
+export function useSkillForgeBalanceOfBatchFromMetadata(skillMetadata?: SkillMetadata, address?: Address) {
+  const depsList = skillMetadata?.properties.dependencies
+  const tokenDepsMap =
+    depsList &&
+    depsList.reduce((acc, dep) => {
+      if (dep) {
+        if (Array.isArray(acc[dep.token])) {
+          acc[dep.token].push(dep.id)
+        } else {
+          acc[dep.token] = []
+        }
       }
-    }
-    return acc
-  }, {} as TokenDepsMap)
+      return acc
+    }, {} as TokenDepsMap)
 
   /*
     address = 0x12312312SomeRandomAddressGuy
@@ -28,20 +30,21 @@ export function useSkillForgeBalanceOfBatchFromMetadata(skillMetadata: SkillMeta
     }
   */
 
-  const contractReadsArgs = gatherSkillContractConfigParams(tokenDepsMap, address)
+  const contractReadsArgs = tokenDepsMap && gatherSkillContractConfigParams(tokenDepsMap, address)
 
   return useContractReads({
-    contracts: contractReadsArgs,
+    contracts: contractReadsArgs || [],
     watch: true,
     scopeKey: WAGMI_SCOPE_KEYS.SKILLS_BALANCE_OF_BATCH_FROM_METADATA,
     // Don't run if our contract reads args list is 0
-    enabled: contractReadsArgs?.length > 0
+    enabled: skillMetadata && !!contractReadsArgs?.length
   })
 }
 
 function gatherSkillContractConfigParams(tokenDepsMap: TokenDepsMap, balanceOfAddress?: Address) {
-  if (!balanceOfAddress) return []
-  const contractConfigList = Object.entries(tokenDepsMap).map(([address, idsList]) => {
+  const depsEntriesList = Object.entries(tokenDepsMap)
+  if (!balanceOfAddress || !depsEntriesList.length) return []
+  const contractConfigList = depsEntriesList.map(([address, idsList]) => {
     if (!address) {
       devWarn(
         '[useBalanceOfBatchFromMetadata::gatherSkillContractConfigParams]::Dep address undefined! Check contracts map in constants.'
