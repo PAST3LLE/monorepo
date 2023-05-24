@@ -1,11 +1,10 @@
 import { Row } from '@past3lle/components'
-import { SupportedChains, useSkillForgeWindowSizeAtom } from '@past3lle/skillforge-web3'
+import { SupportedChains, useSkillForgeWindowSizeAtom, useSupportedChain } from '@past3lle/skillforge-web3'
 import { MEDIA_WIDTHS } from '@past3lle/theme'
 import { useWeb3Modal } from '@web3modal/react'
 // import { useWeb3Modal } from '@web3modal/react'
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
-import { useNetwork } from 'wagmi'
 
 import { SkillForgeAssetsMap as AssetsMap } from '../../../theme/types'
 import { useAssetsMap } from '../../../theme/utils'
@@ -14,7 +13,7 @@ import { MonospaceText } from '../Text'
 export function NetworkInfoButton() {
   const assetsMap = useAssetsMap()
 
-  const { chain } = useNetwork()
+  const chain = useSupportedChain()
 
   const chainName = chain?.name
   const chainLogo = _getChainLogo(chain?.id, assetsMap)
