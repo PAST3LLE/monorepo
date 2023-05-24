@@ -19,6 +19,7 @@
     "@past3lle/theme": "@past3lle/theme",
     "@past3lle/type": "@past3lle/types",
     "@past3lle/utils": "@past3lle/utils",
+    "@past3lle/skillforge-web3": "@past3lle/skillforge-web3",
     "@past3lle/skillforge-widget": "@past3lle/skillforge-widget",
     "react": "../../node_modules/react",
     "react-dom": "../../node_modules/react-dom",
@@ -31,6 +32,8 @@
     "buffer": "^5.5.0",
     "parcel": "^2.8.2",
     "process": "^0.11.10",
+    "punycode": "^1.4.1",
+    "querystring-es3": "^0.2.1",
     "typescript": "../../node_modules/typescript"
   }
 }

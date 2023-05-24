@@ -1,6 +1,5 @@
 import { ThemeChangerButton } from '@past3lle/skillforge-widget'
 import {
-  FontCssProvider,
   StaticGlobalCssProvider,
   ThemeProvider,
   createCustomTheme,
@@ -68,7 +67,6 @@ function AppControl() {
 
 root.render(
   <>
-    <FontCssProvider />
     <StaticCssProviders />
     <AppControl />
   </>
