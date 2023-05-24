@@ -11,7 +11,7 @@ import {
 } from '@past3lle/web3-modal'
 import React, { ReactNode, StrictMode } from 'react'
 
-import { SkillForgeW3StateUpdaters } from './state/Combined/updaters'
+import { SkillForgeBalancesUpdater, SkillForgeW3StateUpdaters, SkillForgeWindowSizeUpdater } from './state'
 import { SkillForgeW3AppConfig } from './types'
 
 // Utilities & Types & Contract Hooks
@@ -59,9 +59,32 @@ function ForgeW3Providers({ config, children }: ForgeW3CoreProvidersProps) {
   )
 }
 
+function ForgeW3BalancesAndWindowSizeProviders({ config, children }: ForgeW3CoreProvidersProps) {
+  return (
+    <StrictMode>
+      <PstlHooksProvider {...config.hooksProviderOptions}>
+        <SkillForgeWindowSizeUpdater />
+        <PstlW3Providers
+          config={{
+            ...config.web3,
+            appName: config.name
+          }}
+        >
+          <SkillForgeBalancesUpdater
+            contractAddressMap={config.contractAddresses}
+            idBase={config.skillOptions?.idBase}
+          />
+          {children}
+        </PstlW3Providers>
+      </PstlHooksProvider>
+    </StrictMode>
+  )
+}
+
 export {
   ForgeW3Providers,
   ForgeStateProviders,
+  ForgeW3BalancesAndWindowSizeProviders,
   useW3Connection,
   useW3Modal,
   useEthereumClient,

@@ -4,6 +4,7 @@ import { SkillForgeMetadataUpdater } from './Metadata/updaters/MetadataUpdater'
 import { SkillForgeWindowSizeUpdater } from './WindowSize/updaters'
 
 // State hooks
+export * from './Combined/updaters'
 export * from './Metadata'
 export * from './Balances'
 export * from './WindowSize'
