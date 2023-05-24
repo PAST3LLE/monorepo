@@ -1,7 +1,7 @@
 import { MEDIA_WIDTHS, MediaWidths } from '@past3lle/theme'
-import { devWarn } from '@past3lle/utils'
+import { devDebug, devWarn } from '@past3lle/utils'
 import debounce from 'lodash.debounce'
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useMemo } from 'react'
 import { useContext, useEffect, useState } from 'react'
 
 export interface WindowSizes {
@@ -41,11 +41,13 @@ function _getSize(): WindowSizes {
     height: window?.innerHeight || document?.documentElement?.clientHeight || document?.body?.clientHeight,
     get ar() {
       if (!IS_CLIENT || !this.width || !this.height) return undefined
-      return this.width / this.height
+      // round the number to 2 decimal places
+      return Math.round((this.width / (this.height + Number.EPSILON)) * 100) / 100
     }
   }
 }
 
+const nullContext = React.createContext(null)
 /**
  * @name useWindowSize
  * @description Listens to window resize events and updates via CONTEXT. This requires you to FIRST place the PstlHooksProvider somewhere in your app ABOVE your intended use of this hook
@@ -58,17 +60,18 @@ function _getSize(): WindowSizes {
       <App />
     </PstlHooksProvider>
   )
- * @returns void
+ * @returns WindowSizes | undefined - width, height, and aspect ratio of window (or undefined if not instantiated)
  */
 export function useWindowSize(): WindowSizes | undefined {
-  const context = useContext(WindowSizeContext)
+  useEffect(() => {
+    if (!window.__PSTL_HOOKS_CONTEXT?.WindowSizeContext) {
+      devWarn(
+        '[@past3lle/hooks]::useWindowSize::Warning! Cannot use <useWindowSize> hook outside of the PstlHooksProvider. Please add one to the root of your app, ABOVE where you are intending to use the hook. Hover over hook for example use-case. For now, calling window.clientWidth directly (not optimum).'
+      )
+    }
+  }, [])
 
-  const isInstantiated = !!context?.windowSizes
-  if (!isInstantiated) {
-    devWarn(
-      '[@past3lle/hooks]::useWindowSize::Error! Cannot use <useWindowSize> hook outside of the PstlHooksProvider. Please add one to the root of your app, ABOVE where you are intending to use the hook. Hover over hook for example use-case. For now, calling window.clientWidth directly (not optimum).'
-    )
-  }
+  const context = useContext(window.__PSTL_HOOKS_CONTEXT?.WindowSizeContext || nullContext)
 
   return context?.windowSizes || _getSize()
 }
@@ -85,14 +88,18 @@ export const useIsMediumMediaWidth = () => useWindowSmallerThan(MEDIA_WIDTHS.upT
 export const useIsLargeMediaWidth = () => useWindowSmallerThan(MEDIA_WIDTHS.upToLarge)
 export const useIsExtraLargeMediaWidth = () => useWindowSmallerThan(MEDIA_WIDTHS.upToExtraLarge)
 
+const WindowSizeContext = React.createContext<{ windowSizes: WindowSizes } | null>(null)
 /**
- * @name WindowSizeContext
+ * @name checkAndSetContextProvider
  * @description Context for useWindowSize hook. Checks if existing Context exists, otherwise creates one
  * @example see useWindowSize
- * @returns void
+ * @returns Context for useWindowSize hook (or undefined if already instantiated) - width, height, and aspect ratio of window
  */
-export const WindowSizeContext =
-  window?.__PSTL_HOOKS_CONTEXT?.WindowSizeContext || React.createContext<{ windowSizes: WindowSizes } | null>(null)
+export const checkAndSetContextProvider = () => {
+  if (!window?.__PSTL_HOOKS_CONTEXT?.WindowSizeContext) {
+    window.__PSTL_HOOKS_CONTEXT = { WindowSizeContext }
+  }
+}
 
 export interface PstlHooksProviderOptions {
   windowSizes?: {
@@ -125,5 +132,19 @@ export interface PstlHooksProviderOptions {
 export function PstlHooksProvider(props?: { children?: ReactNode } & PstlHooksProviderOptions) {
   const windowSizes = useWindowSizeSetup(props?.windowSizes)
 
-  return <WindowSizeContext.Provider value={{ windowSizes }}>{props?.children}</WindowSizeContext.Provider>
+  useEffect(checkAndSetContextProvider, [])
+
+  const Context = useMemo(() => {
+    // Check if context already exists, if not, create one
+    if (!window.__PSTL_HOOKS_CONTEXT?.WindowSizeContext?.Provider) {
+      devDebug('[@past3lle/hooks]::PstlHooksProvider::Context does not exist, creating new context')
+      return WindowSizeContext
+    } else {
+      const ContextProvider = window.__PSTL_HOOKS_CONTEXT.WindowSizeContext
+      devDebug('[@past3lle/hooks]::PstlHooksProvider::Context already exists, skipping creation')
+      return ContextProvider
+    }
+  }, [])
+
+  return <Context.Provider value={{ windowSizes }}>{props?.children}</Context.Provider>
 }
