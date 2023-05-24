@@ -20,7 +20,7 @@ export function useSkillForgeGetSkillAddress(props: FetchSkillAddressesProps) {
     address: collectionsManager,
     functionName: 'skillsContract',
     args: [BigNumber.from(collectionId)],
-    watch: true,
+    watch: false,
     scopeKey: WAGMI_SCOPE_KEYS.SKILLS_CONTRACT
   })
 }

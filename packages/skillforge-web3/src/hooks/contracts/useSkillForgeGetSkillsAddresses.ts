@@ -45,7 +45,7 @@ export function useSkillForgeGetSkillsAddresses(props: FetchSkillAddressesProps)
   return useContractReads({
     // reverse as we loop backwards
     contracts: contractsReadsArgs.reverse(),
-    watch: true,
+    watch: false,
     scopeKey: WAGMI_SCOPE_KEYS.SKILLS_CONTRACT,
     // Bug on the wagmi side is throwing (in prod) when `contracts` is an empty array
     // as it is attempting to destructure during `contracts.map(({ address <--- throws }))`

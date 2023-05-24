@@ -34,7 +34,7 @@ export function useSkillForgeGetBatchSkillMetadataUris({
   return {
     uris: useContractReads({
       contracts: contractsReadsArgs,
-      watch: true,
+      watch: false,
       scopeKey: WAGMI_SCOPE_KEYS.SKILLS_URI,
       enabled: contractsReadsArgs?.length > 0
     }),
