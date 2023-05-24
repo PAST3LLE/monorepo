@@ -1,18 +1,15 @@
 import { ColumnCenter, CookieBanner, PstlButton, Row } from '@past3lle/components'
-import { ForgeW3Providers, useW3Connection } from '@past3lle/skillforge-web3'
+import { useW3Connection } from '@past3lle/skillforge-web3'
 import * as React from 'react'
 
 import { PstlMain } from '../components/Layout'
-import { commonProps, contractProps } from '../config/skillforge-web3'
 
 const App = () => {
   return (
     <>
       <PstlMain>
-        <ForgeW3Providers config={{ name: 'test', web3: commonProps, ...contractProps }}>
-          <h1>Running skillforge-web3</h1>
-          <InnerApp />
-        </ForgeW3Providers>
+        <h1>Running skillforge-web3</h1>
+        <InnerApp />
       </PstlMain>
 
       <CookieBanner

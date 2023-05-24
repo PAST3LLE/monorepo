@@ -1,10 +1,9 @@
+import { ForgeW3Providers } from '@past3lle/skillforge-web3'
 import { ThemeChangerButton } from '@past3lle/skillforge-widget'
 import {
   StaticGlobalCssProvider,
   ThemeProvider,
   createCustomTheme,
-  getThemeColourByKeyCurried,
-  getThemeColoursCurried,
   urlToSimpleGenericImageSrcSet
 } from '@past3lle/theme'
 import * as React from 'react'
@@ -12,6 +11,7 @@ import 'react-app-polyfill/ie11'
 import * as ReactDOM from 'react-dom/client'
 
 import THEME_BUTTON_IMAGE from './assets/pixelated-shirt.png'
+import { commonProps, contractProps } from './config/skillforge-web3'
 import { PstlStaticGlobalCss } from './styles/global'
 import { App } from './views/App'
 
@@ -35,21 +35,60 @@ const appTheme = createCustomTheme({
     LIGHT: {}
   }
 })
+const IPFS_GATEWAY_URI_MAP = {
+  PINATA: 'https://gateway.pinata.cloud/ipfs',
+  INFURA: 'https://infura-ipfs.io/ipfs',
+  PASTELLE_INFURA: 'https://pastelle.infura-ipfs.io/ipfs',
+  DEFAULT_IPFS: 'https://ipfs.io/ipfs'
+}
+
+const GATEWAY_URIS: any[] = [
+  {
+    gateway: IPFS_GATEWAY_URI_MAP.PASTELLE_INFURA,
+    config: {
+      // init: INFURA_IPFS_HEADERS
+    }
+  },
+  {
+    gateway: IPFS_GATEWAY_URI_MAP.INFURA,
+    config: {
+      // init: INFURA_IPFS_HEADERS
+    }
+  },
+  {
+    gateway: IPFS_GATEWAY_URI_MAP.PINATA,
+    config: {
+      // init: PINATA_IPFS_HEADERS
+    }
+  },
+  {
+    gateway: IPFS_GATEWAY_URI_MAP.DEFAULT_IPFS
+  }
+]
 
 /**
  * Curried theme functions to get theme items
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const red1 = getThemeColourByKeyCurried(appTheme)('DARK', 'red1', 'red')
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const themeDark = getThemeColoursCurried(appTheme)('DARK')
 
 const container = document.getElementById('root') as HTMLElement
 const root = ReactDOM.createRoot(container)
 
 function AppControl() {
   return (
-    <>
+    <ForgeW3Providers
+      config={{
+        name: 'PASTELLE SHOP',
+        web3: commonProps,
+        contractAddresses: contractProps.contractAddresses,
+        metadataUris: contractProps.metadataUris,
+        skillOptions: {
+          idBase: 1000,
+          metadataFetchOptions: {
+            gatewayUris: GATEWAY_URIS
+          }
+        }
+      }}
+    >
       {/* We need a top level ThemeProvider from @past3lle to feed components proper default theme */}
       <ThemeProvider theme={appTheme} defaultMode="DARK">
         <App />
@@ -61,7 +100,7 @@ function AppControl() {
           bgImage={urlToSimpleGenericImageSrcSet(THEME_BUTTON_IMAGE)}
         />
       </ThemeProvider>
-    </>
+    </ForgeW3Providers>
   )
 }
 

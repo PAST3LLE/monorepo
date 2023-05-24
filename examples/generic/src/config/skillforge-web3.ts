@@ -1,4 +1,10 @@
-import { SkillForgeContractAddressMap, SkillForgeMetadataUriMap } from '@past3lle/skillforge-web3'
+import {
+  CONTRACTS_NETWORKS,
+  SkillForgeContractAddressMap,
+  SkillForgeMetadataUriMap,
+  SupportedChains
+} from '@past3lle/skillforge-web3'
+import { Address } from '@past3lle/types'
 import { PstlWeb3ModalProps } from '@past3lle/web3-modal'
 import { goerli } from 'wagmi/chains'
 
@@ -24,22 +30,31 @@ const DEFAULT_PROPS: PstlWeb3ModalProps = {
     }
   }
 }
+
+const CONTRACT_ADDRESSES_MAP: SkillForgeContractAddressMap = {
+  [SupportedChains.GOERLI]: {
+    collectionsManager: CONTRACTS_NETWORKS[SupportedChains.GOERLI].CollectionsManager.address as Address,
+    unlockManager: CONTRACTS_NETWORKS[SupportedChains.GOERLI].UnlockManager.address as Address
+  },
+  // TODO: fix - use proper mumbai addreses
+  [SupportedChains.POLYGON_MUMBAI]: {
+    collectionsManager: CONTRACTS_NETWORKS[SupportedChains.GOERLI].CollectionsManager.address as Address,
+    unlockManager: CONTRACTS_NETWORKS[SupportedChains.GOERLI].UnlockManager.address as Address
+  }
+}
+
+const METADATA_URIS_MAP: SkillForgeMetadataUriMap = {
+  [SupportedChains.GOERLI]: {
+    collectionsManager: 'https://pstlcollections.s3.eu-south-2.amazonaws.com/collections/{id}.json'
+  },
+  [SupportedChains.POLYGON_MUMBAI]: {
+    collectionsManager: 'https://pstlcollections.s3.eu-south-2.amazonaws.com/collections/{id}.json'
+  }
+}
+
 const DEFAULT_CONFIG_PROPS = {
-  metadataUris: {
-    [5]: { collectionsManager: 'www.google.com' },
-    [80001]: { collectionsManager: 'www.google.com' }
-  } as SkillForgeMetadataUriMap,
-  contractAddresses: {
-    [5]: {
-      collectionsManager: '0x9e8e103ed51A18E92c0938573f9b7fB4A393083a',
-      unlockManager: '0x0B397B88C96E22E63D6D9b802df62fe40bB1B544'
-    },
-    // TODO: change to mumbai addresses
-    [80001]: {
-      collectionsManager: '0x9e8e103ed51A18E92c0938573f9b7fB4A393083a',
-      unlockManager: '0x0B397B88C96E22E63D6D9b802df62fe40bB1B544'
-    }
-  } as SkillForgeContractAddressMap
+  metadataUris: METADATA_URIS_MAP,
+  contractAddresses: CONTRACT_ADDRESSES_MAP
 }
 
 export { WALLETCONNECT_TEST_ID as wcId, DEFAULT_PROPS as commonProps, DEFAULT_CONFIG_PROPS as contractProps }

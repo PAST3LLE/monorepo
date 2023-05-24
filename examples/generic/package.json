@@ -8,6 +8,12 @@
     "build": "parcel build index.html",
     "serve": "serve -s dist"
   },
+  "resolutions": {
+    "@web3modal/ethereum": ">=2.2.0",
+    "@web3modal/react": ">=2.2.0",
+    "**/*/wagmi": "0.12.1",
+    "**/*/@wagmi/core": "0.10.1"
+  },
   "dependencies": {
     "react-app-polyfill": "^3.0.0"
   },
@@ -23,7 +29,8 @@
     "@past3lle/skillforge-widget": "@past3lle/skillforge-widget",
     "react": "../../node_modules/react",
     "react-dom": "../../node_modules/react-dom",
-    "scheduler/tracing": "../../node_modules/scheduler/tracing-profiling"
+    "scheduler/tracing": "../../node_modules/scheduler/tracing-profiling",
+    "wagmi": "../../node_modules/wagmi"
   },
   "devDependencies": {
     "@babel/core": "../../node_modules/@babel/core",
