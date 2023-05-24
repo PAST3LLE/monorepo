@@ -1,10 +1,16 @@
-import { useNetwork } from 'wagmi'
+import { devDebug } from '@past3lle/utils'
+import { usePstlConnection } from '@past3lle/web3-modal'
+import { goerli } from 'wagmi'
 
-import { SupportedChains } from '../types/chains'
+export function useSupportedChain() {
+  const [, , { chain: rawChain }] = usePstlConnection()
+  const chain = rawChain || goerli
+
+  !chain && devDebug('[useSupportedChainId]::Chain ID undefined. Defaulting to GOERLI [5]')
+
+  return chain
+}
 
 export function useSupportedChainId() {
-  const { chain } = useNetwork()
-  const chainId = (chain?.id as SupportedChains) || SupportedChains.GOERLI
-
-  return chainId
+  return useSupportedChain().id
 }
