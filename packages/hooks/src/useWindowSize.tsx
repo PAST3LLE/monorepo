@@ -85,7 +85,14 @@ export const useIsMediumMediaWidth = () => useWindowSmallerThan(MEDIA_WIDTHS.upT
 export const useIsLargeMediaWidth = () => useWindowSmallerThan(MEDIA_WIDTHS.upToLarge)
 export const useIsExtraLargeMediaWidth = () => useWindowSmallerThan(MEDIA_WIDTHS.upToExtraLarge)
 
-export const WindowSizeContext = React.createContext<{ windowSizes: WindowSizes } | null>(null)
+/**
+ * @name WindowSizeContext
+ * @description Context for useWindowSize hook. Checks if existing Context exists, otherwise creates one
+ * @example see useWindowSize
+ * @returns void
+ */
+export const WindowSizeContext =
+  window?.__PSTL_HOOKS_CONTEXT?.WindowSizeContext || React.createContext<{ windowSizes: WindowSizes } | null>(null)
 
 export interface PstlHooksProviderOptions {
   windowSizes?: {
@@ -105,8 +112,8 @@ export interface PstlHooksProviderOptions {
     }
   }
   // EXAMPLE USE
- // somewhere in app architecture
- // e.g render
+  // somewhere in app architecture
+  // e.g render
   root.render(
     // Provider goes here, hook used in "App", below
     <PstlHooksProvider>
