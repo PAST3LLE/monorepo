@@ -89,7 +89,7 @@ function _overrideMetadataObject(metadata: SkillMetadata, address: Address) {
   return {
     ...metadata,
     properties: {
-      ...metadata.properties,
+      ...metadata?.properties,
       id: newId
     }
   }
