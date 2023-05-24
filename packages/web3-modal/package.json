@@ -89,6 +89,7 @@
     "wagmi": "0.12.1"
   },
   "devDependencies": {
+    "browserify-zlib": "^0.2.0",
     "json-loader": "^0.5.7",
     "react-cosmos": "^5.7.2"
   },

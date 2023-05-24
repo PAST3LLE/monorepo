@@ -34,7 +34,7 @@ function ModalWithoutThemeProvider({
   zIndex = Z_INDICES.PSTL,
   ...restModalProps
 }: Omit<PstlWeb3ConnectionModalProps, 'theme'>) {
-  const [connectors, { connect, openW3Modal }, { address, chainId, currentConnector }] = useConnection()
+  const [connectors, { connect, openW3Modal }, { address, chain, currentConnector }] = useConnection()
   const { isOpen, close } = usePstlWeb3Modal()
 
   // flag for setting whether or not web3auth modal has mounted as it takes a few seconds first time around
@@ -58,7 +58,7 @@ function ModalWithoutThemeProvider({
             setW3aModalLoading
           },
           {
-            chainId,
+            chainId: chain?.id,
             address,
             isW3aModalMounted: w3aModalMounted,
             closeOnConnect: closeModalOnConnect,
@@ -84,7 +84,7 @@ function ModalWithoutThemeProvider({
     [
       address,
       buttonProps,
-      chainId,
+      chain,
       closeModalOnConnect,
       connectors,
       currentConnector,
