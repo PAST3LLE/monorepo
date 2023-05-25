@@ -8,7 +8,7 @@ import {
   SkillLockStatus,
   SkillMetadata,
   SkillRarity,
-  getLockStatus,
+  useDeriveSkillState,
   useSkillForgeBalancesReadAtom,
   useSkillForgeMetadataMapReadAtom
 } from '@past3lle/skillforge-web3'
@@ -36,7 +36,7 @@ export function ActiveSkillPanel() {
   const activeSkill = activeSkillState?.[0]
   const setSkillState = activeSkillState?.[1]
 
-  const lockStatus = useMemo(() => getLockStatus(activeSkill, balances), [activeSkill, balances])
+  const lockStatus = useDeriveSkillState(activeSkill)
   const isLocked = lockStatus === SkillLockStatus.LOCKED
   const isOwned = lockStatus === SkillLockStatus.OWNED
 
