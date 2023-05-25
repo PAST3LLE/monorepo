@@ -5,7 +5,7 @@ import { SkillForgeBalances } from '../state/Balances'
 import { SkillId, SkillMetadata, SkillRarity } from '../types'
 import { ipfsToImageUri } from './ipfs'
 
-export const enum SkillLockStatus {
+export enum SkillLockStatus {
   LOCKED = 'LOCKED',
   UNLOCKED = 'UNLOCKABLE',
   OWNED = 'OWNED'
