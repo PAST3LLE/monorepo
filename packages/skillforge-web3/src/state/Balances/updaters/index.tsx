@@ -3,7 +3,7 @@ import { devWarn } from '@past3lle/utils'
 import { useEffect } from 'react'
 import { Address, useAccount } from 'wagmi'
 
-import { SkillForgeBalances, useSkillForgeBalancesAtom } from '..'
+import { SkillForgeBalances, useSkillForgeBalancesAtom, useSkillForgeResetBalancesAtom } from '..'
 import { useRefetchOnAddress, useSkillForgeGetSkillsAddresses, useSkillForgeSkillsBalanceOfBatch } from '../../../hooks'
 import { getSkillId } from '../../../utils'
 import { SkillForgeMetadataState, useSkillForgeMetadataReadAtom } from '../../Metadata'
@@ -20,8 +20,9 @@ export function SkillForgeBalancesUpdater({
 }: SkillForgeBalancesProps) {
   const [metadata] = useSkillForgeMetadataReadAtom()
   const [, updateSkillForgeBalances] = useSkillForgeBalancesAtom()
+  const [, resetUserBalances] = useSkillForgeResetBalancesAtom()
 
-  const { address = '0x0' } = useAccount()
+  const { address } = useAccount()
 
   const { data: skills = [] } = useSkillForgeGetSkillsAddresses({ loadAmount, contractAddressMap })
   const { data: balancesBatch, refetch: refetchBalances } = useSkillForgeSkillsBalanceOfBatch(
@@ -39,28 +40,39 @@ export function SkillForgeBalancesUpdater({
     const derivedData: BigNumber[][] = _getEnvBalances(balancesBatch as BigNumber[][], metadata)
 
     if (metadataLoaded) {
-      const balances = reduceBalanceDataToMap(derivedData, skills as Address[], idBase)
+      if (!address) {
+        // if address is undefined, reset balances
+        resetUserBalances({})
+      } else {
+        const balances = reduceBalanceDataToMap(derivedData, skills as Address[], address, idBase)
 
-      updateSkillForgeBalances((state) => ({
-        balances: {
-          ...state.balances,
-          ...balances
-        }
-      }))
+        updateSkillForgeBalances((state) => ({
+          balances: {
+            ...state.balances,
+            ...balances
+          }
+        }))
+      }
     }
-  }, [balancesBatch, metadata, updateSkillForgeBalances])
+  }, [address, balancesBatch, metadata, updateSkillForgeBalances])
 
   return null
 }
 
-function reduceBalanceDataToMap(data: readonly BigNumber[][], skills: Address[], idBase?: number) {
+function reduceBalanceDataToMap(
+  data: readonly BigNumber[][],
+  skills: Address[],
+  userAddress?: Address,
+  idBase?: number
+) {
   if (!data) return {}
 
   return data.reduce((oAcc, bnData, collIdx) => {
     const obj = (bnData || []).reduce((acc, nextBn, idx) => {
       const id = skills?.[collIdx]
       if (!!id) {
-        acc[`${id}-${getSkillId(idx, idBase)}`] = nextBn.toString()
+        // return "0" if userAddress is undefined, else return real balance
+        acc[`${id}-${getSkillId(idx, idBase)}`] = userAddress ? nextBn.toString() : '0'
       }
 
       return acc

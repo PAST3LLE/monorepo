@@ -1,5 +1,6 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { devWarn } from '@past3lle/utils'
+import { Address } from 'wagmi'
 
 import { SkillForgeBalances } from '../state/Balances'
 import { SkillId, SkillMetadata, SkillRarity } from '../types'
@@ -11,28 +12,34 @@ export enum SkillLockStatus {
   OWNED = 'OWNED'
 }
 
-export function getLockStatus(skill: SkillMetadata | undefined, balances?: SkillForgeBalances): SkillLockStatus {
-  if (!skill) return SkillLockStatus.LOCKED
+export function getLockStatus(
+  skill: SkillMetadata | undefined,
+  balances?: SkillForgeBalances,
+  address?: Address
+): SkillLockStatus {
+  if (!skill || !balances || !address) return SkillLockStatus.LOCKED
 
-  const ownsSkill = !BigNumber.from(balances?.[skill.properties.id] || 0).isZero()
-  if (ownsSkill) return SkillLockStatus.OWNED
+  const skillBalance = balances?.[skill.properties.id]
+  if (!!skillBalance && BigNumber.from(skillBalance).gt(0)) {
+    return SkillLockStatus.OWNED
+  }
 
   const deps = skill.properties.dependencies
 
   let hasDeps = true
   devWarn(skill.name, ' requires skills', deps.join(' '), 'to unlock. Checking...')
   for (let i = 0; i < deps.length; i++) {
-    const tokenId: SkillId = `${deps[i].token}-${deps[i].id.toString()}`
-    if (!balances || !balances[tokenId] || BigNumber.from(balances[tokenId]).isZero()) {
-      devWarn('You are missing skillId:', deps[i], '// Skill LOCKED.')
+    const depId: SkillId = `${deps[i].token}-${deps[i].id.toString()}`
+    if (!balances[depId] || BigNumber.from(balances[depId]).isZero()) {
+      devWarn('You are missing dependency with ID:', deps[i], '. Skill LOCKED.')
       hasDeps = false
       break
     }
 
-    devWarn('Has skillId', deps[i], '? YES')
+    devWarn('Success! User owns dependency with ID:', deps[i])
   }
   if (hasDeps) {
-    devWarn('ALL skills owned! Unlocking skill...')
+    devWarn('ALL depdendencies owned! Skill unlockable.')
     return SkillLockStatus.UNLOCKED
   } else {
     return SkillLockStatus.LOCKED

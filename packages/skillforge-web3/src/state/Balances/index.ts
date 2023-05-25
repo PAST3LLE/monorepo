@@ -20,7 +20,20 @@ const userBalancesWriteAtom = atom<null, SkillForgeBalancesState['balances']>(nu
   return set(userAtom, { balances: { ...state.balances, ...update } })
 })
 
+const userBalancesResetAtom = atom<null, SkillForgeBalancesState['balances']>(null, (get, set) => {
+  const state = get(userAtom)
+  // reduce state.balances and make all values 0
+  return set(userAtom, {
+    balances: Object.keys(state.balances).reduce((acc, next) => {
+      acc[next as SkillId] = '0'
+      return acc
+    }, {} as SkillForgeBalances)
+  })
+})
+
 export const useSkillForgeBalancesReadAtom = () => useAtom(userBalancesReadAtom)
 export const useSkillForgeBalancesWriteAtom = () => useAtom(userBalancesWriteAtom)
 
 export const useSkillForgeBalancesAtom = () => useAtom(userAtom)
+
+export const useSkillForgeResetBalancesAtom = () => useAtom(userBalancesResetAtom)

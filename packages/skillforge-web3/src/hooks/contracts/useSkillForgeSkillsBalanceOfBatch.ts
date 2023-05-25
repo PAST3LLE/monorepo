@@ -11,11 +11,11 @@ import { WAGMI_SCOPE_KEYS } from '../constants'
 export function useSkillForgeSkillsBalanceOfBatch(
   skills: Address[] | undefined = [],
   metadata: SkillForgeMetadataState['metadata'],
-  address: Address,
+  address?: Address,
   idBase?: number
 ) {
   const contractReadsArgs = useMemo(
-    () => gatherSkillContractConfigParams(skills as Address[], metadata, address, idBase),
+    () => (address ? gatherSkillContractConfigParams(skills as Address[], metadata, address, idBase) : []),
     [skills, metadata, address, idBase]
   )
 
