@@ -80,6 +80,29 @@ export type PastelleThemeExtension = Partial<ThemeContentPartsRequired> & {
   darkModeSvg: string
   darkModeFilter: string
   darkModeLogoFilter: string
+  // rarity colours
+  rarity: {
+    empty: {
+      backgroundColor: string
+      boxShadowColor: string
+    }
+    common: {
+      backgroundColor: string
+      boxShadowColor: string
+    }
+    rare: {
+      backgroundColor: string
+      boxShadowColor: string
+    }
+    legendary: {
+      backgroundColor: string
+      boxShadowColor: string
+    }
+    epic: {
+      backgroundColor: string
+      boxShadowColor: string
+    }
+  }
 }
 const PastelleTheme: ThemeByModes<PastelleThemeExtension> = {
   modes: {
@@ -172,6 +195,23 @@ const PastelleTheme: ThemeByModes<PastelleThemeExtension> = {
           colour: 'transparent'
         },
         hoverColour: '#4a002f'
+      },
+      // rarity colours
+      rarity: {
+        empty: {
+          backgroundColor: 'transparent',
+          boxShadowColor: '0px 0px transparent'
+        },
+        common: {
+          backgroundColor: '#969696b3',
+          boxShadowColor: '12px 2px #969696b3'
+        },
+        rare: { backgroundColor: '#6495ed', boxShadowColor: '12px 2px #6495ed' },
+        legendary: {
+          backgroundColor: '#ab64ffbd',
+          boxShadowColor: '12px 8px #8000809e'
+        },
+        epic: { backgroundColor: '#ffb467', boxShadowColor: '12px 8px #ffb467' }
       }
     },
     DARK: {
