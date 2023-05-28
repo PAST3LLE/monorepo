@@ -17,29 +17,23 @@ export function getLockStatus(
   balances?: SkillForgeBalances,
   address?: Address
 ): SkillLockStatus {
-  if (!skill || !balances || !address) return SkillLockStatus.LOCKED
+  const deps = skill?.properties.dependencies || []
 
-  const skillBalance = balances?.[skill.properties.id]
-  if (!!skillBalance && BigNumber.from(skillBalance).gt(0)) {
-    return SkillLockStatus.OWNED
-  }
+  if (!skill || (!!deps?.length && !address) || (!!deps?.length && !balances)) return SkillLockStatus.LOCKED
+  if (BigNumber.from(balances?.[skill.properties.id] || 0).gt(0)) return SkillLockStatus.OWNED
 
-  const deps = skill.properties.dependencies
-
-  let hasDeps = true
   devWarn(skill.name, ' requires skills', deps.join(' '), 'to unlock. Checking...')
-  for (let i = 0; i < deps.length; i++) {
-    const depId: SkillId = `${deps[i].token}-${deps[i].id.toString()}`
-    if (!balances[depId] || BigNumber.from(balances[depId]).isZero()) {
-      devWarn('You are missing dependency with ID:', deps[i], '. Skill LOCKED.')
-      hasDeps = false
-      break
+  const missingDeps = deps.some((dep) => {
+    const depId: SkillId = `${dep.token}-${dep.id.toString()}`
+    if (!balances?.[depId] || BigNumber.from(balances[depId]).isZero()) {
+      devWarn('User missing skills with dependency ID:', dep, '. Skill LOCKED.')
+      return true
     }
+    return false
+  })
 
-    devWarn('Success! User owns dependency with ID:', deps[i])
-  }
-  if (hasDeps) {
-    devWarn('ALL depdendencies owned! Skill unlockable.')
+  if (!missingDeps) {
+    devWarn('All skill depdendencies owned! Unlockable.')
     return SkillLockStatus.UNLOCKED
   } else {
     return SkillLockStatus.LOCKED
