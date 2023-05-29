@@ -3425,10 +3425,10 @@
   resolved "https://registry.yarnpkg.com/@past3lle/skilltree-contracts/-/skilltree-contracts-0.0.1-rc.6.tgz#cd535ba476698570d0499fd09c4752e0347fdc02"
   integrity sha512-FlqUQ7qdWS/ClPn7TvW8Ek19nUI3u+p+dSgT431SDLt2awgtYaH9CWPd8/krlDZs20FlHn7dr3x2Axax72ca0A==
 
-"@past3lle/skilltree-contracts@^0.0.1-rc.7":
-  version "0.0.1-rc.7"
-  resolved "https://registry.yarnpkg.com/@past3lle/skilltree-contracts/-/skilltree-contracts-0.0.1-rc.7.tgz#53312e41c0ec7345bf6e05795cbf11ec6649ec25"
-  integrity sha512-g8sKSx3S65pST12dNMEK3RmO0l63dBCVmEGuj2EkCA+ifZEeqMjidgI5iO0Bf9qXjrXiC+vp7OLfenMOm5x2NQ==
+"@past3lle/skilltree-contracts@^0.0.1-rc.9":
+  version "0.0.1-rc.9"
+  resolved "https://registry.yarnpkg.com/@past3lle/skilltree-contracts/-/skilltree-contracts-0.0.1-rc.9.tgz#1a260a3296ae5db0dea4aa99790a030048410fe7"
+  integrity sha512-Oa0jTe9oXSXDxxYbXMwYSEyuyykvpZGCBXtTrhhu3ER8JShf+mGRANtLILXpThxdqyw+uFMnFpbgYQD6tmpoaw==
   dependencies:
     "@types/jest" "^29.5.1"
     hardhat-tracer "^2.3.2"
