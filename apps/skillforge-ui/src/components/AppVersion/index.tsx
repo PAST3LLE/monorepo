@@ -72,12 +72,12 @@ export function AppVersion() {
           </a>
         </Row>
         <Row>
-          <strong>UnlockManger:</strong>{' '}
+          <strong>MergeManager:</strong>{' '}
           <a
-            href="https://github.com/PAST3LLE/skilltree-contracts/tree/main/contracts/UnlockManager.sol"
+            href="https://github.com/PAST3LLE/skilltree-contracts/tree/main/contracts/MergeManager.sol"
             target="_blank noreferrer"
           >
-            {CONTRACTS_NETWORKS[SupportedChains.GOERLI].UnlockManager.address as Address}
+            {CONTRACTS_NETWORKS[SupportedChains.GOERLI].MergeManager.address as Address}
           </a>
         </Row>
       </Column>
