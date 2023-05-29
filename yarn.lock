@@ -3420,10 +3420,18 @@
     node-addon-api "^3.2.1"
     node-gyp-build "^4.3.0"
 
-"@past3lle/skilltree-contracts@^0.0.1-rc.5", "@past3lle/skilltree-contracts@^0.0.1-rc.6":
+"@past3lle/skilltree-contracts@^0.0.1-rc.5":
   version "0.0.1-rc.6"
   resolved "https://registry.yarnpkg.com/@past3lle/skilltree-contracts/-/skilltree-contracts-0.0.1-rc.6.tgz#cd535ba476698570d0499fd09c4752e0347fdc02"
   integrity sha512-FlqUQ7qdWS/ClPn7TvW8Ek19nUI3u+p+dSgT431SDLt2awgtYaH9CWPd8/krlDZs20FlHn7dr3x2Axax72ca0A==
+
+"@past3lle/skilltree-contracts@^0.0.1-rc.7":
+  version "0.0.1-rc.7"
+  resolved "https://registry.yarnpkg.com/@past3lle/skilltree-contracts/-/skilltree-contracts-0.0.1-rc.7.tgz#53312e41c0ec7345bf6e05795cbf11ec6649ec25"
+  integrity sha512-g8sKSx3S65pST12dNMEK3RmO0l63dBCVmEGuj2EkCA+ifZEeqMjidgI5iO0Bf9qXjrXiC+vp7OLfenMOm5x2NQ==
+  dependencies:
+    "@types/jest" "^29.5.1"
+    hardhat-tracer "^2.3.2"
 
 "@pedrouid/environment@^1.0.1":
   version "1.0.1"
@@ -4693,7 +4701,7 @@
   dependencies:
     "@types/istanbul-lib-report" "*"
 
-"@types/jest@*", "@types/jest@^29.2.5", "@types/jest@^29.4.0":
+"@types/jest@*", "@types/jest@^29.2.5", "@types/jest@^29.4.0", "@types/jest@^29.5.1":
   version "29.5.1"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-29.5.1.tgz#83c818aa9a87da27d6da85d3378e5a34d2f31a47"
   integrity sha512-tEuVcHrpaixS36w7hpsfLBLpjtMRJUE09/MHXn923LOVojDwyC14cWcfc0rDs0VEfUyYmt/+iX1kxxp+gZMcaQ==
@@ -10037,7 +10045,7 @@ ethereum-cryptography@^2.0.0:
     "@scure/bip32" "1.3.0"
     "@scure/bip39" "1.2.0"
 
-ethers@^5.7.2:
+ethers@^5.6.1, ethers@^5.7.2:
   version "5.7.2"
   resolved "https://registry.yarnpkg.com/ethers/-/ethers-5.7.2.tgz#3a7deeabbb8c030d4126b24f84e525466145872e"
   integrity sha512-wswUsmWo1aOK8rR7DIKiWSw9DbLWe6x98Jrn8wcTflTVvaXhAMaB5zGAXy0GYQEQp9iO1iSHWVyARQm11zUtyg==
@@ -11334,6 +11342,14 @@ hard-rejection@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/hard-rejection/-/hard-rejection-2.1.0.tgz#1c6eda5c1685c63942766d79bb40ae773cecd883"
   integrity sha512-VIZB+ibDhx7ObhAe7OVtoEbuP4h/MuOTHJ+J8h/eBXotJYl0fBgR72xDFCKgIh22OJZIOVNxBMWuhAr10r8HdA==
+
+hardhat-tracer@^2.3.2:
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/hardhat-tracer/-/hardhat-tracer-2.3.2.tgz#c972a82974d4db0fbe99d9b809b9c462a79d36a6"
+  integrity sha512-Sw//tVU/Qyng5rKULONIuYpr4yEobjfh5seIaRT8gYXKDo22eUllTMlJEV2ejsZ92X2x+PSWy1/H27aejV31/w==
+  dependencies:
+    chalk "^4.1.2"
+    ethers "^5.6.1"
 
 harmony-reflect@^1.4.6:
   version "1.6.2"
