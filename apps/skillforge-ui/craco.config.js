@@ -20,8 +20,7 @@ module.exports = {
         stream: require.resolve("stream-browserify"),
         http: require.resolve("stream-http"),
         os: require.resolve("os-browserify"),
-        url: require.resolve("url"),
-        zlib: require.resolve("browserify-zlib"),
+        url: require.resolve("url")
       });
       config.resolve.fallback = fallback;
       config.plugins = (config.plugins || []).concat([
