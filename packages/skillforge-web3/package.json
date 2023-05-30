@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/skillforge-web3",
   "sideEffects": false,
-  "version": "0.0.47",
+  "version": "0.0.48",
   "description": "PAST3LLE SKILLFORGE web3 hooks and tings",
   "main": "dist/esm/index.js",
   "typings": "dist/types/index.d.ts",
@@ -115,7 +115,7 @@
     "@past3lle/hooks": "^0.0.31",
     "@past3lle/skilltree-contracts": "^0.0.1-rc.10",
     "@past3lle/utils": "^0.0.20",
-    "@past3lle/web3-modal": "^0.0.16",
+    "@past3lle/web3-modal": "^0.0.17",
     "jotai": "^1.13.0",
     "jotai-devtools": "0.1.0",
     "wagmi": "0.12.1"
