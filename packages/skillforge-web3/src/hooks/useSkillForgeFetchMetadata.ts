@@ -31,15 +31,14 @@ export function useSkillForgeFetchMetadata({
 
   return useMemo(async (): Promise<{ ids: number[]; skillsMetadata: SkillMetadata[] }[]> => {
     // reverse array as we loop down
-    const filteredSkillErc1155MetadataUris = skillErc1155MetadataUris.filter(Boolean) as string[]
-    if (!filteredSkillErc1155MetadataUris.length || !metadataUris?.collectionsManager)
-      return [{ ids: [], skillsMetadata: [] }]
+    if (!skillErc1155MetadataUris.length || !metadataUris?.collectionsManager) return [{ ids: [], skillsMetadata: [] }]
 
     const promisedCollectionMetadata = []
-    for (let i = 1; i < filteredSkillErc1155MetadataUris.length + 1; i++) {
+    for (let i = 1; i < skillErc1155MetadataUris.length + 1; i++) {
       promisedCollectionMetadata.push((await fetch(metadataUris.collectionsManager + i + '.json')).json())
     }
     const collectionMetadata: CollectionMetadata[] = await Promise.all(promisedCollectionMetadata)
+    console.log('🚀 ~ file: useSkillForgeFetchMetadata.ts:41 ~ returnuseMemo ~ collectionMetadata:', collectionMetadata)
 
     const allMetadata = []
     for (let i = 0; i < collectionMetadata.length; i++) {
@@ -49,7 +48,7 @@ export function useSkillForgeFetchMetadata({
       for (let j = 0; j < limit; j++) {
         promisedSkillsMetadata.push(
           chainFetchIpfsUri(
-            filteredSkillErc1155MetadataUris[i].replace('0.json', ids[j] + '.json'),
+            skillErc1155MetadataUris[i].replace('0.json', ids[j] + '.json'),
             ...(metadataFetchOptions?.gatewayUris || [])
           ).then((res) => res?.json())
         )
@@ -57,7 +56,7 @@ export function useSkillForgeFetchMetadata({
       allMetadata.push({
         ids: ids || [],
         skillsMetadata: (await Promise.all(promisedSkillsMetadata)).map((meta) =>
-          _overrideMetadataObject(meta, skill1155Addresses[i] as Address)
+          _overrideMetadataObject(meta, skill1155Addresses[i])
         )
       })
     }
