@@ -12,7 +12,10 @@ export function SkillForgeW3StateUpdaters(props: SkillForgeW3AppConfig & { child
     // @ts-ignore
     <AtomsDevtools appName={props.name}>
       {/* UPDATERS */}
-      <SkillForgeUserConfigUpdater chains={props.web3.chains} />
+      <SkillForgeUserConfigUpdater
+        chains={props.web3.chains}
+        metadataFetchOptions={props.skillOptions?.metadataFetchOptions}
+      />
       <SkillForgeMetadataUpdater
         metadataUriMap={props.metadataUris}
         contractAddressMap={props.contractAddresses}

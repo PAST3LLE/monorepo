@@ -2,8 +2,8 @@ import { Address } from '@past3lle/types'
 import { useMemo } from 'react'
 
 import { SkillForgeMetadataUpdaterProps } from '../state/Metadata/updaters/MetadataUpdater'
-import { SkillMetadata } from '../types'
-import { chainFetchIpfsUri, get64PaddedSkillId } from '../utils'
+import { CollectionMetadata, SkillMetadata } from '../types'
+import { chainFetchIpfsUri } from '../utils'
 import { useSkillForgeGetBatchSkillMetadataUris } from './contracts/useSkillForgeGetBatchSkillMetadataUris'
 import { useRefetchOnAddress } from './useRefetchOnAddress'
 import { useSupportedChainId } from './useSkillForgeSupportedChainId'
@@ -11,7 +11,6 @@ import { useSupportedChainId } from './useSkillForgeSupportedChainId'
 export function useSkillForgeFetchMetadata({
   contractAddressMap,
   metadataUriMap,
-  idBase,
   loadAmount = 3,
   metadataFetchOptions
 }: SkillForgeMetadataUpdaterProps) {
@@ -30,36 +29,33 @@ export function useSkillForgeFetchMetadata({
 
   useRefetchOnAddress(refetchSkills)
 
-  return useMemo(async (): Promise<{ size: number; skillsMetadata: SkillMetadata[] }[]> => {
+  return useMemo(async (): Promise<{ ids: number[]; skillsMetadata: SkillMetadata[] }[]> => {
     // reverse array as we loop down
     const filteredSkillErc1155MetadataUris = skillErc1155MetadataUris.filter(Boolean) as string[]
     if (!filteredSkillErc1155MetadataUris.length || !metadataUris?.collectionsManager)
-      return [{ size: 0, skillsMetadata: [] }]
+      return [{ ids: [], skillsMetadata: [] }]
 
     const promisedCollectionMetadata = []
     for (let i = 1; i < filteredSkillErc1155MetadataUris.length + 1; i++) {
-      promisedCollectionMetadata.push(
-        (await fetch(metadataUris.collectionsManager.replace('{id}', i.toString()))).json()
-      )
+      promisedCollectionMetadata.push((await fetch(metadataUris.collectionsManager + i + '.json')).json())
     }
-    const collectionMetadata = await Promise.all(promisedCollectionMetadata)
+    const collectionMetadata: CollectionMetadata[] = await Promise.all(promisedCollectionMetadata)
 
     const allMetadata = []
     for (let i = 0; i < collectionMetadata.length; i++) {
-      const size: number = collectionMetadata[i].properties.size
+      const { ids } = collectionMetadata[i].properties
+      const limit = ids?.length || 0
       const promisedSkillsMetadata: Promise<SkillMetadata>[] = []
-      for (let j = 0; j < size; j++) {
-        const skillId = get64PaddedSkillId(j, idBase)
-
+      for (let j = 0; j < limit; j++) {
         promisedSkillsMetadata.push(
           chainFetchIpfsUri(
-            filteredSkillErc1155MetadataUris[i].replace('{id}', skillId),
+            filteredSkillErc1155MetadataUris[i].replace('0.json', ids[j] + '.json'),
             ...(metadataFetchOptions?.gatewayUris || [])
           ).then((res) => res?.json())
         )
       }
       allMetadata.push({
-        size,
+        ids: ids || [],
         skillsMetadata: (await Promise.all(promisedSkillsMetadata)).map((meta) =>
           _overrideMetadataObject(meta, skill1155Addresses[i] as Address)
         )
@@ -85,12 +81,6 @@ export function deriveMetadataId(metadata: SkillMetadata, address: Address): `${
 
 function _overrideMetadataObject(metadata: SkillMetadata, address: Address) {
   const newId = metadata?.properties?.id ? deriveMetadataId(metadata, address) : '0x-0000'
-
-  return {
-    ...metadata,
-    properties: {
-      ...metadata?.properties,
-      id: newId
-    }
-  }
+  metadata.properties.id = newId
+  return metadata
 }

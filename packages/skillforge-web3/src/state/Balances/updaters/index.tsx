@@ -5,7 +5,6 @@ import { Address, useAccount } from 'wagmi'
 
 import { SkillForgeBalances, useSkillForgeBalancesAtom, useSkillForgeResetBalancesAtom } from '..'
 import { useRefetchOnAddress, useSkillForgeGetSkillsAddresses, useSkillForgeSkillsBalanceOfBatch } from '../../../hooks'
-import { getSkillId } from '../../../utils'
 import { SkillForgeMetadataState, useSkillForgeMetadataReadAtom } from '../../Metadata'
 import { SkillForgeMetadataUpdaterProps } from '../../Metadata/updaters/MetadataUpdater'
 
@@ -35,7 +34,7 @@ export function SkillForgeBalancesUpdater({
   useRefetchOnAddress(refetchBalances)
 
   useEffect(() => {
-    const metadataLoaded = !!metadata?.[0]?.size
+    const metadataLoaded = !!metadata?.[0]?.ids?.length
 
     const derivedData: BigNumber[][] = _getEnvBalances(balancesBatch as BigNumber[][], metadata)
 
@@ -44,7 +43,7 @@ export function SkillForgeBalancesUpdater({
         // if address is undefined, reset balances
         resetUserBalances({})
       } else {
-        const balances = reduceBalanceDataToMap(derivedData, skills as Address[], address, idBase)
+        const balances = reduceBalanceDataToMap(derivedData, skills as Address[], metadata, address)
 
         updateSkillForgeBalances((state) => ({
           balances: {
@@ -61,18 +60,19 @@ export function SkillForgeBalancesUpdater({
 
 function reduceBalanceDataToMap(
   data: readonly BigNumber[][],
-  skills: Address[],
-  userAddress?: Address,
-  idBase?: number
+  collectionsAddresses: Address[],
+  metadata: SkillForgeMetadataState['metadata'],
+  userAddress?: Address
 ) {
   if (!data) return {}
 
-  return data.reduce((oAcc, bnData, collIdx) => {
-    const obj = (bnData || []).reduce((acc, nextBn, idx) => {
-      const id = skills?.[collIdx]
-      if (!!id) {
+  return data.reduce((oAcc, bnData, collectionIdx) => {
+    const obj = (bnData || []).reduce((acc, nextBn, i) => {
+      const collectionAddress = collectionsAddresses?.[collectionIdx]
+      const skillId = metadata[collectionIdx].ids[i]
+      if (!!collectionAddress) {
         // return "0" if userAddress is undefined, else return real balance
-        acc[`${id}-${getSkillId(idx, idBase)}`] = userAddress ? nextBn.toString() : '0'
+        acc[`${collectionAddress}-${skillId}`] = userAddress ? nextBn.toString() : '0'
       }
 
       return acc
@@ -89,7 +89,7 @@ function _getEnvBalances(realBalances: BigNumber[][], metadata: SkillForgeMetada
   } else {
     devWarn('[UserBalanceUpdater]::USING MOCK METADATA')
     return metadata.map((collection) => {
-      return Array.from({ length: collection.size }).map(() => BigNumber.from(Math.round(Math.random())))
+      return Array.from({ length: collection?.ids?.length || 0 }).map(() => BigNumber.from(Math.round(Math.random())))
     })
   }
 }

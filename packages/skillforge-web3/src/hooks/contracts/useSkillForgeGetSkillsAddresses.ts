@@ -26,7 +26,7 @@ export function useSkillForgeGetSkillsAddresses(props: FetchSkillAddressesProps)
     const commonArgs = {
       abi: CollectionsManager__factory.abi,
       address: collectionsManager,
-      functionName: 'skillsContract'
+      functionName: 'collectionContract'
     } as const
 
     const derivedArgs: (typeof commonArgs & { args: [number] })[] = []

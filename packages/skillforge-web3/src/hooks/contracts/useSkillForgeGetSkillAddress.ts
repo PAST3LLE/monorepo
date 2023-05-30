@@ -18,7 +18,7 @@ export function useSkillForgeGetSkillAddress(props: FetchSkillAddressesProps) {
   return useContractRead({
     abi: CollectionsManager__factory.abi,
     address: collectionsManager,
-    functionName: 'skillsContract',
+    functionName: 'collectionContract',
     args: [BigNumber.from(collectionId)],
     watch: false,
     scopeKey: WAGMI_SCOPE_KEYS.SKILLS_CONTRACT

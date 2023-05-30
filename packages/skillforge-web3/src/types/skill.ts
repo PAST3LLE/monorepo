@@ -20,7 +20,7 @@ interface BaseProperties {
   rarity: SkillRarity
 }
 interface CollectionProperties extends BaseProperties {
-  size: number
+  ids: number[]
 }
 
 export interface SkillDependencyObject {

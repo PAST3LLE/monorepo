@@ -13,6 +13,7 @@ export interface MetadataFetchOptions {
   mock?: boolean
   mockData?: SkillMetadata[][]
   gatewayUris?: CustomIpfsGatewayConfig[]
+  gatewayApiUris?: CustomIpfsGatewayConfig[]
 }
 export interface SkillForgeMetadataUpdaterProps {
   metadataUriMap: SkillForgeMetadataUriMap
@@ -33,7 +34,6 @@ export function SkillForgeMetadataUpdater(props: SkillForgeMetadataUpdaterProps)
     loadAmount: collections?.toNumber() || 0,
     metadataUriMap: props.metadataUriMap,
     contractAddressMap: props.contractAddressMap,
-    idBase: props.idBase,
     metadataFetchOptions: props.metadataFetchOptions
   })
 
@@ -46,7 +46,7 @@ export function SkillForgeMetadataUpdater(props: SkillForgeMetadataUpdaterProps)
     metadataList
       .then((res) => {
         const data = _getEnvMetadata(res || [], props?.metadataFetchOptions)
-        setLocalMetadata(data?.filter((meta) => !!meta?.size) || [])
+        setLocalMetadata(data?.filter((meta) => !!meta?.ids.length) || [])
       })
       .catch(devError)
   }, [collections?.toNumber(), props.loadAmount, metadataList])
@@ -72,10 +72,7 @@ export function SkillForgeMetadataUpdater(props: SkillForgeMetadataUpdaterProps)
 }
 
 function _getEnvMetadata(
-  realMetadata: {
-    size: number
-    skillsMetadata: SkillMetadata[]
-  }[],
+  realMetadata: SkillForgeMetadataState['metadata'],
   options: MetadataFetchOptions = {
     mock: false,
     mockData: MOCK_ALL_SKILLS_METADATA
@@ -88,6 +85,7 @@ function _getEnvMetadata(
     devWarn('[MetadataUpdater]::USING MOCK METADATA')
     return MOCK_ALL_SKILLS_METADATA.map((coll: SkillMetadata[]) => ({
       size: coll.length,
+      ids: [1000, 2000, 3000],
       skillsMetadata: coll
     }))
   }

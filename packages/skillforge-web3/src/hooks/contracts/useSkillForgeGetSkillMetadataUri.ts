@@ -1,5 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { Skills__factory } from '@past3lle/skilltree-contracts'
+import { Collection__factory } from '@past3lle/skilltree-contracts'
 import { SkillForgeMetadataUpdaterProps } from 'src/state/Metadata/updaters/MetadataUpdater'
 import { useContractRead } from 'wagmi'
 
@@ -14,7 +14,7 @@ export function useSkillForgeGetSkillMetadataUri({ collectionId, contractAddress
   })
 
   return useContractRead({
-    abi: Skills__factory.abi,
+    abi: Collection__factory.abi,
     functionName: 'uri',
     address,
     // ERC1155 shares same base URL, this param is required but irrelevant...

@@ -1,5 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { CollectionsManager__factory, Skills__factory } from '@past3lle/skilltree-contracts'
+import { Collection__factory, CollectionsManager__factory } from '@past3lle/skilltree-contracts'
 import { useMemo } from 'react'
 import { Address, useContract, useContractRead, useProvider } from 'wagmi'
 
@@ -9,14 +9,14 @@ import { CommonHooksProps } from '../types'
 import { useSupportedChainId } from '../useSkillForgeSupportedChainId'
 import { useSkillForgeContractAddressesByChain } from './useSkillForgeContractAddress'
 
-export function useSkillForgeSkillsContract<M extends SkillForgeContractAddressMap>({
+export function useSkillForgeCollectionContract<M extends SkillForgeContractAddressMap>({
   collectionId,
   addressMap
 }: CommonHooksProps<M>) {
   const { collectionsManager } = useSkillForgeContractAddressesByChain(addressMap)
   const { data: address } = useContractRead({
     abi: CollectionsManager__factory.abi,
-    functionName: 'skillsContract',
+    functionName: 'collectionContract',
     args: [BigNumber.from(collectionId)],
     address: collectionsManager,
     scopeKey: WAGMI_SCOPE_KEYS.SKILLS_CONTRACT
@@ -24,8 +24,8 @@ export function useSkillForgeSkillsContract<M extends SkillForgeContractAddressM
 
   const chainId = useSupportedChainId()
   const provider = useProvider({ chainId })
-  const skillsContract = useContract({
-    abi: Skills__factory.abi,
+  const collectionContract = useContract({
+    abi: Collection__factory.abi,
     address,
     signerOrProvider: provider
   })
@@ -34,30 +34,30 @@ export function useSkillForgeSkillsContract<M extends SkillForgeContractAddressM
     read: useMemo(
       () => ({
         balanceOf: async (account: Address, id: BigNumber, overrides?: CallOverrides) =>
-          skillsContract?.balanceOf(account, id, overrides),
+          collectionContract?.balanceOf(account, id, overrides),
         balanceOfBatch: async (accountBatch: Address[], idBatch: BigNumber[], overrides?: CallOverrides) =>
-          skillsContract?.balanceOfBatch(accountBatch, idBatch, overrides),
-        getUri: async (id: number) => skillsContract?.uri(BigNumber.from(id)),
-        getCollectionAddress: async (overrides?: CallOverrides) => skillsContract?.getCollectionAddress(overrides),
-        getCollectionId: async (overrides?: CallOverrides) => skillsContract?.getCollectionId(overrides)
+          collectionContract?.balanceOfBatch(accountBatch, idBatch, overrides),
+        getUri: async (id: number) => collectionContract?.uri(BigNumber.from(id)),
+        getCollectionAddress: async (overrides?: CallOverrides) => collectionContract?.getCollectionAddress(overrides),
+        getCollectionId: async (overrides?: CallOverrides) => collectionContract?.getCollectionId(overrides)
       }),
-      [skillsContract]
+      [collectionContract]
     ),
     write: useMemo(
       () => ({
         mint: async (to: Address, id: BigNumber, amount: BigNumber, data: Address, overrides?: PayableOverrides) =>
-          skillsContract?.mint(to, id, amount, data, overrides),
+          collectionContract?.mint(to, id, amount, data, overrides),
         mintBatch: async (
           to: Address,
           idBatch: BigNumber[],
           amountBatch: BigNumber[],
           data: Address,
           overrides?: PayableOverrides
-        ) => skillsContract?.mintBatch(to, idBatch, amountBatch, data, overrides),
-        pause: async (overrides?: PayableOverrides) => skillsContract?.pause(overrides),
-        unpause: async (overrides?: PayableOverrides) => skillsContract?.unpause(overrides)
+        ) => collectionContract?.mintBatch(to, idBatch, amountBatch, data, overrides),
+        pause: async (overrides?: PayableOverrides) => collectionContract?.pause(overrides),
+        unpause: async (overrides?: PayableOverrides) => collectionContract?.unpause(overrides)
       }),
-      [skillsContract]
+      [collectionContract]
     )
   }
 }

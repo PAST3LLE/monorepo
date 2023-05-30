@@ -1,13 +1,21 @@
-import { devError } from '@past3lle/utils'
+import { delay, devError } from '@past3lle/utils'
 
 import { DEFAULT_GATEWAY_URI } from '../constants/ipfs'
+import { MetadataFetchOptions } from '../state/Metadata/updaters/MetadataUpdater'
 
 export const getHash = (uri: string) => (uri.startsWith('ipfs://') ? uri.substring(7) : uri)
 export function ipfsToImageUri(uriHash: string, gateway: string = DEFAULT_GATEWAY_URI) {
   const skillUriHash = getHash(uriHash)
 
-  return `${gateway}/${skillUriHash}`
+  return `${gateway}/ipfs/${skillUriHash}`
 }
+
+export function ipfsToLsUri(uriHash: string, gateway: string = DEFAULT_GATEWAY_URI) {
+  const skillUriHash = getHash(uriHash)
+
+  return `${gateway}/api/v0/ls?arg=${skillUriHash}`
+}
+
 export async function fetchIpfsUriBlob(uriHash: string, gateway = DEFAULT_GATEWAY_URI) {
   const uri = ipfsToImageUri(uriHash, gateway)
 
@@ -29,12 +37,37 @@ export async function chainFetchIpfsUri(uriHash: string, ...customGateways: Cust
       const response = await fetch(ipfsUri, config?.init)
 
       if (!response?.ok) {
+        await delay(7500)
         devError('Fetching', uri, 'failed. Trying next...')
       } else {
         success = response
         break
       }
     } catch (error) {
+      await delay(7500)
+      devError('Fetching', uri, 'failed. Trying next...')
+    }
+  }
+  return success
+}
+
+export async function chainFetchIpfsLsUri(uriHash: string, ...customGateways: CustomIpfsGatewayConfig[]) {
+  let success
+  for (let i = 0; i < customGateways.length; i++) {
+    const { gateway: uri, config } = customGateways[i]
+    try {
+      const ipfsUri = ipfsToLsUri(uriHash, uri)
+      const response = await fetch(ipfsUri, config?.init)
+
+      if (!response?.ok) {
+        await delay(7500)
+        devError('Fetching', uri, 'failed. Trying next...')
+      } else {
+        success = response
+        break
+      }
+    } catch (error) {
+      await delay(7500)
       devError('Fetching', uri, 'failed. Trying next...')
     }
   }
@@ -45,4 +78,30 @@ export async function chainFetchIpfsUriBlob(uriHash: string, ...customGateways: 
   const response = await chainFetchIpfsUri(uriHash, ...customGateways)
 
   return response && URL.createObjectURL(await response.blob())
+}
+
+type IpfsApiObject = {
+  Hash: string
+  Name: string
+  Size: number
+  Target: string
+  Type: number
+}
+
+export async function chainFetchIpfsApiContent<T extends string>(
+  uri: T,
+  { fetchOptions, auxData }: { fetchOptions?: MetadataFetchOptions; auxData?: any }
+): Promise<{ uri: T; auxData: any }[]> {
+  return chainFetchIpfsLsUri(uri, ...(fetchOptions?.gatewayApiUris || []))
+    .then((res) => res?.json())
+    .then(
+      (res) =>
+        res?.Objects?.[0]?.Links?.map((obj: IpfsApiObject) => ({
+          uri: uri + '/' + obj.Name,
+          auxData
+        })) || []
+    )
+    .catch((error) => {
+      console.error('Failed to fetch IPFS CID <ls> uri:', error)
+    })
 }

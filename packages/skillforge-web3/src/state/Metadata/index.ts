@@ -7,7 +7,7 @@ type MetadataMap = {
   [key: SkillId]: SkillMetadata
 }
 export interface SkillForgeMetadataState {
-  metadata: { size: number; skillsMetadata: SkillMetadata[] }[]
+  metadata: { ids: number[]; skillsMetadata: SkillMetadata[] }[]
   metadataMap: MetadataMap
 }
 

@@ -1,11 +1,10 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { Skills__factory } from '@past3lle/skilltree-contracts'
+import { Collection__factory } from '@past3lle/skilltree-contracts'
 import { devWarn } from '@past3lle/utils'
 import { useMemo } from 'react'
 import { Address, useContractReads } from 'wagmi'
 
 import { SkillForgeMetadataState } from '../../state'
-import { getSkillId } from '../../utils'
 import { WAGMI_SCOPE_KEYS } from '../constants'
 
 export function useSkillForgeSkillsBalanceOfBatch(
@@ -15,7 +14,7 @@ export function useSkillForgeSkillsBalanceOfBatch(
   idBase?: number
 ) {
   const contractReadsArgs = useMemo(
-    () => (address ? gatherSkillContractConfigParams(skills as Address[], metadata, address, idBase) : []),
+    () => (address ? gatherSkillContractConfigParams(skills as Address[], metadata, address) : []),
     [skills, metadata, address, idBase]
   )
 
@@ -31,8 +30,7 @@ export function useSkillForgeSkillsBalanceOfBatch(
 function gatherSkillContractConfigParams(
   skillsAddressList: Address[] | undefined = [],
   metadata: SkillForgeMetadataState['metadata'],
-  balanceOfAddress: Address,
-  idBase?: number
+  balanceOfAddress: Address
 ) {
   const contractConfigList = skillsAddressList.flatMap((address, i) => {
     if (!address) {
@@ -42,9 +40,9 @@ function gatherSkillContractConfigParams(
       return undefined
     }
 
-    const args = getBalanceOfBatchArgs(metadata[i]?.size || 0, balanceOfAddress, idBase)
+    const args = getBalanceOfBatchArgs(metadata[i]?.ids || [], balanceOfAddress)
     return {
-      abi: Skills__factory.abi,
+      abi: Collection__factory.abi,
       address,
       functionName: 'balanceOfBatch',
       args
@@ -54,11 +52,11 @@ function gatherSkillContractConfigParams(
   return contractConfigList
 }
 
-function getBalanceOfBatchArgs(size: number, address: Address, idBase?: number) {
-  return Array.from({ length: size }).reduce(
-    (acc: [Address[], BigNumber[]], _, idx) => {
+function getBalanceOfBatchArgs(ids: number[], address: Address) {
+  return ids.reduce(
+    (acc: [Address[], BigNumber[]], id) => {
       acc[0] = [...acc[0], address]
-      acc[1] = [...acc[1], BigNumber.from(getSkillId(idx, idBase))]
+      acc[1] = [...acc[1], BigNumber.from(id)]
       return acc
     },
     [[], []] as [Address[], BigNumber[]]

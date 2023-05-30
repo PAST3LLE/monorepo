@@ -1,5 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { Skills__factory } from '@past3lle/skilltree-contracts'
+import { Collection__factory } from '@past3lle/skilltree-contracts'
 import { devWarn } from '@past3lle/utils'
 import { Address, useContractReads } from 'wagmi'
 
@@ -54,7 +54,7 @@ function gatherSkillContractConfigParams(tokenDepsMap: TokenDepsMap, balanceOfAd
 
     const args = getBalanceOfBatchArgs(idsList, balanceOfAddress)
     return {
-      abi: Skills__factory.abi,
+      abi: Collection__factory.abi,
       address: address as Address,
       functionName: 'balanceOfBatch',
       args
