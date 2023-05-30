@@ -3420,18 +3420,18 @@
     node-addon-api "^3.2.1"
     node-gyp-build "^4.3.0"
 
+"@past3lle/skilltree-contracts@^0.0.1-rc.10":
+  version "0.0.1-rc.10"
+  resolved "https://registry.yarnpkg.com/@past3lle/skilltree-contracts/-/skilltree-contracts-0.0.1-rc.10.tgz#5633b278769939c26337949901eb2ae6a737c634"
+  integrity sha512-zgQJtpoJIYwhyGpLTvPb77ch8F8WPhpDuReAG8SUIFDE0odkvKTOTePSdieEqfs0cL2izsKRuq44Vfv4a3f7Hg==
+  dependencies:
+    "@types/jest" "^29.5.1"
+    hardhat-tracer "^2.3.2"
+
 "@past3lle/skilltree-contracts@^0.0.1-rc.5":
   version "0.0.1-rc.6"
   resolved "https://registry.yarnpkg.com/@past3lle/skilltree-contracts/-/skilltree-contracts-0.0.1-rc.6.tgz#cd535ba476698570d0499fd09c4752e0347fdc02"
   integrity sha512-FlqUQ7qdWS/ClPn7TvW8Ek19nUI3u+p+dSgT431SDLt2awgtYaH9CWPd8/krlDZs20FlHn7dr3x2Axax72ca0A==
-
-"@past3lle/skilltree-contracts@^0.0.1-rc.9":
-  version "0.0.1-rc.9"
-  resolved "https://registry.yarnpkg.com/@past3lle/skilltree-contracts/-/skilltree-contracts-0.0.1-rc.9.tgz#1a260a3296ae5db0dea4aa99790a030048410fe7"
-  integrity sha512-Oa0jTe9oXSXDxxYbXMwYSEyuyykvpZGCBXtTrhhu3ER8JShf+mGRANtLILXpThxdqyw+uFMnFpbgYQD6tmpoaw==
-  dependencies:
-    "@types/jest" "^29.5.1"
-    hardhat-tracer "^2.3.2"
 
 "@pedrouid/environment@^1.0.1":
   version "1.0.1"
