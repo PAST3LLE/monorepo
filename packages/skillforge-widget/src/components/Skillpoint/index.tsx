@@ -1,19 +1,18 @@
 import { SVG_LoadingCircleLight } from '@past3lle/assets'
 import { RowCenter, RowProps, SmartImg } from '@past3lle/components'
 import {
-  SkillForgeMetadataFetchOptions,
   SkillId,
   SkillMetadata,
   SkillRarity,
   chainFetchIpfsUriBlob,
-  getHash
+  getHash,
+  useSkillForgeGetIpfsAtom
 } from '@past3lle/skillforge-web3'
 import { isImageKitUrl, isImageSrcSet } from '@past3lle/theme'
 import { devError } from '@past3lle/utils'
 import React, { memo, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import { BASE_GATEWAY_URIS } from '../../constants'
 import { SkillsState, useSkillsAtom } from '../../state/Skills'
 import { useAssetsMap } from '../../theme/utils'
 import { Vector } from '../Canvas/canvasApi/api/vector'
@@ -26,7 +25,6 @@ interface Props {
   hasSkill: boolean
   forceRarity?: SkillRarity | 'empty'
   skillpointStyles?: RowProps
-  gatewayUris?: SkillForgeMetadataFetchOptions['gatewayUris']
   lightupDependencies?: (state: SkillsState) => void
 }
 function SkillpointUnmemoed({
@@ -36,9 +34,9 @@ function SkillpointUnmemoed({
   forceRarity,
   hasSkill,
   skillpointStyles,
-  gatewayUris = BASE_GATEWAY_URIS,
   lightupDependencies
 }: Props) {
+  const [ipfsConfig] = useSkillForgeGetIpfsAtom()
   const [state, setSkillState] = useSkillsAtom()
   const {
     active: [currentlyActive],
@@ -48,13 +46,13 @@ function SkillpointUnmemoed({
   const [formattedUri, setImageBlob] = useState<string>()
   useEffect(() => {
     if (!metadata.image) return
-    chainFetchIpfsUriBlob(getHash(metadata.image), ...gatewayUris)
+    chainFetchIpfsUriBlob(getHash(metadata.image), ...ipfsConfig.gatewayUris)
       .then(setImageBlob)
       .catch((error) => {
         devError('[SkillForge-Widget::Skillpoint/index.tsx] Error in fetching IPFS Uri Blob!', error)
         setImageBlob(undefined)
       })
-  }, [gatewayUris, metadata])
+  }, [ipfsConfig.gatewayUris, metadata.image])
 
   const { isEmptySkill, isCurrentSkillActive, isDependency, isOtherSkillActive } = useMemo(
     () => ({

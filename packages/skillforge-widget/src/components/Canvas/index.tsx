@@ -21,7 +21,7 @@ import { SkillCanvasContainer, SkillInnerCanvasContainer } from './styleds'
 export interface SkillsCanvasProps {
   options?: SkillForgeW3AppConfig['skillOptions']
 }
-export function SkillsCanvas(props: SkillsCanvasProps) {
+export function SkillsCanvas() {
   const [{ vectors }] = useVectorsAtom()
   const [metadataMap] = useSkillForgeMetadataMapReadAtom()
   const [{ balances }] = useSkillForgeBalancesAtom()
@@ -41,15 +41,9 @@ export function SkillsCanvas(props: SkillsCanvasProps) {
               hasSkill: !zeroBalance
             }
           : { key: `EMPTY-${vector.X1}-${vector.Y1}`, metadata: EMPTY_METADATA, hasSkill: true }
-        return (
-          <Skillpoint
-            {...skillpointProps}
-            vector={vector}
-            gatewayUris={props.options?.metadataFetchOptions?.gatewayUris}
-          />
-        )
+        return <Skillpoint {...skillpointProps} vector={vector} />
       }),
-    [balances, metadataMap, props.options?.metadataFetchOptions?.gatewayUris, vectors]
+    [balances, metadataMap, vectors]
   )
 
   return (

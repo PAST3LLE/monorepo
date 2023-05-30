@@ -23,11 +23,11 @@ export function GridPositionUpdater() {
 
     if (!container) return null
 
-    const highestRowCount = !metadata?.[0]?.size
+    const highestRowCount = !metadata?.[0]?.ids?.length
       ? EMPTY_COLLECTION_ROWS_SIZE
       : metadata.length === 1
-      ? metadata[0].size
-      : metadata.slice().sort((a, b) => b.size - a.size)[0].size
+      ? metadata[0]?.ids?.length
+      : metadata.slice().sort((a, b) => (b?.ids?.length || 0) - (a?.ids?.length || 0))[0].ids.length
     const columns = Math.max(MINIMUM_COLLECTION_BOARD_SIZE, metadata.length)
     const rows = highestRowCount
 
