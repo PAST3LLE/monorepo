@@ -1,6 +1,6 @@
 {
   "name": "@past3lle/carousel",
-  "version": "0.0.28",
+  "version": "0.0.29",
   "description": "PAST3LLE animated carousel built with @past3lle/carousel-hooks, usegesture, and react-springs",
   "keywords": [
     "springs",
@@ -83,11 +83,11 @@
     "typescript": "^4.9.4"
   },
   "dependencies": {
-    "@past3lle/carousel-hooks": "^0.0.25",
-    "@past3lle/components": "^0.0.63",
-    "@past3lle/hooks": "^0.0.31",
-    "@past3lle/theme": "^0.0.39",
-    "@past3lle/utils": "^0.0.20",
+    "@past3lle/carousel-hooks": "^0.0.26",
+    "@past3lle/components": "^0.0.64",
+    "@past3lle/hooks": "^0.0.32",
+    "@past3lle/theme": "^0.0.40",
+    "@past3lle/utils": "^0.0.21",
     "@react-spring/web": "^9.4.3",
     "polished": "^4.2.2",
     "react-feather": "^2.0.10"

@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/skillforge-widget",
   "sideEffects": false,
-  "version": "0.0.60",
+  "version": "0.0.61",
   "description": "PAST3LLE SKILLFORGE component as an NPM ESM pkg.",
   "main": "dist/esm/index.js",
   "typings": "dist/types/index.d.ts",
@@ -76,7 +76,7 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.13.8",
-    "@past3lle/types": "^0.0.12",
+    "@past3lle/types": "^0.0.13",
     "@trivago/prettier-plugin-sort-imports": "^4.0.0",
     "@types/jest": "^25.2.1",
     "@types/react": "^18.0.19",
@@ -94,12 +94,12 @@
   },
   "dependencies": {
     "@ethersproject/bignumber": "5.7.0",
-    "@past3lle/components": "^0.0.63",
-    "@past3lle/hooks": "^0.0.31",
-    "@past3lle/skillforge-web3": "^0.0.50",
+    "@past3lle/components": "^0.0.64",
+    "@past3lle/hooks": "^0.0.32",
+    "@past3lle/skillforge-web3": "^0.0.51",
     "@past3lle/skills-nft": "^0.0.8",
-    "@past3lle/theme": "^0.0.39",
-    "@past3lle/utils": "^0.0.20",
+    "@past3lle/theme": "^0.0.40",
+    "@past3lle/utils": "^0.0.21",
     "jotai": "^1.13.1",
     "polished": "^4.2.2"
   },
