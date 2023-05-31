@@ -18,7 +18,6 @@ export interface MetadataFetchOptions {
 export interface SkillForgeMetadataUpdaterProps {
   metadataUriMap: SkillForgeMetadataUriMap
   contractAddressMap: SkillForgeContractAddressMap
-  idBase?: number
   loadAmount?: number
   metadataFetchOptions?: MetadataFetchOptions
 }

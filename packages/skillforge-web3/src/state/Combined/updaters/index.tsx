@@ -19,10 +19,9 @@ export function SkillForgeW3StateUpdaters(props: SkillForgeW3AppConfig & { child
       <SkillForgeMetadataUpdater
         metadataUriMap={props.metadataUris}
         contractAddressMap={props.contractAddresses}
-        idBase={props.skillOptions?.idBase}
         metadataFetchOptions={props.skillOptions?.metadataFetchOptions}
       />
-      <SkillForgeBalancesUpdater contractAddressMap={props.contractAddresses} idBase={props.skillOptions?.idBase} />
+      <SkillForgeBalancesUpdater contractAddressMap={props.contractAddresses} />
       <SkillForgeWindowSizeUpdater />
       {props.children}
     </AtomsDevtools>

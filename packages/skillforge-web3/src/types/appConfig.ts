@@ -7,7 +7,6 @@ import { SkillForgeMetadataUriMap } from './metadata'
 
 export { type SkillForgeMetadataFetchOptions }
 export interface SkillForgeW3AppConfigSkillOptions {
-  idBase?: number
   metadataFetchOptions?: SkillForgeMetadataFetchOptions
 }
 export interface SkillForgeW3AppConfig {

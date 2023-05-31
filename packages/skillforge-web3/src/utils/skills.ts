@@ -51,8 +51,3 @@ export function getRarityColours<T extends { rarity: { [key in SkillRarity]: any
 
   return theme.rarity[rarity]
 }
-
-export const getSkillId = (idx: number, idBase = 1) => (idx + 1) * idBase
-export function get64PaddedSkillId(i: number, idBase = 1) {
-  return getSkillId(i, idBase).toString().padStart(64, '0')
-}

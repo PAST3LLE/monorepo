@@ -14,7 +14,6 @@ const DEFAULT_COLLECTION_LOAD_AMOUNT = 3
 type SkillForgeBalancesProps = Omit<SkillForgeMetadataUpdaterProps, 'metadataUriMap'>
 export function SkillForgeBalancesUpdater({
   contractAddressMap,
-  idBase,
   loadAmount = DEFAULT_COLLECTION_LOAD_AMOUNT
 }: SkillForgeBalancesProps) {
   const [metadata] = useSkillForgeMetadataReadAtom()
@@ -27,8 +26,7 @@ export function SkillForgeBalancesUpdater({
   const { data: balancesBatch, refetch: refetchBalances } = useSkillForgeSkillsBalanceOfBatch(
     skills as Address[],
     metadata,
-    address,
-    idBase
+    address
   )
 
   useRefetchOnAddress(refetchBalances)
