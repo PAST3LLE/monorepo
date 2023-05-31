@@ -5,6 +5,7 @@
         "baseUrl": "./",
         "rootDir": "./src",
         "outDir": "./dist",
+        "declarationMap": true,
         "composite": true
     },
     "include": [

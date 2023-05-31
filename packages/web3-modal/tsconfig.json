@@ -4,6 +4,7 @@
         "baseUrl": "./",
         "rootDir": "./src",
         "composite": true,
+        "declarationMap": true,
         "allowJs": true,
         "module": "ESNext"
     },
