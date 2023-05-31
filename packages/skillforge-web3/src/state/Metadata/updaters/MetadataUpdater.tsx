@@ -46,7 +46,10 @@ export function SkillForgeMetadataUpdater(props: SkillForgeMetadataUpdaterProps)
         const skillMetadata = await Promise.all(promisedSkillsMetadatas)
 
         const data = _getEnvMetadata(idsTuple, skillMetadata || [], props?.metadataFetchOptions)
-        setMetadataState((state) => ({ ...state, metadata: data || [] }))
+        // Post new metadata if it exists
+        if (data?.length) {
+          setMetadataState((state) => ({ ...state, metadata: data }))
+        }
       } catch (error) {
         devError(error)
       }
