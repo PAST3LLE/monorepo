@@ -1,7 +1,6 @@
 import { SVG_LoadingCircleLight } from '@past3lle/assets'
 import { RowCenter, RowProps, SmartImg } from '@past3lle/components'
 import {
-  SkillId,
   SkillMetadata,
   SkillRarity,
   chainFetchIpfsUriBlob,
@@ -76,10 +75,7 @@ function SkillpointUnmemoed({
     setSkillState((state) => {
       const newState = {
         ...state,
-        active: isCurrentSkillActive ? state.active.slice(1) : [metadata.properties.id, ...state.active],
-        activeDependencies: isCurrentSkillActive
-          ? []
-          : metadata.properties.dependencies.map(({ token, id }) => `${token}-${id}` as SkillId)
+        active: isCurrentSkillActive ? state.active.slice(1) : [metadata.properties.id, ...state.active]
       }
       // light it up
       lightupDependencies && lightupDependencies(newState)

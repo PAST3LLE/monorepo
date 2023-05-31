@@ -21,6 +21,25 @@ const skillSizeWriteAtom = atom<null, SkillsState['sizes']>(null, (get, set, upd
 })
 const skillSizeReadAtom = atom<SkillsState['sizes']>((get) => get(skillsAtom).sizes)
 
+const activeSkillAtom = atom<SkillsState['active'], SkillsState['active'][0]>(
+  (get) => get(skillsAtom).active,
+  (get, set, update) => {
+    const state = get(skillsAtom)
+    return set(skillsAtom, { ...state, active: [update, ...state.active] })
+  }
+)
+
+const activeDependenciesSkillAtom = atom<SkillsState['activeDependencies'], SkillsState['activeDependencies'][0]>(
+  (get) => get(skillsAtom).activeDependencies,
+  (get, set, update) => {
+    const state = get(skillsAtom)
+    return set(skillsAtom, { ...state, activeDependencies: [update, ...state.activeDependencies] })
+  }
+)
+
+export const useActiveSkillAtom = () => useAtom(activeSkillAtom)
+export const useActiveSkillDependenciesAtom = () => useAtom(activeDependenciesSkillAtom)
+
 export const useSkillSizeWriteAtom = () => useAtom(skillSizeWriteAtom)
 export const useSkillSizeReadAtom = () => useAtom(skillSizeReadAtom)
 

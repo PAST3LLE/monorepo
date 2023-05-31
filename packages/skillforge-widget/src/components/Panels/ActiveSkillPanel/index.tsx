@@ -1,5 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { AutoRow, Column, ExternalLink, Row, RowProps, Text } from '@past3lle/components'
+import { AutoRow, Column, ExternalLink, Row, RowCenter, RowProps, Text } from '@past3lle/components'
 import {
   SkillDependencyObject,
   SkillForgeBalances,
@@ -105,7 +105,15 @@ export function ActiveSkillPanel() {
               backgroundColor: 'transparent',
               justifyContent: 'center',
               disabled: isLocked,
-              css: `img {border-radius: 10px;}`
+              css: `
+                > ${RowCenter} {
+                  min-height: 200px;
+                  height: 20vh;
+                  > img {
+                    border-radius: 10px;
+                  }
+                }
+              `
             }}
           />
           <ThemedButtonExternalLink
