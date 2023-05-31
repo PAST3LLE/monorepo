@@ -1,8 +1,8 @@
 import { devError, devWarn } from '@past3lle/utils'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useContractRead } from 'wagmi'
 
-import { SkillForgeMetadataState, useSkillForgeMetadataMapWriteAtom, useSkillForgeMetadataWriteAtom } from '..'
+import { SkillForgeMetadataState, useSkillForgeMetadataAtom } from '..'
 import { useSkillForgeFetchMetadata, useSkillForgePrepareCollectionsContract } from '../../../hooks'
 import { WAGMI_SCOPE_KEYS } from '../../../hooks/constants'
 import { MOCK_ALL_SKILLS_METADATA } from '../../../mock/metadata'
@@ -30,31 +30,36 @@ export function SkillForgeMetadataUpdater(props: SkillForgeMetadataUpdaterProps)
     scopeKey: WAGMI_SCOPE_KEYS.COLLECTIONS_MANAGER_TOTAL_SUPPLY
   })
 
-  const metadataList = useSkillForgeFetchMetadata({
+  const promisedMetadataTuple = useSkillForgeFetchMetadata({
     loadAmount: collections?.toNumber() || 0,
     metadataUriMap: props.metadataUriMap,
     contractAddressMap: props.contractAddressMap,
     metadataFetchOptions: props.metadataFetchOptions
   })
 
-  const [, setMetadataState] = useSkillForgeMetadataWriteAtom()
-  const [, setMetadataMapState] = useSkillForgeMetadataMapWriteAtom()
-
-  const [localMetadata, setLocalMetadata] = useState<SkillForgeMetadataState['metadata']>([])
+  const [{ metadata }, setMetadataState] = useSkillForgeMetadataAtom()
 
   useEffect(() => {
-    metadataList
-      .then((res) => {
-        const data = _getEnvMetadata(res || [], props?.metadataFetchOptions)
-        setLocalMetadata(data?.filter((meta) => !!meta?.ids.length) || [])
-      })
-      .catch(devError)
-  }, [collections?.toNumber(), props.loadAmount, metadataList])
+    async function resolveMetadata() {
+      try {
+        const [idsTuple, promisedSkillsMetadatas] = await promisedMetadataTuple
+        const skillMetadata = await Promise.all(promisedSkillsMetadatas)
 
+        const data = _getEnvMetadata(idsTuple, skillMetadata || [], props?.metadataFetchOptions)
+        setMetadataState((state) => ({ ...state, metadata: data || [] }))
+      } catch (error) {
+        devError(error)
+      }
+    }
+
+    resolveMetadata()
+  }, [collections?.toNumber(), props.loadAmount, promisedMetadataTuple])
+
+  // Reduce metadata to a map
   useEffect(() => {
-    if (!localMetadata?.length) return
+    if (!metadata?.length) return
 
-    const metadataMap = localMetadata
+    const metadataMap = metadata
       .flatMap((item) => item.skillsMetadata)
       .reduce((acc, next) => {
         const id = next?.properties?.id
@@ -64,15 +69,15 @@ export function SkillForgeMetadataUpdater(props: SkillForgeMetadataUpdaterProps)
         return acc
       }, {} as SkillForgeMetadataState['metadataMap'])
 
-    setMetadataState(localMetadata)
-    setMetadataMapState(metadataMap)
-  }, [localMetadata, setMetadataMapState, setMetadataState])
+    setMetadataState((state) => ({ ...state, metadataMap }))
+  }, [metadata, setMetadataState])
 
   return null
 }
 
 function _getEnvMetadata(
-  realMetadata: SkillForgeMetadataState['metadata'],
+  ids: number[][],
+  realMetadata: SkillForgeMetadataState['metadata'][0]['skillsMetadata'][],
   options: MetadataFetchOptions = {
     mock: false,
     mockData: MOCK_ALL_SKILLS_METADATA
@@ -80,7 +85,15 @@ function _getEnvMetadata(
 ): SkillForgeMetadataState['metadata'] {
   const SHOW_MOCK_DATA = !!(options?.mock || process.env.REACT_APP_MOCK_METADATA)
   if (!SHOW_MOCK_DATA) {
-    return realMetadata
+    return realMetadata.reduce((acc, meta, i) => {
+      if (!!ids?.[i]?.length) {
+        acc.push({
+          ids: ids[i],
+          skillsMetadata: meta
+        })
+      }
+      return acc
+    }, [] as SkillForgeMetadataState['metadata'])
   } else {
     devWarn('[MetadataUpdater]::USING MOCK METADATA')
     return MOCK_ALL_SKILLS_METADATA.map((coll: SkillMetadata[]) => ({

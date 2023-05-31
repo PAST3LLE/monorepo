@@ -29,38 +29,43 @@ export function useSkillForgeFetchMetadata({
 
   useRefetchOnAddress(refetchSkills)
 
-  return useMemo(async (): Promise<{ ids: number[]; skillsMetadata: SkillMetadata[] }[]> => {
+  return useMemo(async (): Promise<[number[][], Promise<SkillMetadata[]>[]]> => {
     // reverse array as we loop down
-    if (!skillErc1155MetadataUris.length || !metadataUris?.collectionsManager) return [{ ids: [], skillsMetadata: [] }]
+    if (!skillErc1155MetadataUris.length || !metadataUris?.collectionsManager) return [[], [Promise.resolve([])]]
 
     const promisedCollectionMetadata = []
     for (let i = 1; i < skillErc1155MetadataUris.length + 1; i++) {
-      promisedCollectionMetadata.push((await fetch(metadataUris.collectionsManager + i + '.json')).json())
+      promisedCollectionMetadata.push(fetch(metadataUris.collectionsManager + i + '.json').then((res) => res.json()))
     }
     const collectionMetadata: CollectionMetadata[] = await Promise.all(promisedCollectionMetadata)
 
+    if (collectionMetadata.length !== skillErc1155MetadataUris.length) {
+      throw new Error(
+        '[useSkillForgeFetchMetadata] Collection metadata length does not match skill erc1155 metadata length'
+      )
+    }
+
     const allMetadata = []
+    const allMetadataIds = []
     for (let i = 0; i < collectionMetadata.length; i++) {
-      const { ids } = collectionMetadata[i].properties
-      const limit = ids?.length || 0
       const promisedSkillsMetadata: Promise<SkillMetadata>[] = []
-      for (let j = 0; j < limit; j++) {
+      for (let j = 0; j < collectionMetadata[i].properties?.ids.length || 0; j++) {
         promisedSkillsMetadata.push(
           chainFetchIpfsUri(
-            skillErc1155MetadataUris[i].replace('0.json', ids[j] + '.json'),
+            skillErc1155MetadataUris[i].replace('0.json', collectionMetadata[i].properties.ids[j] + '.json'),
             ...(metadataFetchOptions?.gatewayUris || [])
           ).then((res) => res?.json())
         )
       }
-      allMetadata.push({
-        ids: ids || [],
-        skillsMetadata: (await Promise.all(promisedSkillsMetadata)).map((meta) =>
-          _overrideMetadataObject(meta, skill1155Addresses[i])
+      allMetadataIds.push(collectionMetadata[i].properties.ids || [])
+      allMetadata.push(
+        Promise.all(promisedSkillsMetadata).then((res) =>
+          res.map((meta) => _overrideMetadataObject(meta, skill1155Addresses[i]))
         )
-      })
+      )
     }
 
-    return allMetadata
+    return [allMetadataIds, allMetadata]
   }, [metadataUris, loadAmount, skillErc1155MetadataUris])
 }
 
