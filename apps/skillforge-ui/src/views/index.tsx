@@ -8,7 +8,6 @@ import { AppVersion } from 'components/AppVersion'
 import { skillforgeTheme as SKILLFORGE_THEME } from 'config/skillforge'
 import { FORGE_LOGO_URL_MAP, pstlModalTheme } from 'config/wallet'
 import { GATEWAY_URIS, GATEWAY_API_URIS } from 'constants/ipfs'
-import { SKILL_ID_BASE } from 'constants/skills'
 import React, { ReactNode } from 'react'
 import { GothicFontCssProvider } from 'theme/fonts'
 import { GlobalStyles } from 'theme/global'
@@ -128,9 +127,6 @@ const SKILLTREE_CONFIG: SkillForgeProps = {
     contractAddresses: CONTRACT_ADDRESSES_MAP,
     metadataUris: METADATA_URIS_MAP,
     skillOptions: {
-      // some id's may NOT be simply [1,2,3...N] and instead 1000,2000,3000...N*1000
-      // idBases in PSTL SkillForge = 1000
-      idBase: SKILL_ID_BASE,
       metadataFetchOptions: {
         gatewayUris: GATEWAY_URIS,
         gatewayApiUris: GATEWAY_API_URIS
