@@ -38,7 +38,6 @@ export function useSkillForgeFetchMetadata({
       promisedCollectionMetadata.push((await fetch(metadataUris.collectionsManager + i + '.json')).json())
     }
     const collectionMetadata: CollectionMetadata[] = await Promise.all(promisedCollectionMetadata)
-    console.log('🚀 ~ file: useSkillForgeFetchMetadata.ts:41 ~ returnuseMemo ~ collectionMetadata:', collectionMetadata)
 
     const allMetadata = []
     for (let i = 0; i < collectionMetadata.length; i++) {
