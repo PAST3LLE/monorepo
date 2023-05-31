@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/skillforge-web3",
   "sideEffects": false,
-  "version": "0.0.52",
+  "version": "0.0.53",
   "description": "PAST3LLE SKILLFORGE web3 hooks and tings",
   "main": "dist/esm/index.js",
   "typings": "dist/types/index.d.ts",
