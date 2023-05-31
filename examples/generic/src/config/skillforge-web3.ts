@@ -34,12 +34,12 @@ const DEFAULT_PROPS: PstlWeb3ModalProps = {
 const CONTRACT_ADDRESSES_MAP: SkillForgeContractAddressMap = {
   [SupportedChains.GOERLI]: {
     collectionsManager: CONTRACTS_NETWORKS[SupportedChains.GOERLI].CollectionsManager.address as Address,
-    unlockManager: CONTRACTS_NETWORKS[SupportedChains.GOERLI].UnlockManager.address as Address
+    mergeManager: CONTRACTS_NETWORKS[SupportedChains.GOERLI].UnlockManager.address as Address
   },
   // TODO: fix - use proper mumbai addreses
   [SupportedChains.POLYGON_MUMBAI]: {
     collectionsManager: CONTRACTS_NETWORKS[SupportedChains.GOERLI].CollectionsManager.address as Address,
-    unlockManager: CONTRACTS_NETWORKS[SupportedChains.GOERLI].UnlockManager.address as Address
+    mergeManager: CONTRACTS_NETWORKS[SupportedChains.GOERLI].UnlockManager.address as Address
   }
 }
 

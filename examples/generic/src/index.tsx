@@ -82,7 +82,6 @@ function AppControl() {
         contractAddresses: contractProps.contractAddresses,
         metadataUris: contractProps.metadataUris,
         skillOptions: {
-          idBase: 1000,
           metadataFetchOptions: {
             gatewayUris: GATEWAY_URIS
           }
