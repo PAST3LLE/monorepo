@@ -1,6 +1,7 @@
 import { atom, useAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 
+import { STATE_STORAGE_KEYS } from '../../constants/state-storage-keys'
 import { SkillId, SkillMetadata } from '../../types'
 
 type MetadataMap = {
@@ -11,7 +12,7 @@ export interface SkillForgeMetadataState {
   metadataMap: MetadataMap
 }
 
-const metadataAtom = atomWithStorage<SkillForgeMetadataState>('SKILLFORGE_METADATA_STATE', {
+const metadataAtom = atomWithStorage<SkillForgeMetadataState>(STATE_STORAGE_KEYS.SKILLFORGE_METADATA_STATE, {
   metadata: [],
   metadataMap: {}
 })

@@ -74,7 +74,7 @@
     "compile:tsdx": "tsdx build --transpileOnly && cp \"./package.json\" ./dist/",
     "compile": "tsc --emitDeclarationOnly --outDir './dist/types' & tsc --project tsconfig.esm.json & tsc --project tsconfig.cjs.json && cp \"./package.json\" ./dist/",
     "cosmos": "cosmos",
-    "build": "yarn clean && yarn compile",
+    "build": "yarn clean && yarn write-version && yarn compile",
     "build:tsdx": "yarn clean && yarn compile:tsdx",
     "prepack": "yarn build",
     "start": "tsdx watch",
@@ -84,7 +84,8 @@
     "test:ci": "yarn alt-test --coverage --no-watch --watch=false --watchAll=false --no-watchman --forceExit --detectOpenHandles",
     "pre-commit": "pretty-quick --staged && yarn test:ci && yarn build",
     "lint": "prettier --write ./src/** --ignore-path '../../.prettierignore'",
-    "depcheck": "npx npm-check"
+    "depcheck": "npx npm-check",
+    "write-version": "echo {'\"version\"': '\"'$npm_package_version'\"' } > ./src/version.json"
   },
   "publishConfig": {
     "access": "public",

@@ -1,6 +1,7 @@
 import { atom, useAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 
+import { STATE_STORAGE_KEYS } from '../../constants/state-storage-keys'
 import { SkillId } from '../../types'
 
 export type SkillForgeBalances = {
@@ -9,7 +10,7 @@ export type SkillForgeBalances = {
 export interface SkillForgeBalancesState {
   balances: SkillForgeBalances
 }
-const userAtom = atomWithStorage<SkillForgeBalancesState>('SKILLFORGE_BALANCES_STATE', {
+const userAtom = atomWithStorage<SkillForgeBalancesState>(STATE_STORAGE_KEYS.SKILLFORGE_BALANCES_STATE, {
   balances: {}
 })
 userAtom.debugLabel = 'BALANCES ATOM'
