@@ -12,9 +12,12 @@ export interface SidePanelProps {
   onDismiss?: (...args: any[]) => void
   onBack?: (...args: any[]) => void
   styledProps?: SidePanelCssProps
+  options?: {
+    onClickOutsideConditionalCb?: (node: Node) => boolean
+  }
 }
 
-export function SidePanel({ header, children, onBack, onDismiss, styledProps }: SidePanelProps) {
+export function SidePanel({ header, children, onBack, onDismiss, options, styledProps }: SidePanelProps) {
   const [{ type: panels }, setPanelState] = useSidePanelAtomBase()
 
   const onBackCallback = useCallback(() => {
@@ -28,7 +31,7 @@ export function SidePanel({ header, children, onBack, onDismiss, styledProps }: 
   }, [onDismiss, setPanelState])
 
   const ref = useRef(null)
-  useOnClickOutside(ref, onDismissCallback)
+  useOnClickOutside(ref, onDismissCallback, options?.onClickOutsideConditionalCb)
 
   useOnKeyPress(['Escape', 'Esc'], onDismissCallback)
 

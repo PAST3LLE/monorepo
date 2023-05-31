@@ -14,10 +14,11 @@ import {
 } from '@past3lle/skillforge-web3'
 import { BLACK, OFF_WHITE } from '@past3lle/theme'
 import { darken } from 'polished'
-import React, { useMemo } from 'react'
+import React, { useMemo, useRef } from 'react'
 import styled, { useTheme } from 'styled-components'
 
 import { SHOP_URL } from '../../../constants'
+import { SKILLPOINTS_CONTAINER_ID } from '../../../constants/skills'
 import { useGetActiveSkill } from '../../../hooks/skills'
 import { baseTheme } from '../../../theme/base'
 import { RARITY_COLOURS_MAP } from '../../../theme/constants'
@@ -62,6 +63,8 @@ export function ActiveSkillPanel() {
     [activeSkill?.properties.dependencies, activeSkill?.properties.rarity, customTheme.rarity, isLocked]
   )
 
+  const skillContainerRef = useRef<HTMLElement>(document.getElementById(SKILLPOINTS_CONTAINER_ID))
+
   if (!activeSkill || !rarity || !deps || !cardColour || !setSkillState) return null
 
   return (
@@ -70,6 +73,9 @@ export function ActiveSkillPanel() {
       styledProps={{
         background: cardColour,
         padding: '2.5rem 0 4rem 0'
+      }}
+      options={{
+        onClickOutsideConditionalCb: (targetNode: Node) => !!skillContainerRef?.current?.contains(targetNode)
       }}
       onDismiss={() => setSkillState((state) => ({ ...state, active: [] }))}
       onBack={() => setSkillState((state) => ({ ...state, active: state.active.slice(1) }))}

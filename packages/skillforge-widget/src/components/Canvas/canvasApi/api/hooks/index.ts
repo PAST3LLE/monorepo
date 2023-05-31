@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react'
 
 import { SkillGridPositionList, SkillsState, VectorsState } from '../../../../../state/Skills'
 import { useAssetsMap } from '../../../../../theme/utils'
-import '../../../../../types'
 import { Lightning } from '../lightning'
 import { LightningConfig } from '../types'
 import { Vector } from '../vector'
@@ -161,68 +160,6 @@ export function toggleSelectedSkill(vectorsState?: VectorsState, skillsState?: S
     )
   }
 }
-
-// function flattenDepsArray(depsList: SkillsState['activeDependencies']) {
-//   return depsList.reduce<SkillId[]>((keyList, nextKey) => {
-//     /* const isKeyObject = depKeyIsObject(nextKey)
-//     if (isKeyObject) {
-//       const { collection, required } = nextKey
-//       const skillId = (idx: number) => (idx + 1) * 1000
-//       keyList.push(...Array.from({ length: required }).map((_, idx): SkillId => `${collection}-${skillId(idx)}`))
-//     } else  */ {
-//       keyList.push(nextKey)
-//     }
-
-//     return keyList
-//   }, [])
-// }
-
-/* Uncomment for eventListening
-function _onMouseDown(e: MouseEvent) {
-  draw = true
-  target = new Vector(
-    0,
-    0,
-    e.clientX - canvas.offsetLeft + document.documentElement.scrollLeft,
-    e.clientY - canvas.offsetTop + document.documentElement.scrollTop
-  )
-}
-function _onMouseUp() {
-  draw = false
-}
-function _onMouseMove(e: MouseEvent) {
-  if (draw) {
-    target = new Vector(
-      0,
-      0,
-      e.clientX - canvas.offsetLeft + document.documentElement.scrollLeft,
-      e.clientY - canvas.offsetTop + document.documentElement.scrollTop
-    )
-  }
-}
-function _onTouchStart(e: TouchEvent) {
-  draw = true
-  target = new Vector(
-    0,
-    0,
-    e.touches[0].clientX - canvas.offsetLeft + document.documentElement.scrollLeft,
-    e.touches[0].clientY - canvas.offsetTop + document.documentElement.scrollTop
-  )
-}
-function _onTouchEnd() {
-  draw = false
-}
-function _onTouchMove(e: TouchEvent) {
-  if (draw) {
-    target = new Vector(
-      0,
-      0,
-      e.touches[0].clientX - canvas.offsetLeft + document.documentElement.scrollLeft,
-      e.touches[0].clientY - canvas.offsetTop + document.documentElement.scrollTop
-    )
-  }
-}
-*/
 
 /**
  * Calculates vector points of a grid by multiplying highest amount of rows by number of columns

@@ -1,6 +1,7 @@
 import { SkillMetadata } from '@past3lle/skillforge-web3'
 
 export const CANVAS_CONTAINER_ID = 'CANVAS-CONTAINER'
+export const SKILLPOINTS_CONTAINER_ID = 'SKILLPOINTS-CONTAINER'
 export const SKILLPOINT_SIZES = {
   width: '10vh',
   get height() {
