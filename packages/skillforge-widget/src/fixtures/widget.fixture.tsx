@@ -3,6 +3,7 @@ import { createPast3lleTemplateTheme } from '@past3lle/theme'
 import React from 'react'
 
 import { SkillForge } from '../components'
+import { SkillForgeHeader } from '../components/Header'
 import { commonProps, contractProps } from './config'
 
 /* 
@@ -85,6 +86,7 @@ function App() {
         }
       }}
     >
+      <SkillForgeHeader />
       <InnerApp />
     </SkillForge>
   )

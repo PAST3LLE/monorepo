@@ -6,6 +6,7 @@ import { useTheme } from 'styled-components'
 import { SkillForgeConnectedDataProviders, SkillForgeDisconnectedDataProviders } from '../state'
 import { CustomStaticGlobalCss, CustomThemeGlobalCss } from '../theme/global'
 import { SkillForgeWidgetConfig } from '../types/appConfig'
+import { AppMessagesBanner } from './AppMessagesBanner'
 import { SkillForge as SkillForgeComponent } from './Board'
 import {
   ConnectionInfoButton,
@@ -69,6 +70,7 @@ function SkillForge({ config, children, ...boxProps }: SkillForgeProps & RowProp
           {...boxProps}
         >
           {children}
+          <AppMessagesBanner />
           <SkillForgeComponent {...boxProps} />
         </ColumnCenter>
       </Provider>

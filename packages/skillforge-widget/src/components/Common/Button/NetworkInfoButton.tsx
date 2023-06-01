@@ -78,8 +78,8 @@ function _getChainLogo(id: number | undefined, assetsMap: AssetsMap['assetsMap']
     // GOERLI
     case SupportedChains.GOERLI:
       return assetsMap.icons.chains[SupportedChains.GOERLI]
-    case SupportedChains.POLYGON_MUMBAI:
-      return assetsMap.icons.chains[SupportedChains.POLYGON_MUMBAI]
+    case SupportedChains.POLYGON_MAINNET:
+      return assetsMap.icons.chains[SupportedChains.POLYGON_MAINNET]
     default:
       return assetsMap.icons.chains.disconnected
   }
