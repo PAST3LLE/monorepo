@@ -3313,10 +3313,10 @@
     node-addon-api "^3.2.1"
     node-gyp-build "^4.3.0"
 
-"@past3lle/skilltree-contracts@^0.0.1-rc.10":
-  version "0.0.1-rc.10"
-  resolved "https://registry.yarnpkg.com/@past3lle/skilltree-contracts/-/skilltree-contracts-0.0.1-rc.10.tgz#5633b278769939c26337949901eb2ae6a737c634"
-  integrity sha512-zgQJtpoJIYwhyGpLTvPb77ch8F8WPhpDuReAG8SUIFDE0odkvKTOTePSdieEqfs0cL2izsKRuq44Vfv4a3f7Hg==
+"@past3lle/skilltree-contracts@^0.0.1-rc.11":
+  version "0.0.1-rc.11"
+  resolved "https://registry.yarnpkg.com/@past3lle/skilltree-contracts/-/skilltree-contracts-0.0.1-rc.11.tgz#e4145ef5e62f87709ba5f3f9bd45b6c66739da42"
+  integrity sha512-/gCy+/Krw6AEX6o/pVdnjrsHHAQ5T42gdCuiuWM6CWZVxv7+twgsq7NKN2DSNNAn2cmnCcM+LyOcXe+Nr4VmPg==
   dependencies:
     "@types/jest" "^29.5.1"
     hardhat-tracer "^2.3.2"

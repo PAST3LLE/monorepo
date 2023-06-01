@@ -46,7 +46,8 @@ export const ASSETS_MAP: SkillForgeAssetsMap['assetsMap'] & {
     chains: {
       disconnected: CONNECTION_ICON,
       5: ETHEREUM_LOGO,
-      80001: POLYGON_LOGO
+      137: POLYGON_LOGO
+      // 80001: POLYGON_LOGO
     },
     rarity: {
       empty: '',

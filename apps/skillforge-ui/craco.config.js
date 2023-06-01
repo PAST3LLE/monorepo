@@ -18,6 +18,7 @@ module.exports = {
         crypto: require.resolve("crypto-browserify"),
         https: require.resolve("https-browserify"),
         stream: require.resolve("stream-browserify"),
+        // path: require.resolve("path-browserify"),
         http: require.resolve("stream-http"),
         os: require.resolve("os-browserify"),
         url: require.resolve("url")
@@ -28,7 +29,7 @@ module.exports = {
           process: "process/browser",
           Buffer: ["buffer", "Buffer"],
         }),
-      ]);
+      ]); 
       config.ignoreWarnings = [/Failed to parse source map/];
       config.module.rules.push({
         test: /\.(ts|tsx|js|mjs|jsx)$/,

@@ -30,6 +30,7 @@ const SKILLTREE_WIDGET_THEME = {
           chains: {
             disconnected: 'disconnected-logo',
             5: 'GOERLI-logo',
+            137: 'POLYGON-logo',
             80001: 'POLYGON_MUMBAI-logo'
           },
           rarity: {

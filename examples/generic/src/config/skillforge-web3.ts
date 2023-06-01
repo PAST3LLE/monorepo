@@ -37,9 +37,9 @@ const CONTRACT_ADDRESSES_MAP: SkillForgeContractAddressMap = {
     mergeManager: CONTRACTS_NETWORKS[SupportedChains.GOERLI].UnlockManager.address as Address
   },
   // TODO: fix - use proper mumbai addreses
-  [SupportedChains.POLYGON_MUMBAI]: {
-    collectionsManager: CONTRACTS_NETWORKS[SupportedChains.GOERLI].CollectionsManager.address as Address,
-    mergeManager: CONTRACTS_NETWORKS[SupportedChains.GOERLI].UnlockManager.address as Address
+  [SupportedChains.POLYGON_MAINNET]: {
+    collectionsManager: CONTRACTS_NETWORKS[SupportedChains.POLYGON_MAINNET].CollectionsManager.address as Address,
+    mergeManager: CONTRACTS_NETWORKS[SupportedChains.POLYGON_MAINNET].UnlockManager.address as Address
   }
 }
 
@@ -47,7 +47,7 @@ const METADATA_URIS_MAP: SkillForgeMetadataUriMap = {
   [SupportedChains.GOERLI]: {
     collectionsManager: 'https://pstlcollections.s3.eu-south-2.amazonaws.com/collections/{id}.json'
   },
-  [SupportedChains.POLYGON_MUMBAI]: {
+  [SupportedChains.POLYGON_MAINNET]: {
     collectionsManager: 'https://pstlcollections.s3.eu-south-2.amazonaws.com/collections/{id}.json'
   }
 }

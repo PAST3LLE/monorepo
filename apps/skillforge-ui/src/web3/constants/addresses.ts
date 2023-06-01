@@ -7,8 +7,8 @@ export const CONTRACT_ADDRESSES_MAP: SkillForgeContractAddressMap = {
     collectionsManager: CONTRACTS_NETWORKS[SupportedChains.GOERLI].CollectionsManager.address as Address,
     mergeManager: CONTRACTS_NETWORKS[SupportedChains.GOERLI].MergeManager.address as Address
   },
-  [SupportedChains.POLYGON_MUMBAI]: {
-    collectionsManager: CONTRACTS_NETWORKS[SupportedChains.GOERLI].CollectionsManager.address as Address,
-    mergeManager: CONTRACTS_NETWORKS[SupportedChains.GOERLI].MergeManager.address as Address
+  [SupportedChains.POLYGON_MAINNET]: {
+    collectionsManager: CONTRACTS_NETWORKS[SupportedChains.POLYGON_MAINNET].CollectionsManager.address as Address,
+    mergeManager: CONTRACTS_NETWORKS[SupportedChains.POLYGON_MAINNET].MergeManager.address as Address
   }
 }
