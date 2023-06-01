@@ -1,7 +1,9 @@
 import { atom, useAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
+import { useMemo } from 'react'
 
 import { STATE_STORAGE_KEYS } from '../../constants/state-storage-keys'
+import pkgVersion from '../../version.json'
 
 interface VersionState {
   version: string | undefined
@@ -14,3 +16,10 @@ versionStateAtom.debugLabel = 'SFW3 VERSION ATOM'
 export const versionGetter = atom((get) => get(versionStateAtom))
 export const useSkillForgeVersionGetterAtom = () => useAtom(versionGetter)
 export const useSkillForgeVersionAtom = () => useAtom(versionStateAtom)
+
+// react hook that checks the local storage version against the current version and returns true if they match
+export const useSkillForgeVersionUpToDate = () => {
+  const [{ version }] = useSkillForgeVersionAtom()
+
+  return useMemo(() => version === pkgVersion?.version, [version])
+}

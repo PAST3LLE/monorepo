@@ -16,7 +16,7 @@ export function SkillForgeVersionAndCacheBustUpdater() {
       Object.keys(STATE_STORAGE_KEYS).forEach((key) => localStorage.removeItem(key))
       setVersion({ version: pkgVersion?.version })
     }
-  }, [pkgVersion?.version, version])
+  }, [setVersion, version])
 
   return null
 }
