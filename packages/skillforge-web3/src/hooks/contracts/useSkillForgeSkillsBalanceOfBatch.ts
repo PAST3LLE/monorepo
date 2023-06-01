@@ -13,7 +13,7 @@ export function useSkillForgeSkillsBalanceOfBatch(
   address?: Address
 ) {
   const contractReadsArgs = useMemo(
-    () => (address ? gatherSkillContractConfigParams(skills as Address[], metadata, address) : []),
+    () => gatherSkillContractConfigParams(skills as Address[], metadata, address),
     [skills, metadata, address]
   )
 
@@ -29,14 +29,13 @@ export function useSkillForgeSkillsBalanceOfBatch(
 function gatherSkillContractConfigParams(
   skillsAddressList: Address[] | undefined = [],
   metadata: SkillForgeMetadataState['metadata'],
-  balanceOfAddress: Address
+  balanceOfAddress: Address | undefined
 ) {
   const contractConfigList = skillsAddressList.flatMap((address, i) => {
     if (!address) {
       devWarn(
         '[SkillForgeBalancesUpdater::gatherSkillContractConfigParams]::Address undefined! Check contracts map in constants.'
       )
-      return undefined
     }
 
     const args = getBalanceOfBatchArgs(metadata[i]?.ids || [], balanceOfAddress)
@@ -51,7 +50,8 @@ function gatherSkillContractConfigParams(
   return contractConfigList
 }
 
-function getBalanceOfBatchArgs(ids: number[], address: Address) {
+function getBalanceOfBatchArgs(ids: number[], address: Address | undefined) {
+  if (!address) return [[], []]
   return ids.reduce(
     (acc: [Address[], BigNumber[]], id) => {
       acc[0] = [...acc[0], address]

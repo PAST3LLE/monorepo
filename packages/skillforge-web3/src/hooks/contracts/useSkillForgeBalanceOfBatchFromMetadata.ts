@@ -9,20 +9,18 @@ import { WAGMI_SCOPE_KEYS } from '../constants'
 type TokenDepsMap = { [key: Address]: BigNumber[] }
 export function useSkillForgeBalanceOfBatchFromMetadata(skillMetadata?: SkillMetadata, address?: Address) {
   const depsList = skillMetadata?.properties.dependencies
-  const tokenDepsMap =
-    depsList &&
-    depsList.reduce((acc, dep) => {
-      if (dep) {
-        if (Array.isArray(acc[dep.token])) {
-          acc[dep.token].push(dep.id)
-        } else {
-          acc[dep.token] = []
-        }
+  const tokenDepsMap = depsList?.reduce((acc, dep) => {
+    if (dep) {
+      if (Array.isArray(acc[dep.token])) {
+        acc[dep.token].push(dep.id)
+      } else {
+        acc[dep.token] = []
       }
-      return acc
-    }, {} as TokenDepsMap)
+    }
+    return acc
+  }, {} as TokenDepsMap)
 
-  const contractReadsArgs = tokenDepsMap && gatherSkillContractConfigParams(tokenDepsMap, address)
+  const contractReadsArgs = gatherSkillContractConfigParams(tokenDepsMap, address)
 
   return useContractReads({
     contracts: contractReadsArgs || [],
@@ -33,15 +31,13 @@ export function useSkillForgeBalanceOfBatchFromMetadata(skillMetadata?: SkillMet
   })
 }
 
-function gatherSkillContractConfigParams(tokenDepsMap: TokenDepsMap, balanceOfAddress?: Address) {
+function gatherSkillContractConfigParams(tokenDepsMap: TokenDepsMap | undefined = {}, balanceOfAddress?: Address) {
   const depsEntriesList = Object.entries(tokenDepsMap)
-  if (!balanceOfAddress || !depsEntriesList.length) return []
   const contractConfigList = depsEntriesList.map(([address, idsList]) => {
-    if (!address) {
+    if (!address || !balanceOfAddress) {
       devWarn(
-        '[useBalanceOfBatchFromMetadata::gatherSkillContractConfigParams]::Dep address undefined! Check contracts map in constants.'
+        '[useBalanceOfBatchFromMetadata::gatherSkillContractConfigParams]::Dep address and/or user address undefined! Check contracts map in constants.'
       )
-      return undefined
     }
 
     const args = getBalanceOfBatchArgs(idsList, balanceOfAddress)
@@ -56,7 +52,8 @@ function gatherSkillContractConfigParams(tokenDepsMap: TokenDepsMap, balanceOfAd
   return contractConfigList
 }
 
-function getBalanceOfBatchArgs(idsList: BigNumber[], address: Address) {
+function getBalanceOfBatchArgs(idsList: BigNumber[], address: Address | undefined) {
+  if (!address) return [[], []]
   return idsList.reduce(
     (acc: [Address[], BigNumber[]], currentId: BigNumber) => {
       acc[0] = [...acc[0], address]

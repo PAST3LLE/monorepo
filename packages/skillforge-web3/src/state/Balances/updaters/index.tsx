@@ -47,7 +47,8 @@ export function SkillForgeBalancesUpdater({ loadAmount = DEFAULT_COLLECTION_LOAD
         }))
       }
     }
-  }, [address, balancesBatch, metadata, resetUserBalances, skills, updateSkillForgeBalances])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [address, balancesBatch, metadata, resetUserBalances, updateSkillForgeBalances])
 
   return null
 }

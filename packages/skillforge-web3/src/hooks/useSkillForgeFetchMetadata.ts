@@ -12,7 +12,7 @@ import { useSupportedChainId } from './useSkillForgeSupportedChainId'
 export function useSkillForgeFetchMetadata({ loadAmount = 3, metadataFetchOptions }: SkillForgeMetadataUpdaterProps) {
   const chainId = useSupportedChainId()
   const [metadataUriMap] = useSkillForgeMetadataUriMapReadAtom()
-  const metadataUris = metadataUriMap?.[chainId]
+  const metadataUris = chainId ? metadataUriMap?.[chainId] : undefined
 
   // get a list of all the skill erc1155 token URIs
   // starting from LATEST collectionId, and counting down <loadAmount> times

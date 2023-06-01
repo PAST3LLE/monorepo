@@ -3,5 +3,5 @@ import { useSupportedChainId } from '../useSkillForgeSupportedChainId'
 
 export function useSkillForgeContractAddressesByChain<M extends UserConfigState['contractAddressMap']>(addressMap: M) {
   const chainId = useSupportedChainId()
-  return addressMap?.[chainId]
+  return chainId ? addressMap?.[chainId] : undefined
 }
