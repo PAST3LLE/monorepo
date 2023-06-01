@@ -22,14 +22,6 @@ export function useSkillForgeBalanceOfBatchFromMetadata(skillMetadata?: SkillMet
       return acc
     }, {} as TokenDepsMap)
 
-  /*
-    address = 0x12312312SomeRandomAddressGuy
-    tokenDepsMap = {
-        '0x123123SkillAddress_123123': [1000,2000,5000],
-        '0xAAB123SkillAddress_222444': [5000,7000]
-    }
-  */
-
   const contractReadsArgs = tokenDepsMap && gatherSkillContractConfigParams(tokenDepsMap, address)
 
   return useContractReads({

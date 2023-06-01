@@ -3,20 +3,15 @@ import { Collection__factory } from '@past3lle/skilltree-contracts'
 import { useMemo } from 'react'
 import { Address, useContractReads } from 'wagmi'
 
-import { SkillForgeMetadataUpdaterProps } from '../../state/Metadata/updaters/MetadataUpdater'
 import { WAGMI_SCOPE_KEYS } from '../constants'
+import { WithLoadAmount } from '../types'
 import { useSkillForgeGetSkillsAddresses } from './useSkillForgeGetSkillsAddresses'
 
-type GetSkillMetadataUriProps = Pick<SkillForgeMetadataUpdaterProps, 'contractAddressMap' | 'loadAmount'>
-export function useSkillForgeGetBatchSkillMetadataUris({
-  loadAmount = 10,
-  contractAddressMap
-}: GetSkillMetadataUriProps) {
+export function useSkillForgeGetBatchSkillMetadataUris({ loadAmount = 10 }: WithLoadAmount) {
   // get <loadAmount> of skillErc1155 addresses starting from LATEST collection
   // and counting down <loadAmount> number of times
   const { data: skillErc1155Addresses = [] } = useSkillForgeGetSkillsAddresses({
-    loadAmount,
-    contractAddressMap
+    loadAmount
   })
 
   const contractsReadsArgs = useMemo(

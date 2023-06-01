@@ -1,3 +1,2 @@
-import { SkillForgeContractAddressMap } from '../types'
-
-export type CommonHooksProps<M extends SkillForgeContractAddressMap> = { collectionId: number; addressMap: M }
+export type WithCollectionId = { collectionId: number }
+export type WithLoadAmount = { loadAmount: number }

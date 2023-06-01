@@ -1,6 +1,7 @@
 import { Address } from '@past3lle/types'
 import { useMemo } from 'react'
 
+import { useSkillForgeMetadataUriMapReadAtom } from '../state'
 import { SkillForgeMetadataUpdaterProps } from '../state/Metadata/updaters/MetadataUpdater'
 import { CollectionMetadata, SkillMetadata } from '../types'
 import { chainFetchIpfsUri } from '../utils'
@@ -8,14 +9,10 @@ import { useSkillForgeGetBatchSkillMetadataUris } from './contracts/useSkillForg
 import { useRefetchOnAddress } from './useRefetchOnAddress'
 import { useSupportedChainId } from './useSkillForgeSupportedChainId'
 
-export function useSkillForgeFetchMetadata({
-  contractAddressMap,
-  metadataUriMap,
-  loadAmount = 3,
-  metadataFetchOptions
-}: SkillForgeMetadataUpdaterProps) {
+export function useSkillForgeFetchMetadata({ loadAmount = 3, metadataFetchOptions }: SkillForgeMetadataUpdaterProps) {
   const chainId = useSupportedChainId()
-  const metadataUris = metadataUriMap[chainId]
+  const [metadataUriMap] = useSkillForgeMetadataUriMapReadAtom()
+  const metadataUris = metadataUriMap?.[chainId]
 
   // get a list of all the skill erc1155 token URIs
   // starting from LATEST collectionId, and counting down <loadAmount> times
@@ -23,8 +20,7 @@ export function useSkillForgeFetchMetadata({
     uris: { data: skillErc1155MetadataUris = [], refetch: refetchSkills },
     addresses: skill1155Addresses
   } = useSkillForgeGetBatchSkillMetadataUris({
-    loadAmount,
-    contractAddressMap
+    loadAmount
   })
 
   useRefetchOnAddress(refetchSkills)
@@ -66,7 +62,12 @@ export function useSkillForgeFetchMetadata({
     }
 
     return [allMetadataIds, allMetadata]
-  }, [metadataUris, loadAmount, skillErc1155MetadataUris])
+  }, [
+    metadataFetchOptions?.gatewayUris,
+    metadataUris?.collectionsManager,
+    skill1155Addresses,
+    skillErc1155MetadataUris
+  ])
 }
 
 export function deriveMetadataId(metadata: SkillMetadata, address: Address): `${Address}-${string}` {

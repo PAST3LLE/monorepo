@@ -1,21 +1,27 @@
 import { useEffect } from 'react'
-import { ForgeW3CoreProvidersProps } from 'src'
 
 import { useSkillForgeUserConfigAtom } from '..'
+import { ForgeW3CoreProvidersProps } from '../../../'
 
-type SkillForgeBalancesProps = Pick<ForgeW3CoreProvidersProps['config']['web3'], 'chains'> &
-  ForgeW3CoreProvidersProps['config']['skillOptions']
-export function SkillForgeUserConfigUpdater({ chains, metadataFetchOptions }: SkillForgeBalancesProps) {
+type SkillForgeBalancesProps = ForgeW3CoreProvidersProps['config']
+export function SkillForgeUserConfigUpdater({
+  contractAddresses,
+  metadataUris,
+  web3: { chains },
+  skillOptions
+}: SkillForgeBalancesProps) {
   const [, updateUserConfig] = useSkillForgeUserConfigAtom()
   useEffect(() => {
     updateUserConfig({
       chains,
       ipfs: {
-        gatewayUris: metadataFetchOptions?.gatewayUris || [],
-        gatewayApiUris: metadataFetchOptions?.gatewayApiUris || []
-      }
+        gatewayUris: skillOptions?.metadataFetchOptions?.gatewayUris || [],
+        gatewayApiUris: skillOptions?.metadataFetchOptions?.gatewayApiUris || []
+      },
+      metadataUriMap: metadataUris || {},
+      contractAddressMap: contractAddresses || {}
     })
-  }, [chains, metadataFetchOptions])
+  }, [chains, contractAddresses, metadataUris, skillOptions?.metadataFetchOptions, updateUserConfig])
 
   return null
 }

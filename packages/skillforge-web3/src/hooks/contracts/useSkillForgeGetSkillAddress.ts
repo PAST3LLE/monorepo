@@ -2,22 +2,18 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { CollectionsManager__factory } from '@past3lle/skilltree-contracts'
 import { useContractRead } from 'wagmi'
 
-import { SkillForgeContractAddressMap } from '../../types'
+import { useSkillForgeContractAddressMapReadAtom } from '../../state'
 import { WAGMI_SCOPE_KEYS } from '../constants'
+import { WithCollectionId } from '../types'
 import { useSkillForgeContractAddressesByChain } from './useSkillForgeContractAddress'
 
-interface FetchSkillAddressesProps {
-  contractAddressMap: SkillForgeContractAddressMap
-  collectionId: number
-}
-export function useSkillForgeGetSkillAddress(props: FetchSkillAddressesProps) {
-  const { collectionId, contractAddressMap } = props
-
-  const { collectionsManager } = useSkillForgeContractAddressesByChain(contractAddressMap)
+export function useSkillForgeGetSkillAddress({ collectionId }: WithCollectionId) {
+  const [contractAddressMap] = useSkillForgeContractAddressMapReadAtom()
+  const contractAddressesByChain = useSkillForgeContractAddressesByChain(contractAddressMap)
 
   return useContractRead({
     abi: CollectionsManager__factory.abi,
-    address: collectionsManager,
+    address: contractAddressesByChain?.collectionsManager,
     functionName: 'collectionContract',
     args: [BigNumber.from(collectionId)],
     watch: false,

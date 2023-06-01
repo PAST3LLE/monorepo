@@ -5,8 +5,9 @@ import { useContractRead } from 'wagmi'
 import { SkillForgeMetadataState, useSkillForgeMetadataAtom } from '..'
 import { useSkillForgeFetchMetadata, useSkillForgePrepareCollectionsContract } from '../../../hooks'
 import { WAGMI_SCOPE_KEYS } from '../../../hooks/constants'
+import { WithLoadAmount } from '../../../hooks/types'
 import { MOCK_ALL_SKILLS_METADATA } from '../../../mock/metadata'
-import { SkillForgeContractAddressMap, SkillForgeMetadataUriMap, SkillMetadata } from '../../../types'
+import { SkillMetadata } from '../../../types'
 import { CustomIpfsGatewayConfig } from '../../../utils/ipfs'
 
 export interface MetadataFetchOptions {
@@ -15,14 +16,12 @@ export interface MetadataFetchOptions {
   gatewayUris?: CustomIpfsGatewayConfig[]
   gatewayApiUris?: CustomIpfsGatewayConfig[]
 }
-export interface SkillForgeMetadataUpdaterProps {
-  metadataUriMap: SkillForgeMetadataUriMap
-  contractAddressMap: SkillForgeContractAddressMap
-  loadAmount?: number
+export type SkillForgeMetadataUpdaterProps = {
   metadataFetchOptions?: MetadataFetchOptions
-}
+} & Partial<WithLoadAmount>
+
 export function SkillForgeMetadataUpdater(props: SkillForgeMetadataUpdaterProps) {
-  const collectionsConfig = useSkillForgePrepareCollectionsContract(props.contractAddressMap)
+  const collectionsConfig = useSkillForgePrepareCollectionsContract()
   const { data: collections } = useContractRead({
     ...collectionsConfig,
     functionName: 'totalSupply',
@@ -31,8 +30,6 @@ export function SkillForgeMetadataUpdater(props: SkillForgeMetadataUpdaterProps)
 
   const promisedMetadataTuple = useSkillForgeFetchMetadata({
     loadAmount: collections?.toNumber() || 0,
-    metadataUriMap: props.metadataUriMap,
-    contractAddressMap: props.contractAddressMap,
     metadataFetchOptions: props.metadataFetchOptions
   })
 
@@ -55,7 +52,7 @@ export function SkillForgeMetadataUpdater(props: SkillForgeMetadataUpdaterProps)
     }
 
     resolveMetadata()
-  }, [collections?.toNumber(), props.loadAmount, promisedMetadataTuple])
+  }, [promisedMetadataTuple, props?.metadataFetchOptions, setMetadataState])
 
   // Reduce metadata to a map
   useEffect(() => {

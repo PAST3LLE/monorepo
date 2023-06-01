@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react'
 
+import { AtomsDevtoolsUpdater } from '../../../dev/devTools'
 import { SkillForgeW3AppConfig } from '../../../types'
 import { SkillForgeBalancesUpdater } from '../../Balances/updaters'
 import { SkillForgeMetadataUpdater } from '../../Metadata/updaters/MetadataUpdater'
@@ -10,18 +11,12 @@ import { SkillForgeWindowSizeUpdater } from '../../WindowSize/updaters'
 export function SkillForgeW3StateUpdaters(props: SkillForgeW3AppConfig & { children: ReactNode }) {
   return (
     <>
+      <AtomsDevtoolsUpdater appName={props.name} />
       {/* UPDATERS */}
       <SkillForgeVersionAndCacheBustUpdater />
-      <SkillForgeUserConfigUpdater
-        chains={props.web3.chains}
-        metadataFetchOptions={props.skillOptions?.metadataFetchOptions}
-      />
-      <SkillForgeMetadataUpdater
-        metadataUriMap={props.metadataUris}
-        contractAddressMap={props.contractAddresses}
-        metadataFetchOptions={props.skillOptions?.metadataFetchOptions}
-      />
-      <SkillForgeBalancesUpdater contractAddressMap={props.contractAddresses} />
+      <SkillForgeUserConfigUpdater {...props} />
+      <SkillForgeMetadataUpdater metadataFetchOptions={props.skillOptions?.metadataFetchOptions} />
+      <SkillForgeBalancesUpdater />
       <SkillForgeWindowSizeUpdater />
       {props.children}
     </>

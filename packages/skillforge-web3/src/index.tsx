@@ -70,7 +70,7 @@ function ForgeW3BalancesAndWindowSizeProviders({ config, children }: ForgeW3Core
             appName: config.name
           }}
         >
-          <SkillForgeBalancesUpdater contractAddressMap={config.contractAddresses} />
+          <SkillForgeBalancesUpdater />
           {children}
         </PstlW3Providers>
       </PstlHooksProvider>

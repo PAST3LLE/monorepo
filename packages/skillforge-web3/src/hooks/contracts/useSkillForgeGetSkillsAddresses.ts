@@ -3,20 +3,16 @@ import { CollectionsManager__factory } from '@past3lle/skilltree-contracts'
 import { useMemo } from 'react'
 import { useContractReads } from 'wagmi'
 
-import { SkillForgeContractAddressMap } from '../../types'
+import { useSkillForgeContractAddressMapReadAtom } from '../../state'
 import { WAGMI_SCOPE_KEYS } from '../constants'
+import { WithLoadAmount } from '../types'
 import { useRefetchOnAddress } from '../useRefetchOnAddress'
 import { useSkillForgeContractAddressesByChain } from './useSkillForgeContractAddress'
 import { useSkillForgeGetLatestCollectionId } from './useSkillForgeGetLatestCollectionId'
 
-interface FetchSkillAddressesProps {
-  loadAmount: number
-  contractAddressMap: SkillForgeContractAddressMap
-}
-export function useSkillForgeGetSkillsAddresses(props: FetchSkillAddressesProps) {
-  const { loadAmount, contractAddressMap } = props
-
-  const { collectionsManager } = useSkillForgeContractAddressesByChain(contractAddressMap)
+export function useSkillForgeGetSkillsAddresses({ loadAmount }: WithLoadAmount) {
+  const [contractAddressMap] = useSkillForgeContractAddressMapReadAtom()
+  const contractAddressesByChain = useSkillForgeContractAddressesByChain(contractAddressMap)
   const { data: latestCollectionId = BigNumber.from(1), refetch: refetchCollectionId } =
     useSkillForgeGetLatestCollectionId(contractAddressMap)
 
@@ -25,7 +21,7 @@ export function useSkillForgeGetSkillsAddresses(props: FetchSkillAddressesProps)
   const contractsReadsArgs = useMemo(() => {
     const commonArgs = {
       abi: CollectionsManager__factory.abi,
-      address: collectionsManager,
+      address: contractAddressesByChain?.collectionsManager,
       functionName: 'collectionContract'
     } as const
 
@@ -40,7 +36,7 @@ export function useSkillForgeGetSkillsAddresses(props: FetchSkillAddressesProps)
     }
 
     return derivedArgs
-  }, [latestCollectionId?.toString(), loadAmount])
+  }, [contractAddressesByChain?.collectionsManager, latestCollectionId, loadAmount])
 
   return useContractReads({
     // reverse as we loop backwards

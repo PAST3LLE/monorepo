@@ -9,5 +9,5 @@ export function useRefetchOnAddress(refetchCb: (...args: any[]) => void) {
   const { address } = useAccount()
   useEffect(() => {
     refetchCb()
-  }, [address])
+  }, [address, refetchCb])
 }

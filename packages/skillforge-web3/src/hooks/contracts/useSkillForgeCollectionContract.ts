@@ -3,22 +3,21 @@ import { Collection__factory, CollectionsManager__factory } from '@past3lle/skil
 import { useMemo } from 'react'
 import { Address, useContract, useContractRead, useProvider } from 'wagmi'
 
-import { CallOverrides, PayableOverrides, SkillForgeContractAddressMap } from '../../types'
+import { useSkillForgeContractAddressMapReadAtom } from '../../state'
+import { CallOverrides, PayableOverrides } from '../../types'
 import { WAGMI_SCOPE_KEYS } from '../constants'
-import { CommonHooksProps } from '../types'
+import { WithCollectionId } from '../types'
 import { useSupportedChainId } from '../useSkillForgeSupportedChainId'
 import { useSkillForgeContractAddressesByChain } from './useSkillForgeContractAddress'
 
-export function useSkillForgeCollectionContract<M extends SkillForgeContractAddressMap>({
-  collectionId,
-  addressMap
-}: CommonHooksProps<M>) {
-  const { collectionsManager } = useSkillForgeContractAddressesByChain(addressMap)
+export function useSkillForgeCollectionContract({ collectionId }: WithCollectionId) {
+  const [addressMap] = useSkillForgeContractAddressMapReadAtom()
+  const contractAddressesByChain = useSkillForgeContractAddressesByChain(addressMap)
   const { data: address } = useContractRead({
     abi: CollectionsManager__factory.abi,
     functionName: 'collectionContract',
     args: [BigNumber.from(collectionId)],
-    address: collectionsManager,
+    address: contractAddressesByChain?.collectionsManager,
     scopeKey: WAGMI_SCOPE_KEYS.SKILLS_CONTRACT
   })
 

@@ -1,16 +1,14 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { Collection__factory } from '@past3lle/skilltree-contracts'
-import { SkillForgeMetadataUpdaterProps } from 'src/state/Metadata/updaters/MetadataUpdater'
 import { useContractRead } from 'wagmi'
 
 import { WAGMI_SCOPE_KEYS } from '../constants'
+import { WithCollectionId } from '../types'
 import { useSkillForgeGetSkillAddress } from './useSkillForgeGetSkillAddress'
 
-type GetSkillMetadataUriProps = Pick<SkillForgeMetadataUpdaterProps, 'contractAddressMap'> & { collectionId: number }
-export function useSkillForgeGetSkillMetadataUri({ collectionId, contractAddressMap }: GetSkillMetadataUriProps) {
+export function useSkillForgeGetSkillMetadataUri({ collectionId }: WithCollectionId) {
   const { data: address } = useSkillForgeGetSkillAddress({
-    collectionId,
-    contractAddressMap
+    collectionId
   })
 
   return useContractRead({

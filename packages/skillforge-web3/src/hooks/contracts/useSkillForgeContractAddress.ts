@@ -1,7 +1,7 @@
-import { SkillForgeContractAddressMap } from '../../types'
+import { UserConfigState } from '../../state'
 import { useSupportedChainId } from '../useSkillForgeSupportedChainId'
 
-export function useSkillForgeContractAddressesByChain<M extends SkillForgeContractAddressMap>(addressMap: M) {
+export function useSkillForgeContractAddressesByChain<M extends UserConfigState['contractAddressMap']>(addressMap: M) {
   const chainId = useSupportedChainId()
-  return addressMap[chainId]
+  return addressMap?.[chainId]
 }

@@ -5,24 +5,20 @@ import { Address, useAccount } from 'wagmi'
 
 import { SkillForgeBalances, useSkillForgeBalancesAtom, useSkillForgeResetBalancesAtom } from '..'
 import { useRefetchOnAddress, useSkillForgeGetSkillsAddresses, useSkillForgeSkillsBalanceOfBatch } from '../../../hooks'
+import { WithLoadAmount } from '../../../hooks/types'
 import { SkillForgeMetadataState, useSkillForgeMetadataReadAtom } from '../../Metadata'
-import { SkillForgeMetadataUpdaterProps } from '../../Metadata/updaters/MetadataUpdater'
 
 // Default amount of latest collection IDs to pull from CollectionsManager.sol
 const DEFAULT_COLLECTION_LOAD_AMOUNT = 3
 
-type SkillForgeBalancesProps = Omit<SkillForgeMetadataUpdaterProps, 'metadataUriMap'>
-export function SkillForgeBalancesUpdater({
-  contractAddressMap,
-  loadAmount = DEFAULT_COLLECTION_LOAD_AMOUNT
-}: SkillForgeBalancesProps) {
+export function SkillForgeBalancesUpdater({ loadAmount = DEFAULT_COLLECTION_LOAD_AMOUNT }: Partial<WithLoadAmount>) {
   const [metadata] = useSkillForgeMetadataReadAtom()
   const [, updateSkillForgeBalances] = useSkillForgeBalancesAtom()
   const [, resetUserBalances] = useSkillForgeResetBalancesAtom()
 
   const { address } = useAccount()
 
-  const { data: skills = [] } = useSkillForgeGetSkillsAddresses({ loadAmount, contractAddressMap })
+  const { data: skills = [] } = useSkillForgeGetSkillsAddresses({ loadAmount })
   const { data: balancesBatch, refetch: refetchBalances } = useSkillForgeSkillsBalanceOfBatch(
     skills as Address[],
     metadata,
@@ -51,7 +47,7 @@ export function SkillForgeBalancesUpdater({
         }))
       }
     }
-  }, [address, balancesBatch, metadata, updateSkillForgeBalances])
+  }, [address, balancesBatch, metadata, resetUserBalances, skills, updateSkillForgeBalances])
 
   return null
 }
