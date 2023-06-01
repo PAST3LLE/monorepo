@@ -1,13 +1,12 @@
 import { useAtomsDevtools } from 'jotai-devtools'
-import { ReactNode } from 'react'
 
 interface Props {
-  children: ReactNode
   appName: string
 }
 
 // Attach atoms to redux devtools
-export const AtomsDevtools = ({ children, appName }: Props) => {
-  useAtomsDevtools(appName)
-  return children
+export const AtomsDevtoolsUpdater = ({ appName }: Props) => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  process.env.NODE_ENV !== 'production' && useAtomsDevtools(appName)
+  return null
 }
