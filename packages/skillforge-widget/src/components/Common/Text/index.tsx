@@ -1,6 +1,6 @@
 import { Text, TextProps } from '@past3lle/components'
 import { setBestContrastingColour } from '@past3lle/theme'
-import React from 'react'
+import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
 export const BlackBoldItalic = styled(Text.Black).attrs((props) => ({
@@ -61,16 +61,20 @@ export interface CursiveMonoHeaderProps {
   restWordProps?: TextProps & { zIndex?: number; textShadow?: string }
 }
 const UnstyledCursiveMonoHeader = ({ text, className, capitalLetterProps, restWordProps }: CursiveMonoHeaderProps) => {
-  const textArr = text.split(' ')
-  const firstLetters: string[] = []
-  const restWords: string[] = []
-  for (let i = 0; i < textArr.length; i++) {
-    const firstLetter = textArr[i][0]
-    const restWord = textArr[i].slice(1)
+  const { firstLetters, restWords } = useMemo(() => {
+    const textArr = text.split(' ')
+    const firstLetters: string[] = []
+    const restWords: string[] = []
+    for (let i = 0; i < textArr.length; i++) {
+      const firstLetter = textArr[i][0]
+      const restWord = textArr[i].slice(1)
 
-    firstLetters.push(firstLetter)
-    restWords.push(restWord)
-  }
+      firstLetters.push(firstLetter)
+      restWords.push(restWord)
+    }
+
+    return { firstLetters, restWords }
+  }, [text])
 
   return (
     <>
@@ -101,12 +105,3 @@ const UnstyledCursiveMonoHeader = ({ text, className, capitalLetterProps, restWo
 }
 
 export const CursiveMonoHeader = styled(UnstyledCursiveMonoHeader)``
-/* 
-return (
-    <CursiveHeader textAlign="left" fontSize="2.2rem">
-      <MonospaceText display="inline-flex" color={'inherit'}>
-        iew
-      </MonospaceText>
-    </CursiveHeader>
-  )
-*/

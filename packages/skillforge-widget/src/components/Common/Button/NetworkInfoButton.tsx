@@ -2,7 +2,6 @@ import { Row } from '@past3lle/components'
 import { SupportedChains, useSkillForgeWindowSizeAtom, useSupportedChain } from '@past3lle/skillforge-web3'
 import { MEDIA_WIDTHS } from '@past3lle/theme'
 import { useWeb3Modal } from '@web3modal/react'
-// import { useWeb3Modal } from '@web3modal/react'
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
 
@@ -12,22 +11,20 @@ import { MonospaceText } from '../Text'
 
 export function NetworkInfoButton() {
   const assetsMap = useAssetsMap()
+  const [{ width = 0 }] = useSkillForgeWindowSizeAtom()
+  const isSmallMediumWidth = width > MEDIA_WIDTHS.upToSmall && width < MEDIA_WIDTHS.upToMedium
+  const isSmallWidth = width <= MEDIA_WIDTHS.upToSmall
 
   const chain = useSupportedChain()
 
-  const chainName = chain?.name
+  const chainName = chain?.name || (isSmallWidth ? 'login' : 'offline')
   const chainLogo = _getChainLogo(chain?.id, assetsMap)
-
-  const [{ width = 0 }] = useSkillForgeWindowSizeAtom()
-  const showShortLogo = width > MEDIA_WIDTHS.upToSmall && width < MEDIA_WIDTHS.upToMedium
 
   const { open } = useWeb3Modal()
 
   const handleClick = useCallback(async () => {
-    return open({ route: 'SelectNetwork' })
-  }, [open])
-
-  if (!chain?.id) return null
+    return open({ route: chain?.id ? (width > MEDIA_WIDTHS.upToSmall ? 'SelectNetwork' : 'Account') : 'ConnectWallet' })
+  }, [chain?.id, open, width])
 
   return (
     <NetworkInfoButtonContainer
@@ -39,26 +36,28 @@ export function NetworkInfoButton() {
           ? 'Disconnected. Click to select a network and connect.'
           : `Connected to ${chainName}. Click to view/change networks.`
       }
+      disconnected={!chain?.id}
     >
       <img src={chainLogo} />
-      {!showShortLogo && <MonospaceText>{chainName}</MonospaceText>}
+      {!isSmallMediumWidth && <MonospaceText>{chainName}</MonospaceText>}
     </NetworkInfoButtonContainer>
   )
 }
 
-const NetworkInfoButtonContainer = styled(Row).attrs({ justifyContent: 'center', alignItems: 'center' })`
+const NetworkInfoButtonContainer = styled(Row).attrs({ justifyContent: 'center', alignItems: 'center' })<{
+  disconnected: boolean
+}>`
   height: 80%;
-  // width: 5rem;
   width: auto;
   cursor: pointer;
-  gap: 0.3rem 0.75rem;
+  gap: ${({ disconnected }) => `0.3rem ${disconnected ? 0.35 : 0.65}rem`};
   background-color: #000000d4;
   border-radius: 0.5rem;
   padding: 0.5rem 1rem;
   box-shadow: 4px 4px 1px 0px #000000bd;
 
   > img {
-    max-height: 100%;
+    max-height: 90%;
   }
   > ${MonospaceText} {
     font-size: 1rem;

@@ -2,6 +2,8 @@ import { Header as PstlHeader, Row } from '@past3lle/components'
 import { setBackgroundOrDefault, upToExtraSmall, upToSmall } from '@past3lle/theme'
 import styled, { DefaultTheme } from 'styled-components'
 
+import { ThemedButton } from '../Common/Button'
+
 export const Web3InfoContainer = styled(Row)`
   position: relative;
   justify-content: flex-end;
@@ -59,20 +61,21 @@ export const HeaderContainer = styled(PstlHeader)<{ isOpen?: boolean }>`
     }
   }
 
-  ${({ theme, isOpen }) => upToSmall`
+  ${upToSmall`
     min-height: 6rem;
     padding: 0;
 
     > ${Row} > ${Web3InfoContainer} {
-      // display: none;
-      width: 45px;
-      height: 45px;
-      margin-right: 1rem;
-      background: url(${theme.assetsMap.icons.inventory}) center/cover no-repeat;
+      width: 80%;
+      margin-right: 0.5rem;
+      margin-left: auto;
 
       > ${Row} {
-        ${!isOpen && 'display: none;'}
-        overflow: hidden;
+        gap: 1rem;
+        // Inventory button
+        > ${ThemedButton}:first-child {
+          padding: 0 0.8rem;
+        }
       }
     }
   `}

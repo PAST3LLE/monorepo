@@ -1,48 +1,79 @@
 import { Row, Text } from '@past3lle/components'
+import { useIsSmallMediaWidth } from '@past3lle/hooks'
 import { useW3Connection as usePstlConnection, useW3Modal as usePstlWeb3Modal } from '@past3lle/skillforge-web3'
-import { setBackgroundOrDefault } from '@past3lle/theme'
+import { fromSmall, setBackgroundOrDefault } from '@past3lle/theme'
 import { truncateAddress } from '@past3lle/utils'
-import { useCallback } from 'react'
-import React from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
 
+import { ThemedButton } from '.'
+import { MAIN_FG } from '../../../theme/constants'
+import { useGenericImageSrcSet } from '../../../theme/global'
 import { useAssetsMap } from '../../../theme/utils'
+import { MonospaceText } from '../Text'
 
 export function ConnectionInfoButton() {
   const { open } = usePstlWeb3Modal()
   const [, { openW3Modal }, { address }] = usePstlConnection()
 
   const assetsMap = useAssetsMap()
+  const logoUrlMaps = useGenericImageSrcSet()
 
   const handleClick = useCallback(async () => {
     address ? openW3Modal({ route: 'Account' }) : open({ route: 'ConnectWallet' })
   }, [address, open, openW3Modal])
 
-  return (
-    <ConnectionInfoContainer
-      title={'Account and connection information. Click to view/change accounts.'}
-      width={'26rem'}
-      minWidth="24rem"
-      marginTop="0.6rem"
-      gap="0.5rem"
-      onClick={handleClick}
-    >
-      <img src={assetsMap.icons.connection} />
-      <Text.SubHeader
-        margin="0 0 1rem 0"
-        padding={0}
-        fontWeight={!!address ? 500 : 700}
-        fontStyle="normal"
-        fontFamily="monospace"
-        letterSpacing="-1.6px"
+  const isSmallWidth = useIsSmallMediaWidth()
+
+  if (isSmallWidth) {
+    return (
+      <ThemedButton
+        bgColor={'black'}
+        bgImage={logoUrlMaps.EMPTY_SKILL_DDPX_URL_MAP ?? undefined}
+        bgBlendMode="hard-light"
+        title={'Click to view skills inventory and account information'}
+        display="flex"
+        flexDirection={'row-reverse'}
+        alignItems="center"
+        gap="0 0.5rem"
+        height="80%"
+        padding="0.5rem"
+        // {...props.buttonProps}
+        onClick={handleClick}
       >
-        <ConnectionStatusWrapper isConnected={!!address}>
-          {!address && <span>LOGIN</span>}{' '}
-          <small>{`${address ? truncateAddress(address, { type: 'long' }) : 'TO VIEW SKILLS'}`}</small>
-        </ConnectionStatusWrapper>
-      </Text.SubHeader>
-    </ConnectionInfoContainer>
-  )
+        <MonospaceText color={MAIN_FG} fontSize="1.05rem" marginLeft="-0.2rem">
+          account
+        </MonospaceText>
+        <img src={assetsMap.icons.shop} style={{ maxWidth: '2.8rem' }} />
+      </ThemedButton>
+    )
+  } else {
+    return (
+      <ConnectionInfoContainer
+        title={'Account and connection information. Click to view/change accounts.'}
+        width={'26rem'}
+        minWidth={'24rem'}
+        marginTop="0.6rem"
+        gap="0.5rem"
+        onClick={handleClick}
+      >
+        <img src={assetsMap.icons.connection} />
+        <Text.SubHeader
+          margin="0 0 1rem 0"
+          padding={0}
+          fontWeight={!!address ? 500 : 700}
+          fontStyle="normal"
+          fontFamily="monospace"
+          letterSpacing="-1.6px"
+        >
+          <ConnectionStatusWrapper isConnected={!!address}>
+            {!address && <span>LOGIN</span>}{' '}
+            <small>{`${address ? truncateAddress(address, { type: 'long' }) : 'TO VIEW SKILLS'}`}</small>
+          </ConnectionStatusWrapper>
+        </Text.SubHeader>
+      </ConnectionInfoContainer>
+    )
+  }
 }
 
 const ConnectionInfoContainer = styled(Row).attrs({ justifyContent: 'center', alignItems: 'center' })`
@@ -58,13 +89,16 @@ const ConnectionInfoContainer = styled(Row).attrs({ justifyContent: 'center', al
     text-shadow: 3px 2px 1px #ffffffc9;
   }
   filter: invert(1);
-  ${({ theme }) =>
-    theme.assetsMap.images.background.header?.account &&
-    setBackgroundOrDefault(
-      theme,
-      { bgValue: theme.assetsMap.images.background.header.account, defaultValue: 'transparent' },
-      { backgroundAttributes: ['center/contain no-repeat'], backgroundColor: 'transparent' }
-    )}
+  ${({ theme }) => fromSmall`
+    ${
+      theme.assetsMap.images.background.header?.account &&
+      setBackgroundOrDefault(
+        theme,
+        { bgValue: theme.assetsMap.images.background.header.account, defaultValue: 'transparent' },
+        { backgroundAttributes: ['center/contain no-repeat'], backgroundColor: 'transparent' }
+      )
+    }}
+  `}
 `
 
 const ConnectionStatusWrapper = styled.div<{ isConnected: boolean }>`
