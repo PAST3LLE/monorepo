@@ -44,7 +44,7 @@ export const ASSETS_MAP: SkillForgeAssetsMap['assetsMap'] & {
     inventory: INVENTORY_ICON,
     shop: SHOP_ICON,
     chains: {
-      disconnected: CONNECTION_ICON,
+      disconnected: LOCK_ICON,
       5: ETHEREUM_LOGO,
       137: POLYGON_LOGO
       // 80001: POLYGON_LOGO
