@@ -1,7 +1,6 @@
 import { PstlHooksProvider } from '@past3lle/hooks'
-import CONTRACTS_NETWORKS from '@past3lle/skilltree-contracts/networks.json'
-import packageJSON from '@past3lle/skilltree-contracts/package.json'
 import {
+  type ChainsPartialReadonly,
   PstlModalTheme as ModalTheme,
   PstlW3Providers,
   usePstlEthereumClient as useEthereumClient,
@@ -22,10 +21,6 @@ export * from './constants'
 
 // State and Updaters
 export * from './state'
-
-// Skilltree-contracts version
-const CONTRACTS_VERSIONS: string = packageJSON.version
-export { CONTRACTS_VERSIONS, CONTRACTS_NETWORKS }
 
 interface ForgeW3CoreProvidersProps {
   children: ReactNode
@@ -87,5 +82,6 @@ export {
   useEthereumClient,
   useWagmiClient,
   type ModalTheme,
-  type ForgeW3CoreProvidersProps
+  type ForgeW3CoreProvidersProps,
+  type ChainsPartialReadonly
 }

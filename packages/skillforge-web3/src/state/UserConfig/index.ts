@@ -1,3 +1,4 @@
+import { ChainsPartialReadonly } from '@past3lle/web3-modal'
 import { atom, useAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 import { Chain } from 'wagmi'
@@ -7,7 +8,7 @@ import { SkillForgeContractAddressMap, SkillForgeMetadataUriMap } from '../../ty
 import { CustomIpfsGatewayConfig } from '../../utils'
 
 export interface UserConfigState {
-  chains: Chain[]
+  chains: ChainsPartialReadonly
   ipfs: {
     gatewayUris: CustomIpfsGatewayConfig[]
     gatewayApiUris: CustomIpfsGatewayConfig[]

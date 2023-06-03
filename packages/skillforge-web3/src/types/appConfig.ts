@@ -9,11 +9,13 @@ export { type SkillForgeMetadataFetchOptions }
 export interface SkillForgeW3AppConfigSkillOptions {
   metadataFetchOptions?: SkillForgeMetadataFetchOptions
 }
+
+export type Web3ModalConfigWeb3Props = Omit<PstlWeb3ModalProps, 'appName'> & {
+  standalone?: boolean
+}
 export interface SkillForgeW3AppConfig {
   name: string
-  web3: Omit<PstlWeb3ModalProps, 'appName'> & {
-    standalone?: boolean
-  }
+  web3: Web3ModalConfigWeb3Props
   contractAddresses: SkillForgeContractAddressMap
   metadataUris: SkillForgeMetadataUriMap
   skillOptions?: SkillForgeW3AppConfigSkillOptions
