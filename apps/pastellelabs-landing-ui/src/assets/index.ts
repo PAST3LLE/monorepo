@@ -1,4 +1,3 @@
-import { SkillForgeAssetsMap } from '@past3lle/skillforge-widget'
 import COMPANY_LOGO from 'assets/png/back-logo.png'
 import APP_BACKGROUND from 'assets/png/background.png'
 import ETHEREUM_LOGO from 'assets/png/chains/ethereumChainLogo.webp'
@@ -15,7 +14,7 @@ import SHOP_ICON from 'assets/png/icons/pixelated-shirt.png'
 import ACCOUNT_BACKGROUND from 'assets/png/spray-account.png'
 import HIGHLIGHT from 'assets/png/spray.png'
 
-export const ASSETS_MAP: SkillForgeAssetsMap['assetsMap'] = {
+export const ASSETS_MAP = {
   logos: {
     company: { full: COMPANY_LOGO }
   },
@@ -41,6 +40,7 @@ export const ASSETS_MAP: SkillForgeAssetsMap['assetsMap'] = {
     chains: {
       disconnected: CONNECTION_ICON,
       5: ETHEREUM_LOGO,
+      137: POLYGON_LOGO,
       80001: POLYGON_LOGO
     },
     rarity: {

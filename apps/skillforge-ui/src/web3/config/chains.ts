@@ -1,3 +1,3 @@
-import { goerli, polygon } from 'wagmi/chains'
+import { goerli, polygon, polygonMumbai } from 'wagmi/chains'
 
-export const SUPPORTED_CHAINS = [goerli, polygon]
+export const SUPPORTED_CHAINS = [goerli, polygon, polygonMumbai]

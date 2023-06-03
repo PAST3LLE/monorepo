@@ -1,7 +1,7 @@
-import { createPast3lleTemplateTheme } from '@past3lle/theme'
+import { createTheme } from '@past3lle/skillforge-widget'
 import { ASSETS_MAP } from 'assets'
 
-export const skillforgeTheme = createPast3lleTemplateTheme('SKILLFORGE', {
+export const skillforgeTheme = createTheme({
   DEFAULT: {
     assetsMap: ASSETS_MAP
   },
