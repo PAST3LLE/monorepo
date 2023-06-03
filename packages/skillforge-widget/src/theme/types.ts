@@ -1,4 +1,4 @@
-import { SkillRarity, SupportedChains } from '@past3lle/skillforge-web3'
+import { ChainsPartialReadonly, SkillRarity } from '@past3lle/skillforge-web3'
 import {
   BackgroundPropertyFull,
   ThemeBaseRequired,
@@ -7,17 +7,17 @@ import {
   ThemeMinimumRequired
 } from '@past3lle/theme'
 
-type ChainsIcons = {
-  readonly disconnected: string
+type ChainsIcons<SC extends ChainsPartialReadonly = ChainsPartialReadonly> = {
+  readonly [key in SC[number]['id']]: string
 } & {
-  readonly [key in SupportedChains]: string
+  readonly disconnected: string
 }
 
 type RarityIcons = {
   readonly [key in SkillRarity]: string
 }
 
-export interface SkillForgeAssetsMap {
+export interface SkillForgeAssetsMap<SC extends ChainsPartialReadonly = ChainsPartialReadonly> {
   readonly assetsMap: {
     readonly logos: {
       company: {
@@ -48,13 +48,13 @@ export interface SkillForgeAssetsMap {
       connection: string
       inventory: string
       shop: string
-      chains: ChainsIcons
+      chains: ChainsIcons<SC>
       rarity: RarityIcons
     }
   }
 }
 
-export interface SkillForgeTheme extends SkillForgeAssetsMap {
+export interface SkillForgeTheme<SC extends ChainsPartialReadonly> extends SkillForgeAssetsMap<SC> {
   mainText: string
   darkText: string
   lightText: string
@@ -87,9 +87,11 @@ export interface SkillForgeTheme extends SkillForgeAssetsMap {
   }
 }
 
-export type SkillForgeThemeByModes = ThemeMinimumRequired & ThemeMediaWidthsBaseRequired & ThemeByModes<SkillForgeTheme>
+export type SkillForgeThemeByModes<SC extends ChainsPartialReadonly> = ThemeMinimumRequired &
+  ThemeMediaWidthsBaseRequired &
+  ThemeByModes<SkillForgeTheme<SC>>
 
 declare module 'styled-components' {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  export interface DefaultTheme extends SkillForgeTheme, ThemeBaseRequired {}
+  export interface DefaultTheme extends SkillForgeTheme<ChainsPartialReadonly>, ThemeBaseRequired {}
 }

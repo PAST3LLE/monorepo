@@ -1,9 +1,9 @@
 import { useW3Connection, useW3Modal } from '@past3lle/skillforge-web3'
-import { createPast3lleTemplateTheme } from '@past3lle/theme'
 import React from 'react'
 
 import { SkillForge } from '../components'
 import { SkillForgeHeader } from '../components/Header'
+import { createTheme } from '../theme/utils'
 import { commonProps, contractProps } from './config'
 
 /* 
@@ -27,7 +27,16 @@ function InnerApp() {
   )
 }
 
-const skillforgeTheme = createPast3lleTemplateTheme('SKILLFORGE', {
+const skillforgeTheme = createTheme({
+  ALT: {
+    mainBgAlt: '#1A1A1A',
+    assetsMap: {
+      logos: {
+        company: { full: 'COMPANY_LOGO' },
+        forge: { '512': 'FORGE_512' }
+      }
+    }
+  },
   DEFAULT: {
     assetsMap: {
       logos: {

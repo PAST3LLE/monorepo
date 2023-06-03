@@ -1,11 +1,10 @@
 import { Row } from '@past3lle/components'
-import { SupportedChains, useSkillForgeWindowSizeAtom, useSupportedChain } from '@past3lle/skillforge-web3'
+import { useSkillForgeWindowSizeAtom, useSupportedChain } from '@past3lle/skillforge-web3'
 import { MEDIA_WIDTHS } from '@past3lle/theme'
 import { useWeb3Modal } from '@web3modal/react'
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
 
-import { SkillForgeAssetsMap as AssetsMap } from '../../../theme/types'
 import { useAssetsMap } from '../../../theme/utils'
 import { MonospaceText } from '../Text'
 
@@ -18,7 +17,7 @@ export function NetworkInfoButton() {
   const chain = useSupportedChain()
 
   const chainName = chain?.name || (isSmallWidth ? 'login' : 'offline')
-  const chainLogo = _getChainLogo(chain?.id, assetsMap)
+  const chainLogo = chain?.id ? assetsMap.icons.chains?.[chain?.id] : assetsMap.icons.chains.disconnected
 
   const { open } = useWeb3Modal()
 
@@ -71,15 +70,3 @@ const NetworkInfoButtonContainer = styled(Row).attrs({ justifyContent: 'center',
 
   transition: box-shadow 0.1s ease-in-out, transform 0.1s ease-in-out;
 `
-
-function _getChainLogo(id: number | undefined, assetsMap: AssetsMap['assetsMap']) {
-  switch (id) {
-    // GOERLI
-    case SupportedChains.GOERLI:
-      return assetsMap.icons.chains[SupportedChains.GOERLI]
-    case SupportedChains.POLYGON_MAINNET:
-      return assetsMap.icons.chains[SupportedChains.POLYGON_MAINNET]
-    default:
-      return assetsMap.icons.chains.disconnected
-  }
-}

@@ -1,6 +1,6 @@
 import { SkillForgeTheme } from './types'
 
-export const baseTheme: Omit<SkillForgeTheme, 'assetsMap'> = {
+export const baseTheme: Omit<SkillForgeTheme<any>, 'assetsMap'> = {
   mainText: '#fff',
   darkText: '#000',
   lightText: 'ghostwhite',

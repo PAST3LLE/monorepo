@@ -16,12 +16,15 @@ import {
   SkillForgeThemeAndDataProviders
 } from './state'
 import { SkillForgeAssetsMap, SkillForgeTheme, SkillForgeThemeByModes } from './theme/types'
+import { createTheme } from './theme/utils'
 
 export {
   // Components
   SkillForge as default,
   SkillForgeConnectedHeader,
   SkillForgeComponent,
+  // Theme creator
+  createTheme,
   // Buttons
   ConnectionInfoButton,
   InventoryButton,
