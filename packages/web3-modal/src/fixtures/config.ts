@@ -1,8 +1,10 @@
 import { ThemeByModes, createCustomTheme } from '@past3lle/theme'
+import { goerli, polygonMumbai } from 'wagmi/chains'
 
-import { chains } from '../connectors/config'
 import { PstlWeb3ModalProps } from '../providers'
 import { PstlModalTheme } from '../theme/types'
+
+const chains = [goerli, polygonMumbai]
 
 const BG_LOGO = 'https://ik.imagekit.io/pastelle/SKILLFORGE/forge-background.png'
 export const pstlModalTheme = createCustomTheme<ThemeByModes<PstlModalTheme>>({

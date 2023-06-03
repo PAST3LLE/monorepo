@@ -4,13 +4,13 @@ import { IPlugin } from '@web3auth/base-plugin'
 import { Web3Auth } from '@web3auth/modal'
 import { OpenloginAdapter } from '@web3auth/openlogin-adapter'
 import { Web3AuthConnector } from '@web3auth/web3auth-wagmi-connector'
-import { Chain } from 'wagmi'
 
 import { Z_INDICES } from '../constants'
+import { ChainsPartialReadonly } from '../providers/types'
 
 export interface PstlWeb3AuthConnectorProps {
   theme?: 'light' | 'dark'
-  chains: Chain[]
+  chains: ChainsPartialReadonly
   zIndex?: number
   network: 'mainnet' | 'testnet' | 'development' | 'cyan'
   preset?: 'DISALLOW_EXTERNAL_WALLETS' | 'ALLOW_EXTERNAL_WALLETS'

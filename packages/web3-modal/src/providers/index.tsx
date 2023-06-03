@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react'
 
 import { PstlWeb3ConnectionModal } from '../components'
-import type { PstlWeb3ModalProps } from './types'
+import type { ChainsPartialReadonly, PstlWeb3ModalProps } from './types'
 import { PstlWagmiClientOptions, usePstlEthereumClient, usePstlWagmiClient } from './utils'
 import { PstlWagmiProvider } from './wagmi'
 import { PstlWeb3Modal } from './web3Modal'
@@ -30,5 +30,6 @@ export {
   usePstlWagmiClient,
   // types
   type PstlWeb3ModalProps,
-  type PstlWagmiClientOptions
+  type PstlWagmiClientOptions,
+  type ChainsPartialReadonly
 }
