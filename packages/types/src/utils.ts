@@ -8,6 +8,8 @@ export type Writable<T> = {
 
 export type Nullable<T> = T | null
 
+export type MakeOptional<T, K extends keyof T> = Partial<T> & Pick<T, Exclude<keyof T, K>>
+
 export type DeepPartial<T> = {
   [P in keyof T]?: DeepPartial<T[P]>
 }
