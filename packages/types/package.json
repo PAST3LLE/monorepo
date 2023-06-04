@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/types",
   "sideEffects": false,
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "common types",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
