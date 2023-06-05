@@ -34,12 +34,14 @@ async function deployCollectionsManager(): Promise<void> {
     {
       type: 'input',
       name: 'metadataUri',
-      message: `Enter your CollectionsManager base metadata uri e.g ipfs://someHash/ or https://s3.somebucket.url.thing.com/collections/
+      message: `Enter your CollectionsManager metadata folder uri -
+      
+  Example: ipfs://someHash/ or https://s3.somebucket.url.thing.com/collections/
       
   This URL must point to a FOLDER containing each collection(s) metadata information.
   It MUST also end with a trailing slash, like in the examples above.
 
-      `,
+Metadata folder URI:`,
       validate(input) {
         if (typeof input === 'string' && input.length > 0 && input.endsWith('/')) {
           return true

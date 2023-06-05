@@ -68,14 +68,16 @@ async function mintAndAddCollectionToManager(): Promise<void> {
     {
       type: 'input',
       name: 'metadataUri',
-      message: `Enter your Collection base metadata uri e.g ipfs://someHash/
+      message: `Enter your Collection metadata folder uri -
+      
+  Example: ipfs://someHash/
         
   NOTE: Using IPFS urls (ipfs://) are recommended as it provides an immutable url.
 
   URL must point to an IPFS folder containing each collection's skills metadata information.
   It MUST also end with a trailing slash, like in the examples above.
 
-        `,
+Metadata URI:`,
       validate(input) {
         if (typeof input === 'string' && input.length > 0 && input.startsWith('ipfs://') && input.endsWith('/')) {
           return true
