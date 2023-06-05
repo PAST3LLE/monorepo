@@ -24,7 +24,9 @@
     "build-serve:scope": "lerna run build:serve --scope",
     "serve:scope": "lerna run serve --scope",
     "start:scope": "lerna run start --scope",
-    "cosmos:scope": "lerna run cosmos --scope"
+    "cosmos:scope": "lerna run cosmos --scope",
+    "forge-cli:scope": "lerna run forge-cli --scope",
+    "cli-ui": "yarn forge-cli:scope @past3lle/skillforge-ui"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.18.6",
