@@ -1,6 +1,6 @@
 {
     "extends": "../../tsconfig.build.json",
-    "include": ["src/**/*"],
+    "include": ["src/**/*", "src/forge-networks.json"],
     "compilerOptions": {
         "baseUrl": "src",
         "module": "esnext",

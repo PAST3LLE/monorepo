@@ -31,7 +31,7 @@
     "test:debug": "craco --inspect-brk test --runInBand --no-cache",
     "dedup": "npx yarn-deduplicate",
     "copy:metadata": "cp ../skills-nft/src/skills/metadata.js ./src/mock/metadata/fullMetadata.js",
-    "forge-cli": "npx @past3lle/forge-cli"
+    "cli": "npx @past3lle/forge-cli"
   },
   "resolutions": {
     "@web3modal/ethereum": ">=2.2.0",

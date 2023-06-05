@@ -1,0 +1,58 @@
+{
+  "5": {
+    "CollectionsManager": {
+      "timestamp": "2023-06-05T16:00:49.537Z",
+      "address": "0x82639b3BD3912a219bEc678f96c9e5964011671a",
+      "transactionHash": "0x7fdc19e1b9dcb32746dcbfa7262c1e5db7da0b35ba8e9bb6aba625d605d5aca2"
+    },
+    "Collection-1": {
+      "timestamp": "2023-06-05T16:01:43.858Z",
+      "address": "0xBbDF87165846b4f29e43ce8cCFC1d1Ab055F56B0",
+      "transactionHash": "0x4fb948dafbc4d56b2dce075c6986600d0a458a99e73a6c747d81cfd7e053434a"
+    },
+    "Collection-2": {
+      "timestamp": "2023-06-05T16:15:44.564Z",
+      "address": "0x89968ef7e1bFa11941935fB245Ad2FFc9A67fEBf",
+      "transactionHash": "0xc5bbb69a16508fd7e93aa376aa011c40ef35a02c5b94d1dc989bf63e4288f945"
+    },
+    "Collection-3": {
+      "timestamp": "2023-06-05T21:11:20.065Z",
+      "address": "0x616DF4C912BB0AE098db3BB80F96283825EB72A3",
+      "transactionHash": "0xb42146fcfe2951c5422adb193628c29e39e44ac24fea8f80de0726870d2e0224"
+    },
+    "Collection-4": {
+      "timestamp": "2023-06-05T21:45:05.562Z",
+      "address": "0x4A3fA9eA8C6FC46a880E333a384a71E495B942a8",
+      "transactionHash": "0x17567b9d7615dca60eb0962b36de47fe492794c34d8364724b0fd301df5ded2e"
+    },
+    "Collection-5": {
+      "timestamp": "2023-06-05T21:50:43.848Z",
+      "address": "0x68E90f10A33D234AF7db0aE8439E04a4205da8ea",
+      "transactionHash": "0xcb6676bf08cff4e937717d26d7a3718931a41984d13ac9792ed16c36583e2861"
+    }
+  },
+  "137": {
+    "CollectionsManager": {
+      "timestamp": "2023-06-02T18:53:40.549Z",
+      "address": "0xa32AB9071A7814258aBbe06c7FbB815d8d4e1B19",
+      "transactionHash": "0xdf11012688ea94e415193cd729c80b039522ad3996f09e2fa9f002a5fab94c94"
+    }
+  },
+  "80001": {
+    "CollectionsManager": {
+      "timestamp": "2023-06-02T18:14:39.947Z",
+      "address": "0xbb76e8eeBe675787B1056A8418733F13967Be209",
+      "transactionHash": "0xcadce97ef5ceffd8712bc999dd9a4f7c2470971534925613439205a1799d4f4d"
+    },
+    "Collection-1": {
+      "timestamp": "2023-06-02T16:01:43.858Z",
+      "address": "0x1D578A2C3ef456012a08Ed6a349565e6229e1d00",
+      "transactionHash": "0x03f6689fae838464830c90c1f6bf0987b9aabdd053628eb8512c6d09f50457b8"
+    },
+    "Collection-2": {
+      "timestamp": "2023-06-02T16:01:43.858Z",
+      "address": "0x03b5d78E489b2bdF57Be8b1e2c0A5fFF369b030F",
+      "transactionHash": "0x687cfbca737dd0da0a646773988f063951d99f9f81baba4fa16b7c5d5e5c3df7"
+    }
+  }
+}

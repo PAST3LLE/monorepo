@@ -1,5 +1,8 @@
+import COLLECTIONS_MANAGER_NETWORKS from '../../forge-networks.json'
 import { Column, Row } from '@past3lle/components'
-import { CONTRACTS_VERSIONS, CONTRACTS_NETWORKS, SupportedChains } from '@past3lle/skillforge-web3'
+import { SupportedChains } from '@past3lle/skillforge-web3'
+import MERGE_MANAGER_NETWORKS from '@past3lle/skilltree-contracts/networks.json'
+import MERGE_MANAGER_VERSION from '@past3lle/skilltree-contracts/package.json'
 import React from 'react'
 import styled from 'styled-components/macro'
 import { Address } from 'wagmi'
@@ -59,7 +62,7 @@ export function AppVersion() {
         <Row>
           <strong>Contracts: </strong>
           <a href="https://github.com/PAST3LLE/skilltree-contracts/tree/main/package.json" target="_blank noreferrer">
-            {CONTRACTS_VERSIONS || 'Unknown version'}
+            {MERGE_MANAGER_VERSION?.version || 'Unknown version'}
           </a>
         </Row>
         <Row>
@@ -68,7 +71,7 @@ export function AppVersion() {
             href="https://github.com/PAST3LLE/skilltree-contracts/tree/main/contracts/CollectionsManager.sol"
             target="_blank noreferrer"
           >
-            {CONTRACTS_NETWORKS[SupportedChains.GOERLI].CollectionsManager.address as Address}
+            {COLLECTIONS_MANAGER_NETWORKS[SupportedChains.GOERLI].CollectionsManager.address as Address}
           </a>
         </Row>
         <Row>
@@ -77,7 +80,7 @@ export function AppVersion() {
             href="https://github.com/PAST3LLE/skilltree-contracts/tree/main/contracts/MergeManager.sol"
             target="_blank noreferrer"
           >
-            {CONTRACTS_NETWORKS[SupportedChains.GOERLI].MergeManager.address as Address}
+            {MERGE_MANAGER_NETWORKS[SupportedChains.GOERLI].MergeManager.address as Address}
           </a>
         </Row>
       </Column>
