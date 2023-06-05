@@ -162,7 +162,7 @@ async function mintAndAddCollectionToManager(): Promise<void> {
 
   await writeNetworks({
     // SOL contract name
-    contract: ('Collection-' + collectionId + 1) as ContractNames,
+    contract: ('Collection-' + (collectionId + 1)) as ContractNames,
     // deployed contract addr
     newAddress: collectionContract.address,
     // deployed txHash
