@@ -15,6 +15,9 @@
   "author": "pastelle",
   "homepage": "https://github.com/past3lle/monorepo/tree/main/packages/forge-cli#readme",
   "license": "MIT",
+  "bin": {
+    "forge-cli": "./bin/forge-cli.js"
+  },
   "type": "commonjs",
   "main": "dist/index.js",
   "module": "dist/forge-cli.esm.js",
@@ -32,7 +35,6 @@
     "registry": "https://registry.npmjs.org"
   },
   "scripts": {
-    "deploy": "node -r dotenv/config dist/index.js",
     "clean": "rm -rf dist tsconfig.tsbuildinfo",
     "compile": "tsdx build && cp \"./package.json\" ./dist/",
     "build": "yarn clean && yarn compile",

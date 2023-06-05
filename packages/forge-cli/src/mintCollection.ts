@@ -23,9 +23,10 @@ async function mintAndAddCollectionToManager(): Promise<void> {
   // Prompt for user input
   const answers = await inquirer.prompt([
     {
-      type: 'input',
+      type: 'list',
       name: 'network',
-      message: `Enter network name - Options: [ ${Object.keys(networksMap).join(', ')} ]:`
+      message: 'Select a network',
+      choices: Object.keys(networksMap).map((network) => ({ name: network, value: network }))
     },
     {
       type: 'password',
