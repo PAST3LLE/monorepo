@@ -3,6 +3,7 @@ import dotEnv from 'dotenv'
 import { ethers } from 'ethers'
 import inquirer from 'inquirer'
 
+import { SupportedNetworks } from './types/networks'
 import { getConfig } from './utils/getConfig'
 import { getWalletInfo } from './utils/getWalletInfo'
 import { writeNetworks } from './utils/writeNetworks'
@@ -33,12 +34,11 @@ async function deployCollectionsManager(): Promise<void> {
     {
       type: 'input',
       name: 'metadataUri',
-      message: `
-      Enter your CollectionsManager base metadata uri
-      e.g ipfs://someHash/ or https://s3.somebucket.url.thing.com/collections/
+      message: `Enter your CollectionsManager base metadata uri e.g ipfs://someHash/ or https://s3.somebucket.url.thing.com/collections/
       
-      This URL must point to a FOLDER containing each collection(s) metadata information.
-      It MUST also end with a trailing slash, like in the examples above.
+  This URL must point to a FOLDER containing each collection(s) metadata information.
+  It MUST also end with a trailing slash, like in the examples above.
+
       `,
       validate(input) {
         if (typeof input === 'string' && input.length > 0 && input.endsWith('/')) {
@@ -54,12 +54,12 @@ async function deployCollectionsManager(): Promise<void> {
     network,
     mnemonic: cliMnemonic,
     metadataUri
-  }: { network: string; mnemonic: string | undefined; metadataUri: string } = answers
+  }: { network: SupportedNetworks; mnemonic: string | undefined; metadataUri: string } = answers
 
   const mnemonic: string | undefined = cliMnemonic || configMnemonic
   if (!mnemonic) throw new Error('[Forge-CLI] Please set your MNEMONIC correctly in forge.config or in the CLI prompt')
 
-  const rpcUrl = networksMap?.[network].rpcUrl
+  const rpcUrl = networksMap?.[network]?.rpcUrl
   if (!rpcUrl)
     throw new Error(
       '[Forge-CLI] No rpcUrl found for network ' +

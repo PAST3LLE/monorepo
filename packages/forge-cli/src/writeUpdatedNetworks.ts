@@ -2,6 +2,7 @@ import dotEnv from 'dotenv'
 import inquirer from 'inquirer'
 
 import { networksToChainId } from './constants/chains'
+import { SupportedNetworks } from './types/networks'
 import { getConfig } from './utils/getConfig'
 import { writeNetworks } from './utils/writeNetworks'
 
@@ -47,13 +48,14 @@ async function writeUpdatedNetworks(): Promise<void> {
     transactionHash,
     network
   }: {
-    contractName: string
+    contractName: 'CollectionsManager'
     network: string
     newAddress: string
     transactionHash: string | undefined
   } = answers
 
-  const chainId = networks?.[network]?.id || (networksToChainId as Record<string, number>)?.[network]
+  const chainId =
+    networks?.[network as SupportedNetworks]?.id || (networksToChainId as Record<string, number>)?.[network]
   if (!chainId) throw new Error('[Forge-CLI] ChainId not found for network ' + network + '. Please check networks.json')
 
   await writeNetworks({
