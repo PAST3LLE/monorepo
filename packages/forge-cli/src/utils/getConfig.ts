@@ -7,6 +7,10 @@ import { ForgeConfig } from '../types/networks'
 
 const DEFAULT_CONFIG: ForgeConfig = {
   networks: {
+    mainnet: {
+      id: 1,
+      rpcUrl: 'https://mainnet.infura.io/v3/INSERT_INFURA_KEY_HERE'
+    },
     goerli: {
       id: 5,
       rpcUrl: 'https://goerli.infura.io/v3/INSERT_INFURA_KEY_HERE'
@@ -18,7 +22,11 @@ const DEFAULT_CONFIG: ForgeConfig = {
     matic: {
       id: 137,
       rpcUrl: 'https://rpc-mainnet.maticvigil.com/v1/INSERT_MATIC_VIGIL_KEY_HERE'
-    }
+    },
+    polygon: {
+      id: 137,
+      rpcUrl: 'https://rpc-mainnet.maticvigil.com/v1/INSERT_MATIC_VIGIL_KEY_HERE'
+    },
   },
   mnemonic: 'test test test test test',
   etherscanApiKey: 'INSERT_ETHERSCAN_API_KEY_HERE'

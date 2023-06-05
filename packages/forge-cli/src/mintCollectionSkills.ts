@@ -1,0 +1,302 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { CollectionsManager__factory as CollectionsManager } from '@past3lle/skilltree-contracts'
+import mergeManagerNetworks from '@past3lle/skilltree-contracts/networks.json'
+import { ethers } from 'ethers'
+import inquirer from 'inquirer'
+
+import { networksToChainId } from './constants/chains'
+import { SupportedNetworks } from './types/networks'
+import { getConfig } from './utils/getConfig'
+import { getNetworksJson } from './utils/getNetworksJson'
+import { getWalletInfo } from './utils/getWalletInfo'
+
+interface LockedSkillParams {
+  amount: number
+  id: number
+  holdDependencies: { token: string; id: string }[]
+  burnDependencies: { token: string; id: string }[]
+}
+
+async function mintCollectionSkills(): Promise<void> {
+  const { networks: networksMap, mnemonic: configMnemonic } = await getConfig()
+
+  if (!networksMap) {
+    throw new Error(
+      '[Forge-CLI] No networks map detected. Check script signature if passing via function call otherwise .env NETWORKS_URL_MAP'
+    )
+  }
+
+  // Prompt for user input
+  const networkAndMnemonicAnswer = await inquirer.prompt([
+    {
+      type: 'list',
+      name: 'network',
+      message: 'Select a network',
+      choices: Object.keys(networksMap).map((network) => ({ name: network, value: network }))
+    },
+    {
+      type: 'password',
+      name: 'mnemonic',
+      message: 'Enter mnemonic phrase or leave empty if you want to use the forge.config value:'
+    }
+  ])
+
+  const network = networkAndMnemonicAnswer.network as SupportedNetworks
+  const idFromNetworkAnswer = networksToChainId?.[network]
+  const networksJson = await getNetworksJson()
+
+  const collectionsManagerAddr = networksJson?.[idFromNetworkAnswer]?.CollectionsManager?.address
+  if (!collectionsManagerAddr) {
+    console.log(`
+    _  _ ___   _   ___  ___   _   _ __  _ 
+    | || | __| /_\\ |   \\/ __| | | | | _ \\ |
+    | __ | _| / _ \\| |) \\__ \\ | |_| |  _/_|
+    |_||_|___/_/ \\_\\___/|___/  \\___/|_| (_)
+
+    WARNING!
+    No CollectionsManager networks.json information found! 
+    
+    Either deploy a new CollectionsManager via the CLI > deployCollectionsManager
+    
+    OR
+    
+    Write new networks using an existing address via the CLI > writeNetworks
+
+    Exiting CLI.
+
+    `)
+    process.exit(0)
+  }
+
+  const unlockedSkillsAnswers = await inquirer.prompt([
+    {
+      type: 'number',
+      name: 'collectionId',
+      message: 'For which collection ID are you minting new skills?'
+    },
+    {
+      type: 'input',
+      name: 'to',
+      message: 'To which address are you minting new skills? (Any locked skills will ignore this param) Address:',
+      validate(input) {
+        if (ethers.utils.isAddress(input)) {
+          return true
+        }
+
+        throw Error('Please provide a valid address.')
+      }
+    },
+    {
+      type: 'input',
+      name: 'unlockedIds',
+      message: `Enter number array of ids. These are ids of skills WITHOUT dependencies. Leave blank if none.
+      
+      Example: [1,2,3]
+
+IDs:`,
+      validate(input) {
+        if (input && JSON.parse(input)) {
+          return true
+        }
+
+        throw Error('Invalid JSON. Try again.')
+      }
+      // transformer(input) {
+      //   return JSON.parse(input)
+      // }
+    }
+  ])
+
+  const { unlockedIds: unlockedIdsJSON, collectionId, to } = unlockedSkillsAnswers
+
+  const unlockedIds = JSON.parse(unlockedIdsJSON)
+  const unlockedSkills: { amount: number; id: number }[] = []
+  if (unlockedIds?.length) {
+    const unlockedSkillsAmountAnswers: { amount: number }[] = []
+    for (let i = 0; i < unlockedIds.length; i++) {
+      const answer = await inquirer.prompt({
+        type: 'number',
+        name: 'amount',
+        message: `How many of skill ${unlockedIds[i]} are you minting?`
+      })
+      unlockedSkillsAmountAnswers.push(answer)
+    }
+
+    unlockedSkillsAmountAnswers.forEach((answer: { amount: number }, i: number) =>
+      unlockedSkills.push({ id: unlockedIds[i], amount: answer.amount })
+    )
+  }
+
+  const lockedSkillsAnswers = await inquirer.prompt([
+    {
+      type: 'input',
+      name: 'lockedIds',
+      message: `Enter number array of ids. These are ids of skills WITH dependencies. Leave blank if none.
+      
+      Example: [1,2,3]
+
+IDs:`,
+      validate(input) {
+        if (JSON.parse(input)) {
+          return true
+        }
+
+        throw Error('Invalid JSON. Try again.')
+      }
+      // transformer(input) {
+      //   return JSON.parse(input)
+      // }
+    }
+  ])
+
+  const { lockedIds: lockedIdsJSON } = lockedSkillsAnswers
+
+  const lockedIds = lockedIdsJSON && JSON.parse(lockedIdsJSON)
+  const lockedSkills: LockedSkillParams[] = []
+  if (lockedIds?.length) {
+    const lockedSkillsAmountAnswers: (Omit<LockedSkillParams, 'holdDependencies' | 'burnDependencies'> & {
+      holdDependencies: string
+      burnDependencies: string
+    })[] = []
+    for (let i = 0; i < lockedIds.length; i++) {
+      const answer = await inquirer.prompt([
+        { type: 'number', name: 'amount', message: `How many of locked skill ${lockedIds[i]} are you minting?` },
+        {
+          type: 'input',
+          name: 'holdDependencies',
+          message: `Enter skill HOLD dependencies. Array of objects:
+          
+        interface Dep { token: AddressOfEIC1155CollectionContract, id: string }
+        Example: [{ token: '0x123', id: '1' }, { token: '0x123', id: '2' }]
+    
+    Hold dependencies:`,
+          validate(input) {
+            if (JSON.parse(input)) {
+              return true
+            }
+
+            throw Error('Invalid JSON. Try again.')
+          }
+        },
+        {
+          type: 'input',
+          name: 'burnDependencies',
+          message: `Enter skill BURN dependencies. Array of objects:
+          
+        interface Dep { token: AddressOfEIC1155CollectionContract, id: string }
+        Example: [{ token: '0x123', id: '1' }, { token: '0x123', id: '2' }]
+    
+        CAUTION: these are dependencies that will be burned when the skill is used!
+
+    Burn dependencies:`,
+          validate(input) {
+            if (JSON.parse(input)) {
+              return true
+            }
+
+            throw Error('Invalid JSON. Try again.')
+          }
+        }
+      ])
+      lockedSkillsAmountAnswers.push(answer)
+    }
+
+    lockedSkillsAmountAnswers.forEach(({ amount, holdDependencies, burnDependencies }, i: number) =>
+      lockedSkills.push({
+        id: lockedIds[i],
+        amount,
+        holdDependencies: JSON.parse(holdDependencies),
+        burnDependencies: JSON.parse(burnDependencies)
+      })
+    )
+  }
+
+  const mnemonic: string | undefined = networkAndMnemonicAnswer?.mnemonic || configMnemonic
+  if (!mnemonic) {
+    throw new Error('[Forge-CLI] No mnemonic detected. Check forge.config or CLI params if using them.')
+  }
+
+  const rpcUrl = networksMap?.[network].rpcUrl
+  const chainId = networksMap?.[network].id
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const mergeManagerAddr = (mergeManagerNetworks as any)?.[chainId.toString()]?.MergeManager?.address
+  if (!rpcUrl)
+    throw new Error(
+      '[Forge-CLI] No rpcUrl found for network ' + network + '. Please check forge.config networks settings'
+    )
+  if (!chainId)
+    throw new Error(
+      '[Forge-CLI] No chainId found for network ' + network + '. Please check forge.config networks settings'
+    )
+  if (!mergeManagerAddr)
+    throw new Error(
+      '[Forge-CLI] No mergeManagerAddr found for network ' +
+        network +
+        '. Please check networks.json from @past3lle/skilltree-contracts that ' +
+        network +
+        ' is supported.'
+    )
+  const { wallet } = getWalletInfo({ rpcUrl, mnemonic })
+
+  console.log(`
+      
+  Configuration submitted. Mint locked/unlocked skills on ${network} with the following parameters:
+  
+  MNEMONIC:                   ******
+  RPC URL:                    ${rpcUrl}
+  
+  COLLECTION ID:              ${collectionId}
+  TO:                         ${to}
+  MERGE MANAGER ADDR:         ${mergeManagerAddr}
+  
+  UNLOCKED SKILL IDS:         ${unlockedIds.join(', ')}
+  UNLOCKED SKILL AMTS:        ${unlockedSkills.map((skill) => skill.amount).join(', ')}
+
+  LOCKED SKILL IDS:           ${lockedIds.join(', ')}
+  LOCKED SKILL AMTS:          ${lockedSkills.map((skill) => skill.amount).join(', ')}
+  
+  LOCKED SKILL HOLD DEPS:     ${lockedSkills
+    .map((skill) => skill.holdDependencies.map((dep) => JSON.stringify(dep)).join(', '))
+    .join(', ')}
+  LOCKED SKILL BURN DEPS:     ${lockedSkills
+    .map((skill) => skill.burnDependencies.map((dep) => JSON.stringify(dep)).join(', '))
+    .join(', ')}
+
+  Please wait...
+
+  `)
+
+  // Get Collection contract instance
+  const CollectionsManagerContract = new ethers.Contract(collectionsManagerAddr, CollectionsManager.abi, wallet)
+  const collectionsManager = CollectionsManagerContract.attach(collectionsManagerAddr)
+
+  await collectionsManager.mintBatchSkills(
+    collectionId,
+    to,
+    unlockedSkills.map((skill) => skill.id),
+    unlockedSkills.map((skill) => skill.amount),
+    '0x'
+  )
+
+  console.log('[Forge-CLI] Minted unlocked skills!')
+
+  await collectionsManager.mintBatchLockedSkills(
+    collectionId,
+    lockedSkills.map((skill) => skill.id),
+    lockedSkills.map((skill) => skill.amount),
+    '0x',
+    mergeManagerAddr,
+    lockedSkills.map((skill) => skill.holdDependencies),
+    lockedSkills.map((skill) => skill.burnDependencies)
+  )
+
+  console.log('[Forge-CLI] Minted locked skills!')
+}
+
+export default async () =>
+  mintCollectionSkills()
+    .then(() => process.exit(0))
+    .catch((error) => {
+      console.error(error)
+      process.exit(1)
+    })

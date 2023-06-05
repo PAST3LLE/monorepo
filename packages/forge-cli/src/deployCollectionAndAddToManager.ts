@@ -13,7 +13,7 @@ import { getNetworksJson } from './utils/getNetworksJson'
 import { getWalletInfo } from './utils/getWalletInfo'
 import { writeNetworks } from './utils/writeNetworks'
 
-async function mintAndAddCollectionToManager(): Promise<void> {
+async function deployCollectionAndAddToManager(): Promise<void> {
   const { networks: networksMap, mnemonic: configMnemonic } = await getConfig()
 
   if (!networksMap) {
@@ -176,7 +176,7 @@ Metadata URI:`,
 }
 
 export default async () =>
-  mintAndAddCollectionToManager()
+  deployCollectionAndAddToManager()
     .then(() => process.exit(0))
     .catch((error) => {
       console.error(error)

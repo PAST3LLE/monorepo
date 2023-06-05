@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 import inquirer from 'inquirer'
 
+import deployCollectionAndAddToManager from './deployCollectionAndAddToManager'
 import deployCollectionsManager from './deployCollectionsManager'
-import mintAndAddCollection from './mintCollection'
+import mintCollectionSkills from './mintCollectionSkills'
 import writeUpdatedNetworks from './writeUpdatedNetworks'
 
 async function cli() {
@@ -39,13 +40,19 @@ async function cli() {
         },
         new inquirer.Separator(' '),
         {
-          name: 'b) Mint and add a new collection to your CollectionsManager contract',
-          value: 'mintAndAddCollection',
-          description: 'Mints a collection and adds it to the CollectionsManager contract'
+          name: 'b) Deploy and add a new Collection to your CollectionsManager contract',
+          value: 'deployCollectionAndAddToManager',
+          description: 'Creates (deploys) a collection and adds it to the CollectionsManager contract'
         },
         new inquirer.Separator(' '),
         {
-          name: 'c) Update root networks.json file with a new CollectionsManager contract address',
+          name: 'c) Mint new locked and unlocked SKILLS to a deployed collection',
+          value: 'mintCollectionSkills',
+          description: 'Mints new locked and/or unlocked SKILLS to a deployed collection'
+        },
+        new inquirer.Separator(' '),
+        {
+          name: 'd) Update root networks.json file with a new CollectionsManager contract address',
           value: 'writeNetworks',
           description: 'Update networks.json with new CollectionsManager.sol address'
         }
@@ -58,8 +65,11 @@ async function cli() {
     case 'deployCollectionsManager':
       await deployCollectionsManager()
       break
-    case 'mintAndAddCollection':
-      await mintAndAddCollection()
+    case 'deployCollectionAndAddToManager':
+      await deployCollectionAndAddToManager()
+      break
+    case 'mintCollectionSkills':
+      await mintCollectionSkills()
       break
     case 'writeNetworks':
       await writeUpdatedNetworks()
