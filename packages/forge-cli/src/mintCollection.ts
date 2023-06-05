@@ -117,8 +117,20 @@ async function mintAndAddCollectionToManager(): Promise<void> {
     )
   const { wallet, provider } = getWalletInfo({ rpcUrl, mnemonic })
 
-  // Get/deploy contracts
-  console.log('[Forge-CLI] Using CollectionManager contract deployed at:', collectionsManagerAddr)
+  console.log(`
+      
+  Configuration submitted. Deploying Collection.sol to ${network} with the following parameters:
+  
+  MNEMONIC: ******
+  RPC URL: ${rpcUrl}
+  
+  METADATA URI: ${metadataUri}
+  NAME: ${collectionName}
+  COLLECTIONS MANAGER ADDRESS: ${collectionsManagerAddr}
+
+  Please wait...
+
+  `)
 
   // Get Collection contract instance
   const CollectionsManagerContract = new ethers.Contract(collectionsManagerAddr, CollectionsManager.abi, wallet)

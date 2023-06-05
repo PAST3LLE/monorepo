@@ -67,6 +67,19 @@ async function deployCollectionsManager(): Promise<void> {
         ". Please check the network's forge.config.js rpcUrl value."
     )
 
+  console.log(`
+      
+  Configuration submitted. Deploying CollectionsManager.sol to ${network} with the following parameters:
+
+  MNEMONIC: ******
+  RPC URL: ${rpcUrl}
+  
+  METADATA URI: ${metadataUri}
+
+  Please wait...
+
+  `)
+
   const { wallet, provider } = getWalletInfo({ rpcUrl, mnemonic })
 
   // Create a contract factory
