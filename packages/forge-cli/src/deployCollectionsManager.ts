@@ -48,7 +48,11 @@ async function deployCollectionsManager(): Promise<void> {
 
   const rpcUrl = networksMap?.[network].rpcUrl
   if (!rpcUrl)
-    throw new Error('[Forge-CLI] No rpcUrl found for network ' + network + '. Please check passed in networksMap arg')
+    throw new Error(
+      '[Forge-CLI] No rpcUrl found for network ' +
+        network +
+        ". Please check the network's forge.config.js rpcUrl value."
+    )
 
   const { wallet, provider } = getWalletInfo({ rpcUrl, mnemonic })
 

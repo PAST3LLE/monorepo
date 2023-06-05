@@ -1,4 +1,6 @@
+/* eslint-disable */
 import { promises as fs } from 'fs'
+import inquirer from 'inquirer'
 import path from 'path'
 
 import { ForgeConfig } from '../types/networks'
@@ -31,22 +33,39 @@ export async function getConfig() {
     await createDefaultConfigFile()
 
     console.log(`
-     _  _ ___   _   ___  ___   _   _ __  _ 
+    _  _ ___   _   ___  ___   _   _ __  _ 
     | || | __| /_\\ |   \\/ __| | | | | _ \\ |
     | __ | _| / _ \\| |) \\__ \\ | |_| |  _/_|
     |_||_|___/_/ \\_\\___/|___/  \\___/|_| (_)
-                                           
-  WARNING!
-  No "forge.config.js" file found in the current directory root: ${process.cwd()}. 
-  We created a default config file for you, which you can edit to fit your needs by exiting the CLI. 
-  The CLI will continue using the default forge.confif.js file which reads from the following environment variables:
+    
+    WARNING!
+    No "forge.config.js" file found in the current directory root: ${process.cwd()}. 
+    We created a default config file for you, which you can edit to fit your needs by exiting the CLI. 
+    The CLI will continue using the default forge.confif.js file which reads from the following environment variables:
     
     1. MNEMONIC: your mnemonic phrase for signing deployment transactions
     2. <NETWORK>_RPC_URL: <network> RPC urls for each network
-
-  If any of these env variables are missing, the CLI will throw an error and exit.
-
+    
+    If any of these env variables are missing, the CLI will throw an error and exit.
+    
   `)
+
+    const answers = await inquirer.prompt([
+      {
+        type: 'confirm',
+        name: 'continue',
+        message: 'Do you wish to continue using the default forge.config.js?'
+      }
+    ])
+
+    if (!answers.continue) {
+      console.log('[Forge-CLI] Exiting CLI.')
+      process.exit(0)
+    }
+
+    console.log('[Forge-CLI] Continuing with default forge.config.js file.')
+
+    config = await import(CONFIG_PATH)
   }
 
   if (!config?.networks) {
@@ -56,7 +75,7 @@ export async function getConfig() {
   }
   if (!config?.mnemonic) {
     throw new Error(
-      '[Forge-CLI] No networks detected. Check that your mnemonic string inside forge.config.js is correct.'
+      '[Forge-CLI] No mnemonic detected. Check that your mnemonic string inside forge.config.js is correct.'
     )
   }
 
