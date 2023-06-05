@@ -31,7 +31,7 @@
     "test:debug": "craco --inspect-brk test --runInBand --no-cache",
     "dedup": "npx yarn-deduplicate",
     "copy:metadata": "cp ../skills-nft/src/skills/metadata.js ./src/mock/metadata/fullMetadata.js",
-    "forge-cli": "@past3lle/forge-cli"
+    "forge-cli": "npx @past3lle/forge-cli"
   },
   "resolutions": {
     "@web3modal/ethereum": ">=2.2.0",
@@ -42,7 +42,6 @@
   "devDependencies": {
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.13.8",
     "@craco/craco": "^5.7.0",
-    "@past3lle/forge-cli": "^0.0.4",
     "@past3lle/skillforge-web3": "^0.0.62",
     "@past3lle/skillforge-widget": "^0.0.72",
     "@past3lle/skilltree-contracts": "^0.0.1-rc.12",
