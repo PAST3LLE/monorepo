@@ -19,6 +19,24 @@ async function writeUpdatedNetworks(): Promise<void> {
       choices: Object.keys(networks).map((network) => ({ name: network, value: network }))
     },
     {
+      type: 'input',
+      name: 'customSubPath',
+      message: `(Optional) Enter a custom sub-path to read/write networks from/to -
+  
+  Example: "/json/misc/" would resolve to: "${process.cwd()}/json/misc/forge-networks.json"
+  
+  Defaults root folder: "${process.cwd()}/forge-networks.json"
+  
+  Custom sub-path:`,
+      default: '',
+      validate: (input) => {
+        if (input === '' || input === undefined || input === null) return true
+        if (!input.startsWith('/')) return 'Custom sub-path must start with a "/"'
+        if (!input.endsWith('/')) return 'Custom sub-path must end with a "/"'
+        return true
+      }
+    },
+    {
       type: 'list',
       name: 'contractName',
       message: 'Select a contract for which to make updates:',
@@ -33,7 +51,7 @@ async function writeUpdatedNetworks(): Promise<void> {
     {
       type: 'input',
       name: 'newAddress',
-      message: 'Enter CollectionsManager address to update networks.json file with'
+      message: 'Enter CollectionsManager address to update forge-networks.json file with'
     },
     {
       type: 'input',
@@ -46,17 +64,20 @@ async function writeUpdatedNetworks(): Promise<void> {
     contractName,
     newAddress,
     transactionHash,
-    network
+    network,
+    customSubPath
   }: {
     contractName: 'CollectionsManager'
     network: string
     newAddress: string
     transactionHash: string | undefined
+    customSubPath?: string
   } = answers
 
   const chainId =
     networks?.[network as SupportedNetworks]?.id || (networksToChainId as Record<string, number>)?.[network]
-  if (!chainId) throw new Error('[Forge-CLI] ChainId not found for network ' + network + '. Please check networks.json')
+  if (!chainId)
+    throw new Error('[Forge-CLI] ChainId not found for network ' + network + '. Please check forge-networks.json')
 
   await writeNetworks({
     // SOL contract name
@@ -67,8 +88,24 @@ async function writeUpdatedNetworks(): Promise<void> {
     transactionHash,
     chainId,
     // network string name (e.g mumbai)
-    network
+    network,
+    customSubPath
   })
+
+  const confirmation = await inquirer.prompt([
+    {
+      type: 'confirm',
+      name: 'continue',
+      message: 'Do you wish to write more networks?'
+    }
+  ])
+
+  if (!confirmation.continue) {
+    console.log('[Forge-CLI] Exiting CLI.')
+    process.exit(0)
+  }
+
+  await writeUpdatedNetworks()
 }
 
 export default async () =>

@@ -35,6 +35,24 @@ async function mintCollectionSkills(): Promise<void> {
       choices: Object.keys(networksMap).map((network) => ({ name: network, value: network }))
     },
     {
+      type: 'input',
+      name: 'customSubPath',
+      message: `(Optional) Enter a custom sub-path to read/write networks from/to -
+  
+  Example: "/json/misc/" would resolve to: "${process.cwd()}/json/misc/forge-networks.json"
+  
+  Defaults root folder: "${process.cwd()}/forge-networks.json"
+  
+  Custom sub-path:`,
+      default: '',
+      validate: (input) => {
+        if (input === '' || input === undefined || input === null) return true
+        if (!input.startsWith('/')) return 'Custom sub-path must start with a "/"'
+        if (!input.endsWith('/')) return 'Custom sub-path must end with a "/"'
+        return true
+      }
+    },
+    {
       type: 'password',
       name: 'mnemonic',
       message: 'Enter mnemonic phrase or leave empty if you want to use the forge.config value:'
@@ -54,7 +72,7 @@ async function mintCollectionSkills(): Promise<void> {
     |_||_|___/_/ \\_\\___/|___/  \\___/|_| (_)
 
     WARNING!
-    No CollectionsManager networks.json information found! 
+    No CollectionsManager forge-networks.json information found! 
     
     Either deploy a new CollectionsManager via the CLI > deployCollectionsManager
     
@@ -270,27 +288,46 @@ IDs:`,
   const CollectionsManagerContract = new ethers.Contract(collectionsManagerAddr, CollectionsManager.abi, wallet)
   const collectionsManager = CollectionsManagerContract.attach(collectionsManagerAddr)
 
-  await collectionsManager.mintBatchSkills(
-    collectionId,
-    to,
-    unlockedSkills.map((skill) => skill.id),
-    unlockedSkills.map((skill) => skill.amount),
-    '0x'
-  )
+  if (unlockedIds.length) {
+    await collectionsManager.mintBatchSkills(
+      collectionId,
+      to,
+      unlockedSkills.map((skill) => skill.id),
+      unlockedSkills.map((skill) => skill.amount),
+      '0x'
+    )
 
-  console.log('[Forge-CLI] Minted unlocked skills!')
+    console.log('[Forge-CLI] Minted unlocked skills!')
+  }
 
-  await collectionsManager.mintBatchLockedSkills(
-    collectionId,
-    lockedSkills.map((skill) => skill.id),
-    lockedSkills.map((skill) => skill.amount),
-    '0x',
-    mergeManagerAddr,
-    lockedSkills.map((skill) => skill.holdDependencies),
-    lockedSkills.map((skill) => skill.burnDependencies)
-  )
+  if (lockedSkills.length) {
+    await collectionsManager.mintBatchLockedSkills(
+      collectionId,
+      lockedSkills.map((skill) => skill.id),
+      lockedSkills.map((skill) => skill.amount),
+      '0x',
+      mergeManagerAddr,
+      lockedSkills.map((skill) => skill.holdDependencies),
+      lockedSkills.map((skill) => skill.burnDependencies)
+    )
 
-  console.log('[Forge-CLI] Minted locked skills!')
+    console.log('[Forge-CLI] Minted locked skills!')
+  }
+
+  const confirmation = await inquirer.prompt([
+    {
+      type: 'confirm',
+      name: 'continue',
+      message: 'Do you wish to mint new skills?'
+    }
+  ])
+
+  if (!confirmation.continue) {
+    console.log('[Forge-CLI] Exiting CLI.')
+    process.exit(0)
+  }
+
+  await mintCollectionSkills()
 }
 
 export default async () =>

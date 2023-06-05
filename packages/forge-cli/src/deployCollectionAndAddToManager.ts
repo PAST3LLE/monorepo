@@ -23,16 +23,34 @@ async function deployCollectionAndAddToManager(): Promise<void> {
   }
 
   // Prompt for user input
-  const networkAnswer = await inquirer.prompt([
+  const initialPromptAnswer = await inquirer.prompt([
     {
       type: 'list',
       name: 'network',
       message: 'Select a network',
       choices: Object.keys(networksMap).map((network) => ({ name: network, value: network }))
+    },
+    {
+      type: 'input',
+      name: 'customSubPath',
+      message: `(Optional) Enter a custom sub-path to read/write networks from/to -
+  
+  Example: "/json/misc/" would resolve to: "${process.cwd()}/json/misc/forge-networks.json"
+  
+  Defaults root folder: "${process.cwd()}/forge-networks.json"
+  
+  Custom sub-path:`,
+      default: '',
+      validate: (input) => {
+        if (input === '' || input === undefined || input === null) return true
+        if (!input.startsWith('/')) return 'Custom sub-path must start with a "/"'
+        if (!input.endsWith('/')) return 'Custom sub-path must end with a "/"'
+        return true
+      }
     }
   ])
 
-  const network = networkAnswer.network as SupportedNetworks
+  const network = initialPromptAnswer.network as SupportedNetworks
   const idFromNetworkAnswer = networksToChainId?.[network]
   const networksJson = await getNetworksJson()
 
@@ -45,7 +63,7 @@ async function deployCollectionAndAddToManager(): Promise<void> {
     |_||_|___/_/ \\_\\___/|___/  \\___/|_| (_)
 
     WARNING!
-    No CollectionsManager networks.json information found! 
+    No CollectionsManager forge-networks.json information found! 
     
     Either deploy a new CollectionsManager via the CLI > deployCollectionsManager
     
@@ -171,8 +189,24 @@ Metadata URI:`,
     transactionHash: collectionContract.deployTransaction.hash,
     chainId: provider.network.chainId,
     // network string name (e.g mumbai)
-    network: provider.network.name
+    network: provider.network.name,
+    customSubPath: initialPromptAnswer?.customSubPath
   })
+
+  const confirmation = await inquirer.prompt([
+    {
+      type: 'confirm',
+      name: 'continue',
+      message: 'Do you wish to deply and add a new Collection to the CollectionsManager contract?'
+    }
+  ])
+
+  if (!confirmation.continue) {
+    console.log('[Forge-CLI] Exiting CLI.')
+    process.exit(0)
+  }
+
+  await deployCollectionAndAddToManager()
 }
 
 export default async () =>

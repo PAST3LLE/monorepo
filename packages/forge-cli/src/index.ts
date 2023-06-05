@@ -52,9 +52,9 @@ async function cli() {
         },
         new inquirer.Separator(' '),
         {
-          name: 'd) Update root networks.json file with a new CollectionsManager contract address',
+          name: 'd) Update root forge-networks.json file with a new CollectionsManager contract address',
           value: 'writeNetworks',
-          description: 'Update networks.json with new CollectionsManager.sol address'
+          description: 'Update forge-networks.json with new CollectionsManager.sol address'
         }
       ]
     }

@@ -16,16 +16,5 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended'
   ],
-  ignorePatterns: ['node_modules/', '!.prettierrc.js', 'dist/'],
-  rules: {
-    'import/order': [
-      'error',
-      {
-        'newlines-between': 'always',
-        alphabetize: {
-          order: 'asc'
-        }
-      }
-    ]
-  }
+  ignorePatterns: ['node_modules/', '!.prettierrc.js', 'dist/']
 }

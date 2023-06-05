@@ -1,6 +1,7 @@
 import { promises as fs } from 'fs'
 import path from 'path'
 
+import { DEFAULT_NETWORKS_SUB_PATH, INDENT } from '../constants/paths'
 // eslint-disable-next-line import/order
 import { ContractNames } from '../types/networks'
 import { getNetworksJson } from './getNetworksJson'
@@ -11,11 +12,17 @@ interface WriteNetworksArgs {
   transactionHash?: string
   chainId: number
   network: string
+  customSubPath?: string
 }
 
-const NETWORKS_PATH = path.join(process.cwd(), '/networks.json')
-const INDENT = '  '
-export async function writeNetworks({ contract, newAddress, transactionHash, chainId, network }: WriteNetworksArgs) {
+export async function writeNetworks({
+  contract,
+  newAddress,
+  transactionHash,
+  chainId,
+  network,
+  customSubPath
+}: WriteNetworksArgs) {
   try {
     if (network === 'localhost') {
       console.log('[Forge-CLI] Localhost network detected, bailing.')
@@ -37,10 +44,16 @@ export async function writeNetworks({ contract, newAddress, transactionHash, cha
       }
     }
 
-    console.log('[Forge-CLI] New network information to write:', JSON.stringify(updatedNetworks, null, INDENT))
+    const writePath = path.join(process.cwd(), customSubPath || DEFAULT_NETWORKS_SUB_PATH, 'forge-networks.json')
+    console.log(
+      '[Forge-CLI] New forge network information to write:',
+      JSON.stringify(updatedNetworks, null, INDENT),
+      ' Attempting to write at:',
+      writePath
+    )
 
-    await fs.writeFile(NETWORKS_PATH, JSON.stringify(updatedNetworks, null, INDENT))
-    console.log('[Forge-CLI] Succesfully wrote new address to root:networks.json!')
+    await fs.writeFile(writePath, JSON.stringify(updatedNetworks, null, INDENT))
+    console.log('[Forge-CLI] Succesfully wrote new address to', writePath)
   } catch (error) {
     console.error(error)
   }

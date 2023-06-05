@@ -3,6 +3,7 @@ import dotEnv from 'dotenv'
 import { ethers } from 'ethers'
 import inquirer from 'inquirer'
 
+import deployCollectionAndAddToManager from './deployCollectionAndAddToManager'
 import { SupportedNetworks } from './types/networks'
 import { getConfig } from './utils/getConfig'
 import { getWalletInfo } from './utils/getWalletInfo'
@@ -25,6 +26,24 @@ async function deployCollectionsManager(): Promise<void> {
       name: 'network',
       message: 'Select a network',
       choices: Object.keys(networksMap).map((network) => ({ name: network, value: network }))
+    },
+    {
+      type: 'input',
+      name: 'customSubPath',
+      message: `(Optional) Enter a custom sub-path to read/write networks from/to -
+  
+  Example: "/json/misc/" would resolve to: "${process.cwd()}/json/misc/forge-networks.json"
+  
+  Defaults root folder: "${process.cwd()}/forge-networks.json"
+  
+  Custom sub-path:`,
+      default: '',
+      validate: (input) => {
+        if (input === '' || input === undefined || input === null) return true
+        if (!input.startsWith('/')) return 'Custom sub-path must start with a "/"'
+        if (!input.endsWith('/')) return 'Custom sub-path must end with a "/"'
+        return true
+      }
     },
     {
       type: 'password',
@@ -107,6 +126,21 @@ Metadata folder URI:`,
     // network string name (e.g mumbai)
     network: provider.network.name
   })
+
+  const confirmation = await inquirer.prompt([
+    {
+      type: 'confirm',
+      name: 'continue',
+      message: 'Do you wish to deply and add a new Collection to the CollectionsManager contract?'
+    }
+  ])
+
+  if (!confirmation.continue) {
+    console.log('[Forge-CLI] Exiting CLI.')
+    process.exit(0)
+  }
+
+  await deployCollectionAndAddToManager()
 }
 
 export default async () =>

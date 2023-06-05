@@ -23,8 +23,7 @@
   "module": "dist/forge-cli.esm.js",
   "types": "dist/index.d.ts",
   "files": [
-    "dist/",
-    "networks.json"
+    "dist/"
   ],
   "repository": {
     "type": "git",
