@@ -1,1 +1,0 @@
-{"networks":{"goerli":{"id":5,"rpcUrl":"https://goerli.infura.io/v3/INSERT_INFURA_KEY_HERE"},"mumbai":{"id":80001,"rpcUrl":"https://rpc-mumbai.maticvigil.com/v1/INSERT_MATICVIGIL_KEY_HERE"},"matic":{"id":137,"rpcUrl":"https://rpc-mainnet.maticvigil.com/v1/INSERT_MATICVIGIL_KEY_HERE"}},"mnemonic":"test test test test test","etherscanApiKey":"INSERT_ETHERSCAN_API_KEY_HERE"}
