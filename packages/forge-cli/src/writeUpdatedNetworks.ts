@@ -53,7 +53,7 @@ async function writeUpdatedNetworks(): Promise<void> {
     transactionHash: string | undefined
   } = answers
 
-  const chainId = networks?.[network]?.chainId || (networksToChainId as Record<string, number>)?.[network]
+  const chainId = networks?.[network]?.id || (networksToChainId as Record<string, number>)?.[network]
   if (!chainId) throw new Error('[Forge-CLI] ChainId not found for network ' + network + '. Please check networks.json')
 
   await writeNetworks({

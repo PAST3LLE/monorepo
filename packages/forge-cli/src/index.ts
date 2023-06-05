@@ -11,10 +11,9 @@ async function cli() {
     {
       type: 'list',
       name: 'task',
-      message: `Welcome to 
-      
-                                                                                       
-    
+      message: `
+  Welcome to Past3lle's
+  
   ▄▄▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄▄▄       ▄▄▄▄▄▄▄▄▄▄▄  ▄            ▄▄▄▄▄▄▄▄▄▄▄ 
  ▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌     ▐░░░░░░░░░░░▌▐░▌          ▐░░░░░░░░░░░▌
  ▐░█▀▀▀▀▀▀▀▀▀ ▐░█▀▀▀▀▀▀▀█░▌▐░█▀▀▀▀▀▀▀█░▌▐░█▀▀▀▀▀▀▀▀▀ ▐░█▀▀▀▀▀▀▀▀▀      ▐░█▀▀▀▀▀▀▀▀▀ ▐░▌           ▀▀▀▀█░█▀▀▀▀ 
@@ -26,25 +25,27 @@ async function cli() {
  ▐░▌          ▐░█▄▄▄▄▄▄▄█░▌▐░▌      ▐░▌ ▐░█▄▄▄▄▄▄▄█░▌▐░█▄▄▄▄▄▄▄▄▄      ▐░█▄▄▄▄▄▄▄▄▄ ▐░█▄▄▄▄▄▄▄▄▄  ▄▄▄▄█░█▄▄▄▄ 
  ▐░▌          ▐░░░░░░░░░░░▌▐░▌       ▐░▌▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌     ▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌
   ▀            ▀▀▀▀▀▀▀▀▀▀▀  ▀         ▀  ▀▀▀▀▀▀▀▀▀▀▀  ▀▀▀▀▀▀▀▀▀▀▀       ▀▀▀▀▀▀▀▀▀▀▀  ▀▀▀▀▀▀▀▀▀▀▀  ▀▀▀▀▀▀▀▀▀▀▀ 
-                                                                                                              
- 
-                                                                                        
-                                                                                        
- 
-       What would you like to do?`,
+  
+  
+  Past3lle's FORGE-CLI is a tool for deploying and managing your Forge-powered Skill (NFT) collections.
+
+  What would you like to do?`,
       choices: [
+        new inquirer.Separator(' '),
         {
-          name: 'Deploy a new CollectionsManager contract',
+          name: 'a) Deploy a new CollectionsManager contract',
           value: 'deployCollectionsManager',
           description: 'Deploys a CollectionsManager contract to the specified network'
         },
+        new inquirer.Separator(' '),
         {
-          name: 'Mint and add a new collection to your CollectionsManager contract',
+          name: 'b) Mint and add a new collection to your CollectionsManager contract',
           value: 'mintAndAddCollection',
           description: 'Mints a collection and adds it to the CollectionsManager contract'
         },
+        new inquirer.Separator(' '),
         {
-          name: 'Update root networks.json file with a new CollectionsManager contract address',
+          name: 'c) Update root networks.json file with a new CollectionsManager contract address',
           value: 'writeNetworks',
           description: 'Update networks.json with new CollectionsManager.sol address'
         }
@@ -53,7 +54,6 @@ async function cli() {
   ])
 
   const { task } = answers
-
   switch (task) {
     case 'deployCollectionsManager':
       await deployCollectionsManager()

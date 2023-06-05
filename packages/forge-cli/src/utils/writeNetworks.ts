@@ -1,9 +1,6 @@
 import { promises as fs } from 'fs'
 import path from 'path'
 
-const NETWORKS_PATH = path.join(process.cwd(), '/networks.json')
-const INDENT = '  '
-
 interface WriteNetworksArgs {
   contract: string
   newAddress: string
@@ -11,6 +8,9 @@ interface WriteNetworksArgs {
   chainId: number
   network: string
 }
+
+const NETWORKS_PATH = path.join(process.cwd(), '/networks.json')
+const INDENT = '  '
 export async function writeNetworks({ contract, newAddress, transactionHash, chainId, network }: WriteNetworksArgs) {
   try {
     if (network === 'localhost') {
