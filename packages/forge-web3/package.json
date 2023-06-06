@@ -1,0 +1,139 @@
+{
+  "name": "@past3lle/forge-web3",
+  "sideEffects": false,
+  "version": "0.0.64",
+  "description": "PAST3LLE FORGE Web3 hooks and tings",
+  "main": "dist/esm/index.js",
+  "typings": "dist/types/index.d.ts",
+  "old_exports": {
+    "import": "./dist/esm/index.js",
+    "require": "./dist/cjs/index.js",
+    "default": "./dist/esm/index.js"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "types": "./dist/types/index.d.ts",
+      "require": "./dist/cjs/index.js",
+      "default": "./dist/esm/index.js"
+    },
+    "./components": {
+      "import": "./dist/esm/components/index.js",
+      "types": "./dist/components/index.d.ts",
+      "require": "./dist/cjs/components/index.js",
+      "default": "./dist/esm/components/index.js"
+    },
+    "./hooks": {
+      "import": "./dist/esm/hooks/index.js",
+      "types": "./dist/hooks/index.d.ts",
+      "require": "./dist/cjs/hooks/index.js",
+      "default": "./dist/esm/hooks/index.js"
+    },
+    "./providers": {
+      "import": "./dist/esm/providers/index.js",
+      "types": "./dist/providers/index.d.ts",
+      "require": "./dist/cjs/providers/index.js",
+      "default": "./dist/esm/providers/index.js"
+    },
+    "./state": {
+      "import": "./dist/esm/state/index.js",
+      "types": "./dist/state/index.d.ts",
+      "require": "./dist/cjs/state/index.js",
+      "default": "./dist/esm/state/index.js"
+    },
+    "./utils": {
+      "import": "./dist/esm/utils/index.js",
+      "types": "./dist/utils/index.d.ts",
+      "require": "./dist/cjs/utils/index.js",
+      "default": "./dist/esm/utils/index.js"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "directory": "packages/forge-web3",
+    "url": "git+https://github.com/PAST3LLE/monorepo.git"
+  },
+  "keywords": [
+    "web3",
+    "forge",
+    "past3lle",
+    "skilltree",
+    "skillforge",
+    "crypto",
+    "skills"
+  ],
+  "author": "pastelle",
+  "homepage": "https://github.com/past3lle/monorepo/tree/main/packages/forge-web3#readme",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "check-types": "npx tsc --noEmit",
+    "clean": "rm -rf dist && rm -rf tsconfig.tsbuildinfo",
+    "compile:tsdx": "tsdx build --transpileOnly && cp \"./package.json\" ./dist/",
+    "compile": "tsc --emitDeclarationOnly --outDir './dist/types' & tsc --project tsconfig.esm.json & tsc --project tsconfig.cjs.json && cp \"./package.json\" ./dist/",
+    "cosmos": "cosmos",
+    "build": "yarn clean && yarn write-version && yarn compile",
+    "build:tsdx": "yarn clean && yarn compile:tsdx",
+    "prepack": "yarn build",
+    "start": "tsdx watch",
+    "test": "echo 'removed default test' ",
+    "alt-test": "tsc test --env=jsdom",
+    "test:watch": "tsc test --env=jsdom --watchAll",
+    "test:ci": "yarn alt-test --coverage --no-watch --watch=false --watchAll=false --no-watchman --forceExit --detectOpenHandles",
+    "pre-commit": "pretty-quick --staged && yarn test:ci && yarn build",
+    "lint": "prettier --write ./src/** --ignore-path '../../.prettierignore'",
+    "depcheck": "npx npm-check",
+    "write-version": "echo {'\"version\"': '\"'$npm_package_version'\"' } > ./src/version.json"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      ".+\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/src/__mocks__/file-mock.js"
+    },
+    "testMatch": [
+      "<rootDir>src/**/__tests__/*.{ts,tsx}"
+    ]
+  },
+  "bugs": {
+    "url": "https://github.com/PAST3LLE/past3lle-monorepo/issues"
+  },
+  "resolutions": {
+    "**/@web3modal/ethereum": ">=2.2.0",
+    "**/@web3modal/react": ">=2.2.0",
+    "**/*/@wagmi/core": "0.10.1"
+  },
+  "peerDependencies": {
+    "react": ">=16",
+    "styled-components": ">=5"
+  },
+  "dependencies": {
+    "@ethersproject/bignumber": ">=5.7.0",
+    "@past3lle/hooks": "^0.0.33",
+    "@past3lle/skilltree-contracts": "^0.0.1-rc.15",
+    "@past3lle/utils": "^0.0.22",
+    "@past3lle/web3-modal": "^0.0.21",
+    "jotai": "^1.13.0"
+  },
+  "devDependencies": {
+    "jotai-devtools": "0.1.0",
+    "react-cosmos": "^5.7.2"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "gitHead": "2bcc1e8d445933a2c17832d4b8183c3f8ebc61d0"
+}
