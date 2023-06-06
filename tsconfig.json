@@ -27,8 +27,8 @@
             "@past3lle/skillforge-ui/*": [
                 "apps/skillforge-ui/src/*"
             ],
-            "@past3lle/skillforge-web3/*": [
-                "packages/skillforge-web3/src/*"
+            "@past3lle/forge-web3/*": [
+                "packages/forge-web3/src/*"
             ],
             "@past3lle/skillforge-widget/*": [
                 "packages/skillforge-widget/src/*"
@@ -70,7 +70,7 @@
             "path": "packages/hooks"
         },
         {
-            "path": "packages/skillforge-web3"
+            "path": "packages/forge-web3"
         },
         {
             "path": "packages/skillforge-widget"

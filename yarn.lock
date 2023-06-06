@@ -3610,6 +3610,16 @@
     hardhat-tracer "^2.3.2"
     inquirer "9.2.6"
 
+"@past3lle/skilltree-contracts@^0.0.1-rc.15":
+  version "0.0.1-rc.15"
+  resolved "https://registry.yarnpkg.com/@past3lle/skilltree-contracts/-/skilltree-contracts-0.0.1-rc.15.tgz#3992fb962a1a8d3a338cf26d311baeba39da1b36"
+  integrity sha512-FTLTOJWAlephS2xOjIEYT7x/nd1WMzLFbtjH2MbW0uAso4I7hHaTEjPJRPenZAI6X5jrRKQ4zlGqM4THot51lg==
+  dependencies:
+    ethers "^5.0.0"
+    hardhat "^2.12.4"
+    hardhat-tracer "^2.3.2"
+    inquirer "9.2.6"
+
 "@pedrouid/environment@^1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@pedrouid/environment/-/environment-1.0.1.tgz#858f0f8a057340e0b250398b75ead77d6f4342ec"
