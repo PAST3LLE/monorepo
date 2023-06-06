@@ -2,14 +2,14 @@ import { devDebug } from '@past3lle/utils'
 import React, { useEffect, useState } from 'react'
 
 import { CHAIN_IMAGES, WALLET_IMAGES, Z_INDICES } from '../../constants'
-import { PstlWeb3ModalProps } from '../types'
+import { ChainsPartialReadonly, PstlWeb3ModalProps } from '../types'
 
-export const PstlWeb3Modal = ({
+export const PstlWeb3Modal = <ID extends number, SC extends ChainsPartialReadonly<ID>>({
   ethereumClient,
   modals: {
     w3m: { projectId, zIndex = Z_INDICES.W3M, themeVariables, ...w3mProps }
   }
-}: PstlWeb3ModalProps) => {
+}: PstlWeb3ModalProps<ID, SC>) => {
   if (!projectId) {
     throw new Error('MISSING or INVALID WalletConnect options! Please check your config object.')
   }

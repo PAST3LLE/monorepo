@@ -1,5 +1,5 @@
 import { ClientConfig, configureChains } from '@wagmi/core'
-import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
+import { Chain, EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
 import { useMemo } from 'react'
 import { WagmiConfigProps, createClient } from 'wagmi'
 
@@ -10,15 +10,18 @@ import { ChainsPartialReadonly, PstlWeb3ModalProps } from '../types'
 interface ClientConfigEnhanced extends Omit<ClientConfig, 'connectors'> {
   connectors?: (() => ConnectorEnhanced<any, any, any>[]) | ConnectorEnhanced<any, any, any>[]
 }
-interface CreateWagmiClientProps {
+interface CreateWagmiClientProps<ID extends number, SC extends ChainsPartialReadonly<ID> = ChainsPartialReadonly<ID>> {
   appName: string
-  chains: ChainsPartialReadonly
-  w3mConnectorProps: PstlWeb3ModalProps['modals']['w3m']
-  w3aConnectorProps: Omit<PstlWeb3AuthConnectorProps, 'chains'>
+  chains: ChainsPartialReadonly<ID>
+  w3mConnectorProps: PstlWeb3ModalProps<ID, SC>['modals']['w3m']
+  w3aConnectorProps: Omit<PstlWeb3AuthConnectorProps<ID>, 'chains'>
   options?: Partial<Pick<ClientConfigEnhanced, 'connectors' | 'provider' | 'autoConnect'>>
 }
 export type WagmiClient = ReturnType<typeof createClient>
-const createWagmiClient = ({ options, ...props }: CreateWagmiClientProps): WagmiConfigProps['client'] => {
+function createWagmiClient<ID extends number>({
+  options,
+  ...props
+}: CreateWagmiClientProps<ID>): WagmiConfigProps['client'] {
   const connectors = Array.isArray(options?.connectors) ? options?.connectors : options?.connectors?.()
 
   return createClient({
@@ -30,24 +33,33 @@ const createWagmiClient = ({ options, ...props }: CreateWagmiClientProps): Wagmi
       ...w3mConnectors({
         projectId: props.w3mConnectorProps.projectId,
         version: 2,
-        chains: props.chains
+        chains: props.chains as Chain[]
       }),
       // any use custom modals
       ...(connectors || [])
     ],
     provider:
       options?.provider ||
-      configureChains(props.chains, [w3mProvider({ projectId: props.w3mConnectorProps.projectId })]).provider
+      configureChains(props.chains as Chain[], [w3mProvider({ projectId: props.w3mConnectorProps.projectId })]).provider
   })
 }
-const createEthereumClient = (wagmiClient: ReturnType<typeof createWagmiClient>, chains: ChainsPartialReadonly) =>
-  new EthereumClient(wagmiClient, chains)
-
-export type PstlWagmiClientOptions = {
-  client?: WagmiClient
-  options?: Partial<CreateWagmiClientProps['options']>
+function createEthereumClient<ID extends number>(
+  wagmiClient: ReturnType<typeof createWagmiClient>,
+  chains: ChainsPartialReadonly<ID>
+) {
+  return new EthereumClient(wagmiClient, chains as Chain[])
 }
-export function usePstlWagmiClient(props: PstlWeb3ModalProps) {
+
+export type PstlWagmiClientOptions<
+  ID extends number,
+  SC extends ChainsPartialReadonly<ID> = ChainsPartialReadonly<ID>
+> = {
+  client?: WagmiClient
+  options?: Partial<CreateWagmiClientProps<ID, SC>['options']>
+}
+export function usePstlWagmiClient<ID extends number, SC extends ChainsPartialReadonly<ID>>(
+  props: PstlWeb3ModalProps<ID, SC>
+) {
   return useMemo(
     () =>
       !props.wagmiClient?.client
@@ -62,10 +74,10 @@ export function usePstlWagmiClient(props: PstlWeb3ModalProps) {
     [props]
   )
 }
-export function usePstlEthereumClient(
+export function usePstlEthereumClient<ID extends number>(
   ethereumClient: EthereumClient | undefined,
   wagmiClient: ReturnType<typeof createWagmiClient>,
-  chains: ChainsPartialReadonly
+  chains: ChainsPartialReadonly<ID>
 ) {
   const client = useMemo(
     () => (!ethereumClient ? createEthereumClient(wagmiClient, chains) : ethereumClient),

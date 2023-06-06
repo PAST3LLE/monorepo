@@ -6,7 +6,13 @@ import { PstlWagmiClientOptions, usePstlEthereumClient, usePstlWagmiClient } fro
 import { PstlWagmiProvider } from './wagmi'
 import { PstlWeb3Modal } from './web3Modal'
 
-const PstlW3Providers = ({ children, config }: { children: ReactNode; config: PstlWeb3ModalProps }) => {
+const PstlW3Providers = <ID extends number, SC extends ChainsPartialReadonly<ID>>({
+  children,
+  config
+}: {
+  children: ReactNode
+  config: PstlWeb3ModalProps<ID, SC>
+}) => {
   const wagmiClient = usePstlWagmiClient(config)
   const ethereumClient = usePstlEthereumClient(config.ethereumClient, wagmiClient, config.chains)
 
