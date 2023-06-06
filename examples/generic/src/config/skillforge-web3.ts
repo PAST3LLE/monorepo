@@ -3,7 +3,7 @@ import {
   SkillForgeContractAddressMap,
   SkillForgeMetadataUriMap,
   SupportedChains
-} from '@past3lle/skillforge-web3'
+} from '@past3lle/forge-web3'
 import { Address } from '@past3lle/types'
 import { PstlWeb3ModalProps } from '@past3lle/web3-modal'
 import { goerli } from 'wagmi/chains'

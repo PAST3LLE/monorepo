@@ -1,5 +1,5 @@
 import { ColumnCenter, CookieBanner, PstlButton, Row } from '@past3lle/components'
-import { useW3Connection } from '@past3lle/skillforge-web3'
+import { useW3Connection } from '@past3lle/forge-web3'
 import * as React from 'react'
 
 import { PstlMain } from '../components/Layout'

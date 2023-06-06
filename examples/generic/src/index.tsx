@@ -1,4 +1,4 @@
-import { ForgeW3Providers } from '@past3lle/skillforge-web3'
+import { ForgeW3Providers } from '@past3lle/forge-web3'
 import { ThemeChangerButton } from '@past3lle/skillforge-widget'
 import {
   StaticGlobalCssProvider,
