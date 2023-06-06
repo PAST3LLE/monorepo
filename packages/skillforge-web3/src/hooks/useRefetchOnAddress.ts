@@ -1,13 +1,16 @@
 import { useEffect } from 'react'
 import { useAccount } from 'wagmi'
 
+import { useSupportedChainId } from './useSkillForgeSupportedChainId'
+
 /**
- * @name useRefetchOnAddress
+ * @name useRefetchOnAddressAndChain
  * @param refetchCb refetch callback returned from wagmi contract hook
  */
-export function useRefetchOnAddress(refetchCb: (...args: any[]) => void) {
+export function useRefetchOnAddressAndChain(refetchCb: (...args: any[]) => void) {
   const { address } = useAccount()
+  const chain = useSupportedChainId()
   useEffect(() => {
     refetchCb()
-  }, [address, refetchCb])
+  }, [address, chain, refetchCb])
 }

@@ -3,8 +3,13 @@ import { devWarn } from '@past3lle/utils'
 import { useEffect } from 'react'
 import { Address, useAccount } from 'wagmi'
 
-import { SkillForgeBalances, useSkillForgeBalancesAtom, useSkillForgeResetBalancesAtom } from '..'
-import { useRefetchOnAddress, useSkillForgeGetSkillsAddresses, useSkillForgeSkillsBalanceOfBatch } from '../../../hooks'
+import { SkillForgeBalances, useSkillForgeBalancesWriteAtom, useSkillForgeResetBalancesAtom } from '..'
+import {
+  useRefetchOnAddressAndChain,
+  useSkillForgeGetSkillsAddresses,
+  useSkillForgeSkillsBalanceOfBatch,
+  useSupportedChainId
+} from '../../../hooks'
 import { WithLoadAmount } from '../../../hooks/types'
 import { SkillForgeMetadataState, useSkillForgeMetadataReadAtom } from '../../Metadata'
 
@@ -12,22 +17,25 @@ import { SkillForgeMetadataState, useSkillForgeMetadataReadAtom } from '../../Me
 const DEFAULT_COLLECTION_LOAD_AMOUNT = 3
 
 export function SkillForgeBalancesUpdater({ loadAmount = DEFAULT_COLLECTION_LOAD_AMOUNT }: Partial<WithLoadAmount>) {
-  const [metadata] = useSkillForgeMetadataReadAtom()
-  const [, updateSkillForgeBalances] = useSkillForgeBalancesAtom()
-  const [, resetUserBalances] = useSkillForgeResetBalancesAtom()
-
   const { address } = useAccount()
+  const chainId = useSupportedChainId()
+
+  const [metadata] = useSkillForgeMetadataReadAtom()
+  const [, updateSkillForgeBalances] = useSkillForgeBalancesWriteAtom()
+  const [, resetUserBalances] = useSkillForgeResetBalancesAtom()
 
   const { data: skills = [] } = useSkillForgeGetSkillsAddresses({ loadAmount })
   const { data: balancesBatch, refetch: refetchBalances } = useSkillForgeSkillsBalanceOfBatch(
     skills as Address[],
     metadata,
-    address
+    address,
+    chainId
   )
 
-  useRefetchOnAddress(refetchBalances)
+  useRefetchOnAddressAndChain(refetchBalances)
 
   useEffect(() => {
+    if (!chainId) return
     const metadataLoaded = !!metadata?.[0]?.ids?.length
 
     const derivedData: BigNumber[][] = _getEnvBalances(balancesBatch as BigNumber[][], metadata)
@@ -37,18 +45,13 @@ export function SkillForgeBalancesUpdater({ loadAmount = DEFAULT_COLLECTION_LOAD
         // if address is undefined, reset balances
         resetUserBalances({})
       } else {
-        const balances = reduceBalanceDataToMap(derivedData, skills as Address[], metadata, address)
+        const balances = reduceBalanceDataToMap(derivedData, skills as Address[], metadata, chainId)
 
-        updateSkillForgeBalances((state) => ({
-          balances: {
-            ...state.balances,
-            ...balances
-          }
-        }))
+        updateSkillForgeBalances(balances)
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [address, balancesBatch, metadata, resetUserBalances, updateSkillForgeBalances])
+  }, [chainId, address, balancesBatch, metadata, resetUserBalances, updateSkillForgeBalances])
 
   return null
 }
@@ -56,27 +59,29 @@ export function SkillForgeBalancesUpdater({ loadAmount = DEFAULT_COLLECTION_LOAD
 function reduceBalanceDataToMap(
   data: readonly BigNumber[][],
   collectionsAddresses: Address[],
-  metadata: SkillForgeMetadataState['metadata'],
-  userAddress?: Address
+  metadata: SkillForgeMetadataState['metadata'][number],
+  chainId: number
 ) {
   if (!data) return {}
 
   return data.reduce((oAcc, bnData, collectionIdx) => {
-    const obj = (bnData || []).reduce((acc, nextBn, i) => {
+    const chainBalance = (bnData || []).reduce((acc, nextBn, i) => {
       const collectionAddress = collectionsAddresses?.[collectionIdx]
       const skillId = metadata[collectionIdx].ids[i]
       if (!!collectionAddress) {
-        // return "0" if userAddress is undefined, else return real balance
-        acc[`${collectionAddress}-${skillId}`] = userAddress ? nextBn.toString() : '0'
+        acc[`${collectionAddress}-${skillId}`] = nextBn.toString()
       }
 
       return acc
-    }, {} as SkillForgeBalances)
-    return { ...oAcc, ...obj }
+    }, {} as SkillForgeBalances[number])
+    return { ...oAcc, [chainId]: { ...oAcc[chainId], ...chainBalance } }
   }, {} as SkillForgeBalances)
 }
 
-function _getEnvBalances(realBalances: BigNumber[][], metadata: SkillForgeMetadataState['metadata']): BigNumber[][] {
+function _getEnvBalances(
+  realBalances: BigNumber[][],
+  metadata: SkillForgeMetadataState['metadata'][number]
+): BigNumber[][] {
   // TODO: remove this
   const SHOW_MOCK_DATA = !!process.env.REACT_APP_MOCK_METADATA
   if (!SHOW_MOCK_DATA) {

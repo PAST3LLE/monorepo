@@ -9,8 +9,9 @@ import { WAGMI_SCOPE_KEYS } from '../constants'
 
 export function useSkillForgeSkillsBalanceOfBatch(
   skills: Address[] | undefined = [],
-  metadata: SkillForgeMetadataState['metadata'],
-  address?: Address
+  metadata: SkillForgeMetadataState['metadata'][number],
+  address?: Address,
+  chainId?: number
 ) {
   const contractReadsArgs = useMemo(
     () => gatherSkillContractConfigParams(skills as Address[], metadata, address),
@@ -22,13 +23,13 @@ export function useSkillForgeSkillsBalanceOfBatch(
     watch: true,
     scopeKey: WAGMI_SCOPE_KEYS.SKILLS_BALANCE_OF_BATCH,
     // Don't run if our contract reads args list is 0
-    enabled: contractReadsArgs?.length > 0
+    enabled: !!chainId && contractReadsArgs?.length > 0
   })
 }
 
 function gatherSkillContractConfigParams(
   skillsAddressList: Address[] | undefined = [],
-  metadata: SkillForgeMetadataState['metadata'],
+  metadata: SkillForgeMetadataState['metadata'][number],
   balanceOfAddress: Address | undefined
 ) {
   const contractConfigList = skillsAddressList.flatMap((address, i) => {
@@ -38,7 +39,7 @@ function gatherSkillContractConfigParams(
       )
     }
 
-    const args = getBalanceOfBatchArgs(metadata[i]?.ids || [], balanceOfAddress)
+    const args = getBalanceOfBatchArgs(metadata?.[i]?.ids || [], balanceOfAddress)
     return {
       abi: Collection__factory.abi,
       address,

@@ -14,7 +14,7 @@ export enum SkillLockStatus {
 
 export function getLockStatus(
   skill: SkillMetadata | undefined,
-  balances?: SkillForgeBalances,
+  balances?: SkillForgeBalances[number],
   address?: Address
 ): SkillLockStatus {
   const deps = skill?.properties.dependencies || []

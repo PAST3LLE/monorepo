@@ -6,7 +6,7 @@ import { useContractReads } from 'wagmi'
 import { useSkillForgeContractAddressMapReadAtom } from '../../state'
 import { WAGMI_SCOPE_KEYS } from '../constants'
 import { WithLoadAmount } from '../types'
-import { useRefetchOnAddress } from '../useRefetchOnAddress'
+import { useRefetchOnAddressAndChain } from '../useRefetchOnAddress'
 import { useSkillForgeContractAddressesByChain } from './useSkillForgeContractAddress'
 import { useSkillForgeGetLatestCollectionId } from './useSkillForgeGetLatestCollectionId'
 
@@ -16,7 +16,7 @@ export function useSkillForgeGetSkillsAddresses({ loadAmount }: WithLoadAmount) 
   const { data: latestCollectionId = BigNumber.from(1), refetch: refetchCollectionId } =
     useSkillForgeGetLatestCollectionId(contractAddressMap)
 
-  useRefetchOnAddress(refetchCollectionId)
+  useRefetchOnAddressAndChain(refetchCollectionId)
 
   const contractsReadsArgs = useMemo(() => {
     const commonArgs = {

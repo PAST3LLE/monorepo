@@ -6,7 +6,7 @@ import { SkillForgeMetadataUpdaterProps } from '../state/Metadata/updaters/Metad
 import { CollectionMetadata, SkillMetadata } from '../types'
 import { chainFetchIpfsUri } from '../utils'
 import { useSkillForgeGetBatchSkillMetadataUris } from './contracts/useSkillForgeGetBatchSkillMetadataUris'
-import { useRefetchOnAddress } from './useRefetchOnAddress'
+import { useRefetchOnAddressAndChain } from './useRefetchOnAddress'
 import { useSupportedChainId } from './useSkillForgeSupportedChainId'
 
 export function useSkillForgeFetchMetadata({ loadAmount = 3, metadataFetchOptions }: SkillForgeMetadataUpdaterProps) {
@@ -23,7 +23,7 @@ export function useSkillForgeFetchMetadata({ loadAmount = 3, metadataFetchOption
     loadAmount
   })
 
-  useRefetchOnAddress(refetchSkills)
+  useRefetchOnAddressAndChain(refetchSkills)
 
   return useMemo(async (): Promise<[number[][], Promise<SkillMetadata[]>[]]> => {
     // reverse array as we loop down
@@ -85,6 +85,8 @@ export function deriveMetadataId(metadata: SkillMetadata, address: Address): `${
 
 function _overrideMetadataObject(metadata: SkillMetadata, address: Address) {
   const newId = metadata?.properties?.id ? deriveMetadataId(metadata, address) : '0x-0000'
-  metadata.properties.id = newId
+  if (typeof metadata === 'object' && 'properties' in metadata) {
+    metadata.properties.id = newId
+  }
   return metadata
 }

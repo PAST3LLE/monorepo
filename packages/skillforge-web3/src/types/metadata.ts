@@ -1,5 +1,5 @@
 export type SkillForgeMetadataUriMap = {
-  [key: number]: {
+  [chainId: number]: {
     collectionsManager: string
   }
 }
