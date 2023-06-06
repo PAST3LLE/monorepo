@@ -1,4 +1,4 @@
-import { CustomIpfsGatewayConfig } from '@past3lle/skillforge-web3'
+import { CustomIpfsGatewayConfig } from '@past3lle/forge-web3'
 
 export const IPFS_GATEWAY_URI_MAP = {
   PINATA: 'https://gateway.pinata.cloud',

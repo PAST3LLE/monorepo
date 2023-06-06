@@ -1,11 +1,12 @@
 import COLLECTIONS_MANAGER_NETWORKS from '../../forge-networks.json'
 import { Column, Row } from '@past3lle/components'
-import { SupportedChains } from '@past3lle/skillforge-web3'
+import { SupportedForgeChains, useForgeUserConfigAtom } from '@past3lle/forge-web3'
 import MERGE_MANAGER_NETWORKS from '@past3lle/skilltree-contracts/networks.json'
 import MERGE_MANAGER_VERSION from '@past3lle/skilltree-contracts/package.json'
-import React from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components/macro'
 import { Address } from 'wagmi'
+import { getBlockExplorerURL } from 'web3/utilts'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const packageJson = require('../../../package.json')
@@ -47,43 +48,77 @@ const AppVersionContainer = styled(Column)`
 `
 
 export function AppVersion() {
+  const [
+    {
+      chains,
+      user: { chainId }
+    }
+  ] = useForgeUserConfigAtom()
+  const chain = chainId && chains?.find((chain) => chain.id === chainId)
+
+  const getExplorerUrl = useCallback((address: Address) => getBlockExplorerURL(chainId, address, 'address'), [chainId])
+
+  if (!chainId || !chain) return null
+
   return (
-    <AppVersionContainer>
-      <Column>
-        <Row>
-          <strong>Version:</strong>
-          <a
-            href="https://github.com/PAST3LLE/monorepo/tree/main/apps/skillforge-ui/package.json"
-            target="_blank noreferrer"
-          >
-            {packageJson?.version || 'Unknown version'}
-          </a>
-        </Row>
-        <Row>
-          <strong>Contracts: </strong>
-          <a href="https://github.com/PAST3LLE/skilltree-contracts/tree/main/package.json" target="_blank noreferrer">
-            {MERGE_MANAGER_VERSION?.version || 'Unknown version'}
-          </a>
-        </Row>
-        <Row>
-          <strong>CollectionsManager:</strong>{' '}
-          <a
-            href="https://github.com/PAST3LLE/skilltree-contracts/tree/main/contracts/CollectionsManager.sol"
-            target="_blank noreferrer"
-          >
-            {COLLECTIONS_MANAGER_NETWORKS[SupportedChains.GOERLI].CollectionsManager.address as Address}
-          </a>
-        </Row>
-        <Row>
-          <strong>MergeManager:</strong>{' '}
-          <a
-            href="https://github.com/PAST3LLE/skilltree-contracts/tree/main/contracts/MergeManager.sol"
-            target="_blank noreferrer"
-          >
-            {MERGE_MANAGER_NETWORKS[SupportedChains.GOERLI].MergeManager.address as Address}
-          </a>
-        </Row>
-      </Column>
-    </AppVersionContainer>
+    <Row marginBottom={-100} height={100} style={{ position: 'relative' }}>
+      <AppVersionContainer>
+        <Column>
+          <Row>
+            <strong>Version:</strong>
+            <a
+              href="https://github.com/PAST3LLE/monorepo/tree/main/apps/skillforge-ui/package.json"
+              target="_blank noreferrer"
+            >
+              {packageJson?.version || 'Unknown version'}
+            </a>
+          </Row>
+          <Row>
+            <strong>Contracts: </strong>
+            <a href="https://github.com/PAST3LLE/skilltree-contracts/tree/main/package.json" target="_blank noreferrer">
+              {MERGE_MANAGER_VERSION?.version || 'Unknown version'}
+            </a>
+          </Row>
+          <Row>
+            <strong>CollectionsManager:</strong>{' '}
+            <a
+              href={`${getExplorerUrl(
+                COLLECTIONS_MANAGER_NETWORKS?.[chainId as SupportedForgeChains].CollectionsManager.address as Address
+              )}#code`}
+              target="_blank noreferrer"
+            >
+              {(COLLECTIONS_MANAGER_NETWORKS?.[chainId as SupportedForgeChains].CollectionsManager
+                .address as Address) || 'CollectionsManager not deployed on this network'}
+            </a>
+            //
+            <a
+              href="https://github.com/PAST3LLE/skilltree-contracts/tree/main/contracts/CollectionsManager.sol"
+              target="_blank noreferrer"
+            >
+              Github
+            </a>
+          </Row>
+          <Row>
+            <strong>MergeManager:</strong>{' '}
+            <a
+              href={`${getExplorerUrl(
+                MERGE_MANAGER_NETWORKS?.[chainId as SupportedForgeChains].MergeManager.address as Address
+              )}#code`}
+              target="_blank noreferrer"
+            >
+              {(MERGE_MANAGER_NETWORKS?.[chainId as SupportedForgeChains].MergeManager.address as Address) ||
+                'MergeManager not deployed on this network'}
+            </a>
+            //
+            <a
+              href="https://github.com/PAST3LLE/skilltree-contracts/tree/main/contracts/MergeManager.sol"
+              target="_blank noreferrer"
+            >
+              Github
+            </a>
+          </Row>
+        </Column>
+      </AppVersionContainer>
+    </Row>
   )
 }

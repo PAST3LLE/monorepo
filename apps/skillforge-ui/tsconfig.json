@@ -12,7 +12,7 @@
     },
     "references": [
         {
-            "path": "../../packages/skillforge-web3"
+            "path": "../../packages/forge-web3"
         },
         {
             "path": "../../packages/skillforge-widget"

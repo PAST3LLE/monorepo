@@ -1,6 +1,6 @@
 import { Column, Row } from '@past3lle/components'
+import { ForgeW3CoreProvidersProps } from '@past3lle/forge-web3'
 import { useIsMobile } from '@past3lle/hooks'
-import { ForgeW3CoreProvidersProps } from '@past3lle/skillforge-web3'
 import SkillForge, { SkillForgeProps, SkillForgeConnectedHeader } from '@past3lle/skillforge-widget'
 import { RobotoVariableFontProvider } from '@past3lle/theme'
 import { TorusWalletConnectorPlugin } from '@web3auth/torus-wallet-connector-plugin'
@@ -153,14 +153,15 @@ export function App() {
             config={SKILLTREE_CONFIG.config}
             maxWidth={isMobile ? '100%' : '90%'}
             maxHeight={isMobile ? '100%' : '90%'}
-          >
-            <W3aStyles />
-            <SkillForgeConnectedHeader />
-          </SkillForge>
+            render={() => (
+              <>
+                <W3aStyles />
+                <SkillForgeConnectedHeader />
+              </>
+            )}
+          />
         </Row>
-        <Row marginBottom={-100} height={100} style={{ position: 'relative' }}>
-          <AppVersion />
-        </Row>
+        <AppVersion />
       </Column>
     </FontsAndCssProviders>
   )
