@@ -1,5 +1,5 @@
 import { Row } from '@past3lle/components'
-import { useSkillForgeWindowSizeAtom } from '@past3lle/skillforge-web3'
+import { useForgeWindowSizeAtom } from '@past3lle/forge-web3'
 import { MEDIA_WIDTHS } from '@past3lle/theme'
 import React from 'react'
 
@@ -10,7 +10,7 @@ import { ShopExternalLinkButton } from '../Common/Button/ShopExternalLinkButton'
 import { HeaderContainer, Web3InfoContainer } from './styleds'
 
 export const SkillForgeHeader = () => {
-  const [{ width = 0 }] = useSkillForgeWindowSizeAtom()
+  const [{ width = 0 }] = useForgeWindowSizeAtom()
   const isMobileWidth = width <= MEDIA_WIDTHS.upToSmall
   return (
     <HeaderContainer>

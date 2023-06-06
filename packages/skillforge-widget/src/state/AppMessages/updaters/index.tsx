@@ -1,4 +1,4 @@
-import { SkillForgeW3ChainState, useChainState } from '@past3lle/skillforge-web3'
+import { ForgeW3ChainState, useChainState } from '@past3lle/forge-web3'
 import { useEffect } from 'react'
 
 import { AppMessagesKeys, useAppMessagesAtom } from '..'
@@ -15,7 +15,7 @@ function useSetChainStateMessages() {
   const [, setAppMessages] = useAppMessagesAtom()
   const [, chainState] = useChainState()
   useEffect(() => {
-    if (chainState === SkillForgeW3ChainState.UNSUPPORTED) {
+    if (chainState === ForgeW3ChainState.UNSUPPORTED) {
       setAppMessages([
         AppMessagesKeys.UNSUPPORTED_CHAIN,
         'Unsupported network! Click the network button above and switch to a supported network.'

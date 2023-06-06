@@ -1,5 +1,5 @@
 import { ButtonProps } from '@past3lle/components'
-import { useSkillForgeWindowSizeAtom } from '@past3lle/skillforge-web3'
+import { useForgeWindowSizeAtom } from '@past3lle/forge-web3'
 import { MEDIA_WIDTHS } from '@past3lle/theme'
 import React from 'react'
 
@@ -20,7 +20,7 @@ export function InventoryButton(props: InventoryButtonProps) {
   const assetsMap = useAssetsMap()
   const logoUrlMaps = useGenericImageSrcSet()
 
-  const [{ width = 0 }] = useSkillForgeWindowSizeAtom()
+  const [{ width = 0 }] = useForgeWindowSizeAtom()
   const showShortLogo = width > MEDIA_WIDTHS.upToSmall && width < MEDIA_WIDTHS.upToMedium
 
   return (

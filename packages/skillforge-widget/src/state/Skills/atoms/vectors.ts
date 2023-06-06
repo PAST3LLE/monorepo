@@ -1,4 +1,4 @@
-import { SkillId } from '@past3lle/skillforge-web3'
+import { SkillId } from '@past3lle/forge-web3'
 import { atom, useAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 

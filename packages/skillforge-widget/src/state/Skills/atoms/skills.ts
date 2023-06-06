@@ -1,4 +1,4 @@
-import { SkillId } from '@past3lle/skillforge-web3'
+import { SkillId } from '@past3lle/forge-web3'
 import { atom, useAtom } from 'jotai'
 
 export interface SkillsState {
@@ -40,8 +40,8 @@ const activeDependenciesSkillAtom = atom<SkillsState['activeDependencies'], Skil
 export const useActiveSkillAtom = () => useAtom(activeSkillAtom)
 export const useActiveSkillDependenciesAtom = () => useAtom(activeDependenciesSkillAtom)
 
-export const useSkillSizeWriteAtom = () => useAtom(skillSizeWriteAtom)
-export const useSkillSizeReadAtom = () => useAtom(skillSizeReadAtom)
+export const useForgeSizeWriteAtom = () => useAtom(skillSizeWriteAtom)
+export const useForgeSizeReadAtom = () => useAtom(skillSizeReadAtom)
 
 export const useActiveSkillReadAtom = () => useAtom(activeSkillRead)
-export const useSkillsAtom = () => useAtom(skillsAtom)
+export const useForgesAtom = () => useAtom(skillsAtom)

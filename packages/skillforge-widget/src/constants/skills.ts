@@ -1,4 +1,4 @@
-import { SkillMetadata } from '@past3lle/skillforge-web3'
+import { SkillMetadata } from '@past3lle/forge-web3'
 
 export const CANVAS_CONTAINER_ID = 'CANVAS-CONTAINER'
 export const SKILLPOINTS_CONTAINER_ID = 'SKILLPOINTS-CONTAINER'

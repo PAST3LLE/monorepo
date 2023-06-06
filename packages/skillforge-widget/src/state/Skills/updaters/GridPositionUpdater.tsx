@@ -1,4 +1,4 @@
-import { useSkillForgeMetadataReadAtom, useSkillForgeWindowSizeAtom } from '@past3lle/skillforge-web3'
+import { useForgeMetadataReadAtom, useForgeWindowSizeAtom } from '@past3lle/forge-web3'
 import { MEDIA_WIDTHS } from '@past3lle/theme'
 import { useEffect, useMemo } from 'react'
 
@@ -13,10 +13,10 @@ import {
 } from '../../../constants/skills'
 
 export function GridPositionUpdater() {
-  const [metadata] = useSkillForgeMetadataReadAtom()
+  const [metadata] = useForgeMetadataReadAtom()
   const [active] = useActiveSkillReadAtom()
   const [{ vectors }, setVectorsState] = useVectorsAtom()
-  const [windowSizeState] = useSkillForgeWindowSizeAtom()
+  const [windowSizeState] = useForgeWindowSizeAtom()
 
   const gridConstants = useMemo(() => {
     const container = document.getElementById(CANVAS_CONTAINER_ID)

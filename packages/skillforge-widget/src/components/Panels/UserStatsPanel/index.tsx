@@ -1,6 +1,6 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { Column, Row, Text } from '@past3lle/components'
-import { useSkillForgeBalancesAtom } from '@past3lle/skillforge-web3'
+import { useForgeBalancesReadAtom } from '@past3lle/forge-web3'
 import { upToSmall } from '@past3lle/theme'
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
@@ -17,7 +17,7 @@ import { SidePanel } from '../BaseSidePanel'
 
 export function UserStatsPanel() {
   const [{ vectors }] = useVectorsAtom()
-  const [{ balances }] = useSkillForgeBalancesAtom()
+  const [balances] = useForgeBalancesReadAtom()
 
   const getSkill = useGetSkillFromIdCallback()
 

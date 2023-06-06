@@ -1,12 +1,12 @@
-import { useSkillForgeWindowSizeAtom } from '@past3lle/skillforge-web3'
+import { useForgeWindowSizeAtom } from '@past3lle/forge-web3'
 import { useEffect } from 'react'
 
-import { useSkillSizeWriteAtom } from '..'
+import { useForgeSizeWriteAtom } from '..'
 import { CANVAS_CONTAINER_ID, SKILLPOINT_SIZES } from '../../../constants/skills'
 
 export function SkillSquareSizeUpdater() {
-  const [{ width, height }] = useSkillForgeWindowSizeAtom()
-  const [, setSkillSize] = useSkillSizeWriteAtom()
+  const [{ width, height }] = useForgeWindowSizeAtom()
+  const [, setSkillSize] = useForgeSizeWriteAtom()
 
   useEffect(() => {
     const canvas = document.getElementById(CANVAS_CONTAINER_ID)

@@ -1,17 +1,17 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { AutoRow, Column, ExternalLink, Row, RowCenter, RowProps, Text } from '@past3lle/components'
 import {
+  ForgeBalances,
+  ForgeMetadataState,
   SkillDependencyObject,
-  SkillForgeBalances,
-  SkillForgeMetadataState,
   SkillId,
   SkillLockStatus,
   SkillMetadata,
   SkillRarity,
   useDeriveSkillState,
-  useSkillForgeBalancesReadAtom,
-  useSkillForgeMetadataMapReadAtom
-} from '@past3lle/skillforge-web3'
+  useForgeBalancesReadAtom,
+  useForgeMetadataMapReadAtom
+} from '@past3lle/forge-web3'
 import { BLACK, OFF_WHITE } from '@past3lle/theme'
 import { darken } from 'polished'
 import React, { useMemo, useRef } from 'react'
@@ -30,9 +30,9 @@ import { SidePanel } from '../BaseSidePanel'
 import { ActiveSkillPanelContainer, SkillRarityLabel, SkillStatusLabel, SkillsRowContainer } from './styleds'
 
 export function ActiveSkillPanel() {
-  const [metadataMap] = useSkillForgeMetadataMapReadAtom()
+  const [metadataMap] = useForgeMetadataMapReadAtom()
   const activeSkillState = useGetActiveSkill()
-  const [balances] = useSkillForgeBalancesReadAtom()
+  const [balances] = useForgeBalancesReadAtom()
 
   const activeSkill = activeSkillState?.[0]
   const setSkillState = activeSkillState?.[1]
@@ -190,8 +190,8 @@ const RequiredDepsContainer = styled(Column)<{ borderRadius?: string; background
 
 interface SkillsRowProps {
   deps: SkillDependencyObject[]
-  metadataMap: SkillForgeMetadataState['metadataMap']
-  balances: SkillForgeBalances
+  metadataMap: ForgeMetadataState['metadataMap'][number]
+  balances: ForgeBalances[number]
   rowProps?: RowProps
 }
 function SkillsRow({ balances, deps, metadataMap, rowProps }: SkillsRowProps) {

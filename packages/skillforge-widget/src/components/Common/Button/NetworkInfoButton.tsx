@@ -1,5 +1,5 @@
 import { Row } from '@past3lle/components'
-import { useSkillForgeWindowSizeAtom, useSupportedChain } from '@past3lle/skillforge-web3'
+import { useForgeGetUserConfigChainsAtom, useForgeWindowSizeAtom, useSupportedChainId } from '@past3lle/forge-web3'
 import { MEDIA_WIDTHS } from '@past3lle/theme'
 import { useWeb3Modal } from '@web3modal/react'
 import React, { useCallback } from 'react'
@@ -10,14 +10,17 @@ import { MonospaceText } from '../Text'
 
 export function NetworkInfoButton() {
   const assetsMap = useAssetsMap()
-  const [{ width = 0 }] = useSkillForgeWindowSizeAtom()
+  const [{ width = 0 }] = useForgeWindowSizeAtom()
   const isSmallMediumWidth = width > MEDIA_WIDTHS.upToSmall && width < MEDIA_WIDTHS.upToMedium
   const isSmallWidth = width <= MEDIA_WIDTHS.upToSmall
 
-  const chain = useSupportedChain()
+  const [chains] = useForgeGetUserConfigChainsAtom()
+
+  const chainId = useSupportedChainId()
+  const chain = chains?.find((chain) => chain?.id === chainId)
 
   const chainName = chain?.name || (isSmallWidth ? 'login' : 'offline')
-  const chainLogo = chain?.id ? assetsMap.icons.chains?.[chain?.id] : assetsMap.icons.chains.disconnected
+  const chainLogo = chainId ? assetsMap.icons.chains[chainId] : assetsMap.icons.chains.disconnected
 
   const { open } = useWeb3Modal()
 

@@ -10,7 +10,7 @@
         "rootDir": "./src",
         "composite": true,
         "declarationMap": true,
-        "allowJs": true
+        "allowJs": true,
     },
     "references": [
         {
@@ -23,7 +23,7 @@
             "path": "../hooks"
         },
         {
-            "path": "../skillforge-web3"
+            "path": "../forge-web3"
         },
         {
             "path": "../../apps/skills-nft"

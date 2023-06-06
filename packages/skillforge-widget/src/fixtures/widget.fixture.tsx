@@ -1,4 +1,4 @@
-import { useW3Connection, useW3Modal } from '@past3lle/skillforge-web3'
+import { useW3Connection, useW3Modal } from '@past3lle/forge-web3'
 import React from 'react'
 
 import { SkillForge } from '../components'

@@ -1,18 +1,12 @@
 import { SVG_LoadingCircleLight } from '@past3lle/assets'
 import { RowCenter, RowProps, SmartImg } from '@past3lle/components'
-import {
-  SkillMetadata,
-  SkillRarity,
-  chainFetchIpfsUriBlob,
-  getHash,
-  useSkillForgeGetIpfsAtom
-} from '@past3lle/skillforge-web3'
+import { SkillMetadata, SkillRarity, chainFetchIpfsUriBlob, getHash, useForgeGetIpfsAtom } from '@past3lle/forge-web3'
 import { isImageKitUrl, isImageSrcSet } from '@past3lle/theme'
 import { devError } from '@past3lle/utils'
 import React, { memo, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import { SkillsState, useSkillsAtom } from '../../state/Skills'
+import { SkillsState, useForgesAtom } from '../../state/Skills'
 import { useAssetsMap } from '../../theme/utils'
 import { Vector } from '../Canvas/canvasApi/api/vector'
 import { StyledSkillpoint } from '../Common'
@@ -35,8 +29,8 @@ function SkillpointUnmemoed({
   skillpointStyles,
   lightupDependencies
 }: Props) {
-  const [ipfsConfig] = useSkillForgeGetIpfsAtom()
-  const [state, setSkillState] = useSkillsAtom()
+  const [ipfsConfig] = useForgeGetIpfsAtom()
+  const [state, setSkillState] = useForgesAtom()
   const {
     active: [currentlyActive],
     sizes: { height }

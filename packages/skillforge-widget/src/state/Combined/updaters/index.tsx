@@ -1,4 +1,4 @@
-import { ForgeStateProviders, ForgeW3Providers } from '@past3lle/skillforge-web3'
+import { ForgeStateProviders, ForgeW3Providers } from '@past3lle/forge-web3'
 import { ThemeProviderSimple, useConstructTheme } from '@past3lle/theme'
 import React, { ReactNode } from 'react'
 import { DefaultTheme } from 'styled-components'

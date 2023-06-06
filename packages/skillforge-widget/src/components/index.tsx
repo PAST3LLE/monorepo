@@ -1,12 +1,12 @@
 import { ColumnCenter, RowProps } from '@past3lle/components'
+import { SupportedForgeChains, useSupportedChainId } from '@past3lle/forge-web3'
 import { StaticGlobalCssProvider, ThemedGlobalCssProvider } from '@past3lle/theme'
-import React, { ReactNode, StrictMode, useMemo } from 'react'
+import React, { StrictMode, useMemo } from 'react'
 import { useTheme } from 'styled-components'
 
 import { SkillForgeConnectedDataProviders, SkillForgeDisconnectedDataProviders } from '../state'
 import { CustomStaticGlobalCss, CustomThemeGlobalCss } from '../theme/global'
 import { SkillForgeWidgetConfig } from '../types/appConfig'
-import { AppMessagesBanner } from './AppMessagesBanner'
 import { SkillForge as SkillForgeComponent } from './Board'
 import {
   ConnectionInfoButton,
@@ -33,6 +33,18 @@ const CssProviders = () => {
   )
 }
 
+const InnerRenderComponent = ({
+  render
+}: {
+  render?: ({ chainId }: { chainId: SupportedForgeChains | undefined }) => React.ReactElement<any, any>
+}) => {
+  const chainId = useSupportedChainId()
+  if (!render) {
+    return null
+  }
+  return render({ chainId })
+}
+
 interface SkillForgeProps {
   config: SkillForgeWidgetConfig
 }
@@ -52,7 +64,14 @@ interface SkillForgeProps {
       }
     }
  */
-function SkillForge({ config, children, ...boxProps }: SkillForgeProps & RowProps & { children?: ReactNode }) {
+function SkillForge({
+  config,
+  render,
+  ...boxProps
+}: SkillForgeProps &
+  RowProps & {
+    render?: ({ chainId }: { chainId: SupportedForgeChains | undefined }) => React.ReactElement<any, any>
+  }) {
   const Provider = useMemo(
     () => (config.web3.standalone ? SkillForgeDisconnectedDataProviders : SkillForgeConnectedDataProviders),
     [config.web3.standalone]
@@ -69,8 +88,7 @@ function SkillForge({ config, children, ...boxProps }: SkillForgeProps & RowProp
           // User passed in props
           {...boxProps}
         >
-          {children}
-          <AppMessagesBanner />
+          <InnerRenderComponent render={render} />
           <SkillForgeComponent {...boxProps} />
         </ColumnCenter>
       </Provider>

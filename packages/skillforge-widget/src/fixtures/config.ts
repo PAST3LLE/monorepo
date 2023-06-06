@@ -1,4 +1,4 @@
-import { ForgeW3CoreProvidersProps } from '@past3lle/skillforge-web3'
+import { ForgeW3CoreProvidersProps } from '@past3lle/forge-web3'
 import { goerli } from 'wagmi'
 
 // TESTING ID - DONT USE IN PROD

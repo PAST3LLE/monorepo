@@ -1,16 +1,16 @@
+import { SkillId, useForgeMetadataMapReadAtom } from '@past3lle/forge-web3'
 import { useIsMobile } from '@past3lle/hooks'
-import { SkillId, useSkillForgeMetadataAtom } from '@past3lle/skillforge-web3'
 import { useEffect } from 'react'
 
-import { useSkillsAtom, useVectorsAtom } from '..'
+import { useForgesAtom, useVectorsAtom } from '..'
 import { toggleSelectedSkill } from '../../../components/Canvas/canvasApi/api/hooks'
 import { ActiveSidePanel, useSidePanelAtomBase } from '../../SidePanel'
 
 export function ActiveSkillUpdater() {
   const [{ type }, openSidePanel] = useSidePanelAtomBase()
   const isMobileWidthOrDevice = useIsMobile()
-  const [skillsState, updateSkillsState] = useSkillsAtom()
-  const [metadata] = useSkillForgeMetadataAtom()
+  const [skillsState, updateSkillsState] = useForgesAtom()
+  const [metadataMap] = useForgeMetadataMapReadAtom()
   const [vectorsState] = useVectorsAtom()
 
   // Updates the activeDepedencies whenever the active skill changes
@@ -19,7 +19,7 @@ export function ActiveSkillUpdater() {
     if (activeSkill) {
       updateSkillsState((state) => ({
         ...state,
-        activeDependencies: metadata.metadataMap[activeSkill].properties.dependencies.map(
+        activeDependencies: metadataMap[activeSkill].properties.dependencies.map(
           ({ token, id }) => `${token}-${id}` as SkillId
         )
       }))
@@ -29,7 +29,7 @@ export function ActiveSkillUpdater() {
         activeDependencies: state.activeDependencies.slice(1)
       }))
     }
-  }, [metadata.metadataMap, skillsState.active, updateSkillsState])
+  }, [metadataMap, skillsState.active, updateSkillsState])
 
   // handles ActivePanel history
   // toggles skill effects and auto-scrolls to active skill

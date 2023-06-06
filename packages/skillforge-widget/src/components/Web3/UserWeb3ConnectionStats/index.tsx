@@ -1,5 +1,5 @@
 import { Column, RowProps } from '@past3lle/components'
-import { useW3Connection as usePstlConnection, useW3Modal as usePstlWeb3Modal } from '@past3lle/skillforge-web3'
+import { useW3Connection as usePstlConnection, useW3Modal as usePstlWeb3Modal } from '@past3lle/forge-web3'
 import { BLACK_TRANSPARENT } from '@past3lle/theme'
 import { truncateAddress } from '@past3lle/utils'
 import React, { useCallback } from 'react'

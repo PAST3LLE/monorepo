@@ -1,5 +1,5 @@
 import { Row } from '@past3lle/components'
-import { SkillRarity, getRarityColours } from '@past3lle/skillforge-web3'
+import { SkillRarity, getRarityColours } from '@past3lle/forge-web3'
 import styled from 'styled-components'
 
 import { SKILLPOINT_SIZES } from '../../constants/skills'

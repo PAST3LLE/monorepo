@@ -1,12 +1,12 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { Row } from '@past3lle/components'
 import {
-  SkillForgeW3AppConfig,
+  ForgeW3AppConfig,
   SkillId,
   SkillRarity,
-  useSkillForgeBalancesAtom,
-  useSkillForgeMetadataMapReadAtom
-} from '@past3lle/skillforge-web3'
+  useForgeBalancesReadAtom,
+  useForgeMetadataMapReadAtom
+} from '@past3lle/forge-web3'
 import { convertToRomanNumerals } from '@past3lle/utils'
 import React, { useMemo } from 'react'
 
@@ -19,12 +19,12 @@ import { Vector } from './canvasApi/api/vector'
 import { SkillCanvasContainer, SkillInnerCanvasContainer } from './styleds'
 
 export interface SkillsCanvasProps {
-  options?: SkillForgeW3AppConfig['skillOptions']
+  options?: ForgeW3AppConfig['skillOptions']
 }
 export function SkillsCanvas() {
   const [{ vectors }] = useVectorsAtom()
-  const [metadataMap] = useSkillForgeMetadataMapReadAtom()
-  const [{ balances }] = useSkillForgeBalancesAtom()
+  const [metadataMap] = useForgeMetadataMapReadAtom()
+  const [balances] = useForgeBalancesReadAtom()
 
   const VectorsMap = useMemo(
     () =>

@@ -1,6 +1,6 @@
 import { SmartImg } from '@past3lle/components'
+import { useForgeWindowSizeAtom } from '@past3lle/forge-web3'
 import { useStateRef } from '@past3lle/hooks'
-import { useSkillForgeWindowSizeAtom } from '@past3lle/skillforge-web3'
 import React, { useContext, useMemo } from 'react'
 
 import { SkillForgeComponentContext } from '../../../components/Board'
@@ -19,7 +19,7 @@ export function LightningCanvas() {
 
   const widgetWidth = useContext(SkillForgeComponentContext)
 
-  const [windowSize] = useSkillForgeWindowSizeAtom()
+  const [windowSize] = useForgeWindowSizeAtom()
 
   const { width, height } = useMemo(() => {
     const height = Math.max(canvasDOM?.parentElement?.clientHeight || 0, MINIMUM_BOARD_HEIGHT - 30)

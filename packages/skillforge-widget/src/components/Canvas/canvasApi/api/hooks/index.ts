@@ -1,4 +1,4 @@
-import { SkillForgeMetadataState, SkillId, SkillMetadata } from '@past3lle/skillforge-web3'
+import { ForgeMetadataState, SkillId, SkillMetadata } from '@past3lle/forge-web3'
 import { useEffect, useState } from 'react'
 
 import { SkillGridPositionList, SkillsState, VectorsState } from '../../../../../state/Skills'
@@ -168,7 +168,7 @@ export function toggleSelectedSkill(vectorsState?: VectorsState, skillsState?: S
  * @returns Array (list) of Vectors each containing location Vector data for each square of the grid
  */
 export function calculateGridPoints(
-  metadata: SkillForgeMetadataState['metadata'],
+  metadata: ForgeMetadataState['metadata'][number],
   gridConstants: {
     rows: number
     columns: number
