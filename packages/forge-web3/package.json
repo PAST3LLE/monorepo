@@ -86,7 +86,7 @@
     "lint": "prettier --write ./src/** --ignore-path '../../.prettierignore'",
     "depcheck": "npx npm-check",
     "write-version": "echo {'\"version\"': '\"'$npm_package_version'\"' } > ./src/version.json",
-    "postversion": "yarn write-version && git add -- packages/forge-web3/src/version.json && git commit -m 'forge-web3: version.json update'"
+    "postversion": "yarn write-version && git add -- src/version.json && git commit -m 'forge-web3: version.json update'"
   },
   "publishConfig": {
     "access": "public",
