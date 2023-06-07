@@ -3,7 +3,7 @@ import { Row } from '@past3lle/components'
 import { BLACK, OFF_WHITE } from '@past3lle/theme'
 import { a } from '@react-spring/web'
 import { transparentize } from 'polished'
-import styled, { css } from 'styled-components/macro'
+import styled, { css } from 'styled-components'
 
 import { TouchAction } from '../../types'
 
