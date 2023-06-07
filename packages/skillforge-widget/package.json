@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/skillforge-widget",
   "sideEffects": false,
-  "version": "0.0.78",
+  "version": "0.0.79",
   "description": "PAST3LLE SKILLFORGE component as an NPM ESM pkg.",
   "main": "dist/esm/index.js",
   "typings": "dist/types/index.d.ts",
@@ -76,7 +76,7 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.13.8",
-    "@past3lle/types": "^0.0.15",
+    "@past3lle/types": "^0.0.16",
     "@trivago/prettier-plugin-sort-imports": "^4.0.0",
     "@types/jest": "^25.2.1",
     "@types/react": "^18.0.19",
@@ -93,17 +93,17 @@
   },
   "dependencies": {
     "@ethersproject/bignumber": "5.7.0",
-    "@past3lle/components": "^0.0.66",
-    "@past3lle/forge-web3": "^0.0.68",
-    "@past3lle/hooks": "^0.0.34",
-    "@past3lle/skills-nft": "^0.0.9",
-    "@past3lle/theme": "^0.0.42",
-    "@past3lle/utils": "^0.0.23",
+    "@past3lle/components": "^0.0.67",
+    "@past3lle/forge-web3": "^0.0.69",
+    "@past3lle/hooks": "^0.0.35",
+    "@past3lle/skills-nft": "^0.0.10",
+    "@past3lle/theme": "^0.0.43",
+    "@past3lle/utils": "^0.0.24",
     "jotai": "^1.13.1",
     "polished": "^4.2.2"
   },
   "bugs": {
     "url": "https://github.com/PAST3LLE/past3lle-monorepo/issues"
   },
-  "gitHead": "2bcc1e8d445933a2c17832d4b8183c3f8ebc61d0"
+  "gitHead": "678330e165795f742194e153fc6eba002ffcc05f"
 }

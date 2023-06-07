@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/assets",
   "sideEffects": false,
-  "version": "0.0.16",
+  "version": "0.0.17",
   "description": "common assets",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -40,5 +40,5 @@
     "tslib": "^2.4.1",
     "typescript": "^4.9.4"
   },
-  "gitHead": "844a40ca768fd8b246635af67d7a2db054639ea3"
+  "gitHead": "678330e165795f742194e153fc6eba002ffcc05f"
 }

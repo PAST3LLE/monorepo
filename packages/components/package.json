@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/components",
   "sideEffects": false,
-  "version": "0.0.66",
+  "version": "0.0.67",
   "description": "common components",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -77,12 +77,12 @@
     "typescript": "^4.9.4"
   },
   "dependencies": {
-    "@past3lle/assets": "^0.0.16",
-    "@past3lle/constants": "^0.0.23",
-    "@past3lle/hooks": "^0.0.34",
-    "@past3lle/theme": "^0.0.42",
-    "@past3lle/types": "^0.0.15",
-    "@past3lle/utils": "^0.0.23",
+    "@past3lle/assets": "^0.0.17",
+    "@past3lle/constants": "^0.0.24",
+    "@past3lle/hooks": "^0.0.35",
+    "@past3lle/theme": "^0.0.43",
+    "@past3lle/types": "^0.0.16",
+    "@past3lle/utils": "^0.0.24",
     "@popperjs/core": "^2.11.6",
     "@reach/dialog": "^0.18.0",
     "imagekitio-react": "^2.0.0",
@@ -95,5 +95,5 @@
     "react-spring": "^9.6.1",
     "rebass": "^4.0.7"
   },
-  "gitHead": "2bcc1e8d445933a2c17832d4b8183c3f8ebc61d0"
+  "gitHead": "678330e165795f742194e153fc6eba002ffcc05f"
 }
