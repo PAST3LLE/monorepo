@@ -218,7 +218,7 @@ const PastelleTheme: ThemeByModes<PastelleThemeExtension> = {
     DARK: {
       modeToggle: 'lightgoldenrodyellow',
       modeSvg: '#4a002f',
-      modeFilter: 'invert(1) brightness(0.8) hue-rotate(247deg) saturate(2)',
+      modeLogoFilter: 'invert(1) saturate(1.4) hue-rotate(180deg) drop-shadow(0px 0px 12px rgba(0,0,0,1))',
       // content
       input: {
         ...BaseContent.DARK.input,
@@ -230,7 +230,7 @@ const PastelleTheme: ThemeByModes<PastelleThemeExtension> = {
       }
     },
     LIGHT: {
-      modeLogoFilter: 'invert(1) saturate(1.4) hue-rotate(180deg) drop-shadow(0px 0px 12px rgba(0,0,0,1))'
+      modeFilter: 'invert(1) brightness(0.8) hue-rotate(247deg) saturate(2)'
     }
   }
 } as const
