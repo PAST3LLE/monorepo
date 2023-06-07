@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/hooks",
   "sideEffects": false,
-  "version": "0.0.35",
+  "version": "0.0.36",
   "description": "PAST3LLE common hooks e.g useDetectIntoView, useDebounce, etc.",
   "main": "dist/index.js",
   "repository": {
@@ -43,7 +43,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",
-    "@past3lle/theme": "^0.0.43",
+    "@past3lle/theme": "^0.0.44",
     "@rollup/plugin-image": "^3.0.1",
     "@testing-library/jest-dom": "^5.1.1",
     "@testing-library/react": "^13.4.0",
@@ -66,5 +66,5 @@
     "copy-to-clipboard": "^3.3.3",
     "lodash.debounce": "^4.0.8"
   },
-  "gitHead": "678330e165795f742194e153fc6eba002ffcc05f"
+  "gitHead": "5e49f48f540a2eb11b63050c2685accd8e77f41f"
 }

@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/types",
   "sideEffects": false,
-  "version": "0.0.16",
+  "version": "0.0.17",
   "description": "common types",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -31,5 +31,5 @@
   "devDependencies": {
     "abitype": "^0.4.0"
   },
-  "gitHead": "678330e165795f742194e153fc6eba002ffcc05f"
+  "gitHead": "5e49f48f540a2eb11b63050c2685accd8e77f41f"
 }

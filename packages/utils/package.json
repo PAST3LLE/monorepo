@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/utils",
   "sideEffects": false,
-  "version": "0.0.24",
+  "version": "0.0.25",
   "description": "common utils",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -33,12 +33,12 @@
     "react": ">=16"
   },
   "devDependencies": {
-    "@past3lle/types": "^0.0.16",
+    "@past3lle/types": "^0.0.17",
     "@types/ua-parser-js": "^0.7.36",
     "react": "^18.2.0"
   },
   "dependencies": {
     "ua-parser-js": "^1.0.32"
   },
-  "gitHead": "678330e165795f742194e153fc6eba002ffcc05f"
+  "gitHead": "5e49f48f540a2eb11b63050c2685accd8e77f41f"
 }
