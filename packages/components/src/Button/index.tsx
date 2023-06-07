@@ -64,16 +64,16 @@ const SECONDARY_BUTTON_STYLES = css`
 const DARK_MODE_TOGGLE_STYLES = css`
   color: ${({ theme }): string =>
     setBestContrastingColour({
-      bgColour: theme.darkModeToggle,
+      bgColour: theme.modeToggle,
       fgColour: theme.offwhite,
       lightColour: theme.offwhite,
       darkColour: theme.black
     })};
-  background: ${({ theme }): string => theme.darkModeToggle};
+  background: ${({ theme }): string => theme.modeToggle};
 
   svg {
-    stroke: ${({ theme }) => theme.darkModeSvg};
-    fill: ${({ theme }) => theme.darkModeSvg};
+    stroke: ${({ theme }) => theme.modeSvg};
+    fill: ${({ theme }) => theme.modeSvg};
   }
 `
 
