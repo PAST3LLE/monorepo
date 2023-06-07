@@ -76,10 +76,11 @@ export type PastelleThemeExtension = Partial<ThemeContentPartsRequired> & {
   shadow1: string
   // gradients
   whiteGradient1: FlattenSimpleInterpolation
-  darkModeToggle: string
-  darkModeSvg: string
-  darkModeFilter: string
-  darkModeLogoFilter: string
+  // toggle colours/effects
+  modeToggle: string
+  modeSvg: string
+  modeFilter: string
+  modeLogoFilter: string
   // rarity colours
   rarity: {
     empty: {
@@ -179,14 +180,14 @@ const PastelleTheme: ThemeByModes<PastelleThemeExtension> = {
       whiteGradient1: css`
         background-image: linear-gradient(to top, ghostwhite, #fff 53%);
       `,
-      get darkModeToggle() {
+      get modeToggle() {
         return this.purple1
       },
-      get darkModeSvg() {
+      get modeSvg() {
         return this.yellow3
       },
-      darkModeFilter: '',
-      darkModeLogoFilter: 'drop-shadow(0px 0px 12px rgba(0,0,0,1))',
+      modeFilter: '',
+      modeLogoFilter: 'drop-shadow(0px 0px 12px rgba(0,0,0,1))',
       // content
       input: {
         ...BaseContent.DEFAULT.input,
@@ -215,10 +216,9 @@ const PastelleTheme: ThemeByModes<PastelleThemeExtension> = {
       }
     },
     DARK: {
-      darkModeToggle: 'lightgoldenrodyellow',
-      darkModeSvg: '#4a002f',
-      darkModeFilter: 'invert(1) brightness(0.8) hue-rotate(247deg) saturate(2)',
-      darkModeLogoFilter: 'invert(1) saturate(1.4) hue-rotate(180deg) drop-shadow(0px 0px 12px rgba(0,0,0,1))',
+      modeToggle: 'lightgoldenrodyellow',
+      modeSvg: '#4a002f',
+      modeFilter: 'invert(1) brightness(0.8) hue-rotate(247deg) saturate(2)',
       // content
       input: {
         ...BaseContent.DARK.input,
@@ -229,7 +229,9 @@ const PastelleTheme: ThemeByModes<PastelleThemeExtension> = {
         hoverColour: '#4a002f'
       }
     },
-    LIGHT: {}
+    LIGHT: {
+      modeLogoFilter: 'invert(1) saturate(1.4) hue-rotate(180deg) drop-shadow(0px 0px 12px rgba(0,0,0,1))'
+    }
   }
 } as const
 
