@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/utils",
   "sideEffects": false,
-  "version": "0.0.22",
+  "version": "0.0.23",
   "description": "common utils",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -33,7 +33,7 @@
     "react": ">=16"
   },
   "devDependencies": {
-    "@past3lle/types": "^0.0.14",
+    "@past3lle/types": "^0.0.15",
     "@types/ua-parser-js": "^0.7.36",
     "react": "^18.2.0"
   },
