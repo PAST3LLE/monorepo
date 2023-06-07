@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/hooks",
   "sideEffects": false,
-  "version": "0.0.36",
+  "version": "0.0.37",
   "description": "PAST3LLE common hooks e.g useDetectIntoView, useDebounce, etc.",
   "main": "dist/index.js",
   "repository": {
@@ -43,7 +43,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",
-    "@past3lle/theme": "^0.0.44",
+    "@past3lle/theme": "^0.0.45",
     "@rollup/plugin-image": "^3.0.1",
     "@testing-library/jest-dom": "^5.1.1",
     "@testing-library/react": "^13.4.0",

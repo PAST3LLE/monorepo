@@ -1,6 +1,6 @@
 {
   "name": "@past3lle/web3-modal",
-  "version": "0.0.25",
+  "version": "0.0.26",
   "sideEffects": false,
   "description": "PAST3LLE's Web3 connection modal",
   "keywords": [
@@ -72,9 +72,9 @@
   "dependencies": {
     "@ethersproject/bignumber": ">=5.7.0",
     "@gnosis.pm/safe-apps-wagmi": "2.1.0",
-    "@past3lle/components": "^0.0.68",
-    "@past3lle/hooks": "^0.0.36",
-    "@past3lle/theme": "^0.0.44",
+    "@past3lle/components": "^0.0.69",
+    "@past3lle/hooks": "^0.0.37",
+    "@past3lle/theme": "^0.0.45",
     "@past3lle/utils": "^0.0.25",
     "@walletconnect/client": "1.8.0",
     "@web3auth/modal": "5.1.0",
