@@ -35,6 +35,11 @@ export default {
         ...commonProps,
         appName: 'COSMOS APP',
         chains: commonProps.chains,
+        wagmiClient: {
+          options: {
+            pollingInterval: 10_000
+          }
+        },
         modals: {
           w3m: commonProps.modals.w3m,
           w3a: {
