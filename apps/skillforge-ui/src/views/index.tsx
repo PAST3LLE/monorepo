@@ -19,6 +19,11 @@ import { METADATA_URIS_MAP } from 'web3/constants/metadata'
 const APP_NAME = 'SKILLFORGE'
 const WEB3_PROPS: ForgeW3CoreProvidersProps['config']['web3'] = {
   chains: SUPPORTED_CHAINS,
+  wagmiClient: {
+    options: {
+      pollingInterval: 10_000
+    }
+  },
   modals: {
     w3a: {
       appName: APP_NAME,
