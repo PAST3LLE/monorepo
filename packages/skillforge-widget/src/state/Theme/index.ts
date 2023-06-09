@@ -2,7 +2,7 @@ import { ThemeModesRequired } from '@past3lle/theme'
 import { atom, useAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 
-export type AppThemeMode = ThemeModesRequired | 'DEFAULT'
+export type AppThemeMode = ThemeModesRequired
 
 const themeModeStorageAtom = atomWithStorage<AppThemeMode>('SKILLFORGE_THEME_MODES', 'DEFAULT')
 themeModeStorageAtom.debugLabel = 'THEME ATOM'
