@@ -71,7 +71,7 @@ const WEB3_PROPS: ForgeW3CoreProvidersProps['config']['web3'] = {
     },
     pstl: {
       title: APP_NAME + ' LOGIN',
-      theme: pstlModalTheme,
+      themeConfig: { theme: pstlModalTheme },
       maxHeight: '650px',
       maxWidth: '360px',
       margin: 'auto',
