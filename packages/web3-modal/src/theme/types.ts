@@ -5,6 +5,7 @@ export type PstlModalThemeExtension = Partial<ThemeContentPartsRequired> & DeepR
 export interface PstlModalTheme {
   modals?: {
     connection?: {
+      filter?: string
       baseFontSize?: number
       helpers?: {
         show?: boolean

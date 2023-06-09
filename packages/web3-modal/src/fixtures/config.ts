@@ -10,6 +10,7 @@ export const pstlModalTheme = createTheme({
   DARK: {
     modals: {
       connection: {
+        filter: 'invert(1) brightness(0.65) contrast(1.8) hue-rotate(247deg) saturate(2)',
         backgroundImg: 'unset',
         backgroundColor: 'indianred',
         title: { color: 'black', fontWeight: 900 },

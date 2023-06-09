@@ -82,6 +82,8 @@ export const ModalTitleText = styled(Text.SubHeader)`
 `
 
 export const InnerContainer = styled(ColumnCenter)`
+  ${({ theme }) => theme.modals?.connection?.filter && `filter: ${theme.modals?.connection?.filter};`}
+
   position: relative;
   font-size: ${({ theme }) =>
     theme.modals?.connection?.baseFontSize || BaseTheme.modes.DEFAULT.modals.connection.baseFontSize}px;
