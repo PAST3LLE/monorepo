@@ -152,23 +152,23 @@ export function getPosition(position?: 'top-left' | 'top-right' | 'bottom-right'
   switch (position) {
     case 'top-left':
       return css`
-        top: 0.75rem;
-        left: 0.75rem;
+        top: 0.75em;
+        left: 0.75em;
       `
     case 'bottom-left':
       return css`
-        bottom: 0.75rem;
-        left: 0.75rem;
+        bottom: 0.75em;
+        left: 0.75em;
       `
     case 'bottom-right':
       return css`
-        bottom: 0.75rem;
-        right: 0.75rem;
+        bottom: 0.75em;
+        right: 0.75em;
       `
     default:
       return css`
-        top: 0.75rem;
-        right: 0.75rem;
+        top: 0.75em;
+        right: 0.75em;
       `
   }
 }

@@ -32,11 +32,11 @@ export function useModalTheme(customModalThemeByModes?: ThemeByModes<BasicUserTh
     const customThemeByMode = customModalThemeByModes?.modes?.[currentTheme?.mode || 'DEFAULT']
     const mergedCurrentMode = merge({}, currentTheme, customThemeByMode)
 
-    const createdMergeModalTheme = createCustomTheme({
-      modes: { ...mergedCurrentMode.modes, [currentTheme?.mode]: mergedCurrentMode }
+    const modifiedModalTheme = createCustomTheme({
+      modes: { ...mergedCurrentMode.modes, [currentTheme?.mode || 'DEFAULT']: mergedCurrentMode }
     })
 
-    setTheme(createdMergeModalTheme)
+    setTheme(modifiedModalTheme)
   }, [customModalThemeByModes, currentTheme])
 
   return theme

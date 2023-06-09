@@ -18,25 +18,25 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
           closeIcon: {
             color: BASE_TEXT_COLOUR,
             position: 'top-right',
-            size: '2.5rem'
+            size: '2.5em'
           },
           title: {
             color: BASE_TEXT_COLOUR,
-            fontSize: '2rem',
+            fontSize: '2em',
             fontWeight: 700,
             letterSpacing: '0px',
             lineHeight: 1
           },
           backgroundImg: 'unset',
           backgroundColor: 'lightsalmon',
-          padding: '1rem',
+          padding: '1em',
           button: {
             color: BASE_TEXT_COLOUR,
             textShadow: 'none',
             backgroundImg: 'unset',
             backgroundColor: BASE_TEXT_COLOUR,
             connectedBackgroundColor: 'darkpurple',
-            fontSize: '1.5rem',
+            fontSize: '1.5em',
             fontStyle: 'inherit',
             fontWeight: 300,
             letterSpacing: '0px',
@@ -44,7 +44,7 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
             border: {
               border: '1px solid black',
               color: 'none',
-              radius: '1rem'
+              radius: '1em'
             },
             hoverAnimations: true
           }
