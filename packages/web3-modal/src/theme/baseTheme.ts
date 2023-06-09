@@ -10,6 +10,7 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
     DEFAULT: {
       modals: {
         connection: {
+          filter: 'none',
           baseFontSize: 16,
           helpers: {
             show: true,
