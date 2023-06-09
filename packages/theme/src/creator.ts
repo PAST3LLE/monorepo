@@ -1,3 +1,4 @@
+import { MakeOptional } from '@past3lle/types'
 import merge from 'lodash.merge'
 
 import {
@@ -119,12 +120,16 @@ export function createCustomTheme<T extends ThemeByModes, M extends BasicUserThe
  * @returns 
  */
 export const createTemplateThemeFactory = <TE extends { [name: string]: ThemeByModes }>(templates: TE) =>
-  function createTemplateTheme<K extends keyof TE, E extends Subset<TE[K]['modes']>>(template: K, extension?: E) {
+  function createTemplateTheme<K extends keyof TE, E extends MakeOptional<Subset<TE[K]['modes']>, 'DARK' | 'LIGHT'>>(
+    template: K,
+    extension?: E
+  ) {
     const theme = templates[template]
 
     // if extension passed, deep merge
     // and set type accordingly
     if (extension) {
+      // Merge together all parts
       const mergedThemeModes = merge({}, theme.modes, extension)
       theme.modes = mergedThemeModes
     }

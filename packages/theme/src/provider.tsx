@@ -84,6 +84,7 @@ export function useConstructTheme<
         modes: { [mode]: CURRENT_CONTENT = {} }
       }
     } = theme
+
     const computedTheme = {
       ...CURRENT_CONTENT,
       ...CURRENT_THEME,
@@ -95,7 +96,7 @@ export function useConstructTheme<
     } as const
 
     return computedTheme
-  }, [autoDetect, mode])
+  }, [autoDetect, mode, modeCustom, theme])
 
   return { ...staticTheme, ...dynamicTheme }
 }

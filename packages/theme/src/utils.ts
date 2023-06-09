@@ -318,8 +318,8 @@ export function ikUrlToSimpleImageSrcSet(url: ImageKitUrl): GenericImageSrcSet<M
   return sizeUrlMap
 }
 
-export function getProperBackgroundType(type?: BackgroundPropertyFull) {
-  if (!type) return null
+export function getProperBackgroundType(type?: BackgroundPropertyFull | null) {
+  if (!type || type == 'unset' || type === 'none') return null
 
   const isSrcSet = isImageSrcSet(type)
   const isIkProp = !isSrcSet && isImageKitUrl(type)
@@ -333,13 +333,13 @@ export function setBackgroundOrDefault(
     bgValue,
     defaultValue
   }: {
-    bgValue?: BackgroundPropertyFull
+    bgValue?: BackgroundPropertyFull | null
     defaultValue: string
   },
   auxOptions: BackgroundWithDPIProps = {}
 ) {
   const value = getProperBackgroundType(bgValue)
-  return value ? setBackgroundWithDPI(theme, [value], auxOptions) : `background: ${bgValue || defaultValue};`
+  return value ? setBackgroundWithDPI(theme, [value], auxOptions) : `background: ${defaultValue};`
 }
 
 export const getThemeColourByKeyCurried =
@@ -355,3 +355,7 @@ export const getThemeColoursCurried =
   <T extends ThemeByModes>(theme: T) =>
   (mode: keyof T['modes'] | 'DEFAULT') =>
     (theme.modes as T['modes'])?.[mode]
+
+export function isObjectEmpty(obj: Record<any, any>): boolean {
+  return Object.keys(obj).length === 0
+}
