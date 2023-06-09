@@ -83,7 +83,7 @@ export type CustomThemeOrTemplate<T, K, M extends BasicUserTheme = BasicUserThem
     ? (typeof ThemeTemplates)[K]
     : void)
 
-export type ThemeModesRequired = 'LIGHT' | 'DARK'
+export type ThemeSubModesRequired = 'LIGHT' | 'DARK'
 
 export type Subset<K> = {
   [attr in keyof K]?: K[attr] extends object
@@ -99,9 +99,11 @@ export type ThemeByModes<T extends BasicUserTheme = BasicUserTheme> = {
   modes: {
     DEFAULT: T
   } & {
-    [key in ThemeModesRequired]: Subset<T>
+    [key in ThemeSubModesRequired]: Subset<T>
   }
 }
+export type ThemeModesRequired = keyof ThemeByModes['modes']
+
 export interface ThemeStateBaseRequired<M = ThemeModesRequired> {
   mode: M
   autoDetect: boolean

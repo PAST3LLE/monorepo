@@ -1,3 +1,3 @@
-import { ThemeModesRequired } from './types'
+import { ThemeSubModesRequired } from './types'
 
-export const THEME_LIST: ThemeModesRequired[] = ['DARK', 'LIGHT']
+export const THEME_LIST: ThemeSubModesRequired[] = ['DARK', 'LIGHT']

@@ -46,7 +46,7 @@ export function ThemeProviderSimple({ theme, children }: { theme: DefaultTheme; 
 
 export function useConstructTheme<
   T extends CustomThemeOrTemplate<ThemeByModes, AvailableThemeTemplate>,
-  K extends ThemeModesRequired | 'DEFAULT'
+  K extends ThemeModesRequired
 >({
   mode: modeCustom,
   setMode: setModeCustom,
