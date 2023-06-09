@@ -2,6 +2,7 @@ import { Button, CloseIcon, ColumnCenter, Modal, Text } from '@past3lle/componen
 import { setBackgroundOrDefault, setBestTextColour, upToSmall } from '@past3lle/theme'
 import styled from 'styled-components'
 
+import BaseTheme from '../../theme/baseTheme'
 import { getPosition } from '../../utils'
 
 export const ModalButton = styled(Button)<{ connected: boolean }>`
@@ -10,28 +11,42 @@ export const ModalButton = styled(Button)<{ connected: boolean }>`
   ${({ theme }) =>
     setBackgroundOrDefault(theme, {
       bgValue: theme.modals?.connection?.button?.backgroundImg,
-      defaultValue: 'rgba(0,0,0,0.9)'
+      defaultValue:
+        theme.modals?.connection?.button?.backgroundColor ||
+        BaseTheme.modes.DEFAULT.modals.connection.button.backgroundColor
     })};
 
-  background-color: ${({ theme }) => theme.modals?.connection?.button?.backgroundColor};
+  // background-color: ${({ theme }) => theme.modals?.connection?.button?.backgroundColor};
 
-  border: ${({ theme }) => theme.modals?.connection?.button?.border?.border || '1px solid black'};
+  border: ${({ theme }) =>
+    theme.modals?.connection?.button?.border?.border || BaseTheme.modes.DEFAULT.modals.connection.button.border.border};
   border-color: ${({ theme }) => theme.modals?.connection?.button?.border?.color};
 
-  font-style: ${({ theme }) => theme.modals?.connection?.button?.fontStyle || 'inherit'};
-  font-variation-settings: ${({ theme }) => `'wght' ${theme.modals?.connection?.button?.fontWeight || 300}`};
+  font-style: ${({ theme }) =>
+    theme.modals?.connection?.button?.fontStyle || BaseTheme.modes.DEFAULT.modals.connection.button.fontStyle};
+  font-variation-settings: ${({ theme }) =>
+    `'wght' ${
+      theme.modals?.connection?.button?.fontWeight || BaseTheme.modes.DEFAULT.modals.connection.button.fontWeight
+    }`};
   color: ${({ theme }) =>
     theme.modals?.connection?.button?.color ||
-    setBestTextColour(theme.modals?.connection?.button?.backgroundColor || 'ghostwhite')};
+    setBestTextColour(
+      theme.modals?.connection?.button?.backgroundColor ||
+        BaseTheme.modes.DEFAULT.modals.connection.button.backgroundColor
+    )};
 
-  letter-spacing: ${({ theme }) => theme.modals?.connection?.button?.letterSpacing || '0px'};
+  letter-spacing: ${({ theme }) =>
+    theme.modals?.connection?.button?.letterSpacing || BaseTheme.modes.DEFAULT.modals.connection.button.letterSpacing};
   ${({ theme }) =>
     theme.modals?.connection?.button?.textShadow && `text-shadow: ${theme.modals?.connection?.button?.textShadow};`}
 
   ${({ theme }) =>
     theme.modals?.connection?.button?.fontSize && `font-size: ${theme.modals?.connection?.button?.fontSize};`}
     
-    ${({ theme }) => `text-transform: ${theme.modals?.connection?.button?.textTransform || 'none'};`}
+    ${({ theme }) =>
+    `text-transform: ${
+      theme.modals?.connection?.button?.textTransform || BaseTheme.modes.DEFAULT.modals.connection.button.textTransform
+    };`}
     
     gap: 10px;
 
@@ -48,21 +63,28 @@ export const ModalButton = styled(Button)<{ connected: boolean }>`
   ${({ connected, theme }) =>
     connected &&
     `
-      background: ${theme.modals?.connection?.button?.connectedBackgroundColor || 'transparent'};
+      background: ${
+        theme.modals?.connection?.button?.connectedBackgroundColor ||
+        BaseTheme.modes.DEFAULT.modals.connection.button.connectedBackgroundColor
+      };
       transform: scale(1.05);
       filter: saturate(2);
   `}
 `
 
 export const ModalTitleText = styled(Text.SubHeader)`
-  color: ${({ theme }) => theme.modals?.connection?.title?.color || 'ghostwhite'};
-  letter-spacing: ${({ theme }) => theme.modals?.connection?.title?.letterSpacing || '0px'};
-  line-height: ${({ theme }) => theme.modals?.connection?.title?.lineHeight || 1};
+  color: ${({ theme }) =>
+    theme.modals?.connection?.title?.color || BaseTheme.modes.DEFAULT.modals.connection.title.color};
+  letter-spacing: ${({ theme }) =>
+    theme.modals?.connection?.title?.letterSpacing || BaseTheme.modes.DEFAULT.modals.connection.title.letterSpacing};
+  line-height: ${({ theme }) =>
+    theme.modals?.connection?.title?.lineHeight || BaseTheme.modes.DEFAULT.modals.connection.title.lineHeight};
 `
 
 export const InnerContainer = styled(ColumnCenter)`
   position: relative;
-  font-size: ${({ theme }) => theme.modals?.connection?.baseFontSize || 16}px;
+  font-size: ${({ theme }) =>
+    theme.modals?.connection?.baseFontSize || BaseTheme.modes.DEFAULT.modals.connection.baseFontSize}px;
   font-style: italic;
   font-weight: 200;
   font-family: 'Roboto Flex', 'Inter', sans-serif, system-ui;
@@ -74,21 +96,30 @@ export const InnerContainer = styled(ColumnCenter)`
   -ms-overflow-style: none;
   scrollbar-width: none;
 
-  padding: ${({ theme: { modals } }) => modals?.connection?.padding || '1em'};
+  padding: ${({ theme: { modals } }) =>
+    modals?.connection?.padding || BaseTheme.modes.DEFAULT.modals.connection.padding};
 
   overflow-y: auto;
 
   > ${CloseIcon} {
-    color: ${({ theme }) => theme.modals?.connection?.closeIcon?.color || 'ghostwhite'};
-    ${({ theme }) => getPosition(theme.modals?.connection?.closeIcon?.position)};
-    width: ${({ theme }) => theme.modals?.connection?.closeIcon?.size || '1em'};
+    position: absolute;
+    color: ${({ theme }) =>
+      theme.modals?.connection?.closeIcon?.color || BaseTheme.modes.DEFAULT.modals.connection.closeIcon.color};
+
+    width: ${({ theme }) =>
+      theme.modals?.connection?.closeIcon?.size || BaseTheme.modes.DEFAULT.modals.connection.closeIcon.size};
+
+    ${({ theme }) => getPosition(theme.modals?.connection?.closeIcon?.position)}
   }
 
-  border-radius: ${({ theme: { modals } }) => modals?.connection?.button?.border?.radius || '1em'};
+  border-radius: ${({ theme: { modals } }) =>
+    modals?.connection?.button?.border?.radius || BaseTheme.modes.DEFAULT.modals.connection.button.border.radius};
+
   ${({ theme }) =>
     setBackgroundOrDefault(theme, {
       bgValue: theme.modals?.connection?.backgroundImg,
-      defaultValue: theme.modals?.connection?.backgroundColor || 'rgb(201 172 172)'
+      defaultValue:
+        theme.modals?.connection?.backgroundColor || BaseTheme.modes.DEFAULT.modals.connection.backgroundColor
     })};
 `
 

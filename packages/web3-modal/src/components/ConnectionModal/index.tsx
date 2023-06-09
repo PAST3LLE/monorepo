@@ -1,5 +1,5 @@
 import { ButtonProps, CloseIcon, ModalProps } from '@past3lle/components'
-import { BasicUserTheme, ThemeByModes, ThemeProvider } from '@past3lle/theme'
+import { BasicUserTheme, ThemeByModes, ThemeModesRequired, ThemeProvider } from '@past3lle/theme'
 import { devWarn } from '@past3lle/utils'
 import React, { Fragment, memo, useMemo, useState } from 'react'
 import { useTheme } from 'styled-components'
@@ -13,9 +13,16 @@ import { ConnectedCheckMark } from './ConnectedCheckMark'
 import { ConnectorHelper } from './ConnectorHelper'
 import { InnerContainer, ModalButton, ModalTitleText, StyledConnectionModal } from './styled'
 
+interface ThemeConfigProps<
+  T extends ThemeByModes<BasicUserTheme> = ThemeByModes<BasicUserTheme>,
+  K extends ThemeModesRequired = ThemeModesRequired
+> {
+  theme: T
+  mode?: K
+}
 interface PstlWeb3ConnectionModalProps extends Omit<ModalProps, 'isOpen' | 'onDismiss'> {
   title?: string
-  theme?: ThemeByModes<BasicUserTheme>
+  themeConfig?: ThemeConfigProps
   loaderProps?: LoadingScreenProps
   buttonProps?: ButtonProps
   closeModalOnConnect?: boolean
@@ -114,12 +121,7 @@ function ModalWithoutThemeProvider({
       {...restModalProps}
     >
       <InnerContainer justifyContent="flex-start" gap="0.75rem">
-        <CloseIcon
-          height={30}
-          width={100}
-          style={{ position: 'absolute', right: '0.75em', top: '0.75em' }}
-          onClick={close}
-        />
+        <CloseIcon height={30} width={100} onClick={close} />
         <ModalTitleText
           fontSize={theme.modals?.connection?.title?.fontSize || '2em'}
           fvs={{
@@ -140,8 +142,8 @@ function ModalWithoutThemeProvider({
   )
 }
 
-function ModalWithThemeProvider({ theme, ...modalProps }: PstlWeb3ConnectionModalProps) {
-  const builtTheme = useModalTheme(theme)
+function ModalWithThemeProvider({ themeConfig, ...modalProps }: PstlWeb3ConnectionModalProps) {
+  const builtTheme = useModalTheme(themeConfig?.theme)
 
   if (!builtTheme) {
     devWarn('[@past3lle/web3-modal::ConnectionModal] No theme detected!')
@@ -149,7 +151,7 @@ function ModalWithThemeProvider({ theme, ...modalProps }: PstlWeb3ConnectionModa
   }
 
   return (
-    <ThemeProvider theme={builtTheme}>
+    <ThemeProvider theme={builtTheme} mode={themeConfig?.mode}>
       <ModalWithoutThemeProvider {...modalProps} />
     </ThemeProvider>
   )

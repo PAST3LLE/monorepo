@@ -1,5 +1,7 @@
-import { BackgroundPropertyFull, ThemeBaseRequired } from '@past3lle/theme'
+import { BackgroundPropertyFull, ThemeBaseRequired, ThemeContentPartsRequired } from '@past3lle/theme'
+import { DeepRequired } from '@past3lle/types'
 
+export type PstlModalThemeExtension = Partial<ThemeContentPartsRequired> & DeepRequired<PstlModalTheme>
 export interface PstlModalTheme {
   modals?: {
     connection?: {

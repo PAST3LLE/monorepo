@@ -1,6 +1,8 @@
 import { ButtonVariations, ColumnCenter, PstlButton } from '@past3lle/components'
+import { ThemeModesRequired, ThemeProvider, createCustomTheme } from '@past3lle/theme'
 import { TorusWalletConnectorPlugin } from '@web3auth/torus-wallet-connector-plugin'
 import React, { ReactNode } from 'react'
+import { useTheme } from 'styled-components'
 import { useAccount } from 'wagmi'
 
 import { usePstlWeb3Modal } from '../hooks'
@@ -26,10 +28,21 @@ const Web3Button = ({ children = <div>Show PSTL Wallet Modal</div> }: Web3Button
     </ColumnCenter>
   )
 }
+
 const TORUS_LOGO = 'https://web3auth.io/docs/contents/logo-ethereum.png'
 const LOGO = 'https://raw.githubusercontent.com/PAST3LLE/monorepo/main/apps/skillforge-ui/public/512_logo.png'
-export default {
-  ConnectedModal: (
+
+function DefaultApp() {
+  const topLevelTheme = useTheme()
+
+  if (!topLevelTheme) console.debug('No top level theme DefaultApp')
+
+  return <InnerApp />
+}
+
+function InnerApp() {
+  const { setMode, mode } = useTheme()
+  return (
     <PstlW3Providers
       config={{
         ...commonProps,
@@ -71,7 +84,7 @@ export default {
           },
           pstl: {
             ...commonProps.modals.pstl,
-            theme: pstlModalTheme,
+            themeConfig: { theme: pstlModalTheme, mode },
             closeModalOnConnect: false,
             connectorDisplayOverrides: {
               general: {
@@ -120,7 +133,34 @@ export default {
         }
       }}
     >
+      <h1>MODE: {mode}</h1>
+      <button onClick={() => setMode(mode === 'LIGHT' ? 'DARK' : 'LIGHT')}>Change theme mode</button>
+      <button onClick={() => setMode('DEFAULT' as ThemeModesRequired)}>Revert to default</button>
       <Web3Button />
     </PstlW3Providers>
   )
+}
+
+const withThemeProvider = (Component: () => JSX.Element | null) => (
+  <ThemeProvider
+    theme={createCustomTheme({
+      modes: {
+        LIGHT: {
+          header: 'white'
+        },
+        DARK: {
+          header: 'black'
+        },
+        DEFAULT: {
+          header: 'red'
+        }
+      }
+    })}
+  >
+    <Component />
+  </ThemeProvider>
+)
+
+export default {
+  ConnectedModal: withThemeProvider(() => <DefaultApp />)
 }

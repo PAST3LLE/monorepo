@@ -1,22 +1,28 @@
-import { ThemeByModes, createCustomTheme, ikUrlToSimpleImageSrcSet } from '@past3lle/theme'
+import { Subset, createTemplateThemeFactory, ikUrlToSimpleImageSrcSet } from '@past3lle/theme'
+import { MakeOptional } from '@past3lle/types'
 
-import { PstlModalTheme } from './types'
+import PstlModalTheme from './baseTheme'
+import { PstlModalThemeExtension } from './types'
 
 const FORGE_LOGO_URL = 'https://ik.imagekit.io/pastelle/SKILLFORGE/forge-512-logo.png'
 export const FORGE_LOGO_URL_MAP = ikUrlToSimpleImageSrcSet(FORGE_LOGO_URL)
 
-export const createTheme = ({
-  LIGHT,
-  DARK,
-  ...REST
-}: Partial<ThemeByModes<PstlModalTheme>['modes']> & Pick<ThemeByModes<PstlModalTheme>['modes'], 'DEFAULT'>) => {
-  const theme = {
-    modes: {
-      DEFAULT: REST.DEFAULT,
-      LIGHT: LIGHT || REST.DEFAULT,
-      DARK: DARK || REST.DEFAULT
-    }
-  }
+const templates = {
+  PSTL_WEB3_MODAL: PstlModalTheme
+} as const
 
-  return createCustomTheme(theme)
-}
+const createThemeFactory = createTemplateThemeFactory(templates)
+
+export const createTheme = (
+  extension:
+    | MakeOptional<
+        Subset<
+          { DEFAULT: PstlModalThemeExtension } & {
+            LIGHT: Subset<PstlModalThemeExtension>
+            DARK: Subset<PstlModalThemeExtension>
+          }
+        >,
+        'LIGHT' | 'DARK'
+      >
+    | undefined
+) => createThemeFactory('PSTL_WEB3_MODAL', extension)
