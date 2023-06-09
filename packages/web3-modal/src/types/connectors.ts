@@ -7,5 +7,6 @@ export type ConnectorEnhancedExtras = {
   logo?: string
   details?: string
   infoText?: InfoTextMap
+  isRecommended?: boolean
 }
 export type ConnectorEnhanced<P, O, S> = Connector<P, O, S> & ConnectorEnhancedExtras

@@ -6,6 +6,7 @@ import BaseTheme from '../../theme/baseTheme'
 import { getPosition } from '../../utils'
 
 export const ModalButton = styled(Button)<{ connected: boolean }>`
+  position: relative;
   width: 100%;
   justify-content: flex-start;
   ${({ theme }) =>
@@ -15,8 +16,6 @@ export const ModalButton = styled(Button)<{ connected: boolean }>`
         theme.modals?.connection?.button?.backgroundColor ||
         BaseTheme.modes.DEFAULT.modals.connection.button.backgroundColor
     })};
-
-  // background-color: ${({ theme }) => theme.modals?.connection?.button?.backgroundColor};
 
   border: ${({ theme }) =>
     theme.modals?.connection?.button?.border?.border || BaseTheme.modes.DEFAULT.modals.connection.button.border.border};

@@ -11,6 +11,7 @@ import { getConnectorInfo } from '../../utils'
 import { LoadingScreen, LoadingScreenProps } from '../LoadingScreen'
 import { ConnectedCheckMark } from './ConnectedCheckMark'
 import { ConnectorHelper } from './ConnectorHelper'
+import { RecommendedLabel } from './RecommendedLabel'
 import { InnerContainer, ModalButton, ModalTitleText, StyledConnectionModal } from './styled'
 
 interface ThemeConfigProps<
@@ -54,7 +55,7 @@ function ModalWithoutThemeProvider({
   const data = useMemo(
     () =>
       connectors.slice(0, 2).map((connector, index) => {
-        const [{ label, logo, connected }, callback] = getConnectorInfo(
+        const [{ label, logo, connected, isRecommended }, callback] = getConnectorInfo(
           connector,
           currentConnector,
           {
@@ -79,6 +80,7 @@ function ModalWithoutThemeProvider({
               <img style={{ maxWidth: 50 }} src={logo} />
               {label}
               {connected && <ConnectedCheckMark />}
+              {isRecommended && <RecommendedLabel />}
             </ModalButton>
             {theme?.modals?.connection?.helpers?.show && (
               <ConnectorHelper title={connectorDisplayOverrides?.[connector.id]?.infoText?.title} connector={connector}>

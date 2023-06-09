@@ -51,6 +51,7 @@ export const pstlModalTheme = createTheme({
           connectedBackgroundColor: '#37b9927d',
           border: { border: 'none', radius: '1em' },
           color: 'ghostwhite',
+          fontSize: '1em',
           fontStyle: 'normal',
           fontWeight: 200,
           letterSpacing: '-1px',

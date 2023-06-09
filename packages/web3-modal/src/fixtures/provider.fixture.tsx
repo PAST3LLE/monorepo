@@ -100,6 +100,7 @@ function InnerApp() {
                 }
               },
               web3auth: {
+                isRecommended: true,
                 infoText: {
                   title: 'How does this login work?',
                   content: (

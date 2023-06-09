@@ -9,7 +9,7 @@ export const StyledConnectedCheckMark = styled(RowStart)`
 
   gap: 0.4em;
 
-  font-size: 0.6em;
+  font-size: 0.5em;
 `
 
 export function ConnectedCheckMark() {

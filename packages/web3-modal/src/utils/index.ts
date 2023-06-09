@@ -37,7 +37,7 @@ export function getConnectorInfo(
     connectorDisplayOverrides?: { [id: string]: ConnectorEnhancedExtras | undefined }
   }
 ): [
-  { label: string; logo?: string; connected: boolean },
+  { label: string; logo?: string; connected: boolean; isRecommended?: boolean },
   ReturnType<typeof useConnection>[1]['connect'] | ReturnType<typeof useConnection>[1]['openW3Modal']
 ] {
   switch (connector.id) {
@@ -46,7 +46,8 @@ export function getConnectorInfo(
         {
           label: connectorDisplayOverrides?.[connector.id]?.customName || 'Social',
           logo: connectorDisplayOverrides?.[connector.id]?.logo || connector?.logo || SOCIAL_LOGO,
-          connected: currentConnector?.id === DefaultWallets.WEB3AUTH
+          connected: currentConnector?.id === DefaultWallets.WEB3AUTH,
+          isRecommended: connectorDisplayOverrides?.[connector.id]?.isRecommended
         },
         async () => {
           try {
@@ -81,7 +82,8 @@ export function getConnectorInfo(
         {
           label: connectorDisplayOverrides?.[connector.id]?.customName || 'WalletConnect',
           logo: connectorDisplayOverrides?.[connector.id]?.logo || connector?.logo || WALLETCONNECT_LOGO,
-          connected: !!currentConnector && currentConnector?.id !== DefaultWallets.WEB3AUTH
+          connected: !!currentConnector && currentConnector?.id !== DefaultWallets.WEB3AUTH,
+          isRecommended: connectorDisplayOverrides?.[connector.id]?.isRecommended
         },
         async () => {
           try {
@@ -99,7 +101,8 @@ export function getConnectorInfo(
         {
           label: connector?.customName || connector?.name || connector?.id || 'Unknown option',
           logo: connector?.logo || WALLETCONNECT_LOGO,
-          connected: currentConnector?.id === connector.id
+          connected: currentConnector?.id === connector.id,
+          isRecommended: connectorDisplayOverrides?.[connector.id]?.isRecommended
         },
         async () => {
           try {
