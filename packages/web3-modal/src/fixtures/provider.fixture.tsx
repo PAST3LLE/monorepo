@@ -1,5 +1,5 @@
 import { ButtonVariations, ColumnCenter, PstlButton } from '@past3lle/components'
-import { ThemeModesRequired, ThemeProvider, createCustomTheme } from '@past3lle/theme'
+import { ThemeProvider, createCustomTheme } from '@past3lle/theme'
 import { TorusWalletConnectorPlugin } from '@web3auth/torus-wallet-connector-plugin'
 import React, { ReactNode } from 'react'
 import { useTheme } from 'styled-components'
@@ -135,7 +135,7 @@ function InnerApp() {
     >
       <h1>MODE: {mode}</h1>
       <button onClick={() => setMode(mode === 'LIGHT' ? 'DARK' : 'LIGHT')}>Change theme mode</button>
-      <button onClick={() => setMode('DEFAULT' as ThemeModesRequired)}>Revert to default</button>
+      <button onClick={() => setMode('DEFAULT')}>Revert to default</button>
       <Web3Button />
     </PstlW3Providers>
   )
