@@ -1,6 +1,6 @@
 import { ConnectedConnectionModalProps } from './components'
 import { PstlWeb3ConnectionModal, PstlWeb3ConnectionModalProps } from './components/ConnectionModal'
-import { ConnectionHookProps, useConnection as usePstlConnection, usePstlWeb3Modal } from './hooks'
+import { PstlW3mConnectionHook, useConnection as usePstlConnection, usePstlWeb3Modal } from './hooks'
 
 export * from './constants'
 export * from './types'
@@ -14,5 +14,5 @@ export {
   usePstlWeb3Modal,
   type ConnectedConnectionModalProps,
   type PstlWeb3ConnectionModalProps,
-  type ConnectionHookProps
+  type PstlW3mConnectionHook
 }
