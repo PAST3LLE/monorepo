@@ -18,7 +18,7 @@ export const WEB3_PROPS: ForgeW3CoreProvidersProps['config']['web3'] = {
     w3a: {
       appName: SKILLFORGE_APP_NAME,
       // TODO: change this once ready for production
-      network: process.env.NODE_ENV === 'production' ? 'mainnet' : 'testnet',
+      network: process.env.NODE_ENV === 'production' ? 'aqua' : 'testnet',
       projectId: process.env.REACT_APP_WEB3AUTH_ID as string,
       configureAdditionalConnectors() {
         // Add Torus Wallet Plugin (optional)
