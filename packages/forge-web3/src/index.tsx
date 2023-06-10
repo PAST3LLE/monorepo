@@ -3,6 +3,7 @@ import {
   type ChainsPartialReadonly,
   PstlModalTheme as ForgeModalTheme,
   PstlW3Providers,
+  W3aStyleResetProvider,
   usePstlEthereumClient as useEthereumClient,
   usePstlConnection as useW3Connection,
   usePstlWeb3Modal as useW3Modal,
@@ -47,6 +48,7 @@ function ForgeW3Providers({ config, children }: ForgeW3CoreProvidersProps) {
             appName: config.name
           }}
         >
+          <W3aStyleResetProvider />
           <ForgeW3StateUpdaters {...config}>{children}</ForgeW3StateUpdaters>
         </PstlW3Providers>
       </PstlHooksProvider>
@@ -65,6 +67,7 @@ function ForgeW3BalancesAndWindowSizeProviders({ config, children }: ForgeW3Core
             appName: config.name
           }}
         >
+          <W3aStyleResetProvider />
           <ForgeBalancesUpdater />
           {children}
         </PstlW3Providers>
