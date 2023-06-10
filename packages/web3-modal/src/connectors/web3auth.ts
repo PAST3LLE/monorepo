@@ -1,7 +1,7 @@
 // Web3Auth Libraries
 import { CHAIN_NAMESPACES, WALLET_ADAPTERS } from '@web3auth/base'
 import { IPlugin } from '@web3auth/base-plugin'
-import { Web3Auth } from '@web3auth/modal'
+import { Web3Auth, Web3AuthOptions } from '@web3auth/modal'
 import { OpenloginAdapter } from '@web3auth/openlogin-adapter'
 import { Web3AuthConnector } from '@web3auth/web3auth-wagmi-connector'
 
@@ -12,7 +12,7 @@ export interface PstlWeb3AuthConnectorProps<ID extends number> {
   theme?: 'light' | 'dark'
   chains: ChainsPartialReadonly<ID>
   zIndex?: number
-  network: 'mainnet' | 'testnet' | 'development' | 'cyan'
+  network: Web3AuthOptions['web3AuthNetwork']
   preset?: 'DISALLOW_EXTERNAL_WALLETS' | 'ALLOW_EXTERNAL_WALLETS'
   projectId: string
   appName: string
@@ -27,7 +27,7 @@ export interface PstlWeb3AuthConnectorProps<ID extends number> {
 
 export function PstlWeb3AuthConnector<ID extends number>({
   chains,
-  network,
+  network = 'testnet',
   appName,
   projectId,
   theme = 'dark',
