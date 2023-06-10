@@ -21,7 +21,8 @@ module.exports = {
         // path: require.resolve("path-browserify"),
         http: require.resolve("stream-http"),
         os: require.resolve("os-browserify"),
-        url: require.resolve("url")
+        url: require.resolve("url"),
+        zlib: require.resolve("browserify-zlib")
       });
       config.resolve.fallback = fallback;
       config.plugins = (config.plugins || []).concat([
