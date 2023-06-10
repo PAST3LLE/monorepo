@@ -1,8 +1,12 @@
 import { Row } from '@past3lle/components'
-import { useForgeGetUserConfigChainsAtom, useForgeWindowSizeAtom, useSupportedChainId } from '@past3lle/forge-web3'
+import {
+  useForgeGetUserConfigChainsAtom,
+  useForgeWindowSizeAtom,
+  useSupportedChainId,
+  useW3Connection
+} from '@past3lle/forge-web3'
 import { MEDIA_WIDTHS } from '@past3lle/theme'
-import { useWeb3Modal } from '@web3modal/react'
-import React, { useCallback } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 import { useAssetsMap } from '../../../theme/utils'
@@ -22,17 +26,13 @@ export function NetworkInfoButton() {
   const chainName = chain?.name || (isSmallWidth ? 'login' : 'offline')
   const chainLogo = chainId ? assetsMap.icons.chains[chainId] : assetsMap.icons.chains.disconnected
 
-  const { open } = useWeb3Modal()
-
-  const handleClick = useCallback(async () => {
-    return open({ route: chain?.id ? (width > MEDIA_WIDTHS.upToSmall ? 'SelectNetwork' : 'Account') : 'ConnectWallet' })
-  }, [chain?.id, open, width])
+  const [, { onNetworkClick }] = useW3Connection()
 
   return (
     <NetworkInfoButtonContainer
       justifyContent={'center'}
       alignItems="center"
-      onClick={handleClick}
+      onClick={onNetworkClick}
       title={
         !chainName
           ? 'Disconnected. Click to select a network and connect.'

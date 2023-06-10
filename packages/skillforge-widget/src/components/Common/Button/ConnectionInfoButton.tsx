@@ -1,9 +1,9 @@
 import { Row, Text } from '@past3lle/components'
-import { useW3Connection as usePstlConnection, useW3Modal as usePstlWeb3Modal } from '@past3lle/forge-web3'
+import { useW3Connection as usePstlConnection } from '@past3lle/forge-web3'
 import { useIsSmallMediaWidth } from '@past3lle/hooks'
 import { fromSmall, setBackgroundOrDefault } from '@past3lle/theme'
 import { truncateAddress } from '@past3lle/utils'
-import React, { useCallback } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 import { ThemedButton } from '.'
@@ -13,15 +13,10 @@ import { useAssetsMap } from '../../../theme/utils'
 import { MonospaceText } from '../Text'
 
 export function ConnectionInfoButton() {
-  const { open } = usePstlWeb3Modal()
-  const [, { openW3Modal }, { address }] = usePstlConnection()
+  const [, { onAccountClick }, { address }] = usePstlConnection()
 
   const assetsMap = useAssetsMap()
   const logoUrlMaps = useGenericImageSrcSet()
-
-  const handleClick = useCallback(async () => {
-    address ? openW3Modal({ route: 'Account' }) : open({ route: 'ConnectWallet' })
-  }, [address, open, openW3Modal])
 
   const isSmallWidth = useIsSmallMediaWidth()
 
@@ -38,8 +33,7 @@ export function ConnectionInfoButton() {
         gap="0 0.5rem"
         height="80%"
         padding="0.5rem"
-        // {...props.buttonProps}
-        onClick={handleClick}
+        onClick={onAccountClick}
       >
         <MonospaceText color={MAIN_FG} fontSize="1.05rem" marginLeft="-0.2rem">
           account
@@ -55,7 +49,7 @@ export function ConnectionInfoButton() {
         minWidth={'24rem'}
         marginTop="0.6rem"
         gap="0.5rem"
-        onClick={handleClick}
+        onClick={onAccountClick}
       >
         <img src={assetsMap.icons.connection} />
         <Text.SubHeader
