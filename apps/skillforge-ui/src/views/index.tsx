@@ -8,7 +8,6 @@ import React, { ReactNode } from 'react'
 import { GothicFontCssProvider } from 'theme/fonts'
 import { GlobalStyles } from 'theme/global'
 import { skillforgeTheme as SKILLFORGE_THEME } from 'theme/skillforge'
-import { W3aStyles } from 'theme/w3aStyles'
 import { SKILLFORGE_APP_NAME, WEB3_PROPS } from 'web3/config/skillforge'
 import { CONTRACT_ADDRESSES_MAP } from 'web3/constants/addresses'
 import { METADATA_URIS_MAP } from 'web3/constants/metadata'
@@ -47,12 +46,7 @@ export function App() {
             config={SKILLFORGE_CONFIG.config}
             maxWidth={isMobile ? '100%' : '90%'}
             maxHeight={isMobile ? '100%' : '90%'}
-            render={() => (
-              <>
-                <W3aStyles />
-                <SkillForgeConnectedHeader />
-              </>
-            )}
+            render={() => <SkillForgeConnectedHeader />}
           />
         </Row>
         <AppVersion />
