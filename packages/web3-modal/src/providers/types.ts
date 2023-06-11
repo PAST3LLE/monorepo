@@ -67,6 +67,7 @@ export type ChainsPartialReadonly<ID extends number> = DeepReadonly<Chain<ID>>[]
 
 export type Web3ModalThemeVariables = {
   '--w3m-color-bg-1'?: string
+  '--w3m-color-bg-2'?: string
   '--w3m-color-fg-1'?: string
 } & Web3ModalConfigOriginal['themeVariables']
 
@@ -78,6 +79,7 @@ export type Web3ModalConfig<ID extends number, SC extends ChainsPartialReadonly<
   projectId: string
   w3aProjectId: string
   zIndex?: number
+  themeMode?: Web3ModalConfigOriginal['themeMode']
   themeVariables?: Web3ModalThemeVariables
 }
 export interface Web3ModalProps<ID extends number, SC extends ChainsPartialReadonly<ID>> {
