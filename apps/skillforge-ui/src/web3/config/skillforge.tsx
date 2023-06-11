@@ -49,6 +49,7 @@ export const WEB3_PROPS: ForgeW3CoreProvidersProps['config']['web3'] = {
     },
     w3m: {
       projectId: process.env.REACT_APP_WEB3MODAL_ID as string,
+      themeMode: 'dark',
       themeVariables: {
         '--w3m-background-color': SKILLFORGE_THEME.blackOpaque,
         '--w3m-accent-color': '#525291',
