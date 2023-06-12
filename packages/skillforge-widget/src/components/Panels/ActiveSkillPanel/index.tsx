@@ -10,7 +10,8 @@ import {
   SkillRarity,
   useDeriveSkillState,
   useForgeBalancesReadAtom,
-  useForgeMetadataMapReadAtom
+  useForgeMetadataMapReadAtom,
+  useSupportedChainId
 } from '@past3lle/forge-web3'
 import { BLACK, OFF_WHITE } from '@past3lle/theme'
 import { darken } from 'polished'
@@ -22,6 +23,7 @@ import { SKILLPOINTS_CONTAINER_ID } from '../../../constants/skills'
 import { useGetActiveSkill } from '../../../hooks/skills'
 import { baseTheme } from '../../../theme/base'
 import { RARITY_COLOURS_MAP } from '../../../theme/constants'
+import { buildSkillMetadataExplorerUri } from '../../../utils/skills'
 import { ThemedButtonExternalLink } from '../../Common/Button'
 import { BlackHeader, MonospaceText } from '../../Common/Text'
 import { Skillpoint } from '../../Skillpoint'
@@ -33,6 +35,8 @@ export function ActiveSkillPanel() {
   const [metadataMap] = useForgeMetadataMapReadAtom()
   const activeSkillState = useGetActiveSkill()
   const [balances] = useForgeBalancesReadAtom()
+
+  const chainId = useSupportedChainId()
 
   const activeSkill = activeSkillState?.[0]
   const setSkillState = activeSkillState?.[1]
@@ -158,11 +162,11 @@ export function ActiveSkillPanel() {
             <SkillsRow balances={balances} deps={deps} metadataMap={metadataMap} />
           </RequiredDepsContainer>
         )}
-        {!isLocked && (
+        {!isLocked && chainId && (
           <AutoRow>
             <MonospaceText>
               View on{' '}
-              <ExternalLink href="#">
+              <ExternalLink href={buildSkillMetadataExplorerUri('opensea', activeSkill, chainId)}>
                 {' '}
                 <strong style={{ color: baseTheme.mainBg }}>OpenSea</strong>{' '}
               </ExternalLink>{' '}
