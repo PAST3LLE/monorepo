@@ -16,6 +16,16 @@
       "timestamp": "2023-06-02T18:53:40.549Z",
       "address": "0xa32AB9071A7814258aBbe06c7FbB815d8d4e1B19",
       "transactionHash": "0xdf11012688ea94e415193cd729c80b039522ad3996f09e2fa9f002a5fab94c94"
+    },
+    "Collection-1": {
+      "timestamp": "2023-06-12T12:48:33.933Z",
+      "address": "0xCc45915AB63A4A48eFE227845d7df2baD380E418",
+      "transactionHash": "0xe7b394eb09f638301a390fff0e7a20ff75557c6abc830f2864303f2547658bb1"
+    },
+    "Collection-2": {
+      "timestamp": "2023-06-12T14:14:11.146Z",
+      "address": "0xa4bAfCB71a6E15421bF70110aD8Cd95e311bd770",
+      "transactionHash": "0x2ca184043acbf127e543afa9f13caf19c08feecc56ddfced00bafa06b757af39"
     }
   },
   "80001": {
