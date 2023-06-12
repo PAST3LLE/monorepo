@@ -61,7 +61,7 @@ export function useConnection(): PstlW3mConnectionHook {
 
   const onNetworkClick = useCallback(async () => {
     return chain?.id
-      ? openW3Modal({ route: isMobileWidth ? 'SelectNetwork' : 'Account' })
+      ? openW3Modal({ route: !isMobileWidth ? 'SelectNetwork' : 'Account' })
       : openPstlW3Modal({ route: 'ConnectWallet' })
   }, [chain?.id, openPstlW3Modal, openW3Modal, isMobileWidth])
 
