@@ -7,8 +7,10 @@ import inquirer from 'inquirer'
 import { networksToChainId } from './constants/chains'
 import { SupportedNetworks } from './types/networks'
 import { getConfig } from './utils/getConfig'
+import { getFeeData } from './utils/getFeeData'
 import { getNetworksJson } from './utils/getNetworksJson'
 import { getWalletInfo } from './utils/getWalletInfo'
+import { logFormattedTxInfo } from './utils/logFormattedTxInfo'
 
 interface LockedSkillParams {
   amount: number
@@ -288,30 +290,44 @@ IDs:`,
   const CollectionsManagerContract = new ethers.Contract(collectionsManagerAddr, CollectionsManager.abi, wallet)
   const collectionsManager = CollectionsManagerContract.attach(collectionsManagerAddr)
 
-  if (unlockedIds.length) {
-    await collectionsManager.mintBatchSkills(
-      collectionId,
-      to,
-      unlockedSkills.map((skill) => skill.id),
-      unlockedSkills.map((skill) => skill.amount),
-      '0x'
-    )
+  const feeData = await getFeeData(network)
 
-    console.log('[Forge-CLI] Minted unlocked skills!')
+  if (unlockedIds.length) {
+    const txInfo = await collectionsManager
+      .mintBatchSkills(
+        collectionId,
+        to,
+        unlockedSkills.map((skill) => skill.id),
+        unlockedSkills.map((skill) => skill.amount),
+        '0x',
+        feeData
+      )
+      .catch((error: Error | string) => {
+        console.error('[Forge-CLI] Error minting unlocked skills: ', error)
+        throw new Error(typeof error !== 'string' ? error?.message : error)
+      })
+
+    console.log('[Forge-CLI] Minted unlocked skills! Transaction information:', logFormattedTxInfo(txInfo))
   }
 
   if (lockedSkills.length) {
-    await collectionsManager.mintBatchLockedSkills(
-      collectionId,
-      lockedSkills.map((skill) => skill.id),
-      lockedSkills.map((skill) => skill.amount),
-      '0x',
-      mergeManagerAddr,
-      lockedSkills.map((skill) => skill.holdDependencies),
-      lockedSkills.map((skill) => skill.burnDependencies)
-    )
+    const txInfo = await collectionsManager
+      .mintBatchLockedSkills(
+        collectionId,
+        lockedSkills.map((skill) => skill.id),
+        lockedSkills.map((skill) => skill.amount),
+        '0x',
+        mergeManagerAddr,
+        lockedSkills.map((skill) => skill.holdDependencies),
+        lockedSkills.map((skill) => skill.burnDependencies),
+        feeData
+      )
+      .catch((error: Error | string) => {
+        console.error('[Forge-CLI] Error minting locked skills: ', error)
+        throw new Error(typeof error !== 'string' ? error?.message : error)
+      })
 
-    console.log('[Forge-CLI] Minted locked skills!')
+    console.log('[Forge-CLI] Minted locked skills! Transaction info:', logFormattedTxInfo(txInfo))
   }
 
   const confirmation = await inquirer.prompt([

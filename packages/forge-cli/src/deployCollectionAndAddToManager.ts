@@ -9,8 +9,10 @@ import inquirer from 'inquirer'
 import { networksToChainId } from './constants/chains'
 import { ContractNames, SupportedNetworks } from './types/networks'
 import { getConfig } from './utils/getConfig'
+import { getFeeData } from './utils/getFeeData'
 import { getNetworksJson } from './utils/getNetworksJson'
 import { getWalletInfo } from './utils/getWalletInfo'
+import { logFormattedTxInfo } from './utils/logFormattedTxInfo'
 import { writeNetworks } from './utils/writeNetworks'
 
 async function deployCollectionAndAddToManager(): Promise<void> {
@@ -153,7 +155,7 @@ Metadata URI:`,
   `)
 
   // Get Collection contract instance
-  const CollectionsManagerContract = new ethers.Contract(collectionsManagerAddr, CollectionsManager.abi, wallet)
+  const CollectionsManagerContract = new ethers.Contract(collectionsManagerAddr, CollectionsManager.bytecode, wallet)
 
   // Load the contract's bytecode and ABI
   const collectionAbi = Collection.abi
@@ -162,16 +164,32 @@ Metadata URI:`,
   const factory = new ethers.ContractFactory(collectionAbi, collection, wallet)
 
   const constructorArgs = [metadataUri, collectionName, collectionsManagerAddr]
-  // // Deploy the contract
-  const collectionContract = await factory.deploy(...constructorArgs)
 
-  // // Wait for the deployment transaction to be mined
+  // gas cost estimation
+  const deploymentData = factory.interface.encodeDeploy(constructorArgs)
+  const estimatedGas = await wallet.estimateGas({ data: deploymentData }).catch(() => {
+    //ignore
+  })
+  estimatedGas && console.log('COLLECTION.SOL DEPLOYMENT GAS ESTIMATION:', estimatedGas.toString())
+
+  const feeData = await getFeeData(network)
+
+  // Deploy the contract
+  const collectionContract = await factory.deploy(...constructorArgs, feeData)
+
+  // Wait for the deployment transaction to be mined
   await collectionContract.deployed()
   console.log('[Forge-CLI] Collection.sol contract deployed at address:', collectionContract.address)
 
   const collectionsManager = CollectionsManagerContract.attach(collectionsManagerAddr)
   // Add a new collection to CollectionsManager
-  await collectionsManager.addCollection(collectionContract.address)
+  const txInfo = await collectionsManager
+    .addCollection(collectionContract.address, feeData)
+    .catch((error: Error | string) => {
+      console.error('[Forge-CLI] Error adding new collection to manager! Error: ', error)
+      throw new Error(typeof error !== 'string' ? error?.message : error)
+    })
+  console.log('[Forge-CLI] CollectionsManager addCollection txInfo:', logFormattedTxInfo(txInfo))
   const collectionId: number = (await collectionsManager.totalSupply()).toNumber()
   console.log(
     '[Forge-CLI] Added new collection into CollectionsManager.sol! Collections.sol address:',

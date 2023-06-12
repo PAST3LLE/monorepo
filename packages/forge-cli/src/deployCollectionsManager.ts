@@ -6,6 +6,7 @@ import inquirer from 'inquirer'
 import deployCollectionAndAddToManager from './deployCollectionAndAddToManager'
 import { SupportedNetworks } from './types/networks'
 import { getConfig } from './utils/getConfig'
+import { getFeeData } from './utils/getFeeData'
 import { getWalletInfo } from './utils/getWalletInfo'
 import { writeNetworks } from './utils/writeNetworks'
 
@@ -108,8 +109,10 @@ Metadata folder URI:`,
 
   const constructorArgs = [metadataUri]
 
+  const feeData = await getFeeData(network)
+
   // Deploy the contract
-  const contract = await factory.deploy(...constructorArgs)
+  const contract = await factory.deploy(...constructorArgs, feeData)
 
   // Wait for the deployment transaction to be mined
   await contract.deployed()
