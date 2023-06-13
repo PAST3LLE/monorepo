@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/forge-web3",
   "sideEffects": false,
-  "version": "0.0.83",
+  "version": "0.0.84",
   "description": "PAST3LLE FORGE Web3 hooks and tings",
   "main": "dist/esm/index.js",
   "typings": "dist/types/index.d.ts",
@@ -114,10 +114,10 @@
   },
   "dependencies": {
     "@ethersproject/bignumber": ">=5.7.0",
-    "@past3lle/hooks": "^0.0.40",
+    "@past3lle/hooks": "^0.0.41",
     "@past3lle/skilltree-contracts": "^0.0.1-rc.15",
-    "@past3lle/utils": "^0.0.26",
-    "@past3lle/web3-modal": "^0.0.36",
+    "@past3lle/utils": "^0.0.27",
+    "@past3lle/web3-modal": "^0.0.37",
     "jotai": "^1.13.0"
   },
   "devDependencies": {
@@ -136,5 +136,5 @@
       "last 1 safari version"
     ]
   },
-  "gitHead": "80c9c8b79dec194eadae0098671150fb8e5e0d13"
+  "gitHead": "ea5e9f7f17f6f18288598f171df36853ac32f5d1"
 }
