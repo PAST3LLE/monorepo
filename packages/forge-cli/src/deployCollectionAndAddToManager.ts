@@ -155,7 +155,7 @@ Metadata URI:`,
   `)
 
   // Get Collection contract instance
-  const CollectionsManagerContract = new ethers.Contract(collectionsManagerAddr, CollectionsManager.bytecode, wallet)
+  const CollectionsManagerContract = new ethers.Contract(collectionsManagerAddr, CollectionsManager.abi, wallet)
 
   // Load the contract's bytecode and ABI
   const collectionAbi = Collection.abi
