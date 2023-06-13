@@ -27,24 +27,42 @@ export function ForgeMetadataUpdater(props: ForgeMetadataUpdaterProps) {
     scopeKey: WAGMI_SCOPE_KEYS.COLLECTIONS_MANAGER_TOTAL_SUPPLY
   })
 
-  const promisedMetadataTuple = useForgeFetchMetadata({
+  const { data, chainId } = useForgeFetchMetadata({
     loadAmount: collections?.toNumber() || 0,
     metadataFetchOptions: props.metadataFetchOptions
   })
 
-  const [metadata, setMetadataState] = useForgeMetadataAtom()
-  const [, setMetadataMapState] = useForgeMetadataMapWriteAtom()
+  const [, setMetadataMapState] = useForgeMetadataMapWriteAtom(chainId)
+  const [, setMetadataState] = useForgeMetadataAtom()
 
   useEffect(() => {
     async function resolveMetadata() {
       try {
-        const [idsTuple, promisedSkillsMetadatas] = await promisedMetadataTuple
-        const skillMetadata = await Promise.all(promisedSkillsMetadatas)
+        if (!chainId) return
 
-        const data = _getEnvMetadata(idsTuple, skillMetadata || [])
+        const metadata = await Promise.all(data)
         // Post new metadata if it exists
-        if (data?.length) {
-          setMetadataState(data)
+        if (metadata?.length) {
+          const metadataMap = metadata.reduce((acc, meta) => {
+            if (meta?.properties?.id) {
+              acc[meta.properties.id] = meta
+            }
+            return acc
+          }, {} as ForgeMetadataState['metadataMap'][number])
+
+          setMetadataState((state) => ({
+            metadata: {
+              ...state.metadata,
+              [chainId]: new Map([[1, data]])
+            },
+            metadataMap: {
+              ...state.metadataMap,
+              [chainId]: {
+                ...state.metadataMap[chainId],
+                ...metadataMap
+              }
+            }
+          }))
         }
       } catch (error) {
         devError(error)
@@ -52,39 +70,20 @@ export function ForgeMetadataUpdater(props: ForgeMetadataUpdaterProps) {
     }
 
     resolveMetadata()
-  }, [promisedMetadataTuple, props?.metadataFetchOptions, setMetadataState])
-
-  // Reduce metadata to a map
-  useEffect(() => {
-    if (!metadata?.length) return
-
-    const metadataMap = metadata
-      .flatMap((item) => item.skillsMetadata)
-      .reduce((acc, next) => {
-        const id = next?.properties?.id
-        if (id) {
-          acc[id] = next
-        }
-        return acc
-      }, {} as ForgeMetadataState['metadataMap'][number])
-
-    setMetadataMapState(metadataMap)
-  }, [metadata, setMetadataMapState])
+  }, [promisedMetadataTuple, props.metadataFetchOptions, setMetadataMapState, setMetadataState])
 
   return null
 }
 
 function _getEnvMetadata(
-  ids: number[][],
-  metadata: ForgeMetadataState['metadata'][number][0]['skillsMetadata'][]
+  metadataAndId: { id: number; metadata: SkillMetadata }[]
 ): ForgeMetadataState['metadata'][number] {
-  return metadata.reduce((acc, meta, i) => {
-    if (!!ids?.[i]?.length) {
-      acc.push({
-        ids: ids[i],
-        skillsMetadata: meta
-      })
-    }
+  return metadataAndId.reduce((acc, { metadata, id }) => {
+    acc.push({
+      ids: id,
+      skillsMetadata: metadata
+    })
+
     return acc
   }, [] as ForgeMetadataState['metadata'][number])
 }

@@ -20,7 +20,7 @@ export function ForgeBalancesUpdater({ loadAmount = DEFAULT_COLLECTION_LOAD_AMOU
   const { address } = useAccount()
   const chainId = useSupportedChainId()
 
-  const [metadata] = useForgeMetadataReadAtom()
+  const [metadata] = useForgeMetadataReadAtom(chainId)
   const [, updateForgeBalances] = useForgeBalancesWriteAtom()
   const [, resetUserBalances] = useForgeResetBalancesAtom()
 

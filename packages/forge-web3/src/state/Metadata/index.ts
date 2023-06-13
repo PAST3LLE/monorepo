@@ -3,8 +3,7 @@ import { atomWithStorage } from 'jotai/utils'
 import { useMemo } from 'react'
 
 import { STATE_STORAGE_KEYS } from '../../constants/state-storage-keys'
-import { useSupportedChainId } from '../../hooks'
-import { SkillId, SkillMetadata } from '../../types'
+import { SkillId, SkillMetadata, SupportedForgeChains } from '../../types'
 
 type MetadataMapByChain = {
   [chainId: number]: {
@@ -75,30 +74,29 @@ const metadataReadWriteAtom = (chainId?: number) =>
     }
   )
 
-export const useForgeMetadataMapReadAtom = () => {
-  const chainId = useSupportedChainId()
+export const useForgeMetadataMapReadAtom = (chainId: SupportedForgeChains | undefined) => {
   const state = useMemo(() => skillMetadataMapReadAtom(chainId), [chainId])
   return useAtom(state)
 }
-export const useForgeMetadataMapWriteAtom = () => {
-  const chainId = useSupportedChainId()
+export const useForgeMetadataMapWriteAtom = (chainId: SupportedForgeChains | undefined) => {
   const state = useMemo(() => skillMetadataMapWriteAtom(chainId), [chainId])
   return useAtom(state)
 }
 
-export const useForgeMetadataReadAtom = () => {
-  const chainId = useSupportedChainId()
+export const useForgeMetadataReadAtom = (chainId: SupportedForgeChains | undefined) => {
   const state = useMemo(() => skillMetadataReadAtom(chainId), [chainId])
   return useAtom(state)
 }
-export const useForgeMetadataWriteAtom = () => {
-  const chainId = useSupportedChainId()
+export const useForgeMetadataWriteAtom = (chainId: SupportedForgeChains | undefined) => {
   const state = useMemo(() => skillMetadataWriteAtom(chainId), [chainId])
   return useAtom(state)
 }
 
-export const useForgeMetadataAtom = () => {
-  const chainId = useSupportedChainId()
+export const useForgeMetadataReadWriteAtom = (chainId: SupportedForgeChains | undefined) => {
   const state = useMemo(() => metadataReadWriteAtom(chainId), [chainId])
   return useAtom(state)
+}
+
+export const useForgeMetadataAtom = () => {
+  return useAtom(metadataAtom)
 }
