@@ -10,7 +10,7 @@ import {
 } from '@past3lle/forge-web3'
 import { OFF_WHITE } from '@past3lle/theme'
 import { darken } from 'polished'
-import React, { useRef } from 'react'
+import React, { useMemo, useRef } from 'react'
 import { useTheme } from 'styled-components'
 
 import { SKILLPOINTS_CONTAINER_ID } from '../../../constants/skills'
@@ -27,19 +27,29 @@ import { SkillTradeExpandingContainer, TradeAndUnlockPanelContainer } from './st
 
 export function TradeAndUnlockPanel() {
   const activeSkill = useGetActiveSkillFromActiveSkillId()
+
   const [balances] = useForgeBalancesReadAtom()
   const [metadataMap] = useForgeMetadataMapReadAtom()
 
   const skillContainerRef = useRef<HTMLElement>(document.getElementById(SKILLPOINTS_CONTAINER_ID))
 
   const theme = useTheme()
+  const chainId = useSupportedChainId()
+
   const rarity = activeSkill.properties.rarity
   const cardColour = 'linear-gradient(195deg,#996ef4,#ffb900)'
 
-  const chainId = useSupportedChainId()
-  const metadataExplorerUri = buildSkillMetadataExplorerUri('opensea', activeSkill, chainId)
+  const { metadataExplorerUri, requiresSeveralDepsOfDifferentRarities, depsMap } = useMemo(() => {
+    const metadataExplorerUri = buildSkillMetadataExplorerUri('opensea', activeSkill, chainId)
+    const depsMap = gatherDepsInfo(activeSkill.properties.dependencies, metadataMap)
+    const hasMultiDeps = [...depsMap.entries()].filter(([, list]) => !!list.length).length > 1
 
-  const depsMap = gatherDepsInfo(activeSkill.properties.dependencies, metadataMap)
+    return {
+      requiresSeveralDepsOfDifferentRarities: hasMultiDeps,
+      metadataExplorerUri,
+      depsMap
+    }
+  }, [activeSkill, chainId, metadataMap])
 
   return (
     <SidePanel
@@ -61,9 +71,9 @@ export function TradeAndUnlockPanel() {
           </Text.SubHeader>
         </Row>
 
-        <SkillTradeExpandingContainer showHover={activeSkill.properties.dependencies.length > 1}>
+        <SkillTradeExpandingContainer showHover={requiresSeveralDepsOfDifferentRarities}>
           <Column minWidth={'12rem'} width="100%" gap="0.25rem">
-            {Object.entries(depsMap).map(([rarity, { length }], idx) => (
+            {[...depsMap.entries()].map(([rarity, { length }], idx) => (
               <SkillRarityLabel
                 id={`${rarity}_${idx}`}
                 backgroundColor={darken(0.02, theme.rarity[rarity as SkillRarity].backgroundColor)}
@@ -81,7 +91,7 @@ export function TradeAndUnlockPanel() {
                   src={theme.assetsMap.icons.rarity[rarity as SkillRarity]}
                   style={{ maxWidth: '2rem', marginRight: '0.3rem' }}
                 />
-                <strong style={{ fontSize: '1.8rem' }}>
+                <strong style={{ fontSize: '1.65rem' }}>
                   <span style={{ marginRight: '1rem' }}>{rarity?.toLocaleUpperCase()}</span> x{length}
                 </strong>
               </SkillRarityLabel>
@@ -100,7 +110,9 @@ export function TradeAndUnlockPanel() {
             justifyContent="flex-start"
           >
             <img src={theme.assetsMap.icons.rarity[rarity]} style={{ maxWidth: '2.5rem', marginRight: '0.3rem' }} />
-            <strong style={{ fontSize: '1.8rem' }}>{rarity?.toLocaleUpperCase()}</strong>
+            <strong style={{ fontSize: '1.65rem', letterSpacing: '-0.3px' }}>
+              {rarity?.toLocaleUpperCase()} SKILL
+            </strong>
           </SkillRarityLabel>
         </SkillTradeExpandingContainer>
 
@@ -212,7 +224,7 @@ export function TradeAndUnlockPanel() {
 export function SkillsCardDeck({
   deps,
   metadataMap,
-  theme: { assetsMap, ...customTheme }
+  theme: { assetsMap, ...theme }
 }: SkillsRowProps & { theme: ReturnType<typeof useTheme> }) {
   return (
     <SkillsRowContainer padding="0.2rem" gap="0" overflowX={'auto'}>
@@ -220,7 +232,7 @@ export function SkillsCardDeck({
         const skillId: SkillId = `${token}-${id}`
         const skill = metadataMap[skillId]
         const depRarity = skill.properties.rarity
-        const depRarityColour = customTheme.rarity[depRarity].backgroundColor
+        const depRarityColour = theme.rarity[depRarity].backgroundColor
         return (
           skill && (
             <Column
@@ -232,7 +244,7 @@ export function SkillsCardDeck({
                 z-index: ${idx + 1};
 
                 &:hover {
-                  margin-right: 7%;
+                  margin-right: 10%;
                 }
 
                 transition: margin 0.3s ease-in-out;
@@ -274,8 +286,10 @@ function gatherDepsInfo(deps: SkillDependencyObject[], metadataMap: ForgeMetadat
   return deps.reduce((acc, dep) => {
     const skillId = `${dep.token}-${dep.id}` as SkillId
     const rarity = metadataMap[skillId].properties.rarity
-    acc[rarity] = Array.isArray(acc[rarity]) ? [...acc[rarity], skillId] : [skillId]
+    const prevDep = acc.get(rarity)
+
+    acc.set(rarity, [...(prevDep || []), skillId])
 
     return acc
-  }, {} as Record<SkillRarity, SkillId[]>)
+  }, new Map() as Map<SkillRarity, SkillId[]>)
 }
