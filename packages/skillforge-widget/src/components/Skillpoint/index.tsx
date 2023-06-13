@@ -16,6 +16,7 @@ interface Props {
   metadata: SkillMetadata
   vector?: Vector
   hasSkill: boolean
+  disabledHighlight?: boolean
   forceRarity?: SkillRarity | 'empty'
   skillpointStyles?: RowProps
   lightupDependencies?: (state: SkillsState) => void
@@ -26,6 +27,7 @@ function SkillpointUnmemoed({
   vector,
   forceRarity,
   hasSkill,
+  disabledHighlight,
   skillpointStyles,
   lightupDependencies
 }: Props) {
@@ -50,13 +52,13 @@ function SkillpointUnmemoed({
   const { isEmptySkill, isCurrentSkillActive, isDependency, isOtherSkillActive } = useMemo(
     () => ({
       isEmptySkill: (metadata.properties.id as `${string}-${string}`) === 'EMPTY-EMPTY',
-      isCurrentSkillActive: metadata.properties.id === currentlyActive,
+      isCurrentSkillActive: !disabledHighlight && metadata.properties.id === currentlyActive,
       isDependency: state.activeDependencies.includes(metadata.properties.id),
       get isOtherSkillActive() {
         return !this.isDependency && !this.isCurrentSkillActive && !!currentlyActive
       }
     }),
-    [currentlyActive, metadata.properties.id, state.activeDependencies]
+    [currentlyActive, metadata.properties.id, state.activeDependencies, disabledHighlight]
   )
 
   const emptySkillYOffset = useMemo(
@@ -79,11 +81,11 @@ function SkillpointUnmemoed({
 
   return (
     <StyledSkillpoint
+      id={metadata.properties.id}
       title={`${metadata.name}_${metadata.properties.id}`}
       className={className}
       metadataCss={metadata?.attributes?.css}
       yOffset={emptySkillYOffset}
-      id={metadata.properties.id}
       rarity={forceRarity || (!isEmptySkill ? metadata.properties?.rarity : undefined)}
       dimSkill={!hasSkill || isOtherSkillActive}
       active={isCurrentSkillActive}

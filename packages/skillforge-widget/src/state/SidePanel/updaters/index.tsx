@@ -2,6 +2,7 @@ import React, { useMemo } from 'react'
 
 import { useSidePanelAtomBase } from '..'
 import { ActiveSkillPanel } from '../../../components/Panels/ActiveSkillPanel'
+import { TradeAndUnlockPanel } from '../../../components/Panels/TradeAndUnlockPanel'
 import { UserStatsPanel } from '../../../components/Panels/UserStatsPanel'
 
 export function SidePanelUpdater() {
@@ -11,7 +12,7 @@ export function SidePanelUpdater() {
     }
   ] = useSidePanelAtomBase()
 
-  const type = panelType?.split('::')?.[0] as 'ACTIVE_SKILL' | 'USER_STATS' | undefined
+  const type = panelType?.split('::')?.[0] as 'ACTIVE_SKILL' | 'USER_STATS' | 'UNLOCK_SKILL' | undefined
 
   return useMemo(() => {
     switch (type) {
@@ -19,6 +20,8 @@ export function SidePanelUpdater() {
         return <ActiveSkillPanel />
       case 'USER_STATS':
         return <UserStatsPanel />
+      case 'UNLOCK_SKILL':
+        return <TradeAndUnlockPanel />
       default:
         return null
     }

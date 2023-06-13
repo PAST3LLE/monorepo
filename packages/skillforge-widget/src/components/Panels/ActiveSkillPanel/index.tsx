@@ -1,13 +1,6 @@
-import { BigNumber } from '@ethersproject/bignumber'
-import { AutoRow, Column, ExternalLink, Row, RowCenter, RowProps, Text } from '@past3lle/components'
+import { AutoRow, ExternalLink, Row, RowCenter, Text } from '@past3lle/components'
 import {
-  ForgeBalances,
-  ForgeMetadataState,
-  SkillDependencyObject,
-  SkillId,
   SkillLockStatus,
-  SkillMetadata,
-  SkillRarity,
   useDeriveSkillState,
   useForgeBalancesReadAtom,
   useForgeMetadataMapReadAtom,
@@ -16,20 +9,20 @@ import {
 import { BLACK, OFF_WHITE } from '@past3lle/theme'
 import { darken } from 'polished'
 import React, { useMemo, useRef } from 'react'
-import styled, { useTheme } from 'styled-components'
+import { useTheme } from 'styled-components'
 
-import { SHOP_URL } from '../../../constants'
 import { SKILLPOINTS_CONTAINER_ID } from '../../../constants/skills'
 import { useGetActiveSkill } from '../../../hooks/skills'
 import { baseTheme } from '../../../theme/base'
-import { RARITY_COLOURS_MAP } from '../../../theme/constants'
 import { buildSkillMetadataExplorerUri } from '../../../utils/skills'
-import { ThemedButtonExternalLink } from '../../Common/Button'
 import { BlackHeader, MonospaceText } from '../../Common/Text'
 import { Skillpoint } from '../../Skillpoint'
 // import { SkillpointPoint } from '../../Skillpoint/SkillpointPoint'
 import { SidePanel } from '../BaseSidePanel'
-import { ActiveSkillPanelContainer, SkillRarityLabel, SkillStatusLabel, SkillsRowContainer } from './styleds'
+import { SkillsRow } from '../common'
+import { SkillActionButton } from './SkillActionButton'
+import { ActiveSkillPanelContainer, RequiredDepsContainer, SkillRarityLabel, SkillStatusLabel } from './styleds'
+import { getLockStatusColour, getSkillDescription } from './utils'
 
 export function ActiveSkillPanel() {
   const [metadataMap] = useForgeMetadataMapReadAtom()
@@ -45,15 +38,13 @@ export function ActiveSkillPanel() {
   const isLocked = lockStatus === SkillLockStatus.LOCKED
   const isOwned = lockStatus === SkillLockStatus.OWNED
 
-  const description = useMemo(
-    () => _getSkillDescription(activeSkill?.name, lockStatus),
-    [activeSkill?.name, lockStatus]
-  )
+  const description = useMemo(() => getSkillDescription(activeSkill?.name, lockStatus), [activeSkill?.name, lockStatus])
 
   const { assetsMap, ...customTheme } = useTheme()
 
-  const { rarity, deps, cardColour } = useMemo(
+  const { rarity, deps, cardColour, metadataExplorerUri } = useMemo(
     () => ({
+      metadataExplorerUri: buildSkillMetadataExplorerUri('opensea', activeSkill, chainId),
       rarity: activeSkill?.properties.rarity,
       deps: activeSkill?.properties.dependencies,
       get cardColour() {
@@ -64,12 +55,12 @@ export function ActiveSkillPanel() {
           : null
       }
     }),
-    [activeSkill?.properties.dependencies, activeSkill?.properties.rarity, customTheme.rarity, isLocked]
+    [activeSkill, chainId, customTheme.rarity, isLocked]
   )
 
   const skillContainerRef = useRef<HTMLElement>(document.getElementById(SKILLPOINTS_CONTAINER_ID))
 
-  if (!activeSkill || !rarity || !deps || !cardColour || !setSkillState) return null
+  if (!metadataExplorerUri || !activeSkill || !rarity || !deps || !cardColour || !setSkillState) return null
 
   return (
     <SidePanel
@@ -120,17 +111,11 @@ export function ActiveSkillPanel() {
               `
             }}
           />
-          <ThemedButtonExternalLink
-            className={isLocked ? 'disabled' : ''}
-            disabled={isLocked}
-            href={isLocked ? '#' : _getSkillShopUri(activeSkill)}
-          >
-            <Text.Black fontWeight={300}>{isLocked ? 'LOCKED' : isOwned ? 'VIEW IN STORE' : 'UNLOCK'}</Text.Black>
-          </ThemedButtonExternalLink>
+          <SkillActionButton skill={activeSkill} lockStatus={lockStatus} metadataExplorerUri={metadataExplorerUri} />
         </Row>
         <Row alignSelf="flex-start" width="auto">
           <SkillStatusLabel
-            bgColour={_getLockStatusColour(lockStatus, rarity)}
+            bgColour={getLockStatusColour(lockStatus, rarity)}
             fgColour={BLACK}
             fontWeight={400}
             borderRadius="0.3rem"
@@ -162,20 +147,17 @@ export function ActiveSkillPanel() {
             <SkillsRow balances={balances} deps={deps} metadataMap={metadataMap} />
           </RequiredDepsContainer>
         )}
-        {!isLocked && chainId && (
+        {((!isLocked && !deps.length) || isOwned) && chainId && (
           <AutoRow>
             <MonospaceText>
               View on{' '}
-              <ExternalLink href={buildSkillMetadataExplorerUri('opensea', activeSkill, chainId)}>
+              <ExternalLink href={metadataExplorerUri}>
                 {' '}
                 <strong style={{ color: baseTheme.mainBg }}>OpenSea</strong>{' '}
               </ExternalLink>{' '}
             </MonospaceText>
           </AutoRow>
         )}
-        {/* <AutoRow>
-          <MonospaceText>Connect Wallet</MonospaceText>
-        </AutoRow> */}
         <Row marginTop={'4rem'}>
           <MonospaceText>
             Checkout this{' '}
@@ -189,79 +171,4 @@ export function ActiveSkillPanel() {
       </ActiveSkillPanelContainer>
     </SidePanel>
   )
-}
-const RequiredDepsContainer = styled(Column)<{ borderRadius?: string; background?: string }>``
-
-interface SkillsRowProps {
-  deps: SkillDependencyObject[]
-  metadataMap: ForgeMetadataState['metadataMap'][number]
-  balances: ForgeBalances[number]
-  rowProps?: RowProps
-}
-function SkillsRow({ balances, deps, metadataMap, rowProps }: SkillsRowProps) {
-  return (
-    <SkillsRowContainer padding="1rem" gap="0 1.7rem" overflowX={'auto'} {...rowProps}>
-      {/* 
-      // TODO: review - right now disabled as not required in contracts
-      <SkillpointPoint />
-      <Row justifyContent={'center'} width="auto" minWidth={'2rem'} fontSize={'4rem'} fontWeight={100}>
-        +
-      </Row> */}
-      {deps.flatMap(({ token, id }) => {
-        const skillId: SkillId = `${token}-${id}`
-        const skill = metadataMap[skillId]
-        return (
-          skill && (
-            <Skillpoint
-              key={skill.properties.id}
-              // @ts-ignore
-              title={skill.name}
-              hasSkill={!BigNumber.from(balances?.[skillId] || 0).isZero()}
-              metadata={skill}
-              css="box-shadow: unset;"
-            />
-          )
-        )
-      })}
-    </SkillsRowContainer>
-  )
-}
-
-function _getSkillDescription(name: string | undefined, lockStatus: SkillLockStatus) {
-  switch (lockStatus) {
-    case SkillLockStatus.LOCKED:
-      return "You can't get this skill yet. Click/view required skill(s) below."
-    case SkillLockStatus.UNLOCKED:
-      return `Buy ${
-        name || 'this skill'
-      } in the shop and receive a free skill + skillpoint giving you access to exclusive perks.`
-    case SkillLockStatus.OWNED:
-      return (
-        <>
-          Nice, you already own {name || 'this skill'}. <br />
-          What now? Head to the shop to get new pieces and earn more skills + skillpoints!
-        </>
-      )
-    default:
-      return 'Skill information missing. Please try again later.'
-  }
-}
-
-function _getLockStatusColour(lockStatus: SkillLockStatus, rarity: SkillRarity) {
-  switch (lockStatus) {
-    case SkillLockStatus.LOCKED:
-      return 'darkred'
-    case SkillLockStatus.UNLOCKED:
-      return 'darkgreen'
-    case SkillLockStatus.OWNED:
-      return RARITY_COLOURS_MAP[rarity]
-  }
-}
-
-// TODO: this fn should be local to the project using SkillForge Widget
-const STORE_URL = process.env.NODE_ENV === 'production' ? SHOP_URL : 'http://localhost:8080'
-function _getSkillShopUri(activeSkill: SkillMetadata) {
-  return `${STORE_URL}/#/SKILLS/${(
-    activeSkill?.attributes?.handle || activeSkill.name
-  ).toLowerCase()}?referral=FORGE&id=${activeSkill.properties.shopifyId.replace('gid://shopify/Product/', '')}`
 }

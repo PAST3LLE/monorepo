@@ -4,7 +4,7 @@ import { MEDIA_WIDTHS } from '@past3lle/theme'
 import React from 'react'
 
 import { ThemedButton } from '.'
-import { useSidePanelAtomBase } from '../../../state/SidePanel'
+import { useSidePanelWriteAtom } from '../../../state/SidePanel'
 import { MAIN_BG, MAIN_FG } from '../../../theme/constants'
 import { useGenericImageSrcSet } from '../../../theme/global'
 import { useAssetsMap } from '../../../theme/utils'
@@ -16,7 +16,7 @@ interface InventoryButtonProps {
   restWordProps?: CursiveMonoHeaderProps['restWordProps']
 }
 export function InventoryButton(props: InventoryButtonProps) {
-  const [, openActivePanel] = useSidePanelAtomBase()
+  const [, openActivePanel] = useSidePanelWriteAtom()
   const assetsMap = useAssetsMap()
   const logoUrlMaps = useGenericImageSrcSet()
 
@@ -35,7 +35,7 @@ export function InventoryButton(props: InventoryButtonProps) {
       gap="0 0.5rem"
       height="80%"
       {...props.buttonProps}
-      onClick={() => openActivePanel((state) => ({ ...state, type: ['USER_STATS', ...state.type] }))}
+      onClick={() => openActivePanel('USER_STATS')}
     >
       {width > MEDIA_WIDTHS.upToSmall ? (
         <CursiveMonoHeader

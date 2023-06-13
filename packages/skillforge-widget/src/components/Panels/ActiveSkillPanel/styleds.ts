@@ -2,15 +2,16 @@ import { Column, Row } from '@past3lle/components'
 import { upToSmall } from '@past3lle/theme'
 import styled from 'styled-components'
 
-import { ThemedButtonExternalLink } from '../../Common/Button'
+import { ThemedButtonActions, ThemedButtonExternalLink } from '../../Common/Button'
 import { AutoColorHeader, BlackHeader } from '../../Common/Text'
 
 export const SkillStatusLabel = styled(AutoColorHeader)``
-export const SkillRarityLabel = styled(BlackHeader)`
+export const SkillRarityLabel = styled(BlackHeader)<{ border?: string }>`
   display: flex;
   justify-content: space-evenly;
   align-items: center;
   font-style: unset;
+  ${({ border }) => border && `border: ${border};`}
   > strong {
     font-variation-settings: 'wght' 450;
     margin-right: 0.5rem;
@@ -46,7 +47,7 @@ export const ActiveSkillPanelContainer = styled(Column)`
     > img {
       max-width: 40%;
     }
-    > ${ThemedButtonExternalLink} {
+    > ${ThemedButtonExternalLink}, > ${ThemedButtonActions} {
       padding: 1.5rem;
       > * {
         font-size: 2rem;
@@ -58,3 +59,5 @@ export const ActiveSkillPanelContainer = styled(Column)`
     }
   }
 `
+
+export const RequiredDepsContainer = styled(Column)<{ borderRadius?: string; background?: string }>``
