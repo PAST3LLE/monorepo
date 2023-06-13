@@ -3,7 +3,12 @@ import { ASSETS_MAP } from 'assets'
 
 export const skillforgeTheme = createTheme({
   DEFAULT: {
-    assetsMap: ASSETS_MAP
+    assetsMap: ASSETS_MAP,
+    rarity: {
+      common: {
+        backgroundColor: '#919191'
+      }
+    }
   },
   ALT: {
     mainBgAlt: 'darkred',
