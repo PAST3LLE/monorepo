@@ -1,5 +1,6 @@
 import { Address } from '@past3lle/types'
-import { useMemo } from 'react'
+import { devError } from '@past3lle/utils'
+import { useEffect, useState } from 'react'
 
 import { useForgeMetadataUriMapReadAtom } from '../state'
 import { ForgeMetadataUpdaterProps } from '../state/Metadata/updaters/MetadataUpdater'
@@ -25,47 +26,57 @@ export function useForgeFetchMetadata({ loadAmount = 3, metadataFetchOptions }: 
 
   useRefetchOnAddressAndChain(refetchSkills)
 
-  return useMemo(async (): Promise<[number[][], Promise<SkillMetadata[]>[]]> => {
-    // reverse array as we loop down
-    if (!skillErc1155MetadataUris.length || !metadataUris?.collectionsManager) return [[], [Promise.resolve([])]]
+  const [metadata, setMetadata] = useState<[number[][], Promise<SkillMetadata[]>[]]>([[], [Promise.resolve([])]])
 
-    const promisedCollectionMetadata = []
-    for (let i = 1; i < skillErc1155MetadataUris.length + 1; i++) {
-      promisedCollectionMetadata.push(fetch(metadataUris.collectionsManager + i + '.json').then((res) => res.json()))
-    }
-    const collectionMetadata: CollectionMetadata[] = await Promise.all(promisedCollectionMetadata)
+  useEffect(() => {
+    if (!skillErc1155MetadataUris.length || !metadataUris?.collectionsManager) return
 
-    if (collectionMetadata.length !== skillErc1155MetadataUris.length) {
-      throw new Error('[useForgeFetchMetadata] Collection metadata length does not match skill erc1155 metadata length')
-    }
+    async function fetchMetadata(): Promise<[number[][], Promise<SkillMetadata[]>[]]> {
+      const promisedCollectionMetadata = []
+      for (let i = 1; i < skillErc1155MetadataUris.length + 1; i++) {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        promisedCollectionMetadata.push(fetch(metadataUris!.collectionsManager + i + '.json').then((res) => res.json()))
+      }
+      const collectionMetadata: CollectionMetadata[] = await Promise.all(promisedCollectionMetadata)
 
-    const allMetadata = []
-    const allMetadataIds = []
-    for (let i = 0; i < collectionMetadata.length; i++) {
-      const promisedSkillsMetadata: Promise<SkillMetadata>[] = []
-      for (let j = 0; j < collectionMetadata[i].properties?.ids.length || 0; j++) {
-        promisedSkillsMetadata.push(
-          chainFetchIpfsUri(
-            skillErc1155MetadataUris[i].replace('0.json', collectionMetadata[i].properties.ids[j] + '.json'),
-            ...(metadataFetchOptions?.gatewayUris || [])
-          ).then((res) => res?.json())
+      if (collectionMetadata.length !== skillErc1155MetadataUris.length) {
+        throw new Error(
+          '[useForgeFetchMetadata] Collection metadata length does not match skill erc1155 metadata length'
         )
       }
-      allMetadataIds.push(collectionMetadata[i].properties.ids || [])
-      allMetadata.push(
-        Promise.all(promisedSkillsMetadata).then((res) =>
-          res.map((meta) => _overrideMetadataObject(meta, skill1155Addresses[i]))
+
+      const allMetadata = []
+      const allMetadataIds = []
+      for (let i = 0; i < collectionMetadata.length; i++) {
+        const promisedSkillsMetadata: Promise<SkillMetadata>[] = []
+        for (let j = 0; j < collectionMetadata[i].properties?.ids.length || 0; j++) {
+          promisedSkillsMetadata.push(
+            chainFetchIpfsUri(
+              skillErc1155MetadataUris[i].replace('0.json', collectionMetadata[i].properties.ids[j] + '.json'),
+              ...(metadataFetchOptions?.gatewayUris || [])
+            ).then((res) => res?.json())
+          )
+        }
+        allMetadataIds.push(collectionMetadata[i].properties.ids || [])
+        allMetadata.push(
+          Promise.all(promisedSkillsMetadata).then((res) =>
+            res.map((meta) => _overrideMetadataObject(meta, skill1155Addresses[i]))
+          )
         )
-      )
+      }
+
+      return [allMetadataIds, allMetadata]
     }
 
-    return [allMetadataIds, allMetadata]
-  }, [
-    metadataFetchOptions?.gatewayUris,
-    metadataUris?.collectionsManager,
-    skill1155Addresses,
-    skillErc1155MetadataUris
-  ])
+    fetchMetadata()
+      .then((res) => setMetadata(res))
+      .catch((error) => {
+        devError(error)
+      })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [metadataFetchOptions?.gatewayUris, metadataUris?.collectionsManager, skillErc1155MetadataUris])
+
+  return metadata
 }
 
 export function deriveMetadataId(metadata: SkillMetadata, address: Address): `${Address}-${string}` {

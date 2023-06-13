@@ -1,4 +1,4 @@
-import { delay, devError } from '@past3lle/utils'
+import { delay, devDebug, devError } from '@past3lle/utils'
 
 import { DEFAULT_GATEWAY_URI } from '../constants/ipfs'
 import { MetadataFetchOptions } from '../state/Metadata/updaters/MetadataUpdater'
@@ -29,23 +29,34 @@ export interface CustomIpfsGatewayConfig {
   }
 }
 export async function chainFetchIpfsUri(uriHash: string, ...customGateways: CustomIpfsGatewayConfig[]) {
+  const controllersMap: Map<number, AbortController> = new Map()
+
   let success
   for (let i = 0; i < customGateways.length; i++) {
     const { gateway: uri, config } = customGateways[i]
+
+    const controller = new AbortController()
+    controllersMap.set(i, controller)
+    const { signal } = controller
+
     try {
       const ipfsUri = ipfsToImageUri(uriHash, uri)
-      const response = await fetch(ipfsUri, config?.init)
+      const response = await fetch(ipfsUri, { ...config?.init, signal })
 
       if (!response?.ok) {
-        await delay(7500)
-        devError('Fetching', uri, 'failed. Trying next...')
+        controller.abort()
+        devError('Fetching', uri, 'failed. Controller.abort() called. Trying next...')
       } else {
+        devDebug('Gateway URI fetch at index', i, 'succesful. Aborting all other requests.')
+        controllersMap.delete(i)
+        controllersMap.forEach((controller) => controller.abort())
+
         success = response
         break
       }
     } catch (error) {
-      await delay(7500)
-      devError('Fetching', uri, 'failed. Trying next...')
+      controller.abort()
+      devError('Fetching', uri, 'failed. Controller.abort() called. Trying next...')
     }
   }
   return success

@@ -8,7 +8,8 @@ import { ipfsToImageUri } from './ipfs'
 
 export enum SkillLockStatus {
   LOCKED = 'LOCKED',
-  UNLOCKED = 'UNLOCKABLE',
+  UNLOCKABLE_IN_STORE = 'UNLOCKABLE IN STORE',
+  UNLOCKABLE_IN_TRADE = 'UNLOCKABLE IN TRADE',
   OWNED = 'OWNED'
 }
 
@@ -18,8 +19,9 @@ export function getLockStatus(
   address?: Address
 ): SkillLockStatus {
   const deps = skill?.properties.dependencies || []
+  const hasDeps = deps.length > 0
 
-  if (!skill || (!!deps?.length && !address) || (!!deps?.length && !balances)) return SkillLockStatus.LOCKED
+  if (!skill || (hasDeps && !address) || (hasDeps && !balances)) return SkillLockStatus.LOCKED
   if (BigNumber.from(balances?.[skill.properties.id] || 0).gt(0)) return SkillLockStatus.OWNED
 
   devWarn(skill.name, ' requires skills', deps.join(' '), 'to unlock. Checking...')
@@ -33,8 +35,13 @@ export function getLockStatus(
   })
 
   if (!missingDeps) {
-    devWarn('All skill depdendencies owned! Unlockable.')
-    return SkillLockStatus.UNLOCKED
+    if (hasDeps) {
+      devWarn('All skill depdendencies owned! Unlockable by trading in required skills!')
+      return SkillLockStatus.UNLOCKABLE_IN_TRADE
+    } else {
+      devWarn('No dependencies required. Unlockable by purchasing in store!')
+      return SkillLockStatus.UNLOCKABLE_IN_STORE
+    }
   } else {
     return SkillLockStatus.LOCKED
   }
