@@ -36,7 +36,7 @@ export function ForgeBalancesUpdater({ loadAmount = DEFAULT_COLLECTION_LOAD_AMOU
 
   useEffect(() => {
     if (!chainId) return
-    const metadataLoaded = !!metadata?.[0]?.ids?.length
+    const metadataLoaded = !!metadata?.length
 
     const derivedData: BigNumber[][] = _getEnvBalances(balancesBatch as BigNumber[][], metadata)
 
@@ -64,12 +64,14 @@ function reduceBalanceDataToMap(
 ) {
   if (!data) return {}
 
-  return data.reduce((oAcc, bnData, collectionIdx) => {
-    const chainBalance = (bnData || []).reduce((acc, nextBn, i) => {
+  return data.reduce((oAcc, collectionBnBalances = [], collectionIdx) => {
+    const chainBalance = collectionBnBalances.reduce((acc, nextBn, i) => {
       const collectionAddress = collectionsAddresses?.[collectionIdx]
-      const skillId = metadata[collectionIdx].ids[i]
+
+      const skillId = metadata[collectionIdx][i].properties.id
+
       if (!!collectionAddress) {
-        acc[`${collectionAddress}-${skillId}`] = nextBn.toString()
+        acc[skillId] = nextBn.toString()
       }
 
       return acc
@@ -85,8 +87,8 @@ function _getEnvBalances(realBalances: BigNumber[][], metadata: ForgeMetadataSta
     return realBalances
   } else {
     devWarn('[UserBalanceUpdater]::USING MOCK METADATA')
-    return metadata.map((collection) => {
-      return Array.from({ length: collection?.ids?.length || 0 }).map(() => BigNumber.from(Math.round(Math.random())))
+    return metadata.map(() => {
+      return Array.from({ length: metadata?.length || 0 }).map(() => BigNumber.from(Math.round(Math.random())))
     })
   }
 }

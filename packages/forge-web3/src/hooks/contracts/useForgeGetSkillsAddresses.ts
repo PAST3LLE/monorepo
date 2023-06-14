@@ -35,12 +35,12 @@ export function useForgeGetSkillsAddresses({ loadAmount }: WithLoadAmount) {
       })
     }
 
-    return derivedArgs
+    return derivedArgs.reverse()
   }, [contractAddressesByChain?.collectionsManager, latestCollectionId, loadAmount])
 
   return useContractReads({
     // reverse as we loop backwards
-    contracts: contractsReadsArgs.reverse(),
+    contracts: contractsReadsArgs,
     watch: false,
     scopeKey: WAGMI_SCOPE_KEYS.SKILLS_CONTRACT,
     // Bug on the wagmi side is throwing (in prod) when `contracts` is an empty array

@@ -32,14 +32,14 @@ function gatherSkillContractConfigParams(
   metadata: ForgeMetadataState['metadata'][number],
   balanceOfAddress: Address | undefined
 ) {
-  const contractConfigList = skillsAddressList.flatMap((address, i) => {
+  const contractConfigList = skillsAddressList.map((address, idx) => {
     if (!address) {
       devWarn(
         '[SkillForgeBalancesUpdater::gatherSkillContractConfigParams]::Address undefined! Check contracts map in constants.'
       )
     }
 
-    const args = getBalanceOfBatchArgs(metadata?.[i]?.ids || [], balanceOfAddress)
+    const args = getBalanceOfBatchArgs(metadata?.[idx] || [], balanceOfAddress)
     return {
       abi: Collection__factory.abi,
       address,
@@ -51,10 +51,15 @@ function gatherSkillContractConfigParams(
   return contractConfigList
 }
 
-function getBalanceOfBatchArgs(ids: number[], address: Address | undefined) {
+function getBalanceOfBatchArgs(
+  skills: ForgeMetadataState['metadata'][number][number],
+  address: Address | undefined
+): [Address[], BigNumber[]] {
   if (!address) return [[], []]
-  return ids.reduce(
-    (acc: [Address[], BigNumber[]], id) => {
+  return skills.reduce(
+    (acc: [Address[], BigNumber[]], skill) => {
+      const [, id] = skill.properties.id.split('-')
+
       acc[0] = [...acc[0], address]
       acc[1] = [...acc[1], BigNumber.from(id)]
       return acc

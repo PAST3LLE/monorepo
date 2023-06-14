@@ -11,7 +11,7 @@ type MetadataMapByChain = {
   }
 }
 type MetadataByChain = {
-  [chainId: number]: { ids: number[]; skillsMetadata: SkillMetadata[] }[]
+  [chainId: number]: SkillMetadata[][]
 }
 export interface ForgeMetadataState {
   metadata: MetadataByChain

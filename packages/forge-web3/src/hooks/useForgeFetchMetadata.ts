@@ -28,14 +28,15 @@ export function useForgeFetchMetadata({ loadAmount = 3, metadataFetchOptions }: 
   useRefetchOnAddressAndChain(refetchSkills)
 
   const [metadata, setMetadata] = useState<{
-    data: Promise<SkillMetadata>[]
+    data: Promise<SkillMetadata[]>[] | undefined
+
     chainId: SupportedForgeChains | undefined
-  }>({ data: [], chainId: undefined })
+  }>({ data: undefined, chainId: undefined })
 
   useEffect(() => {
     if (!skillErc1155MetadataUris.length || !metadataUris?.collectionsManager) return
 
-    async function fetchMetadata(): Promise<Promise<SkillMetadata>[]> {
+    async function fetchMetadata() {
       const promisedCollectionMetadata = []
       for (let i = 1; i < skillErc1155MetadataUris.length + 1; i++) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -49,10 +50,11 @@ export function useForgeFetchMetadata({ loadAmount = 3, metadataFetchOptions }: 
         )
       }
 
-      const promisedSkillsMetadata: Promise<SkillMetadata>[] = []
+      const promisedSkillsMetadata: Promise<SkillMetadata>[][] = []
       for (let i = 0; i < collectionMetadata.length; i++) {
+        promisedSkillsMetadata.push([])
         for (let j = 0; j < collectionMetadata[i].properties?.ids.length || 0; j++) {
-          promisedSkillsMetadata.push(
+          promisedSkillsMetadata[i].push(
             chainFetchIpfsUri(
               skillErc1155MetadataUris[i].replace('0.json', collectionMetadata[i].properties.ids[j] + '.json'),
               ...(metadataFetchOptions?.gatewayUris || [])
@@ -62,11 +64,11 @@ export function useForgeFetchMetadata({ loadAmount = 3, metadataFetchOptions }: 
           )
         }
       }
-      return promisedSkillsMetadata
+      return promisedSkillsMetadata.map((collection) => Promise.all(collection))
     }
 
     fetchMetadata()
-      .then((res) => res && setMetadata({ data: res, chainId }))
+      .then((res) => setMetadata({ data: res, chainId }))
       .catch((error) => {
         devError(error)
       })
