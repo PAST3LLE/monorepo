@@ -25,11 +25,11 @@ import { ActiveSkillPanelContainer, RequiredDepsContainer, SkillRarityLabel, Ski
 import { getLockStatusColour, getSkillDescription } from './utils'
 
 export function ActiveSkillPanel() {
-  const [metadataMap] = useForgeMetadataMapReadAtom()
-  const activeSkillState = useGetActiveSkill()
-  const [balances] = useForgeBalancesReadAtom()
-
   const chainId = useSupportedChainId()
+
+  const [metadataMap] = useForgeMetadataMapReadAtom(chainId)
+  const activeSkillState = useGetActiveSkill(chainId)
+  const [balances] = useForgeBalancesReadAtom()
 
   const activeSkill = activeSkillState?.[0]
   const setSkillState = activeSkillState?.[1]

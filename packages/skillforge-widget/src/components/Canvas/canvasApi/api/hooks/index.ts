@@ -190,7 +190,7 @@ export function calculateGridPoints(
       row++
     }
 
-    const skillAtPosition: SkillMetadata | undefined = metadata?.[i % columns]?.skillsMetadata?.[row - 1]
+    const skillAtPosition: SkillMetadata | undefined = metadata?.[i % columns]?.[row - 1]
 
     // e.g i = 2
     // 200cw * 2 = 400aw

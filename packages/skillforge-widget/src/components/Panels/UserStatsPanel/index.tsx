@@ -1,6 +1,6 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { Column, Row, Text } from '@past3lle/components'
-import { useForgeBalancesReadAtom } from '@past3lle/forge-web3'
+import { useForgeBalancesReadAtom, useSupportedChainId } from '@past3lle/forge-web3'
 import { upToSmall } from '@past3lle/theme'
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
@@ -16,10 +16,11 @@ import { UserConnectionStats } from '../../Web3/UserWeb3ConnectionStats'
 import { SidePanel } from '../BaseSidePanel'
 
 export function UserStatsPanel() {
+  const chainId = useSupportedChainId()
   const [{ vectors }] = useVectorsAtom()
   const [balances] = useForgeBalancesReadAtom()
 
-  const getSkill = useGetSkillFromIdCallback()
+  const getSkill = useGetSkillFromIdCallback(chainId)
 
   const totalSkills = useMemo(() => vectors.filter((vectorObj) => !!vectorObj.skillId).length, [vectors])
   const ownedSkillsList = useMemo(() => {

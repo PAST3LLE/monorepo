@@ -1,4 +1,4 @@
-import { SkillId, useForgeMetadataMapReadAtom } from '@past3lle/forge-web3'
+import { SkillId, useForgeMetadataMapReadAtom, useSupportedChainId } from '@past3lle/forge-web3'
 import { useIsMobile } from '@past3lle/hooks'
 import { useEffect } from 'react'
 
@@ -7,10 +7,12 @@ import { toggleSelectedSkill } from '../../../components/Canvas/canvasApi/api/ho
 import { ActiveSidePanel, useSidePanelAtomBase } from '../../SidePanel'
 
 export function ActiveSkillUpdater() {
+  const chainId = useSupportedChainId()
+
   const [{ type }, openSidePanel] = useSidePanelAtomBase()
   const isMobileWidthOrDevice = useIsMobile()
   const [skillsState, updateSkillsState] = useForgesAtom()
-  const [metadataMap] = useForgeMetadataMapReadAtom()
+  const [metadataMap] = useForgeMetadataMapReadAtom(chainId)
   const [vectorsState] = useVectorsAtom()
 
   // Updates the activeDepedencies whenever the active skill changes

@@ -5,7 +5,8 @@ import {
   SkillId,
   SkillRarity,
   useForgeBalancesReadAtom,
-  useForgeMetadataMapReadAtom
+  useForgeMetadataMapReadAtom,
+  useSupportedChainId
 } from '@past3lle/forge-web3'
 import { convertToRomanNumerals } from '@past3lle/utils'
 import React, { useMemo } from 'react'
@@ -23,7 +24,9 @@ export interface SkillsCanvasProps {
 }
 export function SkillsCanvas() {
   const [{ vectors }] = useVectorsAtom()
-  const [metadataMap] = useForgeMetadataMapReadAtom()
+
+  const chainId = useSupportedChainId()
+  const [metadataMap] = useForgeMetadataMapReadAtom(chainId)
   const [balances] = useForgeBalancesReadAtom()
 
   const VectorsMap = useMemo(

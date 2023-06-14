@@ -17,24 +17,25 @@ import { SKILLPOINTS_CONTAINER_ID } from '../../../constants/skills'
 import { useGetActiveSkillFromActiveSkillId } from '../../../hooks/useGetActiveSkillFromActiveSkillId'
 import { baseTheme } from '../../../theme/base'
 import { buildSkillMetadataExplorerUri } from '../../../utils/skills'
-import { ThemedButtonActions } from '../../Common/Button'
 import { BlackHeader, MonospaceText } from '../../Common/Text'
 import { Skillpoint } from '../../Skillpoint'
 import { RequiredDepsContainer, SkillRarityLabel, SkillsRowContainer } from '../ActiveSkillPanel/styleds'
 import { SidePanel } from '../BaseSidePanel'
 import { SkillsRowProps } from '../common'
+import { TradeAndUnlockActionButton } from './ActionButton'
 import { SkillTradeExpandingContainer, TradeAndUnlockPanelContainer } from './styleds'
 
 export function TradeAndUnlockPanel() {
-  const activeSkill = useGetActiveSkillFromActiveSkillId()
+  const chainId = useSupportedChainId()
+
+  const activeSkill = useGetActiveSkillFromActiveSkillId(chainId)
 
   const [balances] = useForgeBalancesReadAtom()
-  const [metadataMap] = useForgeMetadataMapReadAtom()
+  const [metadataMap] = useForgeMetadataMapReadAtom(chainId)
 
   const skillContainerRef = useRef<HTMLElement>(document.getElementById(SKILLPOINTS_CONTAINER_ID))
 
   const theme = useTheme()
-  const chainId = useSupportedChainId()
 
   const rarity = activeSkill.properties.rarity
   const cardColour = 'linear-gradient(195deg,#996ef4,#ffb900)'
@@ -175,25 +176,7 @@ export function TradeAndUnlockPanel() {
               `
             }}
           />
-          <Column justifyContent={'center'} gap="0.75rem">
-            <ThemedButtonActions fontSize="2rem" onClick={() => window.alert('Confirming upgrade')}>
-              <Text.Black fontWeight={300}>CONFIRM UPGRADE</Text.Black>
-            </ThemedButtonActions>
-            <SkillRarityLabel
-              backgroundColor={darken(0.02, theme.rarity[rarity].backgroundColor)}
-              color={OFF_WHITE}
-              fontSize="2rem"
-              fontWeight={100}
-              borderRadius="0.3rem"
-              marginLeft="0"
-              width="100%"
-              textShadow={`1px 1px 1px ${darken(0.3, theme.rarity[rarity].backgroundColor)}`}
-              justifyContent="flex-start"
-            >
-              <img src={theme.assetsMap.icons.rarity[rarity]} style={{ maxWidth: '2.5rem', marginRight: '0.3rem' }} />
-              <strong>{rarity?.toLocaleUpperCase()}</strong> SKILL
-            </SkillRarityLabel>
-          </Column>
+          <TradeAndUnlockActionButton skill={activeSkill} />
         </Row>
         {chainId && (
           <AutoRow>

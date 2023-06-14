@@ -1,4 +1,4 @@
-import { useForgeMetadataReadAtom, useForgeWindowSizeAtom } from '@past3lle/forge-web3'
+import { useForgeMetadataReadAtom, useForgeWindowSizeAtom, useSupportedChainId } from '@past3lle/forge-web3'
 import { MEDIA_WIDTHS } from '@past3lle/theme'
 import { useEffect, useMemo } from 'react'
 
@@ -13,9 +13,10 @@ import {
 } from '../../../constants/skills'
 
 export function GridPositionUpdater() {
-  const [metadata] = useForgeMetadataReadAtom()
+  const chainId = useSupportedChainId()
+  const [metadata] = useForgeMetadataReadAtom(chainId)
   const [active] = useActiveSkillReadAtom()
-  const [{ vectors }, setVectorsState] = useVectorsAtom()
+  const [, setVectorsState] = useVectorsAtom()
   const [windowSizeState] = useForgeWindowSizeAtom()
 
   const gridConstants = useMemo(() => {
@@ -23,11 +24,11 @@ export function GridPositionUpdater() {
 
     if (!container) return null
 
-    const highestRowCount = !metadata?.[0]?.ids?.length
+    const highestRowCount = !metadata?.[0]?.length
       ? EMPTY_COLLECTION_ROWS_SIZE
       : metadata.length === 1
-      ? metadata[0]?.ids?.length
-      : metadata.slice().sort((a, b) => (b?.ids?.length || 0) - (a?.ids?.length || 0))[0].ids.length
+      ? metadata[0]?.length
+      : metadata.slice().sort((a, b) => (b?.length || 0) - (a?.length || 0))[0].length
     const columns = Math.max(MINIMUM_COLLECTION_BOARD_SIZE, metadata.length)
     const rows = highestRowCount
 
@@ -43,32 +44,26 @@ export function GridPositionUpdater() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [metadata, windowSizeState.height, windowSizeState.width])
 
-  useEffect(
-    () => {
-      if (gridConstants) {
-        setVectorsState((vectorsState) => ({
-          ...vectorsState,
-          vectors: calculateGridPoints(metadata, gridConstants)
-        }))
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [windowSizeState.height, windowSizeState.width, active, metadata]
-  )
-
-  // TODO: make this more efficient, e.g only update which vectors we know changed
   useEffect(() => {
-    if (vectors.length > 0) {
-      const vectorsMap = vectors.reduce((acc, next) => {
-        const id = next.skillId
-        if (id) {
-          acc[id] = next
-        }
-        return acc
-      }, {} as SkillVectorsMap)
-      setVectorsState((state) => ({ ...state, vectorsMap }))
+    if (gridConstants) {
+      const vectors = calculateGridPoints(metadata, gridConstants)
+      setVectorsState((vectorsState) => ({
+        ...vectorsState,
+        vectors
+      }))
+
+      if (vectors.length > 0) {
+        const vectorsMap = vectors.reduce((acc, next) => {
+          const id = next.skillId
+          if (id) {
+            acc[id] = next
+          }
+          return acc
+        }, {} as SkillVectorsMap)
+        setVectorsState((state) => ({ ...state, vectorsMap }))
+      }
     }
-  }, [setVectorsState, vectors])
+  }, [windowSizeState.height, windowSizeState.width, active, metadata, gridConstants, setVectorsState])
 
   return null
 }
