@@ -1,13 +1,21 @@
 import { SUPPORTED_CHAINS } from './chains'
-import { ForgeW3CoreProvidersProps } from '@past3lle/forge-web3'
+import { Web3ModalConfigWeb3Props } from '@past3lle/forge-web3'
 import { FORGE_LOGO_URL_MAP } from '@past3lle/web3-modal'
 import { TorusWalletConnectorPlugin } from '@web3auth/torus-wallet-connector-plugin'
 import React from 'react'
 import { pstlModalTheme as PSTL_MODAL_THEME } from 'theme/pstlModal'
 import { skillforgeTheme as SKILLFORGE_THEME } from 'theme/skillforge'
 
+if (
+  !process.env.REACT_APP_WEB3MODAL_ID ||
+  !process.env.REACT_APP_WEB3AUTH_ID ||
+  !process.env.REACT_APP_WEB3_AUTH_NETWORK
+) {
+  throw new Error('Missing W3A and/or W3M projectID env variables!')
+}
+
 export const SKILLFORGE_APP_NAME = 'SKILLFORGE'
-export const WEB3_PROPS: ForgeW3CoreProvidersProps['config']['web3'] = {
+export const WEB3_PROPS: Web3ModalConfigWeb3Props = {
   chains: SUPPORTED_CHAINS,
   wagmiClient: {
     options: {
@@ -18,7 +26,10 @@ export const WEB3_PROPS: ForgeW3CoreProvidersProps['config']['web3'] = {
     w3a: {
       appName: SKILLFORGE_APP_NAME,
       // CYAN = USA focused
-      network: process.env.NODE_ENV === 'production' ? 'cyan' : 'testnet',
+      network:
+        process.env.NODE_ENV === 'production'
+          ? (process.env.REACT_APP_WEB3_AUTH_NETWORK as Web3ModalConfigWeb3Props['modals']['w3a']['network'])
+          : 'testnet',
       projectId: process.env.REACT_APP_WEB3AUTH_ID as string,
       storageKey: 'session',
       preset: 'DISALLOW_EXTERNAL_WALLETS',
