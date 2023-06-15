@@ -22,8 +22,24 @@ export function useForgeClaimLockedSkill(args: { token: Address; id: BigNumber }
 
   if (error) {
     devError('useForgeClaimLockedSkill prepare contract for write error!', error)
-    throw new Error('useForgeClaimLockedSkill prepare contract for write error!')
   }
 
   return useContractWrite(config)
+}
+
+export function useForgeUnpreparedClaimLockedSkill(args: { token: Address; id: BigNumber }) {
+  const chainId = useSupportedChainId()
+  const [contractAddresses] = useForgeContractAddressMapReadAtom()
+
+  const mergeManager = chainId ? contractAddresses[chainId]?.mergeManager : undefined
+
+  const config = {
+    mode: 'recklesslyUnprepared',
+    address: mergeManager,
+    abi: MergeManager__factory.abi,
+    functionName: 'claimLockedSkill',
+    args: [args]
+  }
+
+  return useContractWrite(config as any)
 }

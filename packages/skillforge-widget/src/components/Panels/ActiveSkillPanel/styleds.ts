@@ -1,5 +1,5 @@
 import { Column, Row } from '@past3lle/components'
-import { upToSmall } from '@past3lle/theme'
+import { upToExtraSmall, upToSmall } from '@past3lle/theme'
 import styled from 'styled-components'
 
 import { ThemedButtonActions, ThemedButtonExternalLink } from '../../Common/Button'
@@ -35,6 +35,10 @@ export const ActiveSkillPanelContainer = styled(Column)`
     font-size: 2.5rem;
     padding: 0.5rem 1.5rem 0.5rem 0.8rem;
   }
+
+  ${upToExtraSmall`
+    padding: 0 2rem;
+  `}
 
   ${upToSmall`
     ${SkillStatusLabel}, ${SkillRarityLabel} {

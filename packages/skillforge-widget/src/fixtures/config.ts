@@ -24,17 +24,17 @@ const DEFAULT_PROPS: ForgeW3CoreProvidersProps['config']['web3'] = {
 }
 const DEFAULT_CONFIG_PROPS: any = {
   metadataUris: {
-    [5]: { collectionsManager: 'www.google.com' },
-    [80001]: { collectionsManager: 'www.google.com' }
+    [5]: { collectionsManager: 'https://pstlcollections.s3.eu-south-2.amazonaws.com/collections/' },
+    [80001]: { collectionsManager: 'https://pstlcollections.s3.eu-south-2.amazonaws.com/collections/' }
   },
   contractAddresses: {
     [5]: {
-      collectionsManager: '0x9e8e103ed51A18E92c0938573f9b7fB4A393083a',
+      collectionsManager: '0x9f4d9aC52C7356E00A4e9b732Dbd6377EcE19EE4',
       mergeManager: '0x0B397B88C96E22E63D6D9b802df62fe40bB1B544'
     },
     // TODO: change to mumbai addresses
     [80001]: {
-      collectionsManager: '0x9e8e103ed51A18E92c0938573f9b7fB4A393083a',
+      collectionsManager: '0xbb76e8eeBe675787B1056A8418733F13967Be209',
       mergeManager: '0x0B397B88C96E22E63D6D9b802df62fe40bB1B544'
     }
   }

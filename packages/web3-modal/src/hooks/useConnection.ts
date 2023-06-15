@@ -1,7 +1,7 @@
 import { useIsSmallMediaWidth } from '@past3lle/hooks'
 import { useWeb3Modal } from '@web3modal/react'
 import { useCallback } from 'react'
-import { Address, Chain, Connector, useAccount, useConnect, useDisconnect, useNetwork } from 'wagmi'
+import { Address, Chain, Connector, useAccount, useBalance, useConnect, useDisconnect, useNetwork } from 'wagmi'
 
 import { usePstlWeb3Modal } from './usePstlWeb3Modal'
 
@@ -18,6 +18,7 @@ export type PstlW3mConnectionHook = [
   Callbacks,
   {
     address?: Address
+    balanceInfo: ReturnType<typeof useBalance>
     chain?: Chain
     currentConnector: ReturnType<typeof useAccount>['connector']
     error: Error | null
@@ -54,8 +55,14 @@ export function useConnection(): PstlW3mConnectionHook {
   } = useConnect()
   const { disconnect } = useDisconnect()
   const { address, connector, isConnected, isConnecting, isDisconnected, isReconnecting } = useAccount()
-
+  
+  
   const { chain } = useNetwork()
+  
+  const balanceInfo = useBalance({
+    address,
+    chainId: chain?.id
+  })
 
   const isMobileWidth = useIsSmallMediaWidth()
 
@@ -74,6 +81,7 @@ export function useConnection(): PstlW3mConnectionHook {
     { connect, disconnect, openW3Modal, openPstlW3Modal, onNetworkClick, onAccountClick },
     {
       address,
+      balanceInfo,
       chain,
       currentConnector: connector,
       error,

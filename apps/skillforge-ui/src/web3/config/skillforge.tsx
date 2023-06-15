@@ -17,9 +17,10 @@ export const WEB3_PROPS: ForgeW3CoreProvidersProps['config']['web3'] = {
   modals: {
     w3a: {
       appName: SKILLFORGE_APP_NAME,
-      // TODO: change this once ready for production
-      network: process.env.NODE_ENV === 'production' ? 'aqua' : 'testnet',
+      // CYAN = USA focused
+      network: process.env.NODE_ENV === 'production' ? 'cyan' : 'testnet',
       projectId: process.env.REACT_APP_WEB3AUTH_ID as string,
+      storageKey: 'session',
       preset: 'DISALLOW_EXTERNAL_WALLETS',
       configureAdditionalConnectors() {
         // Add Torus Wallet Plugin (optional)
@@ -40,7 +41,8 @@ export const WEB3_PROPS: ForgeW3CoreProvidersProps['config']['web3'] = {
               logoDark: FORGE_LOGO_URL_MAP[500]['1x'],
               logoLight: FORGE_LOGO_URL_MAP[500]['1x']
             },
-            useWalletConnect: false
+            showTorusButton: true,
+            useWalletConnect: true
           }
         })
 

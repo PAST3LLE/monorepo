@@ -14,7 +14,7 @@ import {
 } from '@past3lle/forge-web3'
 import { OFF_WHITE, urlToSimpleGenericImageSrcSet } from '@past3lle/theme'
 import { darken } from 'polished'
-import React, { useCallback, useMemo, useRef } from 'react'
+import React, { useMemo, useRef } from 'react'
 import { useTheme } from 'styled-components'
 import { Address, useWaitForTransaction } from 'wagmi'
 
@@ -73,10 +73,6 @@ export function TradeAndUnlockPanel() {
       setPanelState('reset')
     }
   })
-
-  const handleClaim = useCallback(async () => {
-    return writeAsync?.()
-  }, [writeAsync])
 
   const isClickedButNoHash = isLoading && !data?.hash
   const isPending = isLoadingHash || isLoading || (!!data?.hash && !isSuccessHash)
@@ -150,7 +146,7 @@ export function TradeAndUnlockPanel() {
         )}
 
         <SkillTradeExpandingContainer showHover={requiresSeveralDepsOfDifferentRarities}>
-          <Column minWidth={'12rem'} width="100%" gap="0.25rem">
+          <Column minWidth={'15rem'} width="100%" gap="0.25rem">
             {[...depsMap.entries()].map(([rarity, { length }], idx) => (
               <SkillRarityLabel
                 id={`${rarity}_${idx}`}
@@ -188,9 +184,7 @@ export function TradeAndUnlockPanel() {
             justifyContent="flex-start"
           >
             <img src={theme.assetsMap.icons.rarity[rarity]} style={{ maxWidth: '2.5rem', marginRight: '0.3rem' }} />
-            <strong style={{ fontSize: '1.65rem', letterSpacing: '-0.3px' }}>
-              {rarity?.toLocaleUpperCase()} SKILL
-            </strong>
+            <strong style={{ fontSize: '1.65rem', letterSpacing: '-0.3px' }}>{rarity?.toLocaleUpperCase()}</strong>
           </SkillRarityLabel>
         </SkillTradeExpandingContainer>
 
@@ -255,7 +249,7 @@ export function TradeAndUnlockPanel() {
               `
                 }}
               />
-              {!isPending && <TradeAndUnlockActionButton skill={activeSkill} handleClaim={handleClaim} />}
+              {!isPending && <TradeAndUnlockActionButton skill={activeSkill} handleClaim={writeAsync} />}
             </Row>
 
             {chainId && (

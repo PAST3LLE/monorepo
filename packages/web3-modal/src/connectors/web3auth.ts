@@ -13,6 +13,7 @@ export interface PstlWeb3AuthConnectorProps<ID extends number> {
   chains: ChainsPartialReadonly<ID>
   zIndex?: number
   network: Web3AuthOptions['web3AuthNetwork']
+  storageKey?: Web3AuthOptions['storageKey']
   preset?: 'DISALLOW_EXTERNAL_WALLETS' | 'ALLOW_EXTERNAL_WALLETS'
   projectId: string
   appName: string
@@ -37,7 +38,7 @@ export function PstlWeb3AuthConnector<ID extends number>({
   zIndex = Z_INDICES.W3A,
   preset = 'ALLOW_EXTERNAL_WALLETS',
   configureAdditionalConnectors
-}: PstlWeb3AuthConnectorProps<ID>) {
+}: PstlWeb3AuthConnectorProps<ID>): Web3AuthConnector {
   if (!projectId) throw new Error('Missing REACT_APP_WEB3AUTH_ID! Check env.')
 
   const chainConfig = {
@@ -82,7 +83,9 @@ export function PstlWeb3AuthConnector<ID extends number>({
   // custom connector callback
   const pluginsList = configureAdditionalConnectors?.()
   if (!!pluginsList?.length) {
-    pluginsList?.forEach((plugin) => web3AuthInstance.addPlugin(plugin))
+    pluginsList?.forEach((plugin) => {
+      web3AuthInstance.addPlugin(plugin)
+    })
   }
 
   return new Web3AuthConnector({

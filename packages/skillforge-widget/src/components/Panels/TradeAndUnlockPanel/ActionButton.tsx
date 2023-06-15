@@ -8,12 +8,12 @@ import { useTheme } from 'styled-components'
 import { ThemedButtonActions } from '../../Common/Button'
 import { SkillRarityLabel } from '../ActiveSkillPanel/styleds'
 
-export function TradeAndUnlockActionButton({ skill, handleClaim }: { skill: SkillMetadata; handleClaim: () => void }) {
+export function TradeAndUnlockActionButton({ skill, handleClaim }: { skill: SkillMetadata; handleClaim?: () => void }) {
   const theme = useTheme()
 
   return (
-    <Column justifyContent={'center'} gap="0.75rem">
-      <ThemedButtonActions fontSize="2rem" onClick={handleClaim}>
+    <Column justifyContent={'center'} gap="0.75rem" width={'40%'}>
+      <ThemedButtonActions fontSize="2rem" disabled={!handleClaim} onClick={handleClaim}>
         <Text.Black fontWeight={300}>{'CONFIRM UPGRADE'}</Text.Black>
       </ThemedButtonActions>
       <SkillRarityLabel

@@ -1,4 +1,5 @@
 import { proxy, subscribe as valtioSub } from 'valtio/vanilla'
+import { Chain } from 'wagmi'
 
 import { ClientCtrl } from './ClientCtrl'
 import type { OptionsCtrlState } from './types/controllerTypes'
@@ -17,8 +18,24 @@ const state = proxy<OptionsCtrlState>({
   walletConnectVersion: 1
 })
 
+type OptionsCtrl = {
+  state: OptionsCtrlState
+  subscribe: (callback: (newState: OptionsCtrlState) => void) => () => void
+  setChains(chains?: OptionsCtrlState['chains']): void
+  setStandaloneChains(standaloneChains: OptionsCtrlState['standaloneChains']): void
+  setStandaloneUri(standaloneUri: OptionsCtrlState['standaloneUri']): void
+  getSelectedChain(): Chain | undefined
+  setIsStandalone(isStandalone: OptionsCtrlState['isStandalone']): void
+  setSelectedChain(selectedChain: OptionsCtrlState['selectedChain']): void
+  setIsCustomDesktop(isCustomDesktop: OptionsCtrlState['isCustomDesktop']): void
+  setIsCustomMobile(isCustomMobile: OptionsCtrlState['isCustomMobile']): void
+  setIsDataLoaded(isDataLoaded: OptionsCtrlState['isDataLoaded']): void
+  setIsUiLoaded(isUiLoaded: OptionsCtrlState['isUiLoaded']): void
+  setWalletConnectVersion(walletConnectVersion: OptionsCtrlState['walletConnectVersion']): void
+}
+
 // -- controller --------------------------------------------------- //
-export const OptionsCtrl = {
+export const OptionsCtrl: OptionsCtrl = {
   state,
 
   subscribe(callback: (newState: OptionsCtrlState) => void) {

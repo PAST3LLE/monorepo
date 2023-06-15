@@ -58,10 +58,12 @@ function getBalanceOfBatchArgs(
   if (!address) return [[], []]
   return skills.reduce(
     (acc: [Address[], BigNumber[]], skill) => {
-      const [, id] = skill.properties.id.split('-')
+      if (skill) {
+        const [, id] = skill.properties.id.split('-')
 
-      acc[0] = [...acc[0], address]
-      acc[1] = [...acc[1], BigNumber.from(id)]
+        acc[0] = [...acc[0], address]
+        acc[1] = [...acc[1], BigNumber.from(id)]
+      }
       return acc
     },
     [[], []] as [Address[], BigNumber[]]

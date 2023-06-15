@@ -1,20 +1,26 @@
 import { ButtonVariations, ColumnCenter, PstlButton } from '@past3lle/components'
 import { ThemeProvider, createCustomTheme } from '@past3lle/theme'
 import { TorusWalletConnectorPlugin } from '@web3auth/torus-wallet-connector-plugin'
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useEffect, useState } from 'react'
 import { useTheme } from 'styled-components'
 import { useAccount } from 'wagmi'
 
-import { usePstlWeb3Modal } from '../hooks'
+import { useConnection, usePstlWeb3Modal } from '../hooks'
 import { PstlW3Providers } from '../providers'
-import { commonProps, pstlModalTheme } from './config'
+import { WEB3AUTH_TEST_ID, commonProps, pstlModalTheme } from './config'
 
 interface Web3ButtonProps {
   children?: ReactNode
 }
 const Web3Button = ({ children = <div>Show PSTL Wallet Modal</div> }: Web3ButtonProps) => {
-  const { address } = useAccount()
+  const [, ,{ address, currentConnector: connector } ] = useConnection()
   const { open } = usePstlWeb3Modal()
+
+  const [provider, setProvider] = useState()
+
+  useEffect(() => {
+    connector?.getSigner().then(setProvider)
+  }, [connector])
 
   return (
     <ColumnCenter>
@@ -25,6 +31,8 @@ const Web3Button = ({ children = <div>Show PSTL Wallet Modal</div> }: Web3Button
         {children}
       </PstlButton>
       <h3>Connected to {address || 'DISCONNECTED!'}</h3>
+      <h3>Connector: {connector?.id}</h3>
+      <h3>Provider: {JSON.stringify(provider, null, 2)}</h3>
     </ColumnCenter>
   )
 }
@@ -66,7 +74,8 @@ function InnerApp() {
               // Add Torus Wallet Plugin (optional)
               const torusPlugin = new TorusWalletConnectorPlugin({
                 torusWalletOpts: {
-                  buttonPosition: 'bottom-left'
+                  buttonPosition: 'bottom-right',
+                  apiKey: WEB3AUTH_TEST_ID
                 },
                 walletInitOptions: {
                   whiteLabel: {
@@ -134,12 +143,24 @@ function InnerApp() {
         }
       }}
     >
+      <AppWithWagmiAccess />
       <h1>MODE: {mode}</h1>
       <button onClick={() => setMode(mode === 'LIGHT' ? 'DARK' : 'LIGHT')}>Change theme mode</button>
       <button onClick={() => setMode('DEFAULT')}>Revert to default</button>
       <Web3Button />
     </PstlW3Providers>
   )
+}
+
+function AppWithWagmiAccess() {
+  const accountApi = useAccount()
+  console.debug('Account API', accountApi.connector)
+  
+  accountApi.connector?.getProvider().then(res => console.debug('getProvider', res))
+  accountApi.connector?.getSigner().then(res => console.debug('getSigner', res))
+  console.debug('Torus EVM Wallet', accountApi.connector?.options?.web3AuthInstance?.walletAdapters?.['torus-evm'])
+
+  return <h1>Here has wagmi access</h1>
 }
 
 const withThemeProvider = (Component: () => JSX.Element | null) => (

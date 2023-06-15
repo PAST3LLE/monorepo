@@ -1,7 +1,15 @@
+import { BigNumber } from '@ethersproject/bignumber'
+import { Address } from '@past3lle/types'
 import { Web3Button } from '@web3modal/react'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
-import { ForgeW3Providers, useW3Connection, useW3Modal } from '..'
+import {
+  ForgeW3Providers,
+  useForgeCollectionContract,
+  useForgeUnpreparedClaimLockedSkill,
+  useW3Connection,
+  useW3Modal
+} from '..'
 import { commonProps, contractProps } from './config'
 
 /* 
@@ -15,7 +23,22 @@ import { commonProps, contractProps } from './config'
 
 function InnerApp() {
   const { open } = useW3Modal()
-  const [, , { address }] = useW3Connection()
+  const [, , { address, balanceInfo }] = useW3Connection()
+
+  const data = useForgeUnpreparedClaimLockedSkill({
+    token: '0x1b18aC6D5371FeD52521964145E2c8aAF7571a88',
+    id: BigNumber.from(3000)
+  })
+
+  const collectionContract = useForgeCollectionContract({ collectionId: 1 })
+
+  const [balanceOf1000, setBalanceOf1000] = useState('0')
+  useEffect(() => {
+    address &&
+      collectionContract.read
+        .balanceOf(address as Address, BigNumber.from(1000))
+        .then((res) => res && setBalanceOf1000(res.toString()))
+  }, [address, collectionContract])
 
   return (
     <div>
@@ -23,6 +46,11 @@ function InnerApp() {
         Open Pstl Web3 Modal
       </button>
       <h1>{address || 'Disconnected'}</h1>
+      <h1>{(balanceInfo.data?.formatted || 0) + ' ETH' || '0 ETH'}</h1>
+      <h1>Collection 1, ID 1000 balance: {balanceOf1000}</h1>
+      <button disabled={!data.writeAsync} onClick={() => data.writeAsync?.()}>
+        Claim skill
+      </button>
     </div>
   )
 }

@@ -4,7 +4,6 @@ import { useMemo } from 'react'
 import { Address, useContract, useContractRead, useProvider } from 'wagmi'
 
 import { useForgeContractAddressMapReadAtom } from '../../state'
-import { CallOverrides, PayableOverrides } from '../../types'
 import { WAGMI_SCOPE_KEYS } from '../constants'
 import { WithCollectionId } from '../types'
 import { useSupportedChainId } from '../useForgeSupportedChainId'
@@ -32,29 +31,28 @@ export function useForgeCollectionContract({ collectionId }: WithCollectionId) {
   return {
     read: useMemo(
       () => ({
-        balanceOf: async (account: Address, id: BigNumber, overrides?: CallOverrides) =>
-          collectionContract?.balanceOf(account, id, overrides),
-        balanceOfBatch: async (accountBatch: Address[], idBatch: BigNumber[], overrides?: CallOverrides) =>
-          collectionContract?.balanceOfBatch(accountBatch, idBatch, overrides),
+        balanceOf: async (account: Address, id: BigNumber) =>
+          collectionContract?.balanceOf(account, id),
+        balanceOfBatch: async (accountBatch: Address[], idBatch: BigNumber[] ) =>
+          collectionContract?.balanceOfBatch(accountBatch, idBatch),
         getUri: async (id: number) => collectionContract?.uri(BigNumber.from(id)),
-        getCollectionAddress: async (overrides?: CallOverrides) => collectionContract?.getCollectionAddress(overrides),
-        getCollectionId: async (overrides?: CallOverrides) => collectionContract?.getCollectionId(overrides)
+        getCollectionAddress: async () => collectionContract?.getCollectionAddress(),
+        getCollectionId: async () => collectionContract?.getCollectionId()
       }),
       [collectionContract]
     ),
     write: useMemo(
       () => ({
-        mint: async (to: Address, id: BigNumber, amount: BigNumber, data: Address, overrides?: PayableOverrides) =>
-          collectionContract?.mint(to, id, amount, data, overrides),
+        mint: async (to: Address, id: BigNumber, amount: BigNumber, data: Address) =>
+          collectionContract?.mint(to, id, amount, data),
         mintBatch: async (
           to: Address,
           idBatch: BigNumber[],
           amountBatch: BigNumber[],
           data: Address,
-          overrides?: PayableOverrides
-        ) => collectionContract?.mintBatch(to, idBatch, amountBatch, data, overrides),
-        pause: async (overrides?: PayableOverrides) => collectionContract?.pause(overrides),
-        unpause: async (overrides?: PayableOverrides) => collectionContract?.unpause(overrides)
+        ) => collectionContract?.mintBatch(to, idBatch, amountBatch, data),
+        pause: async () => collectionContract?.pause(),
+        unpause: async () => collectionContract?.unpause()
       }),
       [collectionContract]
     )

@@ -18,7 +18,7 @@ export function ActiveSkillUpdater() {
   // Updates the activeDepedencies whenever the active skill changes
   useEffect(() => {
     const activeSkill = skillsState.active[0]
-    if (activeSkill) {
+    if (activeSkill && metadataMap?.[activeSkill]) {
       updateSkillsState((state) => ({
         ...state,
         activeDependencies: metadataMap[activeSkill].properties.dependencies.map(

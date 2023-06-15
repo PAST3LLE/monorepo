@@ -6,6 +6,7 @@ import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { useGetSkillFromIdCallback } from '../../../hooks/skills'
+import { useSidePanelWriteAtom } from '../../../state/SidePanel'
 import { SkillGridPositionList, useVectorsAtom } from '../../../state/Skills'
 import { baseTheme } from '../../../theme/base'
 import { MAIN_FG } from '../../../theme/constants'
@@ -34,9 +35,10 @@ export function UserStatsPanel() {
   }, [balances, vectors])
 
   const assetsMap = useAssetsMap()
+  const [, setPanelState] = useSidePanelWriteAtom()
 
   return (
-    <SidePanel header="INVENTORY">
+    <SidePanel header="INVENTORY" onDismiss={() => setPanelState()}>
       <UserStatsPanelContainer>
         <Row padding="1rem 2rem" gap="0 1rem" backgroundColor={baseTheme.mainBg}>
           <CursiveMonoHeader

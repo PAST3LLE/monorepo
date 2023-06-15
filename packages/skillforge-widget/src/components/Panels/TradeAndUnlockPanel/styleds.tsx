@@ -1,4 +1,5 @@
 import { Column, RowCenter, Text } from '@past3lle/components'
+import { upToExtraSmall } from '@past3lle/theme'
 import styled from 'styled-components'
 
 import { ThemedButtonActions } from '../../Common/Button'
@@ -22,6 +23,10 @@ export const TradeAndUnlockPanelContainer = styled(ActiveSkillPanelContainer)`
       }
     }
   }
+
+  ${Column} > ${SkillRarityLabel} {
+    width: 100%;
+  }
 `
 
 export const SkillTradeExpandingContainer = styled(RowCenter)<{ showHover?: boolean }>`
@@ -32,6 +37,10 @@ export const SkillTradeExpandingContainer = styled(RowCenter)<{ showHover?: bool
   overflow: hidden;
   min-height: 6rem;
   padding: 0 1rem;
+
+  ${upToExtraSmall`
+    padding: 0;
+  `}
 
   ${({ showHover }) =>
     showHover &&
