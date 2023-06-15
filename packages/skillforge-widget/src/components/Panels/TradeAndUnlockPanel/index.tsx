@@ -1,20 +1,26 @@
-import { AutoRow, Column, ExternalLink, Row, RowCenter, Text } from '@past3lle/components'
+import { BigNumber } from '@ethersproject/bignumber'
+import { AutoRow, Column, ExternalLink, Row, RowCenter, SpinnerCircle, Text } from '@past3lle/components'
 import {
   ForgeMetadataState,
   SkillDependencyObject,
   SkillId,
   SkillRarity,
+  ipfsToImageUri,
   useForgeBalancesReadAtom,
+  useForgeClaimLockedSkill,
+  useForgeIpfsGatewayUrisAtom,
   useForgeMetadataMapReadAtom,
   useSupportedChainId
 } from '@past3lle/forge-web3'
-import { OFF_WHITE } from '@past3lle/theme'
+import { OFF_WHITE, urlToSimpleGenericImageSrcSet } from '@past3lle/theme'
 import { darken } from 'polished'
-import React, { useMemo, useRef } from 'react'
+import React, { useCallback, useMemo, useRef } from 'react'
 import { useTheme } from 'styled-components'
+import { Address, useWaitForTransaction } from 'wagmi'
 
 import { SKILLPOINTS_CONTAINER_ID } from '../../../constants/skills'
 import { useGetActiveSkillFromActiveSkillId } from '../../../hooks/useGetActiveSkillFromActiveSkillId'
+import { useSidePanelAtom } from '../../../state/SidePanel'
 import { baseTheme } from '../../../theme/base'
 import { buildSkillMetadataExplorerUri } from '../../../utils/skills'
 import { BlackHeader, MonospaceText } from '../../Common/Text'
@@ -52,25 +58,96 @@ export function TradeAndUnlockPanel() {
     }
   }, [activeSkill, chainId, metadataMap])
 
+  const [token, id] = activeSkill.properties.id.split('-')
+  const { data, writeAsync, isLoading } = useForgeClaimLockedSkill({
+    token: token as Address,
+    id: BigNumber.from(id)
+  })
+
+  const [, setPanelState] = useSidePanelAtom()
+
+  const { isLoading: isLoadingHash, isSuccess: isSuccessHash } = useWaitForTransaction({
+    hash: data?.hash,
+    onSettled() {
+      // close panel on any settled state
+      setPanelState('reset')
+    }
+  })
+
+  const handleClaim = useCallback(async () => {
+    return writeAsync?.()
+  }, [writeAsync])
+
+  const isClickedButNoHash = isLoading && !data?.hash
+  const isPending = isLoadingHash || isLoading || (!!data?.hash && !isSuccessHash)
+
+  const [gatewayUris] = useForgeIpfsGatewayUrisAtom()
+  const bgImageSet = urlToSimpleGenericImageSrcSet(ipfsToImageUri(activeSkill.image, ...gatewayUris.slice(1)))
+
   return (
     <SidePanel
       header={activeSkill?.name || 'Unknown'}
       styledProps={{
-        background: cardColour,
-        padding: '2.5rem 0 4rem 0'
+        background: isPending ? '#fff' : cardColour,
+        bgWithDpiOptions: isPending
+          ? {
+              bgSet: bgImageSet,
+              color: '#fff'
+            }
+          : undefined,
+        padding: '2.5rem 0 4rem 0',
+        filter: isPending ? 'invert(1) hue-rotate(180deg)' : 'none',
+        transition: 'filter 1s ease-out'
       }}
       options={{
         onClickOutsideConditionalCb: (targetNode: Node) => !!skillContainerRef?.current?.contains(targetNode)
       }}
-      onDismiss={console.log}
-      onBack={console.log}
+      onDismiss={() => setPanelState()}
+      onBack={() => setPanelState()}
     >
       <TradeAndUnlockPanelContainer gap="1rem">
         <Row justifyContent={'center'} margin="0">
           <Text.SubHeader fontSize={'2.5rem'} fontWeight={200}>
-            TRADE SKILLS AND UNLOCK {activeSkill.name.toUpperCase() || 'SKILL'}!
+            {isClickedButNoHash ? (
+              <>
+                <p>UPGRADE IN PROGRESS</p>
+                PLEASE CONFIRM WITH YOUR CONNECTED WALLET TO CONTINUE!
+              </>
+            ) : isPending ? (
+              <>
+                <p>AWAITING SUCCESS CONFIRMATION</p>
+                MODAL WILL CLOSE WHEN UPGRADE COMPLETES.
+              </>
+            ) : (
+              `TRADE SKILLS AND UNLOCK ${activeSkill.name.toUpperCase() || 'SKILL'}!`
+            )}
           </Text.SubHeader>
         </Row>
+
+        {isPending && (
+          <RowCenter
+            margin={'2rem auto 4rem'}
+            width="100%"
+            css={`
+              filter: invert(1);
+            `}
+          >
+            <SpinnerCircle size={80} />
+          </RowCenter>
+        )}
+
+        {isPending && (
+          <Row marginBottom={'2rem'}>
+            <MonospaceText>
+              Checkout this{' '}
+              <ExternalLink href="#">
+                {' '}
+                <strong style={{ color: baseTheme.mainBg }}>tutorial</strong>{' '}
+              </ExternalLink>{' '}
+              to understand skill upgrade and claiming works.
+            </MonospaceText>
+          </Row>
+        )}
 
         <SkillTradeExpandingContainer showHover={requiresSeveralDepsOfDifferentRarities}>
           <Column minWidth={'12rem'} width="100%" gap="0.25rem">
@@ -117,54 +194,56 @@ export function TradeAndUnlockPanel() {
           </SkillRarityLabel>
         </SkillTradeExpandingContainer>
 
-        <RequiredDepsContainer overflow={'visible'} background="linear-gradient(90deg, black, transparent 80%)">
-          <BlackHeader
-            fontSize="1.8rem"
-            fontWeight={100}
-            margin="0 0 0.25rem 0"
-            padding="0"
-            letterSpacing={-1}
-            width="max-content"
-          >
-            SKILLS TO TRADE FOR UPGRADE
-          </BlackHeader>
-          <SkillsCardDeck
-            balances={balances}
-            deps={activeSkill?.properties.dependencies}
-            metadataMap={metadataMap}
-            theme={theme}
-          />
-        </RequiredDepsContainer>
+        {!isPending && (
+          <>
+            <RequiredDepsContainer overflow={'visible'} background="linear-gradient(90deg, black, transparent 80%)">
+              <BlackHeader
+                fontSize="1.8rem"
+                fontWeight={100}
+                margin="0 0 0.25rem 0"
+                padding="0"
+                letterSpacing={-1}
+                width="max-content"
+              >
+                SKILLS TO TRADE FOR UPGRADE
+              </BlackHeader>
+              <SkillsCardDeck
+                balances={balances}
+                deps={activeSkill?.properties.dependencies}
+                metadataMap={metadataMap}
+                theme={theme}
+              />
+            </RequiredDepsContainer>
 
-        <BlackHeader
-          fontSize="1.8rem"
-          fontWeight={100}
-          margin="1rem 0 -0.3rem 0"
-          padding="0"
-          width="max-content"
-          letterSpacing={-1}
-        >
-          SKILL TO UNLOCK + RECEIVE
-        </BlackHeader>
-        <Row
-          id="skill-image-and-store-button"
-          justifyContent={'space-around'}
-          marginBottom="12%"
-          flexWrap={'wrap'}
-          gap="1rem 4rem"
-        >
-          <Skillpoint
-            forceRarity="empty"
-            metadata={activeSkill}
-            hasSkill={false}
-            disabledHighlight
-            skillpointStyles={{
-              height: '80%',
-              flex: 1.4,
-              padding: '0',
-              backgroundColor: 'transparent',
-              justifyContent: 'center',
-              css: `
+            <BlackHeader
+              fontSize="1.8rem"
+              fontWeight={100}
+              margin="1rem 0 -0.3rem 0"
+              padding="0"
+              width="max-content"
+              letterSpacing={-1}
+            >
+              SKILL TO UNLOCK + RECEIVE
+            </BlackHeader>
+            <Row
+              id="skill-image-and-store-button"
+              justifyContent={'space-around'}
+              marginBottom="12%"
+              flexWrap={'wrap'}
+              gap="1rem 4rem"
+            >
+              <Skillpoint
+                forceRarity="empty"
+                metadata={activeSkill}
+                hasSkill={false}
+                disabledHighlight
+                skillpointStyles={{
+                  height: '80%',
+                  flex: 1.4,
+                  padding: '0',
+                  backgroundColor: 'transparent',
+                  justifyContent: 'center',
+                  css: `
                 > ${RowCenter} {
                   justify-content: flex-start;
                   min-height: 200px;
@@ -174,31 +253,35 @@ export function TradeAndUnlockPanel() {
                   }
                 }
               `
-            }}
-          />
-          <TradeAndUnlockActionButton skill={activeSkill} />
-        </Row>
-        {chainId && (
-          <AutoRow>
-            <MonospaceText>
-              View on{' '}
-              <ExternalLink href={metadataExplorerUri}>
-                {' '}
-                <strong style={{ color: baseTheme.mainBg }}>OpenSea</strong>{' '}
-              </ExternalLink>{' '}
-            </MonospaceText>
-          </AutoRow>
+                }}
+              />
+              {!isPending && <TradeAndUnlockActionButton skill={activeSkill} handleClaim={handleClaim} />}
+            </Row>
+
+            {chainId && (
+              <AutoRow>
+                <MonospaceText>
+                  View on{' '}
+                  <ExternalLink href={metadataExplorerUri}>
+                    {' '}
+                    <strong style={{ color: baseTheme.mainBg }}>OpenSea</strong>{' '}
+                  </ExternalLink>{' '}
+                </MonospaceText>
+              </AutoRow>
+            )}
+
+            <Row marginTop={'4rem'}>
+              <MonospaceText>
+                Checkout this{' '}
+                <ExternalLink href="#">
+                  {' '}
+                  <strong style={{ color: baseTheme.mainBg }}>tutorial</strong>{' '}
+                </ExternalLink>{' '}
+                to understand how to claim your skillpoint NFT.
+              </MonospaceText>
+            </Row>
+          </>
         )}
-        <Row marginTop={'4rem'}>
-          <MonospaceText>
-            Checkout this{' '}
-            <ExternalLink href="#">
-              {' '}
-              <strong style={{ color: baseTheme.mainBg }}>tutorial</strong>{' '}
-            </ExternalLink>{' '}
-            to understand how to claim your skillpoint NFT.
-          </MonospaceText>
-        </Row>
       </TradeAndUnlockPanelContainer>
     </SidePanel>
   )

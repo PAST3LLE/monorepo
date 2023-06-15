@@ -1,22 +1,39 @@
 import { ArticleFadeIn, RowProps } from '@past3lle/components'
-import { setBackgroundOrDefault, upToLarge, upToMedium, upToSmall } from '@past3lle/theme'
+import {
+  MediaWidths,
+  setBackgroundOrDefault,
+  setBackgroundWithDPI,
+  setFlickerAnimation,
+  upToLarge,
+  upToMedium,
+  upToSmall
+} from '@past3lle/theme'
+import { GenericImageSrcSet } from '@past3lle/types'
 import styled from 'styled-components'
 
 import { CursiveHeader, MonospaceText } from '../../Common/Text'
 
 const DEFAULT_SIDE_PANEL_PROPS = {
   background: 'lightgrey',
-  padding: '4rem',
   paddingMobile: '4rem 0',
-  width: '40%',
   borderRadius: '0px',
+  filter: 'none',
   flexDir: 'column' as RowProps['flexDirection'],
   flexWrap: 'nowrap' as RowProps['flexWrap'],
-  zIndex: 88,
-  useMediaQueries: true as boolean
+  padding: '4rem',
+  transition: 'none',
+  useMediaQueries: true,
+  width: '40%',
+  zIndex: 88
 }
 
-export type SidePanelCssProps = Partial<typeof DEFAULT_SIDE_PANEL_PROPS>
+export type SidePanelCssProps = Partial<typeof DEFAULT_SIDE_PANEL_PROPS> & {
+  bgWithDpiOptions?: {
+    bgSet: GenericImageSrcSet<MediaWidths>
+    color?: string
+  }
+  showFlickerAnimation?: boolean
+}
 
 export const StyledSidePanel = styled(ArticleFadeIn)<SidePanelCssProps>`
   position: fixed;
@@ -38,6 +55,9 @@ export const StyledSidePanel = styled(ArticleFadeIn)<SidePanelCssProps>`
   bottom: 0;
   height: 100%;
 
+  filter: ${({ filter }) => filter};
+  transition: ${({ transition }) => transition};
+
   > div#bg-tag {
     position: absolute;
     top: 0;
@@ -47,15 +67,25 @@ export const StyledSidePanel = styled(ArticleFadeIn)<SidePanelCssProps>`
     z-index: -1;
     opacity: 0.4;
 
-    ${({ theme }) =>
-      setBackgroundOrDefault(
-        theme,
-        {
-          bgValue: theme.assetsMap.logos.company.full,
-          defaultValue: 'lightgrey'
-        },
-        { backgroundColor: 'lightgrey', backgroundAttributes: ['bottom/contain no-repeat'] }
-      )}
+    ${({ showFlickerAnimation }) => showFlickerAnimation && setFlickerAnimation({ state: true, duration: 4, count: 2 })}
+
+    ${({ theme, bgWithDpiOptions }) =>
+      bgWithDpiOptions
+        ? setBackgroundWithDPI(theme, bgWithDpiOptions.bgSet, {
+            preset: 'header',
+            modeColours: [bgWithDpiOptions?.color || '#fff', '#fff'],
+            backgroundAttributes: ['center / cover no-repeat', 'center 5px / cover no-repeat'],
+            backgroundBlendMode: 'difference',
+            lqIkUrlOptions: { dpi: '1x', transforms: [null, 'pr-true,q-2,w-50,h-700'] }
+          })
+        : setBackgroundOrDefault(
+            theme,
+            {
+              bgValue: theme.assetsMap.logos.company.full,
+              defaultValue: 'lightgrey'
+            },
+            { backgroundColor: 'lightgrey', backgroundAttributes: ['bottom/contain no-repeat'] }
+          )}
   }
 
   ${CursiveHeader} {

@@ -9,7 +9,7 @@ import {
 import { BLACK, OFF_WHITE } from '@past3lle/theme'
 import { darken } from 'polished'
 import React, { useMemo, useRef } from 'react'
-import { useTheme } from 'styled-components'
+import { DefaultTheme, useTheme } from 'styled-components'
 
 import { SKILLPOINTS_CONTAINER_ID } from '../../../constants/skills'
 import { useGetActiveSkill } from '../../../hooks/skills'
@@ -35,7 +35,7 @@ export function ActiveSkillPanel() {
   const setSkillState = activeSkillState?.[1]
 
   const lockStatus = useDeriveSkillState(activeSkill)
-  const isLocked = lockStatus === SkillLockStatus.LOCKED
+  const isLocked = lockStatus === SkillLockStatus.LOCKED || lockStatus === SkillLockStatus.UNLOCKABLE_IN_TRADE
   const isOwned = lockStatus === SkillLockStatus.OWNED
 
   const description = useMemo(() => getSkillDescription(activeSkill?.name, lockStatus), [activeSkill?.name, lockStatus])
@@ -113,26 +113,39 @@ export function ActiveSkillPanel() {
           />
           <SkillActionButton skill={activeSkill} lockStatus={lockStatus} metadataExplorerUri={metadataExplorerUri} />
         </Row>
-        <Row alignSelf="flex-start" width="auto">
+        <Row alignSelf="flex-start" width="100%" justifyContent={'center'} gap="1rem">
           <SkillStatusLabel
-            bgColour={getLockStatusColour(lockStatus, rarity)}
+            bgColour={getLockStatusColour(lockStatus, customTheme as DefaultTheme)}
             fgColour={BLACK}
-            fontWeight={400}
+            fontWeight={500}
             borderRadius="0.3rem"
             letterSpacing={-2.2}
+            flex={1}
+            display={'flex'}
+            alignItems={'center'}
+            justifyContent={'center'}
+            height="100%"
+            textShadow={lockStatus !== SkillLockStatus.OWNED ? '1px 1px 1px #000000ba' : 'none'}
           >
-            {lockStatus}
+            {lockStatus === SkillLockStatus.UNLOCKABLE_IN_STORE || lockStatus === SkillLockStatus.UNLOCKABLE_IN_TRADE
+              ? 'UNLOCKABLE'
+              : lockStatus}
           </SkillStatusLabel>
           <SkillRarityLabel
             backgroundColor={darken(0.02, customTheme.rarity[rarity].backgroundColor)}
             color={OFF_WHITE}
             fontWeight={100}
             borderRadius="0.3rem"
-            marginLeft="0.75rem"
+            flex={1}
+            display={'flex'}
+            alignItems={'center'}
+            justifyContent={'center'}
+            style={{ gap: '0.3rem' }}
+            height="100%"
             textShadow={`1px 1px 1px ${darken(0.3, customTheme.rarity[rarity].backgroundColor)}`}
           >
-            <img src={assetsMap.icons.rarity[rarity]} style={{ maxWidth: '2.5rem', marginRight: '0.3rem' }} />
-            <strong>{rarity?.toLocaleUpperCase()}</strong> SKILL
+            <img src={assetsMap.icons.rarity[rarity]} style={{ maxWidth: '3rem' }} />
+            <strong>{rarity?.toLocaleUpperCase()}</strong>
           </SkillRarityLabel>
         </Row>
         {!isOwned && deps.length > 0 && (

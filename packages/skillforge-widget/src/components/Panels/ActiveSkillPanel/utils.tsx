@@ -1,7 +1,6 @@
-import { SkillLockStatus, SkillRarity } from '@past3lle/forge-web3'
+import { SkillLockStatus } from '@past3lle/forge-web3'
 import React from 'react'
-
-import { RARITY_COLOURS_MAP } from '../../../theme/constants'
+import { DefaultTheme } from 'styled-components'
 
 export function getSkillDescription(name: string | undefined, lockStatus: SkillLockStatus) {
   switch (lockStatus) {
@@ -25,7 +24,7 @@ export function getSkillDescription(name: string | undefined, lockStatus: SkillL
   }
 }
 
-export function getLockStatusColour(lockStatus: SkillLockStatus, rarity: SkillRarity) {
+export function getLockStatusColour(lockStatus: SkillLockStatus, theme: DefaultTheme) {
   switch (lockStatus) {
     case SkillLockStatus.LOCKED:
       return 'darkred'
@@ -34,6 +33,6 @@ export function getLockStatusColour(lockStatus: SkillLockStatus, rarity: SkillRa
     case SkillLockStatus.UNLOCKABLE_IN_TRADE:
       return '#e46cff'
     case SkillLockStatus.OWNED:
-      return RARITY_COLOURS_MAP[rarity]
+      return theme.mainBg
   }
 }

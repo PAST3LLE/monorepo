@@ -14,7 +14,6 @@ export const SkillRarityLabel = styled(BlackHeader)<{ border?: string }>`
   ${({ border }) => border && `border: ${border};`}
   > strong {
     font-variation-settings: 'wght' 450;
-    margin-right: 0.5rem;
     letter-spacing: -1.5px;
   }
 `
