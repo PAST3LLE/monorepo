@@ -102,8 +102,8 @@ export function TradeAndUnlockPanel() {
       options={{
         onClickOutsideConditionalCb: (targetNode: Node) => !!skillContainerRef?.current?.contains(targetNode)
       }}
-      onDismiss={() => setPanelState()}
-      onBack={() => setPanelState()}
+      onDismiss={isPending ? undefined : setPanelState}
+      onBack={isPending ? undefined : setPanelState}
     >
       <TradeAndUnlockPanelContainer gap="1rem">
         <Row justifyContent={'center'} margin="0">
