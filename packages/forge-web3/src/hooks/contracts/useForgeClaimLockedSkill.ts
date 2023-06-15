@@ -1,9 +1,29 @@
+import { BigNumber } from '@ethersproject/bignumber'
+import { MergeManager__factory } from '@past3lle/skilltree-contracts'
 import { Address } from '@past3lle/types'
-import { useContractWrite } from 'wagmi'
+import { devError } from '@past3lle/utils'
+import { useContractWrite, usePrepareContractWrite } from 'wagmi'
 
-import { useForgePrepareMergeManagerContract } from './useForgePrepareMergeManagerContract'
+import { useForgeContractAddressMapReadAtom } from '../../state'
+import { useSupportedChainId } from '../useForgeSupportedChainId'
 
-export function useForgeClaimLockedSkill(args: readonly { token: Address; id: number }[]) {
-  const mergeManager = useForgePrepareMergeManagerContract(args)
-  return useContractWrite({ ...mergeManager, functionName: 'claimLockedSkill' })
+export function useForgeClaimLockedSkill(args: { token: Address; id: BigNumber }) {
+  const chainId = useSupportedChainId()
+  const [contractAddresses] = useForgeContractAddressMapReadAtom()
+
+  const mergeManager = chainId ? contractAddresses[chainId]?.mergeManager : undefined
+
+  const { config, error } = usePrepareContractWrite({
+    address: mergeManager,
+    abi: MergeManager__factory.abi,
+    functionName: 'claimLockedSkill',
+    args: [args]
+  })
+
+  if (error) {
+    devError('useForgeClaimLockedSkill prepare contract for write error!', error)
+    throw new Error('useForgeClaimLockedSkill prepare contract for write error!')
+  }
+
+  return useContractWrite(config)
 }

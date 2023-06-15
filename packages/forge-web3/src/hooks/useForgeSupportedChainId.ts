@@ -20,7 +20,7 @@ export function useChainState() {
     let chainState: ForgeW3ChainState
     if (rawChain === undefined) {
       chainState = ForgeW3ChainState.DISCONNECTED
-    } else if (!supportedChains.map((chain) => chain.id).includes(rawChain.id)) {
+    } else if (!supportedChains.map((chain) => chain.id).includes(rawChain.id as SupportedForgeChains)) {
       chainState = ForgeW3ChainState.UNSUPPORTED
     } else {
       chainState = ForgeW3ChainState.CONNECTED

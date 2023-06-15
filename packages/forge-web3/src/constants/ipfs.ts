@@ -1,1 +1,1 @@
-export const DEFAULT_GATEWAY_URI = 'https://ipfs.io/ipfs'
+export const DEFAULT_GATEWAY_URI = 'https://ipfs.io'

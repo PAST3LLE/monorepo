@@ -47,9 +47,9 @@ export function getLockStatus(
   }
 }
 
-export async function getTokenUri(imageUri: SkillMetadata['image']) {
+export async function getTokenUri(imageUri: SkillMetadata['image'], ...gatewayUris: string[]) {
   const skillMetaData: SkillMetadata = await (await fetch(imageUri)).json()
-  return ipfsToImageUri(skillMetaData.image)
+  return ipfsToImageUri(skillMetaData.image, ...gatewayUris)
 }
 
 // TODO: fix this with base "forge" type e.g extends ThemeWithRarity
