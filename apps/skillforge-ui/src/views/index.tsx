@@ -3,7 +3,7 @@ import { useIsMobile } from '@past3lle/hooks'
 import SkillForge, { SkillForgeProps, SkillForgeConnectedHeader } from '@past3lle/skillforge-widget'
 import { RobotoVariableFontProvider } from '@past3lle/theme'
 import { AppVersion } from 'components/AppVersion'
-import { GATEWAY_URIS, GATEWAY_API_URIS } from 'constants/ipfs'
+import { GATEWAY_URIS, GATEWAY_API_URIS, CONTACT_EMAIL } from 'constants/index'
 import React, { ReactNode } from 'react'
 import { GothicFontCssProvider } from 'theme/fonts'
 import { GlobalStyles } from 'theme/global'
@@ -15,6 +15,12 @@ import { METADATA_URIS_MAP } from 'web3/constants/metadata'
 const SKILLFORGE_CONFIG: SkillForgeProps = {
   config: {
     name: SKILLFORGE_APP_NAME,
+    contactInfo: {
+      email: CONTACT_EMAIL
+    },
+    contentUrls: {
+      FAQ: 'https://faq.pastelle.shop#upgrading'
+    },
     theme: SKILLFORGE_THEME,
     web3: WEB3_PROPS,
     contractAddresses: CONTRACT_ADDRESSES_MAP,
