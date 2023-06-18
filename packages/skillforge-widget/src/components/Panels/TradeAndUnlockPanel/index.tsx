@@ -27,6 +27,7 @@ import { BlackHeader, MonospaceText } from '../../Common/Text'
 import { Skillpoint } from '../../Skillpoint'
 import { RequiredDepsContainer, SkillRarityLabel, SkillsRowContainer } from '../ActiveSkillPanel/styleds'
 import { SidePanel } from '../BaseSidePanel'
+import { ErrorPanel } from '../ErrorPanel'
 import { SkillsRowProps } from '../common'
 import { TradeAndUnlockActionButton } from './ActionButton'
 import { SkillTradeExpandingContainer, TradeAndUnlockPanelContainer } from './styleds'
@@ -59,7 +60,13 @@ export function TradeAndUnlockPanel() {
   }, [activeSkill, chainId, metadataMap])
 
   const [token, id] = activeSkill.properties.id.split('-')
-  const { data, writeAsync, isLoading } = useForgeClaimLockedSkill({
+  const {
+    data,
+    writeAsync,
+    isLoading,
+    isError: isErrorContract,
+    error
+  } = useForgeClaimLockedSkill({
     token: token as Address,
     id: BigNumber.from(id)
   })
@@ -76,11 +83,14 @@ export function TradeAndUnlockPanel() {
 
   const isClickedButNoHash = isLoading && !data?.hash
   const isPending = isLoadingHash || isLoading || (!!data?.hash && !isSuccessHash)
+  const isError = isErrorContract && !!error
 
   const [gatewayUris] = useForgeIpfsGatewayUrisAtom()
   const bgImageSet = urlToSimpleGenericImageSrcSet(ipfsToImageUri(activeSkill.image, ...gatewayUris.slice(1)))
 
-  return (
+  return isError ? (
+    <ErrorPanel title="UPGRADE ERROR!" reason={error} />
+  ) : (
     <SidePanel
       header={activeSkill?.name || 'Unknown'}
       styledProps={{

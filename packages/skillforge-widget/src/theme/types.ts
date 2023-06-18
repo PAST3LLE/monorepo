@@ -56,6 +56,12 @@ export interface SkillForgeAssetsMap<
     }
   }
 }
+export enum ForgeSidePanelTypes {
+  ERROR = 'ERROR',
+  ACTIVE_SKILL = 'ACTIVE_SKILL',
+  UPGRADE_SKILL = 'UPGRADE_SKILL',
+  INVENTORY = 'INVENTORY'
+}
 
 export interface SkillForgeTheme<SC extends ChainsPartialReadonly<SupportedForgeChains>>
   extends SkillForgeAssetsMap<SC> {
@@ -77,6 +83,16 @@ export interface SkillForgeTheme<SC extends ChainsPartialReadonly<SupportedForge
     hoverColour: string
     fontSize: { small: string; normal: string; large: string }
   }
+
+  sidePanels?: {
+    [type in ForgeSidePanelTypes]?: {
+      container?: {
+        backgroundColor?: string
+        color?: string
+      }
+    }
+  }
+
   // rarity colours
   rarity: {
     [key in SkillRarity]: {

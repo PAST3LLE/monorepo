@@ -27,6 +27,16 @@ export const baseTheme: Omit<SkillForgeTheme<any>, 'assetsMap'> = {
     },
     hoverColour: 'cornflowerblue'
   },
+  sidePanels: {
+    ERROR: {
+      container: {
+        backgroundColor: 'darkred',
+        get color() {
+          return baseTheme.lightText
+        }
+      }
+    }
+  },
   // rarity colours
   rarity: {
     empty: {

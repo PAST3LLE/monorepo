@@ -4,6 +4,7 @@ import {
   useDeriveSkillState,
   useForgeBalancesReadAtom,
   useForgeMetadataMapReadAtom,
+  useForgeUserConfigAtom,
   useSupportedChainId
 } from '@past3lle/forge-web3'
 import { BLACK, OFF_WHITE } from '@past3lle/theme'
@@ -26,6 +27,7 @@ import { getLockStatusColour, getSkillDescription } from './utils'
 
 export function ActiveSkillPanel() {
   const chainId = useSupportedChainId()
+  const [userConfig] = useForgeUserConfigAtom()
 
   const [metadataMap] = useForgeMetadataMapReadAtom(chainId)
   const activeSkillState = useGetActiveSkill(chainId)
@@ -171,16 +173,18 @@ export function ActiveSkillPanel() {
             </MonospaceText>
           </AutoRow>
         )}
-        <Row marginTop={'4rem'}>
-          <MonospaceText>
-            Checkout this{' '}
-            <ExternalLink href="#">
-              {' '}
-              <strong style={{ color: baseTheme.mainBg }}>tutorial</strong>{' '}
-            </ExternalLink>{' '}
-            to understand how to claim your skillpoint NFT.
-          </MonospaceText>
-        </Row>
+        {userConfig?.contentUrls?.claiming && (
+          <Row marginTop={'4rem'}>
+            <MonospaceText>
+              Checkout this{' '}
+              <ExternalLink href={userConfig.contentUrls.claiming}>
+                {' '}
+                <strong style={{ color: baseTheme.mainBg }}>tutorial</strong>{' '}
+              </ExternalLink>{' '}
+              to understand how to claim skills!
+            </MonospaceText>
+          </Row>
+        )}
       </ActiveSkillPanelContainer>
     </SidePanel>
   )
