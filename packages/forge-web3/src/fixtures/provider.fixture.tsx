@@ -60,6 +60,12 @@ function App() {
     <ForgeW3Providers
       config={{
         ...contractProps,
+        contactInfo: {
+          email: 'some-fake-email@gmail.com'
+        },
+        contentUrls: {
+          FAQ: 'https://faq.learnmoreabout.stuff.net'
+        },
         name: commonProps.appName,
         web3: {
           chains: commonProps.chains,
@@ -80,6 +86,12 @@ export default {
     <ForgeW3Providers
       config={{
         ...contractProps,
+        contactInfo: {
+          email: 'some-fake-email@gmail.com'
+        },
+        contentUrls: {
+          FAQ: 'https://faq.learnmoreabout.stuff.net'
+        },
         name: commonProps.appName,
         web3: {
           chains: commonProps.chains,
@@ -98,6 +110,12 @@ export default {
     <ForgeW3Providers
       config={{
         ...contractProps,
+        contactInfo: {
+          email: 'some-fake-email@gmail.com'
+        },
+        contentUrls: {
+          FAQ: 'https://faq.learnmoreabout.stuff.net'
+        },
         name: commonProps.appName,
         web3: {
           chains: commonProps.chains,

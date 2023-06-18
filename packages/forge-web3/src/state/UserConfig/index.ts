@@ -12,6 +12,17 @@ export interface UserConfigState {
   user: {
     account: Address | undefined
     chainId: number | undefined
+    contactInfo: {
+      email: string | undefined
+      phone?: string
+      discord?: string
+      telegram?: string
+      other?: string
+    }
+  }
+  contentUrls?: {
+    FAQ?: string
+    claiming?: string
   }
   ipfs: {
     gatewayUris: CustomIpfsGatewayConfig[]
@@ -24,7 +35,10 @@ export const userConfigAtom = atomWithStorage<UserConfigState>(STATE_STORAGE_KEY
   chains: [],
   user: {
     account: undefined,
-    chainId: undefined
+    chainId: undefined,
+    contactInfo: {
+      email: undefined
+    }
   },
   ipfs: {
     gatewayUris: [],

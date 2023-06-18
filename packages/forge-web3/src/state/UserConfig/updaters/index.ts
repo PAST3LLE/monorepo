@@ -8,6 +8,8 @@ export function ForgeUserConfigUpdater({
   contractAddresses,
   metadataUris,
   web3: { chains },
+  contactInfo,
+  contentUrls,
   skillOptions
 }: ForgeBalancesProps) {
   const chainId = useChainId()
@@ -16,7 +18,8 @@ export function ForgeUserConfigUpdater({
   useEffect(() => {
     updateUserConfig({
       chains,
-      user: { account, chainId },
+      user: { account, chainId, contactInfo },
+      contentUrls,
       ipfs: {
         gatewayUris: skillOptions?.metadataFetchOptions?.gatewayUris || [],
         gatewayApiUris: skillOptions?.metadataFetchOptions?.gatewayApiUris || []
@@ -24,7 +27,17 @@ export function ForgeUserConfigUpdater({
       metadataUriMap: metadataUris || {},
       contractAddressMap: contractAddresses || {}
     })
-  }, [chains, chainId, account, contractAddresses, metadataUris, skillOptions?.metadataFetchOptions, updateUserConfig])
+  }, [
+    chains,
+    chainId,
+    account,
+    contractAddresses,
+    metadataUris,
+    skillOptions?.metadataFetchOptions,
+    contactInfo,
+    contentUrls,
+    updateUserConfig
+  ])
 
   return null
 }

@@ -1,8 +1,8 @@
-import { ForgeContractAddressMap } from 'src/types'
+import { TorusWalletConnectorPlugin } from '@web3auth/torus-wallet-connector-plugin'
+
+import { ForgeContractAddressMap } from '../types'
 import { ForgeWeb3ModalProps } from '../types/web3modal'
 import { chains } from './chains'
-
-import { TorusWalletConnectorPlugin } from '@web3auth/torus-wallet-connector-plugin'
 
 // TESTING ID - DONT USE IN PROD
 const WALLETCONNECT_TEST_ID = 'a01e2f3b7c64ff495f9cb28e4e2d4b49'

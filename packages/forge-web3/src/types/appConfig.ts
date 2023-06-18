@@ -1,5 +1,6 @@
 import { PstlHooksProviderOptions } from '@past3lle/hooks'
 import { PstlWeb3ModalProps } from '@past3lle/web3-modal'
+import { UserConfigState } from 'src/state'
 
 import { MetadataFetchOptions as ForgeMetadataFetchOptions } from '../state/Metadata/updaters/MetadataUpdater'
 import { ForgeContractAddressMap } from './addresses'
@@ -16,6 +17,8 @@ export type Web3ModalConfigWeb3Props = Omit<PstlWeb3ModalProps<SupportedForgeCha
 }
 export interface ForgeW3AppConfig {
   name: string
+  contactInfo: UserConfigState['user']['contactInfo']
+  contentUrls?: UserConfigState['contentUrls']
   web3: Web3ModalConfigWeb3Props
   contractAddresses: ForgeContractAddressMap
   metadataUris: ForgeMetadataUriMap

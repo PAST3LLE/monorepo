@@ -64,8 +64,8 @@ function reduceBalanceDataToMap(
 ) {
   if (!data) return {}
 
-  return data.reduce((oAcc, collectionBnBalances = [], collectionIdx) => {
-    const chainBalance = collectionBnBalances.reduce((acc, nextBn, i) => {
+  return data.reduce((oAcc, collectionBnBalances, collectionIdx) => {
+    const chainBalance = (collectionBnBalances || []).reduce((acc, nextBn, i) => {
       const collectionAddress = collectionsAddresses?.[collectionIdx]
 
       const skillId = metadata[collectionIdx][i].properties.id
