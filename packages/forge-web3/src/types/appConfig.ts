@@ -1,7 +1,7 @@
 import { PstlHooksProviderOptions } from '@past3lle/hooks'
 import { PstlWeb3ModalProps } from '@past3lle/web3-modal'
-import { UserConfigState } from 'src/state'
 
+import { UserConfigState } from '../state'
 import { MetadataFetchOptions as ForgeMetadataFetchOptions } from '../state/Metadata/updaters/MetadataUpdater'
 import { ForgeContractAddressMap } from './addresses'
 import { SupportedForgeChains } from './chains'
