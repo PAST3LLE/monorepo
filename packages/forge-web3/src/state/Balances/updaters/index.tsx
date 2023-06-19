@@ -39,8 +39,9 @@ export function ForgeBalancesUpdater({ loadAmount = DEFAULT_COLLECTION_LOAD_AMOU
     const metadataLoaded = !!metadata?.length
 
     const derivedData: BigNumber[][] = _getEnvBalances(balancesBatch as BigNumber[][], metadata)
+    const dataHasLength = derivedData?.[0]?.length && derivedData?.[1]?.length
 
-    if (metadataLoaded) {
+    if (metadataLoaded && dataHasLength) {
       if (!address) {
         // if address is undefined, reset balances
         resetUserBalances({})
@@ -62,8 +63,6 @@ function reduceBalanceDataToMap(
   metadata: ForgeMetadataState['metadata'][number],
   chainId: number
 ) {
-  if (!data) return {}
-
   return data.reduce((oAcc, collectionBnBalances, collectionIdx) => {
     const chainBalance = (collectionBnBalances || []).reduce((acc, nextBn, i) => {
       const collectionAddress = collectionsAddresses?.[collectionIdx]
