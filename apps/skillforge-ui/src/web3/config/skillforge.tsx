@@ -19,7 +19,8 @@ export const WEB3_PROPS: Web3ModalConfigWeb3Props = {
   chains: SUPPORTED_CHAINS,
   wagmiClient: {
     options: {
-      pollingInterval: 10_000
+      pollingInterval: 10_000,
+      autoConnect: true
     }
   },
   modals: {
@@ -33,6 +34,8 @@ export const WEB3_PROPS: Web3ModalConfigWeb3Props = {
       projectId: process.env.REACT_APP_WEB3AUTH_ID as string,
       storageKey: 'session',
       preset: 'DISALLOW_EXTERNAL_WALLETS',
+      mfaLevel: 'none',
+      uxMode: 'popup',
       configureAdditionalConnectors() {
         // Add Torus Wallet Plugin (optional)
         const torusPlugin = new TorusWalletConnectorPlugin({
