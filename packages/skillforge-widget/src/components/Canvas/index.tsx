@@ -32,7 +32,7 @@ export function SkillsCanvas() {
   const VectorsMap = useMemo(
     () =>
       vectors.map(({ skillId, vector }) => {
-        if (!vector) return
+        if (!vector || !metadataMap) return
         const skillBalance = skillId && balances?.[skillId]
         const missingSkill = !skillBalance || !skillId
         const zeroBalance = !!skillBalance && BigNumber.from(skillBalance).isZero()
@@ -40,7 +40,7 @@ export function SkillsCanvas() {
         const skillpointProps = !missingSkill
           ? {
               key: skillId,
-              metadata: metadataMap[skillId],
+              metadata: metadataMap?.[skillId],
               hasSkill: !zeroBalance
             }
           : { key: `EMPTY-${vector.X1}-${vector.Y1}`, metadata: EMPTY_METADATA, hasSkill: true }
