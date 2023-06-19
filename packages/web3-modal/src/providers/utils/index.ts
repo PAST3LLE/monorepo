@@ -30,7 +30,7 @@ function createWagmiClient<ID extends number>({
   const providers = options?.providers || []
 
   return createClient({
-    autoConnect: true,
+    autoConnect: !!options?.autoConnect,
     connectors: [
       // Web3Auth aka social login
       PstlWeb3AuthConnector({ chains: props.chains, ...props.w3aConnectorProps }),

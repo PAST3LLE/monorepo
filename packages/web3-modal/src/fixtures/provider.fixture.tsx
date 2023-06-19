@@ -13,7 +13,7 @@ interface Web3ButtonProps {
   children?: ReactNode
 }
 const Web3Button = ({ children = <div>Show PSTL Wallet Modal</div> }: Web3ButtonProps) => {
-  const [, ,{ address, currentConnector: connector } ] = useConnection()
+  const [, , { address, currentConnector: connector }] = useConnection()
   const { open } = usePstlWeb3Modal()
 
   const [provider, setProvider] = useState()
@@ -58,7 +58,8 @@ function InnerApp() {
         chains: commonProps.chains,
         wagmiClient: {
           options: {
-            pollingInterval: 10_000
+            pollingInterval: 10_000,
+            autoConnect: true
           }
         },
         modals: {
@@ -155,9 +156,9 @@ function InnerApp() {
 function AppWithWagmiAccess() {
   const accountApi = useAccount()
   console.debug('Account API', accountApi.connector)
-  
-  accountApi.connector?.getProvider().then(res => console.debug('getProvider', res))
-  accountApi.connector?.getSigner().then(res => console.debug('getSigner', res))
+
+  accountApi.connector?.getProvider().then((res) => console.debug('getProvider', res))
+  accountApi.connector?.getSigner().then((res) => console.debug('getSigner', res))
   console.debug('Torus EVM Wallet', accountApi.connector?.options?.web3AuthInstance?.walletAdapters?.['torus-evm'])
 
   return <h1>Here has wagmi access</h1>

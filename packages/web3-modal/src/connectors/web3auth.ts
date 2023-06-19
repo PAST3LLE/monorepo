@@ -2,7 +2,7 @@
 import { CHAIN_NAMESPACES, WALLET_ADAPTERS } from '@web3auth/base'
 import { IPlugin } from '@web3auth/base-plugin'
 import { Web3Auth, Web3AuthOptions } from '@web3auth/modal'
-import { OpenloginAdapter } from '@web3auth/openlogin-adapter'
+import { OpenloginAdapter, OpenloginLoginParams } from '@web3auth/openlogin-adapter'
 import { Web3AuthConnector } from '@web3auth/web3auth-wagmi-connector'
 
 import { Z_INDICES } from '../constants'
@@ -23,6 +23,8 @@ export interface PstlWeb3AuthConnectorProps<ID extends number> {
   listingLogo?: string
   listingDetails?: string
   loginMethodsOrder?: string[]
+  mfaLevel?: OpenloginLoginParams['mfaLevel']
+  uxMode?: 'popup' | 'redirect'
   configureAdditionalConnectors?: () => IPlugin[] | undefined
 }
 
@@ -35,6 +37,8 @@ export function PstlWeb3AuthConnector<ID extends number>({
   appLogoDark,
   appLogoLight,
   loginMethodsOrder,
+  mfaLevel,
+  uxMode,
   zIndex = Z_INDICES.W3A,
   preset = 'ALLOW_EXTERNAL_WALLETS',
   configureAdditionalConnectors
@@ -55,6 +59,7 @@ export function PstlWeb3AuthConnector<ID extends number>({
     clientId: projectId,
     chainConfig,
     web3AuthNetwork: network,
+    authMode: 'DAPP',
     uiConfig: {
       appName,
       theme,
@@ -68,7 +73,7 @@ export function PstlWeb3AuthConnector<ID extends number>({
   const openloginAdapterInstance = new OpenloginAdapter({
     adapterSettings: {
       network,
-      uxMode: 'popup',
+      uxMode,
       whiteLabel: {
         name: appName,
         logoLight: appLogoLight,
@@ -76,6 +81,9 @@ export function PstlWeb3AuthConnector<ID extends number>({
         defaultLanguage: 'en',
         dark: theme === 'dark' // whether to enable dark mode. defaultValue: false
       }
+    },
+    loginSettings: {
+      mfaLevel
     }
   })
   web3AuthInstance.configureAdapter(openloginAdapterInstance)
