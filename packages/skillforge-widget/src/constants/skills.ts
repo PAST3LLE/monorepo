@@ -8,10 +8,6 @@ export const SKILLPOINT_SIZES = {
     return this.width
   }
 }
-export const MINIMUM_COLLECTION_BOARD_SIZE = 4
-export const EMPTY_COLLECTION_ROWS_SIZE = 6
-export const MINIMUM_BOARD_WIDTH = 580
-export const MINIMUM_BOARD_HEIGHT = 400
 
 export const SKILLPOINT_IMAGE_HASH = 'QmSMBa8KBK7QCJGVsViqAsUp5FQHQMC3qfmWH3wJxw219f'
 export const SKILLPOINT_METADATA: SkillMetadata = {

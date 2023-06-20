@@ -6,12 +6,13 @@ import {
   SkillRarity,
   useForgeBalancesReadAtom,
   useForgeMetadataMapReadAtom,
-  useSupportedChainId
+  useForgeUserConfigAtom,
+  useSupportedOrDefaultChainId
 } from '@past3lle/forge-web3'
 import { convertToRomanNumerals } from '@past3lle/utils'
 import React, { useMemo } from 'react'
 
-import { CANVAS_CONTAINER_ID, MINIMUM_COLLECTION_BOARD_SIZE, SKILLPOINTS_CONTAINER_ID } from '../../constants/skills'
+import { CANVAS_CONTAINER_ID, SKILLPOINTS_CONTAINER_ID } from '../../constants/skills'
 import { useVectorsAtom } from '../../state/Skills'
 import { SkillContainerAbsolute, SkillpointHeader } from '../Common'
 import { Skillpoint } from '../Skillpoint'
@@ -25,25 +26,30 @@ export interface SkillsCanvasProps {
 export function SkillsCanvas() {
   const [{ vectors }] = useVectorsAtom()
 
-  const chainId = useSupportedChainId()
+  const chainId = useSupportedOrDefaultChainId()
   const [metadataMap] = useForgeMetadataMapReadAtom(chainId)
   const [balances] = useForgeBalancesReadAtom()
+  const [
+    {
+      board: { minimumColumns: BOARD_COLUMNS, minimumBoardWidth }
+    }
+  ] = useForgeUserConfigAtom()
 
   const VectorsMap = useMemo(
     () =>
       vectors.map(({ skillId, vector }) => {
         if (!vector || !metadataMap) return
         const skillBalance = skillId && balances?.[skillId]
-        const missingSkill = !skillBalance || !skillId
-        const zeroBalance = !!skillBalance && BigNumber.from(skillBalance).isZero()
+        const zeroBalance = !skillBalance || BigNumber.from(skillBalance).isZero()
 
-        const skillpointProps = !missingSkill
-          ? {
-              key: skillId,
-              metadata: metadataMap?.[skillId],
-              hasSkill: !zeroBalance
-            }
-          : { key: `EMPTY-${vector.X1}-${vector.Y1}`, metadata: EMPTY_METADATA, hasSkill: true }
+        const skillpointProps =
+          skillId && metadataMap?.[skillId]
+            ? {
+                key: skillId,
+                metadata: metadataMap[skillId],
+                hasSkill: !zeroBalance
+              }
+            : { key: `EMPTY-${vector.X1}-${vector.Y1}`, metadata: EMPTY_METADATA, hasSkill: true }
         return <Skillpoint {...skillpointProps} vector={vector} />
       }),
     [balances, metadataMap, vectors]
@@ -53,7 +59,7 @@ export function SkillsCanvas() {
     <SkillCanvasContainer style={{ position: 'relative' }}>
       <Row width="100%" height={80} justifyContent="space-between" style={{ position: 'relative' }}>
         <SkillContainerAbsolute>
-          {vectors.slice(0, MINIMUM_COLLECTION_BOARD_SIZE).map(({ vector }, idx) => {
+          {vectors.slice(0, BOARD_COLUMNS).map(({ vector }, idx) => {
             const idxToRoman = convertToRomanNumerals(idx + 1)
             if (!vector) return null
             return (
@@ -64,7 +70,13 @@ export function SkillsCanvas() {
           })}
         </SkillContainerAbsolute>
       </Row>
-      <SkillInnerCanvasContainer height="100%" width="100%" style={{ position: 'relative' }} id={CANVAS_CONTAINER_ID}>
+      <SkillInnerCanvasContainer
+        height="100%"
+        width="100%"
+        minimumBoardWidth={minimumBoardWidth}
+        style={{ position: 'relative' }}
+        id={CANVAS_CONTAINER_ID}
+      >
         <SkillContainerAbsolute id={SKILLPOINTS_CONTAINER_ID}>{VectorsMap}</SkillContainerAbsolute>
         {/* CANVAS */}
         <LightningCanvas />

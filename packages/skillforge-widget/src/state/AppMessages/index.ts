@@ -5,19 +5,21 @@ export type AppMessagesState = {
 }
 
 export enum AppMessagesKeys {
-  UNSUPPORTED_CHAIN = 'UNSUPPORTED_CHAIN'
+  UNSUPPORTED_CHAIN = 'UNSUPPORTED_CHAIN',
+  READONLY = 'READONLY'
 }
 
 const appMessagesAtom = atom<AppMessagesState>({
-  [AppMessagesKeys.UNSUPPORTED_CHAIN]: undefined
+  [AppMessagesKeys.UNSUPPORTED_CHAIN]: undefined,
+  [AppMessagesKeys.READONLY]: undefined
 })
 
 const readWriteAppMessagesAtom = atom(
   (get) => get(appMessagesAtom),
-  (get, set, [key, value]: [string, string | undefined]) => {
+  (get, set, update: Partial<AppMessagesState>) => {
     const messagesState = get(appMessagesAtom)
 
-    return set(appMessagesAtom, { ...messagesState, [key]: value })
+    return set(appMessagesAtom, { ...messagesState, ...update })
   }
 )
 const readKeyAppMessagesAtom = (key: AppMessagesKeys) =>

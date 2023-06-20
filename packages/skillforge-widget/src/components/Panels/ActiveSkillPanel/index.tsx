@@ -5,7 +5,7 @@ import {
   useForgeBalancesReadAtom,
   useForgeMetadataMapReadAtom,
   useForgeUserConfigAtom,
-  useSupportedChainId
+  useSupportedOrDefaultChainId
 } from '@past3lle/forge-web3'
 import { BLACK, OFF_WHITE } from '@past3lle/theme'
 import { darken } from 'polished'
@@ -26,7 +26,7 @@ import { ActiveSkillPanelContainer, RequiredDepsContainer, SkillRarityLabel, Ski
 import { getLockStatusColour, getSkillDescription } from './utils'
 
 export function ActiveSkillPanel() {
-  const chainId = useSupportedChainId()
+  const chainId = useSupportedOrDefaultChainId()
   const [userConfig] = useForgeUserConfigAtom()
 
   const [metadataMap] = useForgeMetadataMapReadAtom(chainId)

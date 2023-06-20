@@ -5,9 +5,11 @@ import { useSidePanelAtomBase } from '..'
 import { ActiveSkillPanel } from '../../../components/Panels/ActiveSkillPanel'
 import { TradeAndUnlockPanel } from '../../../components/Panels/TradeAndUnlockPanel'
 import { UserStatsPanel } from '../../../components/Panels/UserStatsPanel'
+import { removeSearchParams, updateSearchParams } from '../../../utils/url'
 import { useActiveSkillAtom } from '../../Skills'
 
 export enum ForgeSearchParamKeys {
+  FORGE_CHAIN = 'forge-network',
   FORGE_SKILL_ID = 'forge-skill',
   FORGE_USER_INVENTORY = 'forge-inventory',
   FORGE_UPGRADE_SKILL = 'forge-upgrade-skill'
@@ -80,23 +82,27 @@ export function SidePanelUpdater() {
     switch (type) {
       case 'ACTIVE_SKILL':
         if (id && searchParamKey !== id) {
-          _updateSearchParams(`${ForgeSearchParamKeys.FORGE_SKILL_ID}=${id}`)
+          updateSearchParams(ForgeSearchParamKeys.FORGE_SKILL_ID, id)
         }
         setPanel(<ActiveSkillPanel />)
         break
       case 'USER_STATS':
-        _updateSearchParams(ForgeSearchParamKeys.FORGE_USER_INVENTORY)
+        updateSearchParams(ForgeSearchParamKeys.FORGE_USER_INVENTORY, 'open')
         setPanel(<UserStatsPanel />)
         break
       case 'UNLOCK_SKILL':
         if (id && searchParamKey !== id) {
-          _updateSearchParams(`${ForgeSearchParamKeys.FORGE_UPGRADE_SKILL}=${id}`)
+          updateSearchParams(ForgeSearchParamKeys.FORGE_UPGRADE_SKILL, id)
         }
         setPanel(<TradeAndUnlockPanel />)
         break
       default:
         // Reset search param
-        _updateSearchParams('')
+        removeSearchParams(
+          ForgeSearchParamKeys.FORGE_SKILL_ID,
+          ForgeSearchParamKeys.FORGE_UPGRADE_SKILL,
+          ForgeSearchParamKeys.FORGE_USER_INVENTORY
+        )
         setPanel(null)
         break
     }
@@ -106,12 +112,4 @@ export function SidePanelUpdater() {
   }, [id, type])
 
   return panel
-}
-
-function _updateSearchParams(searchParam: string) {
-  if (window.history.pushState) {
-    const newURL = new URL(window.location.href)
-    newURL.search = searchParam
-    window.history.pushState({ path: newURL.href }, '', newURL.href)
-  }
 }

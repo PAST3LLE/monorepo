@@ -5,7 +5,6 @@ import { useAppMessagesReadAtom } from '../../state/AppMessages'
 
 export const BannerContainer = styled.div`
   width: 100%;
-  height: 50px;
   background: ${({ theme }) => theme.mainBg};
   text-align: center;
   font-variation-settings: 'wght' 100;
@@ -22,7 +21,7 @@ export function AppMessagesBanner() {
     <>
       {appMessagesFiltered.map((message, i) => (
         <BannerContainer id={'message_' + i}>
-          <h1>{message}</h1>
+          <h2>{message}</h2>
         </BannerContainer>
       ))}
     </>

@@ -5,6 +5,7 @@ import { DefaultTheme } from 'styled-components'
 
 import { SkillForgeWidgetConfig } from '../../../types'
 import { AppMessagesUpdater } from '../../AppMessages/updaters'
+import { ChainUpdater } from '../../Chain/updater'
 import { SidePanelUpdater } from '../../SidePanel/updaters'
 import { SkillsUpdaters } from '../../Skills/updaters'
 import { AppThemeMode, useAppThemeModeRead } from '../../Theme'
@@ -20,6 +21,7 @@ export function SkillForgeThemeAndDataProviders(props: SkillForgeWidgetConfig & 
   return (
     <>
       <SkillsUpdaters />
+      <ChainUpdater />
       <ThemeProviderSimple theme={theme as DefaultTheme}>
         <AppMessagesUpdater />
         <ThemeUpdater mode={theme.mode as AppThemeMode} />
