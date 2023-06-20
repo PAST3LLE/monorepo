@@ -26,13 +26,11 @@ export function ChainUpdater() {
   useEffect(() => {
     if (!chain?.network) {
       setReadonlyChain(chainFromParam || userChains[0])
+      if (!chainFromParam) updateSearchParams(ForgeSearchParamKeys.FORGE_CHAIN, userChains[0]?.network)
     }
 
-    updateSearchParams(
-      ForgeSearchParamKeys.FORGE_CHAIN,
-      chain?.network || chainFromParam?.network || userChains[0]?.network
-    )
-  }, [chain?.network, chainFromParam, setReadonlyChain, userChains])
+    chain?.network && updateSearchParams(ForgeSearchParamKeys.FORGE_CHAIN, chain.network)
+  }, [chain.network, chainFromParam, setReadonlyChain, userChains])
 
   return null
 }
