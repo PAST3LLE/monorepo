@@ -15,6 +15,10 @@ import { METADATA_URIS_MAP } from 'web3/constants/metadata'
 const SKILLFORGE_CONFIG: SkillForgeProps = {
   config: {
     name: SKILLFORGE_APP_NAME,
+    boardOptions: {
+      minimumBoardHeight: 550,
+      minimumColumns: 3
+    },
     contactInfo: {
       email: CONTACT_EMAIL
     },

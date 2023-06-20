@@ -17,6 +17,10 @@ if (
 export const SKILLFORGE_APP_NAME = 'SKILLFORGE'
 export const WEB3_PROPS: Web3ModalConfigWeb3Props = {
   chains: SUPPORTED_CHAINS,
+  chainFromUrlOptions: {
+    type: 'network',
+    key: 'forge-network'
+  },
   wagmiClient: {
     options: {
       pollingInterval: 10_000,
