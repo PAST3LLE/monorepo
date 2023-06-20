@@ -17,6 +17,7 @@ export type Web3ModalConfigWeb3Props = Omit<PstlWeb3ModalProps<SupportedForgeCha
 }
 export interface ForgeW3AppConfig {
   name: string
+  boardOptions?: Partial<UserConfigState['board']>
   contactInfo: UserConfigState['user']['contactInfo']
   contentUrls?: UserConfigState['contentUrls']
   web3: Web3ModalConfigWeb3Props

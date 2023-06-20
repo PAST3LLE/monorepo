@@ -5,9 +5,11 @@ import { Address, useContractReads } from 'wagmi'
 
 import { WAGMI_SCOPE_KEYS } from '../constants'
 import { WithLoadAmount } from '../types'
+import { useSupportedOrDefaultChainId } from '../useForgeSupportedChainId'
 import { useForgeGetSkillsAddresses } from './useForgeGetSkillsAddresses'
 
 export function useForgeGetBatchSkillMetadataUris({ loadAmount = 10 }: WithLoadAmount) {
+  const chainId = useSupportedOrDefaultChainId()
   // get <loadAmount> of skillErc1155 addresses starting from LATEST collection
   // and counting down <loadAmount> number of times
   const { data: skillErc1155Addresses = [] } = useForgeGetSkillsAddresses({
@@ -20,10 +22,11 @@ export function useForgeGetBatchSkillMetadataUris({ loadAmount = 10 }: WithLoadA
         abi: Collection__factory.abi,
         functionName: 'uri',
         address,
+        chainId,
         // ERC1155 shares same base URL, this param is required but irrelevant...
         args: [BigNumber.from(0)]
       })),
-    [skillErc1155Addresses]
+    [chainId, skillErc1155Addresses]
   )
 
   return {

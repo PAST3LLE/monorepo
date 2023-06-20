@@ -8,7 +8,7 @@ import {
   useForgeGetSkillsAddresses,
   useForgeSkillsBalanceOfBatch,
   useRefetchOnAddressAndChain,
-  useSupportedChainId
+  useSupportedOrDefaultChainId
 } from '../../../hooks'
 import { WithLoadAmount } from '../../../hooks/types'
 import { ForgeMetadataState, useForgeMetadataReadAtom } from '../../Metadata'
@@ -18,7 +18,7 @@ const DEFAULT_COLLECTION_LOAD_AMOUNT = 3
 
 export function ForgeBalancesUpdater({ loadAmount = DEFAULT_COLLECTION_LOAD_AMOUNT }: Partial<WithLoadAmount>) {
   const { address } = useAccount()
-  const chainId = useSupportedChainId()
+  const chainId = useSupportedOrDefaultChainId()
 
   const [metadata] = useForgeMetadataReadAtom(chainId)
   const [, updateForgeBalances] = useForgeBalancesWriteAtom()

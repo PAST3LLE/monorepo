@@ -7,11 +7,11 @@ import { ForgeMetadataUpdaterProps } from '../state/Metadata/updaters/MetadataUp
 import { CollectionMetadata, SkillMetadata, SupportedForgeChains } from '../types'
 import { chainFetchIpfsUri } from '../utils'
 import { useForgeGetBatchSkillMetadataUris } from './contracts/useForgeGetBatchSkillMetadataUris'
-import { useSupportedChainId } from './useForgeSupportedChainId'
+import { useSupportedOrDefaultChainId } from './useForgeSupportedChainId'
 import { useRefetchOnAddressAndChain } from './useRefetchOnAddress'
 
 export function useForgeFetchMetadata({ loadAmount = 3, metadataFetchOptions }: ForgeMetadataUpdaterProps) {
-  const chainId = useSupportedChainId()
+  const chainId = useSupportedOrDefaultChainId()
   const [metadataUriMap] = useForgeMetadataUriMapReadAtom()
 
   const metadataUris = chainId ? metadataUriMap?.[chainId] : undefined

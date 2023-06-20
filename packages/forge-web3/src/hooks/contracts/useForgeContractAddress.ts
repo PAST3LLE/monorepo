@@ -1,7 +1,7 @@
 import { UserConfigState } from '../../state'
-import { useSupportedChainId } from '../useForgeSupportedChainId'
+import { useSupportedOrDefaultChainId } from '../useForgeSupportedChainId'
 
 export function useForgeContractAddressesByChain<M extends UserConfigState['contractAddressMap']>(addressMap: M) {
-  const chainId = useSupportedChainId()
+  const chainId = useSupportedOrDefaultChainId()
   return chainId ? addressMap[chainId] : undefined
 }

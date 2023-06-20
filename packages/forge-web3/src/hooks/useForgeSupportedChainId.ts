@@ -2,24 +2,30 @@ import { devDebug } from '@past3lle/utils'
 import { usePstlConnection } from '@past3lle/web3-modal'
 import { useEffect, useMemo } from 'react'
 
-import { useForgeGetUserConfigChainsAtom } from '../state/UserConfig'
+import { useForgeGetUserConfigChainsAtom, useForgeReadonlyChainAtom } from '../state/UserConfig'
 import { SupportedForgeChains } from '../types'
 import { isSupportedChain } from '../utils/chains'
 
 export enum ForgeW3ChainState {
   CONNECTED = 'CONNECTED',
   DISCONNECTED = 'DISCONNECTED',
+  READONLY = 'READONLY',
   UNSUPPORTED = 'UNSUPPORTED'
 }
 
 export function useChainState() {
   const [supportedChains = []] = useForgeGetUserConfigChainsAtom()
   const [, , { chain: rawChain }] = usePstlConnection()
+  const [readonlyChain] = useForgeReadonlyChainAtom()
 
   const chainState = useMemo(() => {
     let chainState: ForgeW3ChainState
     if (rawChain === undefined) {
-      chainState = ForgeW3ChainState.DISCONNECTED
+      if (readonlyChain?.id) {
+        chainState = ForgeW3ChainState.READONLY
+      } else {
+        chainState = ForgeW3ChainState.DISCONNECTED
+      }
     } else if (!supportedChains.map((chain) => chain.id).includes(rawChain.id as SupportedForgeChains)) {
       chainState = ForgeW3ChainState.UNSUPPORTED
     } else {
@@ -27,7 +33,7 @@ export function useChainState() {
     }
 
     return chainState
-  }, [rawChain, supportedChains])
+  }, [rawChain, readonlyChain?.id, supportedChains])
 
   useEffect(() => {
     chainState === ForgeW3ChainState.UNSUPPORTED &&
@@ -50,4 +56,10 @@ export function useSupportedChainId(): SupportedForgeChains | undefined {
   const id = useChainId()
   const supportedChain = isSupportedChain(id)
   return supportedChain ? (id as SupportedForgeChains) : undefined
+}
+
+export function useSupportedOrDefaultChainId() {
+  const [defaultChain] = useForgeReadonlyChainAtom()
+
+  return useSupportedChainId() || defaultChain?.id
 }

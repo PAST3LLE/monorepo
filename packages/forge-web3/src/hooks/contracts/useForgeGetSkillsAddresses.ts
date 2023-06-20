@@ -6,14 +6,16 @@ import { useContractReads } from 'wagmi'
 import { useForgeContractAddressMapReadAtom } from '../../state'
 import { WAGMI_SCOPE_KEYS } from '../constants'
 import { WithLoadAmount } from '../types'
+import { useSupportedOrDefaultChainId } from '../useForgeSupportedChainId'
 import { useRefetchOnAddressAndChain } from '../useRefetchOnAddress'
 import { useForgeContractAddressesByChain } from './useForgeContractAddress'
 import { useForgeGetLatestCollectionId } from './useForgeGetLatestCollectionId'
 
 export function useForgeGetSkillsAddresses({ loadAmount }: WithLoadAmount) {
+  const chainId = useSupportedOrDefaultChainId()
   const [contractAddressMap] = useForgeContractAddressMapReadAtom()
   const contractAddressesByChain = useForgeContractAddressesByChain(contractAddressMap)
-  const { data: latestCollectionId = BigNumber.from(1), refetch: refetchCollectionId } =
+  const { data: latestCollectionId = BigNumber.from(2), refetch: refetchCollectionId } =
     useForgeGetLatestCollectionId(contractAddressMap)
 
   useRefetchOnAddressAndChain(refetchCollectionId)
@@ -22,7 +24,8 @@ export function useForgeGetSkillsAddresses({ loadAmount }: WithLoadAmount) {
     const commonArgs = {
       abi: CollectionsManager__factory.abi,
       address: contractAddressesByChain?.collectionsManager,
-      functionName: 'collectionContract'
+      functionName: 'collectionContract',
+      chainId
     } as const
 
     const derivedArgs: (typeof commonArgs & { args: [number] })[] = []
@@ -36,7 +39,7 @@ export function useForgeGetSkillsAddresses({ loadAmount }: WithLoadAmount) {
     }
 
     return derivedArgs.reverse()
-  }, [contractAddressesByChain?.collectionsManager, latestCollectionId, loadAmount])
+  }, [chainId, contractAddressesByChain?.collectionsManager, latestCollectionId, loadAmount])
 
   return useContractReads({
     // reverse as we loop backwards

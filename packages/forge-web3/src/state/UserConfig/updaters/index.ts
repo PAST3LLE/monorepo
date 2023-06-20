@@ -5,6 +5,7 @@ import { ForgeW3CoreProvidersProps, useChainId, useW3Connection } from '../../..
 
 type ForgeBalancesProps = ForgeW3CoreProvidersProps['config']
 export function ForgeUserConfigUpdater({
+  boardOptions,
   contractAddresses,
   metadataUris,
   web3: { chains },
@@ -16,9 +17,11 @@ export function ForgeUserConfigUpdater({
   const [, , { address: account }] = useW3Connection()
   const [, updateUserConfig] = useForgeUserConfigAtom()
   useEffect(() => {
-    updateUserConfig({
+    updateUserConfig((state) => ({
       chains,
+      readonlyChain: chains[0],
       user: { account, chainId, contactInfo },
+      board: { ...state.board, ...boardOptions },
       contentUrls,
       ipfs: {
         gatewayUris: skillOptions?.metadataFetchOptions?.gatewayUris || [],
@@ -26,8 +29,9 @@ export function ForgeUserConfigUpdater({
       },
       metadataUriMap: metadataUris || {},
       contractAddressMap: contractAddresses || {}
-    })
+    }))
   }, [
+    boardOptions,
     chains,
     chainId,
     account,

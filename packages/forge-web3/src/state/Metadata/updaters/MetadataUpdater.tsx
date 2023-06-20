@@ -28,7 +28,7 @@ export function ForgeMetadataUpdater(props: ForgeMetadataUpdaterProps) {
   })
 
   const { data: promisedMetadata, chainId } = useForgeFetchMetadata({
-    loadAmount: collections?.toNumber() || 0,
+    loadAmount: collections?.toNumber() || 2,
     metadataFetchOptions: props.metadataFetchOptions
   })
 
