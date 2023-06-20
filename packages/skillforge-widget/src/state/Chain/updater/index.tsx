@@ -27,10 +27,10 @@ export function ChainUpdater() {
     if (!chain?.network) {
       setReadonlyChain(chainFromParam || userChains[0])
       if (!chainFromParam) updateSearchParams(ForgeSearchParamKeys.FORGE_CHAIN, userChains[0]?.network)
+    } else {
+      updateSearchParams(ForgeSearchParamKeys.FORGE_CHAIN, chain.network)
     }
-
-    chain?.network && updateSearchParams(ForgeSearchParamKeys.FORGE_CHAIN, chain.network)
-  }, [chain.network, chainFromParam, setReadonlyChain, userChains])
+  }, [chain?.network, chainFromParam, setReadonlyChain, userChains])
 
   return null
 }
