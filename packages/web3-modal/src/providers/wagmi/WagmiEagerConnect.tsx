@@ -1,15 +1,18 @@
 import React from 'react'
 import { ReactNode, useEffect } from 'react'
-import { useAccount, useConnect } from 'wagmi'
+import { useAccount, useConnect, useSwitchNetwork } from 'wagmi'
 
 export const WagmiEagerConnect = ({
+  chainIdFromUrl,
   persistOnRefresh,
   children
 }: {
+  chainIdFromUrl: number | undefined
   persistOnRefresh: boolean
   children: ReactNode
 }) => {
-  const { connect, connectors } = useConnect()
+  const { connectAsync, connectors } = useConnect()
+  const { switchNetwork } = useSwitchNetwork()
   const { isDisconnected } = useAccount()
 
   useEffect(() => {
@@ -22,8 +25,19 @@ export const WagmiEagerConnect = ({
     const isWagmiConnected = wagmiConnected ? JSON.parse(wagmiConnected) : false
 
     if (!isWagmiConnected) return
-    connect({ connector: connectors[0] })
-  }, [connect, connectors, isDisconnected, persistOnRefresh])
+
+    async function smartReconnect() {
+      const [connector] = connectors
+      const internalChain = await connector.getChainId()
+      await connectAsync({ connector, chainId: chainIdFromUrl })
+      if (chainIdFromUrl && chainIdFromUrl !== internalChain) {
+        if (!connector.ready) await connector.connect()
+        await connector.switchChain?.(chainIdFromUrl)
+      }
+    }
+
+    smartReconnect()
+  }, [chainIdFromUrl, connectAsync, connectors, isDisconnected, persistOnRefresh, switchNetwork])
 
   return <>{children}</>
 }

@@ -6,6 +6,7 @@ import { useTheme } from 'styled-components'
 
 import { Z_INDICES } from '../../constants'
 import { useConnection, useModalTheme, usePstlWeb3Modal } from '../../hooks'
+import { WithChainIdFromUrl } from '../../providers/types'
 import { ConnectorEnhancedExtras } from '../../types'
 import { getConnectorInfo } from '../../utils'
 import { LoadingScreen, LoadingScreenProps } from '../LoadingScreen'
@@ -21,7 +22,7 @@ interface ThemeConfigProps<
   theme: T
   mode?: K
 }
-interface PstlWeb3ConnectionModalProps extends Omit<ModalProps, 'isOpen' | 'onDismiss'> {
+interface PstlWeb3ConnectionModalProps extends Omit<ModalProps, 'isOpen' | 'onDismiss'>, WithChainIdFromUrl {
   title?: string
   themeConfig?: ThemeConfigProps
   loaderProps?: LoadingScreenProps
@@ -32,6 +33,7 @@ interface PstlWeb3ConnectionModalProps extends Omit<ModalProps, 'isOpen' | 'onDi
 }
 
 function ModalWithoutThemeProvider({
+  chainIdFromUrl,
   title = 'WALLET CONNECTION',
   buttonProps,
   loaderProps,
@@ -66,7 +68,7 @@ function ModalWithoutThemeProvider({
             setW3aModalLoading
           },
           {
-            chainId: chain?.id,
+            chainId: chainIdFromUrl || chain?.id,
             address,
             isW3aModalMounted: w3aModalMounted,
             closeOnConnect: closeModalOnConnect,
@@ -91,18 +93,19 @@ function ModalWithoutThemeProvider({
         )
       }),
     [
-      address,
-      buttonProps,
-      chain,
-      closeModalOnConnect,
       connectors,
       currentConnector,
-      connectorDisplayOverrides,
-      theme?.modals?.connection?.helpers?.show,
-      w3aModalMounted,
-      close,
       connect,
-      openW3Modal
+      openW3Modal,
+      close,
+      chainIdFromUrl,
+      chain?.id,
+      address,
+      w3aModalMounted,
+      closeModalOnConnect,
+      connectorDisplayOverrides,
+      buttonProps,
+      theme?.modals?.connection?.helpers?.show
     ]
   )
 

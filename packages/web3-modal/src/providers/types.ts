@@ -85,10 +85,11 @@ export type Web3ModalConfig<ID extends number, SC extends ChainsPartialReadonly<
 export interface Web3ModalProps<ID extends number, SC extends ChainsPartialReadonly<ID>> {
   appName: string
   chains: SC
+  chainFromUrlOptions?: { key: string; type: 'network' | 'id' }
   wagmiClient?: PstlWagmiClientOptions<ID, SC>
   ethereumClient?: EthereumClient
   modals: {
-    pstl?: Omit<PstlWeb3ConnectionModalProps, 'isOpen' | 'onDismiss'>
+    pstl?: Omit<PstlWeb3ConnectionModalProps, 'isOpen' | 'onDismiss' | 'chainIdFromUrl'>
     w3m: Omit<Web3ModalConfig<any, any>, 'w3aProjectId' | 'chains'>
     w3a: Omit<PstlWeb3AuthConnectorProps<ID>, 'chains'>
   }
@@ -99,3 +100,7 @@ export type PstlWeb3ModalProps<
   SC extends ChainsPartialReadonly<ID> = ChainsPartialReadonly<ID>
 > = Web3ModalProps<ID, SC>
 export type PstlWeb3ProviderProps<ID extends number, SC extends ChainsPartialReadonly<ID>> = PstlWeb3ModalProps<ID, SC>
+
+export type WithChainIdFromUrl = {
+  chainIdFromUrl: number | undefined
+}

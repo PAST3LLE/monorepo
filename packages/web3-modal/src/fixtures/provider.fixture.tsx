@@ -56,6 +56,7 @@ function InnerApp() {
         ...commonProps,
         appName: 'COSMOS APP',
         chains: commonProps.chains,
+        chainFromUrlOptions: { type: 'network', key: 'web3-modal-network' },
         wagmiClient: {
           options: {
             pollingInterval: 10_000,
@@ -71,6 +72,7 @@ function InnerApp() {
             projectId: commonProps.modals.w3a.projectId,
             appLogoLight: LOGO,
             appLogoDark: LOGO,
+            uxMode: 'redirect',
             configureAdditionalConnectors() {
               // Add Torus Wallet Plugin (optional)
               const torusPlugin = new TorusWalletConnectorPlugin({
