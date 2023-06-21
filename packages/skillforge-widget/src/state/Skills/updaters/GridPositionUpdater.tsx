@@ -8,7 +8,7 @@ import { MEDIA_WIDTHS } from '@past3lle/theme'
 import { useEffect, useMemo } from 'react'
 
 import { SkillVectorsMap, useActiveSkillReadAtom, useVectorsAtom } from '..'
-import { calculateGridPoints } from '../../../components/Canvas/canvasApi/api/hooks'
+import { calculateGridPoints } from '../../../api/hooks'
 import { CANVAS_CONTAINER_ID } from '../../../constants/skills'
 
 export function GridPositionUpdater() {

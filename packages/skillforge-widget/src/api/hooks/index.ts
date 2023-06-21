@@ -1,8 +1,8 @@
 import { ForgeMetadataState, SkillId, SkillMetadata } from '@past3lle/forge-web3'
 import { useEffect, useState } from 'react'
 
-import { SkillGridPositionList, SkillsState, VectorsState } from '../../../../../state/Skills'
-import { useAssetsMap } from '../../../../../theme/utils'
+import { SkillGridPositionList, SkillsState, VectorsState } from '../../state/Skills'
+import { useAssetsMap } from '../../theme/utils'
 import { Lightning } from '../lightning'
 import { LightningConfig } from '../types'
 import { Vector } from '../vector'

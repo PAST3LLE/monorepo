@@ -12,12 +12,12 @@ import {
 import { convertToRomanNumerals } from '@past3lle/utils'
 import React, { useMemo } from 'react'
 
+import { Vector } from '../../api/vector'
 import { CANVAS_CONTAINER_ID, SKILLPOINTS_CONTAINER_ID } from '../../constants/skills'
 import { useVectorsAtom } from '../../state/Skills'
 import { SkillContainerAbsolute, SkillpointHeader } from '../Common'
 import { Skillpoint } from '../Skillpoint'
-import { LightningCanvas } from './canvasApi'
-import { Vector } from './canvasApi/api/vector'
+import { LightningCanvas } from './LightningCanvas'
 import { SkillCanvasContainer, SkillInnerCanvasContainer } from './styleds'
 
 export interface SkillsCanvasProps {

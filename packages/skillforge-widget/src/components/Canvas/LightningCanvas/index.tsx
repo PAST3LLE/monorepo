@@ -3,11 +3,11 @@ import { useForgeUserConfigAtom, useForgeWindowSizeAtom } from '@past3lle/forge-
 import { useStateRef } from '@past3lle/hooks'
 import React, { useContext, useMemo } from 'react'
 
-import { SkillForgeComponentContext } from '../../../components/Board'
+import { CONFIG } from '../../../api/config'
+import { useLightningCanvas } from '../../../api/hooks'
 import { calculateCanvasWidth } from '../../../state/Skills/updaters/GridPositionUpdater'
 import { useGenericImageSrcSet } from '../../../theme/global'
-import { CONFIG } from './api/config'
-import { useLightningCanvas } from './api/hooks'
+import { SkillForgeComponentContext } from '../../Board'
 import { CanvasContainer, StyledCanvas } from './styleds'
 
 const CANVAS_ID = 'skillforge'

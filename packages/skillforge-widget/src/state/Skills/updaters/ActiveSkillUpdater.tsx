@@ -3,7 +3,7 @@ import { useIsMobile } from '@past3lle/hooks'
 import { useEffect } from 'react'
 
 import { useForgesAtom, useVectorsAtom } from '..'
-import { toggleSelectedSkill } from '../../../components/Canvas/canvasApi/api/hooks'
+import { toggleSelectedSkill } from '../../../api/hooks'
 import { ActiveSidePanel, useSidePanelAtomBase } from '../../SidePanel'
 
 export function ActiveSkillUpdater() {
