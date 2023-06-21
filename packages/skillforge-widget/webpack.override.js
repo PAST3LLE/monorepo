@@ -10,7 +10,12 @@ module.exports = (webpackConfig) => (
             }),
             new webpack.ProvidePlugin({
                 Buffer: ["buffer", "Buffer"],
-            })
+            }),
+            new webpack.DefinePlugin({
+                'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
+                'process.env.REACT_APP_WEB3MODAL_ID': JSON.stringify(process.env.REACT_APP_WEB3MODAL_ID || ''),
+                'process.env.REACT_APP_WEB3_AUTH_ID': JSON.stringify(process.env.REACT_APP_WEB3_AUTH_ID || '')
+            }),
         ],
         module: {
             rules: [
@@ -48,6 +53,7 @@ module.exports = (webpackConfig) => (
                 https: require.resolve("https-browserify"),
                 os: require.resolve("os-browserify"),
                 url: require.resolve("url"),
+                zlib: false
             },
         },
     }

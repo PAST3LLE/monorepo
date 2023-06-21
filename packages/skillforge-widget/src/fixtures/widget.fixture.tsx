@@ -32,7 +32,9 @@ const skillforgeTheme = createTheme({
     mainBgAlt: '#1A1A1A',
     assetsMap: {
       logos: {
-        company: { full: 'COMPANY_LOGO' },
+        company: {
+          full: '	https://pastelle.shop/static/media/pastelle-ivory-outlined.06d3dadfc9e4e7c2c8904b880bf4067c.svg'
+        },
         forge: { '512': 'FORGE_512' }
       }
     }
@@ -40,21 +42,26 @@ const skillforgeTheme = createTheme({
   DEFAULT: {
     assetsMap: {
       logos: {
-        company: { full: 'COMPANY_LOGO' },
+        company: {
+          full: '	https://pastelle.shop/static/media/pastelle-ivory-outlined.06d3dadfc9e4e7c2c8904b880bf4067c.svg'
+        },
         forge: { '512': 'FORGE_512' }
       },
       images: {
         background: {
           app: 'https://ik.imagekit.io/pastelle/SKILLFORGE/forge-background.png',
           header: {
-            background: 'HEADER_BACKGROUND',
+            background:
+              'https://e7.pngegg.com/pngimages/977/1011/png-clipart-blue-banner-design-page-header-web-banner-header-miscellaneous-blue.png',
             account: 'ACCOUNT_BACKGROUND'
           }
         },
         skills: {
           skillpoint: {
-            highlight: 'HIGHLIGHT',
-            empty: 'EMPTY_SKILL'
+            highlight:
+              'https://www.transparentpng.com/download/red-circle/rotation-effect-red-circle-logo-transparent-free-5mbxgt.png',
+            empty:
+              'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Blank_square.svg/1200px-Blank_square.svg.png'
           }
         }
       },
@@ -66,6 +73,7 @@ const skillforgeTheme = createTheme({
         chains: {
           disconnected: 'CONNECTION_ICON',
           5: 'ETHEREUM_LOGO',
+          137: 'MATIC_LOGO',
           80001: 'POLYGON_LOGO'
         },
         rarity: {
@@ -86,8 +94,19 @@ function App() {
         ...contractProps,
         name: 'Skillforge Widget Fixture',
         theme: skillforgeTheme,
+        contactInfo: {
+          email: 'fixture@fuxtire.gmail.com'
+        },
+        contentUrls: {
+          FAQ: 'faq.thing.io'
+        },
         web3: {
           chains: commonProps.chains,
+          wagmiClient: {
+            options: {
+              pollingInterval: 10_000
+            }
+          },
           modals: {
             w3m: commonProps.modals.w3m,
             w3a: commonProps.modals.w3a
