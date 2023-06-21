@@ -93,6 +93,10 @@ function App() {
       config={{
         ...contractProps,
         name: 'Skillforge Widget Fixture',
+        boardOptions: {
+          minimumColumns: 3,
+          minimumBoardWidth: 0
+        },
         theme: skillforgeTheme,
         contactInfo: {
           email: 'fixture@fuxtire.gmail.com'

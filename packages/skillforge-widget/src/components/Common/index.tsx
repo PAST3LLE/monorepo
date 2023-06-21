@@ -1,11 +1,11 @@
-import { Row } from '@past3lle/components'
+import { ColumnCenter, Row } from '@past3lle/components'
 import { SkillRarity, getRarityColours } from '@past3lle/forge-web3'
 import styled from 'styled-components'
 
+import { Vector } from '../../api/vector'
 import { SKILLPOINT_SIZES } from '../../constants/skills'
-import { Vector } from '../Canvas/canvasApi/api/vector'
 
-const StyledGridItem = styled(Row)<{
+const StyledGridItem = styled(ColumnCenter)<{
   vector?: Vector
 }>`
   width: ${SKILLPOINT_SIZES.width};
@@ -73,14 +73,15 @@ export const StyledSkillpoint = styled(StyledGridItem).attrs({
 export const SkillpointHeader = styled(StyledGridItem)`
   font-family: 'Goth';
   font-weight: 900;
-  font-size: 6rem;
+  font-size: 4rem;
   color: ${({ theme }) => theme.mainBg};
   margin: 0;
   text-align: center;
   justify-content: center;
+  padding: 0;
 `
 
-export const SkillContainerAbsolute = styled.div`
+export const SkillContainerAbsolute = styled(Row)`
   position: absolute;
   top: 0;
   left: 0;

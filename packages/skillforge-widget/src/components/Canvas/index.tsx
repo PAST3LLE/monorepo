@@ -1,5 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { Row } from '@past3lle/components'
+import { Row, Text } from '@past3lle/components'
 import {
   ForgeW3AppConfig,
   SkillId,
@@ -58,13 +58,14 @@ export function SkillsCanvas() {
   return (
     <SkillCanvasContainer style={{ position: 'relative' }}>
       <Row width="100%" height={80} justifyContent="space-between" style={{ position: 'relative' }}>
-        <SkillContainerAbsolute>
+        <SkillContainerAbsolute alignItems={'center'}>
           {vectors.slice(0, BOARD_COLUMNS).map(({ vector }, idx) => {
             const idxToRoman = convertToRomanNumerals(idx + 1)
             if (!vector) return null
             return (
-              <SkillpointHeader key={idx} vector={new Vector(vector.X, vector.Y, vector.X1, 0)} height={70}>
-                {idxToRoman}
+              <SkillpointHeader key={idx} vector={new Vector(vector.X, vector.Y, vector.X1, 0)}>
+                <span>{idxToRoman}</span>
+                <Text.Small>COLLECTION</Text.Small>
               </SkillpointHeader>
             )
           })}
@@ -77,7 +78,9 @@ export function SkillsCanvas() {
         style={{ position: 'relative' }}
         id={CANVAS_CONTAINER_ID}
       >
-        <SkillContainerAbsolute id={SKILLPOINTS_CONTAINER_ID}>{VectorsMap}</SkillContainerAbsolute>
+        <SkillContainerAbsolute id={SKILLPOINTS_CONTAINER_ID} display={'block'}>
+          {VectorsMap}
+        </SkillContainerAbsolute>
         {/* CANVAS */}
         <LightningCanvas />
       </SkillInnerCanvasContainer>

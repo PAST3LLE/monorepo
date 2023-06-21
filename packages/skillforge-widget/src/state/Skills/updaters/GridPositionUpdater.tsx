@@ -9,14 +9,16 @@ import { useEffect, useMemo } from 'react'
 
 import { SkillVectorsMap, useActiveSkillReadAtom, useVectorsAtom } from '..'
 import { calculateGridPoints } from '../../../api/hooks'
-import { CANVAS_CONTAINER_ID } from '../../../constants/skills'
+import { CANVAS_CONTAINER_ID, SKILLPOINT_SIZES } from '../../../constants/skills'
 
+const SKILLPOINT_SIZE_NUMBER = Number(SKILLPOINT_SIZES.width.replace('vh', '')) || 10
 export function GridPositionUpdater() {
   const chainId = useSupportedOrDefaultChainId()
   const [metadata] = useForgeMetadataReadAtom(chainId)
   const [active] = useActiveSkillReadAtom()
   const [, setVectorsState] = useVectorsAtom()
   const [windowSizeState] = useForgeWindowSizeAtom()
+  const isMobileWidth = (windowSizeState.width || 0) <= MEDIA_WIDTHS.upToExtraSmall
   const [{ board }] = useForgeUserConfigAtom()
 
   const gridConstants = useMemo(() => {
@@ -33,7 +35,11 @@ export function GridPositionUpdater() {
     const rows = highestRowCount
 
     const gridHeight = Math.max(container.clientHeight - 30, board?.minimumBoardHeight)
-    const gridWidth = Math.max(container.clientWidth, board?.minimumBoardWidth) * 0.95
+    const gridWidth = Math.max(
+      container.clientWidth,
+      board?.minimumBoardWidth,
+      (gridHeight / SKILLPOINT_SIZE_NUMBER) * columns * 1.55
+    )
 
     // config
     const rowHeight = Math.floor(gridHeight / rows)
@@ -42,7 +48,7 @@ export function GridPositionUpdater() {
     return { rows, columns, rowHeight, columnWidth, gridHeight, gridWidth }
     // NOTE: TS complains about windowSizeState which we need to re-calc on window size change(s)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [metadata, windowSizeState.height, windowSizeState.width, board])
+  }, [metadata, windowSizeState.height, windowSizeState.width, board, isMobileWidth])
 
   useEffect(() => {
     if (gridConstants) {
@@ -63,7 +69,7 @@ export function GridPositionUpdater() {
         setVectorsState((state) => ({ ...state, vectorsMap }))
       }
     }
-  }, [windowSizeState.height, windowSizeState.width, active, metadata, gridConstants, setVectorsState])
+  }, [windowSizeState.height, windowSizeState.width, active, metadata, gridConstants, setVectorsState, isMobileWidth])
 
   return null
 }

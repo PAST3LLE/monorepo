@@ -6,9 +6,9 @@ import { devError } from '@past3lle/utils'
 import React, { memo, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
+import { Vector } from '../../api/vector'
 import { SkillsState, useForgesAtom } from '../../state/Skills'
 import { useAssetsMap } from '../../theme/utils'
-import { Vector } from '../Canvas/canvasApi/api/vector'
 import { StyledSkillpoint } from '../Common'
 
 interface Props {

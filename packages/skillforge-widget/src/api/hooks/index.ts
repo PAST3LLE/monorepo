@@ -161,6 +161,7 @@ export function toggleSelectedSkill(vectorsState?: VectorsState, skillsState?: S
   }
 }
 
+const checkItemRowPosition = (i: number, columns: number) => i > 0 && i % columns === 0
 /**
  * Calculates vector points of a grid by multiplying highest amount of rows by number of columns
  * @param metadata Skills metadata - aggregation of skills metadata in each collection
@@ -185,7 +186,8 @@ export function calculateGridPoints(
   const points = []
   for (let i = 0; i < columns * rows; i++) {
     // e.g 3i % 3 === 0 means we are onto the next row
-    if (i > 0 && i % columns === 0) {
+    const isNextRow = checkItemRowPosition(i, columns)
+    if (isNextRow) {
       // we have moved onto the next row, iterate variable
       row++
     }

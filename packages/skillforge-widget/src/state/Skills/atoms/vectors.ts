@@ -2,7 +2,7 @@ import { SkillId } from '@past3lle/forge-web3'
 import { atom, useAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 
-import { Vector } from '../../../components/Canvas/canvasApi/api/vector'
+import { Vector } from '../../../api/vector'
 
 export type SkillGridPositionList = {
   vector: Vector | undefined
