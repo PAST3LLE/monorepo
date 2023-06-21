@@ -31,9 +31,11 @@ export interface CustomIpfsGatewayConfig {
 export async function chainFetchIpfsUri(uriHash: string, ...customGateways: CustomIpfsGatewayConfig[]) {
   const controllersMap: Map<number, AbortController> = new Map()
 
+  const gateways = customGateways?.length ? customGateways : [{ gateway: DEFAULT_GATEWAY_URI }]
+
   let success
-  for (let i = 0; i < customGateways.length; i++) {
-    const { gateway: uri, config } = customGateways[i]
+  for (let i = 0; i < gateways.length; i++) {
+    const { gateway: uri, config } = gateways[i]
 
     const controller = new AbortController()
     controllersMap.set(i, controller)
@@ -63,9 +65,11 @@ export async function chainFetchIpfsUri(uriHash: string, ...customGateways: Cust
 }
 
 export async function chainFetchIpfsLsUri(uriHash: string, ...customGateways: CustomIpfsGatewayConfig[]) {
+  const gateways = customGateways?.length ? customGateways : [{ gateway: DEFAULT_GATEWAY_URI }]
+
   let success
-  for (let i = 0; i < customGateways.length; i++) {
-    const { gateway: uri, config } = customGateways[i]
+  for (let i = 0; i < gateways.length; i++) {
+    const { gateway: uri, config } = gateways[i]
     try {
       const ipfsUri = ipfsToLsUri(uriHash, uri)
       const response = await fetch(ipfsUri, config?.init)
@@ -86,7 +90,8 @@ export async function chainFetchIpfsLsUri(uriHash: string, ...customGateways: Cu
 }
 
 export async function chainFetchIpfsUriBlob(uriHash: string, ...customGateways: CustomIpfsGatewayConfig[]) {
-  const response = await chainFetchIpfsUri(uriHash, ...customGateways)
+  const gateways = customGateways?.length ? customGateways : [{ gateway: DEFAULT_GATEWAY_URI }]
+  const response = await chainFetchIpfsUri(uriHash, ...gateways)
 
   return response && URL.createObjectURL(await response.blob())
 }
@@ -103,7 +108,10 @@ export async function chainFetchIpfsApiContent<T extends string>(
   uri: T,
   { fetchOptions, auxData }: { fetchOptions?: MetadataFetchOptions; auxData?: any }
 ): Promise<{ uri: T; auxData: any }[]> {
-  return chainFetchIpfsLsUri(uri, ...(fetchOptions?.gatewayApiUris || []))
+  const gateways = fetchOptions?.gatewayApiUris?.length
+    ? fetchOptions?.gatewayApiUris
+    : [{ gateway: DEFAULT_GATEWAY_URI }]
+  return chainFetchIpfsLsUri(uri, ...gateways)
     .then((res) => res?.json())
     .then(
       (res) =>
