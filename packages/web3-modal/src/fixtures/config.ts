@@ -67,7 +67,8 @@ export const pstlModalTheme = createTheme({
 // TESTING ID - DONT USE IN PROD
 const WALLETCONNECT_TEST_ID = 'a01e2f3b7c64ff495f9cb28e4e2d4b49'
 // TESTING KEY DO NOT USE IN PROD
-export const WEB3AUTH_TEST_ID = 'BHloyoLW113nGn-mIfeeNqj2U0wNCXa4y83xLnR6d3FELPMz_oZ7rbY4ZEO3r0MVjQ_LX92obu1ta0NknOwfvtU'
+export const WEB3AUTH_TEST_ID =
+  'BHloyoLW113nGn-mIfeeNqj2U0wNCXa4y83xLnR6d3FELPMz_oZ7rbY4ZEO3r0MVjQ_LX92obu1ta0NknOwfvtU'
 const DEFAULT_PROPS: PstlWeb3ModalProps<5 | 80001> = {
   appName: 'COSMOS APP',
   chains,
