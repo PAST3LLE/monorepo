@@ -1,5 +1,5 @@
 import { Row } from '@past3lle/components'
-import { useForgeWindowSizeAtom } from '@past3lle/forge-web3'
+import { useForgeGetUserConfigChainsAtom, useForgeWindowSizeAtom } from '@past3lle/forge-web3'
 import { MEDIA_WIDTHS } from '@past3lle/theme'
 import React from 'react'
 
@@ -12,6 +12,7 @@ import { HeaderContainer, Web3InfoContainer } from './styleds'
 
 export const SkillForgeHeader = () => {
   const [{ width = 0 }] = useForgeWindowSizeAtom()
+  const [{ length: chainsLength }] = useForgeGetUserConfigChainsAtom()
   const isMobileWidth = width <= MEDIA_WIDTHS.upToSmall
   return (
     <>
@@ -21,7 +22,7 @@ export const SkillForgeHeader = () => {
             <Row flexDirection={isMobileWidth ? 'row-reverse' : 'row'}>
               {!isMobileWidth && <ShopExternalLinkButton />}
               <InventoryButton />
-              <NetworkInfoButton />
+              {chainsLength > 1 && <NetworkInfoButton />}
               {!isMobileWidth && <ConnectionInfoButton />}
             </Row>
           </Web3InfoContainer>

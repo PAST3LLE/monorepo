@@ -1,4 +1,4 @@
-import { ForgeW3ChainState, useChainState, useForgeReadonlyChainAtom } from '@past3lle/forge-web3'
+import { ForgeW3ChainState, useChainState, useForgeUserConfigAtom } from '@past3lle/forge-web3'
 import { useEffect } from 'react'
 
 import { AppMessagesKeys, useAppMessagesAtom } from '..'
@@ -14,7 +14,12 @@ export function AppMessagesUpdater() {
 function useSetChainStateMessages() {
   const [, setAppMessages] = useAppMessagesAtom()
   const [, chainState] = useChainState()
-  const [readonlyChain] = useForgeReadonlyChainAtom()
+  const [
+    {
+      readonlyChain,
+      chains: { length: availableChains }
+    }
+  ] = useForgeUserConfigAtom()
   useEffect(() => {
     switch (chainState) {
       case ForgeW3ChainState.UNSUPPORTED: {
@@ -27,8 +32,8 @@ function useSetChainStateMessages() {
       case ForgeW3ChainState.READONLY: {
         setAppMessages({
           [AppMessagesKeys.READONLY]: `${
-            readonlyChain?.name || 'App'
-          } readonly mode active. Please login to view your active balances and skill inventory.`
+            availableChains > 1 && readonlyChain?.name ? `${readonlyChain?.name} readonly` : 'Readonly'
+          } mode active. Please login to view your active balances and skill inventory.`
         })
         break
       }
@@ -37,5 +42,5 @@ function useSetChainStateMessages() {
         break
       }
     }
-  }, [readonlyChain?.name, chainState, setAppMessages])
+  }, [readonlyChain?.name, chainState, setAppMessages, availableChains])
 }
