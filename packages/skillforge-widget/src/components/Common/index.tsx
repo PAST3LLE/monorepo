@@ -1,4 +1,4 @@
-import { ColumnCenter, Row } from '@past3lle/components'
+import { ColumnCenter, Row, Text } from '@past3lle/components'
 import { SkillRarity, getRarityColours } from '@past3lle/forge-web3'
 import styled from 'styled-components'
 
@@ -71,14 +71,24 @@ export const StyledSkillpoint = styled(StyledGridItem).attrs({
 `
 
 export const SkillpointHeader = styled(StyledGridItem)`
-  font-family: 'Goth';
-  font-weight: 900;
-  font-size: 4rem;
-  color: ${({ theme }) => theme.mainBg};
-  margin: 0;
   text-align: center;
-  justify-content: center;
+
+  color: ${({ theme }) => theme.canvas?.header?.collectionNumber?.color || theme.mainBg};
+  font-family: ${({ theme }) => theme.canvas?.header?.collectionNumber?.fontFamily || 'Goth'};
+  font-size: ${({ theme }) => theme.canvas?.header?.collectionNumber?.fontSize || '4rem'};
+  font-weight: ${({ theme }) => theme.canvas?.header?.collectionNumber?.fontWeight || 900};
+
+  margin: 0;
   padding: 0;
+  justify-content: center;
+
+  > ${Text.Small} {
+    color: ${({ theme }) => theme.canvas?.header?.collectionText?.color || 'inherit'};
+    font-family: ${({ theme }) => theme.canvas?.header?.collectionText?.fontFamily || 'inherit'};
+    font-size: ${({ theme }) => theme.canvas?.header?.collectionText?.fontSize || '1.1rem'};
+    font-variation-settings: 'wght' ${({ theme }) => theme.canvas?.header?.collectionText?.fontWeight || 100};
+    font-weight: ${({ theme }) => theme.canvas?.header?.collectionText?.fontWeight || 100};
+  }
 `
 
 export const SkillContainerAbsolute = styled(Row)`

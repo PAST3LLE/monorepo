@@ -84,6 +84,23 @@ export interface SkillForgeTheme<SC extends ChainsPartialReadonly<SupportedForge
     fontSize: { small: string; normal: string; large: string }
   }
 
+  canvas?: {
+    header?: {
+      collectionNumber?: {
+        color?: string
+        fontFamily?: string
+        fontSize?: string
+        fontWeight?: number
+      }
+      collectionText?: {
+        color?: string
+        fontFamily?: string
+        fontSize?: string
+        fontWeight?: number
+      }
+    }
+  }
+
   sidePanels?: {
     [type in ForgeSidePanelTypes]?: {
       container?: {
