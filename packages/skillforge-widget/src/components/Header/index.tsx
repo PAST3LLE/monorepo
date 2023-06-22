@@ -22,7 +22,7 @@ export const SkillForgeHeader = () => {
             <Row flexDirection={isMobileWidth ? 'row-reverse' : 'row'}>
               {!isMobileWidth && <ShopExternalLinkButton />}
               <InventoryButton />
-              {chainsLength > 1 && <NetworkInfoButton />}
+              {(isMobileWidth || chainsLength > 1) && <NetworkInfoButton />}
               {!isMobileWidth && <ConnectionInfoButton />}
             </Row>
           </Web3InfoContainer>

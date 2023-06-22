@@ -1,4 +1,5 @@
 import { useW3Connection, useW3Modal } from '@past3lle/forge-web3'
+import { useIsMobile } from '@past3lle/hooks'
 import React from 'react'
 
 import { SkillForge } from '../components'
@@ -88,13 +89,16 @@ const skillforgeTheme = createTheme({
   }
 })
 function App() {
+  const isMobile = useIsMobile()
   return (
     <SkillForge
+      maxWidth={isMobile ? '100%' : '90%'}
+      maxHeight={isMobile ? '100%' : '90%'}
       config={{
         ...contractProps,
         name: 'Skillforge Widget Fixture',
         boardOptions: {
-          minimumColumns: 2,
+          minimumColumns: 3,
           minimumBoardWidth: 0
         },
         theme: skillforgeTheme,
