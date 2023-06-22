@@ -94,7 +94,7 @@ function App() {
         ...contractProps,
         name: 'Skillforge Widget Fixture',
         boardOptions: {
-          minimumColumns: 3,
+          minimumColumns: 2,
           minimumBoardWidth: 0
         },
         theme: skillforgeTheme,

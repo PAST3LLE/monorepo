@@ -1,6 +1,7 @@
 import { ForgeMetadataState, SkillId, SkillMetadata } from '@past3lle/forge-web3'
 import { useEffect, useState } from 'react'
 
+import { MARGINS } from '../../constants/grid'
 import { SkillGridPositionList, SkillsState, VectorsState } from '../../state/Skills'
 import { useAssetsMap } from '../../theme/utils'
 import { Lightning } from '../lightning'
@@ -194,13 +195,13 @@ export function calculateGridPoints(
 
     const skillAtPosition: SkillMetadata | undefined = metadata?.[i % columns]?.[row - 1]
 
-    // e.g i = 2
-    // 200cw * 2 = 400aw
-    // 200cw + 400aw = 600aw
-    // 600 - 100hc = 500
-    const xAxis = Math.floor(columnWidth * (i % columns) + columnWidth / columns)
+    const columnsEven = columns % 2 === 0
+    const xAxis = Math.floor(
+      columnWidth * (i % columns) +
+        Math.max(MARGINS.SIDE, columnWidth / (columnsEven || columns <= 3 ? columns + 1 : columns))
+    )
     const yAxis = Math.floor((gridHeight / rows) * (row + 0.2) - rowHeight)
-    const vector: Vector | undefined = /* !!skillAtPosition ? */ new Vector(0, 0, xAxis, yAxis) /* : undefined */
+    const vector: Vector | undefined = new Vector(0, 0, xAxis, yAxis)
 
     points.push({ vector, skillId: skillAtPosition?.properties?.id })
   }

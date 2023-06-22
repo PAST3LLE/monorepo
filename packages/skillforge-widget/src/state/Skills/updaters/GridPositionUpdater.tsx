@@ -7,7 +7,7 @@ import {
 import { MEDIA_WIDTHS } from '@past3lle/theme'
 import { useEffect, useMemo } from 'react'
 
-import { SkillVectorsMap, useActiveSkillReadAtom, useVectorsAtom } from '..'
+import { SkillVectorsMap, VectorsState, useActiveSkillReadAtom, useVectorsAtom } from '..'
 import { calculateGridPoints } from '../../../api/hooks'
 import { CANVAS_CONTAINER_ID, SKILLPOINT_SIZES } from '../../../constants/skills'
 
@@ -18,10 +18,9 @@ export function GridPositionUpdater() {
   const [active] = useActiveSkillReadAtom()
   const [, setVectorsState] = useVectorsAtom()
   const [windowSizeState] = useForgeWindowSizeAtom()
-  const isMobileWidth = (windowSizeState.width || 0) <= MEDIA_WIDTHS.upToExtraSmall
   const [{ board }] = useForgeUserConfigAtom()
 
-  const gridConstants = useMemo(() => {
+  const gridConstants: VectorsState['dimensions'] = useMemo(() => {
     const container = document.getElementById(CANVAS_CONTAINER_ID)
 
     if (!container) return null
@@ -32,13 +31,16 @@ export function GridPositionUpdater() {
       ? metadata[0]?.length
       : metadata.slice().sort((a, b) => (b?.length || 0) - (a?.length || 0))[0].length
     const columns = Math.max(board.minimumColumns, metadata.length)
+
     const rows = highestRowCount
 
     const gridHeight = Math.max(container.clientHeight - 30, board?.minimumBoardHeight)
+
+    const skillpointWidth = container.clientHeight / SKILLPOINT_SIZE_NUMBER
     const gridWidth = Math.max(
       container.clientWidth,
       board?.minimumBoardWidth,
-      (gridHeight / SKILLPOINT_SIZE_NUMBER) * columns * 1.55
+      Math.ceil(skillpointWidth * columns * 1.5)
     )
 
     // config
@@ -48,13 +50,14 @@ export function GridPositionUpdater() {
     return { rows, columns, rowHeight, columnWidth, gridHeight, gridWidth }
     // NOTE: TS complains about windowSizeState which we need to re-calc on window size change(s)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [metadata, windowSizeState.height, windowSizeState.width, board, isMobileWidth])
+  }, [metadata, windowSizeState.height, windowSizeState.width, board])
 
   useEffect(() => {
     if (gridConstants) {
       const vectors = calculateGridPoints(metadata, gridConstants)
       setVectorsState((vectorsState) => ({
         ...vectorsState,
+        dimensions: gridConstants,
         vectors
       }))
 
@@ -69,7 +72,7 @@ export function GridPositionUpdater() {
         setVectorsState((state) => ({ ...state, vectorsMap }))
       }
     }
-  }, [windowSizeState.height, windowSizeState.width, active, metadata, gridConstants, setVectorsState, isMobileWidth])
+  }, [windowSizeState.height, windowSizeState.width, active, metadata, gridConstants, setVectorsState])
 
   return null
 }

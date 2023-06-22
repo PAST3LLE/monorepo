@@ -13,6 +13,7 @@ import { convertToRomanNumerals } from '@past3lle/utils'
 import React, { useMemo } from 'react'
 
 import { Vector } from '../../api/vector'
+import { MARGINS } from '../../constants/grid'
 import { CANVAS_CONTAINER_ID, SKILLPOINTS_CONTAINER_ID } from '../../constants/skills'
 import { useVectorsAtom } from '../../state/Skills'
 import { SkillContainerAbsolute, SkillpointHeader } from '../Common'
@@ -55,8 +56,11 @@ export function SkillsCanvas() {
     [balances, metadataMap, vectors]
   )
 
+  const [{ dimensions }] = useVectorsAtom()
+  const showRightMargin = dimensions && dimensions.columnWidth * dimensions.columns >= window.innerWidth
+
   return (
-    <SkillCanvasContainer style={{ position: 'relative' }}>
+    <SkillCanvasContainer marginRight={showRightMargin ? MARGINS.SIDE : 0}>
       <Row width="100%" height={80} justifyContent="space-between" style={{ position: 'relative' }}>
         <SkillContainerAbsolute alignItems={'center'}>
           {vectors.slice(0, BOARD_COLUMNS).map(({ vector }, idx) => {

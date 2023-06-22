@@ -12,10 +12,19 @@ export type SkillVectorsMap = {
   [key: SkillId]: SkillGridPositionList[0]
 }
 export interface VectorsState {
+  dimensions: {
+    rows: number
+    columns: number
+    rowHeight: number
+    columnWidth: number
+    gridHeight: number
+    gridWidth: number
+  } | null
   vectors: SkillGridPositionList
   vectorsMap: SkillVectorsMap
 }
 const vectorsAtom = atomWithStorage<VectorsState>('SKILLFORGE_VECTORS_STATE', {
+  dimensions: null,
   vectors: [],
   vectorsMap: {}
 })
