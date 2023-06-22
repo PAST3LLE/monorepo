@@ -17,13 +17,14 @@ const SKILLFORGE_CONFIG: SkillForgeProps = {
     name: SKILLFORGE_APP_NAME,
     boardOptions: {
       minimumBoardHeight: 550,
+      minimumBoardWidth: 0,
       minimumColumns: 3
     },
     contactInfo: {
       email: CONTACT_EMAIL
     },
     contentUrls: {
-      FAQ: 'https://faq.pastelle.shop#upgrading'
+      FAQ: 'https://faq.pastelle.shop/#upgrading'
     },
     theme: SKILLFORGE_THEME,
     web3: WEB3_PROPS,
