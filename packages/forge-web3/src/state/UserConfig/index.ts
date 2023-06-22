@@ -28,9 +28,25 @@ export interface UserConfigState {
     }
   }
   board: {
+    /**
+     * Minimum amounts of columns to show
+     * @param minimumColumns 3
+     */
     minimumColumns: number
+    /**
+     * Minimum board height in px
+     * @param minimumBoardHeight 500
+     */
     minimumBoardHeight: number
+    /**
+     * Minimum board width in px. Ignored if derived size is bigger based on skills amount
+     * @param minimumBoardWidth 580
+     */
     minimumBoardWidth: number
+    /**
+     * Column size in rows when board empty
+     * @param emptyCollectionRowAmount 6
+     */
     emptyCollectionRowAmount: number
   }
   contentUrls?: {
