@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { CollectionsManager__factory as CollectionsManager } from '@past3lle/skilltree-contracts'
 import dotEnv from 'dotenv'
 import { ethers } from 'ethers'
@@ -12,7 +13,7 @@ import { writeNetworks } from './utils/writeNetworks'
 
 dotEnv.config()
 
-async function deployCollectionsManager(): Promise<void> {
+async function deployCollectionsManager(props?: { tryHigherValues: boolean }): Promise<void> {
   const { networks: networksMap, mnemonic: configMnemonic } = await getConfig()
 
   if (!networksMap) {
@@ -109,26 +110,59 @@ Metadata folder URI:`,
 
   const constructorArgs = [metadataUri]
 
-  const feeData = await getFeeData(network)
+  const feeData = await getFeeData(network, props?.tryHigherValues)
 
-  // Deploy the contract
-  const contract = await factory.deploy(...constructorArgs, feeData)
+  try {
+    // Deploy the contract
+    const contract = await factory.deploy(...constructorArgs, feeData)
 
-  // Wait for the deployment transaction to be mined
-  await contract.deployed()
-  console.log('[Forge-CLI] CollectionsManager.sol deployed at address:', contract.address)
+    // Wait for the deployment transaction to be mined
+    await contract.deployed()
+    console.log('[Forge-CLI] CollectionsManager.sol deployed at address:', contract.address)
 
-  await writeNetworks({
-    // SOL contract name
-    contract: 'CollectionsManager',
-    // deployed contract addr
-    newAddress: contract.address,
-    // deployed txHash
-    transactionHash: contract.deployTransaction.hash,
-    chainId: provider.network.chainId,
-    // network string name (e.g mumbai)
-    network: provider.network.name
-  })
+    await writeNetworks({
+      // SOL contract name
+      contract: 'CollectionsManager',
+      // deployed contract addr
+      newAddress: contract.address,
+      // deployed txHash
+      transactionHash: contract.deployTransaction.hash,
+      chainId: provider.network.chainId,
+      // network string name (e.g mumbai)
+      network: provider.network.name
+    })
+  } catch (error) {
+    console.log(`
+    _  _ ___   _   ___  ___   _   _ __  _ 
+    | || | __| /_\\ |   \\/ __| | | | | _ \\ |
+    | __ | _| / _ \\| |) \\__ \\ | |_| |  _/_|
+    |_||_|___/_/ \\_\\___/|___/  \\___/|_| (_)
+
+    ERROR!
+    An error occurred while deploying a new CollectionsManager.sol contract! Error message (if any):
+
+    ==========================
+    ${(error as any)?.message}
+    ==========================
+    
+    Confirm below to try again with higher gas fees as this is likely a network congestion issue.
+    `)
+
+    const confirmation = await inquirer.prompt([
+      {
+        type: 'confirm',
+        name: 'retry',
+        message: 'Do you wish to retry with 12% higher gas fees?'
+      }
+    ])
+
+    if (confirmation.retry) {
+      console.log('[Forge-CLI] Retrying with 12% increased gas fees.')
+      await deployCollectionsManager({ tryHigherValues: true })
+    } else {
+      throw error
+    }
+  }
 
   const confirmation = await inquirer.prompt([
     {

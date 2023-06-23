@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { CollectionsManager__factory as CollectionsManager } from '@past3lle/skilltree-contracts'
 import mergeManagerNetworks from '@past3lle/skilltree-contracts/networks.json'
@@ -19,7 +21,7 @@ interface LockedSkillParams {
   burnDependencies: { token: string; id: string }[]
 }
 
-async function mintCollectionSkills(): Promise<void> {
+async function mintCollectionSkills(props?: { tryHigherValues?: boolean }): Promise<void> {
   const { networks: networksMap, mnemonic: configMnemonic } = await getConfig()
 
   if (!networksMap) {
@@ -97,29 +99,32 @@ async function mintCollectionSkills(): Promise<void> {
     {
       type: 'input',
       name: 'to',
-      message: 'To which address are you minting new skills? (Any locked skills will ignore this param) Address:',
+      message:
+        'To which address are you minting new skills? Any locked skills will ignore this param, so if you plan on only minting locked skills, you can just leave blank! Address:',
+      default: '',
       validate(input) {
-        if (ethers.utils.isAddress(input)) {
+        if (!input || ethers.utils.isAddress(input)) {
           return true
         }
 
-        throw Error('Please provide a valid address.')
+        throw Error('Please provide a valid address or leave blank.')
       }
     },
     {
       type: 'input',
       name: 'unlockedIds',
-      message: `Enter number array of ids. These are ids of skills WITHOUT dependencies. Leave blank if none.
+      message: `Enter number array of ids. These are ids of skills WITHOUT dependencies. To skip, leave field as is and hit ENTER.
       
       Example: [1,2,3]
 
 IDs:`,
+      default: '[]',
       validate(input) {
         if (input && JSON.parse(input)) {
           return true
         }
 
-        throw Error('Invalid JSON. Try again.')
+        throw Error('Invalid JSON. Try again. If skipping, be sure field is blank!')
       }
       // transformer(input) {
       //   return JSON.parse(input)
@@ -151,13 +156,14 @@ IDs:`,
     {
       type: 'input',
       name: 'lockedIds',
-      message: `Enter number array of ids. These are ids of skills WITH dependencies. Leave blank if none.
+      message: `Enter number array of ids. These are ids of skills WITH dependencies. To skip, leave field as is and hit ENTER.
       
       Example: [1,2,3]
 
 IDs:`,
+      default: '[]',
       validate(input) {
-        if (JSON.parse(input)) {
+        if (input && JSON.parse(input)) {
           return true
         }
 
@@ -190,6 +196,7 @@ IDs:`,
         Example: [{ token: '0x123', id: '1' }, { token: '0x123', id: '2' }]
     
     Hold dependencies:`,
+          default: '[]',
           validate(input) {
             if (JSON.parse(input)) {
               return true
@@ -209,6 +216,7 @@ IDs:`,
         CAUTION: these are dependencies that will be burned when the skill is used!
 
     Burn dependencies:`,
+          default: '[]',
           validate(input) {
             if (JSON.parse(input)) {
               return true
@@ -290,44 +298,77 @@ IDs:`,
   const CollectionsManagerContract = new ethers.Contract(collectionsManagerAddr, CollectionsManager.abi, wallet)
   const collectionsManager = CollectionsManagerContract.attach(collectionsManagerAddr)
 
-  const feeData = await getFeeData(network)
+  const feeData = await getFeeData(network, props?.tryHigherValues)
 
-  if (unlockedIds.length) {
-    const txInfo = await collectionsManager
-      .mintBatchSkills(
-        collectionId,
-        to,
-        unlockedSkills.map((skill) => skill.id),
-        unlockedSkills.map((skill) => skill.amount),
-        '0x',
-        feeData
-      )
-      .catch((error: Error | string) => {
-        console.error('[Forge-CLI] Error minting unlocked skills: ', error)
-        throw new Error(typeof error !== 'string' ? error?.message : error)
-      })
+  try {
+    if (unlockedIds.length) {
+      const txInfo = await collectionsManager
+        .mintBatchSkills(
+          collectionId,
+          to,
+          unlockedSkills.map((skill) => skill.id),
+          unlockedSkills.map((skill) => skill.amount),
+          '0x',
+          feeData
+        )
+        .catch((error: Error | string) => {
+          console.error('[Forge-CLI] Error minting unlocked skills: ', error)
+          throw new Error(typeof error !== 'string' ? error?.message : error)
+        })
 
-    console.log('[Forge-CLI] Minted unlocked skills! Transaction information:', logFormattedTxInfo(txInfo))
-  }
+      console.log('[Forge-CLI] Minted unlocked skills! Transaction information:', logFormattedTxInfo(txInfo))
+    }
 
-  if (lockedSkills.length) {
-    const txInfo = await collectionsManager
-      .mintBatchLockedSkills(
-        collectionId,
-        lockedSkills.map((skill) => skill.id),
-        lockedSkills.map((skill) => skill.amount),
-        '0x',
-        mergeManagerAddr,
-        lockedSkills.map((skill) => skill.holdDependencies),
-        lockedSkills.map((skill) => skill.burnDependencies),
-        feeData
-      )
-      .catch((error: Error | string) => {
-        console.error('[Forge-CLI] Error minting locked skills: ', error)
-        throw new Error(typeof error !== 'string' ? error?.message : error)
-      })
+    if (lockedSkills.length) {
+      const txInfo = await collectionsManager
+        .mintBatchLockedSkills(
+          collectionId,
+          lockedSkills.map((skill) => skill.id),
+          lockedSkills.map((skill) => skill.amount),
+          '0x',
+          mergeManagerAddr,
+          lockedSkills.map((skill) => skill.holdDependencies),
+          lockedSkills.map((skill) => skill.burnDependencies),
+          feeData
+        )
+        .catch((error: Error | string) => {
+          console.error('[Forge-CLI] Error minting locked skills: ', error)
+          throw new Error(typeof error !== 'string' ? error?.message : error)
+        })
 
-    console.log('[Forge-CLI] Minted locked skills! Transaction info:', logFormattedTxInfo(txInfo))
+      console.log('[Forge-CLI] Minted locked skills! Transaction info:', logFormattedTxInfo(txInfo))
+    }
+  } catch (error) {
+    console.log(`
+    _  _ ___   _   ___  ___   _   _ __  _ 
+    | || | __| /_\\ |   \\/ __| | | | | _ \\ |
+    | __ | _| / _ \\| |) \\__ \\ | |_| |  _/_|
+    |_||_|___/_/ \\_\\___/|___/  \\___/|_| (_)
+
+    ERROR!
+    An error occurred while minting new skills! Error message (if any):
+    
+    ==========================
+    ${(error as any)?.message}
+    ==========================
+    
+    Confirm below to try again with higher gas fees as this is likely a network congestion issue.
+    `)
+
+    const confirmation = await inquirer.prompt([
+      {
+        type: 'confirm',
+        name: 'retry',
+        message: 'Do you wish to retry with 12% higher gas fees?'
+      }
+    ])
+
+    if (confirmation.retry) {
+      console.log('[Forge-CLI] Retrying with 12% increased gas fees.')
+      await mintCollectionSkills({ tryHigherValues: true })
+    } else {
+      throw error
+    }
   }
 
   const confirmation = await inquirer.prompt([

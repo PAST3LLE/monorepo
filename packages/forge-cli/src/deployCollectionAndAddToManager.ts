@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
   Collection__factory as Collection,
@@ -15,7 +17,7 @@ import { getWalletInfo } from './utils/getWalletInfo'
 import { logFormattedTxInfo } from './utils/logFormattedTxInfo'
 import { writeNetworks } from './utils/writeNetworks'
 
-async function deployCollectionAndAddToManager(): Promise<void> {
+async function deployCollectionAndAddToManager(props?: { tryHigherValues: boolean }): Promise<void> {
   const { networks: networksMap, mnemonic: configMnemonic } = await getConfig()
 
   if (!networksMap) {
@@ -172,44 +174,77 @@ Metadata URI:`,
   })
   estimatedGas && console.log('COLLECTION.SOL DEPLOYMENT GAS ESTIMATION:', estimatedGas.toString())
 
-  const feeData = await getFeeData(network)
+  const feeData = await getFeeData(network, props?.tryHigherValues)
 
-  // Deploy the contract
-  const collectionContract = await factory.deploy(...constructorArgs, feeData)
+  try {
+    // Deploy the contract
+    const collectionContract = await factory.deploy(...constructorArgs, feeData)
 
-  // Wait for the deployment transaction to be mined
-  await collectionContract.deployed()
-  console.log('[Forge-CLI] Collection.sol contract deployed at address:', collectionContract.address)
+    // Wait for the deployment transaction to be mined
+    await collectionContract.deployed()
+    console.log('[Forge-CLI] Collection.sol contract deployed at address:', collectionContract.address)
 
-  const collectionsManager = CollectionsManagerContract.attach(collectionsManagerAddr)
-  // Add a new collection to CollectionsManager
-  const txInfo = await collectionsManager
-    .addCollection(collectionContract.address, feeData)
-    .catch((error: Error | string) => {
-      console.error('[Forge-CLI] Error adding new collection to manager! Error: ', error)
-      throw new Error(typeof error !== 'string' ? error?.message : error)
+    const collectionsManager = CollectionsManagerContract.attach(collectionsManagerAddr)
+    // Add a new collection to CollectionsManager
+    const txInfo = await collectionsManager
+      .addCollection(collectionContract.address, feeData)
+      .catch((error: Error | string) => {
+        console.error('[Forge-CLI] Error adding new collection to manager! Error: ', error)
+        throw new Error(typeof error !== 'string' ? error?.message : error)
+      })
+    console.log('[Forge-CLI] CollectionsManager addCollection txInfo:', logFormattedTxInfo(txInfo))
+    const collectionId: number = (await collectionsManager.totalSupply()).toNumber()
+    console.log(
+      '[Forge-CLI] Added new collection into CollectionsManager.sol! Collections.sol address:',
+      collectionContract.address,
+      ' With ID inside CollectionsManager:',
+      collectionId
+    )
+
+    await writeNetworks({
+      // SOL contract name
+      contract: ('Collection-' + (collectionId + 1)) as ContractNames,
+      // deployed contract addr
+      newAddress: collectionContract.address,
+      // deployed txHash
+      transactionHash: collectionContract.deployTransaction.hash,
+      chainId: provider.network.chainId,
+      // network string name (e.g mumbai)
+      network: provider.network.name,
+      customSubPath: initialPromptAnswer?.customSubPath
     })
-  console.log('[Forge-CLI] CollectionsManager addCollection txInfo:', logFormattedTxInfo(txInfo))
-  const collectionId: number = (await collectionsManager.totalSupply()).toNumber()
-  console.log(
-    '[Forge-CLI] Added new collection into CollectionsManager.sol! Collections.sol address:',
-    collectionContract.address,
-    ' With ID inside CollectionsManager:',
-    collectionId
-  )
+  } catch (error) {
+    console.log(`
+    _  _ ___   _   ___  ___   _   _ __  _ 
+    | || | __| /_\\ |   \\/ __| | | | | _ \\ |
+    | __ | _| / _ \\| |) \\__ \\ | |_| |  _/_|
+    |_||_|___/_/ \\_\\___/|___/  \\___/|_| (_)
 
-  await writeNetworks({
-    // SOL contract name
-    contract: ('Collection-' + (collectionId + 1)) as ContractNames,
-    // deployed contract addr
-    newAddress: collectionContract.address,
-    // deployed txHash
-    transactionHash: collectionContract.deployTransaction.hash,
-    chainId: provider.network.chainId,
-    // network string name (e.g mumbai)
-    network: provider.network.name,
-    customSubPath: initialPromptAnswer?.customSubPath
-  })
+    ERROR!
+    An error occurred while deploying a new Collection.sol contract and/or trying to attach it to the CollectionsManager.sol contract! Error message (if any):
+
+    ==========================
+    ${(error as any)?.message}
+    ==========================
+    
+    Confirm below to try again with higher gas fees as this is likely a network congestion issue.
+    `)
+
+    const confirmation = await inquirer.prompt([
+      {
+        type: 'confirm',
+        name: 'retry',
+        message: 'Do you wish to retry with 12% higher gas fees?'
+      }
+    ])
+
+    if (confirmation.retry) {
+      console.log('[Forge-CLI] Retrying with 12% increased gas fees.')
+      await deployCollectionAndAddToManager({ tryHigherValues: true })
+    } else {
+      throw error
+    }
+  }
 
   const confirmation = await inquirer.prompt([
     {

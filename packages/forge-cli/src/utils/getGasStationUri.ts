@@ -7,9 +7,9 @@ export function getGasStationUri(network: SupportedNetworks) {
     case SupportedNetworks.GOERLI:
       return 'https://goerli.beaconcha.in/api/v1/execution/gasnow'
     case SupportedNetworks.MATIC:
-      return 'https://gasstation-mainnet.matic.network/v2'
+      return 'https://gasstation.polygon.technology/v2'
     case SupportedNetworks.MUMBAI:
-      return 'https://gasstation-mumbai.matic.today/v2'
+      return 'https://gasstation-testnet.polygon.technology/v2'
     default:
       return ''
   }
