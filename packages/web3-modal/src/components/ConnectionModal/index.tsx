@@ -28,6 +28,7 @@ interface PstlWeb3ConnectionModalProps extends Omit<ModalProps, 'isOpen' | 'onDi
   loaderProps?: LoadingScreenProps
   buttonProps?: ButtonProps
   closeModalOnConnect?: boolean
+  hideInjectedFromRoot?: boolean
   connectorDisplayOverrides?: { [id: string]: ConnectorEnhancedExtras | undefined }
   zIndex?: number
 }
@@ -40,6 +41,7 @@ function ModalWithoutThemeProvider({
   maxWidth = '360px',
   maxHeight = '600px',
   closeModalOnConnect = false,
+  hideInjectedFromRoot = false,
   connectorDisplayOverrides,
   zIndex = Z_INDICES.PSTL,
   ...restModalProps
@@ -62,6 +64,7 @@ function ModalWithoutThemeProvider({
             (connectorDisplayOverrides?.[connB.id]?.rank || 0) - (connectorDisplayOverrides?.[connA.id]?.rank || 0)
         )
         .map((connector, index) => {
+          if (hideInjectedFromRoot && connector.id === 'injected') return null
           const [{ label, logo, connected, isRecommended }, callback] = getConnectorInfo(
             connector,
             currentConnector,
@@ -111,6 +114,7 @@ function ModalWithoutThemeProvider({
       address,
       w3aModalMounted,
       closeModalOnConnect,
+      hideInjectedFromRoot,
       connectorDisplayOverrides,
       buttonProps,
       theme?.modals?.connection?.helpers?.show

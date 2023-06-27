@@ -138,5 +138,32 @@ export default {
       <AppWithWagmiAccess />
       <Web3Button />
     </PstlW3Providers>
+  )),
+  W3aW3mWithMetaMaskHiddenFromRoot: withThemeProvider(() => (
+    <PstlW3Providers
+      config={{
+        ...DEFAULT_PROPS,
+        modals: {
+          ...DEFAULT_PROPS.modals,
+          pstl: {
+            ...DEFAULT_PROPS.modals.pstl,
+            connectorDisplayOverrides: {
+              ...DEFAULT_PROPS.modals.pstl?.connectorDisplayOverrides,
+              web3auth: {
+                customName: 'GMAIL or MOBILE',
+                isRecommended: false
+              },
+              walletConnect: {
+                customName: 'WEB3 MODAL'
+              }
+            },
+            hideInjectedFromRoot: true
+          }
+        }
+      }}
+    >
+      <AppWithWagmiAccess />
+      <Web3Button />
+    </PstlW3Providers>
   ))
 }

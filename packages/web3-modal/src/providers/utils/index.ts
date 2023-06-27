@@ -42,7 +42,7 @@ function createWagmiClient<ID extends number>({
     autoConnect: !!options?.autoConnect,
     connectors: [
       PstlWeb3AuthConnector({ chains: props.chains as Chain[], ...props.w3aConnectorProps }),
-      w3mConnectors({ projectId: props.w3mConnectorProps.projectId, chains: props.chains as Chain[] })[0],
+      ...w3mConnectors({ projectId: props.w3mConnectorProps.projectId, chains: props.chains as Chain[] }),
       // any use custom modals
       ...userConnectors
     ],
