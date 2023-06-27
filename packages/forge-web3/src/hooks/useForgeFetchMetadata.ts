@@ -10,7 +10,7 @@ import { useForgeGetBatchSkillMetadataUris } from './contracts/useForgeGetBatchS
 import { useSupportedOrDefaultChainId } from './useForgeSupportedChainId'
 import { useRefetchOnAddressAndChain } from './useRefetchOnAddress'
 
-export function useForgeFetchMetadata({ loadAmount = 3, metadataFetchOptions }: ForgeMetadataUpdaterProps) {
+export function useForgeFetchMetadata({ loadAmount = BigInt(3), metadataFetchOptions }: ForgeMetadataUpdaterProps) {
   const chainId = useSupportedOrDefaultChainId()
   const [metadataUriMap] = useForgeMetadataUriMapReadAtom()
 
@@ -56,7 +56,10 @@ export function useForgeFetchMetadata({ loadAmount = 3, metadataFetchOptions }: 
         for (let j = 0; j < collectionMetadata[i].properties?.ids.length || 0; j++) {
           promisedSkillsMetadata[i].push(
             chainFetchIpfsUri(
-              skillErc1155MetadataUris[i].replace('0.json', collectionMetadata[i].properties.ids[j] + '.json'),
+              (skillErc1155MetadataUris[i].result as string)?.replace(
+                '0.json',
+                collectionMetadata[i].properties.ids[j] + '.json'
+              ),
               ...(metadataFetchOptions?.gatewayUris || [])
             )
               .then((res) => res?.json())

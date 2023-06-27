@@ -1,4 +1,3 @@
-import { BigNumber } from '@ethersproject/bignumber'
 import { Collection__factory } from '@past3lle/skilltree-contracts'
 import { useContractRead } from 'wagmi'
 
@@ -16,7 +15,7 @@ export function useForgeGetSkillMetadataUri({ collectionId }: WithCollectionId) 
     functionName: 'uri',
     address,
     // ERC1155 shares same base URL, this param is required but irrelevant...
-    args: [BigNumber.from(0)],
+    args: [BigInt(0)],
     scopeKey: WAGMI_SCOPE_KEYS.SKILLS_URI
   })
 }

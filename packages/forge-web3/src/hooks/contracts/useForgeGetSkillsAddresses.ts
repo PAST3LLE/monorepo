@@ -1,4 +1,3 @@
-import { BigNumber } from '@ethersproject/bignumber'
 import { CollectionsManager__factory } from '@past3lle/skilltree-contracts'
 import { useMemo } from 'react'
 import { useContractReads } from 'wagmi'
@@ -15,7 +14,7 @@ export function useForgeGetSkillsAddresses({ loadAmount }: WithLoadAmount) {
   const chainId = useSupportedOrDefaultChainId()
   const [contractAddressMap] = useForgeContractAddressMapReadAtom()
   const contractAddressesByChain = useForgeContractAddressesByChain(contractAddressMap)
-  const { data: latestCollectionId = BigNumber.from(2), refetch: refetchCollectionId } =
+  const { data: latestCollectionId = BigInt(2), refetch: refetchCollectionId } =
     useForgeGetLatestCollectionId(contractAddressMap)
 
   useRefetchOnAddressAndChain(refetchCollectionId)
@@ -28,10 +27,10 @@ export function useForgeGetSkillsAddresses({ loadAmount }: WithLoadAmount) {
       chainId
     } as const
 
-    const derivedArgs: (typeof commonArgs & { args: [number] })[] = []
-    const limit = Math.max(latestCollectionId.sub(BigNumber.from(loadAmount)).toNumber(), 0)
+    const derivedArgs: (typeof commonArgs & { args: [bigint] })[] = []
+    const limit = Math.max(Number(latestCollectionId - BigInt(loadAmount)), 0)
 
-    for (let i = latestCollectionId.toNumber(); i > limit; i--) {
+    for (let i = latestCollectionId; i > limit; i--) {
       derivedArgs.push({
         ...commonArgs,
         args: [i]
