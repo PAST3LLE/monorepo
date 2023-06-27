@@ -6,7 +6,7 @@ const webpack = require("webpack")
 
 module.exports = {
   babel: {
-    plugins: ['@babel/plugin-proposal-nullish-coalescing-operator']
+    plugins: ['@babel/plugin-proposal-nullish-coalescing-operator', '@babel/plugin-proposal-private-property-in-object']
   },
   webpack: {
     plugins: [],
@@ -29,7 +29,7 @@ module.exports = {
         new webpack.ProvidePlugin({
           process: "process/browser",
           Buffer: ["buffer", "Buffer"],
-        }),
+        })
       ]); 
       config.ignoreWarnings = [/Failed to parse source map/];
       config.module.rules.push({
