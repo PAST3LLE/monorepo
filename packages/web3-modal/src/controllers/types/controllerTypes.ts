@@ -1,4 +1,5 @@
-import type { Chain, EthereumClient } from '@web3modal/ethereum'
+import type { EthereumClient } from '@web3modal/ethereum'
+import { Chain } from 'viem'
 
 export interface MobileWallet {
   id: string

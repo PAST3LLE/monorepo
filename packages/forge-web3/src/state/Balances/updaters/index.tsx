@@ -1,5 +1,3 @@
-import { BigNumber } from '@ethersproject/bignumber'
-import { devWarn } from '@past3lle/utils'
 import { useEffect } from 'react'
 import { Address, useAccount } from 'wagmi'
 
@@ -16,7 +14,7 @@ import { ForgeMetadataState, useForgeMetadataReadAtom } from '../../Metadata'
 // Default amount of latest collection IDs to pull from CollectionsManager.sol
 const DEFAULT_COLLECTION_LOAD_AMOUNT = 3
 
-export function ForgeBalancesUpdater({ loadAmount = DEFAULT_COLLECTION_LOAD_AMOUNT }: Partial<WithLoadAmount>) {
+export function ForgeBalancesUpdater({ loadAmount = BigInt(DEFAULT_COLLECTION_LOAD_AMOUNT) }: Partial<WithLoadAmount>) {
   const { address } = useAccount()
   const chainId = useSupportedOrDefaultChainId()
 
@@ -26,7 +24,7 @@ export function ForgeBalancesUpdater({ loadAmount = DEFAULT_COLLECTION_LOAD_AMOU
 
   const { data: skills = [] } = useForgeGetSkillsAddresses({ loadAmount })
   const { data: balancesBatch, refetch: refetchBalances } = useForgeSkillsBalanceOfBatch(
-    skills as Address[],
+    skills as { result?: Address }[],
     metadata,
     address,
     chainId
@@ -38,7 +36,7 @@ export function ForgeBalancesUpdater({ loadAmount = DEFAULT_COLLECTION_LOAD_AMOU
     if (!chainId) return
     const metadataLoaded = !!metadata?.length
 
-    const derivedData: BigNumber[][] = _getEnvBalances(balancesBatch as BigNumber[][], metadata)
+    const derivedData: bigint[][] = _getEnvBalances(balancesBatch as { result: bigint[] }[] | undefined)
     const dataHasLength = derivedData?.[0]?.length && derivedData?.[1]?.length
 
     if (metadataLoaded && dataHasLength) {
@@ -46,7 +44,7 @@ export function ForgeBalancesUpdater({ loadAmount = DEFAULT_COLLECTION_LOAD_AMOU
         // if address is undefined, reset balances
         resetUserBalances({})
       } else {
-        const balances = reduceBalanceDataToMap(derivedData, skills as Address[], metadata, chainId)
+        const balances = reduceBalanceDataToMap(derivedData, skills as { result: Address }[], metadata, chainId)
 
         updateForgeBalances(balances)
       }
@@ -58,14 +56,14 @@ export function ForgeBalancesUpdater({ loadAmount = DEFAULT_COLLECTION_LOAD_AMOU
 }
 
 function reduceBalanceDataToMap(
-  data: readonly BigNumber[][],
-  collectionsAddresses: Address[],
+  data: readonly bigint[][],
+  collectionsAddresses: { result: Address }[],
   metadata: ForgeMetadataState['metadata'][number],
   chainId: number
 ) {
   return data.reduce((oAcc, collectionBnBalances, collectionIdx) => {
     const chainBalance = (collectionBnBalances || []).reduce((acc, nextBn, i) => {
-      const collectionAddress = collectionsAddresses?.[collectionIdx]
+      const collectionAddress = collectionsAddresses?.[collectionIdx]?.result
 
       const skillId = metadata[collectionIdx][i].properties.id
 
@@ -79,15 +77,6 @@ function reduceBalanceDataToMap(
   }, {} as ForgeBalances)
 }
 
-function _getEnvBalances(realBalances: BigNumber[][], metadata: ForgeMetadataState['metadata'][number]): BigNumber[][] {
-  // TODO: remove this
-  const SHOW_MOCK_DATA = !!process.env.REACT_APP_MOCK_METADATA
-  if (!SHOW_MOCK_DATA) {
-    return realBalances
-  } else {
-    devWarn('[UserBalanceUpdater]::USING MOCK METADATA')
-    return metadata.map(() => {
-      return Array.from({ length: metadata?.length || 0 }).map(() => BigNumber.from(Math.round(Math.random())))
-    })
-  }
+function _getEnvBalances(realBalances?: { result: bigint[] }[]): bigint[][] {
+  return (realBalances || []).map((res) => res.result)
 }

@@ -1,4 +1,3 @@
-import { BigNumber } from '@ethersproject/bignumber'
 import { CollectionsManager__factory } from '@past3lle/skilltree-contracts'
 import { useContractRead } from 'wagmi'
 
@@ -15,7 +14,7 @@ export function useForgeGetSkillAddress({ collectionId }: WithCollectionId) {
     abi: CollectionsManager__factory.abi,
     address: contractAddressesByChain?.collectionsManager,
     functionName: 'collectionContract',
-    args: [BigNumber.from(collectionId)],
+    args: [BigInt(collectionId)],
     watch: false,
     scopeKey: WAGMI_SCOPE_KEYS.SKILLS_CONTRACT
   })

@@ -1,26 +1,21 @@
 import { ButtonVariations, ColumnCenter, PstlButton } from '@past3lle/components'
 import { ThemeProvider, createCustomTheme } from '@past3lle/theme'
-import { TorusWalletConnectorPlugin } from '@web3auth/torus-wallet-connector-plugin'
-import React, { ReactNode, useEffect, useState } from 'react'
+import React, { ReactNode } from 'react'
 import { useTheme } from 'styled-components'
 import { useAccount } from 'wagmi'
 
 import { useConnection, usePstlWeb3Modal } from '../hooks'
 import { PstlW3Providers } from '../providers'
-import { WEB3AUTH_TEST_ID, commonProps, pstlModalTheme } from './config'
+import { DEFAULT_PROPS } from './config'
+import { w3aPlugins, wagmiConnectors } from './connectorsAndPlugins'
 
 interface Web3ButtonProps {
   children?: ReactNode
 }
 const Web3Button = ({ children = <div>Show PSTL Wallet Modal</div> }: Web3ButtonProps) => {
-  const [, , { address, currentConnector: connector }] = useConnection()
+  const [, , { currentConnector: connector }] = useConnection()
   const { open } = usePstlWeb3Modal()
-
-  const [provider, setProvider] = useState()
-
-  useEffect(() => {
-    connector?.getSigner().then(setProvider)
-  }, [connector])
+  const { address } = useAccount()
 
   return (
     <ColumnCenter>
@@ -32,13 +27,9 @@ const Web3Button = ({ children = <div>Show PSTL Wallet Modal</div> }: Web3Button
       </PstlButton>
       <h3>Connected to {address || 'DISCONNECTED!'}</h3>
       <h3>Connector: {connector?.id}</h3>
-      <h3>Provider: {JSON.stringify(provider, null, 2)}</h3>
     </ColumnCenter>
   )
 }
-
-const TORUS_LOGO = 'https://web3auth.io/docs/contents/logo-ethereum.png'
-const LOGO = 'https://raw.githubusercontent.com/PAST3LLE/monorepo/main/apps/skillforge-ui/public/512_logo.png'
 
 function DefaultApp() {
   const topLevelTheme = useTheme()
@@ -53,94 +44,13 @@ function InnerApp() {
   return (
     <PstlW3Providers
       config={{
-        ...commonProps,
-        appName: 'COSMOS APP',
-        chains: commonProps.chains,
-        chainFromUrlOptions: { type: 'network', key: 'web3-modal-network' },
-        wagmiClient: {
-          options: {
-            pollingInterval: 10_000,
-            autoConnect: true
-          }
-        },
+        ...DEFAULT_PROPS,
         modals: {
-          w3m: commonProps.modals.w3m,
+          ...DEFAULT_PROPS.modals,
           w3a: {
-            appName: 'COSMOS APP',
-            network: 'testnet',
-            listingName: 'Email/SMS/Social',
-            projectId: commonProps.modals.w3a.projectId,
-            appLogoLight: LOGO,
-            appLogoDark: LOGO,
-            uxMode: 'redirect',
+            ...DEFAULT_PROPS.modals.w3a,
             configureAdditionalConnectors() {
-              // Add Torus Wallet Plugin (optional)
-              const torusPlugin = new TorusWalletConnectorPlugin({
-                torusWalletOpts: {
-                  buttonPosition: 'bottom-right',
-                  apiKey: WEB3AUTH_TEST_ID
-                },
-                walletInitOptions: {
-                  whiteLabel: {
-                    theme: { isDark: true, colors: { primary: '#00a8ff' } },
-                    logoDark: TORUS_LOGO,
-                    logoLight: TORUS_LOGO
-                  },
-                  useWalletConnect: true,
-                  enableLogging: true
-                }
-              })
-
-              return [torusPlugin]
-            }
-          },
-          pstl: {
-            ...commonProps.modals.pstl,
-            themeConfig: { theme: pstlModalTheme, mode },
-            closeModalOnConnect: false,
-            connectorDisplayOverrides: {
-              general: {
-                infoText: {
-                  title: 'What is this?',
-                  content: (
-                    <strong>
-                      This is some helper filler text to describe wtf is going on in this connection modal. It is useful
-                      to learn these things while browsing apps as users can get confused when having to exit apps to
-                      read info somewhere else that isn't the current screent they are on.
-                    </strong>
-                  )
-                }
-              },
-              web3auth: {
-                isRecommended: true,
-                infoText: {
-                  title: 'How does this login work?',
-                  content: (
-                    <strong>
-                      Social login is done via Web3Auth - a non-custodial social login protocol (i.e they never actually
-                      know, or hold your data) - which facilitates logging into dApps (decentralised apps) via familiar
-                      social login choices
-                    </strong>
-                  )
-                }
-              },
-              walletConnect: {
-                infoText: {
-                  title: 'What is WalletConnect?',
-                  content: (
-                    <strong>
-                      Web3Modal/WalletConnect is a simple blockchain wallet aggregator modal that facilitates the choice
-                      of selecting preferred blockchain wallet(s) for connecting to dApps (decentralised apps). This
-                      generally requires more blockchain knowledge.
-                    </strong>
-                  )
-                }
-              }
-            },
-            loaderProps: {
-              spinnerProps: {
-                size: 80
-              }
+              return [w3aPlugins.torusPlugin]
             }
           }
         }
@@ -160,7 +70,6 @@ function AppWithWagmiAccess() {
   console.debug('Account API', accountApi.connector)
 
   accountApi.connector?.getProvider().then((res) => console.debug('getProvider', res))
-  accountApi.connector?.getSigner().then((res) => console.debug('getSigner', res))
   console.debug('Torus EVM Wallet', accountApi.connector?.options?.web3AuthInstance?.walletAdapters?.['torus-evm'])
 
   return <h1>Here has wagmi access</h1>
@@ -187,5 +96,74 @@ const withThemeProvider = (Component: () => JSX.Element | null) => (
 )
 
 export default {
-  ConnectedModal: withThemeProvider(() => <DefaultApp />)
+  Web3ModalWeb3AuthAndTorus: withThemeProvider(() => <DefaultApp />),
+  LedgerLive: withThemeProvider(() => (
+    <PstlW3Providers
+      config={{
+        ...DEFAULT_PROPS,
+        wagmiClient: {
+          ...DEFAULT_PROPS.wagmiClient,
+          options: {
+            connectors: Object.values(wagmiConnectors)
+          }
+        },
+        modals: {
+          ...DEFAULT_PROPS.modals,
+          pstl: {
+            ...DEFAULT_PROPS.modals.pstl,
+            connectorDisplayOverrides: {
+              ...DEFAULT_PROPS.modals.pstl?.connectorDisplayOverrides,
+              web3auth: {
+                customName: 'GMAIL or MOBILE',
+                isRecommended: false
+              },
+              walletConnect: {
+                customName: 'WEB3 MODAL'
+              },
+              ledger: {
+                customName: 'LEDGER LIVE',
+                logo: 'https://dka575ofm4ao0.cloudfront.net/pages-transactional_logos/retina/166944/1.png',
+                rank: 10,
+                isRecommended: true,
+                infoText: {
+                  title: 'What is Ledger?',
+                  content: <strong>Ledger wallet is a cold storage hardware wallet.</strong>
+                }
+              }
+            }
+          }
+        }
+      }}
+    >
+      <AppWithWagmiAccess />
+      <Web3Button />
+    </PstlW3Providers>
+  )),
+  W3aW3mWithMetaMaskHiddenFromRoot: withThemeProvider(() => (
+    <PstlW3Providers
+      config={{
+        ...DEFAULT_PROPS,
+        modals: {
+          ...DEFAULT_PROPS.modals,
+          pstl: {
+            ...DEFAULT_PROPS.modals.pstl,
+            connectorDisplayOverrides: {
+              ...DEFAULT_PROPS.modals.pstl?.connectorDisplayOverrides,
+              web3auth: {
+                customName: 'GMAIL or MOBILE',
+                isRecommended: false
+              },
+              walletConnect: {
+                customName: 'WEB3 MODAL'
+              }
+            },
+            hideInjectedFromRoot: true
+          }
+        }
+      }}
+    >
+      <AppWithWagmiAccess />
+      <Web3Button />
+    </PstlW3Providers>
+  ))
 }

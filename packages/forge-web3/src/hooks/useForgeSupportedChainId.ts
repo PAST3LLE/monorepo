@@ -1,5 +1,5 @@
 import { devDebug } from '@past3lle/utils'
-import { usePstlConnection } from '@past3lle/web3-modal'
+import { ChainsPartialReadonly, usePstlConnection } from '@past3lle/web3-modal'
 import { useEffect, useMemo } from 'react'
 
 import { useForgeGetUserConfigChainsAtom, useForgeReadonlyChainAtom } from '../state/UserConfig'
@@ -13,12 +13,12 @@ export enum ForgeW3ChainState {
   UNSUPPORTED = 'UNSUPPORTED'
 }
 
-export function useChainState() {
+export function useChainState(): [ChainsPartialReadonly<number>[number] | undefined, ForgeW3ChainState] {
   const [supportedChains = []] = useForgeGetUserConfigChainsAtom()
   const [, , { chain: rawChain }] = usePstlConnection()
   const [readonlyChain] = useForgeReadonlyChainAtom()
 
-  const chainState = useMemo(() => {
+  const chainState: ForgeW3ChainState = useMemo(() => {
     let chainState: ForgeW3ChainState
     if (rawChain === undefined) {
       if (readonlyChain?.id) {
@@ -40,7 +40,7 @@ export function useChainState() {
       devDebug('[useSupportedChainId]::Chain ID', rawChain?.id, 'not supported!')
   }, [chainState, rawChain?.id])
 
-  return [rawChain, chainState] as const
+  return [rawChain, chainState]
 }
 
 export function useSupportedChain() {

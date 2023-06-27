@@ -12,9 +12,9 @@ export const PstlWagmiProvider = ({
   chainIdFromUrl: number | undefined
   persistOnRefresh?: boolean
   children: ReactNode
-  wagmiClient: WagmiConfigProps['client']
+  wagmiClient: WagmiConfigProps['config']
 }) => (
-  <WagmiConfig client={wagmiClient}>
+  <WagmiConfig config={wagmiClient}>
     <WagmiEagerConnect chainIdFromUrl={chainIdFromUrl} persistOnRefresh={!!persistOnRefresh}>
       {children}
     </WagmiEagerConnect>

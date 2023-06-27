@@ -88,6 +88,7 @@ export const WEB3_PROPS: Web3ModalConfigWeb3Props = {
       maxWidth: '360px',
       margin: 'auto',
       closeModalOnConnect: true,
+      hideInjectedFromRoot: true,
       connectorDisplayOverrides: {
         general: {
           infoText: {
@@ -104,7 +105,7 @@ export const WEB3_PROPS: Web3ModalConfigWeb3Props = {
         },
         web3auth: {
           isRecommended: true,
-          customName: 'Email/SMS/Social',
+          customName: 'Gmail/Mobile',
           infoText: {
             title: <strong>How does Email/SMS/Social login work?</strong>,
             content: (

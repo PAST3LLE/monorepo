@@ -8,8 +8,8 @@ const WALLETCONNECT_LOGO =
   'https://repository-images.githubusercontent.com/204001588/a5169900-c66c-11e9-8592-33c7334dfd6d'
 
 export function getConnectorInfo(
-  connector: ConnectorEnhanced<any, any, any>,
-  currentConnector: ConnectorEnhanced<any, any, any> | undefined,
+  connector: ConnectorEnhanced<any, any>,
+  currentConnector: ConnectorEnhanced<any, any> | undefined,
   {
     connect,
     openW3Modal,
@@ -96,14 +96,21 @@ export function getConnectorInfo(
         }
       ]
     }
-    default:
+    default: {
+      const readInfo = {
+        label:
+          connectorDisplayOverrides?.[connector.id]?.customName ||
+          connector?.customName ||
+          connector?.name ||
+          connector?.id ||
+          'Unknown option',
+        logo: connectorDisplayOverrides?.[connector.id]?.logo || connector?.logo || WALLETCONNECT_LOGO,
+        connected: currentConnector?.id === connector.id,
+        isRecommended: connectorDisplayOverrides?.[connector.id]?.isRecommended
+      }
+
       return [
-        {
-          label: connector?.customName || connector?.name || connector?.id || 'Unknown option',
-          logo: connector?.logo || WALLETCONNECT_LOGO,
-          connected: currentConnector?.id === connector.id,
-          isRecommended: connectorDisplayOverrides?.[connector.id]?.isRecommended
-        },
+        readInfo,
         async () => {
           try {
             return !address ? connect({ connector, chainId }) : openW3Modal({ route: 'Account' })
@@ -114,6 +121,7 @@ export function getConnectorInfo(
           }
         }
       ]
+    }
   }
 }
 

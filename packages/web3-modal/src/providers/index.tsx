@@ -24,7 +24,7 @@ const PstlW3Providers = <ID extends number, SC extends ChainsPartialReadonly<ID>
       <PstlWeb3Modal {...config} ethereumClient={ethereumClient} />
       <PstlWagmiProvider
         wagmiClient={wagmiClient}
-        persistOnRefresh={config.wagmiClient?.options?.autoConnect}
+        persistOnRefresh={!!config.wagmiClient?.options?.autoConnect}
         chainIdFromUrl={chainIdFromUrl}
       >
         <PstlWeb3ConnectionModal {...config.modals.pstl} chainIdFromUrl={chainIdFromUrl} />

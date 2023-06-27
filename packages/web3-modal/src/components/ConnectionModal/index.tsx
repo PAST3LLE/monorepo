@@ -28,6 +28,7 @@ interface PstlWeb3ConnectionModalProps extends Omit<ModalProps, 'isOpen' | 'onDi
   loaderProps?: LoadingScreenProps
   buttonProps?: ButtonProps
   closeModalOnConnect?: boolean
+  hideInjectedFromRoot?: boolean
   connectorDisplayOverrides?: { [id: string]: ConnectorEnhancedExtras | undefined }
   zIndex?: number
 }
@@ -40,6 +41,7 @@ function ModalWithoutThemeProvider({
   maxWidth = '360px',
   maxHeight = '600px',
   closeModalOnConnect = false,
+  hideInjectedFromRoot = false,
   connectorDisplayOverrides,
   zIndex = Z_INDICES.PSTL,
   ...restModalProps
@@ -56,42 +58,51 @@ function ModalWithoutThemeProvider({
 
   const data = useMemo(
     () =>
-      connectors.slice(0, 2).map((connector, index) => {
-        const [{ label, logo, connected, isRecommended }, callback] = getConnectorInfo(
-          connector,
-          currentConnector,
-          {
-            connect,
-            openW3Modal,
-            closePstlModal: close,
-            setW3aModalMounted,
-            setW3aModalLoading
-          },
-          {
-            chainId: chainIdFromUrl || chain?.id,
-            address,
-            isW3aModalMounted: w3aModalMounted,
-            closeOnConnect: closeModalOnConnect,
-            connectorDisplayOverrides
-          }
+      connectors
+        .sort(
+          (connA, connB) =>
+            (connectorDisplayOverrides?.[connB.id]?.rank || 0) - (connectorDisplayOverrides?.[connA.id]?.rank || 0)
         )
+        .map((connector, index) => {
+          if (hideInjectedFromRoot && connector.id === 'injected') return null
+          const [{ label, logo, connected, isRecommended }, callback] = getConnectorInfo(
+            connector,
+            currentConnector,
+            {
+              connect,
+              openW3Modal,
+              closePstlModal: close,
+              setW3aModalMounted,
+              setW3aModalLoading
+            },
+            {
+              chainId: chainIdFromUrl || chain?.id,
+              address,
+              isW3aModalMounted: w3aModalMounted,
+              closeOnConnect: closeModalOnConnect,
+              connectorDisplayOverrides
+            }
+          )
 
-        return (
-          <Fragment key={connector.id + '_' + index}>
-            <ModalButton onClick={callback} connected={connected} {...buttonProps}>
-              <img style={{ maxWidth: 50 }} src={logo} />
-              {label}
-              {connected && <ConnectedCheckMark />}
-              {isRecommended && <RecommendedLabel />}
-            </ModalButton>
-            {theme?.modals?.connection?.helpers?.show && (
-              <ConnectorHelper title={connectorDisplayOverrides?.[connector.id]?.infoText?.title} connector={connector}>
-                {connectorDisplayOverrides?.[connector.id]?.infoText?.content}
-              </ConnectorHelper>
-            )}
-          </Fragment>
-        )
-      }),
+          const showHelperText = theme?.modals?.connection?.helpers?.show
+          const helperContent = connectorDisplayOverrides?.[connector.id]?.infoText
+
+          return (
+            <Fragment key={connector.id + '_' + index}>
+              <ModalButton onClick={callback} connected={connected} {...buttonProps}>
+                <img style={{ maxWidth: 50 }} src={logo} />
+                {label}
+                {connected && <ConnectedCheckMark />}
+                {isRecommended && <RecommendedLabel />}
+              </ModalButton>
+              {showHelperText && !!helperContent?.content && (
+                <ConnectorHelper title={helperContent.title} connector={connector}>
+                  {helperContent.content}
+                </ConnectorHelper>
+              )}
+            </Fragment>
+          )
+        }),
     [
       connectors,
       currentConnector,
@@ -103,6 +114,7 @@ function ModalWithoutThemeProvider({
       address,
       w3aModalMounted,
       closeModalOnConnect,
+      hideInjectedFromRoot,
       connectorDisplayOverrides,
       buttonProps,
       theme?.modals?.connection?.helpers?.show

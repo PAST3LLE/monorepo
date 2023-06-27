@@ -1,4 +1,3 @@
-import { BigNumber } from '@ethersproject/bignumber'
 import { AutoRow, Column, ExternalLink, Row, RowCenter, SpinnerCircle, Text } from '@past3lle/components'
 import {
   ForgeMetadataState,
@@ -68,7 +67,7 @@ export function TradeAndUnlockPanel() {
     error
   } = useForgeClaimLockedSkill({
     token: token as Address,
-    id: BigNumber.from(id)
+    id: BigInt(id)
   })
 
   const [, setPanelState] = useSidePanelAtom()

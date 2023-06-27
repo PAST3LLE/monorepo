@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/forge-web3",
   "sideEffects": false,
-  "version": "0.0.96",
+  "version": "0.0.97",
   "description": "PAST3LLE FORGE Web3 hooks and tings",
   "main": "dist/esm/index.js",
   "typings": "dist/types/index.d.ts",
@@ -104,9 +104,9 @@
     "url": "https://github.com/PAST3LLE/past3lle-monorepo/issues"
   },
   "resolutions": {
-    "**/@web3modal/ethereum": ">=2.2.0",
-    "**/@web3modal/react": ">=2.2.0",
-    "**/*/@wagmi/core": "0.10.1"
+    "**/@web3modal/ethereum": ">=2.4.0",
+    "**/@web3modal/react": ">=2.4.0",
+    "**/*/@wagmi/core": ">=1"
   },
   "peerDependencies": {
     "react": ">=16",
@@ -117,7 +117,7 @@
     "@past3lle/hooks": "^0.0.41",
     "@past3lle/skilltree-contracts": "^0.0.1-rc.15",
     "@past3lle/utils": "^0.0.27",
-    "@past3lle/web3-modal": "^0.0.41",
+    "@past3lle/web3-modal": "^1.0.0",
     "jotai": "^1.13.0"
   },
   "devDependencies": {

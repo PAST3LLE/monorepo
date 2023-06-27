@@ -1,5 +1,5 @@
 import { ForgeW3CoreProvidersProps } from '@past3lle/forge-web3'
-import { goerli } from 'wagmi'
+import { goerli } from 'wagmi/chains'
 
 const DEFAULT_PROPS: ForgeW3CoreProvidersProps['config']['web3'] = {
   chains: [goerli],

@@ -29,7 +29,7 @@ module.exports = {
         new webpack.ProvidePlugin({
           process: "process/browser",
           Buffer: ["buffer", "Buffer"],
-        }),
+        })
       ]); 
       config.ignoreWarnings = [/Failed to parse source map/];
       config.module.rules.push({
