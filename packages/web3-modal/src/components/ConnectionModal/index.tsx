@@ -22,7 +22,9 @@ interface ThemeConfigProps<
   theme: T
   mode?: K
 }
-interface PstlWeb3ConnectionModalProps extends Omit<ModalProps, 'isOpen' | 'onDismiss'>, WithChainIdFromUrl {
+interface PstlWeb3ConnectionModalProps
+  extends Omit<ModalProps, 'isLargeImageModal' | 'isOpen' | 'onDismiss'>,
+    WithChainIdFromUrl {
   title?: string
   themeConfig?: ThemeConfigProps
   loaderProps?: LoadingScreenProps
