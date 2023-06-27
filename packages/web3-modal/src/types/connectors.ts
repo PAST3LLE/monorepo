@@ -8,5 +8,6 @@ export type ConnectorEnhancedExtras = {
   details?: string
   infoText?: InfoTextMap
   isRecommended?: boolean
+  rank?: number
 }
-export type ConnectorEnhanced<P, O, S> = Connector<P, O, S> & ConnectorEnhancedExtras
+export type ConnectorEnhanced<P, O> = Connector<P, O> & ConnectorEnhancedExtras

@@ -34,10 +34,8 @@ export const AccountCtrl = {
       const address = profileAddress ?? state.address
       const { chain } = ClientCtrl.client()?.getNetwork() ?? {}
       if (address && chain?.id === 1) {
-        const [name, avatar] = await Promise.all([
-          ClientCtrl.client().fetchEnsName({ address, chainId: 1 }),
-          ClientCtrl.client().fetchEnsAvatar({ address, chainId: 1 })
-        ])
+        const name = await ClientCtrl.client().fetchEnsName({ address, chainId: 1 })
+        const avatar = await ClientCtrl.client().fetchEnsAvatar({ name: name as string, chainId: 1 })
         if (avatar) {
           await preloadAvatarFn(avatar)
         }

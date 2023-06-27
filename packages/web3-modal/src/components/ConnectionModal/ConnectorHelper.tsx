@@ -51,7 +51,7 @@ export function ConnectorHelper({
   title?: ReactNode
   children?: ReactNode
   color?: string
-  connector?: Connector<any, any, any>
+  connector?: Connector<any, any>
 }) {
   const [open, setOpen] = useState(false)
   const handleClick = () => setOpen((state) => !state)
@@ -68,7 +68,7 @@ export function ConnectorHelper({
   )
 }
 
-function _getConnectorHelperText(connector?: ConnectorEnhanced<any, any, any>) {
+function _getConnectorHelperText(connector?: ConnectorEnhanced<any, any>) {
   switch (connector?.id) {
     case 'web3auth':
       return (

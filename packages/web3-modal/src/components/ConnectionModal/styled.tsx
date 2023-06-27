@@ -9,6 +9,7 @@ export const ModalButton = styled(Button)<{ connected: boolean }>`
   position: relative;
   width: 100%;
   justify-content: flex-start;
+  height: 82px;
   ${({ theme }) =>
     setBackgroundOrDefault(theme, {
       bgValue: theme.modals?.connection?.button?.backgroundImg,

@@ -14,7 +14,7 @@ type Callbacks = Pick<ReturnType<typeof useDisconnect>, 'disconnect'> & {
 }
 
 export type PstlW3mConnectionHook = [
-  Connector<any, any, any>[],
+  Connector<any, any>[],
   Callbacks,
   {
     address?: Address
@@ -30,7 +30,7 @@ export type PstlW3mConnectionHook = [
     isConnecting: boolean
     isDisconnected: boolean
     isReconnecting: boolean
-    pendingConnector: Connector<any, any, any> | undefined
+    pendingConnector: Connector<any, any> | undefined
     isW3mOpen: ReturnType<typeof useWeb3Modal>['isOpen']
     isPstlW3mOpen: ReturnType<typeof usePstlWeb3Modal>['isOpen']
   }
@@ -55,10 +55,9 @@ export function useConnection(): PstlW3mConnectionHook {
   } = useConnect()
   const { disconnect } = useDisconnect()
   const { address, connector, isConnected, isConnecting, isDisconnected, isReconnecting } = useAccount()
-  
-  
+
   const { chain } = useNetwork()
-  
+
   const balanceInfo = useBalance({
     address,
     chainId: chain?.id
