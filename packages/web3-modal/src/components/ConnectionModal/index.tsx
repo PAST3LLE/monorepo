@@ -83,7 +83,10 @@ function ModalWithoutThemeProvider({
           return connB_rank - connA_rank
         })
         .map((connector, index) => {
-          if (hideInjectedFromRoot && connector.id === 'injected') return null
+          // Don't show "injected" provider if either
+          // a. User explicitly states to ignore it
+          // b. Window object does NOT contain the injected ethereum proxy object
+          if ((hideInjectedFromRoot || !(window as any)?.ethereum) && connector.id === 'injected') return null
           const [{ label, logo, connected, isRecommended }, callback] = getConnectorInfo(
             connector,
             currentConnector,
