@@ -96,50 +96,8 @@ const withThemeProvider = (Component: () => JSX.Element | null) => (
 )
 
 export default {
-  Web3ModalWeb3AuthAndTorus: withThemeProvider(() => <DefaultApp />),
-  LedgerLive: withThemeProvider(() => (
-    <PstlW3Providers
-      config={{
-        ...DEFAULT_PROPS,
-        wagmiClient: {
-          ...DEFAULT_PROPS.wagmiClient,
-          options: {
-            connectors: Object.values(wagmiConnectors)
-          }
-        },
-        modals: {
-          ...DEFAULT_PROPS.modals,
-          pstl: {
-            ...DEFAULT_PROPS.modals.pstl,
-            connectorDisplayOverrides: {
-              ...DEFAULT_PROPS.modals.pstl?.connectorDisplayOverrides,
-              web3auth: {
-                customName: 'GMAIL or MOBILE',
-                isRecommended: false
-              },
-              walletConnect: {
-                customName: 'WEB3 MODAL'
-              },
-              ledger: {
-                customName: 'LEDGER LIVE',
-                logo: 'https://dka575ofm4ao0.cloudfront.net/pages-transactional_logos/retina/166944/1.png',
-                rank: 10,
-                isRecommended: true,
-                infoText: {
-                  title: 'What is Ledger?',
-                  content: <strong>Ledger wallet is a cold storage hardware wallet.</strong>
-                }
-              }
-            }
-          }
-        }
-      }}
-    >
-      <AppWithWagmiAccess />
-      <Web3Button />
-    </PstlW3Providers>
-  )),
-  W3aW3mWithMetaMaskHiddenFromRoot: withThemeProvider(() => (
+  List__Web3ModalWeb3AuthAndTorus: withThemeProvider(() => <DefaultApp />),
+  List__WalletConnectMetaMaskHidden: withThemeProvider(() => (
     <PstlW3Providers
       config={{
         ...DEFAULT_PROPS,
@@ -158,6 +116,101 @@ export default {
               }
             },
             hideInjectedFromRoot: true
+          }
+        }
+      }}
+    >
+      <AppWithWagmiAccess />
+      <Web3Button />
+    </PstlW3Providers>
+  )),
+  List__LedgerLiveWalletConnect: withThemeProvider(() => (
+    <PstlW3Providers
+      config={{
+        ...DEFAULT_PROPS,
+        wagmiClient: {
+          ...DEFAULT_PROPS.wagmiClient,
+          options: {
+            connectors: Object.values(wagmiConnectors)
+          }
+        },
+        modals: {
+          ...DEFAULT_PROPS.modals,
+          pstl: {
+            ...DEFAULT_PROPS.modals.pstl,
+            hideInjectedFromRoot: true,
+            connectorDisplayOverrides: {
+              ...DEFAULT_PROPS.modals.pstl?.connectorDisplayOverrides,
+              web3auth: {
+                customName: 'GMAIL or MOBILE',
+                isRecommended: false
+              },
+              walletConnect: {
+                customName: 'WEB3 MODAL'
+              },
+              ledger: {
+                customName: 'LEDGER LIVE',
+                logo: 'https://crypto-central.io/library/uploads/Ledger-Logo-3.png',
+                rank: 10,
+                isRecommended: true,
+                infoText: {
+                  title: 'What is Ledger?',
+                  content: <strong>Ledger wallet is a cold storage hardware wallet.</strong>
+                }
+              }
+            }
+          }
+        }
+      }}
+    >
+      <AppWithWagmiAccess />
+      <Web3Button />
+    </PstlW3Providers>
+  )),
+  Grid__AllWithLedgerLive: withThemeProvider(() => (
+    <PstlW3Providers
+      config={{
+        ...DEFAULT_PROPS,
+        wagmiClient: {
+          ...DEFAULT_PROPS.wagmiClient,
+          options: {
+            connectors: Object.values(wagmiConnectors)
+          }
+        },
+        modals: {
+          ...DEFAULT_PROPS.modals,
+          pstl: {
+            ...DEFAULT_PROPS.modals.pstl,
+            walletsView: 'grid',
+            width: '640px',
+            maxWidth: '100%',
+            maxHeight: '550px',
+            connectorDisplayOverrides: {
+              ...DEFAULT_PROPS.modals.pstl?.connectorDisplayOverrides,
+              web3auth: {
+                customName: 'GMAIL or MOBILE',
+                isRecommended: false
+              },
+              walletConnect: {
+                customName: 'WEB3 MODAL'
+              },
+              'Brave Wallet': {
+                logo: 'https://logodownload.org/wp-content/uploads/2022/04/brave-logo-1.png'
+              },
+              MetaMask: {
+                logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/1200px-MetaMask_Fox.svg.png'
+              },
+              ledger: {
+                customName: 'LEDGER LIVE',
+                logo: 'https://crypto-central.io/library/uploads/Ledger-Logo-3.png',
+                rank: 10,
+                isRecommended: true,
+                infoText: {
+                  title: 'What is Ledger?',
+                  content: <strong>Ledger wallet is a cold storage hardware wallet.</strong>
+                }
+              }
+            }
           }
         }
       }}

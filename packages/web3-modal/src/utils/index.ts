@@ -96,6 +96,33 @@ export function getConnectorInfo(
         }
       ]
     }
+    case DefaultWallets.INJECTED: {
+      const readInfo = {
+        label:
+          connectorDisplayOverrides?.[connector.id]?.customName ||
+          connector?.customName ||
+          connector?.name ||
+          connector?.id ||
+          'Unknown option',
+        logo:
+          connectorDisplayOverrides?.[connector.name || connector.id]?.logo || connector?.logo || WALLETCONNECT_LOGO,
+        connected: currentConnector?.id === connector.id,
+        isRecommended: connectorDisplayOverrides?.[connector.id]?.isRecommended
+      }
+
+      return [
+        readInfo,
+        async () => {
+          try {
+            return !address ? connect({ connector, chainId }) : openW3Modal({ route: 'Account' })
+          } catch (error) {
+            console.error('[PstlWeb3ConnectionModal::getConnectorInfo] WalletConnect error!', error)
+          } finally {
+            closeOnConnect && closePstlModal()
+          }
+        }
+      ]
+    }
     default: {
       const readInfo = {
         label:
@@ -104,7 +131,11 @@ export function getConnectorInfo(
           connector?.name ||
           connector?.id ||
           'Unknown option',
-        logo: connectorDisplayOverrides?.[connector.id]?.logo || connector?.logo || WALLETCONNECT_LOGO,
+        logo:
+          connectorDisplayOverrides?.[connector.id]?.logo ||
+          connectorDisplayOverrides?.[connector.name]?.logo ||
+          connector?.logo ||
+          WALLETCONNECT_LOGO,
         connected: currentConnector?.id === connector.id,
         isRecommended: connectorDisplayOverrides?.[connector.id]?.isRecommended
       }

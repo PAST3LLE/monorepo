@@ -13,7 +13,7 @@ import { LoadingScreen, LoadingScreenProps } from '../LoadingScreen'
 import { ConnectedCheckMark } from './ConnectedCheckMark'
 import { ConnectorHelper } from './ConnectorHelper'
 import { RecommendedLabel } from './RecommendedLabel'
-import { InnerContainer, ModalButton, ModalTitleText, StyledConnectionModal } from './styled'
+import { InnerContainer, ModalButton, ModalTitleText, StyledConnectionModal, WalletsWrapper } from './styled'
 
 interface ThemeConfigProps<
   T extends ThemeByModes<BasicUserTheme> = ThemeByModes<BasicUserTheme>,
@@ -31,6 +31,7 @@ interface PstlWeb3ConnectionModalProps
   buttonProps?: ButtonProps
   closeModalOnConnect?: boolean
   hideInjectedFromRoot?: boolean
+  walletsView?: 'grid' | 'list'
   connectorDisplayOverrides?: { [id: string]: ConnectorEnhancedExtras | undefined }
   zIndex?: number
 }
@@ -38,6 +39,7 @@ interface PstlWeb3ConnectionModalProps
 function ModalWithoutThemeProvider({
   chainIdFromUrl,
   title = 'WALLET CONNECTION',
+  walletsView = 'list',
   buttonProps,
   loaderProps,
   maxWidth = '360px',
@@ -92,12 +94,12 @@ function ModalWithoutThemeProvider({
           return (
             <Fragment key={connector.id + '_' + index}>
               <ModalButton onClick={callback} connected={connected} {...buttonProps}>
-                <img style={{ maxWidth: 50 }} src={logo} />
+                <img src={logo} />
                 {label}
                 {connected && <ConnectedCheckMark />}
                 {isRecommended && <RecommendedLabel />}
               </ModalButton>
-              {showHelperText && !!helperContent?.content && (
+              {walletsView !== 'grid' && showHelperText && !!helperContent?.content && (
                 <ConnectorHelper title={helperContent.title} connector={connector}>
                   {helperContent.content}
                 </ConnectorHelper>
@@ -106,6 +108,7 @@ function ModalWithoutThemeProvider({
           )
         }),
     [
+      walletsView,
       connectors,
       currentConnector,
       connect,
@@ -155,7 +158,11 @@ function ModalWithoutThemeProvider({
             {connectorDisplayOverrides?.general.infoText.content}
           </ConnectorHelper>
         )}
-        {w3aModalLoading ? <LoadingScreen {...loaderProps} /> : data}
+        {w3aModalLoading ? (
+          <LoadingScreen {...loaderProps} />
+        ) : (
+          <WalletsWrapper view={walletsView}>{data}</WalletsWrapper>
+        )}
       </InnerContainer>
     </StyledConnectionModal>
   )

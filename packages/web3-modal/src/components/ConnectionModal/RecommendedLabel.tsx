@@ -2,7 +2,7 @@ import { CheckCircle, RowStart } from '@past3lle/components'
 import React from 'react'
 import styled from 'styled-components'
 
-export const Wrapper = styled(RowStart)`
+export const RecommendedLabelWrapper = styled(RowStart)`
   position: absolute;
   bottom: 0.75em;
   right: 0.75em;
@@ -14,8 +14,8 @@ export const Wrapper = styled(RowStart)`
 
 export function RecommendedLabel() {
   return (
-    <Wrapper>
+    <RecommendedLabelWrapper>
       Recommended <CheckCircle size={10} />
-    </Wrapper>
+    </RecommendedLabelWrapper>
   )
 }

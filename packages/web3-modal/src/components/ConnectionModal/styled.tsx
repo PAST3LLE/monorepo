@@ -2,8 +2,10 @@ import { Button, CloseIcon, ColumnCenter, Modal, Text } from '@past3lle/componen
 import { setBackgroundOrDefault, setBestTextColour, upToSmall } from '@past3lle/theme'
 import styled from 'styled-components'
 
+import { PstlWeb3ConnectionModalProps } from '.'
 import BaseTheme from '../../theme/baseTheme'
 import { getPosition } from '../../utils'
+import { RecommendedLabelWrapper } from './RecommendedLabel'
 
 export const ModalButton = styled(Button)<{ connected: boolean }>`
   position: relative;
@@ -138,6 +140,60 @@ export const StyledConnectionModal = styled(Modal)`
             border-bottom-left-radius: 0;
             border-bottom-right-radius: 0;
           }
+        }
+      }
+  `}
+`
+
+export const WalletsWrapper = styled.div<{ view?: PstlWeb3ConnectionModalProps['walletsView'] }>`
+  width: 100%;
+
+  > ${ModalButton} {
+    > img {
+      max-width: 50px;
+    }
+  }
+
+  display: grid;
+  gap: 1rem;
+
+  ${({ view }) =>
+    view === 'grid' &&
+    `
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 1rem;
+    justify-content: center;
+
+    > ${ModalButton} {
+      flex-flow: column;
+      padding: 0.75rem;
+      justify-content: center;
+      font-size: 0.8rem;
+      
+      > ${RecommendedLabelWrapper} {
+        position: absolute;
+        top: 10px;
+        height: min-content;
+        right: 10px;
+      }
+
+      > img {
+        max-width: 30px;
+      }
+    }
+  `}
+
+  ${upToSmall`
+      > ${ModalButton} {
+        padding: 0.25rem;
+        font-size: 0.75rem;
+      
+        > ${RecommendedLabelWrapper} {
+          display: none;
+        }
+
+        > img {
+          max-width: 25px;
         }
       }
   `}
