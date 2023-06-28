@@ -192,7 +192,7 @@ function _getProviderInfo(
   }
 }
 
-function _handleConnectorClick(
+async function _handleConnectorClick(
   connector: ConnectorEnhanced<any, any>,
   currentConnector: ConnectorEnhanced<any, any> | undefined,
   { address, chainId }: Pick<GetConnectorInfoConstants, 'address' | 'chainId'>,
