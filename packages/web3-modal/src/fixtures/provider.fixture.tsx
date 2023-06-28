@@ -339,6 +339,17 @@ export default {
                   content: <strong>Ledger wallet is a cold storage hardware wallet.</strong>
                 }
               }
+            },
+            loaderProps: {
+              containerProps: {
+                backgroundColor: 'rgba(0,0,0,0.65)',
+                borderRadius: '5px'
+              },
+              spinnerProps: {
+                size: 80,
+                invertColor: true
+              },
+              loadingText: 'FETCHING INFO...'
             }
           }
         }

@@ -8,6 +8,7 @@ import { ModalTitleText } from '../ConnectionModal/styled'
 interface LoadingContainerProps {
   backgroundColor?: string
   backgroundImg?: string
+  borderRadius?: string
 }
 const LoadingContainerFadeIn = styled(ArticleFadeIn)<LoadingContainerProps>`
   display: flex;
@@ -23,6 +24,8 @@ const LoadingContainerFadeIn = styled(ArticleFadeIn)<LoadingContainerProps>`
 
   background-color: ${({ backgroundColor = 'transparent' }) => backgroundColor};
 
+  border-radius: ${({ borderRadius = '0px' }) => borderRadius};
+
   ${({ theme, backgroundColor, backgroundImg }) =>
     backgroundImg &&
     setCssBackground(theme, { imageUrls: [urlToSimpleGenericImageSrcSet(backgroundImg)], backgroundColor })}
@@ -31,14 +34,16 @@ const LoadingContainerFadeIn = styled(ArticleFadeIn)<LoadingContainerProps>`
 interface SpinnerProps {
   src?: string | undefined
   size?: number | undefined
+  invertColor?: boolean
 }
 
 export interface LoadingScreenProps {
   containerProps?: LoadingContainerProps
   spinnerProps?: SpinnerProps
+  loadingText?: string
 }
 
-export function LoadingScreen({ containerProps, spinnerProps }: LoadingScreenProps) {
+export function LoadingScreen({ containerProps, spinnerProps, loadingText = 'QUERYING INFO...' }: LoadingScreenProps) {
   return (
     <LoadingContainerFadeIn {...containerProps}>
       <ModalTitleText
@@ -48,7 +53,7 @@ export function LoadingScreen({ containerProps, spinnerProps }: LoadingScreenPro
           wght: 100
         }}
       >
-        FETCHING LOG IN DATA...
+        {loadingText}
       </ModalTitleText>
       <SpinnerCircle {...spinnerProps} />
     </LoadingContainerFadeIn>
