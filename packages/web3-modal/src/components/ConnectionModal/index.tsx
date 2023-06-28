@@ -1,4 +1,5 @@
 import { ButtonProps, CloseIcon, ModalProps } from '@past3lle/components'
+import { useIsExtraSmallMediaWidth } from '@past3lle/hooks'
 import { BasicUserTheme, ThemeByModes, ThemeModesRequired, ThemeProvider } from '@past3lle/theme'
 import { devWarn } from '@past3lle/utils'
 import React, { Fragment, memo, useMemo, useState } from 'react'
@@ -42,14 +43,18 @@ function ModalWithoutThemeProvider({
   walletsView = 'list',
   buttonProps,
   loaderProps,
-  maxWidth = '360px',
-  maxHeight = '600px',
+  width = walletsView === 'grid' ? '650px' : '50vh',
+  maxWidth = walletsView === 'grid' ? '100%' : '360px',
+  maxHeight = walletsView === 'grid' ? '500px' : '600px',
   closeModalOnConnect = false,
   hideInjectedFromRoot = false,
   connectorDisplayOverrides,
   zIndex = Z_INDICES.PSTL,
   ...restModalProps
 }: Omit<PstlWeb3ConnectionModalProps, 'theme'>) {
+  const isExtraSmallScreen = useIsExtraSmallMediaWidth()
+  // We always show list view in tiny screens
+  const modalView = isExtraSmallScreen ? 'list' : walletsView
   const [connectors, { connect, openW3Modal }, { address, chain, currentConnector }] = useConnection()
   const { isOpen, close } = usePstlWeb3Modal()
 
@@ -99,7 +104,7 @@ function ModalWithoutThemeProvider({
                 {connected && <ConnectedCheckMark />}
                 {isRecommended && <RecommendedLabel />}
               </ModalButton>
-              {walletsView !== 'grid' && showHelperText && !!helperContent?.content && (
+              {modalView !== 'grid' && showHelperText && !!helperContent?.content && (
                 <ConnectorHelper title={helperContent.title} connector={connector}>
                   {helperContent.content}
                 </ConnectorHelper>
@@ -108,7 +113,7 @@ function ModalWithoutThemeProvider({
           )
         }),
     [
-      walletsView,
+      modalView,
       connectors,
       currentConnector,
       connect,
@@ -131,6 +136,7 @@ function ModalWithoutThemeProvider({
       className={restModalProps.className}
       isOpen={isOpen}
       onDismiss={close}
+      width={width}
       maxWidth={maxWidth}
       maxHeight={maxHeight}
       // to prevent locking of focus on modal (with web3auth this blocks using their modal e.g)
@@ -161,7 +167,7 @@ function ModalWithoutThemeProvider({
         {w3aModalLoading ? (
           <LoadingScreen {...loaderProps} />
         ) : (
-          <WalletsWrapper view={walletsView}>{data}</WalletsWrapper>
+          <WalletsWrapper view={modalView}>{data}</WalletsWrapper>
         )}
       </InnerContainer>
     </StyledConnectionModal>

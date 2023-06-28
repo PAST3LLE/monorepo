@@ -218,5 +218,51 @@ export default {
       <AppWithWagmiAccess />
       <Web3Button />
     </PstlW3Providers>
+  )),
+  Grid__SizeDefaults: withThemeProvider(() => (
+    <PstlW3Providers
+      config={{
+        ...DEFAULT_PROPS,
+        wagmiClient: {
+          ...DEFAULT_PROPS.wagmiClient,
+          options: {
+            connectors: Object.values(wagmiConnectors)
+          }
+        },
+        modals: {
+          ...DEFAULT_PROPS.modals,
+          pstl: {
+            ...DEFAULT_PROPS.modals.pstl,
+            walletsView: 'grid'
+          }
+        }
+      }}
+    >
+      <AppWithWagmiAccess />
+      <Web3Button />
+    </PstlW3Providers>
+  )),
+  List__SizeDefaults: withThemeProvider(() => (
+    <PstlW3Providers
+      config={{
+        ...DEFAULT_PROPS,
+        wagmiClient: {
+          ...DEFAULT_PROPS.wagmiClient,
+          options: {
+            connectors: Object.values(wagmiConnectors)
+          }
+        },
+        modals: {
+          ...DEFAULT_PROPS.modals,
+          pstl: {
+            ...DEFAULT_PROPS.modals.pstl,
+            walletsView: 'list'
+          }
+        }
+      }}
+    >
+      <AppWithWagmiAccess />
+      <Web3Button />
+    </PstlW3Providers>
   ))
 }
