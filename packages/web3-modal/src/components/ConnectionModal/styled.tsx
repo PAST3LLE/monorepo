@@ -183,7 +183,9 @@ export const WalletsWrapper = styled.div<{ view?: PstlWeb3ConnectionModalProps['
     }
   `}
 
-  ${upToSmall`
+  ${({ view }) =>
+    view === 'grid' &&
+    upToSmall`
       > ${ModalButton} {
         padding: 0.25rem;
         font-size: 0.75rem;
