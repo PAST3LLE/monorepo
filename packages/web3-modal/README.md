@@ -215,6 +215,8 @@ modals: {
             // Optional. Pass outer theme from upper level of surrounding app to sync theme modes
             mode?: 'DEFAULT' | 'DARK' | 'LIGHT' | string
         }
+        // Optional. Displays modal in a grid or list view.
+        walletView?: 'list' | 'grid' // Default: 'list'
         // Optional. Web3Auth modal loading props.
         loaderProps?: LoadingScreenProps
         // Optional. Base modal button style props.
