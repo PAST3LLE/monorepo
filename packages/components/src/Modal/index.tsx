@@ -13,6 +13,7 @@ interface ModalStyleProps {
   zIndex?: number
   boxShadowColor?: string
   mainBackgroundColor?: string
+  width?: string
 }
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const StyledDialogOverlay = styled(({ zIndex, ...props }) => <AnimatedDialogOverlay {...props} />)<
@@ -41,7 +42,7 @@ const AnimatedDialogContent = animated(DialogContent)
 // destructure to not pass custom props to Dialog DOM element
 const StyledDialogContent = styled(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  ({ margin, minHeight, maxHeight, maxWidth, mobile, isOpen, isLargeImageModal, tabIndex, zIndex, ...rest }) => (
+  ({ margin, minHeight, maxHeight, maxWidth, width, mobile, isOpen, isLargeImageModal, tabIndex, zIndex, ...rest }) => (
     <AnimatedDialogContent {...rest} tabIndex={tabIndex} />
   )
 ).attrs({
@@ -66,7 +67,7 @@ const StyledDialogContent = styled(
     border-radius: 0;
     margin: ${({ margin = '0 0 auto 0' }) => margin};
     padding-top: 2rem;
-    width: ${({ isLargeImageModal }) => (isLargeImageModal ? '90' : '50')}vh;
+    width: ${({ isLargeImageModal, width = '50vh' }) => (isLargeImageModal ? '90vh' : width)};
     max-width: ${({ maxHeight, maxWidth = '42rem', isLargeImageModal = false }) =>
       `${isLargeImageModal ? maxHeight + 'vh' : maxWidth}`};
     ${({ maxHeight }) => maxHeight && `max-height: ${maxHeight};`}
@@ -82,6 +83,7 @@ export interface ModalProps {
   minHeight?: string
   maxHeight?: string
   maxWidth?: string
+  width?: string | number
   margin?: string
   initialFocusRef?: React.RefObject<any>
   className?: string
@@ -99,6 +101,7 @@ export function Modal({
   minHeight,
   maxHeight = '90vh',
   maxWidth,
+  width = 50,
   styleProps = {},
   initialFocusRef,
   isLargeImageModal = false
@@ -127,6 +130,7 @@ export function Modal({
         minHeight={minHeight}
         maxHeight={maxHeight}
         maxWidth={maxWidth}
+        width={width}
         mobile={isMobile}
         tabIndex={tabIndex}
         isLargeImageModal={isLargeImageModal}
