@@ -17,7 +17,7 @@ export const PstlWeb3Modal = <ID extends number, SC extends ChainsPartialReadonl
   const [LazyModal, setModal] = useState<React.ReactElement<any, any>>()
 
   useEffect(() => {
-    if (projectId && !!ethereumClient?.getAccount) {
+    if (projectId && !!ethereumClient?.namespace) {
       devDebug('[@past3lle/web3-modal]::IMPORTING WEB3MODAL')
       import('@web3modal/react')
         .then(({ Web3Modal }) =>
@@ -41,7 +41,7 @@ export const PstlWeb3Modal = <ID extends number, SC extends ChainsPartialReadonl
         .catch(console.error)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ethereumClient?.getAccount, projectId])
+  }, [ethereumClient?.namespace, projectId])
 
   if (!LazyModal) return null
 

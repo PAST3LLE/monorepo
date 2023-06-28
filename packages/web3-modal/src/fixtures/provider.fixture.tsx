@@ -108,10 +108,12 @@ export default {
             connectorDisplayOverrides: {
               ...DEFAULT_PROPS.modals.pstl?.connectorDisplayOverrides,
               web3auth: {
+                ...DEFAULT_PROPS.modals.pstl?.connectorDisplayOverrides?.['web3auth'],
                 customName: 'GMAIL or MOBILE',
                 isRecommended: false
               },
               walletConnect: {
+                ...DEFAULT_PROPS.modals.pstl?.connectorDisplayOverrides?.['walletConnect'],
                 customName: 'WEB3 MODAL'
               }
             },
@@ -142,10 +144,12 @@ export default {
             connectorDisplayOverrides: {
               ...DEFAULT_PROPS.modals.pstl?.connectorDisplayOverrides,
               web3auth: {
+                ...DEFAULT_PROPS.modals.pstl?.connectorDisplayOverrides?.['web3auth'],
                 customName: 'GMAIL or MOBILE',
                 isRecommended: false
               },
               walletConnect: {
+                ...DEFAULT_PROPS.modals.pstl?.connectorDisplayOverrides?.['walletConnect'],
                 customName: 'WEB3 MODAL'
               },
               ledger: {
@@ -185,13 +189,16 @@ export default {
             width: '640px',
             maxWidth: '100%',
             maxHeight: '550px',
+            hideInjectedFromRoot: false,
             connectorDisplayOverrides: {
               ...DEFAULT_PROPS.modals.pstl?.connectorDisplayOverrides,
               web3auth: {
+                ...DEFAULT_PROPS.modals.pstl?.connectorDisplayOverrides?.['web3auth'],
                 customName: 'GMAIL or MOBILE',
                 isRecommended: false
               },
               walletConnect: {
+                ...DEFAULT_PROPS.modals.pstl?.connectorDisplayOverrides?.['walletConnect'],
                 customName: 'WEB3 MODAL'
               },
               'Brave Wallet': {
@@ -233,7 +240,20 @@ export default {
           ...DEFAULT_PROPS.modals,
           pstl: {
             ...DEFAULT_PROPS.modals.pstl,
-            walletsView: 'grid'
+            walletsView: 'grid',
+            connectorDisplayOverrides: {
+              ...DEFAULT_PROPS.modals.pstl?.connectorDisplayOverrides,
+              ledger: {
+                customName: 'LEDGER LIVE',
+                logo: 'https://crypto-central.io/library/uploads/Ledger-Logo-3.png',
+                rank: 10,
+                isRecommended: true,
+                infoText: {
+                  title: 'What is Ledger?',
+                  content: <strong>Ledger wallet is a cold storage hardware wallet.</strong>
+                }
+              }
+            }
           }
         }
       }}
@@ -256,7 +276,20 @@ export default {
           ...DEFAULT_PROPS.modals,
           pstl: {
             ...DEFAULT_PROPS.modals.pstl,
-            walletsView: 'list'
+            walletsView: 'list',
+            connectorDisplayOverrides: {
+              ...DEFAULT_PROPS.modals.pstl?.connectorDisplayOverrides,
+              ledger: {
+                customName: 'LEDGER LIVE',
+                logo: 'https://crypto-central.io/library/uploads/Ledger-Logo-3.png',
+                rank: 10,
+                isRecommended: true,
+                infoText: {
+                  title: 'What is Ledger?',
+                  content: <strong>Ledger wallet is a cold storage hardware wallet.</strong>
+                }
+              }
+            }
           }
         }
       }}

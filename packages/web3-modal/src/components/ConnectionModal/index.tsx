@@ -1,4 +1,4 @@
-import { ButtonProps, CloseIcon, ModalProps } from '@past3lle/components'
+import { ButtonProps, CloseIcon, ErrorBoundary, ModalProps } from '@past3lle/components'
 import { useIsExtraSmallMediaWidth } from '@past3lle/hooks'
 import { BasicUserTheme, ThemeByModes, ThemeModesRequired, ThemeProvider } from '@past3lle/theme'
 import { devWarn } from '@past3lle/utils'
@@ -37,6 +37,13 @@ interface PstlWeb3ConnectionModalProps
   zIndex?: number
 }
 
+type ProviderModalState = {
+  [id: string]: {
+    mounted: boolean
+    loading: boolean
+  }
+}
+
 function ModalWithoutThemeProvider({
   chainIdFromUrl,
   title = 'WALLET CONNECTION',
@@ -60,8 +67,7 @@ function ModalWithoutThemeProvider({
 
   // flag for setting whether or not web3auth modal has mounted as it takes a few seconds first time around
   // and we want to close the pstlModal only after the web3auth modal has mounted
-  const [w3aModalMounted, setW3aModalMounted] = useState(false)
-  const [w3aModalLoading, setW3aModalLoading] = useState(false)
+  const [providerModalState, setProviderModalState] = useState<ProviderModalState>({})
 
   const theme = useTheme()
 
@@ -81,13 +87,21 @@ function ModalWithoutThemeProvider({
               connect,
               openW3Modal,
               closePstlModal: close,
-              setW3aModalMounted,
-              setW3aModalLoading
+              setProviderModalMounted: (mounted: boolean) =>
+                setProviderModalState((currState) => ({
+                  ...currState,
+                  [connector.id]: { ...currState[connector.id], mounted }
+                })),
+              setProviderModaLoading: (loading: boolean) =>
+                setProviderModalState((currState) => ({
+                  ...currState,
+                  [connector.id]: { ...currState[connector.id], loading }
+                }))
             },
             {
               chainId: chainIdFromUrl || chain?.id,
               address,
-              isW3aModalMounted: w3aModalMounted,
+              isProviderModalMounted: !!providerModalState?.[connector.id]?.mounted,
               closeOnConnect: closeModalOnConnect,
               connectorDisplayOverrides
             }
@@ -122,7 +136,7 @@ function ModalWithoutThemeProvider({
       chainIdFromUrl,
       chain?.id,
       address,
-      w3aModalMounted,
+      providerModalState,
       closeModalOnConnect,
       hideInjectedFromRoot,
       connectorDisplayOverrides,
@@ -159,12 +173,12 @@ function ModalWithoutThemeProvider({
         >
           {title}
         </ModalTitleText>
-        {connectorDisplayOverrides?.general?.infoText?.content && !w3aModalLoading && (
+        {connectorDisplayOverrides?.general?.infoText?.content && !providerModalState.loading && (
           <ConnectorHelper title={connectorDisplayOverrides.general.infoText?.title || 'What is this?'}>
             {connectorDisplayOverrides?.general.infoText.content}
           </ConnectorHelper>
         )}
-        {w3aModalLoading ? (
+        {providerModalState.loading ? (
           <LoadingScreen {...loaderProps} />
         ) : (
           <WalletsWrapper view={modalView}>{data}</WalletsWrapper>
@@ -184,7 +198,9 @@ function ModalWithThemeProvider({ themeConfig, ...modalProps }: PstlWeb3Connecti
 
   return (
     <ThemeProvider theme={builtTheme} mode={themeConfig?.mode}>
-      <ModalWithoutThemeProvider {...modalProps} />
+      <ErrorBoundary fallback={<h1>AH WOOPSEH DEHHHSEESHHHH</h1>}>
+        <ModalWithoutThemeProvider {...modalProps} />
+      </ErrorBoundary>
     </ThemeProvider>
   )
 }

@@ -92,6 +92,9 @@ const commonProps: PstlWeb3ModalProps<5 | 80001> = {
   }
 }
 
+const WEB3AUTH_LOGO = 'https://www.getopensocial.com/wp-content/uploads/2020/12/social-login-COLOR_2.png'
+const WALLETCONNECT_LOGO =
+  'https://repository-images.githubusercontent.com/204001588/a5169900-c66c-11e9-8592-33c7334dfd6d'
 const LOGO = 'https://raw.githubusercontent.com/PAST3LLE/monorepo/main/apps/skillforge-ui/public/512_logo.png'
 
 const DEFAULT_PROPS: PstlWeb3ModalProps<number> = {
@@ -120,6 +123,7 @@ const DEFAULT_PROPS: PstlWeb3ModalProps<number> = {
       ...commonProps.modals.pstl,
       themeConfig: { theme: pstlModalTheme },
       closeModalOnConnect: false,
+      hideInjectedFromRoot: true,
       connectorDisplayOverrides: {
         general: {
           infoText: {
@@ -135,6 +139,7 @@ const DEFAULT_PROPS: PstlWeb3ModalProps<number> = {
         },
         web3auth: {
           isRecommended: true,
+          logo: WEB3AUTH_LOGO,
           infoText: {
             title: 'How does this login work?',
             content: (
@@ -147,6 +152,7 @@ const DEFAULT_PROPS: PstlWeb3ModalProps<number> = {
           }
         },
         walletConnect: {
+          logo: WALLETCONNECT_LOGO,
           infoText: {
             title: 'What is WalletConnect?',
             content: (

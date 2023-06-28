@@ -3,157 +3,65 @@ import { css } from 'styled-components'
 import { useConnection, usePstlWeb3Modal } from '../hooks'
 import { ConnectorEnhanced, ConnectorEnhancedExtras, DefaultWallets } from '../types'
 
-const SOCIAL_LOGO = 'https://www.getopensocial.com/wp-content/uploads/2020/12/social-login-COLOR_2.png'
-const WALLETCONNECT_LOGO =
-  'https://repository-images.githubusercontent.com/204001588/a5169900-c66c-11e9-8592-33c7334dfd6d'
+type GetConnectorInfoCallbacks = {
+  connect: (...params: any[]) => Promise<any>
+  openW3Modal: ReturnType<typeof useConnection>[1]['openW3Modal']
+  closePstlModal: ReturnType<typeof usePstlWeb3Modal>['close']
+  setProviderModalMounted: (val: boolean) => void
+  setProviderModaLoading: (val: boolean) => void
+}
+
+type GetConnectorInfoConstants = {
+  chainId?: number
+  address?: string
+  isProviderModalMounted?: boolean
+  closeOnConnect?: boolean
+  connectorDisplayOverrides?: { [id: string]: ConnectorEnhancedExtras | undefined }
+}
+
+type ProviderModalType = 'w3a-modal' | 'w3m-modal' | null
 
 export function getConnectorInfo(
   connector: ConnectorEnhanced<any, any>,
   currentConnector: ConnectorEnhanced<any, any> | undefined,
-  {
-    connect,
-    openW3Modal,
-    closePstlModal,
-    setW3aModalMounted,
-    setW3aModalLoading
-  }: {
-    connect: (...params: any[]) => Promise<any>
-    openW3Modal: ReturnType<typeof useConnection>[1]['openW3Modal']
-    closePstlModal: ReturnType<typeof usePstlWeb3Modal>['close']
-    setW3aModalMounted: (val: boolean) => void
-    setW3aModalLoading: (val: boolean) => void
-  },
-  {
-    chainId,
-    address,
-    isW3aModalMounted,
-    closeOnConnect,
-    connectorDisplayOverrides
-  }: {
-    chainId?: number
-    address?: string
-    isW3aModalMounted?: boolean
-    closeOnConnect?: boolean
-    connectorDisplayOverrides?: { [id: string]: ConnectorEnhancedExtras | undefined }
-  }
+  { connect, openW3Modal, closePstlModal, setProviderModalMounted, setProviderModaLoading }: GetConnectorInfoCallbacks,
+  { chainId, address, isProviderModalMounted, closeOnConnect, connectorDisplayOverrides }: GetConnectorInfoConstants
 ): [
   { label: string; logo?: string; connected: boolean; isRecommended?: boolean },
   ReturnType<typeof useConnection>[1]['connect'] | ReturnType<typeof useConnection>[1]['openW3Modal']
 ] {
+  let modalType: ProviderModalType = null
+  let isModalMounted = true
   switch (connector.id) {
     case DefaultWallets.WEB3AUTH:
-      return [
-        {
-          label: connectorDisplayOverrides?.[connector.id]?.customName || 'Social',
-          logo: connectorDisplayOverrides?.[connector.id]?.logo || connector?.logo || SOCIAL_LOGO,
-          connected: currentConnector?.id === DefaultWallets.WEB3AUTH,
-          isRecommended: connectorDisplayOverrides?.[connector.id]?.isRecommended
-        },
-        async () => {
-          try {
-            // Web3Auth modal has already mounted, skip timeout
-            if (isW3aModalMounted) {
-              return !address ? connect({ connector, chainId }) : openW3Modal({ route: 'Account' })
-            } else {
-              // Web3Auth modal is async imported on use
-              // we need to wait ~20 seconds for modal to load and show loader in meantime
-              setW3aModalLoading(true)
+      modalType = 'w3a-modal'
+      isModalMounted = !!isProviderModalMounted
+      break
 
-              await Promise.race([
-                // timeout and thow after N seconds if we can't find the modal
-                loopFindElementById('w3a-modal', 20).catch((error) => {
-                  throw new Error(error)
-                }),
-                !address ? connect({ connector, chainId }) : openW3Modal({ route: 'Account' })
-              ])
-            }
-          } catch (error) {
-            await connector.disconnect()
-            console.error('[PstlWeb3ConnectionModal::getProviderInfo] - Error in loading modal:', error)
-          } finally {
-            closeOnConnect && closePstlModal()
-            setW3aModalLoading(false)
-            setW3aModalMounted(true)
-          }
-        }
-      ]
     case DefaultWallets.WEB3MODAL: {
-      return [
-        {
-          label: connectorDisplayOverrides?.[connector.id]?.customName || 'WalletConnect',
-          logo: connectorDisplayOverrides?.[connector.id]?.logo || connector?.logo || WALLETCONNECT_LOGO,
-          connected: !!currentConnector && currentConnector?.id !== DefaultWallets.WEB3AUTH,
-          isRecommended: connectorDisplayOverrides?.[connector.id]?.isRecommended
-        },
-        async () => {
-          try {
-            return openW3Modal({ route: !!address ? 'Account' : 'ConnectWallet' })
-          } catch (error) {
-            console.error('[PstlWeb3ConnectionModal::getConnectorInfo] Web3Modal error!', error)
-          } finally {
-            closeOnConnect && closePstlModal()
-          }
-        }
-      ]
-    }
-    case DefaultWallets.INJECTED: {
-      const readInfo = {
-        label:
-          connectorDisplayOverrides?.[connector.id]?.customName ||
-          connector?.customName ||
-          connector?.name ||
-          connector?.id ||
-          'Unknown option',
-        logo:
-          connectorDisplayOverrides?.[connector.name || connector.id]?.logo || connector?.logo || WALLETCONNECT_LOGO,
-        connected: currentConnector?.id === connector.id,
-        isRecommended: connectorDisplayOverrides?.[connector.id]?.isRecommended
-      }
-
-      return [
-        readInfo,
-        async () => {
-          try {
-            return !address ? connect({ connector, chainId }) : openW3Modal({ route: 'Account' })
-          } catch (error) {
-            console.error('[PstlWeb3ConnectionModal::getConnectorInfo] WalletConnect error!', error)
-          } finally {
-            closeOnConnect && closePstlModal()
-          }
-        }
-      ]
-    }
-    default: {
-      const readInfo = {
-        label:
-          connectorDisplayOverrides?.[connector.id]?.customName ||
-          connector?.customName ||
-          connector?.name ||
-          connector?.id ||
-          'Unknown option',
-        logo:
-          connectorDisplayOverrides?.[connector.id]?.logo ||
-          connectorDisplayOverrides?.[connector.name]?.logo ||
-          connector?.logo ||
-          WALLETCONNECT_LOGO,
-        connected: currentConnector?.id === connector.id,
-        isRecommended: connectorDisplayOverrides?.[connector.id]?.isRecommended
-      }
-
-      return [
-        readInfo,
-        async () => {
-          try {
-            return !address ? connect({ connector, chainId }) : openW3Modal({ route: 'Account' })
-          } catch (error) {
-            console.error('[PstlWeb3ConnectionModal::getConnectorInfo] WalletConnect error!', error)
-          } finally {
-            closeOnConnect && closePstlModal()
-          }
-        }
-      ]
+      modalType = 'w3m-modal'
+      isModalMounted = !!isProviderModalMounted
+      break
     }
   }
+
+  return [
+    _getProviderInfo(connector, currentConnector, connectorDisplayOverrides),
+    async () =>
+      _connectProvider(
+        modalType,
+        connector,
+        currentConnector,
+        { chainId, address, closeOnConnect, isModalMounted },
+        {
+          connect,
+          openW3Modal,
+          closePstlModal,
+          setModalLoading: setProviderModaLoading,
+          setModalMounted: setProviderModalMounted
+        }
+      )
+  ]
 }
 
 const delayWithCondition = async ({
@@ -177,9 +85,14 @@ const loopFindElementById = async (id: string, limit = 10) => {
   let result: HTMLElement | null | 'BAILED' = null
   try {
     while (!result) {
-      result = await delayWithCondition({ value, limit, id }).catch(() => {
-        throw '[loopFindElementById] Timeout searching for w3a-modal.'
-      })
+      result = await delayWithCondition({ value, limit, id })
+        .then((res) => {
+          if (res === 'BAILED') throw '[loopFindElementById] Timeout searching for ' + id
+          return res
+        })
+        .catch((error) => {
+          throw error
+        })
       value = value + 1
     }
   } catch (error: any) {
@@ -212,5 +125,84 @@ export function getPosition(position?: 'top-left' | 'top-right' | 'bottom-right'
         top: 0.75em;
         right: 0.75em;
       `
+  }
+}
+
+async function _connectProvider(
+  modalId: 'w3a-modal' | 'w3m-modal' | null,
+  connector: ConnectorEnhanced<any, any>,
+  currentConnector: ConnectorEnhanced<any, any> | undefined,
+  constants: Pick<GetConnectorInfoConstants, 'address' | 'chainId' | 'closeOnConnect'> & { isModalMounted?: boolean },
+  callbacks: Omit<
+    GetConnectorInfoCallbacks,
+    'setProviderModaLoading' | 'setProviderModalMounted' | 'setW3mModalLoading' | 'setW3mModalMounted'
+  > & {
+    setModalLoading?: (status: boolean) => void
+    setModalMounted?: (status: boolean) => void
+  }
+) {
+  const { address, chainId, closeOnConnect, isModalMounted } = constants
+  const { connect, setModalLoading, setModalMounted, closePstlModal, openW3Modal } = callbacks
+
+  try {
+    // Modal has already mounted, skip timeout
+    if (isModalMounted) {
+      return _handleConnectorClick(connector, currentConnector, { chainId, address }, { connect, openW3Modal })
+    } else if (!!modalId) {
+      // Modal is async imported on use
+      // we need to wait ~20 seconds for modal to load and show loader in meantime
+      setModalLoading?.(true)
+
+      await Promise.race([
+        // timeout and thow after N seconds if we can't find the modal
+        loopFindElementById(modalId, 30).catch((error) => {
+          throw new Error(error)
+        }),
+        _handleConnectorClick(connector, currentConnector, { chainId, address }, { connect, openW3Modal })
+      ])
+    }
+  } catch (error: any) {
+    await connector.disconnect()
+    console.error('[PstlWeb3ConnectionModal::_getProviderInfo] - Error in loading modal:', error)
+    throw new Error(error)
+  } finally {
+    closeOnConnect && closePstlModal()
+    setModalLoading?.(false)
+    setModalMounted?.(true)
+  }
+}
+
+function _getProviderInfo(
+  connector: ConnectorEnhanced<any, any>,
+  currentConnector: ConnectorEnhanced<any, any> | undefined,
+  connectorDisplayOverrides: GetConnectorInfoConstants['connectorDisplayOverrides']
+) {
+  return {
+    label: connectorDisplayOverrides?.[connector.id]?.customName || connector.name,
+    logo:
+      connectorDisplayOverrides?.[connector.name]?.logo ||
+      connectorDisplayOverrides?.[connector.id]?.logo ||
+      connector?.logo,
+    connected: Boolean(currentConnector && currentConnector.id === connector.id),
+    isRecommended: connectorDisplayOverrides?.[connector.id]?.isRecommended
+  }
+}
+
+function _handleConnectorClick(
+  connector: ConnectorEnhanced<any, any>,
+  currentConnector: ConnectorEnhanced<any, any> | undefined,
+  { address, chainId }: Pick<GetConnectorInfoConstants, 'address' | 'chainId'>,
+  { connect, openW3Modal }: Pick<GetConnectorInfoCallbacks, 'openW3Modal' | 'connect'>
+) {
+  const isConnectedConnector = currentConnector?.id === connector.id
+  if (address && isConnectedConnector) {
+    return openW3Modal({ route: 'Account' })
+  } else {
+    switch (connector.id) {
+      case DefaultWallets.WEB3MODAL:
+        return openW3Modal({ route: 'ConnectWallet' })
+      default:
+        return connect({ connector, chainId })
+    }
   }
 }

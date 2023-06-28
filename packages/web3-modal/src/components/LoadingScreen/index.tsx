@@ -48,7 +48,7 @@ export function LoadingScreen({ containerProps, spinnerProps }: LoadingScreenPro
           wght: 100
         }}
       >
-        ATTEMPTING LOG IN...
+        FETCHING LOG IN DATA...
       </ModalTitleText>
       <SpinnerCircle {...spinnerProps} />
     </LoadingContainerFadeIn>
