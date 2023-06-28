@@ -155,6 +155,7 @@ export default {
               ledger: {
                 customName: 'LEDGER LIVE',
                 logo: 'https://crypto-central.io/library/uploads/Ledger-Logo-3.png',
+                modalNodeId: 'ModalWrapper',
                 rank: 10,
                 isRecommended: true,
                 infoText: {
@@ -210,6 +211,7 @@ export default {
               ledger: {
                 customName: 'LEDGER LIVE',
                 logo: 'https://crypto-central.io/library/uploads/Ledger-Logo-3.png',
+                modalNodeId: 'ModalWrapper',
                 rank: 10,
                 isRecommended: true,
                 infoText: {
@@ -250,6 +252,7 @@ export default {
               ledger: {
                 customName: 'LEDGER LIVE',
                 logo: 'https://crypto-central.io/library/uploads/Ledger-Logo-3.png',
+                modalNodeId: 'ModalWrapper',
                 rank: 10,
                 isRecommended: true,
                 infoText: {
@@ -286,6 +289,7 @@ export default {
               ledger: {
                 customName: 'LEDGER LIVE',
                 logo: 'https://crypto-central.io/library/uploads/Ledger-Logo-3.png',
+                modalNodeId: 'ModalWrapper',
                 rank: 10,
                 isRecommended: true,
                 infoText: {
@@ -332,6 +336,7 @@ export default {
               ledger: {
                 customName: 'LEDGER LIVE',
                 logo: 'https://crypto-central.io/library/uploads/Ledger-Logo-3.png',
+                modalNodeId: 'ModalWrapper',
                 rank: 10,
                 isRecommended: true,
                 infoText: {
@@ -342,8 +347,8 @@ export default {
             },
             loaderProps: {
               containerProps: {
-                backgroundColor: 'rgba(0,0,0,0.65)',
-                borderRadius: '5px'
+                backgroundColor: 'rgba(0,0,0,0.42)',
+                borderRadius: '10px'
               },
               spinnerProps: {
                 size: 80,

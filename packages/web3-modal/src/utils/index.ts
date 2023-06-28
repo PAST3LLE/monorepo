@@ -19,7 +19,7 @@ type GetConnectorInfoConstants = {
   connectorDisplayOverrides?: { [id: string]: ConnectorEnhancedExtras | undefined }
 }
 
-type ProviderModalType = 'w3a-modal' | 'w3m-modal' | null
+type ProviderModalType = 'w3a-modal' | 'w3m-modal' | string | null | undefined
 
 export function getConnectorInfo(
   connector: ConnectorEnhanced<any, any>,
@@ -30,7 +30,9 @@ export function getConnectorInfo(
   { label: string; logo?: string; connected: boolean; isRecommended?: boolean },
   ReturnType<typeof useConnection>[1]['connect'] | ReturnType<typeof useConnection>[1]['openW3Modal']
 ] {
-  let modalType: ProviderModalType = null
+  let modalType: ProviderModalType = (
+    connectorDisplayOverrides?.[connector?.name] || connectorDisplayOverrides?.[connector?.id]
+  )?.modalNodeId
   let isModalMounted = true
   switch (connector.id) {
     case DefaultWallets.WEB3AUTH:
@@ -43,6 +45,10 @@ export function getConnectorInfo(
       isModalMounted = !!isProviderModalMounted
       break
     }
+
+    default:
+      isModalMounted = !modalType || !!isProviderModalMounted
+      break
   }
 
   return [
@@ -129,7 +135,7 @@ export function getPosition(position?: 'top-left' | 'top-right' | 'bottom-right'
 }
 
 async function _connectProvider(
-  modalId: 'w3a-modal' | 'w3m-modal' | null,
+  modalId: ProviderModalType,
   connector: ConnectorEnhanced<any, any>,
   currentConnector: ConnectorEnhanced<any, any> | undefined,
   constants: Pick<GetConnectorInfoConstants, 'address' | 'chainId' | 'closeOnConnect'> & { isModalMounted?: boolean },
