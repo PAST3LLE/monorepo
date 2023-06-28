@@ -10,7 +10,8 @@
    "**/package.json",
    "**/*.md",
    "**/perf/**",
-   "**/.nvmrc"
+   "**/.nvmrc",
+   "**/*.fixture.tsx"
  ],
   "command": {
      "version": {
