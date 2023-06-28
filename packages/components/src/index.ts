@@ -1,5 +1,6 @@
 export * from './Button'
 export * from './Cookies'
+export * from './Error'
 export * from './Icons'
 export * from './Layout'
 export * from './Links'
