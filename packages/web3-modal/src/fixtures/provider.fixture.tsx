@@ -241,8 +241,12 @@ export default {
           pstl: {
             ...DEFAULT_PROPS.modals.pstl,
             walletsView: 'grid',
+            hideInjectedFromRoot: false,
             connectorDisplayOverrides: {
               ...DEFAULT_PROPS.modals.pstl?.connectorDisplayOverrides,
+              MetaMask: {
+                logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/1200px-MetaMask_Fox.svg.png'
+              },
               ledger: {
                 customName: 'LEDGER LIVE',
                 logo: 'https://crypto-central.io/library/uploads/Ledger-Logo-3.png',
