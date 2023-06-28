@@ -37,10 +37,9 @@ interface PstlWeb3ConnectionModalProps
   zIndex?: number
 }
 
-type ProviderModalState = {
+type ProviderMountedMap = {
   [id: string]: {
     mounted: boolean
-    loading: boolean
   }
 }
 
@@ -67,7 +66,8 @@ function ModalWithoutThemeProvider({
 
   // flag for setting whether or not web3auth modal has mounted as it takes a few seconds first time around
   // and we want to close the pstlModal only after the web3auth modal has mounted
-  const [providerModalState, setProviderModalState] = useState<ProviderModalState>({})
+  const [providerMountedMap, setProviderMountedMap] = useState<ProviderMountedMap>({})
+  const [providerLoading, setProviderLoading] = useState(false)
 
   const theme = useTheme()
 
@@ -92,20 +92,16 @@ function ModalWithoutThemeProvider({
               openW3Modal,
               closePstlModal: close,
               setProviderModalMounted: (mounted: boolean) =>
-                setProviderModalState((currState) => ({
+                setProviderMountedMap((currState) => ({
                   ...currState,
                   [connector.id]: { ...currState[connector.id], mounted }
                 })),
-              setProviderModaLoading: (loading: boolean) =>
-                setProviderModalState((currState) => ({
-                  ...currState,
-                  [connector.id]: { ...currState[connector.id], loading }
-                }))
+              setProviderModaLoading: setProviderLoading
             },
             {
               chainId: chainIdFromUrl || chain?.id,
               address,
-              isProviderModalMounted: !!providerModalState?.[connector.id]?.mounted,
+              isProviderModalMounted: !!providerMountedMap?.[connector.id]?.mounted,
               closeOnConnect: closeModalOnConnect,
               connectorDisplayOverrides
             }
@@ -142,7 +138,7 @@ function ModalWithoutThemeProvider({
       chainIdFromUrl,
       chain?.id,
       address,
-      providerModalState,
+      providerMountedMap,
       closeModalOnConnect,
       hideInjectedFromRoot,
       connectorDisplayOverrides,
@@ -179,12 +175,12 @@ function ModalWithoutThemeProvider({
         >
           {title}
         </ModalTitleText>
-        {connectorDisplayOverrides?.general?.infoText?.content && !providerModalState.loading && (
+        {connectorDisplayOverrides?.general?.infoText?.content && !providerLoading && (
           <ConnectorHelper title={connectorDisplayOverrides.general.infoText?.title || 'What is this?'}>
             {connectorDisplayOverrides?.general.infoText.content}
           </ConnectorHelper>
         )}
-        {providerModalState.loading ? (
+        {providerLoading ? (
           <LoadingScreen {...loaderProps} />
         ) : (
           <WalletsWrapper view={modalView}>{data}</WalletsWrapper>
