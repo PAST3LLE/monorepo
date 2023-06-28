@@ -301,5 +301,51 @@ export default {
       <AppWithWagmiAccess />
       <Web3Button />
     </PstlW3Providers>
+  )),
+  List__MetaMaskFirstLedgerSecond: withThemeProvider(() => (
+    <PstlW3Providers
+      config={{
+        ...DEFAULT_PROPS,
+        wagmiClient: {
+          ...DEFAULT_PROPS.wagmiClient,
+          options: {
+            connectors: Object.values(wagmiConnectors)
+          }
+        },
+        modals: {
+          ...DEFAULT_PROPS.modals,
+          pstl: {
+            ...DEFAULT_PROPS.modals.pstl,
+            walletsView: 'list',
+            hideInjectedFromRoot: false,
+            connectorDisplayOverrides: {
+              ...DEFAULT_PROPS.modals.pstl?.connectorDisplayOverrides,
+              web3auth: {
+                ...DEFAULT_PROPS.modals.pstl?.connectorDisplayOverrides?.['web3auth'],
+                isRecommended: false
+              },
+              MetaMask: {
+                logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/1200px-MetaMask_Fox.svg.png',
+                rank: 11,
+                isRecommended: true
+              },
+              ledger: {
+                customName: 'LEDGER LIVE',
+                logo: 'https://crypto-central.io/library/uploads/Ledger-Logo-3.png',
+                rank: 10,
+                isRecommended: true,
+                infoText: {
+                  title: 'What is Ledger?',
+                  content: <strong>Ledger wallet is a cold storage hardware wallet.</strong>
+                }
+              }
+            }
+          }
+        }
+      }}
+    >
+      <AppWithWagmiAccess />
+      <Web3Button />
+    </PstlW3Providers>
   ))
 }

@@ -74,10 +74,14 @@ function ModalWithoutThemeProvider({
   const data = useMemo(
     () =>
       connectors
-        .sort(
-          (connA, connB) =>
-            (connectorDisplayOverrides?.[connB.id]?.rank || 0) - (connectorDisplayOverrides?.[connA.id]?.rank || 0)
-        )
+        .sort((connA, connB) => {
+          const connA_rank =
+            (connectorDisplayOverrides?.[connA.id] || connectorDisplayOverrides?.[connA.name])?.rank || 0
+          const connB_rank =
+            (connectorDisplayOverrides?.[connB.id] || connectorDisplayOverrides?.[connB.name])?.rank || 0
+
+          return connB_rank - connA_rank
+        })
         .map((connector, index) => {
           if (hideInjectedFromRoot && connector.id === 'injected') return null
           const [{ label, logo, connected, isRecommended }, callback] = getConnectorInfo(
@@ -108,7 +112,9 @@ function ModalWithoutThemeProvider({
           )
 
           const showHelperText = theme?.modals?.connection?.helpers?.show
-          const helperContent = connectorDisplayOverrides?.[connector.id]?.infoText
+          const helperContent = (
+            connectorDisplayOverrides?.[connector.id] || connectorDisplayOverrides?.[connector.name]
+          )?.infoText
 
           return (
             <Fragment key={connector.id + '_' + index}>

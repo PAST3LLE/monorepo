@@ -177,14 +177,12 @@ function _getProviderInfo(
   currentConnector: ConnectorEnhanced<any, any> | undefined,
   connectorDisplayOverrides: GetConnectorInfoConstants['connectorDisplayOverrides']
 ) {
+  const baseConnectorKey = connectorDisplayOverrides?.[connector.id] || connectorDisplayOverrides?.[connector.name]
   return {
-    label: connectorDisplayOverrides?.[connector.id]?.customName || connector.name,
-    logo:
-      connectorDisplayOverrides?.[connector.name]?.logo ||
-      connectorDisplayOverrides?.[connector.id]?.logo ||
-      connector?.logo,
+    label: baseConnectorKey?.customName || connector.name,
+    logo: baseConnectorKey?.logo || connector?.logo,
     connected: Boolean(currentConnector && currentConnector.id === connector.id),
-    isRecommended: connectorDisplayOverrides?.[connector.id]?.isRecommended
+    isRecommended: baseConnectorKey?.isRecommended
   }
 }
 
