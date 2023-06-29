@@ -2,6 +2,7 @@ import { SUPPORTED_CHAINS } from './chains'
 import { Web3ModalConfigWeb3Props } from '@past3lle/forge-web3'
 import { FORGE_LOGO_URL_MAP } from '@past3lle/web3-modal'
 import { TorusWalletConnectorPlugin } from '@web3auth/torus-wallet-connector-plugin'
+import GOOGLE_APPLE_LOGO from 'assets/png/google-apple.png'
 import React from 'react'
 import { pstlModalTheme as PSTL_MODAL_THEME } from 'theme/pstlModal'
 import { skillforgeTheme as SKILLFORGE_THEME } from 'theme/skillforge'
@@ -84,6 +85,7 @@ export const WEB3_PROPS: Web3ModalConfigWeb3Props = {
     pstl: {
       title: SKILLFORGE_APP_NAME + ' LOGIN',
       themeConfig: { theme: PSTL_MODAL_THEME },
+      walletsView: 'list',
       maxHeight: '650px',
       maxWidth: '360px',
       margin: 'auto',
@@ -98,26 +100,18 @@ export const WEB3_PROPS: Web3ModalConfigWeb3Props = {
                 {SKILLFORGE_APP_NAME} has an opt-in Web3 feature which allows you to collect SKILLS and SKILLPOINTS in
                 exchange for completely new, and unique drop items. Clicking on SKILLS (the squares on the board) shows
                 you the prerequisites for each new skill. To get started, please select a wallet choice below and
-                connect! If you are new to Web3/blockchain, please select "Social Login" below.
+                connect! If you are new to Web3/blockchain, please select the recommended option below.
               </strong>
             )
           }
         },
         web3auth: {
           isRecommended: true,
-          customName: 'Gmail/Mobile',
-          infoText: {
-            title: <strong>How does Email/SMS/Social login work?</strong>,
-            content: (
-              <strong>
-                Social login is done via Web3Auth - a non-custodial social login protocol (i.e they never actually know,
-                or hold your data) - which facilitates logging into Dapps (decentralised apps) via familiar social media
-                login choices.
-              </strong>
-            )
-          }
+          logo: GOOGLE_APPLE_LOGO,
+          customName: 'Google & more'
         },
         walletConnect: {
+          logo: 'https://raw.githubusercontent.com/WalletConnect/walletconnect-assets/master/Logo/Gradient/Logo.png',
           customName: 'Web3',
           infoText: {
             title: <strong>What is web3?</strong>,
@@ -132,7 +126,8 @@ export const WEB3_PROPS: Web3ModalConfigWeb3Props = {
         }
       },
       loaderProps: {
-        spinnerProps: { size: 85 }
+        spinnerProps: { size: 85 },
+        loadingText: 'GETTING LOGIN...'
       }
     }
   }

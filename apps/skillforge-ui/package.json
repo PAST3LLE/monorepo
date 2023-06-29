@@ -56,7 +56,6 @@
     "@types/styled-components": "^5.1.0",
     "@typescript-eslint/eslint-plugin": "^5.48.2",
     "@typescript-eslint/parser": "^5.48.2",
-    "@wagmi/core": "1.3.0",
     "@web3auth/torus-wallet-connector-plugin": "^5.0.1",
     "assert": "^2.0.0",
     "browserify-zlib": "^0.2.0",
