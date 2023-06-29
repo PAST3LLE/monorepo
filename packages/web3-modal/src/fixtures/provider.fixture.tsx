@@ -363,5 +363,59 @@ export default {
       <AppWithWagmiAccess />
       <Web3Button />
     </PstlW3Providers>
+  )),
+  List__LedgerAutoClose: withThemeProvider(() => (
+    <PstlW3Providers
+      config={{
+        ...DEFAULT_PROPS,
+        wagmiClient: {
+          ...DEFAULT_PROPS.wagmiClient,
+          options: {
+            connectors: Object.values(wagmiConnectors)
+          }
+        },
+        modals: {
+          ...DEFAULT_PROPS.modals,
+          pstl: {
+            ...DEFAULT_PROPS.modals.pstl,
+            closeModalOnConnect: true,
+            walletsView: 'list',
+            hideInjectedFromRoot: true,
+            connectorDisplayOverrides: {
+              ...DEFAULT_PROPS.modals.pstl?.connectorDisplayOverrides,
+              web3auth: {
+                ...DEFAULT_PROPS.modals.pstl?.connectorDisplayOverrides?.['web3auth'],
+                isRecommended: false
+              },
+              ledger: {
+                customName: 'LEDGER LIVE',
+                logo: 'https://crypto-central.io/library/uploads/Ledger-Logo-3.png',
+                modalNodeId: 'ModalWrapper',
+                rank: 10,
+                isRecommended: true,
+                infoText: {
+                  title: 'What is Ledger?',
+                  content: <strong>Ledger wallet is a cold storage hardware wallet.</strong>
+                }
+              }
+            },
+            loaderProps: {
+              containerProps: {
+                backgroundColor: 'rgba(0,0,0,0.42)',
+                borderRadius: '10px'
+              },
+              spinnerProps: {
+                size: 80,
+                invertColor: true
+              },
+              loadingText: 'FETCHING INFO...'
+            }
+          }
+        }
+      }}
+    >
+      <AppWithWagmiAccess />
+      <Web3Button />
+    </PstlW3Providers>
   ))
 }
