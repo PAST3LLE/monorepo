@@ -20,7 +20,7 @@ export function AppMessagesBanner() {
   return (
     <>
       {appMessagesFiltered.map((message, i) => (
-        <BannerContainer id={'message_' + i}>
+        <BannerContainer key={i}>
           <h2>{message}</h2>
         </BannerContainer>
       ))}
