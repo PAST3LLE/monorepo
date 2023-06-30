@@ -21,12 +21,12 @@ export function SkillActionButton({
       case SkillLockStatus.OWNED:
         return (
           <Column alignItems={'center'} gap="1rem" maxWidth={'40%'}>
-            <ThemedButtonExternalLink width="100%" href={getSkillShopUri(skill)}>
+            <ThemedButtonExternalLink fullWidth href={getSkillShopUri(skill)}>
               <Text.Black fontSize="1.6rem" fontWeight={300}>
                 VIEW IN SHOP
               </Text.Black>
             </ThemedButtonExternalLink>
-            <ThemedButtonExternalLink width="100%" href={metadataExplorerUri}>
+            <ThemedButtonExternalLink fullWidth href={metadataExplorerUri}>
               <Text.Black fontSize="1.6rem" fontWeight={300}>
                 VIEW ON OPENSEA
               </Text.Black>
@@ -35,7 +35,7 @@ export function SkillActionButton({
         )
       case SkillLockStatus.UNLOCKABLE_IN_STORE:
         return (
-          <ThemedButtonExternalLink fontSize="2rem" href={getSkillShopUri(skill)}>
+          <ThemedButtonExternalLink fullWidth fontSize="2rem" href={getSkillShopUri(skill)}>
             <Text.Black fontWeight={300}>UNLOCK IN SHOP</Text.Black>
           </ThemedButtonExternalLink>
         )

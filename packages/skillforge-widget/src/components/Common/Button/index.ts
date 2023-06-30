@@ -46,12 +46,18 @@ export const ThemedButton = styled(Button).attrs(() => ({}))<{
   transition: box-shadow 0.1s ease-in-out, transform 0.1s ease-in-out;
 `
 
-export const ThemedButtonExternalLink = styled(ExternalLink)<{ disabled?: boolean; fontSize?: string }>`
+export const ThemedButtonExternalLink = styled(ExternalLink)<{
+  disabled?: boolean
+  fontSize?: string
+  fullWidth?: boolean
+}>`
   padding: 1rem 2rem;
   flex: 1;
   text-align: center;
   ${({ fontSize }) => fontSize && `font-size: ${fontSize};`}
   background-color: ${({ theme, disabled }) => (disabled ? theme.rarity.common.backgroundColor : theme.mainBg)};
+  ${({ fullWidth }) => fullWidth && `width: 100%;`}
+
   ${({ disabled }) =>
     disabled &&
     ` 

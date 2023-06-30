@@ -1,4 +1,3 @@
-import { BigNumber } from '@ethersproject/bignumber'
 import { RowProps } from '@past3lle/components'
 import { ForgeBalances, ForgeMetadataState, SkillDependencyObject, SkillId } from '@past3lle/forge-web3'
 import React from 'react'
@@ -30,7 +29,7 @@ export function SkillsRow({ balances, deps, metadataMap, rowProps }: SkillsRowPr
               key={skill.properties.id}
               // @ts-ignore
               title={skill.name}
-              hasSkill={!BigNumber.from(balances?.[skillId] || 0).isZero()}
+              hasSkill={BigInt(balances?.[skillId] || 0) > BigInt(0)}
               metadata={skill}
               skillpointStyles={{ css: 'box-shadow: unset;' }}
             />

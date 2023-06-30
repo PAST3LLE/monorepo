@@ -1,4 +1,3 @@
-import { BigNumber } from '@ethersproject/bignumber'
 import { Column, Row, Text } from '@past3lle/components'
 import { useForgeBalancesReadAtom, useSupportedChainId } from '@past3lle/forge-web3'
 import { upToSmall } from '@past3lle/theme'
@@ -26,7 +25,7 @@ export function UserStatsPanel() {
   const totalSkills = useMemo(() => vectors.filter((vectorObj) => !!vectorObj.skillId).length, [vectors])
   const ownedSkillsList = useMemo(() => {
     return vectors.reduce((acc, skill) => {
-      const missingSkill = !skill.skillId || BigNumber.from(balances?.[skill.skillId] || '0').isZero()
+      const missingSkill = !skill.skillId || BigInt(balances?.[skill.skillId] || 0) === BigInt(0)
       if (!missingSkill) {
         acc.push(skill)
       }

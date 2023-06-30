@@ -1,4 +1,3 @@
-import { BigNumber } from '@ethersproject/bignumber'
 import { Row, Text } from '@past3lle/components'
 import {
   ForgeW3AppConfig,
@@ -41,7 +40,7 @@ export function SkillsCanvas() {
       vectors.map(({ skillId, vector }) => {
         if (!vector || !metadataMap) return
         const skillBalance = skillId && balances?.[skillId]
-        const zeroBalance = !skillBalance || BigNumber.from(skillBalance).isZero()
+        const zeroBalance = !skillBalance || BigInt(skillBalance) === BigInt(0)
 
         const skillpointProps =
           skillId && metadataMap?.[skillId]

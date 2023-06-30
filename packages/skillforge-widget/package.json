@@ -66,7 +66,6 @@
     "wagmi": ">=0.12.1"
   },
   "peerDependencies": {
-    "@ethersproject/bignumber": ">=5.7.0",
     "@web3modal/ethereum": ">=2.2.0",
     "@web3modal/react": ">=2.2.0",
     "jotai": ">=1",
@@ -92,7 +91,6 @@
     "styled-components": "^5.3.5"
   },
   "dependencies": {
-    "@ethersproject/bignumber": "5.7.0",
     "@past3lle/components": "^0.0.77",
     "@past3lle/forge-web3": "^0.0.108",
     "@past3lle/hooks": "^0.0.41",
