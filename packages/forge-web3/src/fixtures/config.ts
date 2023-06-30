@@ -12,17 +12,17 @@ const DEFAULT_PROPS: ForgeWeb3ModalProps = {
   appName: 'COSMOS APP',
   chains,
   modals: {
-    w3m: {
+    walletConnect: {
       projectId: WALLETCONNECT_TEST_ID,
       walletImages: {
         web3auth: 'https://web3auth.io/images/w3a-L-Favicon-1.svg',
         safe: 'https://user-images.githubusercontent.com/3975770/212338977-5968eae5-bb1b-4e71-8f82-af5282564c66.png'
       }
     },
-    w3a: {
+    web3auth: {
       appName: 'SKILLFORGE TEST',
       projectId: WEB3AUTH_TEST_ID,
-      network: 'testnet',
+      network: 'cyan',
       storageKey: 'session',
       preset: 'DISALLOW_EXTERNAL_WALLETS',
       configureAdditionalConnectors() {

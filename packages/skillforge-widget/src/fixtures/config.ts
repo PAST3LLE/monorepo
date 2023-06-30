@@ -4,17 +4,17 @@ import { goerli } from 'wagmi/chains'
 const DEFAULT_PROPS: ForgeW3CoreProvidersProps['config']['web3'] = {
   chains: [goerli],
   modals: {
-    w3m: {
+    walletConnect: {
       projectId: process.env.REACT_APP_WEB3MODAL_ID || '',
       walletImages: {
         web3auth: 'https://web3auth.io/images/w3a-L-Favicon-1.svg',
         safe: 'https://user-images.githubusercontent.com/3975770/212338977-5968eae5-bb1b-4e71-8f82-af5282564c66.png'
       }
     },
-    w3a: {
+    web3auth: {
       appName: 'SKILLFORGE TEST',
       projectId: process.env.REACT_APP_WEB3_AUTH_ID || '',
-      network: 'testnet'
+      network: 'cyan'
     }
   }
 }

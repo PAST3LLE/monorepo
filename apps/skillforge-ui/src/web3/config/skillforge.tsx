@@ -1,11 +1,13 @@
 import { SUPPORTED_CHAINS } from './chains'
 import { Web3ModalConfigWeb3Props } from '@past3lle/forge-web3'
-import { FORGE_LOGO_URL_MAP } from '@past3lle/web3-modal'
+import { SupportedForgeNetworks } from '@past3lle/skilltree-contracts'
+import { FORGE_LOGO_URL_MAP, PstlWeb3AuthConnectorProps } from '@past3lle/web3-modal'
 import { TorusWalletConnectorPlugin } from '@web3auth/torus-wallet-connector-plugin'
+import { ASSETS_MAP } from 'assets'
 import GOOGLE_APPLE_LOGO from 'assets/png/google-apple.png'
 import React from 'react'
 import { pstlModalTheme as PSTL_MODAL_THEME } from 'theme/pstlModal'
-import { skillforgeTheme as SKILLFORGE_THEME } from 'theme/skillforge'
+import { skillforgeTheme as SKILLFORGE_THEME, skillforgeTheme } from 'theme/skillforge'
 
 if (
   !process.env.REACT_APP_WEB3MODAL_ID ||
@@ -29,18 +31,22 @@ export const WEB3_PROPS: Web3ModalConfigWeb3Props = {
     }
   },
   modals: {
-    w3a: {
+    web3auth: {
       appName: SKILLFORGE_APP_NAME,
       // CYAN = USA focused
-      network:
-        process.env.NODE_ENV === 'production'
-          ? (process.env.REACT_APP_WEB3_AUTH_NETWORK as Web3ModalConfigWeb3Props['modals']['w3a']['network'])
-          : 'testnet',
+      network: process.env.REACT_APP_WEB3_AUTH_NETWORK as PstlWeb3AuthConnectorProps<SupportedForgeNetworks>['network'],
       projectId: process.env.REACT_APP_WEB3AUTH_ID as string,
       storageKey: 'session',
       preset: 'DISALLOW_EXTERNAL_WALLETS',
       mfaLevel: 'none',
       uxMode: 'popup',
+      themeInfo: {
+        mode: 'dark',
+        primary: skillforgeTheme.modes.DEFAULT.mainBg
+      },
+      appLogoDark: ASSETS_MAP.logos.forge[512],
+      appLogoLight: ASSETS_MAP.logos.forge[512],
+      url: 'https://skills.pastelle.shop',
       configureAdditionalConnectors() {
         // Add Torus Wallet Plugin (optional)
         const torusPlugin = new TorusWalletConnectorPlugin({
@@ -68,7 +74,7 @@ export const WEB3_PROPS: Web3ModalConfigWeb3Props = {
         return [torusPlugin]
       }
     },
-    w3m: {
+    walletConnect: {
       projectId: process.env.REACT_APP_WEB3MODAL_ID as string,
       themeMode: 'dark',
       themeVariables: {
@@ -82,7 +88,7 @@ export const WEB3_PROPS: Web3ModalConfigWeb3Props = {
         '--w3m-color-fg-1': SKILLFORGE_THEME.offwhiteOpaqueMore
       }
     },
-    pstl: {
+    root: {
       title: SKILLFORGE_APP_NAME + ' LOGIN',
       themeConfig: { theme: PSTL_MODAL_THEME },
       walletsView: 'list',

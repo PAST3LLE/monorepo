@@ -116,8 +116,8 @@ function App() {
             }
           },
           modals: {
-            w3m: commonProps.modals.w3m,
-            w3a: commonProps.modals.w3a
+            walletConnect: commonProps.modals.walletConnect,
+            web3auth: commonProps.modals.web3auth
           }
         }
       }}

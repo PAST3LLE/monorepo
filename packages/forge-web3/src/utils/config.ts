@@ -15,8 +15,8 @@ export function overwriteWeb3PropsWithOuterTheme<T extends ThemeBaseRequired>(
   externalTheme: T
 ): Web3ModalConfigWeb3Props {
   const constructedProps = Object.assign({}, props)
-  if (!constructedProps.modals.pstl?.themeConfig) return props
+  if (!constructedProps.modals.root?.themeConfig) return props
 
-  constructedProps.modals.pstl.themeConfig.mode = externalTheme.mode
+  constructedProps.modals.root.themeConfig.mode = externalTheme.mode
   return constructedProps
 }
