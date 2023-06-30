@@ -6,7 +6,7 @@ import { useAccount } from 'wagmi'
 
 import { useConnection, usePstlWeb3Modal } from '../hooks'
 import { PstlW3Providers } from '../providers'
-import { DEFAULT_PROPS } from './config'
+import { DEFAULT_PROPS, DEFAULT_PROPS_WEB3AUTH } from './config'
 import { w3aPlugins, wagmiConnectors } from './connectorsAndPlugins'
 
 interface Web3ButtonProps {
@@ -41,21 +41,14 @@ function DefaultApp() {
 
 function InnerApp() {
   const { setMode, mode } = useTheme()
+  const derivedConfig = Object.assign({}, DEFAULT_PROPS_WEB3AUTH)
+  // @ts-expect-error - readonly
+  derivedConfig.modals['web3auth'].configureAdditionalConnectors = function configureAdditionalConnectors() {
+    return [w3aPlugins.torusPlugin]
+  }
+  console.log('derivedConfig', derivedConfig)
   return (
-    <PstlW3Providers
-      config={{
-        ...DEFAULT_PROPS,
-        modals: {
-          ...DEFAULT_PROPS.modals,
-          w3a: {
-            ...DEFAULT_PROPS.modals.w3a,
-            configureAdditionalConnectors() {
-              return [w3aPlugins.torusPlugin]
-            }
-          }
-        }
-      }}
-    >
+    <PstlW3Providers config={derivedConfig}>
       <AppWithWagmiAccess />
       <h1>MODE: {mode}</h1>
       <button onClick={() => setMode(mode === 'LIGHT' ? 'DARK' : 'LIGHT')}>Change theme mode</button>
@@ -103,17 +96,12 @@ export default {
         ...DEFAULT_PROPS,
         modals: {
           ...DEFAULT_PROPS.modals,
-          pstl: {
-            ...DEFAULT_PROPS.modals.pstl,
+          root: {
+            ...DEFAULT_PROPS.modals.root,
             connectorDisplayOverrides: {
-              ...DEFAULT_PROPS.modals.pstl?.connectorDisplayOverrides,
-              web3auth: {
-                ...DEFAULT_PROPS.modals.pstl?.connectorDisplayOverrides?.['web3auth'],
-                customName: 'GMAIL or MOBILE',
-                isRecommended: false
-              },
+              ...DEFAULT_PROPS.modals.root?.connectorDisplayOverrides,
               walletConnect: {
-                ...DEFAULT_PROPS.modals.pstl?.connectorDisplayOverrides?.['walletConnect'],
+                ...DEFAULT_PROPS.modals.root?.connectorDisplayOverrides?.['walletConnect'],
                 customName: 'WEB3 MODAL'
               }
             },
@@ -138,18 +126,13 @@ export default {
         },
         modals: {
           ...DEFAULT_PROPS.modals,
-          pstl: {
-            ...DEFAULT_PROPS.modals.pstl,
+          root: {
+            ...DEFAULT_PROPS.modals.root,
             hideInjectedFromRoot: true,
             connectorDisplayOverrides: {
-              ...DEFAULT_PROPS.modals.pstl?.connectorDisplayOverrides,
-              web3auth: {
-                ...DEFAULT_PROPS.modals.pstl?.connectorDisplayOverrides?.['web3auth'],
-                customName: 'GMAIL or MOBILE',
-                isRecommended: false
-              },
+              ...DEFAULT_PROPS.modals.root?.connectorDisplayOverrides,
               walletConnect: {
-                ...DEFAULT_PROPS.modals.pstl?.connectorDisplayOverrides?.['walletConnect'],
+                ...DEFAULT_PROPS.modals.root?.connectorDisplayOverrides?.['walletConnect'],
                 customName: 'WEB3 MODAL'
               },
               ledger: {
@@ -175,31 +158,31 @@ export default {
   Grid__AllWithLedgerLive: withThemeProvider(() => (
     <PstlW3Providers
       config={{
-        ...DEFAULT_PROPS,
+        ...DEFAULT_PROPS_WEB3AUTH,
         wagmiClient: {
-          ...DEFAULT_PROPS.wagmiClient,
+          ...DEFAULT_PROPS_WEB3AUTH.wagmiClient,
           options: {
             connectors: Object.values(wagmiConnectors)
           }
         },
         modals: {
-          ...DEFAULT_PROPS.modals,
-          pstl: {
-            ...DEFAULT_PROPS.modals.pstl,
+          ...DEFAULT_PROPS_WEB3AUTH.modals,
+          root: {
+            ...DEFAULT_PROPS_WEB3AUTH.modals.root,
             walletsView: 'grid',
             width: '640px',
             maxWidth: '100%',
             maxHeight: '550px',
             hideInjectedFromRoot: false,
             connectorDisplayOverrides: {
-              ...DEFAULT_PROPS.modals.pstl?.connectorDisplayOverrides,
+              ...DEFAULT_PROPS_WEB3AUTH.modals.root?.connectorDisplayOverrides,
               web3auth: {
-                ...DEFAULT_PROPS.modals.pstl?.connectorDisplayOverrides?.['web3auth'],
+                ...DEFAULT_PROPS_WEB3AUTH.modals.root?.connectorDisplayOverrides?.['web3auth'],
                 customName: 'GMAIL or MOBILE',
                 isRecommended: false
               },
               walletConnect: {
-                ...DEFAULT_PROPS.modals.pstl?.connectorDisplayOverrides?.['walletConnect'],
+                ...DEFAULT_PROPS_WEB3AUTH.modals.root?.connectorDisplayOverrides?.['walletConnect'],
                 customName: 'WEB3 MODAL'
               },
               'Brave Wallet': {
@@ -240,12 +223,12 @@ export default {
         },
         modals: {
           ...DEFAULT_PROPS.modals,
-          pstl: {
-            ...DEFAULT_PROPS.modals.pstl,
+          root: {
+            ...DEFAULT_PROPS.modals.root,
             walletsView: 'grid',
             hideInjectedFromRoot: false,
             connectorDisplayOverrides: {
-              ...DEFAULT_PROPS.modals.pstl?.connectorDisplayOverrides,
+              ...DEFAULT_PROPS.modals.root?.connectorDisplayOverrides,
               MetaMask: {
                 logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/1200px-MetaMask_Fox.svg.png'
               },
@@ -281,11 +264,11 @@ export default {
         },
         modals: {
           ...DEFAULT_PROPS.modals,
-          pstl: {
-            ...DEFAULT_PROPS.modals.pstl,
+          root: {
+            ...DEFAULT_PROPS.modals.root,
             walletsView: 'list',
             connectorDisplayOverrides: {
-              ...DEFAULT_PROPS.modals.pstl?.connectorDisplayOverrides,
+              ...DEFAULT_PROPS.modals.root?.connectorDisplayOverrides,
               ledger: {
                 customName: 'LEDGER LIVE',
                 logo: 'https://crypto-central.io/library/uploads/Ledger-Logo-3.png',
@@ -318,14 +301,14 @@ export default {
         },
         modals: {
           ...DEFAULT_PROPS.modals,
-          pstl: {
-            ...DEFAULT_PROPS.modals.pstl,
+          root: {
+            ...DEFAULT_PROPS.modals.root,
             walletsView: 'list',
             hideInjectedFromRoot: false,
             connectorDisplayOverrides: {
-              ...DEFAULT_PROPS.modals.pstl?.connectorDisplayOverrides,
+              ...DEFAULT_PROPS.modals.root?.connectorDisplayOverrides,
               web3auth: {
-                ...DEFAULT_PROPS.modals.pstl?.connectorDisplayOverrides?.['web3auth'],
+                ...DEFAULT_PROPS.modals.root?.connectorDisplayOverrides?.['web3auth'],
                 isRecommended: false
               },
               MetaMask: {
@@ -376,15 +359,15 @@ export default {
         },
         modals: {
           ...DEFAULT_PROPS.modals,
-          pstl: {
-            ...DEFAULT_PROPS.modals.pstl,
+          root: {
+            ...DEFAULT_PROPS.modals.root,
             closeModalOnConnect: true,
             walletsView: 'list',
             hideInjectedFromRoot: true,
             connectorDisplayOverrides: {
-              ...DEFAULT_PROPS.modals.pstl?.connectorDisplayOverrides,
+              ...DEFAULT_PROPS.modals.root?.connectorDisplayOverrides,
               web3auth: {
-                ...DEFAULT_PROPS.modals.pstl?.connectorDisplayOverrides?.['web3auth'],
+                ...DEFAULT_PROPS.modals.root?.connectorDisplayOverrides?.['web3auth'],
                 isRecommended: false
               },
               ledger: {

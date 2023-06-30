@@ -89,9 +89,9 @@ export interface Web3ModalProps<ID extends number, SC extends ChainsPartialReado
   wagmiClient?: PstlWagmiClientOptions<ID, SC>
   ethereumClient?: EthereumClient
   modals: {
-    pstl?: Omit<PstlWeb3ConnectionModalProps, 'isOpen' | 'onDismiss' | 'chainIdFromUrl'>
-    w3m: Omit<Web3ModalConfig<any, any>, 'w3aProjectId' | 'chains'>
-    w3a: Omit<PstlWeb3AuthConnectorProps<ID>, 'chains'>
+    root?: Omit<PstlWeb3ConnectionModalProps, 'isOpen' | 'onDismiss' | 'chainIdFromUrl'>
+    walletConnect: Omit<Web3ModalConfig<any, any>, 'w3aProjectId' | 'chains'>
+    web3auth?: Omit<PstlWeb3AuthConnectorProps<ID>, 'chains'>
   }
 }
 

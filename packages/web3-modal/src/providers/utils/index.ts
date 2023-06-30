@@ -14,8 +14,8 @@ interface ClientConfigEnhanced extends Omit<ClientConfig, 'connectors'> {
 interface CreateWagmiClientProps<ID extends number, SC extends ChainsPartialReadonly<ID> = ChainsPartialReadonly<ID>> {
   appName: string
   chains: ChainsPartialReadonly<ID>
-  w3mConnectorProps: PstlWeb3ModalProps<ID, SC>['modals']['w3m']
-  w3aConnectorProps: Omit<PstlWeb3AuthConnectorProps<ID>, 'chains'>
+  w3mConnectorProps: PstlWeb3ModalProps<ID, SC>['modals']['walletConnect']
+  w3aConnectorProps?: Omit<PstlWeb3AuthConnectorProps<ID>, 'chains'>
   options?: Partial<Pick<ClientConfigEnhanced, 'connectors' | 'publicClient'>> & {
     publicClients?: (typeof publicProvider)[]
     pollingInterval?: number
@@ -38,14 +38,18 @@ function createWagmiClient<ID extends number>({
     }
   )
 
+  const baseConnectors = [
+    ...w3mConnectors({ projectId: props.w3mConnectorProps.projectId, chains: props.chains as Chain[] }),
+    // any use custom modals
+    ...userConnectors
+  ]
+  const derivedConnectors = props?.w3aConnectorProps
+    ? [PstlWeb3AuthConnector({ chains: props.chains as Chain[], ...props.w3aConnectorProps }), ...baseConnectors]
+    : baseConnectors
+
   return createClient({
     autoConnect: !!options?.autoConnect,
-    connectors: [
-      PstlWeb3AuthConnector({ chains: props.chains as Chain[], ...props.w3aConnectorProps }),
-      ...w3mConnectors({ projectId: props.w3mConnectorProps.projectId, chains: props.chains as Chain[] }),
-      // any use custom modals
-      ...userConnectors
-    ],
+    connectors: derivedConnectors,
     publicClient: options?.publicClient || publicClient
   }) as WagmiConfigProps['config']
 }
@@ -72,8 +76,8 @@ export function usePstlWagmiClient<ID extends number, SC extends ChainsPartialRe
         ? createWagmiClient({
             appName: props.appName,
             chains: props.chains,
-            w3mConnectorProps: props.modals.w3m,
-            w3aConnectorProps: props.modals.w3a,
+            w3mConnectorProps: props.modals.walletConnect,
+            w3aConnectorProps: props.modals.web3auth,
             options: props.wagmiClient?.options
           })
         : props.wagmiClient.client,

@@ -9,7 +9,10 @@ import { Z_INDICES } from '../constants'
 import { ChainsPartialReadonly } from '../providers/types'
 
 export interface PstlWeb3AuthConnectorProps<ID extends number> {
-  theme?: 'light' | 'dark'
+  themeInfo?: {
+    mode?: 'light' | 'dark'
+    primary?: string
+  }
   chains: ChainsPartialReadonly<ID>
   zIndex?: number
   network: Web3AuthOptions['web3AuthNetwork']
@@ -17,6 +20,7 @@ export interface PstlWeb3AuthConnectorProps<ID extends number> {
   preset?: 'DISALLOW_EXTERNAL_WALLETS' | 'ALLOW_EXTERNAL_WALLETS'
   projectId: string
   appName: string
+  url?: string
   appLogoLight?: string
   appLogoDark?: string
   listingName?: string
@@ -33,9 +37,13 @@ export function PstlWeb3AuthConnector<ID extends number>({
   network = 'testnet',
   appName,
   projectId,
-  theme = 'dark',
+  themeInfo = {
+    mode: 'dark'
+  },
+  storageKey,
   appLogoDark,
   appLogoLight,
+  url,
   loginMethodsOrder,
   mfaLevel,
   uxMode,
@@ -62,10 +70,10 @@ export function PstlWeb3AuthConnector<ID extends number>({
     authMode: 'DAPP',
     uiConfig: {
       appName,
-      theme,
+      theme: themeInfo.mode,
       loginMethodsOrder,
       defaultLanguage: 'en',
-      appLogo: theme === 'light' ? appLogoLight : appLogoDark,
+      appLogo: themeInfo.mode === 'light' ? appLogoLight : appLogoDark,
       modalZIndex: zIndex.toString()
     }
   })
@@ -74,12 +82,17 @@ export function PstlWeb3AuthConnector<ID extends number>({
     adapterSettings: {
       network,
       uxMode,
+      storageKey,
       whiteLabel: {
         name: appName,
+        url,
         logoLight: appLogoLight,
         logoDark: appLogoDark,
         defaultLanguage: 'en',
-        dark: theme === 'dark' // whether to enable dark mode. defaultValue: false
+        theme: {
+          primary: themeInfo.primary
+        },
+        dark: themeInfo.mode === 'dark' // whether to enable dark mode. defaultValue: false
       }
     },
     loginSettings: {

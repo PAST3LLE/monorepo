@@ -7,7 +7,7 @@ import { ChainsPartialReadonly, PstlWeb3ModalProps } from '../types'
 export const PstlWeb3Modal = <ID extends number, SC extends ChainsPartialReadonly<ID>>({
   ethereumClient,
   modals: {
-    w3m: { projectId, zIndex = Z_INDICES.W3M, themeVariables, ...w3mProps }
+    walletConnect: { projectId, zIndex = Z_INDICES.W3M, themeVariables, ...w3mProps }
   }
 }: PstlWeb3ModalProps<ID, SC>) => {
   if (!projectId) {

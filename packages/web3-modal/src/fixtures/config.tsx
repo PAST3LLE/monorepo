@@ -72,25 +72,15 @@ const commonProps: PstlWeb3ModalProps<5 | 80001> = {
   appName: 'COSMOS APP',
   chains,
   modals: {
-    w3m: {
+    walletConnect: {
       projectId: WALLETCONNECT_TEST_ID,
       walletImages: {
-        web3auth: 'https://web3auth.io/images/w3a-L-Favicon-1.svg',
+        web3auth: 'https://web3auth.io/images/web3auth-L-Favicon-1.svg',
         safe: 'https://user-images.githubusercontent.com/3975770/212338977-5968eae5-bb1b-4e71-8f82-af5282564c66.png'
       }
-      // zIndex: 901
-    },
-    w3a: {
-      appName: 'SKILLFORGE TEST',
-      projectId: WEB3AUTH_TEST_ID,
-      network: 'testnet'
-      // zIndex: 901
     }
-    // pstl: {
-    //   zIndex: 900
-    // }
   }
-}
+} as const
 
 const WEB3AUTH_LOGO = 'https://www.getopensocial.com/wp-content/uploads/2020/12/social-login-COLOR_2.png'
 const WALLETCONNECT_LOGO =
@@ -109,18 +99,9 @@ const DEFAULT_PROPS: PstlWeb3ModalProps<number> = {
     }
   },
   modals: {
-    w3m: commonProps.modals.w3m,
-    w3a: {
-      appName: 'COSMOS APP',
-      network: 'testnet',
-      listingName: 'Email/SMS/Social',
-      projectId: commonProps.modals.w3a.projectId,
-      appLogoLight: LOGO,
-      appLogoDark: LOGO,
-      uxMode: 'redirect'
-    },
-    pstl: {
-      ...commonProps.modals.pstl,
+    walletConnect: commonProps.modals.walletConnect,
+    root: {
+      ...commonProps.modals.root,
       themeConfig: { theme: pstlModalTheme },
       closeModalOnConnect: false,
       hideInjectedFromRoot: true,
@@ -133,20 +114,6 @@ const DEFAULT_PROPS: PstlWeb3ModalProps<number> = {
                 This is some helper filler text to describe wtf is going on in this connection modal. It is useful to
                 learn these things while browsing apps as users can get confused when having to exit apps to read info
                 somewhere else that isn't the current screent they are on.
-              </strong>
-            )
-          }
-        },
-        web3auth: {
-          isRecommended: true,
-          logo: WEB3AUTH_LOGO,
-          infoText: {
-            title: 'How does this login work?',
-            content: (
-              <strong>
-                Social login is done via Web3Auth - a non-custodial social login protocol (i.e they never actually know,
-                or hold your data) - which facilitates logging into dApps (decentralised apps) via familiar social login
-                choices
               </strong>
             )
           }
@@ -174,4 +141,41 @@ const DEFAULT_PROPS: PstlWeb3ModalProps<number> = {
   }
 }
 
-export { WALLETCONNECT_TEST_ID as WALLETCONNECT_ID, DEFAULT_PROPS }
+const DEFAULT_PROPS_WEB3AUTH: PstlWeb3ModalProps<number> = {
+  ...DEFAULT_PROPS,
+  modals: {
+    ...DEFAULT_PROPS.modals,
+    root: {
+      ...DEFAULT_PROPS.modals.root,
+      connectorDisplayOverrides: {
+        ...DEFAULT_PROPS.modals.root?.connectorDisplayOverrides,
+        web3auth: {
+          isRecommended: true,
+          logo: WEB3AUTH_LOGO,
+          infoText: {
+            title: 'How does this login work?',
+            content: (
+              <strong>
+                Social login is done via Web3Auth - a non-custodial social login protocol (i.e they never actually know,
+                or hold your data) - which facilitates logging into dApps (decentralised apps) via familiar social login
+                choices
+              </strong>
+            )
+          }
+        }
+      }
+    },
+    web3auth: {
+      appName: 'SKILLFORGE TEST',
+      projectId: WEB3AUTH_TEST_ID,
+      network: 'cyan',
+      listingName: 'GGOOGLE & MORE',
+      appLogoLight: LOGO,
+      appLogoDark: LOGO,
+      uxMode: 'redirect'
+      // zIndex: 901
+    }
+  }
+} as const
+
+export { WALLETCONNECT_TEST_ID as WALLETCONNECT_ID, DEFAULT_PROPS, DEFAULT_PROPS_WEB3AUTH }
