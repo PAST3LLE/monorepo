@@ -39,7 +39,7 @@ export const WEB3_PROPS: Web3ModalConfigWeb3Props = {
       storageKey: 'session',
       preset: 'DISALLOW_EXTERNAL_WALLETS',
       mfaLevel: 'none',
-      uxMode: 'popup',
+      uxMode: 'redirect',
       themeInfo: {
         mode: 'dark',
         primary: skillforgeTheme.modes.DEFAULT.mainBg
