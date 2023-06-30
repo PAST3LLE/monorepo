@@ -1,4 +1,3 @@
-import { BigNumber } from '@ethersproject/bignumber'
 import { Address } from 'wagmi'
 
 export interface ForgeMetadata<P, A = Record<any, any>> {
@@ -25,7 +24,7 @@ interface CollectionProperties extends BaseProperties {
 
 export interface SkillDependencyObject {
   token: Address
-  id: BigNumber
+  id: bigint
 }
 export type SkillId = `${Address}-${string}`
 export interface SkillProperties extends BaseProperties {

@@ -28,7 +28,7 @@ export function useForgeGetSkillsAddresses({ loadAmount }: WithLoadAmount) {
     } as const
 
     const derivedArgs: (typeof commonArgs & { args: [bigint] })[] = []
-    const limit = Math.max(Number(latestCollectionId - BigInt(loadAmount)), 0)
+    const limit = Math.max(Number(BigInt(latestCollectionId) - BigInt(loadAmount)), 0)
 
     for (let i = latestCollectionId; i > limit; i--) {
       derivedArgs.push({

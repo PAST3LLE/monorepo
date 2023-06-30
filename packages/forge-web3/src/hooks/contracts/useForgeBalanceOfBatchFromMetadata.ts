@@ -1,4 +1,3 @@
-import { BigNumber } from '@ethersproject/bignumber'
 import { Collection__factory } from '@past3lle/skilltree-contracts'
 import { devWarn } from '@past3lle/utils'
 import { Address, useContractReads } from 'wagmi'
@@ -6,7 +5,7 @@ import { Address, useContractReads } from 'wagmi'
 import { SkillMetadata } from '../../types/skill'
 import { WAGMI_SCOPE_KEYS } from '../constants'
 
-type TokenDepsMap = { [key: Address]: BigNumber[] }
+type TokenDepsMap = { [key: Address]: bigint[] }
 export function useForgeBalanceOfBatchFromMetadata(skillMetadata?: SkillMetadata, address?: Address) {
   const depsList = skillMetadata?.properties.dependencies
   const tokenDepsMap = depsList?.reduce((acc, dep) => {
@@ -52,14 +51,14 @@ function gatherSkillContractConfigParams(tokenDepsMap: TokenDepsMap | undefined 
   return contractConfigList
 }
 
-function getBalanceOfBatchArgs(idsList: BigNumber[], address: Address | undefined) {
+function getBalanceOfBatchArgs(idsList: bigint[], address: Address | undefined) {
   if (!address) return [[], []]
   return idsList.reduce(
-    (acc: [Address[], BigNumber[]], currentId: BigNumber) => {
+    (acc: [Address[], bigint[]], currentId: bigint) => {
       acc[0] = [...acc[0], address]
       acc[1] = [...acc[1], currentId]
       return acc
     },
-    [[], []] as [Address[], BigNumber[]]
+    [[], []] as [Address[], bigint[]]
   )
 }

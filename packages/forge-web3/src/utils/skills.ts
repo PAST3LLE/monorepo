@@ -1,4 +1,3 @@
-import { BigNumber } from '@ethersproject/bignumber'
 import { devWarn } from '@past3lle/utils'
 import { Address } from 'wagmi'
 
@@ -22,12 +21,12 @@ export function getLockStatus(
   const hasDeps = deps.length > 0
 
   if (!skill || (hasDeps && !address) || (hasDeps && !balances)) return SkillLockStatus.LOCKED
-  if (BigNumber.from(balances?.[skill.properties.id] || 0).gt(0)) return SkillLockStatus.OWNED
+  if (BigInt(balances?.[skill.properties.id] || 0) > 0) return SkillLockStatus.OWNED
 
   devWarn(skill.name, ' requires skills', deps.join(' '), 'to unlock. Checking...')
   const missingDeps = deps.some((dep) => {
     const depId: SkillId = `${dep.token}-${dep.id.toString()}`
-    if (!balances?.[depId] || BigNumber.from(balances[depId]).isZero()) {
+    if (!balances?.[depId] || BigInt(balances[depId]) === BigInt(0)) {
       devWarn('User missing skills with dependency ID:', dep, '. Skill LOCKED.')
       return true
     }

@@ -113,7 +113,6 @@
     "styled-components": ">=5"
   },
   "dependencies": {
-    "@ethersproject/bignumber": ">=5.7.0",
     "@past3lle/hooks": "^0.0.41",
     "@past3lle/skilltree-contracts": "^0.0.1-rc.15",
     "@past3lle/utils": "^0.0.27",
