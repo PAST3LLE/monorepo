@@ -45,6 +45,9 @@
             "@past3lle/utils/*": [
                 "packages/utils/src/*"
             ],
+            "@past3lle/wagmi-connectors/*": [
+                "packages/wagmi-connectors/src/*"
+            ],
             "@past3lle/web3-modal/*": [
                 "packages/web3-modal/src/*"
             ]
@@ -83,6 +86,9 @@
         },
         {
             "path": "packages/utils"
+        },
+        {
+            "path": "packages/wagmi-connectors"
         },
         {
             "path": "packages/web3-modal"
