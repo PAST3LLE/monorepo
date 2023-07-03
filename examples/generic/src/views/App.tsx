@@ -36,11 +36,11 @@ const App = () => {
 
 // InnerApp is a component that calls the useForgeW3 hook
 function InnerApp() {
-  const [, { openW3Modal }, { address }] = useW3Connection()
+  const [, { openWalletConnectModal }, { address }] = useW3Connection()
 
   return (
     <ColumnCenter>
-      <PstlButton onClick={() => openW3Modal({ route: 'ConnectWallet' })} backgroundColor="indianred">
+      <PstlButton onClick={() => openWalletConnectModal({ route: 'ConnectWallet' })} backgroundColor="indianred">
         Open Modal
       </PstlButton>
       <Row>Address: {address}</Row>
