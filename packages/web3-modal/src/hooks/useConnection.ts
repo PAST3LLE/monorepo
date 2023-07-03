@@ -6,8 +6,10 @@ import { Address, Chain, Connector, useAccount, useBalance, useConnect, useDisco
 import { usePstlWeb3Modal } from './usePstlWeb3Modal'
 
 type Callbacks = Pick<ReturnType<typeof useDisconnect>, 'disconnect'> & {
-  openW3Modal: ReturnType<typeof useWeb3Modal>['open']
-  openPstlW3Modal: ReturnType<typeof usePstlWeb3Modal>['open']
+  openWalletConnectModal: ReturnType<typeof useWeb3Modal>['open']
+  closeWalletConnectModal: ReturnType<typeof useWeb3Modal>['close']
+  openRootModal: ReturnType<typeof usePstlWeb3Modal>['open']
+  closeRootModal: ReturnType<typeof usePstlWeb3Modal>['close']
   onNetworkClick: () => Promise<void>
   onAccountClick: () => Promise<void>
   connect: ReturnType<typeof useConnect>['connectAsync']
@@ -31,17 +33,46 @@ export type PstlW3mConnectionHook = [
     isDisconnected: boolean
     isReconnecting: boolean
     pendingConnector: Connector<any, any> | undefined
-    isW3mOpen: ReturnType<typeof useWeb3Modal>['isOpen']
-    isPstlW3mOpen: ReturnType<typeof usePstlWeb3Modal>['isOpen']
+    isWalletConnectOpen: ReturnType<typeof useWeb3Modal>['isOpen']
+    isRootModalOpen: ReturnType<typeof usePstlWeb3Modal>['isOpen']
   }
 ]
 /**
  * Connect/disconnect Forge apps
- * @returns [connectors, {connect, disconnect}, { error, isError, isIdle, isLoading, isSuccess, pendingConnector }]
+ * @example returns: [
+      connectors, 
+      {
+        openWalletConnectModal: ReturnType<typeof useWeb3Modal>['open']
+        closeWalletConnectModal: ReturnType<typeof useWeb3Modal>['close']
+        openRootModal: ReturnType<typeof usePstlWeb3Modal>['open']
+        closeRootModal: ReturnType<typeof usePstlWeb3Modal>['close']
+        onNetworkClick: () => Promise<void>
+        onAccountClick: () => Promise<void>
+        connect: ReturnType<typeof useConnect>['connectAsync']
+      }, 
+      { 
+        address?: Address
+        balanceInfo: ReturnType<typeof useBalance>
+        chain?: Chain
+        currentConnector: ReturnType<typeof useAccount>['connector']
+        error: Error | null
+        isError: boolean
+        isIdle: boolean
+        isLoading: boolean
+        isSuccess: boolean
+        isConnected: boolean
+        isConnecting: boolean
+        isDisconnected: boolean
+        isReconnecting: boolean
+        pendingConnector: Connector<any, any> | undefined
+        isWalletConnectOpen: ReturnType<typeof useWeb3Modal>['isOpen']
+        isRootModalOpen: ReturnType<typeof usePstlWeb3Modal>['isOpen'] 
+      }
+    ]
  */
 export function useConnection(): PstlW3mConnectionHook {
-  const { open: openW3Modal, isOpen: isW3mOpen } = useWeb3Modal()
-  const { open: openPstlW3Modal, isOpen: isPstlW3mOpen } = usePstlWeb3Modal()
+  const { open: openWalletConnectModal, close: closeWalletConnectModal, isOpen: isWalletConnectOpen } = useWeb3Modal()
+  const { open: openRootModal, close: closeRootModal, isOpen: isRootModalOpen } = usePstlWeb3Modal()
 
   const {
     connectAsync: connect,
@@ -67,17 +98,26 @@ export function useConnection(): PstlW3mConnectionHook {
 
   const onNetworkClick = useCallback(async () => {
     return chain?.id
-      ? openW3Modal({ route: !isMobileWidth ? 'SelectNetwork' : 'Account' })
-      : openPstlW3Modal({ route: 'ConnectWallet' })
-  }, [chain?.id, openPstlW3Modal, openW3Modal, isMobileWidth])
+      ? openWalletConnectModal({ route: !isMobileWidth ? 'SelectNetwork' : 'Account' })
+      : openRootModal({ route: 'ConnectWallet' })
+  }, [chain?.id, openRootModal, openWalletConnectModal, isMobileWidth])
 
   const onAccountClick = useCallback(async () => {
-    return chain?.id ? openW3Modal({ route: 'Account' }) : openPstlW3Modal({ route: 'ConnectWallet' })
-  }, [chain?.id, openPstlW3Modal, openW3Modal])
+    return chain?.id ? openWalletConnectModal({ route: 'Account' }) : openRootModal({ route: 'ConnectWallet' })
+  }, [chain?.id, openRootModal, openWalletConnectModal])
 
   return [
     connectors,
-    { connect, disconnect, openW3Modal, openPstlW3Modal, onNetworkClick, onAccountClick },
+    {
+      connect,
+      disconnect,
+      openWalletConnectModal,
+      closeWalletConnectModal,
+      openRootModal,
+      closeRootModal,
+      onNetworkClick,
+      onAccountClick
+    },
     {
       address,
       balanceInfo,
@@ -88,8 +128,8 @@ export function useConnection(): PstlW3mConnectionHook {
       isIdle,
       isLoading,
       isSuccess,
-      isW3mOpen,
-      isPstlW3mOpen,
+      isWalletConnectOpen,
+      isRootModalOpen,
       pendingConnector,
       isConnected,
       isConnecting,

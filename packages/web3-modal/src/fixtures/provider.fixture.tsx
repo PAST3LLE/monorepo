@@ -2,26 +2,26 @@ import { ButtonVariations, ColumnCenter, PstlButton } from '@past3lle/components
 import { ThemeProvider, createCustomTheme } from '@past3lle/theme'
 import React, { ReactNode } from 'react'
 import { useTheme } from 'styled-components'
-import { useAccount } from 'wagmi'
+import { useBalance } from 'wagmi'
 
-import { useConnection, usePstlWeb3Modal } from '../hooks'
+import { useConnection } from '../hooks'
 import { PstlW3Providers } from '../providers'
 import { DEFAULT_PROPS, DEFAULT_PROPS_WEB3AUTH } from './config'
-import { w3aPlugins, wagmiConnectors } from './connectorsAndPlugins'
+import { w3aPlugins, wagmiConnectors, wagmiConnectorsList } from './connectorsAndPlugins'
 
 interface Web3ButtonProps {
   children?: ReactNode
 }
 const Web3Button = ({ children = <div>Show PSTL Wallet Modal</div> }: Web3ButtonProps) => {
-  const [, , { currentConnector: connector }] = useConnection()
-  const { open } = usePstlWeb3Modal()
-  const { address } = useAccount()
+  const [, { openRootModal, openWalletConnectModal }, { address, currentConnector: connector }] = useConnection()
 
   return (
     <ColumnCenter>
       <PstlButton
         buttonVariant={ButtonVariations.PRIMARY}
-        onClick={() => open({ route: address ? 'Account' : 'ConnectWallet' })}
+        onClick={() =>
+          address ? openWalletConnectModal({ route: 'Account' }) : openRootModal({ route: 'ConnectWallet' })
+        }
       >
         {children}
       </PstlButton>
@@ -46,7 +46,6 @@ function InnerApp() {
   derivedConfig.modals['web3auth'].configureAdditionalConnectors = function configureAdditionalConnectors() {
     return [w3aPlugins.torusPlugin]
   }
-  console.log('derivedConfig', derivedConfig)
   return (
     <PstlW3Providers config={derivedConfig}>
       <AppWithWagmiAccess />
@@ -59,13 +58,17 @@ function InnerApp() {
 }
 
 function AppWithWagmiAccess() {
-  const accountApi = useAccount()
-  console.debug('Account API', accountApi.connector)
+  const [, , { address }] = useConnection()
+  const { data, refetch } = useBalance({ address })
 
-  accountApi.connector?.getProvider().then((res) => console.debug('getProvider', res))
-  console.debug('Torus EVM Wallet', accountApi.connector?.options?.web3AuthInstance?.walletAdapters?.['torus-evm'])
-
-  return <h1>Here has wagmi access</h1>
+  return (
+    <>
+      <h1>Here has wagmi access</h1>
+      <p>Address: {address}</p>
+      <button onClick={() => refetch()}>Get balance</button>
+      <p>Balance: {data?.formatted}</p>
+    </>
+  )
 }
 
 const withThemeProvider = (Component: () => JSX.Element | null) => (
@@ -121,7 +124,7 @@ export default {
         wagmiClient: {
           ...DEFAULT_PROPS.wagmiClient,
           options: {
-            connectors: Object.values(wagmiConnectors)
+            connectors: [wagmiConnectors.ledgerLiveModal]
           }
         },
         modals: {
@@ -162,7 +165,7 @@ export default {
         wagmiClient: {
           ...DEFAULT_PROPS_WEB3AUTH.wagmiClient,
           options: {
-            connectors: Object.values(wagmiConnectors)
+            connectors: [wagmiConnectors.ledgerLiveModal]
           }
         },
         modals: {
@@ -218,7 +221,7 @@ export default {
         wagmiClient: {
           ...DEFAULT_PROPS.wagmiClient,
           options: {
-            connectors: Object.values(wagmiConnectors)
+            connectors: [wagmiConnectors.ledgerLiveModal, wagmiConnectors.ledgerHID]
           }
         },
         modals: {
@@ -259,7 +262,7 @@ export default {
         wagmiClient: {
           ...DEFAULT_PROPS.wagmiClient,
           options: {
-            connectors: Object.values(wagmiConnectors)
+            connectors: [wagmiConnectors.ledgerLiveModal, wagmiConnectors.ledgerHID]
           }
         },
         modals: {
@@ -354,7 +357,7 @@ export default {
         wagmiClient: {
           ...DEFAULT_PROPS.wagmiClient,
           options: {
-            connectors: Object.values(wagmiConnectors)
+            connectors: [wagmiConnectors.ledgerLiveModal]
           }
         },
         modals: {
@@ -400,5 +403,76 @@ export default {
       <AppWithWagmiAccess />
       <Web3Button />
     </PstlW3Providers>
-  ))
+  )),
+  Grid__LedgerHID: withThemeProvider(() => {
+    return (
+      <PstlW3Providers
+        config={{
+          ...DEFAULT_PROPS,
+          wagmiClient: {
+            ...DEFAULT_PROPS.wagmiClient,
+            options: {
+              connectors: wagmiConnectorsList
+            }
+          },
+          modals: {
+            ...DEFAULT_PROPS.modals,
+            root: {
+              ...DEFAULT_PROPS.modals.root,
+              closeModalOnConnect: true,
+              walletsView: 'grid',
+              hideInjectedFromRoot: false,
+              connectorDisplayOverrides: {
+                ...DEFAULT_PROPS.modals.root?.connectorDisplayOverrides,
+                web3auth: {
+                  ...DEFAULT_PROPS.modals.root?.connectorDisplayOverrides?.['web3auth'],
+                  isRecommended: false
+                },
+                ledger: {
+                  customName: 'LEDGER LIVE',
+                  logo: 'https://crypto-central.io/library/uploads/Ledger-Logo-3.png',
+                  modalNodeId: 'ModalWrapper',
+                  rank: 10,
+                  isRecommended: true,
+                  infoText: {
+                    title: 'What is Ledger?',
+                    content: <strong>Ledger wallet is a cold storage hardware wallet.</strong>
+                  }
+                },
+                'ledger-hid': {
+                  customName: 'LEDGER HID',
+                  logo: 'https://crypto-central.io/library/uploads/Ledger-Logo-3.png',
+                  rank: 10,
+                  isRecommended: true,
+                  infoText: {
+                    title: 'What is Ledger HID?',
+                    content: <strong>Ledger wallet is a cold storage hardware wallet.</strong>
+                  }
+                },
+                MetaMask: {
+                  logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/1200px-MetaMask_Fox.svg.png',
+                  rank: 11,
+                  isRecommended: true
+                }
+              },
+              loaderProps: {
+                containerProps: {
+                  backgroundColor: 'rgba(0,0,0,0.42)',
+                  borderRadius: '10px'
+                },
+                spinnerProps: {
+                  size: 80,
+                  invertColor: true
+                },
+                loadingText: 'FETCHING INFO...'
+              }
+            }
+          }
+        }}
+      >
+        <AppWithWagmiAccess />
+        <Web3Button />
+      </PstlW3Providers>
+    )
+  })
 }

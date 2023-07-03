@@ -1,3 +1,3 @@
-import { goerli, polygonMumbai } from 'wagmi/chains'
+import { goerli, mainnet, polygonMumbai } from 'wagmi/chains'
 
-export const chains = [goerli, polygonMumbai]
+export const chains = [mainnet, goerli, polygonMumbai]

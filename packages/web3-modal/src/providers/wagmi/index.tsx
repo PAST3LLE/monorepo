@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react'
 import { WagmiConfig, WagmiConfigProps } from 'wagmi'
 
-import { WagmiEagerConnect } from './WagmiEagerConnect'
+import { AutoconnectUpdater } from './AutoconnectUpdater'
 
 export const PstlWagmiProvider = ({
   chainIdFromUrl,
@@ -15,8 +15,7 @@ export const PstlWagmiProvider = ({
   wagmiClient: WagmiConfigProps['config']
 }) => (
   <WagmiConfig config={wagmiClient}>
-    <WagmiEagerConnect chainIdFromUrl={chainIdFromUrl} persistOnRefresh={!!persistOnRefresh}>
-      {children}
-    </WagmiEagerConnect>
+    <AutoconnectUpdater chainIdFromUrl={chainIdFromUrl} persistOnRefresh={!!persistOnRefresh} />
+    {children}
   </WagmiConfig>
 )

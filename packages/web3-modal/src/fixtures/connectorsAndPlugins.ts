@@ -1,3 +1,5 @@
+import { IFrameEthereumConnector, LedgerHIDConnector } from '@past3lle/wagmi-connectors'
+import { Connector } from '@wagmi/connectors'
 import { LedgerConnector } from '@wagmi/connectors/ledger'
 import { TorusWalletConnectorPlugin } from '@web3auth/torus-wallet-connector-plugin'
 
@@ -21,7 +23,7 @@ const torusPlugin = new TorusWalletConnectorPlugin({
   }
 })
 
-const ledgerConnector = new LedgerConnector({
+const ledgerLiveModal = new LedgerConnector({
   chains,
   options: {
     enableDebugLogs: false,
@@ -36,5 +38,9 @@ export const w3aPlugins = {
 }
 
 export const wagmiConnectors = {
-  ledger: ledgerConnector
+  ledgerLiveModal,
+  ledgerHID: new LedgerHIDConnector() as unknown as Connector<LedgerHIDConnector['provider'], any>,
+  ledgerIFrame: new IFrameEthereumConnector({ chains, options: {} })
 }
+
+export const wagmiConnectorsList = Object.values(wagmiConnectors) as Connector<any, any>[]

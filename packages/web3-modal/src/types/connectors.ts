@@ -27,3 +27,4 @@ export type ConnectorEnhancedExtras = {
   rank?: number
 }
 export type ConnectorEnhanced<P, O> = Connector<P, O> & ConnectorEnhancedExtras
+export type ConnectorOverrides = { [id: string]: ConnectorEnhancedExtras | undefined }

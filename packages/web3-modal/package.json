@@ -81,6 +81,7 @@
     "@past3lle/hooks": "^0.0.41",
     "@past3lle/theme": "^0.0.49",
     "@past3lle/utils": "^0.0.27",
+    "@past3lle/wagmi-connectors": "^0.0.1-rc.0",
     "@wagmi/connectors": "2.5.0",
     "@walletconnect/client": "1.8.0",
     "@walletconnect/utils": "2.8.3",
