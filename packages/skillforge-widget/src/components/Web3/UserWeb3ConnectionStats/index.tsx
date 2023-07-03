@@ -1,5 +1,5 @@
 import { Column, RowProps } from '@past3lle/components'
-import { useW3Connection as usePstlConnection, useW3Modal as usePstlWeb3Modal } from '@past3lle/forge-web3'
+import { useW3Connection as usePstlConnection } from '@past3lle/forge-web3'
 import { BLACK_TRANSPARENT } from '@past3lle/theme'
 import { truncateAddress } from '@past3lle/utils'
 import React, { useCallback } from 'react'
@@ -22,14 +22,13 @@ function UnstyledUserConnectionStats({
   const { address } = useAccount()
   const { chain } = useNetwork()
 
-  const { open } = usePstlWeb3Modal()
-  const [, { openW3Modal }] = usePstlConnection()
+  const [, { openRootModal, openWalletConnectModal }] = usePstlConnection()
 
   const handleClick = useCallback(
-    async (connectedRoute: OpenOptions['route'], disConnectedRoute: OpenOptions['route']) => {
-      address ? openW3Modal({ route: connectedRoute }) : open({ route: disConnectedRoute })
+    async (connectedRoute: OpenOptions['route'], disconnectedRoute: OpenOptions['route']) => {
+      address ? openWalletConnectModal({ route: connectedRoute }) : openRootModal({ route: disconnectedRoute })
     },
-    [address, open, openW3Modal]
+    [address, openRootModal, openWalletConnectModal]
   )
 
   return (
