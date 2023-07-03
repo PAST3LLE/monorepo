@@ -1,3 +1,4 @@
+import connectors from '../connectors'
 import { SUPPORTED_CHAINS } from './chains'
 import { Web3ModalConfigWeb3Props } from '@past3lle/forge-web3'
 import { SupportedForgeNetworks } from '@past3lle/skilltree-contracts'
@@ -27,7 +28,8 @@ export const WEB3_PROPS: Web3ModalConfigWeb3Props = {
   wagmiClient: {
     options: {
       pollingInterval: 10_000,
-      autoConnect: true
+      autoConnect: true,
+      connectors
     }
   },
   modals: {
