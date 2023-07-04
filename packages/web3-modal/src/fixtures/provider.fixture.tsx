@@ -1,27 +1,29 @@
 import { ButtonVariations, ColumnCenter, PstlButton } from '@past3lle/components'
 import { ThemeProvider, createCustomTheme } from '@past3lle/theme'
+import { devWarn } from '@past3lle/utils'
+import { InjectedConnector } from '@wagmi/connectors/injected'
 import React, { ReactNode } from 'react'
 import { useTheme } from 'styled-components'
-import { useAccount } from 'wagmi'
+import { useBalance } from 'wagmi'
 
-import { useConnection, usePstlWeb3Modal } from '../hooks'
+import { useUserConnectionInfo, useWeb3Modals } from '../hooks'
 import { PstlW3Providers } from '../providers'
-import { DEFAULT_PROPS, DEFAULT_PROPS_WEB3AUTH } from './config'
+import { addConnector } from '../providers/utils'
+import { COMMON_CONNECTOR_OVERRIDES, DEFAULT_PROPS, DEFAULT_PROPS_WEB3AUTH } from './config'
 import { w3aPlugins, wagmiConnectors } from './connectorsAndPlugins'
 
 interface Web3ButtonProps {
   children?: ReactNode
 }
 const Web3Button = ({ children = <div>Show PSTL Wallet Modal</div> }: Web3ButtonProps) => {
-  const [, , { currentConnector: connector }] = useConnection()
-  const { open } = usePstlWeb3Modal()
-  const { address } = useAccount()
+  const { root, walletConnect } = useWeb3Modals()
+  const { address, connector } = useUserConnectionInfo()
 
   return (
     <ColumnCenter>
       <PstlButton
         buttonVariant={ButtonVariations.PRIMARY}
-        onClick={() => open({ route: address ? 'Account' : 'ConnectWallet' })}
+        onClick={() => (address ? walletConnect.open({ route: 'Account' }) : root.open({ route: 'ConnectWallet' }))}
       >
         {children}
       </PstlButton>
@@ -46,7 +48,6 @@ function InnerApp() {
   derivedConfig.modals['web3auth'].configureAdditionalConnectors = function configureAdditionalConnectors() {
     return [w3aPlugins.torusPlugin]
   }
-  console.log('derivedConfig', derivedConfig)
   return (
     <PstlW3Providers config={derivedConfig}>
       <AppWithWagmiAccess />
@@ -59,13 +60,17 @@ function InnerApp() {
 }
 
 function AppWithWagmiAccess() {
-  const accountApi = useAccount()
-  console.debug('Account API', accountApi.connector)
+  const { address } = useUserConnectionInfo()
+  const { data, refetch } = useBalance({ address })
 
-  accountApi.connector?.getProvider().then((res) => console.debug('getProvider', res))
-  console.debug('Torus EVM Wallet', accountApi.connector?.options?.web3AuthInstance?.walletAdapters?.['torus-evm'])
-
-  return <h1>Here has wagmi access</h1>
+  return (
+    <>
+      <h1>Here has wagmi access</h1>
+      <p>Address: {address}</p>
+      <button onClick={() => refetch()}>Get balance</button>
+      <p>Balance: {data?.formatted}</p>
+    </>
+  )
 }
 
 const withThemeProvider = (Component: () => JSX.Element | null) => (
@@ -98,13 +103,7 @@ export default {
           ...DEFAULT_PROPS.modals,
           root: {
             ...DEFAULT_PROPS.modals.root,
-            connectorDisplayOverrides: {
-              ...DEFAULT_PROPS.modals.root?.connectorDisplayOverrides,
-              walletConnect: {
-                ...DEFAULT_PROPS.modals.root?.connectorDisplayOverrides?.['walletConnect'],
-                customName: 'WEB3 MODAL'
-              }
-            },
+            connectorDisplayOverrides: COMMON_CONNECTOR_OVERRIDES,
             hideInjectedFromRoot: true
           }
         }
@@ -118,23 +117,14 @@ export default {
     <PstlW3Providers
       config={{
         ...DEFAULT_PROPS,
-        wagmiClient: {
-          ...DEFAULT_PROPS.wagmiClient,
-          options: {
-            connectors: Object.values(wagmiConnectors)
-          }
-        },
+        connectors: [wagmiConnectors.ledgerLiveModal],
         modals: {
           ...DEFAULT_PROPS.modals,
           root: {
             ...DEFAULT_PROPS.modals.root,
             hideInjectedFromRoot: true,
             connectorDisplayOverrides: {
-              ...DEFAULT_PROPS.modals.root?.connectorDisplayOverrides,
-              walletConnect: {
-                ...DEFAULT_PROPS.modals.root?.connectorDisplayOverrides?.['walletConnect'],
-                customName: 'WEB3 MODAL'
-              },
+              ...COMMON_CONNECTOR_OVERRIDES,
               ledger: {
                 customName: 'LEDGER LIVE',
                 logo: 'https://crypto-central.io/library/uploads/Ledger-Logo-3.png',
@@ -159,12 +149,7 @@ export default {
     <PstlW3Providers
       config={{
         ...DEFAULT_PROPS_WEB3AUTH,
-        wagmiClient: {
-          ...DEFAULT_PROPS_WEB3AUTH.wagmiClient,
-          options: {
-            connectors: Object.values(wagmiConnectors)
-          }
-        },
+        connectors: [wagmiConnectors.ledgerLiveModal],
         modals: {
           ...DEFAULT_PROPS_WEB3AUTH.modals,
           root: {
@@ -174,35 +159,7 @@ export default {
             maxWidth: '100%',
             maxHeight: '550px',
             hideInjectedFromRoot: false,
-            connectorDisplayOverrides: {
-              ...DEFAULT_PROPS_WEB3AUTH.modals.root?.connectorDisplayOverrides,
-              web3auth: {
-                ...DEFAULT_PROPS_WEB3AUTH.modals.root?.connectorDisplayOverrides?.['web3auth'],
-                customName: 'GMAIL or MOBILE',
-                isRecommended: false
-              },
-              walletConnect: {
-                ...DEFAULT_PROPS_WEB3AUTH.modals.root?.connectorDisplayOverrides?.['walletConnect'],
-                customName: 'WEB3 MODAL'
-              },
-              'Brave Wallet': {
-                logo: 'https://logodownload.org/wp-content/uploads/2022/04/brave-logo-1.png'
-              },
-              MetaMask: {
-                logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/1200px-MetaMask_Fox.svg.png'
-              },
-              ledger: {
-                customName: 'LEDGER LIVE',
-                logo: 'https://crypto-central.io/library/uploads/Ledger-Logo-3.png',
-                modalNodeId: 'ModalWrapper',
-                rank: 10,
-                isRecommended: true,
-                infoText: {
-                  title: 'What is Ledger?',
-                  content: <strong>Ledger wallet is a cold storage hardware wallet.</strong>
-                }
-              }
-            }
+            connectorDisplayOverrides: COMMON_CONNECTOR_OVERRIDES
           }
         }
       }}
@@ -215,35 +172,14 @@ export default {
     <PstlW3Providers
       config={{
         ...DEFAULT_PROPS,
-        wagmiClient: {
-          ...DEFAULT_PROPS.wagmiClient,
-          options: {
-            connectors: Object.values(wagmiConnectors)
-          }
-        },
+        connectors: [wagmiConnectors.ledgerLiveModal, wagmiConnectors.ledgerHID],
         modals: {
           ...DEFAULT_PROPS.modals,
           root: {
             ...DEFAULT_PROPS.modals.root,
             walletsView: 'grid',
             hideInjectedFromRoot: false,
-            connectorDisplayOverrides: {
-              ...DEFAULT_PROPS.modals.root?.connectorDisplayOverrides,
-              MetaMask: {
-                logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/1200px-MetaMask_Fox.svg.png'
-              },
-              ledger: {
-                customName: 'LEDGER LIVE',
-                logo: 'https://crypto-central.io/library/uploads/Ledger-Logo-3.png',
-                modalNodeId: 'ModalWrapper',
-                rank: 10,
-                isRecommended: true,
-                infoText: {
-                  title: 'What is Ledger?',
-                  content: <strong>Ledger wallet is a cold storage hardware wallet.</strong>
-                }
-              }
-            }
+            connectorDisplayOverrides: COMMON_CONNECTOR_OVERRIDES
           }
         }
       }}
@@ -256,31 +192,13 @@ export default {
     <PstlW3Providers
       config={{
         ...DEFAULT_PROPS,
-        wagmiClient: {
-          ...DEFAULT_PROPS.wagmiClient,
-          options: {
-            connectors: Object.values(wagmiConnectors)
-          }
-        },
+        connectors: [wagmiConnectors.ledgerLiveModal, wagmiConnectors.ledgerHID],
         modals: {
           ...DEFAULT_PROPS.modals,
           root: {
             ...DEFAULT_PROPS.modals.root,
             walletsView: 'list',
-            connectorDisplayOverrides: {
-              ...DEFAULT_PROPS.modals.root?.connectorDisplayOverrides,
-              ledger: {
-                customName: 'LEDGER LIVE',
-                logo: 'https://crypto-central.io/library/uploads/Ledger-Logo-3.png',
-                modalNodeId: 'ModalWrapper',
-                rank: 10,
-                isRecommended: true,
-                infoText: {
-                  title: 'What is Ledger?',
-                  content: <strong>Ledger wallet is a cold storage hardware wallet.</strong>
-                }
-              }
-            }
+            connectorDisplayOverrides: COMMON_CONNECTOR_OVERRIDES
           }
         }
       }}
@@ -293,41 +211,29 @@ export default {
     <PstlW3Providers
       config={{
         ...DEFAULT_PROPS,
-        wagmiClient: {
-          ...DEFAULT_PROPS.wagmiClient,
-          options: {
-            connectors: Object.values(wagmiConnectors)
-          }
-        },
+        connectors: [
+          wagmiConnectors.ledgerLiveModal,
+          addConnector(InjectedConnector, {
+            name: 'MetaMask',
+            shimDisconnect: true,
+            getProvider() {
+              try {
+                const provider = window?.ethereum?.providers?.find((provider) => provider?.isMetaMask)
+                if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
+                return provider
+              } catch (error) {
+                return undefined
+              }
+            }
+          })
+        ],
         modals: {
           ...DEFAULT_PROPS.modals,
           root: {
             ...DEFAULT_PROPS.modals.root,
             walletsView: 'list',
             hideInjectedFromRoot: false,
-            connectorDisplayOverrides: {
-              ...DEFAULT_PROPS.modals.root?.connectorDisplayOverrides,
-              web3auth: {
-                ...DEFAULT_PROPS.modals.root?.connectorDisplayOverrides?.['web3auth'],
-                isRecommended: false
-              },
-              MetaMask: {
-                logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/1200px-MetaMask_Fox.svg.png',
-                rank: 11,
-                isRecommended: true
-              },
-              ledger: {
-                customName: 'LEDGER LIVE',
-                logo: 'https://crypto-central.io/library/uploads/Ledger-Logo-3.png',
-                modalNodeId: 'ModalWrapper',
-                rank: 10,
-                isRecommended: true,
-                infoText: {
-                  title: 'What is Ledger?',
-                  content: <strong>Ledger wallet is a cold storage hardware wallet.</strong>
-                }
-              }
-            },
+            connectorDisplayOverrides: COMMON_CONNECTOR_OVERRIDES,
             loaderProps: {
               containerProps: {
                 backgroundColor: 'rgba(0,0,0,0.42)',
@@ -351,12 +257,7 @@ export default {
     <PstlW3Providers
       config={{
         ...DEFAULT_PROPS,
-        wagmiClient: {
-          ...DEFAULT_PROPS.wagmiClient,
-          options: {
-            connectors: Object.values(wagmiConnectors)
-          }
-        },
+        connectors: [wagmiConnectors.ledgerLiveModal],
         modals: {
           ...DEFAULT_PROPS.modals,
           root: {
@@ -365,11 +266,7 @@ export default {
             walletsView: 'list',
             hideInjectedFromRoot: true,
             connectorDisplayOverrides: {
-              ...DEFAULT_PROPS.modals.root?.connectorDisplayOverrides,
-              web3auth: {
-                ...DEFAULT_PROPS.modals.root?.connectorDisplayOverrides?.['web3auth'],
-                isRecommended: false
-              },
+              ...COMMON_CONNECTOR_OVERRIDES,
               ledger: {
                 customName: 'LEDGER LIVE',
                 logo: 'https://crypto-central.io/library/uploads/Ledger-Logo-3.png',
@@ -400,5 +297,191 @@ export default {
       <AppWithWagmiAccess />
       <Web3Button />
     </PstlW3Providers>
-  ))
+  )),
+  Grid__LedgerHID: withThemeProvider(() => {
+    return (
+      <PstlW3Providers
+        config={{
+          ...DEFAULT_PROPS,
+          connectors: [wagmiConnectors.ledgerHID, wagmiConnectors.ledgerLiveModal],
+          modals: {
+            ...DEFAULT_PROPS.modals,
+            root: {
+              ...DEFAULT_PROPS.modals.root,
+              closeModalOnConnect: true,
+              walletsView: 'grid',
+              hideInjectedFromRoot: false,
+              connectorDisplayOverrides: COMMON_CONNECTOR_OVERRIDES,
+              loaderProps: {
+                containerProps: {
+                  backgroundColor: 'rgba(0,0,0,0.42)',
+                  borderRadius: '10px'
+                },
+                spinnerProps: {
+                  size: 80,
+                  invertColor: true
+                },
+                loadingText: 'FETCHING INFO...'
+              }
+            }
+          }
+        }}
+      >
+        <AppWithWagmiAccess />
+        <Web3Button />
+      </PstlW3Providers>
+    )
+  }),
+  Grid__ManyInjected: withThemeProvider(() => {
+    return (
+      <PstlW3Providers
+        config={{
+          ...DEFAULT_PROPS,
+          connectors: [
+            addConnector(InjectedConnector, {
+              name: 'MetaMask',
+              shimDisconnect: true,
+              getProvider() {
+                try {
+                  const provider = window?.ethereum?.providers?.find((provider) => provider?.isMetaMask)
+                  if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
+                  return provider
+                } catch (error) {
+                  return undefined
+                }
+              }
+            }),
+            addConnector(InjectedConnector, {
+              name: 'Taho',
+              shimDisconnect: true,
+              getProvider() {
+                try {
+                  const provider = window?.tally
+                  if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
+                  return provider
+                } catch (error) {
+                  return undefined
+                }
+              }
+            }),
+            addConnector(InjectedConnector, {
+              name: 'Coinbase Wallet',
+              shimDisconnect: true,
+              getProvider() {
+                try {
+                  const provider =
+                    (window?.ethereum?.isCoinbaseWallet && window.ethereum) || window?.coinbaseWalletExtension
+                  if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
+                  return provider
+                } catch (error) {
+                  return undefined
+                }
+              }
+            })
+          ],
+          modals: {
+            ...DEFAULT_PROPS.modals,
+            root: {
+              ...DEFAULT_PROPS.modals.root,
+              closeModalOnConnect: true,
+              walletsView: 'grid',
+              hideInjectedFromRoot: false,
+              connectorDisplayOverrides: COMMON_CONNECTOR_OVERRIDES,
+              loaderProps: {
+                containerProps: {
+                  backgroundColor: 'rgba(0,0,0,0.42)',
+                  borderRadius: '10px'
+                },
+                spinnerProps: {
+                  size: 80,
+                  invertColor: true
+                },
+                loadingText: 'FETCHING INFO...'
+              }
+            }
+          }
+        }}
+      >
+        <AppWithWagmiAccess />
+        <Web3Button />
+      </PstlW3Providers>
+    )
+  }),
+  Grid__ManyInjectedAndLedger: withThemeProvider(() => {
+    return (
+      <PstlW3Providers
+        config={{
+          ...DEFAULT_PROPS_WEB3AUTH,
+          connectors: [
+            wagmiConnectors.ledgerHID,
+            wagmiConnectors.ledgerLiveModal,
+            addConnector(InjectedConnector, {
+              name: 'MetaMask',
+              shimDisconnect: true,
+              getProvider() {
+                try {
+                  const provider = window?.ethereum?.providers?.find((provider) => provider?.isMetaMask)
+                  if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
+                  return provider
+                } catch (error) {
+                  return undefined
+                }
+              }
+            }),
+            addConnector(InjectedConnector, {
+              name: 'Taho',
+              shimDisconnect: true,
+              getProvider() {
+                try {
+                  const provider = window?.tally
+                  if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
+                  return provider
+                } catch (error) {
+                  return undefined
+                }
+              }
+            }),
+            addConnector(InjectedConnector, {
+              name: 'Coinbase Wallet',
+              shimDisconnect: true,
+              getProvider() {
+                try {
+                  const provider =
+                    (window?.ethereum?.isCoinbaseWallet && window.ethereum) || window?.coinbaseWalletExtension
+                  if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
+                  return provider
+                } catch (error) {
+                  return undefined
+                }
+              }
+            })
+          ],
+          modals: {
+            ...DEFAULT_PROPS_WEB3AUTH.modals,
+            root: {
+              ...DEFAULT_PROPS.modals.root,
+              closeModalOnConnect: true,
+              walletsView: 'grid',
+              hideInjectedFromRoot: false,
+              connectorDisplayOverrides: COMMON_CONNECTOR_OVERRIDES,
+              loaderProps: {
+                containerProps: {
+                  backgroundColor: 'rgba(0,0,0,0.42)',
+                  borderRadius: '10px'
+                },
+                spinnerProps: {
+                  size: 80,
+                  invertColor: true
+                },
+                loadingText: 'FETCHING INFO...'
+              }
+            }
+          }
+        }}
+      >
+        <AppWithWagmiAccess />
+        <Web3Button />
+      </PstlW3Providers>
+    )
+  })
 }

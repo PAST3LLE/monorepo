@@ -12,20 +12,5 @@
         "./src/**/*"
     ],
     "references": [
-        {
-            "path": "../components"
-        },
-        {
-            "path": "../hooks"
-        },
-        {
-            "path": "../theme"
-        },
-        {
-            "path": "../utils"
-        },
-        {
-            "path": "../wagmi-connectors"
-        }
     ]
 }

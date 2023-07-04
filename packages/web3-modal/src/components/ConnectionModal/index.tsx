@@ -2,19 +2,20 @@ import { ButtonProps, CloseIcon, ErrorBoundary, ModalProps } from '@past3lle/com
 import { useIsExtraSmallMediaWidth } from '@past3lle/hooks'
 import { BasicUserTheme, ThemeByModes, ThemeModesRequired, ThemeProvider } from '@past3lle/theme'
 import { devWarn } from '@past3lle/utils'
-import React, { Fragment, memo, useMemo, useState } from 'react'
+import React, { memo, useMemo, useState } from 'react'
 import { useTheme } from 'styled-components'
 
 import { Z_INDICES } from '../../constants'
-import { useConnection, useModalTheme, usePstlWeb3Modal } from '../../hooks'
+import { useConnectDisconnect, useModalTheme, useUserConnectionInfo, useWeb3Modals } from '../../hooks'
+import { useAutoClearingTimeout } from '../../hooks/useTimeout'
 import { WithChainIdFromUrl } from '../../providers/types'
-import { ConnectorEnhancedExtras } from '../../types'
-import { getConnectorInfo } from '../../utils'
+import { ConnectorOverrides } from '../../types'
 import { LoadingScreen, LoadingScreenProps } from '../LoadingScreen'
-import { ConnectedCheckMark } from './ConnectedCheckMark'
 import { ConnectorHelper } from './ConnectorHelper'
-import { RecommendedLabel } from './RecommendedLabel'
-import { InnerContainer, ModalButton, ModalTitleText, StyledConnectionModal, WalletsWrapper } from './styled'
+import { ErrorModal } from './ErrorModal'
+import { RenderConnectorOptions } from './RenderConnectorOptions'
+import { InnerContainer, ModalTitleText, StyledConnectionModal, WalletsWrapper } from './styled'
+import { cleanAndFormatConnectorOverrides, sortConnectorsByRank } from './utils'
 
 interface ThemeConfigProps<
   T extends ThemeByModes<BasicUserTheme> = ThemeByModes<BasicUserTheme>,
@@ -33,11 +34,11 @@ interface PstlWeb3ConnectionModalProps
   closeModalOnConnect?: boolean
   hideInjectedFromRoot?: boolean
   walletsView?: 'grid' | 'list'
-  connectorDisplayOverrides?: { [id: string]: ConnectorEnhancedExtras | undefined }
+  connectorDisplayOverrides?: ConnectorOverrides
   zIndex?: number
 }
 
-type ProviderMountedMap = {
+export type ProviderMountedMap = {
   [id: string]: {
     mounted: boolean
   }
@@ -54,107 +55,76 @@ function ModalWithoutThemeProvider({
   maxHeight = walletsView === 'grid' ? '500px' : '600px',
   closeModalOnConnect = false,
   hideInjectedFromRoot = false,
-  connectorDisplayOverrides,
+  connectorDisplayOverrides: connectorDisplayOverridesUnformatted,
   zIndex = Z_INDICES.PSTL,
   ...restModalProps
 }: Omit<PstlWeb3ConnectionModalProps, 'theme'>) {
+  const theme = useTheme()
   const isExtraSmallScreen = useIsExtraSmallMediaWidth()
   // We always show list view in tiny screens
   const modalView = isExtraSmallScreen ? 'list' : walletsView
-  const [connectors, { connect, openW3Modal }, { address, chain, currentConnector }] = useConnection()
-  const { isOpen, close } = usePstlWeb3Modal()
+
+  const modalCallbacks = useWeb3Modals()
+  const userConnectionInfo = useUserConnectionInfo()
+  const {
+    connect: { connectAsync: connect, error }
+  } = useConnectDisconnect({
+    connect: {
+      onSuccess() {
+        closeModalOnConnect && modalCallbacks.root.close()
+      }
+    }
+  })
+
+  const connectorDisplayOverrides = useMemo(
+    () => cleanAndFormatConnectorOverrides(connectorDisplayOverridesUnformatted),
+    [connectorDisplayOverridesUnformatted]
+  )
 
   // flag for setting whether or not web3auth modal has mounted as it takes a few seconds first time around
   // and we want to close the pstlModal only after the web3auth modal has mounted
-  const [providerMountedMap, setProviderMountedMap] = useState<ProviderMountedMap>({})
-  const [providerLoading, setProviderLoading] = useState(false)
+  const providerMountedState = useState<ProviderMountedMap>({})
+  const providerLoadingState = useState(false)
 
-  const theme = useTheme()
+  const showError = useAutoClearingTimeout(!!error, 10_000)
 
   const data = useMemo(
     () =>
-      connectors
-        .sort((connA, connB) => {
-          const connA_rank =
-            (connectorDisplayOverrides?.[connA.id] || connectorDisplayOverrides?.[connA.name])?.rank || 0
-          const connB_rank =
-            (connectorDisplayOverrides?.[connB.id] || connectorDisplayOverrides?.[connB.name])?.rank || 0
-
-          return connB_rank - connA_rank
+      userConnectionInfo.connectors.sort(sortConnectorsByRank(connectorDisplayOverrides)).map(
+        RenderConnectorOptions({
+          connectorDisplayOverrides,
+          hideInjectedFromRoot,
+          chainIdFromUrl,
+          buttonProps,
+          modalView,
+          userConnectionInfo,
+          connect,
+          modalCallbacks,
+          providerMountedState,
+          providerLoadingState,
+          theme
         })
-        .map((connector, index) => {
-          // Don't show "injected" provider if either
-          // a. User explicitly states to ignore it
-          // b. Window object does NOT contain the injected ethereum proxy object
-          if ((hideInjectedFromRoot || !(window as any)?.ethereum) && connector.id === 'injected') return null
-          const [{ label, logo, connected, isRecommended }, callback] = getConnectorInfo(
-            connector,
-            currentConnector,
-            {
-              connect,
-              openW3Modal,
-              closePstlModal: close,
-              setProviderModalMounted: (mounted: boolean) =>
-                setProviderMountedMap((currState) => ({
-                  ...currState,
-                  [connector.id]: { ...currState[connector.id], mounted }
-                })),
-              setProviderModaLoading: setProviderLoading
-            },
-            {
-              chainId: chainIdFromUrl || chain?.id,
-              address,
-              isProviderModalMounted: !!providerMountedMap?.[connector.id]?.mounted,
-              closeOnConnect: closeModalOnConnect,
-              connectorDisplayOverrides
-            }
-          )
-
-          const showHelperText = theme?.modals?.connection?.helpers?.show
-          const helperContent = (
-            connectorDisplayOverrides?.[connector.id] || connectorDisplayOverrides?.[connector.name]
-          )?.infoText
-
-          return (
-            <Fragment key={connector.id + '_' + index}>
-              <ModalButton onClick={callback} connected={connected} {...buttonProps}>
-                <img src={logo} />
-                {label}
-                {connected && <ConnectedCheckMark />}
-                {isRecommended && <RecommendedLabel />}
-              </ModalButton>
-              {modalView !== 'grid' && showHelperText && !!helperContent?.content && (
-                <ConnectorHelper title={helperContent.title} connector={connector}>
-                  {helperContent.content}
-                </ConnectorHelper>
-              )}
-            </Fragment>
-          )
-        }),
+      ),
     [
-      modalView,
-      connectors,
-      currentConnector,
-      connect,
-      openW3Modal,
-      close,
-      chainIdFromUrl,
-      chain?.id,
-      address,
-      providerMountedMap,
-      closeModalOnConnect,
-      hideInjectedFromRoot,
-      connectorDisplayOverrides,
       buttonProps,
-      theme?.modals?.connection?.helpers?.show
+      chainIdFromUrl,
+      connect,
+      connectorDisplayOverrides,
+      hideInjectedFromRoot,
+      modalCallbacks,
+      modalView,
+      providerLoadingState,
+      providerMountedState,
+      theme,
+      userConnectionInfo
     ]
   )
 
   return (
     <StyledConnectionModal
       className={restModalProps.className}
-      isOpen={isOpen}
-      onDismiss={close}
+      isOpen={modalCallbacks.root.isOpen}
+      onDismiss={modalCallbacks.root.close}
       width={width}
       maxWidth={maxWidth}
       maxHeight={maxHeight}
@@ -168,7 +138,7 @@ function ModalWithoutThemeProvider({
       {...restModalProps}
     >
       <InnerContainer justifyContent="flex-start" gap="0.75rem">
-        <CloseIcon height={30} width={100} onClick={close} />
+        <CloseIcon height={30} width={100} onClick={modalCallbacks.root.close} />
         <ModalTitleText
           fontSize={theme.modals?.connection?.title?.fontSize || '2em'}
           fvs={{
@@ -178,12 +148,27 @@ function ModalWithoutThemeProvider({
         >
           {title}
         </ModalTitleText>
-        {connectorDisplayOverrides?.general?.infoText?.content && !providerLoading && (
+        {connectorDisplayOverrides?.general?.infoText?.content && !providerLoadingState[0] && (
           <ConnectorHelper title={connectorDisplayOverrides.general.infoText?.title || 'What is this?'}>
             {connectorDisplayOverrides?.general.infoText.content}
           </ConnectorHelper>
         )}
-        {providerLoading ? (
+        {showError && error?.message && (
+          <p
+            style={{
+              padding: '1rem',
+              width: '90%',
+              borderRadius: '0.25rem',
+              backgroundColor: '#cd5c5cb3',
+              fontVariationSettings: "'wght' 100",
+              fontSize: '1rem',
+              fontStyle: 'normal'
+            }}
+          >
+            {error.message}
+          </p>
+        )}
+        {providerLoadingState[0] ? (
           <LoadingScreen {...loaderProps} />
         ) : (
           <WalletsWrapper view={modalView}>{data}</WalletsWrapper>
@@ -203,7 +188,7 @@ function ModalWithThemeProvider({ themeConfig, ...modalProps }: PstlWeb3Connecti
 
   return (
     <ThemeProvider theme={builtTheme} mode={themeConfig?.mode}>
-      <ErrorBoundary fallback={<h1>AH WOOPSEH DEHHHSEESHHHH</h1>}>
+      <ErrorBoundary fallback={<ErrorModal />}>
         <ModalWithoutThemeProvider {...modalProps} />
       </ErrorBoundary>
     </ThemeProvider>

@@ -1,4 +1,4 @@
-import { useW3Connection, useW3Modal } from '@past3lle/forge-web3'
+import { useW3Connection } from '@past3lle/forge-web3'
 import { useIsMobile } from '@past3lle/hooks'
 import React from 'react'
 
@@ -17,12 +17,17 @@ import { commonProps, contractProps } from './config'
 */
 
 function InnerApp() {
-  const { open } = useW3Modal()
-  const [, , { address }] = useW3Connection()
+  const [, { openRootModal, openWalletConnectModal }, { address }] = useW3Connection()
 
   return (
     <div>
-      <button onClick={() => open({ route: address ? 'Account' : 'ConnectWallet' })}>Open Pstl Web3 Modal</button>
+      <button
+        onClick={() =>
+          address ? openWalletConnectModal({ route: 'Account' }) : openRootModal({ route: 'ConnectWallet' })
+        }
+      >
+        Open Pstl Web3 Modal
+      </button>
       <h1>{address || 'Disconnected'}</h1>
     </div>
   )
@@ -110,10 +115,8 @@ function App() {
         },
         web3: {
           chains: commonProps.chains,
-          wagmiClient: {
-            options: {
-              pollingInterval: 10_000
-            }
+          options: {
+            pollingInterval: 15_000
           },
           modals: {
             walletConnect: commonProps.modals.walletConnect,

@@ -83,11 +83,11 @@ export function AppVersion() {
             <strong>CollectionsManager:</strong>{' '}
             <a
               href={`${getExplorerUrl(
-                COLLECTIONS_MANAGER_NETWORKS?.[chainId as SupportedForgeChains].CollectionsManager.address as Address
+                COLLECTIONS_MANAGER_NETWORKS?.[chainId as SupportedForgeChains]?.CollectionsManager.address as Address
               )}#code`}
               target="_blank noreferrer"
             >
-              {(COLLECTIONS_MANAGER_NETWORKS?.[chainId as SupportedForgeChains].CollectionsManager
+              {(COLLECTIONS_MANAGER_NETWORKS?.[chainId as SupportedForgeChains]?.CollectionsManager
                 .address as Address) || 'CollectionsManager not deployed on this network'}
             </a>
             //
@@ -102,11 +102,11 @@ export function AppVersion() {
             <strong>MergeManager:</strong>{' '}
             <a
               href={`${getExplorerUrl(
-                MERGE_MANAGER_NETWORKS?.[chainId as SupportedForgeChains].MergeManager.address as Address
+                MERGE_MANAGER_NETWORKS?.[chainId as SupportedForgeChains]?.MergeManager.address as Address
               )}#code`}
               target="_blank noreferrer"
             >
-              {(MERGE_MANAGER_NETWORKS?.[chainId as SupportedForgeChains].MergeManager.address as Address) ||
+              {(MERGE_MANAGER_NETWORKS?.[chainId as SupportedForgeChains]?.MergeManager.address as Address) ||
                 'MergeManager not deployed on this network'}
             </a>
             //

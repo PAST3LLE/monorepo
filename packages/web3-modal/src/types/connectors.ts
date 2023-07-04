@@ -25,5 +25,10 @@ export type ConnectorEnhancedExtras = {
    * @name rank Optional. Number rank. Higher the number, the higher in the modal connector appears
    */
   rank?: number
+  /**
+   * @name downloadUrl Optional. URL to navigate to in case provider does not exist
+   */
+  downloadUrl?: string
 }
 export type ConnectorEnhanced<P, O> = Connector<P, O> & ConnectorEnhancedExtras
+export type ConnectorOverrides = { [id: string]: ConnectorEnhancedExtras | undefined }

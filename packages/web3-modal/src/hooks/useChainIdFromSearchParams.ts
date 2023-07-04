@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 
-import { PstlWeb3ModalProps } from '../providers/types'
+import { PstlWeb3ModalOptions, PstlWeb3ModalProps } from '../providers/types'
 
 export function useChainIdFromSearchParams(
   chains: PstlWeb3ModalProps<number>['chains'],
-  chainFromUrlOptions: PstlWeb3ModalProps<number>['chainFromUrlOptions']
+  chainFromUrlOptions: PstlWeb3ModalOptions['chainFromUrlOptions']
 ) {
   const [derivedChainId, setDerivedChainId] = useState<number | undefined>(undefined)
 

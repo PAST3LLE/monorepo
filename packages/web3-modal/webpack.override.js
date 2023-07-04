@@ -10,7 +10,11 @@ module.exports = (webpackConfig) => (
             }),
             new webpack.ProvidePlugin({
                 Buffer: ["buffer", "Buffer"],
-            })
+            }),
+            new webpack.DefinePlugin({
+                "process.env.IS_COSMOS": JSON.stringify(process.env.IS_COSMOS)
+            }),
+        
         ],
         module: {
             rules: [

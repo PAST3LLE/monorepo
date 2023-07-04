@@ -4,6 +4,8 @@ import {
   PstlModalTheme as ForgeModalTheme,
   PstlW3Providers,
   W3aStyleResetProvider,
+  addConnector,
+  addFrameConnector,
   usePstlEthereumClient as useEthereumClient,
   usePstlConnection as useW3Connection,
   usePstlWeb3Modal as useW3Modal,
@@ -84,6 +86,8 @@ export {
   useW3Modal,
   useEthereumClient,
   useWagmiClient,
+  addConnector,
+  addFrameConnector,
   type ForgeModalTheme,
   type ForgeW3CoreProvidersProps,
   type ChainsPartialReadonly
