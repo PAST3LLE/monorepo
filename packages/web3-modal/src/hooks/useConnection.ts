@@ -90,6 +90,28 @@ export function useWeb3Modals(): {
   }
 }
 
+export function useAccountNetworkActions() {
+  const { chain } = useUserConnectionInfo()
+  const { root, walletConnect } = useWeb3Modals()
+
+  const isMobileWidth = useIsSmallMediaWidth()
+
+  const onNetworkClick = useCallback(async () => {
+    return chain?.id
+      ? walletConnect.open({ route: !isMobileWidth ? 'SelectNetwork' : 'Account' })
+      : root.open({ route: 'ConnectWallet' })
+  }, [chain?.id, root, walletConnect, isMobileWidth])
+
+  const onAccountClick = useCallback(async () => {
+    return chain?.id ? walletConnect.open({ route: 'Account' }) : root.open({ route: 'ConnectWallet' })
+  }, [chain?.id, root, walletConnect])
+
+  return {
+    onAccountClick,
+    onNetworkClick
+  }
+}
+
 export type PstlW3mConnectionHook = [
   Connector<any, any>[],
   Callbacks,
@@ -150,10 +172,7 @@ type UseConnectionProps = {
   disconnect: UseConnectDisconnectProps['disconnect']
 }
 export function useConnection(props?: UseConnectionProps): PstlW3mConnectionHook {
-  const {
-    root: { open: openRootModal, close: closeRootModal, isOpen: isRootModalOpen },
-    walletConnect: { open: openWalletConnectModal, close: closeWalletConnectModal, isOpen: isWalletConnectOpen }
-  } = useWeb3Modals()
+  const { root, walletConnect } = useWeb3Modals()
 
   const {
     connect: { connectAsync: connect, connectors, error, isLoading, pendingConnector, isError, isIdle, isSuccess },
@@ -171,27 +190,17 @@ export function useConnection(props?: UseConnectionProps): PstlW3mConnectionHook
     isReconnecting
   } = useUserConnectionInfo()
 
-  const isMobileWidth = useIsSmallMediaWidth()
-
-  const onNetworkClick = useCallback(async () => {
-    return chain?.id
-      ? openWalletConnectModal({ route: !isMobileWidth ? 'SelectNetwork' : 'Account' })
-      : openRootModal({ route: 'ConnectWallet' })
-  }, [chain?.id, openRootModal, openWalletConnectModal, isMobileWidth])
-
-  const onAccountClick = useCallback(async () => {
-    return chain?.id ? openWalletConnectModal({ route: 'Account' }) : openRootModal({ route: 'ConnectWallet' })
-  }, [chain?.id, openRootModal, openWalletConnectModal])
+  const { onAccountClick, onNetworkClick } = useAccountNetworkActions()
 
   return [
     connectors,
     {
       connect,
       disconnect,
-      openWalletConnectModal,
-      closeWalletConnectModal,
-      openRootModal,
-      closeRootModal,
+      openWalletConnectModal: walletConnect.open,
+      closeWalletConnectModal: walletConnect.close,
+      openRootModal: root.open,
+      closeRootModal: root.close,
       onNetworkClick,
       onAccountClick
     },
@@ -205,8 +214,8 @@ export function useConnection(props?: UseConnectionProps): PstlW3mConnectionHook
       isIdle,
       isLoading,
       isSuccess,
-      isWalletConnectOpen,
-      isRootModalOpen,
+      isWalletConnectOpen: walletConnect.isOpen,
+      isRootModalOpen: root.isOpen,
       pendingConnector,
       isConnected,
       isConnecting,
