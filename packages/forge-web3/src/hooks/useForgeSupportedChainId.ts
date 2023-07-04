@@ -1,5 +1,5 @@
 import { devDebug } from '@past3lle/utils'
-import { ChainsPartialReadonly, usePstlConnection } from '@past3lle/web3-modal'
+import { ChainsPartialReadonly, usePstlUserConnectionInfo } from '@past3lle/web3-modal'
 import { useEffect, useMemo } from 'react'
 
 import { useForgeGetUserConfigChainsAtom, useForgeReadonlyChainAtom } from '../state/UserConfig'
@@ -15,7 +15,7 @@ export enum ForgeW3ChainState {
 
 export function useChainState(): [ChainsPartialReadonly<number>[number] | undefined, ForgeW3ChainState] {
   const [supportedChains = []] = useForgeGetUserConfigChainsAtom()
-  const [, , { chain: rawChain }] = usePstlConnection()
+  const { chain: rawChain } = usePstlUserConnectionInfo()
   const [readonlyChain] = useForgeReadonlyChainAtom()
 
   const chainState: ForgeW3ChainState = useMemo(() => {

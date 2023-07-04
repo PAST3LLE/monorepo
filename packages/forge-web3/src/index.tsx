@@ -7,8 +7,12 @@ import {
   addConnector,
   addFrameConnector,
   usePstlEthereumClient as useEthereumClient,
+  usePstlAccountNetworkActions as useW3AccountNetworkActions,
+  usePstlConnectDisconnect as useW3ConnectDisconnect,
   usePstlConnection as useW3Connection,
   usePstlWeb3Modal as useW3Modal,
+  usePstlWeb3Modals as useW3Modals,
+  usePstlUserConnectionInfo as useW3UserConnectionInfo,
   usePstlWagmiClient as useWagmiClient
 } from '@past3lle/web3-modal'
 import React, { ReactNode, StrictMode } from 'react'
@@ -83,7 +87,11 @@ export {
   ForgeStateProviders,
   ForgeW3BalancesAndWindowSizeProviders,
   useW3Connection,
+  useW3ConnectDisconnect,
   useW3Modal,
+  useW3Modals,
+  useW3UserConnectionInfo,
+  useW3AccountNetworkActions,
   useEthereumClient,
   useWagmiClient,
   addConnector,

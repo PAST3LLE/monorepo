@@ -1,7 +1,7 @@
 import { Web3Button } from '@web3modal/react'
 import React from 'react'
 
-import { ForgeW3Providers, useForgeUnpreparedClaimLockedSkill, useW3Connection, useW3Modal } from '..'
+import { ForgeW3Providers, useForgeUnpreparedClaimLockedSkill, useW3Modal, useW3UserConnectionInfo } from '..'
 import { commonProps, contractProps } from './config'
 
 /* 
@@ -15,7 +15,7 @@ import { commonProps, contractProps } from './config'
 
 function InnerApp() {
   const { open } = useW3Modal()
-  const [, , { address, balanceInfo }] = useW3Connection()
+  const { address, balance: balanceInfo } = useW3UserConnectionInfo()
 
   const data = useForgeUnpreparedClaimLockedSkill({
     token: '0x1b18aC6D5371FeD52521964145E2c8aAF7571a88',

@@ -1,7 +1,8 @@
+import { usePstlUserConnectionInfo } from '@past3lle/web3-modal'
 import { useEffect } from 'react'
 
 import { useForgeUserConfigAtom } from '..'
-import { ForgeW3CoreProvidersProps, useChainId, useW3Connection } from '../../../'
+import { ForgeW3CoreProvidersProps, useChainId } from '../../../'
 
 type ForgeBalancesProps = ForgeW3CoreProvidersProps['config']
 export function ForgeUserConfigUpdater({
@@ -14,7 +15,7 @@ export function ForgeUserConfigUpdater({
   skillOptions
 }: ForgeBalancesProps) {
   const chainId = useChainId()
-  const [, , { address: account }] = useW3Connection()
+  const { address: account } = usePstlUserConnectionInfo()
   const [, updateUserConfig] = useForgeUserConfigAtom()
   useEffect(() => {
     updateUserConfig((state) => ({
