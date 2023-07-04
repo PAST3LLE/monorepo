@@ -1,10 +1,13 @@
 import { Address } from '@past3lle/types'
+import { IFrameEthereumConnector } from '@past3lle/wagmi-connectors'
 import { ConfigCtrlState } from '@web3modal/core'
 import { EthereumClient } from '@web3modal/ethereum'
 import { Web3ModalProps as Web3ModalConfigOriginal } from '@web3modal/react'
+import { Chain as ChainWagmi } from 'wagmi'
 
 import { PstlWeb3ConnectionModalProps } from '../components/ConnectionModal'
 import { PstlWeb3AuthConnectorProps } from '../connectors'
+import { ConnectorEnhanced } from '../types'
 import { PstlWagmiClientOptions } from './utils'
 
 type DeepReadonly<T> = {
@@ -82,17 +85,37 @@ export type Web3ModalConfig<ID extends number, SC extends ChainsPartialReadonly<
   themeMode?: Web3ModalConfigOriginal['themeMode']
   themeVariables?: Web3ModalThemeVariables
 }
+
+export type PstlWeb3ModalOptions = Omit<
+  PstlWagmiClientOptions<number>['options'] & {
+    chainFromUrlOptions?: { key: string; type: 'network' | 'id' }
+    autoConnect?: boolean
+  },
+  'publicClient' | 'publicClients' | 'connectors'
+>
 export interface Web3ModalProps<ID extends number, SC extends ChainsPartialReadonly<ID>> {
   appName: string
   chains: SC
-  chainFromUrlOptions?: { key: string; type: 'network' | 'id' }
-  wagmiClient?: PstlWagmiClientOptions<ID, SC>
-  ethereumClient?: EthereumClient
+  /**
+   * @name connectors
+   * @description Wagmi connectors. Loaded in normal, non-iframe dapps (e.g skills.pastelle.shop)
+   */
+  connectors?: ((chains: ChainWagmi[]) => ConnectorEnhanced<any, any>)[]
+  /**
+   * @name frameConnectors
+   * @description iFrame connectors. ONLY loaded in iFrame Dapp browsers (e.g LedgerLive Discovery)
+   */
+  frameConnectors?: ((chains: ChainWagmi[]) => IFrameEthereumConnector)[]
   modals: {
     root?: Omit<PstlWeb3ConnectionModalProps, 'isOpen' | 'onDismiss' | 'chainIdFromUrl'>
     walletConnect: Omit<Web3ModalConfig<any, any>, 'w3aProjectId' | 'chains'>
     web3auth?: Omit<PstlWeb3AuthConnectorProps<ID>, 'chains'>
   }
+  clients?: {
+    wagmi?: PstlWagmiClientOptions<ID, SC>
+    ethereum?: EthereumClient
+  }
+  options?: PstlWeb3ModalOptions
 }
 
 export type PstlWeb3ModalProps<

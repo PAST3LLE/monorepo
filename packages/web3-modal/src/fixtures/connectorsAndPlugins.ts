@@ -1,9 +1,8 @@
 import { IFrameEthereumConnector, LedgerHIDConnector } from '@past3lle/wagmi-connectors'
-import { Connector } from '@wagmi/connectors'
 import { LedgerConnector } from '@wagmi/connectors/ledger'
 import { TorusWalletConnectorPlugin } from '@web3auth/torus-wallet-connector-plugin'
 
-import { chains } from './chains'
+import { addConnector } from '../providers/utils'
 import { WALLETCONNECT_ID, WEB3AUTH_TEST_ID } from './config'
 
 const TORUS_LOGO = 'https://web3auth.io/docs/contents/logo-ethereum.png'
@@ -23,24 +22,17 @@ const torusPlugin = new TorusWalletConnectorPlugin({
   }
 })
 
-const ledgerLiveModal = new LedgerConnector({
-  chains,
-  options: {
-    enableDebugLogs: false,
-    walletConnectVersion: 2,
-    projectId: WALLETCONNECT_ID,
-    requiredChains: [1]
-  }
-})
-
 export const w3aPlugins = {
   torusPlugin
 }
 
 export const wagmiConnectors = {
-  ledgerLiveModal,
-  ledgerHID: new LedgerHIDConnector() as unknown as Connector<LedgerHIDConnector['provider'], any>,
-  ledgerIFrame: new IFrameEthereumConnector({ chains, options: {} })
+  ledgerLiveModal: addConnector(LedgerConnector, {
+    enableDebugLogs: false,
+    walletConnectVersion: 2,
+    projectId: WALLETCONNECT_ID,
+    requiredChains: [1]
+  }),
+  ledgerHID: addConnector(LedgerHIDConnector, {}),
+  ledgerIFrame: addConnector(IFrameEthereumConnector, {})
 }
-
-export const wagmiConnectorsList = Object.values(wagmiConnectors) as Connector<any, any>[]

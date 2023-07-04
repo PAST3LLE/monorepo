@@ -1,12 +1,14 @@
 import React from 'react'
 import { useTheme } from 'styled-components'
 
+import { usePstlWeb3Modal } from '../../hooks'
 import { InnerContainer, ModalTitleText, StyledConnectionModal } from './styled'
 
 export function ErrorModal() {
   const theme = useTheme()
+  const { close } = usePstlWeb3Modal()
   return (
-    <StyledConnectionModal isOpen onDismiss={console.debug} width={'50vw'}>
+    <StyledConnectionModal isOpen onDismiss={close} width={'50vw'}>
       <InnerContainer justifyContent="flex-start" gap="0.75rem">
         <ModalTitleText
           fontSize={theme.modals?.connection?.title?.fontSize || '2em'}

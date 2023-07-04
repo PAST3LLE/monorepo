@@ -2,9 +2,9 @@ import React, { Dispatch, SetStateAction } from 'react'
 import { DefaultTheme } from 'styled-components'
 
 import { ProviderMountedMap, PstlWeb3ConnectionModalProps } from '.'
-import { useConnection } from '../../hooks'
+import { useConnectDisconnect, useUserConnectionInfo, useWeb3Modals } from '../../hooks'
 import { ConnectorEnhanced } from '../../types'
-import { runConnectorConnectionLogic } from '../../utils'
+import { runConnectorConnectionLogic, trimAndLowerCase } from '../../utils'
 import { ConnectorOption } from './ConnectorOption'
 
 type RenderConnectorOptionsProps = Pick<
@@ -13,7 +13,9 @@ type RenderConnectorOptionsProps = Pick<
 > & {
   modalView: 'list' | 'grid'
   theme: DefaultTheme
-  connectionState: ReturnType<typeof useConnection>
+  userConnectionInfo: ReturnType<typeof useUserConnectionInfo>
+  connect: ReturnType<typeof useConnectDisconnect>['connect']['connectAsync']
+  modalCallbacks: ReturnType<typeof useWeb3Modals>
   providerMountedState: [ProviderMountedMap, Dispatch<SetStateAction<ProviderMountedMap>>]
   providerLoadingState: [boolean, (loading: boolean) => void]
 }
@@ -25,7 +27,9 @@ const RenderConnectorOptionsBase =
     buttonProps,
     modalView,
     theme,
-    connectionState: [, { openWalletConnectModal, closeRootModal, connect }, { chain, address, currentConnector }],
+    modalCallbacks: { root, walletConnect },
+    connect,
+    userConnectionInfo: { connector: currentConnector, chain, address },
     providerMountedState: [providerMountedMap, setProviderMountedMap],
     providerLoadingState: [, setProviderLoading]
   }: RenderConnectorOptionsProps) =>
@@ -39,8 +43,8 @@ const RenderConnectorOptionsBase =
       currentConnector,
       {
         connect,
-        openWalletConnectModal,
-        closeRootModal,
+        openWalletConnectModal: walletConnect.open,
+        closeRootModal: root.close,
         setProviderModalMounted: (mounted: boolean) =>
           setProviderMountedMap((currState) => ({
             ...currState,
@@ -57,8 +61,10 @@ const RenderConnectorOptionsBase =
     )
 
     const showHelperText = theme?.modals?.connection?.helpers?.show
-    const helperContent = (connectorDisplayOverrides?.[connector.id] || connectorDisplayOverrides?.[connector.name])
-      ?.infoText
+    const helperContent = (
+      connectorDisplayOverrides?.[trimAndLowerCase(connector?.id)] ||
+      connectorDisplayOverrides?.[trimAndLowerCase(connector?.name)]
+    )?.infoText
 
     return (
       <ConnectorOption

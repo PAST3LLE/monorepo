@@ -4,8 +4,8 @@ import styled from 'styled-components'
 
 export const RecommendedLabelWrapper = styled(RowStart)`
   position: absolute;
-  bottom: 0.75em;
-  right: 0.75em;
+  top: 1em;
+  right: 1em;
 
   gap: 0.4em;
 
@@ -15,7 +15,7 @@ export const RecommendedLabelWrapper = styled(RowStart)`
 export function RecommendedLabel() {
   return (
     <RecommendedLabelWrapper>
-      Recommended <CheckCircle size={10} />
+      Recommended <CheckCircle size={8} />
     </RecommendedLabelWrapper>
   )
 }

@@ -4,10 +4,9 @@ import { BasicUserTheme, ThemeByModes, ThemeModesRequired, ThemeProvider } from 
 import { devWarn } from '@past3lle/utils'
 import React, { memo, useMemo, useState } from 'react'
 import { useTheme } from 'styled-components'
-import { useConnect } from 'wagmi'
 
 import { Z_INDICES } from '../../constants'
-import { useConnection, useModalTheme } from '../../hooks'
+import { useConnectDisconnect, useModalTheme, useUserConnectionInfo, useWeb3Modals } from '../../hooks'
 import { useAutoClearingTimeout } from '../../hooks/useTimeout'
 import { WithChainIdFromUrl } from '../../providers/types'
 import { ConnectorOverrides } from '../../types'
@@ -16,7 +15,7 @@ import { ConnectorHelper } from './ConnectorHelper'
 import { ErrorModal } from './ErrorModal'
 import { RenderConnectorOptions } from './RenderConnectorOptions'
 import { InnerContainer, ModalTitleText, StyledConnectionModal, WalletsWrapper } from './styled'
-import { sortConnectorsByRank } from './utils'
+import { cleanAndFormatConnectorOverrides, sortConnectorsByRank } from './utils'
 
 interface ThemeConfigProps<
   T extends ThemeByModes<BasicUserTheme> = ThemeByModes<BasicUserTheme>,
@@ -56,7 +55,7 @@ function ModalWithoutThemeProvider({
   maxHeight = walletsView === 'grid' ? '500px' : '600px',
   closeModalOnConnect = false,
   hideInjectedFromRoot = false,
-  connectorDisplayOverrides,
+  connectorDisplayOverrides: connectorDisplayOverridesUnformatted,
   zIndex = Z_INDICES.PSTL,
   ...restModalProps
 }: Omit<PstlWeb3ConnectionModalProps, 'theme'>) {
@@ -65,13 +64,22 @@ function ModalWithoutThemeProvider({
   // We always show list view in tiny screens
   const modalView = isExtraSmallScreen ? 'list' : walletsView
 
-  const connectionState = useConnection()
-  const [connectors, { closeRootModal }, { isRootModalOpen }] = connectionState
-  const { error } = useConnect({
-    onSuccess() {
-      closeModalOnConnect && closeRootModal()
+  const modalCallbacks = useWeb3Modals()
+  const userConnectionInfo = useUserConnectionInfo()
+  const {
+    connect: { connectAsync: connect, error }
+  } = useConnectDisconnect({
+    connect: {
+      onSuccess() {
+        closeModalOnConnect && modalCallbacks.root.close()
+      }
     }
   })
+
+  const connectorDisplayOverrides = useMemo(
+    () => cleanAndFormatConnectorOverrides(connectorDisplayOverridesUnformatted),
+    [connectorDisplayOverridesUnformatted]
+  )
 
   // flag for setting whether or not web3auth modal has mounted as it takes a few seconds first time around
   // and we want to close the pstlModal only after the web3auth modal has mounted
@@ -82,14 +90,16 @@ function ModalWithoutThemeProvider({
 
   const data = useMemo(
     () =>
-      connectors.sort(sortConnectorsByRank(connectorDisplayOverrides)).map(
+      userConnectionInfo.connectors.sort(sortConnectorsByRank(connectorDisplayOverrides)).map(
         RenderConnectorOptions({
           connectorDisplayOverrides,
           hideInjectedFromRoot,
           chainIdFromUrl,
           buttonProps,
           modalView,
-          connectionState,
+          userConnectionInfo,
+          connect,
+          modalCallbacks,
           providerMountedState,
           providerLoadingState,
           theme
@@ -98,22 +108,23 @@ function ModalWithoutThemeProvider({
     [
       buttonProps,
       chainIdFromUrl,
-      connectionState,
+      connect,
       connectorDisplayOverrides,
-      connectors,
       hideInjectedFromRoot,
+      modalCallbacks,
       modalView,
       providerLoadingState,
       providerMountedState,
-      theme
+      theme,
+      userConnectionInfo
     ]
   )
 
   return (
     <StyledConnectionModal
       className={restModalProps.className}
-      isOpen={isRootModalOpen}
-      onDismiss={closeRootModal}
+      isOpen={modalCallbacks.root.isOpen}
+      onDismiss={modalCallbacks.root.close}
       width={width}
       maxWidth={maxWidth}
       maxHeight={maxHeight}
@@ -127,7 +138,7 @@ function ModalWithoutThemeProvider({
       {...restModalProps}
     >
       <InnerContainer justifyContent="flex-start" gap="0.75rem">
-        <CloseIcon height={30} width={100} onClick={closeRootModal} />
+        <CloseIcon height={30} width={100} onClick={modalCallbacks.root.close} />
         <ModalTitleText
           fontSize={theme.modals?.connection?.title?.fontSize || '2em'}
           fvs={{

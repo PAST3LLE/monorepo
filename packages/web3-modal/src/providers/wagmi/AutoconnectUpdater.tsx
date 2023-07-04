@@ -20,10 +20,8 @@ export const AutoconnectUpdater = ({
   useEffect(() => {
     if (!isDisconnected) return
 
-    if (isIframe()) {
-      const iFrameConnector = connectors.find(
-        (connector) => (connector as ConnectorEnhanced<any, any> & { isIFrame?: boolean })?.isIFrame
-      )
+    const iFrameConnector = isIframe() && _getIFrameConnector(connectors)
+    if (iFrameConnector) {
       devDebug('[AutoConnect]::Dapp browser: CONNECTORS', iFrameConnector)
       connectAsync({
         connector: iFrameConnector
@@ -55,4 +53,8 @@ export const AutoconnectUpdater = ({
   }, [chainIdFromUrl, connectAsync, connectors, isDisconnected, persistOnRefresh, switchNetwork])
 
   return null
+}
+
+function _getIFrameConnector(connectors: ConnectorEnhanced<any, any>[]) {
+  return connectors.find((connector) => (connector as ConnectorEnhanced<any, any> & { isIFrame?: boolean })?.isIFrame)
 }

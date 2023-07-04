@@ -172,9 +172,9 @@ export const WalletsWrapper = styled.div<{ view?: PstlWeb3ConnectionModalProps['
       
       > ${RecommendedLabelWrapper} {
         position: absolute;
-        bottom: 0.25rem;
+        bottom: 0.5rem;
         height: min-content;
-        right: 0.25rem;
+        right: 0.5rem;
       }
 
       > img {

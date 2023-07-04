@@ -5,7 +5,7 @@ import { CHAIN_IMAGES, WALLET_IMAGES, Z_INDICES } from '../../constants'
 import { ChainsPartialReadonly, PstlWeb3ModalProps } from '../types'
 
 export const PstlWeb3Modal = <ID extends number, SC extends ChainsPartialReadonly<ID>>({
-  ethereumClient,
+  clients,
   modals: {
     walletConnect: { projectId, zIndex = Z_INDICES.W3M, themeVariables, ...w3mProps }
   }
@@ -17,7 +17,7 @@ export const PstlWeb3Modal = <ID extends number, SC extends ChainsPartialReadonl
   const [LazyModal, setModal] = useState<React.ReactElement<any, any>>()
 
   useEffect(() => {
-    if (projectId && !!ethereumClient?.namespace) {
+    if (projectId && !!clients?.ethereum?.namespace) {
       devDebug('[@past3lle/web3-modal]::IMPORTING WEB3MODAL')
       import('@web3modal/react')
         .then(({ Web3Modal }) =>
@@ -34,14 +34,14 @@ export const PstlWeb3Modal = <ID extends number, SC extends ChainsPartialReadonl
               }}
               themeVariables={{ ...themeVariables, '--w3m-z-index': zIndex?.toString() }}
               projectId={projectId}
-              ethereumClient={ethereumClient}
+              ethereumClient={clients?.ethereum}
             />
           )
         )
         .catch(console.error)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ethereumClient?.namespace, projectId])
+  }, [clients?.ethereum?.namespace, projectId])
 
   if (!LazyModal) return null
 

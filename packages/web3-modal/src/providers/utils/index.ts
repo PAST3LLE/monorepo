@@ -1,7 +1,14 @@
+import { IFrameEthereumConnector } from '@past3lle/wagmi-connectors'
 import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
 import { useMemo } from 'react'
 import { Chain } from 'viem'
-import { Config as ClientConfig, WagmiConfigProps, configureChains, createConfig as createClient } from 'wagmi'
+import {
+  Config as ClientConfig,
+  Connector,
+  WagmiConfigProps,
+  configureChains,
+  createConfig as createClient
+} from 'wagmi'
 import { publicProvider } from 'wagmi/providers/public'
 
 import { PstlWeb3AuthConnector, PstlWeb3AuthConnectorProps } from '../../connectors/web3auth'
@@ -14,12 +21,14 @@ interface ClientConfigEnhanced extends Omit<ClientConfig, 'connectors'> {
 interface CreateWagmiClientProps<ID extends number, SC extends ChainsPartialReadonly<ID> = ChainsPartialReadonly<ID>> {
   appName: string
   chains: ChainsPartialReadonly<ID>
+  connectors: PstlWeb3ModalProps<ID, SC>['connectors']
   w3mConnectorProps: PstlWeb3ModalProps<ID, SC>['modals']['walletConnect']
   w3aConnectorProps?: Omit<PstlWeb3AuthConnectorProps<ID>, 'chains'>
-  options?: Partial<Pick<ClientConfigEnhanced, 'connectors' | 'publicClient'>> & {
+  options?: Partial<Pick<ClientConfigEnhanced, 'publicClient'>> & {
     publicClients?: (typeof publicProvider)[]
     pollingInterval?: number
     autoConnect?: boolean
+    connectors?: ((chains: Chain[]) => ConnectorEnhanced<any, any>)[]
   }
 }
 export type WagmiClient = ReturnType<typeof createClient>
@@ -27,9 +36,8 @@ function createWagmiClient<ID extends number>({
   options,
   ...props
 }: CreateWagmiClientProps<ID>): WagmiConfigProps['config'] {
-  const userConnectors = (
-    Array.isArray(options?.connectors) ? options?.connectors : options?.connectors?.() || []
-  ) as ConnectorEnhanced<any, any>[]
+  const userConnectors = (props?.connectors || options?.connectors || []).map((conn) => conn(props.chains as Chain[]))
+
   const { publicClient } = configureChains(
     props.chains as Chain[],
     [w3mProvider({ projectId: props.w3mConnectorProps.projectId }), publicProvider()],
@@ -38,18 +46,32 @@ function createWagmiClient<ID extends number>({
     }
   )
 
-  const baseConnectors = [
-    ...w3mConnectors({ projectId: props.w3mConnectorProps.projectId, chains: props.chains as Chain[] }),
-    // any use custom modals
-    ...userConnectors
-  ]
-  const derivedConnectors = props?.w3aConnectorProps
-    ? [PstlWeb3AuthConnector({ chains: props.chains as Chain[], ...props.w3aConnectorProps }), ...baseConnectors]
-    : baseConnectors
+  const walletConnectProviders = w3mConnectors({
+    projectId: props.w3mConnectorProps.projectId,
+    chains: props.chains as Chain[]
+  })
+
+  const connectorsCopy = userConnectors.slice()
+  // Check user w3a props - if they exist, init web3auth connector
+  if (props?.w3aConnectorProps) {
+    connectorsCopy.push(PstlWeb3AuthConnector({ chains: props.chains as Chain[], ...props.w3aConnectorProps }))
+  }
+
+  // Check if we have multiple providers via window.ethereum.providersMap (coinbase wallet)
+  const userConnectorsContainInjected = userConnectors?.some((conn) => conn.id === 'injected' || conn.id === 'metaMask')
+  if (userConnectorsContainInjected) {
+    // filter injected providers passed by walletconnect to dedup
+    connectorsCopy.push(...walletConnectProviders.filter((connector) => connector.id !== 'injected'))
+  }
+  // otherwise push the walletConnect providers
+  // which includes any injected providers
+  else {
+    connectorsCopy.push(...walletConnectProviders)
+  }
 
   return createClient({
     autoConnect: !!options?.autoConnect,
-    connectors: derivedConnectors,
+    connectors: connectorsCopy,
     publicClient: options?.publicClient || publicClient
   }) as WagmiConfigProps['config']
 }
@@ -72,15 +94,16 @@ export function usePstlWagmiClient<ID extends number, SC extends ChainsPartialRe
 ): ReturnType<typeof createWagmiClient> {
   return useMemo(
     () =>
-      !props.wagmiClient?.client
+      !props.clients?.wagmi?.client
         ? createWagmiClient({
             appName: props.appName,
             chains: props.chains,
+            connectors: props.connectors,
             w3mConnectorProps: props.modals.walletConnect,
             w3aConnectorProps: props.modals.web3auth,
-            options: props.wagmiClient?.options
+            options: { ...props?.clients?.wagmi?.options, ...props.options }
           })
-        : props.wagmiClient.client,
+        : props.clients.wagmi.client,
     [props]
   )
 }
@@ -96,3 +119,15 @@ export function usePstlEthereumClient<ID extends number>(
 
   return client
 }
+
+export const addConnector =
+  <C extends Class<Connector<any, any>>, T extends Record<string, unknown>>(Connector: C, options: T) =>
+  (chains: Chain[]) =>
+    new Connector({ chains, options })
+
+export const addFrameConnector =
+  <C extends Class<IFrameEthereumConnector>, T extends Record<string, unknown>>(Connector: C, options: T) =>
+  (chains: Chain[]) =>
+    new Connector({ chains, options })
+
+type Class<T> = new (...args: any[]) => T

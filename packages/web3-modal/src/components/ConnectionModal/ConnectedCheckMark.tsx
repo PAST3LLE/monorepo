@@ -4,8 +4,8 @@ import styled from 'styled-components'
 
 export const StyledConnectedCheckMark = styled(RowStart)`
   position: absolute;
-  top: 0.5em;
-  right: 0.5em;
+  top: 1em;
+  left: 1em;
 
   gap: 0.4em;
 
@@ -15,7 +15,7 @@ export const StyledConnectedCheckMark = styled(RowStart)`
 export function ConnectedCheckMark() {
   return (
     <StyledConnectedCheckMark>
-      Connected <CheckCircle size={10} />
+      Connected <CheckCircle size={8} />
     </StyledConnectedCheckMark>
   )
 }

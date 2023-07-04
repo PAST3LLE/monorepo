@@ -1,12 +1,17 @@
 import { devDebug } from '@past3lle/utils'
-import { isIframe } from '@past3lle/wagmi-connectors'
-import React, { ReactNode, memo } from 'react'
+import { IFrameEthereumConnector, isIframe } from '@past3lle/wagmi-connectors'
+import React, { ReactNode, memo, useMemo } from 'react'
 
 import { PstlWeb3ConnectionModal } from '../components'
 import { useChainIdFromSearchParams } from '../hooks/useChainIdFromSearchParams'
-import { ConnectorEnhanced } from '../types'
 import type { ChainsPartialReadonly, PstlWeb3ModalProps } from './types'
-import { PstlWagmiClientOptions, usePstlEthereumClient, usePstlWagmiClient } from './utils'
+import {
+  PstlWagmiClientOptions,
+  addConnector,
+  addFrameConnector,
+  usePstlEthereumClient,
+  usePstlWagmiClient
+} from './utils'
 import { PstlWagmiProvider } from './wagmi'
 import { PstlWeb3Modal } from './web3Modal'
 
@@ -18,21 +23,21 @@ const PstlW3ProvidersBase = <ID extends number, SC extends ChainsPartialReadonly
   config: PstlWeb3ModalProps<ID, SC>
 }) => {
   // We run this here in the case we're running this inside a dapp browser iFrame (e.g Ledger dapp browser)
-  const augmentedWagmiConfig = useAugmentWagmiConfig(config.wagmiClient)
+  const dynamicConnectors = useDynamicConnectors(config)
   // Logic below applies to non-iframe dapp browsers
   const wagmiClient = usePstlWagmiClient({
     ...config,
-    wagmiClient: augmentedWagmiConfig
+    connectors: dynamicConnectors
   })
-  const ethereumClient = usePstlEthereumClient(config.ethereumClient, wagmiClient, config.chains)
-  const chainIdFromUrl = useChainIdFromSearchParams(config.chains, config.chainFromUrlOptions)
+  const ethereumClient = usePstlEthereumClient(config.clients?.ethereum, wagmiClient, config.chains)
+  const chainIdFromUrl = useChainIdFromSearchParams(config.chains, config?.options?.chainFromUrlOptions)
 
   return (
     <>
-      {config.modals?.walletConnect && <PstlWeb3Modal {...config} ethereumClient={ethereumClient} />}
+      {config.modals?.walletConnect && <PstlWeb3Modal {...config} clients={{ ethereum: ethereumClient }} />}
       <PstlWagmiProvider
         wagmiClient={wagmiClient}
-        persistOnRefresh={!!config.wagmiClient?.options?.autoConnect}
+        persistOnRefresh={!!(config.options?.autoConnect || config.clients?.wagmi?.options?.autoConnect)}
         chainIdFromUrl={chainIdFromUrl}
       >
         <PstlWeb3ConnectionModal {...config.modals.root} chainIdFromUrl={chainIdFromUrl} />
@@ -42,30 +47,32 @@ const PstlW3ProvidersBase = <ID extends number, SC extends ChainsPartialReadonly
   )
 }
 
-function useAugmentWagmiConfig(
-  wagmiConfig: PstlWeb3ModalProps<number>['wagmiClient']
-): PstlWeb3ModalProps<number>['wagmiClient'] {
-  const connectors = wagmiConfig?.options?.connectors
-  const connectorsAux = typeof connectors === 'function' ? connectors?.() : connectors || []
+function useDynamicConnectors(
+  config: PstlWeb3ModalProps<number>
+): PstlWeb3ModalProps<number>['connectors'] | PstlWeb3ModalProps<number>['frameConnectors'] {
+  const dynamicConnectors = useMemo(
+    () =>
+      isIframe()
+        ? config.frameConnectors?.length
+          ? config.frameConnectors
+          : [addConnector(IFrameEthereumConnector, {})]
+        : config.connectors,
+    [config.connectors, config.frameConnectors]
+  )
 
-  const filteredConnectors = connectorsAux.filter((connector) => {
-    return Boolean((connector as ConnectorEnhanced<any, any> & { isIFrame?: boolean })?.isIFrame) == isIframe()
-  })
+  if (process.env.IS_COSMOS) {
+    devDebug('[@past3lle/web3-modal::useDynamicConnectors] COSMOS detected, returning connectors unaffected')
+    return config.connectors
+  }
 
   devDebug(
-    '[@past3lle/web3-modal::useFilterFrameConnectors]::filtered connectors:',
-    filteredConnectors,
+    '[@past3lle/web3-modal::useDynamicConnectors] Checking connectors compatibility...',
+    dynamicConnectors,
     'Is iFrame?',
     isIframe()
   )
 
-  return {
-    ...wagmiConfig,
-    options: {
-      ...wagmiConfig?.options,
-      connectors: filteredConnectors
-    }
-  }
+  return dynamicConnectors
 }
 
 const PstlW3Providers = memo(PstlW3ProvidersBase)
@@ -77,6 +84,9 @@ export {
   // hooks
   usePstlEthereumClient,
   usePstlWagmiClient,
+  // utils
+  addConnector,
+  addFrameConnector,
   // types
   type PstlWeb3ModalProps,
   type PstlWagmiClientOptions,

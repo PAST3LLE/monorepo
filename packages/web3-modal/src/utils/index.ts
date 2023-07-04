@@ -38,7 +38,8 @@ export function runConnectorConnectionLogic(
   ReturnType<typeof useConnection>[1]['connect'] | ReturnType<typeof useConnection>[1]['openWalletConnectModal']
 ] {
   let modalType: ProviderModalType = (
-    connectorDisplayOverrides?.[connector?.name] || connectorDisplayOverrides?.[connector?.id]
+    connectorDisplayOverrides?.[trimAndLowerCase(connector?.name)] ||
+    connectorDisplayOverrides?.[trimAndLowerCase(connector?.id)]
   )?.modalNodeId
   let isModalMounted = true
   switch (connector.id) {
@@ -65,7 +66,7 @@ export function runConnectorConnectionLogic(
         modalType,
         connector,
         currentConnector,
-        { chainId, address, closeOnConnect, isModalMounted },
+        { chainId, address, closeOnConnect, isModalMounted, connectorDisplayOverrides },
         {
           connect,
           openWalletConnectModal,
@@ -145,7 +146,9 @@ async function _connectProvider(
   modalId: ProviderModalType,
   connector: ConnectorEnhanced<any, any>,
   currentConnector: ConnectorEnhanced<any, any> | undefined,
-  constants: Pick<GetConnectorInfoConstants, 'address' | 'chainId' | 'closeOnConnect'> & { isModalMounted?: boolean },
+  constants: Pick<GetConnectorInfoConstants, 'address' | 'chainId' | 'closeOnConnect' | 'connectorDisplayOverrides'> & {
+    isModalMounted?: boolean
+  },
   callbacks: Omit<
     GetConnectorInfoCallbacks,
     'setProviderModaLoading' | 'setProviderModalMounted' | 'setW3mModalLoading' | 'setW3mModalMounted'
@@ -154,7 +157,7 @@ async function _connectProvider(
     setModalMounted?: (status: boolean) => void
   }
 ) {
-  const { address, chainId, isModalMounted } = constants
+  const { address, chainId, isModalMounted, connectorDisplayOverrides } = constants
   const { connect, setModalLoading, setModalMounted, openWalletConnectModal } = callbacks
 
   try {
@@ -163,7 +166,7 @@ async function _connectProvider(
       return _handleConnectorClick(
         connector,
         currentConnector,
-        { chainId, address },
+        { chainId, address, connectorDisplayOverrides },
         { connect, openWalletConnectModal }
       )
     } else if (!!modalId) {
@@ -194,7 +197,9 @@ function _getProviderInfo(
   currentConnector: ConnectorEnhanced<any, any> | undefined,
   connectorDisplayOverrides: GetConnectorInfoConstants['connectorDisplayOverrides']
 ) {
-  const baseConnectorKey = connectorDisplayOverrides?.[connector.id] || connectorDisplayOverrides?.[connector.name]
+  const baseConnectorKey =
+    connectorDisplayOverrides?.[trimAndLowerCase(connector?.id)] ||
+    connectorDisplayOverrides?.[trimAndLowerCase(connector?.name)]
   return {
     label: baseConnectorKey?.customName || connector.name,
     logo: baseConnectorKey?.logo || connector?.logo,
@@ -206,7 +211,11 @@ function _getProviderInfo(
 async function _handleConnectorClick(
   connector: ConnectorEnhanced<any, any>,
   currentConnector: ConnectorEnhanced<any, any> | undefined,
-  { address, chainId }: Pick<GetConnectorInfoConstants, 'address' | 'chainId'>,
+  {
+    address,
+    chainId,
+    connectorDisplayOverrides
+  }: Pick<GetConnectorInfoConstants, 'address' | 'chainId' | 'connectorDisplayOverrides'>,
   { connect, openWalletConnectModal }: Pick<GetConnectorInfoCallbacks, 'openWalletConnectModal' | 'connect'>
 ) {
   const isConnectedConnector = currentConnector?.id === connector.id
@@ -214,11 +223,32 @@ async function _handleConnectorClick(
     return openWalletConnectModal({ route: 'Account' })
   } else {
     await currentConnector?.disconnect()
+
     switch (connector.id) {
       case DefaultWallets.WEB3MODAL:
         return openWalletConnectModal({ route: 'ConnectWallet' })
-      default:
-        return connect({ connector, chainId })
+      default: {
+        return connect({ connector, chainId }).catch((error) => {
+          const errorMessage = new Error(error).message
+          const connectorNotFoundError = errorMessage?.includes('ConnectorNotFoundError')
+
+          const override =
+            connectorDisplayOverrides?.[trimAndLowerCase(connector?.name)] ||
+            connectorDisplayOverrides?.[trimAndLowerCase(connector?.id)]
+
+          if (override?.downloadUrl && connectorNotFoundError) {
+            window.open(override.downloadUrl, '_newtab')
+          }
+
+          throw error
+        })
+      }
     }
   }
+}
+
+export function trimAndLowerCase(thing: string | undefined) {
+  if (!thing) return ''
+
+  return thing.replace(' ', '').toLowerCase()
 }

@@ -1,18 +1,93 @@
 import { useIsSmallMediaWidth } from '@past3lle/hooks'
+import { ConnectArgs, ConnectResult } from '@wagmi/core'
 import { useWeb3Modal } from '@web3modal/react'
 import { useCallback } from 'react'
-import { Address, Chain, Connector, useAccount, useBalance, useConnect, useDisconnect, useNetwork } from 'wagmi'
+import {
+  Address,
+  Chain,
+  Connector,
+  useAccount,
+  useBalance,
+  useConnect as useConnectWagmi,
+  useDisconnect as useDisconnectWagmi,
+  useNetwork
+} from 'wagmi'
 
 import { usePstlWeb3Modal } from './usePstlWeb3Modal'
 
-type Callbacks = Pick<ReturnType<typeof useDisconnect>, 'disconnect'> & {
+type Callbacks = Pick<ReturnType<typeof useDisconnectWagmi>, 'disconnect'> & {
   openWalletConnectModal: ReturnType<typeof useWeb3Modal>['open']
   closeWalletConnectModal: ReturnType<typeof useWeb3Modal>['close']
   openRootModal: ReturnType<typeof usePstlWeb3Modal>['open']
   closeRootModal: ReturnType<typeof usePstlWeb3Modal>['close']
   onNetworkClick: () => Promise<void>
   onAccountClick: () => Promise<void>
-  connect: ReturnType<typeof useConnect>['connectAsync']
+  connect: ReturnType<typeof useConnectWagmi>['connectAsync']
+}
+
+type DisconnectConfig = {
+  /** Function to invoke when an error is thrown while connecting. */
+  onError?: (error: Error, context: unknown) => void | Promise<unknown>
+  /**
+   * Function fires before mutation function and is passed same variables mutation function would receive.
+   * Value returned from this function will be passed to both onError and onSettled functions in event of a mutation failure.
+   */
+  onMutate?: () => unknown
+  /** Function to invoke when connect is settled (either successfully connected, or an error has thrown). */
+  onSettled?: (error: Error | null, context: unknown) => void | Promise<unknown>
+  /** Function fires when mutation is successful and will be passed the mutation's result */
+  onSuccess?: (context: unknown) => void | Promise<unknown>
+}
+
+type ConnectConfig = DisconnectConfig & {
+  /** Function to invoke when connect is settled (either successfully connected, or an error has thrown). */
+  onSettled?:
+    | ((data: ConnectResult | undefined, error: Error | null, variables: ConnectArgs, context: unknown) => unknown)
+    | undefined
+}
+
+type UseConnectDisconnectProps = {
+  connect?: Partial<ConnectArgs> & ConnectConfig
+  disconnect?: DisconnectConfig
+}
+export function useConnectDisconnect(props?: UseConnectDisconnectProps): {
+  connect: ReturnType<typeof useConnectWagmi>
+  disconnect: ReturnType<typeof useDisconnectWagmi>
+} {
+  return { connect: useConnectWagmi(props?.connect), disconnect: useDisconnectWagmi(props?.disconnect) }
+}
+
+export function useUserConnectionInfo() {
+  const { address, connector, isConnected, isConnecting, isDisconnected, isReconnecting } = useAccount()
+  const { chain } = useNetwork()
+  const balanceInfo = useBalance({
+    address,
+    chainId: chain?.id
+  })
+  const { connectors, pendingConnector } = useConnectWagmi()
+
+  return {
+    address,
+    pendingConnector,
+    connector,
+    connectors,
+    isConnected,
+    isConnecting,
+    isDisconnected,
+    isReconnecting,
+    chain,
+    balance: balanceInfo
+  }
+}
+
+export function useWeb3Modals(): {
+  root: ReturnType<typeof usePstlWeb3Modal>
+  walletConnect: ReturnType<typeof useWeb3Modal>
+} {
+  return {
+    root: usePstlWeb3Modal(),
+    walletConnect: useWeb3Modal()
+  }
 }
 
 export type PstlW3mConnectionHook = [
@@ -70,29 +145,31 @@ export type PstlW3mConnectionHook = [
       }
     ]
  */
-export function useConnection(): PstlW3mConnectionHook {
-  const { open: openWalletConnectModal, close: closeWalletConnectModal, isOpen: isWalletConnectOpen } = useWeb3Modal()
-  const { open: openRootModal, close: closeRootModal, isOpen: isRootModalOpen } = usePstlWeb3Modal()
+type UseConnectionProps = {
+  connect: UseConnectDisconnectProps['connect']
+  disconnect: UseConnectDisconnectProps['disconnect']
+}
+export function useConnection(props?: UseConnectionProps): PstlW3mConnectionHook {
+  const {
+    root: { open: openRootModal, close: closeRootModal, isOpen: isRootModalOpen },
+    walletConnect: { open: openWalletConnectModal, close: closeWalletConnectModal, isOpen: isWalletConnectOpen }
+  } = useWeb3Modals()
 
   const {
-    connectAsync: connect,
-    connectors,
-    error,
-    isLoading,
-    pendingConnector,
-    isError,
-    isIdle,
-    isSuccess
-  } = useConnect()
-  const { disconnect } = useDisconnect()
-  const { address, connector, isConnected, isConnecting, isDisconnected, isReconnecting } = useAccount()
+    connect: { connectAsync: connect, connectors, error, isLoading, pendingConnector, isError, isIdle, isSuccess },
+    disconnect: { disconnect }
+  } = useConnectDisconnect(props)
 
-  const { chain } = useNetwork()
-
-  const balanceInfo = useBalance({
+  const {
     address,
-    chainId: chain?.id
-  })
+    chain,
+    balance: balanceInfo,
+    connector,
+    isConnected,
+    isConnecting,
+    isDisconnected,
+    isReconnecting
+  } = useUserConnectionInfo()
 
   const isMobileWidth = useIsSmallMediaWidth()
 
