@@ -3,7 +3,7 @@ import {
   useForgeGetUserConfigChainsAtom,
   useForgeWindowSizeAtom,
   useSupportedChainId,
-  useW3Connection
+  useW3AccountNetworkActions
 } from '@past3lle/forge-web3'
 import { MEDIA_WIDTHS } from '@past3lle/theme'
 import React from 'react'
@@ -26,7 +26,7 @@ export function NetworkInfoButton() {
   const chainName = chain?.name || (isSmallWidth ? 'login' : 'offline')
   const chainLogo = chainId ? assetsMap.icons.chains[chainId] : assetsMap.icons.chains.disconnected
 
-  const [, { onNetworkClick }] = useW3Connection()
+  const { onNetworkClick } = useW3AccountNetworkActions()
 
   return (
     <NetworkInfoButtonContainer

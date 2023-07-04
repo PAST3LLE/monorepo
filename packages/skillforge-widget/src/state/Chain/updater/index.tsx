@@ -1,11 +1,15 @@
-import { useForgeGetUserConfigChainsAtom, useForgeSetUrlToReadonlyChain, useW3Connection } from '@past3lle/forge-web3'
+import {
+  useForgeGetUserConfigChainsAtom,
+  useForgeSetUrlToReadonlyChain,
+  useW3UserConnectionInfo
+} from '@past3lle/forge-web3'
 import { useEffect, useMemo } from 'react'
 
 import { updateSearchParams } from '../../../utils/url'
 import { ForgeSearchParamKeys } from '../../SidePanel/updaters'
 
 export function ChainUpdater() {
-  const [, , { chain }] = useW3Connection()
+  const { chain } = useW3UserConnectionInfo()
   const [userChains] = useForgeGetUserConfigChainsAtom()
 
   const { chainParam } = useMemo(() => {

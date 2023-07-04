@@ -1,5 +1,5 @@
 import { Column, Row, Text } from '@past3lle/components'
-import { useForgeUserConfigAtom, useSupportedChainId, useW3Connection } from '@past3lle/forge-web3'
+import { useForgeUserConfigAtom, useSupportedChainId, useW3UserConnectionInfo } from '@past3lle/forge-web3'
 import { upToSmall } from '@past3lle/theme'
 import React from 'react'
 import styled, { useTheme } from 'styled-components'
@@ -16,7 +16,7 @@ interface ErrorPanelProps {
 export function ErrorPanel(props: ErrorPanelProps) {
   const [userConfig] = useForgeUserConfigAtom()
   const chainId = useSupportedChainId()
-  const [, , { address }] = useW3Connection()
+  const { address } = useW3UserConnectionInfo()
 
   const [, setPanelState] = useSidePanelWriteAtom()
 

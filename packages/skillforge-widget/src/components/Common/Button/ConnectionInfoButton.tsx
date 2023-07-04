@@ -1,5 +1,5 @@
 import { Row, Text } from '@past3lle/components'
-import { useW3Connection as usePstlConnection } from '@past3lle/forge-web3'
+import { useW3AccountNetworkActions, useW3UserConnectionInfo } from '@past3lle/forge-web3'
 import { useIsSmallMediaWidth } from '@past3lle/hooks'
 import { fromSmall, setBackgroundOrDefault } from '@past3lle/theme'
 import { truncateAddress } from '@past3lle/utils'
@@ -13,7 +13,8 @@ import { useAssetsMap } from '../../../theme/utils'
 import { MonospaceText } from '../Text'
 
 export function ConnectionInfoButton() {
-  const [, { onAccountClick }, { address }] = usePstlConnection()
+  const { address } = useW3UserConnectionInfo()
+  const { onAccountClick } = useW3AccountNetworkActions()
 
   const assetsMap = useAssetsMap()
   const logoUrlMaps = useGenericImageSrcSet()
