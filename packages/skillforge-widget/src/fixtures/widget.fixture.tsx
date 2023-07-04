@@ -115,10 +115,8 @@ function App() {
         },
         web3: {
           chains: commonProps.chains,
-          wagmiClient: {
-            options: {
-              pollingInterval: 10_000
-            }
+          options: {
+            pollingInterval: 15_000
           },
           modals: {
             walletConnect: commonProps.modals.walletConnect,
