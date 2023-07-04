@@ -1,13 +1,12 @@
-import connectors from '../connectors'
+import { frameConnectors } from '../connectors'
 import { SUPPORTED_CHAINS } from './chains'
-import { Web3ModalConfigWeb3Props } from '@past3lle/forge-web3'
-import { SupportedForgeNetworks } from '@past3lle/skilltree-contracts'
-import { FORGE_LOGO_URL_MAP, PstlWeb3AuthConnectorProps } from '@past3lle/web3-modal'
+import { SupportedForgeChains, Web3ModalConfigWeb3Props } from '@past3lle/forge-web3'
+import { PstlWeb3ModalProps } from '@past3lle/web3-modal'
 import { TorusWalletConnectorPlugin } from '@web3auth/torus-wallet-connector-plugin'
 import { ASSETS_MAP } from 'assets'
 import GOOGLE_APPLE_LOGO from 'assets/png/google-apple.png'
 import React from 'react'
-import { pstlModalTheme as PSTL_MODAL_THEME } from 'theme/pstlModal'
+import { FORGE_LOGO_URL_MAP, pstlModalTheme as PSTL_MODAL_THEME } from 'theme/pstlModal'
 import { skillforgeTheme as SKILLFORGE_THEME, skillforgeTheme } from 'theme/skillforge'
 
 if (
@@ -21,22 +20,22 @@ if (
 export const SKILLFORGE_APP_NAME = 'SKILLFORGE'
 export const WEB3_PROPS: Web3ModalConfigWeb3Props = {
   chains: SUPPORTED_CHAINS,
-  chainFromUrlOptions: {
-    type: 'network',
-    key: 'forge-network'
-  },
-  wagmiClient: {
-    options: {
-      pollingInterval: 10_000,
-      autoConnect: true,
-      connectors
+  frameConnectors,
+  options: {
+    pollingInterval: 10_000,
+    autoConnect: true,
+    chainFromUrlOptions: {
+      type: 'network',
+      key: 'forge-network'
     }
   },
   modals: {
     web3auth: {
       appName: SKILLFORGE_APP_NAME,
       // CYAN = USA focused
-      network: process.env.REACT_APP_WEB3_AUTH_NETWORK as PstlWeb3AuthConnectorProps<SupportedForgeNetworks>['network'],
+      network: process.env.REACT_APP_WEB3_AUTH_NETWORK as Required<
+        PstlWeb3ModalProps<SupportedForgeChains>['modals']
+      >['web3auth']['network'],
       projectId: process.env.REACT_APP_WEB3AUTH_ID as string,
       storageKey: 'session',
       preset: 'DISALLOW_EXTERNAL_WALLETS',
@@ -118,7 +117,7 @@ export const WEB3_PROPS: Web3ModalConfigWeb3Props = {
           logo: GOOGLE_APPLE_LOGO,
           customName: 'Google & more'
         },
-        walletConnect: {
+        walletconnect: {
           logo: 'https://raw.githubusercontent.com/WalletConnect/walletconnect-assets/master/Logo/Gradient/Logo.png',
           customName: 'Web3',
           infoText: {
