@@ -7,6 +7,8 @@ import BaseTheme from '../../theme/baseTheme'
 import { getPosition } from '../../utils'
 import { RecommendedLabelWrapper } from './RecommendedLabel'
 
+const ERROR_CONTAINER_HEIGHT_PX = 120
+
 export const ModalButton = styled(Button)<{ connected: boolean }>`
   position: relative;
   width: 100%;
@@ -83,7 +85,7 @@ export const ModalTitleText = styled(Text.SubHeader)`
     theme.modals?.connection?.title?.lineHeight || BaseTheme.modes.DEFAULT.modals.connection.title.lineHeight};
 `
 
-export const InnerContainer = styled(ColumnCenter)`
+export const InnerContainer = styled(ColumnCenter)<{ isError?: boolean }>`
   filter: ${({ theme }) => theme.modals?.connection?.filter};
 
   position: relative;
@@ -102,6 +104,8 @@ export const InnerContainer = styled(ColumnCenter)`
 
   padding: ${({ theme: { modals } }) =>
     modals?.connection?.padding || BaseTheme.modes.DEFAULT.modals.connection.padding};
+
+  ${({ isError }) => isError && `padding-bottom: ${ERROR_CONTAINER_HEIGHT_PX}px;`}
 
   overflow-y: auto;
 
@@ -127,6 +131,27 @@ export const InnerContainer = styled(ColumnCenter)`
     })};
 `
 
+export const ErrorMessageContainer = styled(InnerContainer)<{ hide: boolean }>`
+  opacity: ${({ hide }) => (hide ? 0 : 1)};
+
+  overflow: auto;
+  height: ${ERROR_CONTAINER_HEIGHT_PX}px;
+  padding: 1rem 2rem;
+  border-radius: 0 0 1rem 1rem;
+  background: #00000070;
+  position: absolute;
+  bottom: 0;
+  > p {
+    font-family: monospace;
+    color: indianred;
+    font-variation-settings: 'wght' 500;
+    font-size: 1rem;
+    font-style: normal;
+  }
+
+  transition: opacity 0.5s ease-in-out;
+`
+
 export const StyledConnectionModal = styled(Modal)`
   ${upToSmall`
     div {
@@ -139,7 +164,12 @@ export const StyledConnectionModal = styled(Modal)`
           > ${InnerContainer}{
             border-bottom-left-radius: 0;
             border-bottom-right-radius: 0;
+            
+             > ${ErrorMessageContainer} {
+              border-radius: 1rem 1rem 0 0;
+            }
           }
+
         }
       }
   `}
@@ -147,6 +177,7 @@ export const StyledConnectionModal = styled(Modal)`
 
 export const WalletsWrapper = styled.div<{ view?: PstlWeb3ConnectionModalProps['walletsView'] }>`
   width: 100%;
+  overflow: scroll;
 
   > ${ModalButton} {
     > img {

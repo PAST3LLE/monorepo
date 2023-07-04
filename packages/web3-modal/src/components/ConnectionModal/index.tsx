@@ -14,7 +14,7 @@ import { LoadingScreen, LoadingScreenProps } from '../LoadingScreen'
 import { ConnectorHelper } from './ConnectorHelper'
 import { ErrorModal } from './ErrorModal'
 import { RenderConnectorOptions } from './RenderConnectorOptions'
-import { InnerContainer, ModalTitleText, StyledConnectionModal, WalletsWrapper } from './styled'
+import { ErrorMessageContainer, InnerContainer, ModalTitleText, StyledConnectionModal, WalletsWrapper } from './styled'
 import { cleanAndFormatConnectorOverrides, sortConnectorsByRank } from './utils'
 
 interface ThemeConfigProps<
@@ -137,7 +137,7 @@ function ModalWithoutThemeProvider({
       }}
       {...restModalProps}
     >
-      <InnerContainer justifyContent="flex-start" gap="0.75rem">
+      <InnerContainer justifyContent="flex-start" gap="0.75rem" isError={showError && !!error?.message}>
         <CloseIcon height={30} width={100} onClick={modalCallbacks.root.close} />
         <ModalTitleText
           fontSize={theme.modals?.connection?.title?.fontSize || '2em'}
@@ -153,26 +153,15 @@ function ModalWithoutThemeProvider({
             {connectorDisplayOverrides?.general.infoText.content}
           </ConnectorHelper>
         )}
-        {showError && error?.message && (
-          <p
-            style={{
-              padding: '1rem',
-              width: '90%',
-              borderRadius: '0.25rem',
-              backgroundColor: '#cd5c5cb3',
-              fontVariationSettings: "'wght' 100",
-              fontSize: '1rem',
-              fontStyle: 'normal'
-            }}
-          >
-            {error.message}
-          </p>
-        )}
         {providerLoadingState[0] ? (
           <LoadingScreen {...loaderProps} />
         ) : (
           <WalletsWrapper view={modalView}>{data}</WalletsWrapper>
         )}
+
+        <ErrorMessageContainer hide={!showError || !error?.message}>
+          <p>{error?.message}</p>
+        </ErrorMessageContainer>
       </InnerContainer>
     </StyledConnectionModal>
   )
