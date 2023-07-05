@@ -45,11 +45,12 @@ export default modalTheme
 
 ### 2: Create a config.ts file
 ```tsx
-import { PstlWeb3ModalProps } from '@past3lle/web3-modal'
+import { PstlWeb3ModalProps, addConnector } from '@past3lle/web3-modal'
 import { mainnet } from '@wagmi/chains'
 import modalTheme, { PALETTE } from 'theme'
 
 import { LedgerConnector } from 'wagmi/connectors/ledger'
+import { LedgerHIDConnector } from '@past3lle/wagmi-connectors'
 
 // Ranks wallet connectors on modal (higher number = higher in modal list)
 enum WalletRank {
@@ -67,78 +68,101 @@ enum ZIndices {
 }
 
 // app accepted chains
+// import from wagmi (see above)
 const chains = [mainnet]
-// Get these from cloud.walletconnect.com and dashboard.web3auth.io, respectively
+// cloud.walletconnect.com
 const WALLETCONNECT_PROJECT_ID = 'WALLETCONNECT_PROJECT_ID'
+// dashboard.web3auth.io
 const WEB3AUTH_PROJECT_ID = 'WEB3AUTH_PROJECT_ID'
 
 const config = {
   appName: 'Test App',
   chains,
-  wagmiClient: {
-    options: {
-      pollingInterval: 10_000,
-      // add any custom connectors here
-        connectors: [
-            new LedgerConnector({ 
-                chains, 
-                options: { 
-                    projectId: WALLETCONNECT_PROJECT_ID, 
-                    walletConnectVersion: 2 
-                } 
-            })
-        ]
-    }
+  connectors: [
+      // Adds LedgerHID connector
+      addConnector(LedgerHIDConnector, {}),
+      // Adds LedgerLive modal connector
+      addConnector(LedgerConnector, { 
+        projectId: WALLETCONNECT_PROJECT_ID, 
+        walletConnectVersion: 2 
+      }),
+      // Adds MetaMask injected connector
+      addConnector(InjectedConnector, {
+        name: 'MetaMask',
+        shimDisconnect: true,
+        getProvider() {
+          try {
+            // You may need to (window as any)?.ethereum? ...
+            // Or create a declarations.d.ts file in your /src/ root
+            const provider = window?.ethereum?.providers?.find((provider) => provider?.isMetaMask)
+            if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
+            return provider
+          } catch (error) {
+            return undefined
+          }
+        }
+      }),
+  ],
+  options: {
+    // How often to poll for new data
+    pollingInterval: 20_000,
+    // If you want to try and load chain/network data from URL
+    // WARNING: this can be unreliable depending on the base app's existing URL logic
+    chainFromUrlOptions: { 
+      // Type: 'network' | 'chain' (network == name of network & chain == chainId)
+      type: 'network', 
+      // URL key to look for
+      // e.g { type: 'network', key: 'web3-network' } ==> https://your-dapp-url.io/?web3-network=goerli
+      // e.g { type: 'chain', key: 'web3-chain' } ==> https://your-dapp-url.io/?web3-chain=5
+      key: 'web3-modal-network' 
+    },
   },
+  // frameConnectors : [], <-- Connectors to use ONLY in iFrame Dapp browsers (e.g LedgerLive)
+  // Defaults to IFrameEthereum connector in iFrame mode so there is likely nothing you need to add here
   modals: { 
-    pstl: {
+    root: {
+      // Auto detect connection and close modal
       closeModalOnConnect: true,
+      // Base z-index of root modal. Should be lowest in the hierarchy of modals, but higher than your lower app
       zIndex: ZIndices.BASE,
       title: 'TITLE HERE',
+      // Create a theme object via the aptly named, `createTheme` function
       themeConfig: {
         theme: modalTheme
       },
+      // Hide (non-specified) injected wallets from modal
+      // E.g you add MetaMask in the connectors prop above but don't want detection for Taho if user has it
       hideInjectedFromRoot: true,
+      // Key/value pair of connector UI overrides
       connectorDisplayOverrides: {
-        web3auth: {
-          logo: 'https://www.pngkit.com/png/full/178-1783296_g-transparent-circle-google-logo.png',
-          customName: 'GMAIL & MOBILE',
-          // Uncomment to add helper text under connectors
-          // infoText: {
-          //   title: 'How does this option connect me to the blockchain?',
-          //   content:
-          //     'Choose this to ... etc etc'
-          // },
-          rank: WalletRank['web3auth']
-        },
-        walletConnect: {
-          // Uncomment to add helper text under connectors
-          // infoText: {
-          //   title: 'What is this option?',
-          //   content: 'Choose this to open the WalletConnect wallet modal and select a 3rd party wallet of your choice!'
-          // },
-          rank: WalletRank['walletConnect']
-        },
         ledger: {
           logo:
             'https://play-lh.googleusercontent.com/mHjR3KaAMw3RGA15-t8gXNAy_Onr4ZYUQ07Z9fG2vd51IXO5rd7wtdqEWbNMPTgdqrk',
           customName: 'LEDGER LIVE',
-          // Uncomment to add helper text under connectors
-          // infoText: {
-          //   title: 'What is this option?',
-          //   content: 'Choose this to connect with your Ledger hardware wallet via the LedgerLive desktop app!'
-          // },
+          infoText: {
+            title: 'What is this option?',
+            content: 'Choose this to connect with your Ledger hardware wallet via the LedgerLive desktop app!'
+          },
           rank: WalletRank['ledger']
+        },
+        metamask: {
+          logo: 'https://metamask-logo.io',
+          customName: 'Annoying FOX provider',
+          rank: 100,
+          // Optional. Open a new tab to this URL if provider/connector not injected/found.
+          downloadUrl: 'https://metamask.io/download/'
         }
       }
     },
-    w3a: {
+    // Web3Auth is built in. Leave this undefined (or empty) to not include as a connector/provider
+    web3auth: {
       appName: 'Test App',
       projectId: WEB3AUTH_PROJECT_ID,
       network: 'testnet',
       preset: 'DISALLOW_EXTERNAL_WALLETS'
     },
-    w3m: {
+    // WalletConnect Web3Modal props.
+    walletConnect: {
       // test id, don't use in prod!
       projectId: WALLETCONNECT_PROJECT_ID,
       zIndex: 1000,
@@ -177,15 +201,27 @@ export default function App() {
 appName: string
 // Required. App chains. Import them from "@wagmi/chains" or "wagmi/chains" or "viem"
 chains: Chain[]
-// Optional. Options for getting the chain info from URL.
-// type: 'network' expects url schema: "someUrl.com/?network=goerli
-// type: 'id' expects url schema: "someUrl.com/?id=5
-chainFromUrlOptions?: { key: string; type: 'network' | 'id' }
+// Optional. Array of connectors creator functions to add. E.g LedgerConnector as shown in the example implementation.
+connectors?: ((chains: Chain[]) => Connector<any, any>)[] // Default: undefined
+options?: {
+  // Optional. Options for getting the chain info from URL.
+  // type: 'network' expects url schema: "someUrl.com/?network=goerli
+  // type: 'id' expects url schema: "someUrl.com/?id=5
+  chainFromUrlOptions?: { key: string; type: 'network' | 'id' }
+  // Optional. Polling interval in milliseconds.
+  pollingInterval?: number // Default: 4000 (4s)
+  // Optional. Reconnects last connected provider on reload.
+  autoConnect?: boolean // Default: false
+}
+// Optional. Advanced. 
+// WagmiClient props. 
+// We recommended NOT changing/adding anything here and letting the app handle this.
+// If you need more options, use the root.options prop (see above)
 wagmiClient?: {
     // Optional. Client is automatically created for you if left undefined here.
     // We recommend not passing a client here and letting the app create one for you.
     client?: WagmiClient
-    // Optional. Wagmi creation options.
+    // Optional. Wagmi creation options. Using the root "options" prop WILL OVERRIDE props of the same name.
     options?: {
         // Optional. Array of publicClient objects in order of importance (lower index = higher importance)
         // Clients are normally created via Wagmi's configureChains function
@@ -198,12 +234,13 @@ wagmiClient?: {
         autoConnect?: boolean // Default: false
     }
 }
-// Optional. Ethereum client.
+// Optional. Advanced.
+// Ethereum client props.
 // If blank, app handles creation of Ethereum client.
-// We recommend not passing your own and letting the app handle this.
+// We recommend NOT passing your own and letting the app handle this.
 ethereumClient?: EthereumClient
 modals: {
-    pstl?: {
+    root?: {
         // Optional. Modal title.
         title?: string // Default: "WALLET CONNECTION"
         // Optional. Base modal z-index value.
@@ -261,13 +298,14 @@ modals: {
         // Optional. React children to render inside Modal
         children?: React.ReactNode
     }
-    w3a: {
+    // Optional. Omit to remove Web3Auth connector
+    web3auth: {
         // Required. Web3Auth app name
         appName: string
         // Required. Web3Auth projectId from https://dashboard.web3auth.io
         projectId: WEB3AUTH_PROJECT_ID
         // Required. Web3Auth network.
-        network: "mainnet" | "testnet" | "cyan" | "development" | "aqua"
+        network: "mainnet" | "cyan" | "development" | "aqua"
         // Optional. Preset settings
         // "DISALLOW_EXTERNAL_WALLETS" = don't show external wallets
         // "ALLOW_EXTERNAL_WALLETS" = show external wallets to connect to (e.g injected)
@@ -281,7 +319,8 @@ modals: {
         // Optional. Configure function for adding connectors into web3auth.
         configureAdditionalConnectors?: (() => IPlugin[] | undefined) // Default: undefined
     }
-    w3m: {
+    // WalletConnect -> Web3Modal props
+    walletConnect: {
         // WalletConnect projectId. Get yours at https://cloud.walletconnect.com
         projectId: string
         // Optional. WalletConnect modal z-index.
