@@ -1,14 +1,10 @@
+import { MakeOptional } from '@past3lle/types'
 import { IFrameEthereumConnector } from '@past3lle/wagmi-connectors'
+import { InjectedConnectorOptions } from '@wagmi/core'
 import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
 import { useMemo } from 'react'
 import { Chain } from 'viem'
-import {
-  Config as ClientConfig,
-  Connector,
-  WagmiConfigProps,
-  configureChains,
-  createConfig as createClient
-} from 'wagmi'
+import { Config as ClientConfig, WagmiConfigProps, configureChains, createConfig as createClient } from 'wagmi'
 import { publicProvider } from 'wagmi/providers/public'
 
 import { PstlWeb3AuthConnector, PstlWeb3AuthConnectorProps } from '../../connectors/web3auth'
@@ -120,14 +116,52 @@ export function usePstlEthereumClient<ID extends number>(
   return client
 }
 
+/**
+ * @name addConnector
+ * @description Adds a new Wagmi connector to the modal. Takes 2 parameters:
+ * @param Connector - Uninstantiated connector Class
+ * @param params - Class constructor "options" params passed inside an object
+ * @returns Instantiated connector with set options and chains (passed from root inside API)
+ * 
+ * @example
+  addConnector(InjectedConnector, {
+    // Not necessary or allowed to pass chains here, just options. if connector accepts them
+    options: {
+      name: 'MetaMask',
+      shimDisconnect: true,
+      getProvider() {
+        try {
+          const provider = window?.ethereum?.providers?.find((provider) => provider?.isMetaMask)
+          if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
+          return provider
+        } catch (error) {
+          return undefined
+        }
+      }
+    }
+  })
+ */
+
+type ConnectorIsInjected<C extends Instance<any>> = Required<
+  Required<Required<ConstructorParameters<C>>[0]>['options']
+>['shimDisconnect'] extends boolean
+  ? true
+  : false
+
+type GetConnectorConstructorParams<C extends Instance<any>> = ConnectorIsInjected<C> extends true
+  ? Omit<Required<Required<ConstructorParameters<C>>[0]>, 'chains'> & {
+      options: MakeOptional<Required<InjectedConnectorOptions>, 'shimDisconnect'>
+    }
+  : Partial<Omit<ConstructorParameters<C>[0], 'chains'>>
+
 export const addConnector =
-  <C extends Class<Connector<any, any>>, T extends Record<string, unknown>>(Connector: C, options: T) =>
+  <C extends Instance<any>>(Connector: C, params: GetConnectorConstructorParams<C>) =>
   (chains: Chain[]) =>
-    new Connector({ chains, options })
+    new Connector({ chains, options: params?.options })
 
 export const addFrameConnector =
-  <C extends Class<IFrameEthereumConnector>, T extends Record<string, unknown>>(Connector: C, options: T) =>
+  <C extends Instance<IFrameEthereumConnector>>(Connector: C, params: GetConnectorConstructorParams<C>) =>
   (chains: Chain[]) =>
-    new Connector({ chains, options })
+    new Connector({ chains, options: params?.options })
 
-type Class<T> = new (...args: any[]) => T
+type Instance<T> = new (...args: any[]) => T

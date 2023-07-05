@@ -31,4 +31,8 @@ export type ConnectorEnhancedExtras = {
   downloadUrl?: string
 }
 export type ConnectorEnhanced<P, O> = Connector<P, O> & ConnectorEnhancedExtras
+/**
+ * @name ConnectorOverrides
+ * @description Key/Value pair overriding connector info. Displays in root modal. See {@link ConnectorEnhancedExtras}
+ */
 export type ConnectorOverrides = { [id: string]: ConnectorEnhancedExtras | undefined }

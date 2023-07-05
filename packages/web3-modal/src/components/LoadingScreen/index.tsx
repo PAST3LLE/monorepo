@@ -6,8 +6,17 @@ import styled from 'styled-components'
 import { ModalTitleText } from '../ConnectionModal/styled'
 
 interface LoadingContainerProps {
+  /**
+   * @description Container bg colour
+   */
   backgroundColor?: string
+  /**
+   * @description Container bg img url (override backgroundColor)
+   */
   backgroundImg?: string
+  /**
+   * @description Container border radius
+   */
   borderRadius?: string
 }
 const LoadingContainerFadeIn = styled(ArticleFadeIn)<LoadingContainerProps>`
@@ -32,14 +41,41 @@ const LoadingContainerFadeIn = styled(ArticleFadeIn)<LoadingContainerProps>`
 `
 
 interface SpinnerProps {
+  /**
+   * @name src
+   * @description source URL
+   */
   src?: string | undefined
+  /**
+   * @name suze
+   * @description Number size of spinner (in px)
+   * @default 20
+   */
   size?: number | undefined
+  /**
+   * @name invertColor
+   * @description Boolean. Inverts color of spinner
+   * @default false
+   */
   invertColor?: boolean
 }
 
 export interface LoadingScreenProps {
+  /**
+   * @name containerProps
+   * @description Optional. Spinner container style props.
+   */
   containerProps?: LoadingContainerProps
+  /**
+   * @name spinnerProps
+   * @description Async spinner props: src, size, invertColor
+   */
   spinnerProps?: SpinnerProps
+  /**
+   * @name loadingText
+   * @description Optional. String label to show on load.
+   * @default "QUERYING INFO..."
+   */
   loadingText?: string
 }
 

@@ -214,15 +214,12 @@ export default {
         connectors: [
           wagmiConnectors.ledgerLiveModal,
           addConnector(InjectedConnector, {
-            name: 'MetaMask',
-            shimDisconnect: true,
-            getProvider() {
-              try {
-                const provider = window?.ethereum?.providers?.find((provider) => provider?.isMetaMask)
-                if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                return provider
-              } catch (error) {
-                return undefined
+            options: {
+              name: 'Coinbase Wallet',
+              getProvider() {
+                return window?.ethereum?.isCoinbaseWallet
+                  ? window.ethereum.providerMap?.get('CoinbaseWallet')
+                  : window?.coinbaseWalletExtension
               }
             }
           })
@@ -339,42 +336,48 @@ export default {
           ...DEFAULT_PROPS,
           connectors: [
             addConnector(InjectedConnector, {
-              name: 'MetaMask',
-              shimDisconnect: true,
-              getProvider() {
-                try {
-                  const provider = window?.ethereum?.providers?.find((provider) => provider?.isMetaMask)
-                  if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                  return provider
-                } catch (error) {
-                  return undefined
+              options: {
+                name: 'MetaMask',
+                shimDisconnect: true,
+                getProvider() {
+                  try {
+                    const provider = window?.ethereum?.providers?.find((provider) => provider?.isMetaMask)
+                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
+                    return provider
+                  } catch (error) {
+                    return undefined
+                  }
                 }
               }
             }),
             addConnector(InjectedConnector, {
-              name: 'Taho',
-              shimDisconnect: true,
-              getProvider() {
-                try {
-                  const provider = window?.tally
-                  if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                  return provider
-                } catch (error) {
-                  return undefined
+              options: {
+                name: 'Taho',
+                shimDisconnect: true,
+                getProvider() {
+                  try {
+                    const provider = window?.tally
+                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
+                    return provider
+                  } catch (error) {
+                    return undefined
+                  }
                 }
               }
             }),
             addConnector(InjectedConnector, {
-              name: 'Coinbase Wallet',
-              shimDisconnect: true,
-              getProvider() {
-                try {
-                  const provider =
-                    (window?.ethereum?.isCoinbaseWallet && window.ethereum) || window?.coinbaseWalletExtension
-                  if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                  return provider
-                } catch (error) {
-                  return undefined
+              options: {
+                name: 'Coinbase Wallet',
+                shimDisconnect: true,
+                getProvider() {
+                  try {
+                    const provider =
+                      (window?.ethereum?.isCoinbaseWallet && window.ethereum) || window?.coinbaseWalletExtension
+                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
+                    return provider
+                  } catch (error) {
+                    return undefined
+                  }
                 }
               }
             })
@@ -416,42 +419,48 @@ export default {
             wagmiConnectors.ledgerHID,
             wagmiConnectors.ledgerLiveModal,
             addConnector(InjectedConnector, {
-              name: 'MetaMask',
-              shimDisconnect: true,
-              getProvider() {
-                try {
-                  const provider = window?.ethereum?.providers?.find((provider) => provider?.isMetaMask)
-                  if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                  return provider
-                } catch (error) {
-                  return undefined
+              options: {
+                name: 'MetaMask',
+                shimDisconnect: true,
+                getProvider() {
+                  try {
+                    const provider = window?.ethereum?.providers?.find((provider) => provider?.isMetaMask)
+                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
+                    return provider
+                  } catch (error) {
+                    return undefined
+                  }
                 }
               }
             }),
             addConnector(InjectedConnector, {
-              name: 'Taho',
-              shimDisconnect: true,
-              getProvider() {
-                try {
-                  const provider = window?.tally
-                  if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                  return provider
-                } catch (error) {
-                  return undefined
+              options: {
+                name: 'Taho',
+                shimDisconnect: true,
+                getProvider() {
+                  try {
+                    const provider = window?.tally
+                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
+                    return provider
+                  } catch (error) {
+                    return undefined
+                  }
                 }
               }
             }),
             addConnector(InjectedConnector, {
-              name: 'Coinbase Wallet',
-              shimDisconnect: true,
-              getProvider() {
-                try {
-                  const provider =
-                    (window?.ethereum?.isCoinbaseWallet && window.ethereum) || window?.coinbaseWalletExtension
-                  if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                  return provider
-                } catch (error) {
-                  return undefined
+              options: {
+                name: 'Coinbase Wallet',
+                shimDisconnect: true,
+                getProvider() {
+                  try {
+                    const provider =
+                      (window?.ethereum?.isCoinbaseWallet && window.ethereum) || window?.coinbaseWalletExtension
+                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
+                    return provider
+                  } catch (error) {
+                    return undefined
+                  }
                 }
               }
             })

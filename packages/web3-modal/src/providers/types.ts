@@ -88,17 +88,63 @@ export type Web3ModalConfig<ID extends number, SC extends ChainsPartialReadonly<
 
 export type PstlWeb3ModalOptions = Omit<
   PstlWagmiClientOptions<number>['options'] & {
+    /**
+     * @name chainFromUrlOptions
+     * @description Load chain[number] or network[string] data from URL
+     * ! Use with caution. Depending on underlying app URL logic, this can be unreliable / broken!
+     * @warning this can be unreliable depending on the base app's existing URL logic
+     */
     chainFromUrlOptions?: { key: string; type: 'network' | 'id' }
+    /**
+     * @name autoConnect
+     * @description Boolean. Whether or not to attempt re-connect to last connected connector.
+     * @default false
+     */
     autoConnect?: boolean
   },
   'publicClient' | 'publicClients' | 'connectors'
 >
 export interface Web3ModalProps<ID extends number, SC extends ChainsPartialReadonly<ID>> {
   appName: string
+  /**
+   * @name chains
+   * @description Wagmi chains to allow.
+   * @example 
+    import { mainnet, goerli, polygon } from '@wagmi/chains'
+    ...
+    return (
+      <PstlW3Providers
+        config={{
+          chains: [mainnet, goerli, polygon],
+          ...
+        }}
+        ...
+      />
+    )
+   */
   chains: SC
   /**
    * @name connectors
-   * @description Wagmi connectors. Loaded in normal, non-iframe dapps (e.g skills.pastelle.shop)
+   * @description Optional. Custom wagmi connectors. Loaded in normal, non-iframe dapps (e.g skills.pastelle.shop). For iFrame connectors, see {@link frameConnectors}
+   * @example
+      import { InjectedConnector } from 'wagmi/connectors/MetaMask'
+      import { addConnector } from '@past3lle/web3-modal'
+
+      addConnector(InjectedConnector, {
+        name: 'MetaMask',
+        shimDisconnect: true,
+        getProvider() {
+          try {
+            // Add a declarations.d.ts in root /src/ with ethereum object 
+            // OR use (window as any)?.ethereum
+            const provider = window?.ethereum?.providers?.find((provider) => provider?.isMetaMask)
+            if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
+            return provider
+          } catch (error) {
+            return undefined
+          }
+        }
+      })
    */
   connectors?: ((chains: ChainWagmi[]) => ConnectorEnhanced<any, any>)[]
   /**
@@ -106,9 +152,71 @@ export interface Web3ModalProps<ID extends number, SC extends ChainsPartialReado
    * @description iFrame connectors. ONLY loaded in iFrame Dapp browsers (e.g LedgerLive Discovery)
    */
   frameConnectors?: ((chains: ChainWagmi[]) => IFrameEthereumConnector)[]
+  /**
+   * @name PstlW3Provider.modals
+   * @description Modal props: root, walletConnect, web3auth. See each for more info.
+   */
   modals: {
+    /**
+     * @description Root modal props. Mostly UI/UX
+     * @example 
+     interface PstlWeb3ModalProps.modals.root {
+        // Optional. Modal title, appears at top.
+        title?: string
+        // Optional. Theme config. Set modal theme.
+        themeConfig?: ThemeConfigProps
+        // Optional. Loader props when async loading wallet modals.
+        loaderProps?: LoadingScreenProps
+        // Optional. Modal button style props.
+        buttonProps?: ButtonProps
+        // Optional. Detect connect and auto-close modal.
+        closeModalOnConnect?: boolean
+        // Optional. Hide detected injected wallet from root modal. 
+        // Useful when passing own injected connectors in config.
+        hideInjectedFromRoot?: boolean
+        // Optional. Set root modal wallets view: 'grid' or 'list'.
+        // Default: 'list'. Mobile is ALWAYS in 'list' view.
+        walletsView?: 'grid' | 'list'
+        // Optional. Key/Value pair overriding connector info. Displays in root modal.
+        // Default: undefined
+        connectorDisplayOverrides?: ConnectorOverrides
+        // Optional. Root modal z-index.
+        zIndex?: number
+    }
+     */
     root?: Omit<PstlWeb3ConnectionModalProps, 'isOpen' | 'onDismiss' | 'chainIdFromUrl'>
+    /**
+     * @name walletConnect
+     * @description WalletConnect (Web3Modal) props
+     */
     walletConnect: Omit<Web3ModalConfig<any, any>, 'w3aProjectId' | 'chains'>
+    /**
+     * @description Web3Auth modal props. Optional. Leave blank to exclude Web3Auth from modal.
+     * @example 
+     interface PstlWeb3ModalProps.modals.web3auth {
+        themeInfo?: {
+          mode?: 'light' | 'dark'
+          primary?: string
+        }
+        chains: ChainsPartialReadonly<ID>
+        zIndex?: number
+        network: Web3AuthOptions['web3AuthNetwork']
+        storageKey?: Web3AuthOptions['storageKey']
+        preset?: 'DISALLOW_EXTERNAL_WALLETS' | 'ALLOW_EXTERNAL_WALLETS'
+        projectId: string
+        appName: string
+        url?: string
+        appLogoLight?: string
+        appLogoDark?: string
+        listingName?: string
+        listingLogo?: string
+        listingDetails?: string
+        loginMethodsOrder?: string[]
+        mfaLevel?: OpenloginLoginParams['mfaLevel']
+        uxMode?: 'popup' | 'redirect'
+        configureAdditionalConnectors?: () => IPlugin[] | undefined
+     }
+    */
     web3auth?: Omit<PstlWeb3AuthConnectorProps<ID>, 'chains'>
   }
   clients?: {

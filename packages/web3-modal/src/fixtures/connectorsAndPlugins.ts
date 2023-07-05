@@ -28,10 +28,12 @@ export const w3aPlugins = {
 
 export const wagmiConnectors = {
   ledgerLiveModal: addConnector(LedgerConnector, {
-    enableDebugLogs: false,
-    walletConnectVersion: 2,
-    projectId: WALLETCONNECT_ID,
-    requiredChains: [1]
+    options: {
+      enableDebugLogs: false,
+      walletConnectVersion: 2,
+      projectId: WALLETCONNECT_ID,
+      requiredChains: [1]
+    }
   }),
   ledgerHID: addConnector(LedgerHIDConnector, {}),
   ledgerIFrame: addConnector(IFrameEthereumConnector, {})

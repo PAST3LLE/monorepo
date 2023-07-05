@@ -17,6 +17,12 @@ import { RenderConnectorOptions } from './RenderConnectorOptions'
 import { ErrorMessageContainer, InnerContainer, ModalTitleText, StyledConnectionModal, WalletsWrapper } from './styled'
 import { cleanAndFormatConnectorOverrides, sortConnectorsByRank } from './utils'
 
+/**
+ * @name ThemeConfigProps
+ * @description PSTL modal theme configuration
+ * @property theme - see {@link ThemeByModes}
+ * @property mode - see {@link ThemeModesRequired}
+ */
 interface ThemeConfigProps<
   T extends ThemeByModes<BasicUserTheme> = ThemeByModes<BasicUserTheme>,
   K extends ThemeModesRequired = ThemeModesRequired
@@ -27,14 +33,67 @@ interface ThemeConfigProps<
 interface PstlWeb3ConnectionModalProps
   extends Omit<ModalProps, 'isLargeImageModal' | 'isOpen' | 'onDismiss'>,
     WithChainIdFromUrl {
+  /**
+   * @name title
+   * @description Optional. String header to display on root modal
+   */
   title?: string
+  /**
+   * @name themeConfig
+   * @description Optional. PSTL modal theme configuration. See {@link ThemeConfigProps}. 
+   * @tip ThemeConfig.mode can be used to sync and external theme mode with modal theme mode.
+   * 
+   * @example
+   interface ThemeConfigProps<
+      T extends ThemeByModes<BasicUserTheme> = ThemeByModes<BasicUserTheme>,
+      K extends ThemeModesRequired = ThemeModesRequired
+    > {
+      theme: T
+      mode?: K
+    }
+   */
   themeConfig?: ThemeConfigProps
+  /**
+   * @name loaderProps
+   * @description Optional. Async loader props. For when connector modals are loading.
+   */
   loaderProps?: LoadingScreenProps
+  /**
+   * @name buttonProps
+   * @description Optional. Modal connector button style props
+   *
+   * See {@link ButtonProps}
+   */
   buttonProps?: ButtonProps
+  /**
+   * @name closeModalOnConnect
+   * @default false
+   * @description Optional. Detect connector activation and auto-close modal on success
+   */
   closeModalOnConnect?: boolean
+  /**
+   * @name hideInjectedFromRoot
+   * @description Optional. Hide (potentially) unknown injected wallet from modal root.
+   * @default false
+   * @tip Useful when explicitly setting InjectedConnector in root and want to control UI
+   */
   hideInjectedFromRoot?: boolean
+  /**
+   * @name walletsView
+   * @description Optional. Arrangement of UI elements in modal. "grid" | "list"
+   * @default "list"
+   * @tip Mobile always shows elements in "list" view
+   */
   walletsView?: 'grid' | 'list'
+  /**
+   * @name connectorDisplayOverrides
+   * @description Optional. Key value pair overriding connector info. Displays in root modal. See {@link ConnectorOverrides}
+   */
   connectorDisplayOverrides?: ConnectorOverrides
+  /**
+   * @name zIndex
+   * @description Optional. Set root modal z-index. Should be lower than any other modal z-index but greater than underlying app z-indices
+   */
   zIndex?: number
 }
 
