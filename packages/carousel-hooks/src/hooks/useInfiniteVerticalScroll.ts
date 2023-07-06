@@ -1,4 +1,4 @@
-import { isMobile } from '@past3lle/utils'
+import { useIsMobile } from '@past3lle/hooks'
 import { useGesture } from '@use-gesture/react'
 import { useRef } from 'react'
 import { useSprings } from 'react-spring'
@@ -19,6 +19,7 @@ export default function useInfiniteVerticalScroll(
   items: any[],
   options: InfiniteScrollOptions
 ): SpringAnimationHookReturn {
+  const isMobile = useIsMobile()
   const {
     gestureParams,
     currentIndex,

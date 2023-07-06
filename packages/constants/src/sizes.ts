@@ -1,5 +1,3 @@
-import { isMobile } from '@past3lle/utils'
-
 export const BASE_FONT_SIZE_PX = 10
 export const LAYOUT_REM_SIZE_MAP = {
   HEADER: 8,
@@ -18,4 +16,3 @@ export const SIZE_RATIOS = {
     vertical: 9 / 16
   }
 }
-export const SINGLE_PRODUCT_LOGO_MARGIN_TOP_OFFSET = isMobile ? 0.151 : 0.185
