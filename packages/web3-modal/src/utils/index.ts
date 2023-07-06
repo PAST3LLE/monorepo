@@ -90,7 +90,11 @@ const delayWithCondition = async ({
   id: string
 }): Promise<HTMLElement | null | 'BAILED'> => {
   return new Promise((resolve) =>
-    setTimeout(() => (value >= limit ? resolve('BAILED') : resolve(document.getElementById(id))), freq)
+    setTimeout(
+      () =>
+        typeof document === undefined || value >= limit ? resolve('BAILED') : resolve(document.getElementById(id)),
+      freq
+    )
   )
 }
 
