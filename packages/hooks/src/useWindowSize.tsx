@@ -14,11 +14,16 @@ export interface UseWindowSizeOptions {
   debounceMs?: number
 }
 
-const getIsClient = () => typeof window !== undefined && (window instanceof Window || typeof window === 'object')
+const getIsClient = () => {
+  if (typeof window === undefined) return undefined
+
+  return window instanceof Window || typeof window === 'object'
+}
 export function useWindowSizeSetup(options?: UseWindowSizeOptions) {
   const [windowSize, setWindowSize] = useState<WindowSizes>(_getSize)
 
   useEffect(() => {
+    if (typeof window === undefined) return
     const debouncedCb = debounce(function handleCheckWindowSize() {
       setWindowSize(_getSize)
     }, options?.debounceMs || 150)
@@ -28,7 +33,7 @@ export function useWindowSizeSetup(options?: UseWindowSizeOptions) {
     }
 
     return () => {
-      window.removeEventListener('resize', debouncedCb as EventListener)
+      typeof window !== undefined && window.removeEventListener('resize', debouncedCb as EventListener)
     }
   }, [options?.debounceMs])
 
@@ -36,17 +41,12 @@ export function useWindowSizeSetup(options?: UseWindowSizeOptions) {
 }
 
 function _getSize(): WindowSizes {
+  if (typeof window === undefined || typeof document === undefined) {
+    return { width: undefined, height: undefined, ar: undefined }
+  }
   return {
-    width:
-      (typeof window !== undefined && window?.innerWidth) ||
-      (typeof document !== undefined
-        ? document?.documentElement?.clientWidth || document?.body?.clientWidth
-        : undefined),
-    height:
-      (typeof window !== undefined && window?.innerHeight) ||
-      (typeof document !== undefined
-        ? document?.documentElement?.clientHeight || document?.body?.clientHeight
-        : undefined),
+    width: window?.innerWidth || document?.documentElement?.clientWidth || document?.body?.clientWidth,
+    height: window?.innerHeight || document?.documentElement?.clientHeight || document?.body?.clientHeight,
     get ar() {
       if (!getIsClient() || !this.width || !this.height) return undefined
       // round the number to 2 decimal places
