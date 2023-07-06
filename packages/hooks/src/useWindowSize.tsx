@@ -39,12 +39,14 @@ function _getSize(): WindowSizes {
   return {
     width:
       (typeof window !== undefined && window?.innerWidth) ||
-      document?.documentElement?.clientWidth ||
-      document?.body?.clientWidth,
+      (typeof document !== undefined
+        ? document?.documentElement?.clientWidth || document?.body?.clientWidth
+        : undefined),
     height:
       (typeof window !== undefined && window?.innerHeight) ||
-      document?.documentElement?.clientHeight ||
-      document?.body?.clientHeight,
+      (typeof document !== undefined
+        ? document?.documentElement?.clientHeight || document?.body?.clientHeight
+        : undefined),
     get ar() {
       if (!getIsClient() || !this.width || !this.height) return undefined
       // round the number to 2 decimal places

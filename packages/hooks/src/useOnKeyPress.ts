@@ -10,6 +10,7 @@ import { useEffect } from 'react'
  */
 export function useOnKeyPress(key: KeyboardEvent['key'][], handler: (...params: any[]) => void) {
   useEffect(() => {
+    if (typeof document !== undefined) return
     const listener = function listener(event: KeyboardEvent) {
       if (key.some((key) => key === event.key)) {
         devDebug('[@past3lle/hooks]::useOnKeyPress::Firing handler!', event.key)
@@ -18,7 +19,7 @@ export function useOnKeyPress(key: KeyboardEvent['key'][], handler: (...params: 
     }
     document.addEventListener('keydown', listener)
     return () => {
-      document.removeEventListener('keydown', listener)
+      typeof document !== undefined && document.removeEventListener('keydown', listener)
     }
   }, [handler, key])
 }
