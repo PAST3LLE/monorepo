@@ -5,7 +5,7 @@ import {
   useSupportedOrDefaultChainId
 } from '@past3lle/forge-web3'
 import { MEDIA_WIDTHS } from '@past3lle/theme'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useState } from 'react'
 
 import { SkillVectorsMap, VectorsState, useActiveSkillReadAtom, useVectorsAtom } from '..'
 import { calculateGridPoints } from '../../../api/hooks'
@@ -20,10 +20,19 @@ export function GridPositionUpdater() {
   const [windowSizeState] = useForgeWindowSizeAtom()
   const [{ board }] = useForgeUserConfigAtom()
 
-  const gridConstants: VectorsState['dimensions'] = useMemo(() => {
-    const container = document.getElementById(CANVAS_CONTAINER_ID)
+  const [gridConstants, setGridConstants] = useState<VectorsState['dimensions']>({
+    rows: 6,
+    columns: 3,
+    rowHeight: 100,
+    columnWidth: 300,
+    gridHeight: 500,
+    gridWidth: 500
+  })
+  useEffect(() => {
+    if (typeof document === undefined) return
 
-    if (!container) return null
+    const container = document.getElementById(CANVAS_CONTAINER_ID)
+    if (!container) return
 
     const highestRowCount = !metadata?.[0]?.length
       ? board?.emptyCollectionRowAmount
@@ -47,7 +56,7 @@ export function GridPositionUpdater() {
     const rowHeight = Math.floor(gridHeight / rows)
     const columnWidth = Math.floor(gridWidth / columns)
 
-    return { rows, columns, rowHeight, columnWidth, gridHeight, gridWidth }
+    setGridConstants({ rows, columns, rowHeight, columnWidth, gridHeight, gridWidth })
     // NOTE: TS complains about windowSizeState which we need to re-calc on window size change(s)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [metadata, windowSizeState.height, windowSizeState.width, board])

@@ -1,7 +1,7 @@
 import { SmartImg } from '@past3lle/components'
 import { useForgeUserConfigAtom, useForgeWindowSizeAtom } from '@past3lle/forge-web3'
 import { useStateRef } from '@past3lle/hooks'
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 
 import { CONFIG } from '../../../api/config'
 import { useLightningCanvas } from '../../../api/hooks'
@@ -25,11 +25,13 @@ export function LightningCanvas() {
     }
   ] = useForgeUserConfigAtom()
 
-  const { width, height } = useMemo(() => {
+  const [{ width, height }, setCanvasDimensions] = useState({ width: 0, height: 0 })
+  useEffect(() => {
+    if (typeof document === undefined) return
     const height = Math.max(canvasDOM?.parentElement?.clientHeight || 0, MINIMUM_BOARD_HEIGHT - 30)
     const width = widgetWidth || calculateCanvasWidth(document.body.clientWidth)
 
-    return { height, width }
+    setCanvasDimensions({ height, width })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     widgetWidth,

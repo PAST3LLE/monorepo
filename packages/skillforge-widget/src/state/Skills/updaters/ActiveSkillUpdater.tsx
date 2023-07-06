@@ -36,6 +36,7 @@ export function ActiveSkillUpdater() {
   // handles ActivePanel history
   // toggles skill effects and auto-scrolls to active skill
   useEffect(() => {
+    if (typeof document === undefined) return
     const activeSkillNode = document.getElementById(skillsState.active[0])
     if (activeSkillNode) {
       const panelKey: ActiveSidePanel = `ACTIVE_SKILL::${skillsState.active[0]}`

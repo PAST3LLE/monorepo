@@ -60,7 +60,9 @@ export function ActiveSkillPanel() {
     [activeSkill, chainId, customTheme.rarity, isLocked]
   )
 
-  const skillContainerRef = useRef<HTMLElement>(document.getElementById(SKILLPOINTS_CONTAINER_ID))
+  const skillContainerRef = useRef<HTMLElement>(
+    typeof document !== undefined ? document.getElementById(SKILLPOINTS_CONTAINER_ID) : null
+  )
 
   if (!metadataExplorerUri || !activeSkill || !rarity || !deps || !cardColour || !setSkillState) return null
 

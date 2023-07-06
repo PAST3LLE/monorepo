@@ -9,6 +9,7 @@ export function SkillSquareSizeUpdater() {
   const [, setSkillSize] = useForgeSizeWriteAtom()
 
   useEffect(() => {
+    if (typeof document === undefined) return
     const canvas = document.getElementById(CANVAS_CONTAINER_ID)
 
     if (canvas) {
