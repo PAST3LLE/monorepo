@@ -1,6 +1,6 @@
 {
   "name": "@past3lle/web3-modal",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "sideEffects": false,
   "description": "PAST3LLE's Web3 connection modal",
   "keywords": [
@@ -77,8 +77,8 @@
   },
   "dependencies": {
     "@gnosis.pm/safe-apps-wagmi": "2.1.0",
-    "@past3lle/components": "^0.1.1",
-    "@past3lle/hooks": "^0.1.1",
+    "@past3lle/components": "^0.1.2",
+    "@past3lle/hooks": "^0.1.2",
     "@past3lle/theme": "^0.1.1",
     "@past3lle/utils": "^0.1.1",
     "@past3lle/wagmi-connectors": "^0.1.1",
