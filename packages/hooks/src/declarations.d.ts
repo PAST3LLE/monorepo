@@ -13,6 +13,6 @@ declare module '*.png' {
 
 interface Window {
   __PSTL_HOOKS_CONTEXT?: {
-    WindowSizeContext?: React.Context<WindowSize>
+    WindowSizeContext?: React.Context<WindowSizes>
   }
 }

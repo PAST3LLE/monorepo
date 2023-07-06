@@ -71,19 +71,22 @@ const nullContext = React.createContext(null)
  * @returns WindowSizes | undefined - width, height, and aspect ratio of window (or undefined if not instantiated)
  */
 export function useWindowSize(): WindowSizes | undefined {
+  const [context, setContext] = useState<React.Context<{ windowSizes: WindowSizes }>>(nullContext as any)
   useEffect(() => {
-    if (typeof window !== undefined && !window.__PSTL_HOOKS_CONTEXT?.WindowSizeContext) {
-      devWarn(
-        '[@past3lle/hooks]::useWindowSize::Warning! Cannot use <useWindowSize> hook outside of the PstlHooksProvider. Please add one to the root of your app, ABOVE where you are intending to use the hook. Hover over hook for example use-case. For now, calling window.clientWidth directly (not optimum).'
-      )
+    if (typeof window !== undefined) {
+      if (!window.__PSTL_HOOKS_CONTEXT?.WindowSizeContext) {
+        devWarn(
+          '[@past3lle/hooks]::useWindowSize::Warning! Cannot use <useWindowSize> hook outside of the PstlHooksProvider. Please add one to the root of your app, ABOVE where you are intending to use the hook. Hover over hook for example use-case. For now, calling window.clientWidth directly (not optimum).'
+        )
+      } else {
+        setContext(window?.__PSTL_HOOKS_CONTEXT?.WindowSizeContext || nullContext)
+      }
     }
   }, [])
 
-  const context = useContext(
-    (typeof window !== undefined && window?.__PSTL_HOOKS_CONTEXT?.WindowSizeContext) || nullContext
-  )
+  const ctxt = useContext(context)
 
-  return context?.windowSizes || _getSize()
+  return ctxt?.windowSizes || _getSize()
 }
 
 export function useWindowSmallerThan(media: MediaWidths) {
