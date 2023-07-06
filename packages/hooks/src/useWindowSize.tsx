@@ -14,7 +14,7 @@ export interface UseWindowSizeOptions {
   debounceMs?: number
 }
 
-const IS_CLIENT = window instanceof Window || typeof window === 'object'
+const getIsClient = () => typeof window !== undefined && (window instanceof Window || typeof window === 'object')
 export function useWindowSizeSetup(options?: UseWindowSizeOptions) {
   const [windowSize, setWindowSize] = useState<WindowSizes>(_getSize)
 
@@ -23,7 +23,7 @@ export function useWindowSizeSetup(options?: UseWindowSizeOptions) {
       setWindowSize(_getSize)
     }, options?.debounceMs || 150)
 
-    if (IS_CLIENT) {
+    if (getIsClient()) {
       window.addEventListener('resize', debouncedCb as EventListener)
     }
 
@@ -46,7 +46,7 @@ function _getSize(): WindowSizes {
       document?.documentElement?.clientHeight ||
       document?.body?.clientHeight,
     get ar() {
-      if (!IS_CLIENT || !this.width || !this.height) return undefined
+      if (!getIsClient() || !this.width || !this.height) return undefined
       // round the number to 2 decimal places
       return Math.round((this.width / (this.height + Number.EPSILON)) * 100) / 100
     }
@@ -70,7 +70,7 @@ const nullContext = React.createContext(null)
  */
 export function useWindowSize(): WindowSizes | undefined {
   useEffect(() => {
-    if (!window.__PSTL_HOOKS_CONTEXT?.WindowSizeContext) {
+    if (typeof window !== undefined && !window.__PSTL_HOOKS_CONTEXT?.WindowSizeContext) {
       devWarn(
         '[@past3lle/hooks]::useWindowSize::Warning! Cannot use <useWindowSize> hook outside of the PstlHooksProvider. Please add one to the root of your app, ABOVE where you are intending to use the hook. Hover over hook for example use-case. For now, calling window.clientWidth directly (not optimum).'
       )
@@ -149,6 +149,7 @@ export function PstlHooksProvider(props?: { children?: ReactNode } & PstlHooksPr
     } | null>
   >(WindowSizeContext)
   useEffect(() => {
+    if (typeof window === undefined) return
     // Check if context already exists, if not, create one
     if (!window.__PSTL_HOOKS_CONTEXT?.WindowSizeContext?.Provider) {
       devDebug('[@past3lle/hooks]::PstlHooksProvider::Context does not exist, creating new context')
