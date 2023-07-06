@@ -14,24 +14,22 @@ export interface UseWindowSizeOptions {
   debounceMs?: number
 }
 
-const checkWindow = () => typeof window !== undefined
-const checkDocument = () => typeof document !== undefined
+const checkWindow = () => typeof global?.window !== undefined
 
 export function useWindowSizeSetup(options?: UseWindowSizeOptions) {
-  const [windowSize, setWindowSize] = useState<WindowSizes>(_getSize)
+  const [windowSize, setWindowSize] = useState<WindowSizes>()
 
   useEffect(() => {
     if (!checkWindow()) return
+
     const debouncedCb = debounce(function handleCheckWindowSize() {
       setWindowSize(_getSize)
     }, options?.debounceMs || 150)
 
-    if (checkWindow()) {
-      window?.addEventListener('resize', debouncedCb as EventListener)
-    }
+    global.window.addEventListener('resize', debouncedCb as EventListener)
 
     return () => {
-      checkWindow() && window?.removeEventListener('resize', debouncedCb as EventListener)
+      global.window?.removeEventListener('resize', debouncedCb as EventListener)
     }
   }, [options?.debounceMs])
 
@@ -39,18 +37,15 @@ export function useWindowSizeSetup(options?: UseWindowSizeOptions) {
 }
 
 function _getSize(): WindowSizes {
-  if (!checkWindow() || !checkDocument()) {
-    return { width: undefined, height: undefined, ar: undefined }
-  }
   return {
     width:
-      checkWindow() && checkDocument()
-        ? window?.innerWidth || document?.documentElement?.clientWidth || document?.body?.clientWidth
-        : undefined,
+      global?.window?.innerWidth ||
+      global?.window?.document?.documentElement?.clientWidth ||
+      global?.window?.document?.body?.clientWidth,
     height:
-      checkWindow() && checkDocument()
-        ? window?.innerHeight || document?.documentElement?.clientHeight || document?.body?.clientHeight
-        : undefined,
+      global?.window?.innerHeight ||
+      global?.window?.document?.documentElement?.clientHeight ||
+      global?.window?.document?.body?.clientHeight,
     get ar() {
       if (!checkWindow() || !this.width || !this.height) return undefined
       // round the number to 2 decimal places
@@ -62,7 +57,7 @@ function _getSize(): WindowSizes {
 const nullContext = React.createContext(null)
 /**
  * @name useWindowSize
- * @description Listens to window resize events and updates via CONTEXT. This requires you to FIRST place the PstlHooksProvider somewhere in your app ABOVE your intended use of this hook
+ * @description Listens to global.window resize events and updates via CONTEXT. This requires you to FIRST place the PstlHooksProvider somewhere in your app ABOVE your intended use of this hook
  * @example
  // somewhere in app architecture
  // e.g render
@@ -72,18 +67,18 @@ const nullContext = React.createContext(null)
       <App />
     </PstlHooksProvider>
   )
- * @returns WindowSizes | undefined - width, height, and aspect ratio of window (or undefined if not instantiated)
+ * @returns WindowSizes | undefined - width, height, and aspect ratio of global.window (or undefined if not instantiated)
  */
 export function useWindowSize(): WindowSizes | undefined {
   const [context, setContext] = useState<React.Context<{ windowSizes: WindowSizes }>>(nullContext as any)
   useEffect(() => {
     if (checkWindow()) {
-      if (!window?.__PSTL_HOOKS_CONTEXT?.WindowSizeContext) {
+      if (!global.window?.__PSTL_HOOKS_CONTEXT?.WindowSizeContext) {
         devWarn(
-          '[@past3lle/hooks]::useWindowSize::Warning! Cannot use <useWindowSize> hook outside of the PstlHooksProvider. Please add one to the root of your app, ABOVE where you are intending to use the hook. Hover over hook for example use-case. For now, calling window.clientWidth directly (not optimum).'
+          '[@past3lle/hooks]::useWindowSize::Warning! Cannot use <useWindowSize> hook outside of the PstlHooksProvider. Please add one to the root of your app, ABOVE where you are intending to use the hook. Hover over hook for example use-case. For now, calling global.window.clientWidth directly (not optimum).'
         )
       } else {
-        setContext(window?.__PSTL_HOOKS_CONTEXT?.WindowSizeContext || nullContext)
+        setContext(global.window?.__PSTL_HOOKS_CONTEXT?.WindowSizeContext || nullContext)
       }
     }
   }, [])
@@ -110,11 +105,11 @@ const WindowSizeContext = React.createContext<{ windowSizes: WindowSizes } | nul
  * @name checkAndSetContextProvider
  * @description Context for useWindowSize hook. Checks if existing Context exists, otherwise creates one
  * @example see useWindowSize
- * @returns Context for useWindowSize hook (or undefined if already instantiated) - width, height, and aspect ratio of window
+ * @returns Context for useWindowSize hook (or undefined if already instantiated) - width, height, and aspect ratio of global.window
  */
 export const checkAndSetContextProvider = () => {
-  if (checkWindow() && !window?.__PSTL_HOOKS_CONTEXT?.WindowSizeContext) {
-    window.__PSTL_HOOKS_CONTEXT = { WindowSizeContext }
+  if (checkWindow() && !global.window?.__PSTL_HOOKS_CONTEXT?.WindowSizeContext) {
+    global.window.__PSTL_HOOKS_CONTEXT = { WindowSizeContext }
   }
 }
 
@@ -147,7 +142,7 @@ export interface PstlHooksProviderOptions {
  * @returns
  */
 export function PstlHooksProvider(props?: { children?: ReactNode } & PstlHooksProviderOptions) {
-  const windowSizes = useWindowSizeSetup(props?.windowSizes)
+  const windowSizes = useWindowSizeSetup(props?.windowSizes) || { width: undefined, height: undefined, ar: undefined }
 
   useEffect(checkAndSetContextProvider, [])
 
@@ -157,14 +152,14 @@ export function PstlHooksProvider(props?: { children?: ReactNode } & PstlHooksPr
     } | null>
   >(WindowSizeContext)
   useEffect(() => {
-    // No window instance, bail
+    // No global.window instance, bail
     if (!checkWindow()) return
     // Check if context already exists, if not, create one
-    else if (!window?.__PSTL_HOOKS_CONTEXT?.WindowSizeContext?.Provider) {
+    else if (!global.window?.__PSTL_HOOKS_CONTEXT?.WindowSizeContext?.Provider) {
       devDebug('[@past3lle/hooks]::PstlHooksProvider::Context does not exist, creating new context')
       setContext(WindowSizeContext)
     } else {
-      const ContextProvider = window?.__PSTL_HOOKS_CONTEXT.WindowSizeContext
+      const ContextProvider = global.window?.__PSTL_HOOKS_CONTEXT.WindowSizeContext
       devDebug('[@past3lle/hooks]::PstlHooksProvider::Context already exists, skipping creation')
       setContext(ContextProvider)
     }
