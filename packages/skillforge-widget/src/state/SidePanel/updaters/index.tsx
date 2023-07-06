@@ -1,5 +1,5 @@
 import { SkillId } from '@past3lle/forge-web3'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { useSidePanelAtomBase } from '..'
 import { ActiveSkillPanel } from '../../../components/Panels/ActiveSkillPanel'
@@ -31,7 +31,14 @@ export function SidePanelUpdater() {
 
   const type = panelType?.split('::')?.[0] as 'ACTIVE_SKILL' | 'USER_STATS' | 'UNLOCK_SKILL' | undefined
 
-  const { searchParams, searchParamKey } = useMemo(() => {
+  const [{ searchParams, searchParamKey }, setSearchProperties] = useState<{
+    searchParams: URLSearchParams | undefined
+    searchParamKey: string | undefined
+  }>({
+    searchParams: undefined,
+    searchParamKey: undefined
+  })
+  useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search)
     // Search param keys. We only allow the last one if (for whatever reason) user listed
     // e.g forge.io/?forgeSkillId=0x123123123-1234,forgeUserInventory=true,forgeUpgradeSkill=0x123123123123123-4444
@@ -40,10 +47,10 @@ export function SidePanelUpdater() {
       .filter((key) => FORGE_SEARCH_PARAM_KEYS.includes(key as ForgeSearchParamKeys))
       .pop()
 
-    return {
+    setSearchProperties({
       searchParams,
       searchParamKey
-    }
+    })
   }, [])
 
   // 1. Change panel based on URL search params
@@ -52,7 +59,7 @@ export function SidePanelUpdater() {
     if (searchParamKey && searchParamKey !== id) {
       switch (searchParamKey) {
         case ForgeSearchParamKeys.FORGE_SKILL_ID: {
-          const value = searchParams.get(ForgeSearchParamKeys.FORGE_SKILL_ID)
+          const value = searchParams?.get(ForgeSearchParamKeys.FORGE_SKILL_ID)
           if (value) {
             setActiveSkill(value as SkillId)
           }
@@ -64,7 +71,7 @@ export function SidePanelUpdater() {
           break
         }
         case ForgeSearchParamKeys.FORGE_UPGRADE_SKILL: {
-          const value = searchParams.get(ForgeSearchParamKeys.FORGE_UPGRADE_SKILL)
+          const value = searchParams?.get(ForgeSearchParamKeys.FORGE_UPGRADE_SKILL)
           if (value) {
             setPanel(<TradeAndUnlockPanel />)
           }

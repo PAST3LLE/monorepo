@@ -236,7 +236,7 @@ async function _handleConnectorClick(
             connectorDisplayOverrides?.[trimAndLowerCase(connector?.name)] ||
             connectorDisplayOverrides?.[trimAndLowerCase(connector?.id)]
 
-          if (override?.downloadUrl && connectorNotFoundError) {
+          if (override?.downloadUrl && connectorNotFoundError && typeof window !== undefined) {
             window.open(override.downloadUrl, '_newtab')
           }
 

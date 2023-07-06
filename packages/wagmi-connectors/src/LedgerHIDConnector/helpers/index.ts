@@ -5,7 +5,7 @@ import { TransactionRequestExtended, UnsignedTransactionStrict } from '../types'
 
 export const isHIDSupported = () => {
   try {
-    return 'hid' in window.navigator
+    return typeof window !== undefined && 'hid' in window.navigator
   } catch (error) {
     return false
   }

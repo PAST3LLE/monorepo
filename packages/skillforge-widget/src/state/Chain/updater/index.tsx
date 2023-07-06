@@ -3,7 +3,7 @@ import {
   useForgeSetUrlToReadonlyChain,
   useW3UserConnectionInfo
 } from '@past3lle/forge-web3'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useState } from 'react'
 
 import { updateSearchParams } from '../../../utils/url'
 import { ForgeSearchParamKeys } from '../../SidePanel/updaters'
@@ -11,20 +11,14 @@ import { ForgeSearchParamKeys } from '../../SidePanel/updaters'
 export function ChainUpdater() {
   const { chain } = useW3UserConnectionInfo()
   const [userChains] = useForgeGetUserConfigChainsAtom()
+  const [chainParam, setChainParam] = useState<string | null>(null)
 
-  const { chainParam } = useMemo(() => {
+  useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search)
     const chainParam = urlParams.get(ForgeSearchParamKeys.FORGE_CHAIN)
-    const isParamSet = !!chainParam
-    const chainMismatch = !!(chainParam && chainParam !== userChains?.[0]?.network)
 
-    return {
-      urlParams,
-      chainParam,
-      isParamSet,
-      chainMismatch
-    }
-  }, [userChains])
+    setChainParam(chainParam)
+  }, [])
 
   const [chainFromParam, setReadonlyChain] = useForgeSetUrlToReadonlyChain(chainParam)
   useEffect(() => {

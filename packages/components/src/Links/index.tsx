@@ -1,4 +1,4 @@
-import { devDebug } from '@past3lle/utils'
+import { devDebug, devError, devWarn } from '@past3lle/utils'
 import React, { HTMLProps, useCallback } from 'react'
 import { ArrowLeft } from 'react-feather'
 import ReactGA from 'react-ga'
@@ -33,7 +33,11 @@ function ExternalLink({
         event.preventDefault()
         // send a ReactGA event and then trigger a location change
         ReactGA.outboundLink({ label: href }, () => {
-          window.location.href = href
+          if (typeof window !== undefined) {
+            window.location.href = href
+          } else {
+            devError('[@past3lle/components - ExternalLink] Window does not exist. Are you sure your app is running?')
+          }
         })
       }
     },
@@ -67,8 +71,12 @@ function ScrollableLink(props: LinkRendererProps): JSX.Element {
   const { children, smooth = true, ...otherProps } = props
 
   const scrollWithOffset = (el: HTMLElement) => {
-    const yCoordinate = el.getBoundingClientRect().top + window.pageYOffset
-    window.scrollTo({ top: yCoordinate - SCROLL_OFFSET, behavior: 'smooth' })
+    const yCoordinate = el.getBoundingClientRect().top + (window?.pageYOffset || 0)
+    if (typeof window !== undefined) {
+      window.scrollTo({ top: yCoordinate - SCROLL_OFFSET, behavior: 'smooth' })
+    } else {
+      devWarn('[@past3lle/components - ScrollableLink] Window object not defined.')
+    }
   }
 
   return (

@@ -1,7 +1,7 @@
 import { MEDIA_WIDTHS, MediaWidths } from '@past3lle/theme'
 import { devDebug, devWarn } from '@past3lle/utils'
 import debounce from 'lodash.debounce'
-import React, { ReactNode, useMemo } from 'react'
+import React, { ReactNode } from 'react'
 import { useContext, useEffect, useState } from 'react'
 
 export interface WindowSizes {
@@ -37,8 +37,14 @@ export function useWindowSizeSetup(options?: UseWindowSizeOptions) {
 
 function _getSize(): WindowSizes {
   return {
-    width: window?.innerWidth || document?.documentElement?.clientWidth || document?.body?.clientWidth,
-    height: window?.innerHeight || document?.documentElement?.clientHeight || document?.body?.clientHeight,
+    width:
+      (typeof window !== undefined && window?.innerWidth) ||
+      document?.documentElement?.clientWidth ||
+      document?.body?.clientWidth,
+    height:
+      (typeof window !== undefined && window?.innerHeight) ||
+      document?.documentElement?.clientHeight ||
+      document?.body?.clientHeight,
     get ar() {
       if (!IS_CLIENT || !this.width || !this.height) return undefined
       // round the number to 2 decimal places
@@ -71,7 +77,9 @@ export function useWindowSize(): WindowSizes | undefined {
     }
   }, [])
 
-  const context = useContext(window.__PSTL_HOOKS_CONTEXT?.WindowSizeContext || nullContext)
+  const context = useContext(
+    (typeof window !== undefined && window?.__PSTL_HOOKS_CONTEXT?.WindowSizeContext) || nullContext
+  )
 
   return context?.windowSizes || _getSize()
 }
@@ -96,6 +104,7 @@ const WindowSizeContext = React.createContext<{ windowSizes: WindowSizes } | nul
  * @returns Context for useWindowSize hook (or undefined if already instantiated) - width, height, and aspect ratio of window
  */
 export const checkAndSetContextProvider = () => {
+  if (typeof window === undefined) return
   if (!window?.__PSTL_HOOKS_CONTEXT?.WindowSizeContext) {
     window.__PSTL_HOOKS_CONTEXT = { WindowSizeContext }
   }
@@ -134,15 +143,20 @@ export function PstlHooksProvider(props?: { children?: ReactNode } & PstlHooksPr
 
   useEffect(checkAndSetContextProvider, [])
 
-  const Context = useMemo(() => {
+  const [Context, setContext] = useState<
+    React.Context<{
+      windowSizes: WindowSizes
+    } | null>
+  >(WindowSizeContext)
+  useEffect(() => {
     // Check if context already exists, if not, create one
     if (!window.__PSTL_HOOKS_CONTEXT?.WindowSizeContext?.Provider) {
       devDebug('[@past3lle/hooks]::PstlHooksProvider::Context does not exist, creating new context')
-      return WindowSizeContext
+      setContext(WindowSizeContext)
     } else {
       const ContextProvider = window.__PSTL_HOOKS_CONTEXT.WindowSizeContext
       devDebug('[@past3lle/hooks]::PstlHooksProvider::Context already exists, skipping creation')
-      return ContextProvider
+      setContext(ContextProvider)
     }
   }, [])
 

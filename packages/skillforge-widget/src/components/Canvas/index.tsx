@@ -56,7 +56,7 @@ export function SkillsCanvas() {
   )
 
   const [{ dimensions }] = useVectorsAtom()
-  const showRightMargin = dimensions && dimensions.columnWidth * dimensions.columns >= window.innerWidth
+  const showRightMargin = dimensions && dimensions.columnWidth * dimensions.columns >= (window?.innerWidth || 0)
 
   return (
     <SkillCanvasContainer marginRight={showRightMargin ? MARGINS.SIDE : 0}>

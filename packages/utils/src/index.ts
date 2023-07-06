@@ -33,12 +33,12 @@ export function isIOSDevice() {
   return false
 }
 
-const parser = new UAParser(window.navigator.userAgent)
-const { type } = parser.getDevice()
+const getParser = () => (window !== undefined ? new UAParser(window.navigator.userAgent) : undefined)
+const getType = () => getParser()?.getDevice()?.type
 
-export const userAgent = parser.getResult()
+export const getUserAgent = () => getParser()?.getResult()
 
-export const isMobile = type === 'mobile' || type === 'tablet'
+export const getIsMobile = () => getType() === 'mobile' || getType() === 'tablet'
 
 export const isTruthy = <T>(value: T | null | undefined | false): value is T => !!value
 
