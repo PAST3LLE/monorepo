@@ -14,9 +14,8 @@ export interface UseWindowSizeOptions {
   debounceMs?: number
 }
 
-const checkWindow = () => typeof window !== undefined && (window instanceof Window || typeof window === 'object')
-const checkDocument = () =>
-  typeof document !== undefined && (document instanceof Document || typeof document === 'object')
+const checkWindow = () => typeof window !== undefined
+const checkDocument = () => typeof document !== undefined
 
 export function useWindowSizeSetup(options?: UseWindowSizeOptions) {
   const [windowSize, setWindowSize] = useState<WindowSizes>(_getSize)
