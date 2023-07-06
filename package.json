@@ -26,7 +26,8 @@
     "start:scope": "lerna run start --scope",
     "cosmos:scope": "lerna run cosmos --scope",
     "forge-cli:scope": "lerna run forge-cli --scope",
-    "cli-ui": "yarn forge-cli:scope @past3lle/skillforge-ui"
+    "cli-ui": "yarn forge-cli:scope @past3lle/skillforge-ui",
+    "example:next": "cd examples/next-app && yarn install --force && yarn dev && cd ../.."
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.18.6",

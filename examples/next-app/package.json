@@ -1,0 +1,29 @@
+{
+  "name": "next-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "alias": {
+    "react": "../../node_modules/react",
+    "react-dom": "../../node_modules/react-dom",
+    "@past3lle/web3-modal": "@past3lle/web3-modal",
+    "@past3lle/hooks": "@past3lle/hooks",
+    "@past3lle/wagmi-connectors": "@past3lle/wagmi-connectors"
+  },
+  "dependencies": {
+    "next": "13.4.9"
+  },
+  "devDependencies": {
+    "@types/node": "20.4.0",
+    "@types/react": "../../node_modules/@types/react",
+    "@types/react-dom": "../../node_modules/@types/react-dom",
+    "eslint": "8.44.0",
+    "eslint-config-next": "13.4.9",
+    "typescript": "../../node_modules/typescript"
+  }
+}
