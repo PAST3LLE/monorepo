@@ -1,8 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    esmExternals: true
-  },
   transpilePackages: [
     '@past3lle/web3-modal', 
     '@past3lle/wagmi-connectors', 
