@@ -20,18 +20,11 @@ export function GridPositionUpdater() {
   const [windowSizeState] = useForgeWindowSizeAtom()
   const [{ board }] = useForgeUserConfigAtom()
 
-  const [gridConstants, setGridConstants] = useState<VectorsState['dimensions']>({
-    rows: 6,
-    columns: 3,
-    rowHeight: 100,
-    columnWidth: 300,
-    gridHeight: 500,
-    gridWidth: 500
-  })
+  const [gridConstants, setGridConstants] = useState<VectorsState['dimensions']>(null)
   useEffect(() => {
-    if (typeof document === undefined) return
+    if (typeof global?.window?.document === undefined) return
 
-    const container = document.getElementById(CANVAS_CONTAINER_ID)
+    const container = global.window.document.getElementById(CANVAS_CONTAINER_ID)
     if (!container) return
 
     const highestRowCount = !metadata?.[0]?.length
@@ -81,7 +74,21 @@ export function GridPositionUpdater() {
         setVectorsState((state) => ({ ...state, vectorsMap }))
       }
     }
-  }, [windowSizeState.height, windowSizeState.width, active, metadata, gridConstants, setVectorsState])
+    // Safe to ignore this as we are passing all deps but destructuring the gridConstants object to no infini-loop (TM)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    windowSizeState.height,
+    windowSizeState.width,
+    active,
+    metadata,
+    gridConstants?.rows,
+    gridConstants?.columns,
+    gridConstants?.rowHeight,
+    gridConstants?.columnWidth,
+    gridConstants?.gridHeight,
+    gridConstants?.gridWidth,
+    setVectorsState
+  ])
 
   return null
 }
