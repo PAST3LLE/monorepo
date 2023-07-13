@@ -1,5 +1,5 @@
 import { ConnectedConnectionModalProps } from './components'
-import { PstlWeb3ConnectionModal, PstlWeb3ConnectionModalProps } from './components/ConnectionModal'
+import { PstlWeb3Modal } from './components/modals'
 import {
   PstlW3mConnectionHook,
   useAccountNetworkActions as usePstlAccountNetworkActions,
@@ -10,14 +10,16 @@ import {
   useWeb3Modals as usePstlWeb3Modals
 } from './hooks'
 
+export * from './utils/chains'
 export * from './constants'
 export * from './types'
 export * from './providers'
 export * from './theme'
 
+export { getAppType, AppType } from './providers/utils/connectors'
 export { type PstlWeb3AuthConnectorProps } from './connectors'
 export {
-  PstlWeb3ConnectionModal,
+  PstlWeb3Modal,
   usePstlConnection,
   usePstlWeb3Modal,
   usePstlConnectDisconnect,
@@ -25,6 +27,5 @@ export {
   usePstlWeb3Modals,
   usePstlAccountNetworkActions,
   type ConnectedConnectionModalProps,
-  type PstlWeb3ConnectionModalProps,
   type PstlW3mConnectionHook
 }

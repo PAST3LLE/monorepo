@@ -2,6 +2,7 @@ import { useIsSmallMediaWidth } from '@past3lle/hooks'
 import { ConnectArgs, ConnectResult } from '@wagmi/core'
 import { useWeb3Modal } from '@web3modal/react'
 import { useCallback } from 'react'
+import { useSnapshot } from 'valtio'
 import {
   Address,
   Chain,
@@ -13,6 +14,7 @@ import {
   useNetwork
 } from 'wagmi'
 
+import { ModalPropsCtrl } from '../controllers'
 import { usePstlWeb3Modal } from './usePstlWeb3Modal'
 
 type Callbacks = Pick<ReturnType<typeof useDisconnectWagmi>, 'disconnect'> & {
@@ -93,18 +95,23 @@ export function useWeb3Modals(): {
 export function useAccountNetworkActions() {
   const { chain } = useUserConnectionInfo()
   const { root, walletConnect } = useWeb3Modals()
+  const { openType } = useSnapshot(ModalPropsCtrl.state.root)
 
   const isMobileWidth = useIsSmallMediaWidth()
 
   const onNetworkClick = useCallback(async () => {
     return chain?.id
-      ? walletConnect.open({ route: !isMobileWidth ? 'SelectNetwork' : 'Account' })
+      ? (openType === 'walletconnect' ? walletConnect : root).open({
+          route: !isMobileWidth ? 'SelectNetwork' : 'Account'
+        })
       : root.open({ route: 'ConnectWallet' })
-  }, [chain?.id, root, walletConnect, isMobileWidth])
+  }, [chain?.id, openType, walletConnect, root, isMobileWidth])
 
   const onAccountClick = useCallback(async () => {
-    return chain?.id ? walletConnect.open({ route: 'Account' }) : root.open({ route: 'ConnectWallet' })
-  }, [chain?.id, root, walletConnect])
+    return chain?.id
+      ? (openType === 'walletconnect' ? walletConnect : root).open({ route: 'Account' })
+      : root.open({ route: 'ConnectWallet' })
+  }, [chain?.id, openType, root, walletConnect])
 
   return {
     onAccountClick,

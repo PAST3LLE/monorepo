@@ -12,12 +12,12 @@ export function usePstlWeb3Modal(): PstlWeb3ModalHook {
   const [modal, setModal] = useState(ModalCtrl.state)
 
   useEffect(() => {
-    const unsubscribe = ModalCtrl.subscribe((newModal) => {
+    const unsubscribeModalState = ModalCtrl.subscribe((newModal) => {
       return setModal({ ...newModal })
     })
 
     return () => {
-      unsubscribe()
+      unsubscribeModalState()
     }
   }, [])
 

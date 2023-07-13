@@ -1,33 +1,29 @@
 import { devDebug } from '@past3lle/utils'
 import { isIframe } from '@past3lle/wagmi-connectors'
 import { useEffect } from 'react'
-import { useAccount, useConnect, useSwitchNetwork } from 'wagmi'
+import { Chain, useAccount, useConnect } from 'wagmi'
 
-import { ConnectorEnhanced } from '../../types'
+import { ConnectorEnhanced } from '../types'
 
-export const AutoconnectUpdater = ({
-  chainIdFromUrl,
-  persistOnRefresh
-}: {
-  chainIdFromUrl: number | undefined
-  persistOnRefresh: boolean
-}) => {
+export interface SmartAutoConnectProps {
+  chainFromUrl: Chain | undefined
+  autoConnect?: boolean
+}
+
+export function useSmartAutoConnect({ chainFromUrl, autoConnect }: SmartAutoConnectProps) {
   const { connectAsync, connectors } = useConnect()
-  const { switchNetwork } = useSwitchNetwork()
   const { isDisconnected } = useAccount()
 
   // Reconnect logic
   useEffect(() => {
-    if (!isDisconnected) return
-
-    const iFrameConnector = isIframe() && _getIFrameConnector(connectors)
-    if (iFrameConnector) {
-      devDebug('[AutoConnect]::Dapp browser: CONNECTORS', iFrameConnector)
+    const frameConnector = isIframe() && _getIFrameConnector(connectors)
+    if (frameConnector) {
+      devDebug('[AutoConnect]::Dapp browser: CONNECTORS', frameConnector)
       connectAsync({
-        connector: iFrameConnector
+        connector: frameConnector
       })
     } else {
-      if (!persistOnRefresh) return
+      if (!isDisconnected || !autoConnect) return
       devDebug('[AutoConnect]::Non-Dapp browser: CONNECTORS', connectors)
 
       // if wagmi.connected set to true, then wagmi will not show modal
@@ -41,20 +37,21 @@ export const AutoconnectUpdater = ({
       async function smartReconnect() {
         const [connector] = connectors
         const internalChain = await connector.getChainId()
-        await connectAsync({ connector, chainId: chainIdFromUrl })
-        if (chainIdFromUrl && chainIdFromUrl !== internalChain) {
+        await connectAsync({ connector, chainId: chainFromUrl?.id })
+        if (chainFromUrl && chainFromUrl.id !== internalChain) {
           if (!connector.ready) await connector.connect()
-          await connector.switchChain?.(chainIdFromUrl)
+          await connector.switchChain?.(chainFromUrl.id)
         }
       }
 
       smartReconnect()
     }
-  }, [chainIdFromUrl, connectAsync, connectors, isDisconnected, persistOnRefresh, switchNetwork])
-
-  return null
+  }, [autoConnect, chainFromUrl, connectAsync, connectors, isDisconnected])
 }
 
 function _getIFrameConnector(connectors: ConnectorEnhanced<any, any>[]) {
-  return connectors.find((connector) => (connector as ConnectorEnhanced<any, any> & { isIFrame?: boolean })?.isIFrame)
+  return connectors.find(
+    (connector) =>
+      (connector as ConnectorEnhanced<any, any> & { isIFrame?: boolean })?.isIFrame || connector?.id === 'safe'
+  )
 }

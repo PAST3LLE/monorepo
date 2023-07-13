@@ -16,14 +16,14 @@ interface Web3ButtonProps {
   children?: ReactNode
 }
 const Web3Button = ({ children = <div>Show PSTL Wallet Modal</div> }: Web3ButtonProps) => {
-  const { root, walletConnect } = useWeb3Modals()
+  const { root } = useWeb3Modals()
   const { address, connector } = useUserConnectionInfo()
 
   return (
     <ColumnCenter>
       <PstlButton
         buttonVariant={ButtonVariations.PRIMARY}
-        onClick={() => (address ? walletConnect.open({ route: 'Account' }) : root.open({ route: 'ConnectWallet' }))}
+        onClick={() => (address ? root.open({ route: 'Account' }) : root.open({ route: 'ConnectWallet' }))}
       >
         {children}
       </PstlButton>
@@ -48,6 +48,7 @@ function InnerApp() {
   derivedConfig.modals['web3auth'].configureAdditionalConnectors = function configureAdditionalConnectors() {
     return [w3aPlugins.torusPlugin]
   }
+
   return (
     <PstlW3Providers config={derivedConfig}>
       <AppWithWagmiAccess />
@@ -212,18 +213,18 @@ export default {
       config={{
         ...DEFAULT_PROPS,
         connectors: [
-          wagmiConnectors.ledgerLiveModal,
-          addConnector(InjectedConnector, {
-            options: {
-              name: 'Coinbase Wallet',
-              getProvider() {
-                if (typeof window === undefined) return undefined
-                return window?.ethereum?.isCoinbaseWallet
-                  ? window.ethereum.providerMap?.get('CoinbaseWallet')
-                  : window?.coinbaseWalletExtension
-              }
-            }
-          })
+          wagmiConnectors.ledgerLiveModal
+          // addConnector(InjectedConnector, {
+          //   options: {
+          //     name: 'Coinbase Wallet',
+          //     getProvider() {
+          //       if (typeof window === undefined) return undefined
+          //       return window?.ethereum?.isCoinbaseWallet
+          //         ? window.ethereum.providerMap?.get('CoinbaseWallet')
+          //         : window?.coinbaseWalletExtension
+          //     }
+          //   }
+          // })
         ],
         modals: {
           ...DEFAULT_PROPS.modals,
@@ -478,8 +479,99 @@ export default {
               ...DEFAULT_PROPS.modals.root,
               closeModalOnConnect: true,
               walletsView: 'grid',
+              maxWidth: '650px',
+              minHeight: '600px',
               hideInjectedFromRoot: false,
               connectorDisplayOverrides: COMMON_CONNECTOR_OVERRIDES,
+              loaderProps: {
+                containerProps: {
+                  backgroundColor: 'rgba(0,0,0,0.42)',
+                  borderRadius: '10px'
+                },
+                spinnerProps: {
+                  size: 80,
+                  invertColor: true
+                },
+                loadingText: 'FETCHING INFO...'
+              }
+            }
+          }
+        }}
+      >
+        <AppWithWagmiAccess />
+        <Web3Button />
+      </PstlW3Providers>
+    )
+  }),
+  List__ManyInjectedAndLedger: withThemeProvider(() => {
+    return (
+      <PstlW3Providers
+        config={{
+          ...DEFAULT_PROPS_WEB3AUTH,
+          connectors: [
+            wagmiConnectors.ledgerHID,
+            wagmiConnectors.ledgerLiveModal,
+            addConnector(InjectedConnector, {
+              options: {
+                name: 'MetaMask',
+                shimDisconnect: true,
+                getProvider() {
+                  if (typeof window === undefined) return undefined
+                  try {
+                    const provider = window?.ethereum?.providers?.find((provider) => provider?.isMetaMask)
+                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
+                    return provider
+                  } catch (error) {
+                    return undefined
+                  }
+                }
+              }
+            }),
+            addConnector(InjectedConnector, {
+              options: {
+                name: 'Taho',
+                shimDisconnect: true,
+                getProvider() {
+                  if (typeof window === undefined) return undefined
+                  try {
+                    const provider = window?.tally
+                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
+                    return provider
+                  } catch (error) {
+                    return undefined
+                  }
+                }
+              }
+            }),
+            addConnector(InjectedConnector, {
+              options: {
+                name: 'Coinbase Wallet',
+                shimDisconnect: true,
+                getProvider() {
+                  if (typeof window === undefined) return undefined
+                  try {
+                    const provider =
+                      (window?.ethereum?.isCoinbaseWallet && window.ethereum) || window?.coinbaseWalletExtension
+                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
+                    return provider
+                  } catch (error) {
+                    return undefined
+                  }
+                }
+              }
+            })
+          ],
+          modals: {
+            ...DEFAULT_PROPS_WEB3AUTH.modals,
+            root: {
+              ...DEFAULT_PROPS.modals.root,
+              closeModalOnConnect: true,
+              walletsView: 'list',
+              // maxWidth: '650px',
+              // minHeight: '600px',
+              hideInjectedFromRoot: false,
+              connectorDisplayOverrides: COMMON_CONNECTOR_OVERRIDES,
+
               loaderProps: {
                 containerProps: {
                   backgroundColor: 'rgba(0,0,0,0.42)',

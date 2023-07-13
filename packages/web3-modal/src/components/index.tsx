@@ -1,9 +1,9 @@
 import { ChainsPartialReadonly, PstlWeb3ModalProps } from '../providers'
-import { PstlWeb3ConnectionModal, PstlWeb3ConnectionModalProps } from './ConnectionModal'
+import { PstlWeb3Modal } from './modals'
 
 interface ConnectedConnectionModalProps<ID extends number, SC extends ChainsPartialReadonly<ID>> {
-  modalOptions: PstlWeb3ConnectionModalProps
+  modalOptions: any
   web3Options: PstlWeb3ModalProps<ID, SC>
 }
 
-export { PstlWeb3ConnectionModal, ConnectedConnectionModalProps }
+export { PstlWeb3Modal, type ConnectedConnectionModalProps }

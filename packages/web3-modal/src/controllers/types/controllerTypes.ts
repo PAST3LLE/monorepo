@@ -1,6 +1,8 @@
 import type { EthereumClient } from '@web3modal/ethereum'
 import { Chain } from 'viem'
 
+import { ConnectorOverrides } from '../../types/connectors'
+
 export interface MobileWallet {
   id: string
   name: string
@@ -43,6 +45,49 @@ export interface ConfigCtrlState {
 // -- ModalCtrl --------------------------------------- //
 export interface ModalCtrlState {
   open: boolean
+}
+
+interface RootModalState {
+  /**
+   * @name connectorDisplayOverrides
+   * @description Optional. Key value pair overriding connector info. Displays in root modal. See {@link ConnectorOverrides}
+   */
+  connectorDisplayOverrides?: ConnectorOverrides
+  /**
+   * @name closeModalOnConnect
+   * @default false
+   * @description Optional. Detect connector activation and auto-close modal on success
+   */
+  closeModalOnConnect?: boolean
+  openType: 'root' | 'walletconnect'
+}
+
+type AccountModalState = {
+  error?: Error | null
+}
+
+interface ConnectModalState extends AccountModalState {
+  /**
+   * @name hideInjectedFromRoot
+   * @description Optional. Hide (potentially) unknown injected wallet from modal root.
+   * @default false
+   * @tip Useful when explicitly setting InjectedConnector in root and want to control UI
+   */
+  hideInjectedFromRoot?: boolean
+  /**
+   * @name walletsView
+   * @description Optional. Arrangement of UI elements in modal. "grid" | "list"
+   * @default "list"
+   * @tip Mobile always shows elements in "list" view
+   */
+  walletsView?: 'grid' | 'list'
+}
+
+// -- ModalPropsCtrl ------------------------------------ //
+export type ModalPropsCtrlState = {
+  root: RootModalState
+  account: AccountModalState
+  connect: ConnectModalState
 }
 
 // -- OptionsCtrl --------------------------------------- //

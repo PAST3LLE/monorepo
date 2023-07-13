@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { CHAIN_IMAGES, WALLET_IMAGES, Z_INDICES } from '../../constants'
 import { ChainsPartialReadonly, PstlWeb3ModalProps } from '../types'
 
-export const PstlWeb3Modal = <ID extends number, SC extends ChainsPartialReadonly<ID>>({
+export const Web3Modal = <ID extends number, SC extends ChainsPartialReadonly<ID>>({
   clients,
   modals: {
     walletConnect: { projectId, zIndex = Z_INDICES.W3M, themeVariables, ...w3mProps }
