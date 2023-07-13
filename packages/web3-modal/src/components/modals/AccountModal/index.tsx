@@ -41,7 +41,7 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
     connectorDisplayOverrides?.[trimAndLowerCase(userConnectionInfo.connector?.id)] ||
     connectorDisplayOverrides?.[trimAndLowerCase(userConnectionInfo.connector?.name)]
   )?.logo
-  const chainLogo = userConnectionInfo.chain?.id && CHAIN_IMAGES?.[userConnectionInfo.chain.id]
+  const chainLogo = CHAIN_IMAGES.get(userConnectionInfo?.chain?.id)
 
   const [isCopied, onCopy] = useCopyClipboard(3000)
   const onExplorer = useCallback(() => {
@@ -128,6 +128,7 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
         <Row width="100%">
           {logo && (
             <img
+              title={'Provider image'}
               src={logo}
               style={{
                 marginLeft: 'auto',
@@ -137,7 +138,9 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
               }}
             />
           )}
-          {chainLogo && <img src={chainLogo} style={{ marginLeft: -27.5, maxWidth: 110, borderRadius: '5rem' }} />}
+          {chainLogo && (
+            <img src={chainLogo} style={{ marginLeft: logo ? -27.5 : 'auto', maxWidth: 110, borderRadius: '5rem' }} />
+          )}
         </Row>
       </Row>
       <br />

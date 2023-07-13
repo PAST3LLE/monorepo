@@ -114,6 +114,24 @@ export default {
       <Web3Button />
     </PstlW3Providers>
   )),
+  List__WalletConnectUnknownInjected: withThemeProvider(() => (
+    <PstlW3Providers
+      config={{
+        ...DEFAULT_PROPS,
+        modals: {
+          ...DEFAULT_PROPS.modals,
+          root: {
+            ...DEFAULT_PROPS.modals.root,
+            connectorDisplayOverrides: undefined,
+            hideInjectedFromRoot: false
+          }
+        }
+      }}
+    >
+      <AppWithWagmiAccess />
+      <Web3Button />
+    </PstlW3Providers>
+  )),
   List__LedgerLiveWalletConnect: withThemeProvider(() => (
     <PstlW3Providers
       config={{

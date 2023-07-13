@@ -22,7 +22,7 @@ function NetworkModalContent() {
       <WalletsWrapper view={'grid'} width="auto">
         {supportedChains.map((chain) => {
           if (!switchNetworkAsync || currentChain?.id === chain.id) return null
-          const chainLogo = !!chain?.id && CHAIN_IMAGES?.[chain.id]
+          const chainLogo = CHAIN_IMAGES.get(chain.id)
           return (
             <ConnectorOption
               callback={() => switchNetworkAsync(chain.id) as any}

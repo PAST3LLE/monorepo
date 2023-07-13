@@ -1,8 +1,11 @@
 import { devDebug } from '@past3lle/utils'
 import React, { useEffect, useState } from 'react'
 
-import { CHAIN_IMAGES, WALLET_IMAGES, Z_INDICES } from '../../constants'
+import { CHAIN_IMAGES as RAW_CHAIN_IMAGES, WALLET_IMAGES, Z_INDICES } from '../../constants'
 import { ChainsPartialReadonly, PstlWeb3ModalProps } from '../types'
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const { get, ...CHAIN_IMAGES } = RAW_CHAIN_IMAGES
 
 export const Web3Modal = <ID extends number, SC extends ChainsPartialReadonly<ID>>({
   clients,
