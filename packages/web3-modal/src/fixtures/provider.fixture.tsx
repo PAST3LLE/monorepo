@@ -354,6 +354,7 @@ export default {
       <PstlW3Providers
         config={{
           ...DEFAULT_PROPS,
+          chains: [DEFAULT_PROPS.chains[0]],
           connectors: [
             addConnector(InjectedConnector, {
               options: {

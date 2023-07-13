@@ -1,7 +1,7 @@
 import { Column, Row } from '@past3lle/components'
 import { useCopyClipboard, useIsSmallMediaWidth } from '@past3lle/hooks'
 import { truncateAddress } from '@past3lle/utils'
-import React, { memo, useCallback } from 'react'
+import React, { memo, useCallback, useMemo } from 'react'
 import { useTheme } from 'styled-components'
 
 import { CHAIN_IMAGES } from '../../../constants'
@@ -42,12 +42,31 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
     }
   })
 
+  const showNetworkButton = useMemo(() => {
+    const supportsSeveralChains = (userConnectionInfo?.supportedChains?.length || 0) > 1
+    const currentChainUnsupported = !userConnectionInfo.supportedChains.some(
+      (suppChain) => suppChain.id === userConnectionInfo.chain?.id
+    )
+
+    return supportsSeveralChains || currentChainUnsupported
+  }, [userConnectionInfo.chain?.id, userConnectionInfo.supportedChains])
+
   const isSmallerScreen = useIsSmallMediaWidth()
-  const logo = (
-    connectorDisplayOverrides?.[trimAndLowerCase(userConnectionInfo.connector?.id)] ||
-    connectorDisplayOverrides?.[trimAndLowerCase(userConnectionInfo.connector?.name)]
-  )?.logo
-  const chainLogo = userConnectionInfo?.chain?.id ? CHAIN_IMAGES?.[userConnectionInfo.chain.id] : undefined
+  const [logo, chainLogo] = useMemo(
+    () => [
+      (
+        connectorDisplayOverrides?.[trimAndLowerCase(userConnectionInfo.connector?.id)] ||
+        connectorDisplayOverrides?.[trimAndLowerCase(userConnectionInfo.connector?.name)]
+      )?.logo,
+      userConnectionInfo?.chain?.id ? CHAIN_IMAGES?.[userConnectionInfo.chain.id] : undefined
+    ],
+    [
+      connectorDisplayOverrides,
+      userConnectionInfo.chain?.id,
+      userConnectionInfo.connector?.id,
+      userConnectionInfo.connector?.name
+    ]
+  )
 
   const [isCopied, onCopy] = useCopyClipboard(3000)
   const onExplorer = useCallback(() => {
@@ -112,7 +131,7 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
             </Column>
           </ModalButton>
           <Row width="100%" marginTop="1rem" gap="1rem">
-            {(userConnectionInfo?.supportedChains?.length || 0) > 1 && (
+            {showNetworkButton && (
               <AccountModalButton
                 connected={false}
                 padding="0.6rem"
