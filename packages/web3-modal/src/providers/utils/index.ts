@@ -119,23 +119,19 @@ export function usePstlEthereumClient<ID extends number>(
   })
  */
 
-type ConnectorIsInjected<C extends Instance<any>> = Required<
-  Required<Required<ConstructorParameters<C>>[0]>['options']
->['shimDisconnect'] extends boolean
-  ? true
-  : false
 type InjectedConnectorOptions = MakeOptional<
   Required<Required<Required<ConstructorParameters<typeof InjectedConnector>>[0]>['options']>,
   'shimDisconnect'
 >
-type GetConnectorConstructorParams<C extends Instance<any>> = ConnectorIsInjected<C> extends true
-  ? Omit<Required<Required<ConstructorParameters<C>>[0]>, 'chains'> & {
-      options: InjectedConnectorOptions
-    }
-  : Partial<Omit<ConstructorParameters<C>[0], 'chains'>>
+type GetConnectorConstructorParams<C extends Instance<ConnectorEnhanced<any, any>>> =
+  C extends Instance<InjectedConnector>
+    ? Omit<Required<Required<ConstructorParameters<C>>[0]>, 'chains'> & {
+        options: InjectedConnectorOptions
+      }
+    : Partial<Omit<ConstructorParameters<C>[0], 'chains'>>
 
 export const addConnector =
-  <C extends Instance<any>>(Connector: C, params: GetConnectorConstructorParams<C>) =>
+  <C extends Instance<ConnectorEnhanced<any, any>>>(Connector: C, params: GetConnectorConstructorParams<C>) =>
   (chains: Chain[]) =>
     new Connector({ chains, options: params?.options })
 

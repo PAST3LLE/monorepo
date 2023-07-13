@@ -1,9 +1,9 @@
-import { SafeConnector } from '@gnosis.pm/safe-apps-wagmi'
 import { devDebug } from '@past3lle/utils'
 import { IFrameEthereumConnector } from '@past3lle/wagmi-connectors'
 import { w3mConnectors } from '@web3modal/ethereum'
 import { useMemo } from 'react'
 import { Chain } from 'viem'
+import { SafeConnector } from 'wagmi/connectors/safe'
 
 import { PstlWeb3AuthConnector } from '../connectors'
 import { PstlWeb3ModalProps, addConnector } from '../providers'

@@ -12,7 +12,13 @@ import { ConnectorEnhanced } from '../../../types'
 import { trimAndLowerCase } from '../../../utils'
 import { ModalButton } from '../common/styled'
 import { BaseModalProps } from '../common/types'
-import { AccountColumnContainer, AccountModalButton, AccountText, FooterActionButtonsRow } from './styled'
+import {
+  AccountBottomColumnContainer,
+  AccountColumnContainer,
+  AccountModalButton,
+  AccountText,
+  FooterActionButtonsRow
+} from './styled'
 
 type PstlAccountModalProps = ModalPropsCtrlState['root'] &
   ModalPropsCtrlState['account'] &
@@ -144,7 +150,7 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
         </Row>
       </Row>
       <br />
-      <Column backgroundColor={'#370937c9'} borderRadius="1rem" padding="1rem">
+      <AccountBottomColumnContainer borderRadius="1rem" padding="1rem">
         <Row justifyContent="space-between" title={userConnectionInfo.address}>
           <AccountText
             fontWeight={500}
@@ -179,7 +185,7 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
             {`${isSmallerScreen ? '' : 'View on '}Explorer`}
           </AccountModalButton>
         </FooterActionButtonsRow>
-      </Column>
+      </AccountBottomColumnContainer>
     </AccountColumnContainer>
   )
 }

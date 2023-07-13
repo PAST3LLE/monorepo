@@ -2,6 +2,7 @@ import { Column, Row } from '@past3lle/components'
 import { upToExtraSmall, upToSmall } from '@past3lle/theme'
 import styled from 'styled-components'
 
+import BaseTheme from '../../../theme/baseTheme'
 import { ModalButton, ModalTitleText } from '../common/styled'
 
 export const AccountModalButton = styled(ModalButton).attrs((props) => ({
@@ -23,6 +24,12 @@ export const AccountText = styled(ModalTitleText).attrs((props) => ({
   letterSpacing: props.letterSpacing || '-1.2px',
   ...props
 }))``
+
+export const AccountBottomColumnContainer = styled(Column)`
+  background-color: ${({ theme }) =>
+    theme.modals?.account?.balanceAndAddressContainer?.backgroundColor ||
+    BaseTheme.modes.DEFAULT.modals?.account?.balanceAndAddressContainer?.backgroundColor};
+`
 
 export const AccountColumnContainer = styled(Column)`
   .unsupported-small-text {

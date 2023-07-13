@@ -49,6 +49,11 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
             },
             hoverAnimations: true
           }
+        },
+        account: {
+          balanceAndAddressContainer: {
+            backgroundColor: '#370937c9'
+          }
         }
       }
     }

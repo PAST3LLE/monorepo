@@ -1,10 +1,10 @@
 import { ButtonVariations, ColumnCenter, PstlButton } from '@past3lle/components'
 import { ThemeProvider, createCustomTheme } from '@past3lle/theme'
 import { devWarn } from '@past3lle/utils'
-import { InjectedConnector } from '@wagmi/connectors/injected'
 import React, { ReactNode } from 'react'
 import { useTheme } from 'styled-components'
 import { useBalance } from 'wagmi'
+import { InjectedConnector } from 'wagmi/connectors/injected'
 
 import { useUserConnectionInfo, useWeb3Modals } from '../hooks'
 import { PstlW3Providers } from '../providers'
