@@ -135,12 +135,17 @@ export const ErrorMessageContainer = styled(InnerContainer)<{ hide: boolean }>`
   opacity: ${({ hide }) => (hide ? 0 : 1)};
 
   overflow: auto;
+  align-items: start;
   height: ${ERROR_CONTAINER_HEIGHT_PX}px;
   padding: 1rem 2rem;
-  border-radius: 0 0 1rem 1rem;
+  border-radius: 0 0 0.4rem 0.4rem;
+  border-left: 0.5rem solid indianred;
   background: #00000070;
   position: absolute;
   bottom: 0;
+  > p:first-child {
+    margin: 0;
+  }
   > p {
     font-family: monospace;
     color: indianred;
@@ -166,7 +171,7 @@ export const StyledConnectionModal = styled(Modal)`
             border-bottom-right-radius: 0;
             
              > ${ErrorMessageContainer} {
-              border-radius: 1rem 1rem 0 0;
+              border-radius: 0.4rem 0.4rem 0 0;
             }
           }
 

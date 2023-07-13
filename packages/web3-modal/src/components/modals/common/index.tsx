@@ -23,7 +23,7 @@ export function BaseModal({
 
   const { modalProps, updateModalProps } = usePstlWeb3ModalState()
 
-  const showError = useAutoClearingTimeout(!!modalProps.connect?.error?.message, 3000, () =>
+  const showError = useAutoClearingTimeout(!!modalProps.connect?.error?.message, 7000, () =>
     updateModalProps({ connect: { error: null } })
   )
 
@@ -57,7 +57,10 @@ export function BaseModal({
         </ModalTitleText>
         {children}
         <ErrorMessageContainer hide={!showError || !modalProps.connect?.error?.message}>
-          <p>{modalProps.connect?.error?.message}</p>
+          <p>ERROR!</p>
+          <p style={{ color: theme.modals?.connection?.helpers?.color || 'ghostwhite', fontSize: 14 }}>
+            {modalProps.connect?.error?.message}
+          </p>
         </ErrorMessageContainer>
       </InnerContainer>
     </StyledConnectionModal>
