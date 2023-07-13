@@ -16,40 +16,41 @@ export const ModalButton = styled(Button)<{ connected: boolean }>`
   height: 82px;
   ${({ theme }) =>
     setBackgroundOrDefault(theme, {
-      bgValue: theme.modals?.connection?.button?.backgroundImg,
+      bgValue: theme?.modals?.connection?.button?.backgroundImg,
       defaultValue:
-        theme.modals?.connection?.button?.backgroundColor ||
+        theme?.modals?.connection?.button?.backgroundColor ||
         BaseTheme.modes.DEFAULT.modals.connection.button.backgroundColor
     })};
 
   border: ${({ theme }) =>
-    theme.modals?.connection?.button?.border?.border || BaseTheme.modes.DEFAULT.modals.connection.button.border.border};
-  border-color: ${({ theme }) => theme.modals?.connection?.button?.border?.color};
+    theme?.modals?.connection?.button?.border?.border ||
+    BaseTheme.modes.DEFAULT.modals.connection.button.border.border};
+  border-color: ${({ theme }) => theme?.modals?.connection?.button?.border?.color};
 
   font-style: ${({ theme }) =>
-    theme.modals?.connection?.button?.fontStyle || BaseTheme.modes.DEFAULT.modals.connection.button.fontStyle};
+    theme?.modals?.connection?.button?.fontStyle || BaseTheme.modes.DEFAULT.modals.connection.button.fontStyle};
   font-variation-settings: ${({ theme }) =>
     `'wght' ${
-      theme.modals?.connection?.button?.fontWeight || BaseTheme.modes.DEFAULT.modals.connection.button.fontWeight
+      theme?.modals?.connection?.button?.fontWeight || BaseTheme.modes.DEFAULT.modals.connection.button.fontWeight
     }`};
   color: ${({ theme }) =>
-    theme.modals?.connection?.button?.color ||
+    theme?.modals?.connection?.button?.color ||
     setBestTextColour(
-      theme.modals?.connection?.button?.backgroundColor ||
+      theme?.modals?.connection?.button?.backgroundColor ||
         BaseTheme.modes.DEFAULT.modals.connection.button.backgroundColor
     )};
 
   letter-spacing: ${({ theme }) =>
-    theme.modals?.connection?.button?.letterSpacing || BaseTheme.modes.DEFAULT.modals.connection.button.letterSpacing};
+    theme?.modals?.connection?.button?.letterSpacing || BaseTheme.modes.DEFAULT.modals.connection.button.letterSpacing};
   ${({ theme }) =>
-    theme.modals?.connection?.button?.textShadow && `text-shadow: ${theme.modals?.connection?.button?.textShadow};`}
+    theme?.modals?.connection?.button?.textShadow && `text-shadow: ${theme?.modals?.connection?.button?.textShadow};`}
 
   ${({ theme }) =>
-    theme.modals?.connection?.button?.fontSize && `font-size: ${theme.modals?.connection?.button?.fontSize};`}
+    theme?.modals?.connection?.button?.fontSize && `font-size: ${theme?.modals?.connection?.button?.fontSize};`}
     
     ${({ theme }) =>
     `text-transform: ${
-      theme.modals?.connection?.button?.textTransform || BaseTheme.modes.DEFAULT.modals.connection.button.textTransform
+      theme?.modals?.connection?.button?.textTransform || BaseTheme.modes.DEFAULT.modals.connection.button.textTransform
     };`}
     
     gap: 10px;
@@ -57,7 +58,7 @@ export const ModalButton = styled(Button)<{ connected: boolean }>`
   transition: transform 0.3s ease-in-out;
   &:hover {
     ${({ theme }) =>
-      !!theme.modals?.connection?.button?.hoverAnimations &&
+      !!theme?.modals?.connection?.button?.hoverAnimations &&
       `
     transform: scale(1.05);
     filter: saturate(2);
@@ -68,7 +69,7 @@ export const ModalButton = styled(Button)<{ connected: boolean }>`
     connected &&
     `
       background: ${
-        theme.modals?.connection?.button?.connectedBackgroundColor ||
+        theme?.modals?.connection?.button?.connectedBackgroundColor ||
         BaseTheme.modes.DEFAULT.modals.connection.button.connectedBackgroundColor
       };
       transform: scale(1.05);
@@ -78,19 +79,19 @@ export const ModalButton = styled(Button)<{ connected: boolean }>`
 
 export const ModalTitleText = styled(Text.SubHeader)`
   color: ${({ theme }) =>
-    theme.modals?.connection?.title?.color || BaseTheme.modes.DEFAULT.modals.connection.title.color};
+    theme?.modals?.connection?.title?.color || BaseTheme.modes.DEFAULT.modals.connection.title.color};
   letter-spacing: ${({ theme }) =>
-    theme.modals?.connection?.title?.letterSpacing || BaseTheme.modes.DEFAULT.modals.connection.title.letterSpacing};
+    theme?.modals?.connection?.title?.letterSpacing || BaseTheme.modes.DEFAULT.modals.connection.title.letterSpacing};
   line-height: ${({ theme }) =>
-    theme.modals?.connection?.title?.lineHeight || BaseTheme.modes.DEFAULT.modals.connection.title.lineHeight};
+    theme?.modals?.connection?.title?.lineHeight || BaseTheme.modes.DEFAULT.modals.connection.title.lineHeight};
 `
 
 export const InnerContainer = styled(ColumnCenter)<{ isError?: boolean }>`
-  filter: ${({ theme }) => theme.modals?.connection?.filter};
+  filter: ${({ theme }) => theme?.modals?.connection?.filter};
 
   position: relative;
   font-size: ${({ theme }) =>
-    theme.modals?.connection?.baseFontSize || BaseTheme.modes.DEFAULT.modals.connection.baseFontSize}px;
+    theme?.modals?.connection?.baseFontSize || BaseTheme.modes.DEFAULT.modals.connection.baseFontSize}px;
   font-style: italic;
   font-weight: 200;
   font-family: 'Roboto Flex', 'Inter', sans-serif, system-ui;
@@ -112,12 +113,12 @@ export const InnerContainer = styled(ColumnCenter)<{ isError?: boolean }>`
   > ${CloseIcon} {
     position: absolute;
     color: ${({ theme }) =>
-      theme.modals?.connection?.closeIcon?.color || BaseTheme.modes.DEFAULT.modals.connection.closeIcon.color};
+      theme?.modals?.connection?.closeIcon?.color || BaseTheme.modes.DEFAULT.modals.connection.closeIcon.color};
 
     width: ${({ theme }) =>
-      theme.modals?.connection?.closeIcon?.size || BaseTheme.modes.DEFAULT.modals.connection.closeIcon.size};
+      theme?.modals?.connection?.closeIcon?.size || BaseTheme.modes.DEFAULT.modals.connection.closeIcon.size};
 
-    ${({ theme }) => getPosition(theme.modals?.connection?.closeIcon?.position)}
+    ${({ theme }) => getPosition(theme?.modals?.connection?.closeIcon?.position)}
   }
 
   border-radius: ${({ theme: { modals } }) =>
@@ -125,9 +126,9 @@ export const InnerContainer = styled(ColumnCenter)<{ isError?: boolean }>`
 
   ${({ theme }) =>
     setBackgroundOrDefault(theme, {
-      bgValue: theme.modals?.connection?.backgroundImg,
+      bgValue: theme?.modals?.connection?.backgroundImg,
       defaultValue:
-        theme.modals?.connection?.backgroundColor || BaseTheme.modes.DEFAULT.modals.connection.backgroundColor
+        theme?.modals?.connection?.backgroundColor || BaseTheme.modes.DEFAULT.modals.connection.backgroundColor
     })};
 `
 

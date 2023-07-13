@@ -94,7 +94,7 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
             backgroundColor={
               userConnectionInfo.chain?.unsupported
                 ? '#7f1d1db0'
-                : theme.modals?.connection?.button?.backgroundColor ||
+                : theme?.modals?.connection?.button?.backgroundColor ||
                   BaseTheme.modes.DEFAULT.modals.connection.button.backgroundColor
             }
             onClick={() => modalCallbacks.open({ route: 'ConnectWallet' })}

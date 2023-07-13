@@ -8,7 +8,7 @@ import { ConnectorEnhanced } from '../../../types'
 
 const ConnectorHelperContainer = styled(ColumnCenter)<{ open: boolean; contentHeight?: number }>`
   cursor: pointer;
-  color: ${({ theme }) => theme.modals?.connection?.helpers?.color || 'ghostwhite'};
+  color: ${({ theme }) => theme?.modals?.connection?.helpers?.color || 'ghostwhite'};
   > p {
     font-weight: 400;
     font-size: 0.55em;

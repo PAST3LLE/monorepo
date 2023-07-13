@@ -47,7 +47,7 @@ export function BaseModal({
       <InnerContainer justifyContent="flex-start" gap="0.75rem" isError={!!modalProps.connect?.error?.message}>
         <CloseIcon height={30} width={100} onClick={onDismiss} />
         <ModalTitleText
-          fontSize={theme.modals?.connection?.title?.fontSize || '2em'}
+          fontSize={theme?.modals?.connection?.title?.fontSize || '2em'}
           fvs={{
             wght: theme?.modals?.connection?.title?.fontWeight || 200
           }}
@@ -58,7 +58,7 @@ export function BaseModal({
         {children}
         <ErrorMessageContainer hide={!showError || !modalProps.connect?.error?.message}>
           <p>ERROR!</p>
-          <p style={{ color: theme.modals?.connection?.helpers?.color || 'ghostwhite', fontSize: 14 }}>
+          <p style={{ color: theme?.modals?.connection?.helpers?.color || 'ghostwhite', fontSize: 14 }}>
             {modalProps.connect?.error?.message}
           </p>
         </ErrorMessageContainer>
