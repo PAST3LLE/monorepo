@@ -84,6 +84,7 @@ export function useWindowSize(): WindowSizes | undefined {
       devError(
         '[@past3lle/hooks]::useWindowSize::Warning! Cannot use <useWindowSize> hook outside of the PstlHooksProvider. Please add one to the root of your app, ABOVE where you are intending to use the hook. Hover over hook for example use-case.'
       )
+      setContext(WindowSizeContext)
     } else if (!!globalThis.window?.__PSTL_HOOKS_CONTEXT?.WindowSizeContext) {
       setContext(globalThis.window?.__PSTL_HOOKS_CONTEXT?.WindowSizeContext)
     }
