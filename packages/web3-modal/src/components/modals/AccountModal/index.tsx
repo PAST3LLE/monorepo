@@ -169,7 +169,7 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
         </Row>
       </Row>
       <br />
-      <AccountBottomColumnContainer borderRadius="1rem" padding="1rem">
+      <AccountBottomColumnContainer borderRadius="1rem" padding="1em">
         <Row justifyContent="space-between" title={userConnectionInfo.address}>
           <AccountText
             fontWeight={500}
@@ -194,7 +194,7 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
         <FooterActionButtonsRow
           marginTop={'1rem'}
           justifyContent={'space-evenly'}
-          gap="1rem"
+          gap="2rem"
           style={{ zIndex: errorOptions?.show ? 0 : 1 }}
         >
           <AccountModalButton connected={isCopied} onClick={() => onCopy(userConnectionInfo?.address || '')}>
