@@ -1,13 +1,13 @@
 import { MakeOptional } from '@past3lle/types'
 import { IFrameEthereumConnector } from '@past3lle/wagmi-connectors'
-import { InjectedConnectorOptions } from '@wagmi/core'
-import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
+import { EthereumClient, w3mProvider } from '@web3modal/ethereum'
 import { useMemo } from 'react'
 import { Chain } from 'viem'
 import { Config as ClientConfig, WagmiConfigProps, configureChains, createConfig as createClient } from 'wagmi'
+import { InjectedConnector } from 'wagmi/connectors/injected'
 import { publicProvider } from 'wagmi/providers/public'
 
-import { PstlWeb3AuthConnector, PstlWeb3AuthConnectorProps } from '../../connectors/web3auth'
+import { PstlWeb3AuthConnectorProps } from '../../connectors/web3auth'
 import { ConnectorEnhanced } from '../../types'
 import { ChainsPartialReadonly, PstlWeb3ModalProps } from '../types'
 
@@ -17,7 +17,7 @@ interface ClientConfigEnhanced extends Omit<ClientConfig, 'connectors'> {
 interface CreateWagmiClientProps<ID extends number, SC extends ChainsPartialReadonly<ID> = ChainsPartialReadonly<ID>> {
   appName: string
   chains: ChainsPartialReadonly<ID>
-  connectors: PstlWeb3ModalProps<ID, SC>['connectors']
+  connectors: ConnectorEnhanced<any, any>[]
   w3mConnectorProps: PstlWeb3ModalProps<ID, SC>['modals']['walletConnect']
   w3aConnectorProps?: Omit<PstlWeb3AuthConnectorProps<ID>, 'chains'>
   options?: Partial<Pick<ClientConfigEnhanced, 'publicClient'>> & {
@@ -32,8 +32,6 @@ function createWagmiClient<ID extends number>({
   options,
   ...props
 }: CreateWagmiClientProps<ID>): WagmiConfigProps['config'] {
-  const userConnectors = (props?.connectors || options?.connectors || []).map((conn) => conn(props.chains as Chain[]))
-
   const { publicClient } = configureChains(
     props.chains as Chain[],
     [w3mProvider({ projectId: props.w3mConnectorProps.projectId }), publicProvider()],
@@ -42,32 +40,9 @@ function createWagmiClient<ID extends number>({
     }
   )
 
-  const walletConnectProviders = w3mConnectors({
-    projectId: props.w3mConnectorProps.projectId,
-    chains: props.chains as Chain[]
-  })
-
-  const connectorsCopy = userConnectors.slice()
-  // Check user w3a props - if they exist, init web3auth connector
-  if (props?.w3aConnectorProps) {
-    connectorsCopy.push(PstlWeb3AuthConnector({ chains: props.chains as Chain[], ...props.w3aConnectorProps }))
-  }
-
-  // Check if we have multiple providers via window.ethereum.providersMap (coinbase wallet)
-  const userConnectorsContainInjected = userConnectors?.some((conn) => conn.id === 'injected' || conn.id === 'metaMask')
-  if (userConnectorsContainInjected) {
-    // filter injected providers passed by walletconnect to dedup
-    connectorsCopy.push(...walletConnectProviders.filter((connector) => connector.id !== 'injected'))
-  }
-  // otherwise push the walletConnect providers
-  // which includes any injected providers
-  else {
-    connectorsCopy.push(...walletConnectProviders)
-  }
-
   return createClient({
     autoConnect: !!options?.autoConnect,
-    connectors: connectorsCopy,
+    connectors: props?.connectors,
     publicClient: options?.publicClient || publicClient
   }) as WagmiConfigProps['config']
 }
@@ -85,8 +60,9 @@ export type PstlWagmiClientOptions<
   client?: WagmiClient
   options?: Partial<CreateWagmiClientProps<ID, SC>['options']>
 }
+
 export function usePstlWagmiClient<ID extends number, SC extends ChainsPartialReadonly<ID>>(
-  props: PstlWeb3ModalProps<ID, SC>
+  props: Omit<PstlWeb3ModalProps<ID, SC>, 'connectors'> & { connectors: CreateWagmiClientProps<ID, SC>['connectors'] }
 ): ReturnType<typeof createWagmiClient> {
   return useMemo(
     () =>
@@ -103,6 +79,7 @@ export function usePstlWagmiClient<ID extends number, SC extends ChainsPartialRe
     [props]
   )
 }
+
 export function usePstlEthereumClient<ID extends number>(
   ethereumClient: EthereumClient | undefined,
   wagmiClient: ReturnType<typeof createWagmiClient>,
@@ -147,10 +124,13 @@ type ConnectorIsInjected<C extends Instance<any>> = Required<
 >['shimDisconnect'] extends boolean
   ? true
   : false
-
+type InjectedConnectorOptions = MakeOptional<
+  Required<Required<Required<ConstructorParameters<typeof InjectedConnector>>[0]>['options']>,
+  'shimDisconnect'
+>
 type GetConnectorConstructorParams<C extends Instance<any>> = ConnectorIsInjected<C> extends true
   ? Omit<Required<Required<ConstructorParameters<C>>[0]>, 'chains'> & {
-      options: MakeOptional<Required<InjectedConnectorOptions>, 'shimDisconnect'>
+      options: InjectedConnectorOptions
     }
   : Partial<Omit<ConstructorParameters<C>[0], 'chains'>>
 

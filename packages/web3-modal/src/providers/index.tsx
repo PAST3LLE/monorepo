@@ -1,9 +1,13 @@
-import { devDebug } from '@past3lle/utils'
-import { IFrameEthereumConnector, isIframe } from '@past3lle/wagmi-connectors'
+// import { SafeConnector } from '@gnosis.pm/safe-apps-wagmi'
+import { IFrameEthereumConnector } from '@past3lle/wagmi-connectors'
+import { w3mConnectors } from '@web3modal/ethereum'
 import React, { ReactNode, memo, useMemo } from 'react'
+import { Chain } from 'viem'
 
 import { PstlWeb3ConnectionModal } from '../components'
+import { PstlWeb3AuthConnector } from '../connectors/web3auth'
 import { useChainIdFromSearchParams } from '../hooks/useChainIdFromSearchParams'
+import { ConnectorEnhanced } from '../types/connectors'
 import type { ChainsPartialReadonly, PstlWeb3ModalProps } from './types'
 import {
   PstlWagmiClientOptions,
@@ -12,6 +16,7 @@ import {
   usePstlEthereumClient,
   usePstlWagmiClient
 } from './utils'
+import { AppStatus, getAppStatus, mapChainsToConnectors } from './utils/connectors'
 import { PstlWagmiProvider } from './wagmi'
 import { PstlWeb3Modal } from './web3Modal'
 
@@ -47,32 +52,58 @@ const PstlW3ProvidersBase = <ID extends number, SC extends ChainsPartialReadonly
   )
 }
 
-function useDynamicConnectors(
-  config: PstlWeb3ModalProps<number>
-): PstlWeb3ModalProps<number>['connectors'] | PstlWeb3ModalProps<number>['frameConnectors'] {
-  const dynamicConnectors = useMemo(
-    () =>
-      isIframe()
-        ? config.frameConnectors?.length
-          ? config.frameConnectors
-          : [addConnector(IFrameEthereumConnector, {})]
-        : config.connectors,
-    [config.connectors, config.frameConnectors]
-  )
+/* 
+  isIframe()
+    ? config.frameConnectors?.length
+      ? config.frameConnectors
+      : [addConnector(IFrameEthereumConnector, {}), addConnector(SafeConnector, { options: { debug: true } })]
+    : config.connectors,
+*/
 
-  if (process.env.IS_COSMOS) {
-    devDebug('[@past3lle/web3-modal::useDynamicConnectors] COSMOS detected, returning connectors unaffected')
-    return config.connectors
-  }
+function useDynamicConnectors(config: PstlWeb3ModalProps<number>): ConnectorEnhanced<any, any>[] {
+  const status = getAppStatus()
+  return useMemo((): ConnectorEnhanced<any, any>[] => {
+    const defaultConnectors = mapChainsToConnectors(config?.connectors || [], config)
 
-  devDebug(
-    '[@past3lle/web3-modal::useDynamicConnectors] Checking connectors compatibility...',
-    dynamicConnectors,
-    'Is iFrame?',
-    isIframe()
-  )
+    switch (status) {
+      case AppStatus.COSMOS_APP:
+        return defaultConnectors
+      case AppStatus.SAFE_APP:
+      // return mapChainsToConnectors([addConnector(SafeConnector, { options: { debug: true } })], config)
+      case AppStatus.IFRAME:
+        return mapChainsToConnectors(
+          [addConnector(IFrameEthereumConnector, {}), ...(config?.frameConnectors || [])],
+          config
+        )
+      case AppStatus.DAPP:
+        const userConnectors = mapChainsToConnectors(config?.connectors || config?.connectors || [], config)
+        const walletConnectProviders = w3mConnectors({
+          projectId: config.modals.walletConnect.projectId,
+          chains: config.chains as Chain[]
+        })
 
-  return dynamicConnectors
+        const connectors = userConnectors.slice()
+        // Check user w3a props - if they exist, init web3auth connector
+        if (config.modals?.web3auth) {
+          connectors.push(PstlWeb3AuthConnector({ chains: config.chains as Chain[], ...config.modals.web3auth }))
+        }
+
+        // Check if we have multiple providers via window.ethereum.providersMap (coinbase wallet)
+        const userConnectorsContainInjected = userConnectors?.some(
+          (conn) => conn.id === 'injected' || conn.id === 'metaMask'
+        )
+        if (userConnectorsContainInjected) {
+          // filter injected providers passed by walletconnect to dedup
+          connectors.push(...walletConnectProviders.filter((connector) => connector.id !== 'injected'))
+        }
+        // otherwise push the walletConnect providers
+        // which includes any injected providers
+        else {
+          connectors.push(...walletConnectProviders)
+        }
+        return defaultConnectors
+    }
+  }, [config, status])
 }
 
 const PstlW3Providers = memo(PstlW3ProvidersBase)
