@@ -1,9 +1,9 @@
 import React, { memo } from 'react'
-import { ConnectorEnhanced } from 'src/types'
 import { useSwitchNetwork } from 'wagmi'
 
 import { CHAIN_IMAGES } from '../../../constants'
 import { usePstlWeb3Modal, useUserConnectionInfo } from '../../../hooks'
+import { ConnectorEnhanced } from '../../../types'
 import { AccountColumnContainer } from '../AccountModal/styled'
 import { ConnectorOption } from '../ConnectionModal/ConnectorOption'
 import { WalletsWrapper } from '../common/styled'

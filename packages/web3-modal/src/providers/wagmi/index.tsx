@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react'
-import { SmartAutoConnectProps } from 'src/hooks/useSmartAutoConnect'
 import { WagmiConfig } from 'wagmi'
 
+import { SmartAutoConnectProps } from '../../hooks/useSmartAutoConnect'
 import { WagmiClient } from '../utils'
 import { SmartConnect } from './SmartConnect'
 
