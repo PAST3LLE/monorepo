@@ -1,11 +1,13 @@
 import { PstlHooksProvider } from '@past3lle/hooks'
 import {
+  AppType,
   type ChainsPartialReadonly,
   PstlModalTheme as ForgeModalTheme,
   PstlW3Providers,
   W3aStyleResetProvider,
   addConnector,
   addFrameConnector,
+  getAppType,
   usePstlEthereumClient as useEthereumClient,
   usePstlAccountNetworkActions as useW3AccountNetworkActions,
   usePstlConnectDisconnect as useW3ConnectDisconnect,
@@ -96,6 +98,8 @@ export {
   useWagmiClient,
   addConnector,
   addFrameConnector,
+  getAppType,
+  AppType,
   type ForgeModalTheme,
   type ForgeW3CoreProvidersProps,
   type ChainsPartialReadonly
