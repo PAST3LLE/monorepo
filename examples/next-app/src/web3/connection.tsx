@@ -1,7 +1,7 @@
 // WC STUFF
 import { PstlWeb3ModalProps } from "@past3lle/web3-modal";
 import { goerli, mainnet } from "viem/chains";
-import theme, { PALETTE } from './theme'
+
 import { WALLETCONNECT_CONFIG } from "./config/walletconnect";
 import { ROOT_CONFIG } from "./config/root";
 import { CONNECTORS_CONFIG } from "./config/connectors";

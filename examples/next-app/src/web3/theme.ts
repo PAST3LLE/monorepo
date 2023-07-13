@@ -13,6 +13,7 @@ export const PALETTE = {
     DEFAULT: {
       modals: {
         connection: {
+          baseFontSize: 20,
           backgroundImg:
             'https://uploads-ssl.webflow.com/63fdf8c863bcf0c02efdffbc/64144c23e693f7d7f5cdb958_chorus_logo.svg',
           title: {
@@ -23,9 +24,17 @@ export const PALETTE = {
             backgroundColor: PALETTE.mainBgOpaque,
             fontWeight: 600,
             fontSize: '1rem',
-            letterSpacing: '-1.7px',
+            letterSpacing: '-1.1px',
             fontStyle: 'normal',
-            textShadow: '3px 2px 2px #00000078'
+            textShadow: '3px 2px 2px #00000078',
+            border: {
+              border: 'none'
+            }
+          }
+        },
+        account: {
+          balanceAndAddressContainer: {
+            backgroundColor: '#0a383ee0' || '#1e1e1edb'
           }
         }
       }
