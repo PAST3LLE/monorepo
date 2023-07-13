@@ -41,7 +41,7 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
     connectorDisplayOverrides?.[trimAndLowerCase(userConnectionInfo.connector?.id)] ||
     connectorDisplayOverrides?.[trimAndLowerCase(userConnectionInfo.connector?.name)]
   )?.logo
-  const chainLogo = CHAIN_IMAGES.get(userConnectionInfo?.chain?.id)
+  const chainLogo = userConnectionInfo?.chain?.id ? CHAIN_IMAGES?.[userConnectionInfo.chain.id] : undefined
 
   const [isCopied, onCopy] = useCopyClipboard(3000)
   const onExplorer = useCallback(() => {
