@@ -9,6 +9,7 @@ import { useModalTheme, usePstlWeb3Modal } from '../../hooks'
 import { AccountModal } from './AccountModal'
 import { ConnectionModal } from './ConnectionModal'
 import { ErrorModal } from './ErrorModal'
+import { NetworkModal } from './NetworkModal'
 import { BaseModal } from './common'
 import { BaseModalProps } from './common/types'
 
@@ -34,6 +35,21 @@ export function ModalWithoutThemeProvider(baseProps: BaseModalProps) {
         }
 
         return [() => <AccountModal {...props} />, augmentedBaseProps]
+      }
+
+      case 'SwitchNetwork':
+      case 'SelectNetwork': {
+        const augmentedBaseProps: BaseModalProps = {
+          ...baseProps,
+          title: 'NETWORK',
+          width: '450px',
+          maxWidth: '80vw',
+          minHeight: '350px',
+          maxHeight: '80vh',
+          height: 'auto'
+        }
+
+        return [() => <NetworkModal />, augmentedBaseProps]
       }
 
       case 'ConnectWallet':

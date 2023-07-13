@@ -1,5 +1,5 @@
 import { Button, CloseIcon, ColumnCenter, Modal, Text } from '@past3lle/components'
-import { setBackgroundOrDefault, setBestTextColour, upToSmall } from '@past3lle/theme'
+import { setBackgroundOrDefault, setBestTextColour, upToExtraSmall, upToSmall } from '@past3lle/theme'
 import styled from 'styled-components'
 
 import BaseTheme from '../../../theme/baseTheme'
@@ -180,8 +180,12 @@ export const StyledConnectionModal = styled(Modal)`
   `}
 `
 
-export const WalletsWrapper = styled.div<{ isError?: boolean; view?: PstlWeb3ConnectionModalProps['walletsView'] }>`
-  width: 100%;
+export const WalletsWrapper = styled.div<{
+  isError?: boolean
+  width?: string
+  view?: PstlWeb3ConnectionModalProps['walletsView']
+}>`
+  width: ${({ width = '100%' }) => width};
   padding: 0 1rem;
   z-index: 1;
 
@@ -243,5 +247,9 @@ export const WalletsWrapper = styled.div<{ isError?: boolean; view?: PstlWeb3Con
           max-width: 25px;
         }
       }
+  `}
+
+  ${upToExtraSmall`
+    grid-template-columns: 1fr;
   `}
 `

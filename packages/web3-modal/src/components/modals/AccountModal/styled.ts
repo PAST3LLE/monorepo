@@ -33,13 +33,36 @@ export const AccountColumnContainer = styled(Column)`
     letter-spacing: -0.6px;
   }
 
+  > ${Row} {
+    // Details column
+    > ${Column} {
+      width: 100%;
+      order: 0;
+    }
+    // Logo row
+    > ${Row} {
+      width: auto;
+      flex: 1;
+    }
+  }
+
   ${upToSmall`
       > ${Row} {
         flex-flow: row wrap;
-        > img {
-          order: 1;
-          width: 17vw;
+        // Details column
+        > ${Column} {
+          order: 2;
           margin: auto;
+        }
+        // Logo row
+        > ${Row} {
+          order: 1;
+          margin-bottom: 1rem;
+          min-width: 150px;
+          > img {
+            width: 17vw;
+            margin: auto;
+          }
         }
         > ${ModalButton} {
             order: 2;
@@ -64,6 +87,11 @@ export const AccountColumnContainer = styled(Column)`
     `}
 
   ${upToExtraSmall`
+    > ${Row} {
+      > ${Column} {
+        max-width: unset;
+      }
+    }
     > ${Column} {
       > ${Row} {
         > ${AccountText} {

@@ -61,50 +61,84 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
   return (
     <AccountColumnContainer width="100%">
       <Row width="100%">
-        <ModalButton
-          connected={false}
-          width="100%"
-          maxWidth="400px"
-          marginRight="1rem"
-          backgroundColor={
-            userConnectionInfo.chain?.unsupported
-              ? '#7f1d1db0'
-              : theme.modals?.connection?.button?.backgroundColor ||
-                BaseTheme.modes.DEFAULT.modals.connection.button.backgroundColor
-          }
-          onClick={() => modalCallbacks.open({ route: 'ConnectWallet' })}
-        >
-          <Column width={'100%'}>
-            <AccountText display="inline-flex" alignItems="center" width="auto">
-              Wallet:{' '}
-              <AccountText fontWeight={500} display={'inline-flex'} alignItems="center" padding={0} marginLeft="0.5rem">
-                {(userConnectionInfo.connector as ConnectorEnhanced<any, any>)?.customName ||
-                  userConnectionInfo.connector?.name}
+        <Column width="100%" maxWidth={400}>
+          <ModalButton
+            connected={false}
+            width="100%"
+            marginRight="1rem"
+            backgroundColor={
+              userConnectionInfo.chain?.unsupported
+                ? '#7f1d1db0'
+                : theme.modals?.connection?.button?.backgroundColor ||
+                  BaseTheme.modes.DEFAULT.modals.connection.button.backgroundColor
+            }
+            onClick={() => modalCallbacks.open({ route: 'ConnectWallet' })}
+          >
+            <Column width={'100%'}>
+              <AccountText display="inline-flex" alignItems="center" width="auto">
+                Wallet:{' '}
+                <AccountText
+                  fontWeight={500}
+                  display={'inline-flex'}
+                  alignItems="center"
+                  padding={0}
+                  marginLeft="0.5rem"
+                >
+                  {(userConnectionInfo.connector as ConnectorEnhanced<any, any>)?.customName ||
+                    userConnectionInfo.connector?.name}
+                </AccountText>
               </AccountText>
-            </AccountText>
-            <AccountText display="inline-flex" alignItems="center" width="auto">
-              Network:{' '}
-              <AccountText fontWeight={500} display={'inline-flex'} alignItems="center" padding={0} marginLeft="0.5rem">
-                {userConnectionInfo.chain?.name || 'Unknown network'}
-                {userConnectionInfo.chain?.unsupported && (
-                  <small className="unsupported-small-text">[unsupported]</small>
-                )}
+              <AccountText display="inline-flex" alignItems="center" width="auto">
+                Network:{' '}
+                <AccountText
+                  fontWeight={500}
+                  display={'inline-flex'}
+                  alignItems="center"
+                  padding={0}
+                  marginLeft="0.5rem"
+                >
+                  {userConnectionInfo.chain?.name || 'Unknown network'}
+                  {userConnectionInfo.chain?.unsupported && (
+                    <small className="unsupported-small-text">[unsupported]</small>
+                  )}
+                </AccountText>
               </AccountText>
-            </AccountText>
-          </Column>
-        </ModalButton>
-        {logo && (
-          <img
-            src={logo}
-            style={{
-              marginLeft: 'auto',
-              maxWidth: 110,
-              borderRadius: '5rem',
-              overflow: 'hidden'
-            }}
-          />
-        )}
-        {chainLogo && <img src={chainLogo} style={{ marginLeft: -27.5, maxWidth: 110, borderRadius: '5rem' }} />}
+            </Column>
+          </ModalButton>
+          <Row width="100%" marginTop="1rem" gap="1rem">
+            {(userConnectionInfo?.supportedChains?.length || 0) > 1 && (
+              <AccountModalButton
+                connected={false}
+                padding="0.6rem"
+                onClick={() => modalCallbacks.open({ route: 'SelectNetwork' })}
+              >
+                Switch Network
+              </AccountModalButton>
+            )}
+            <AccountModalButton
+              connected={false}
+              padding="0.6rem"
+              onClick={() => disconnectAsync()}
+              backgroundColor={'#7b2727b0'}
+            >
+              Disconnect
+            </AccountModalButton>
+          </Row>
+        </Column>
+        <Row width="100%">
+          {logo && (
+            <img
+              src={logo}
+              style={{
+                marginLeft: 'auto',
+                maxWidth: 110,
+                borderRadius: '5rem',
+                overflow: 'hidden'
+              }}
+            />
+          )}
+          {chainLogo && <img src={chainLogo} style={{ marginLeft: -27.5, maxWidth: 110, borderRadius: '5rem' }} />}
+        </Row>
       </Row>
       <br />
       <Column backgroundColor={'#370937c9'} borderRadius="1rem" padding="1rem">
@@ -140,9 +174,6 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
           </AccountModalButton>
           <AccountModalButton connected={false} onClick={() => onExplorer()}>
             {`${isSmallerScreen ? '' : 'View on '}Explorer`}
-          </AccountModalButton>
-          <AccountModalButton connected={false} onClick={() => disconnectAsync()}>
-            Disconnect
           </AccountModalButton>
         </FooterActionButtonsRow>
       </Column>

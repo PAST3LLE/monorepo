@@ -61,7 +61,7 @@ export function useConnectDisconnect(props?: UseConnectDisconnectProps): {
 
 export function useUserConnectionInfo() {
   const { address, connector, isConnected, isConnecting, isDisconnected, isReconnecting } = useAccount()
-  const { chain } = useNetwork()
+  const { chain, chains } = useNetwork()
   const balanceInfo = useBalance({
     address,
     chainId: chain?.id
@@ -78,6 +78,7 @@ export function useUserConnectionInfo() {
     isDisconnected,
     isReconnecting,
     chain,
+    supportedChains: chains,
     balance: balanceInfo
   }
 }
