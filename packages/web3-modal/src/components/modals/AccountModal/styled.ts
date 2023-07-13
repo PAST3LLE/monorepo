@@ -25,6 +25,14 @@ export const AccountText = styled(ModalTitleText).attrs((props) => ({
 }))``
 
 export const AccountColumnContainer = styled(Column)`
+  .unsupported-small-text {
+    font-size: 0.6em;
+    color: darkgrey;
+    margin-left: 0.35rem;
+    font-variation-settings: 'wght' 100;
+    letter-spacing: -0.6px;
+  }
+
   ${upToSmall`
       > ${Row} {
         flex-flow: row wrap;

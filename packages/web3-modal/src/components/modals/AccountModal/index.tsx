@@ -2,10 +2,12 @@ import { Column, Row } from '@past3lle/components'
 import { useCopyClipboard, useIsSmallMediaWidth } from '@past3lle/hooks'
 import { truncateAddress } from '@past3lle/utils'
 import React, { memo, useCallback } from 'react'
+import { useTheme } from 'styled-components'
 
 import { CHAIN_IMAGES } from '../../../constants'
 import { ModalPropsCtrlState } from '../../../controllers/types/controllerTypes'
 import { useConnectDisconnect, usePstlWeb3Modal, useUserConnectionInfo } from '../../../hooks'
+import BaseTheme from '../../../theme/baseTheme'
 import { ConnectorEnhanced } from '../../../types'
 import { trimAndLowerCase } from '../../../utils'
 import { ModalButton } from '../common/styled'
@@ -54,6 +56,8 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
     window.open(explorerUrl, '_blank')
   }, [userConnectionInfo?.chain?.blockExplorers?.default, userConnectionInfo?.address])
 
+  const theme = useTheme()
+
   return (
     <AccountColumnContainer width="100%">
       <Row width="100%">
@@ -62,6 +66,12 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
           width="100%"
           maxWidth="400px"
           marginRight="1rem"
+          backgroundColor={
+            userConnectionInfo.chain?.unsupported
+              ? '#7f1d1db0'
+              : theme.modals?.connection?.button?.backgroundColor ||
+                BaseTheme.modes.DEFAULT.modals.connection.button.backgroundColor
+          }
           onClick={() => modalCallbacks.open({ route: 'ConnectWallet' })}
         >
           <Column width={'100%'}>
@@ -76,6 +86,9 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
               Network:{' '}
               <AccountText fontWeight={500} display={'inline-flex'} alignItems="center" padding={0} marginLeft="0.5rem">
                 {userConnectionInfo.chain?.name || 'Unknown network'}
+                {userConnectionInfo.chain?.unsupported && (
+                  <small className="unsupported-small-text">[unsupported]</small>
+                )}
               </AccountText>
             </AccountText>
           </Column>
