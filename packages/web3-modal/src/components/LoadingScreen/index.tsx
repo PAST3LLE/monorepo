@@ -3,7 +3,7 @@ import { setCssBackground, urlToSimpleGenericImageSrcSet } from '@past3lle/theme
 import React from 'react'
 import styled from 'styled-components'
 
-import { ModalTitleText } from '../ConnectionModal/styled'
+import { ModalTitleText } from '../modals/common/styled'
 
 interface LoadingContainerProps {
   /**

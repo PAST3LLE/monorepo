@@ -164,6 +164,7 @@ const DEFAULT_PROPS: PstlWeb3ModalProps<number> = {
   },
   modals: {
     root: {
+      title: 'PSTL CONNECT',
       themeConfig: { theme: pstlModalTheme },
       closeModalOnConnect: false,
       hideInjectedFromRoot: true,

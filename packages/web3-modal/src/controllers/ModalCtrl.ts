@@ -28,6 +28,8 @@ export const ModalCtrl = {
 
   async open(options?: OpenOptions) {
     return new Promise<void>((resolve) => {
+      state.open = false
+
       const { isStandalone } = OptionsCtrl.state
       const { isConnected } = AccountCtrl.state
       const { enableNetworkView } = ConfigCtrl.state

@@ -4,8 +4,8 @@ import styled from 'styled-components'
 
 export const StyledConnectedCheckMark = styled(RowStart)`
   position: absolute;
-  top: 1em;
-  left: 1em;
+  top: 3em;
+  right: 1em;
 
   gap: 0.4em;
 

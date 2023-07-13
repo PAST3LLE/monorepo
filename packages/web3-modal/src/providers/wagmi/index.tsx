@@ -1,21 +1,18 @@
 import React, { ReactNode } from 'react'
-import { WagmiConfig, WagmiConfigProps } from 'wagmi'
+import { WagmiConfig } from 'wagmi'
 
-import { AutoconnectUpdater } from './AutoconnectUpdater'
+import { SmartAutoConnectProps } from '../../hooks/useSmartAutoConnect'
+import { WagmiClient } from '../utils'
+import { SmartConnect } from './SmartConnect'
 
-export const PstlWagmiProvider = ({
-  chainIdFromUrl,
-  persistOnRefresh,
-  children,
-  wagmiClient
-}: {
-  chainIdFromUrl: number | undefined
-  persistOnRefresh?: boolean
+interface WagmiProviderProps extends SmartAutoConnectProps {
   children: ReactNode
-  wagmiClient: WagmiConfigProps['config']
-}) => (
+  wagmiClient: WagmiClient
+}
+
+export const PstlWagmiProvider = ({ children, wagmiClient, ...smartConnectProps }: WagmiProviderProps) => (
   <WagmiConfig config={wagmiClient}>
-    <AutoconnectUpdater chainIdFromUrl={chainIdFromUrl} persistOnRefresh={!!persistOnRefresh} />
+    <SmartConnect {...smartConnectProps} />
     {children}
   </WagmiConfig>
 )

@@ -1,11 +1,11 @@
 import { Button, CloseIcon, ColumnCenter, Modal, Text } from '@past3lle/components'
-import { setBackgroundOrDefault, setBestTextColour, upToSmall } from '@past3lle/theme'
+import { setBackgroundOrDefault, setBestTextColour, upToExtraSmall, upToSmall } from '@past3lle/theme'
 import styled from 'styled-components'
 
-import { PstlWeb3ConnectionModalProps } from '.'
-import BaseTheme from '../../theme/baseTheme'
-import { getPosition } from '../../utils'
-import { RecommendedLabelWrapper } from './RecommendedLabel'
+import BaseTheme from '../../../theme/baseTheme'
+import { getPosition } from '../../../utils'
+import { PstlWeb3ConnectionModalProps } from '../ConnectionModal'
+import { RecommendedLabelWrapper } from '../ConnectionModal/RecommendedLabel'
 
 const ERROR_CONTAINER_HEIGHT_PX = 120
 
@@ -135,12 +135,17 @@ export const ErrorMessageContainer = styled(InnerContainer)<{ hide: boolean }>`
   opacity: ${({ hide }) => (hide ? 0 : 1)};
 
   overflow: auto;
+  align-items: start;
   height: ${ERROR_CONTAINER_HEIGHT_PX}px;
   padding: 1rem 2rem;
-  border-radius: 0 0 1rem 1rem;
+  border-radius: 0 0 0.4rem 0.4rem;
+  border-left: 0.5rem solid indianred;
   background: #00000070;
   position: absolute;
   bottom: 0;
+  > p:first-child {
+    margin: 0;
+  }
   > p {
     font-family: monospace;
     color: indianred;
@@ -166,7 +171,7 @@ export const StyledConnectionModal = styled(Modal)`
             border-bottom-right-radius: 0;
             
              > ${ErrorMessageContainer} {
-              border-radius: 1rem 1rem 0 0;
+              border-radius: 0.4rem 0.4rem 0 0;
             }
           }
 
@@ -175,9 +180,21 @@ export const StyledConnectionModal = styled(Modal)`
   `}
 `
 
-export const WalletsWrapper = styled.div<{ view?: PstlWeb3ConnectionModalProps['walletsView'] }>`
-  width: 100%;
-  overflow: scroll;
+export const WalletsWrapper = styled.div<{
+  isError?: boolean
+  width?: string
+  view?: PstlWeb3ConnectionModalProps['walletsView']
+}>`
+  width: ${({ width = '100%' }) => width};
+  padding: 0 1rem;
+  z-index: 1;
+
+  ${({ isError }) =>
+    isError &&
+    `
+    z-index: 0;
+    overflow-y: hidden;
+  `}
 
   > ${ModalButton} {
     > img {
@@ -194,6 +211,7 @@ export const WalletsWrapper = styled.div<{ view?: PstlWeb3ConnectionModalProps['
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 1rem;
     justify-content: center;
+    padding: 1rem;
 
     > ${ModalButton} {
       flex-flow: column;
@@ -229,5 +247,9 @@ export const WalletsWrapper = styled.div<{ view?: PstlWeb3ConnectionModalProps['
           max-width: 25px;
         }
       }
+  `}
+
+  ${upToExtraSmall`
+    grid-template-columns: 1fr;
   `}
 `

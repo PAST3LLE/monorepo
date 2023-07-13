@@ -1,6 +1,6 @@
 import { IFrameEthereumConnector, LedgerHIDConnector } from '@past3lle/wagmi-connectors'
-import { LedgerConnector } from '@wagmi/connectors/ledger'
 import { TorusWalletConnectorPlugin } from '@web3auth/torus-wallet-connector-plugin'
+import { LedgerConnector } from 'wagmi/connectors/ledger'
 
 import { addConnector } from '../providers/utils'
 import { WALLETCONNECT_ID, WEB3AUTH_TEST_ID } from './config'

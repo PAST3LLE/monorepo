@@ -1,6 +1,8 @@
 {
-  "short_name": "SKILLFORGE",
-  "name": "SKILLFORGE: SKILLS + UPGRADES",
+  "short_name": "FORGE",
+  "name": "FORGE: SKILLS & UPGRADES",
+  "description": "Unlock, upgrade and discover new skills!",
+  "iconPath": "512_logo.png",
   "icons": [
     {
       "src": "favicon@3x.png",

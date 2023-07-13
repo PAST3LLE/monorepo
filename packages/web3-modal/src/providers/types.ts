@@ -5,7 +5,7 @@ import { EthereumClient } from '@web3modal/ethereum'
 import { Web3ModalProps as Web3ModalConfigOriginal } from '@web3modal/react'
 import { Chain as ChainWagmi } from 'wagmi'
 
-import { PstlWeb3ConnectionModalProps } from '../components/ConnectionModal'
+import { PstlWeb3ConnectionModalProps } from '../components/modals/ConnectionModal'
 import { PstlWeb3AuthConnectorProps } from '../connectors'
 import { ConnectorEnhanced } from '../types'
 import { PstlWagmiClientOptions } from './utils'
@@ -184,7 +184,7 @@ export interface Web3ModalProps<ID extends number, SC extends ChainsPartialReado
         zIndex?: number
     }
      */
-    root?: Omit<PstlWeb3ConnectionModalProps, 'isOpen' | 'onDismiss' | 'chainIdFromUrl'>
+    root?: Omit<PstlWeb3ConnectionModalProps, 'isOpen' | 'onDismiss' | 'chainIdFromUrl' | 'error'>
     /**
      * @name walletConnect
      * @description WalletConnect (Web3Modal) props

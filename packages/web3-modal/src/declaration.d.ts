@@ -10,3 +10,12 @@ declare global {
     coinbaseWalletExtension?: WindowProvider
   }
 }
+
+declare module 'valtio' {
+  function useSnapshot<T extends object>(p: T): T
+}
+
+declare module '*.png' {
+  export const src: string
+  export default src
+}

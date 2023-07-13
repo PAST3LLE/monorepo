@@ -2,12 +2,12 @@ import { ButtonProps } from '@past3lle/components'
 import { ConnectArgs, ConnectResult, PublicClient } from '@wagmi/core'
 import React, { memo } from 'react'
 
-import { ConnectorEnhanced } from '../../types'
-import { ConnectorInfo } from '../../utils'
-import { ConnectedCheckMark } from './ConnectedCheckMark'
+import { ConnectorEnhanced } from '../../../types'
+import { ConnectorInfo } from '../../../utils'
+import { ModalButton } from '../common/styled'
+// import { ConnectedCheckMark } from './ConnectedCheckMark'
 import { ConnectorHelper } from './ConnectorHelper'
 import { RecommendedLabel } from './RecommendedLabel'
-import { ModalButton } from './styled'
 
 export type ConnectorOptionProps = ConnectorInfo & {
   connector: ConnectorEnhanced<any, any>
@@ -36,7 +36,7 @@ function ConnectorOptionBase({
       <ModalButton onClick={callback} connected={connected} {...buttonProps}>
         <img src={logo} />
         {label}
-        {connected && <ConnectedCheckMark />}
+        {/* {connected && <ConnectedCheckMark />} */}
         {isRecommended && <RecommendedLabel />}
       </ModalButton>
       {modalView !== 'grid' && showHelperText && !!helperContent?.content && (

@@ -45,6 +45,11 @@ export interface PstlModalTheme {
         hoverAnimations?: boolean
       }
     }
+    account?: {
+      balanceAndAddressContainer?: {
+        backgroundColor?: string
+      }
+    }
   }
 }
 

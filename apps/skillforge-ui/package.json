@@ -23,12 +23,12 @@
     "depcheck": "npx npm-check",
     "lint": "npx prettier --write src --ignore-path ./.prettierignore --config ./.prettierrc",
     "start:mock": "REACT_APP_IS_MOCK=true && yarn start",
-    "start": "PORT=6969 GENERATE_SOURCEMAP=false craco start",
-    "build": "DISABLE_ESLINT_PLUGIN=true craco build",
-    "serve": "npx serve build -l 7766",
+    "start": "PORT=6969 HTTPS=true GENERATE_SOURCEMAP=false react-app-rewired start",
+    "build": "DISABLE_ESLINT_PLUGIN=true react-app-rewired build",
+    "serve": "npx serve build -l 7766 --ssl-cert /Users/davidsato/Work/pastelle/localhost-cert/CA/localhost/localhost.crt --ssl-key /Users/davidsato/Work/pastelle/localhost-cert/CA/localhost/localhost.decrypted.key --cors",
     "build:serve": "yarn build && yarn serve",
-    "test": "craco test --env=jsdom",
-    "test:debug": "craco --inspect-brk test --runInBand --no-cache",
+    "test": "react-app-rewired test --env=jsdom",
+    "test:debug": "react-app-rewired --inspect-brk test --runInBand --no-cache",
     "dedup": "npx yarn-deduplicate",
     "copy:metadata": "cp ../skills-nft/src/skills/metadata.js ./src/mock/metadata/fullMetadata.js",
     "cli": "npx @past3lle/forge-cli@latest"
@@ -40,6 +40,7 @@
     "**/*/@wagmi/core": ">=1"
   },
   "devDependencies": {
+    "react-app-rewired": "^2.2.1",
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.13.8",
     "@craco/craco": "^5.7.0",
     "@past3lle/forge-web3": "^0.1.9",

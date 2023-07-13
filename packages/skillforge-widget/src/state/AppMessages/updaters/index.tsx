@@ -1,4 +1,4 @@
-import { ForgeW3ChainState, useChainState, useForgeUserConfigAtom } from '@past3lle/forge-web3'
+import { AppType, ForgeW3ChainState, getAppType, useChainState, useForgeUserConfigAtom } from '@past3lle/forge-web3'
 import { useEffect } from 'react'
 
 import { AppMessagesKeys, useAppMessagesAtom } from '..'
@@ -20,12 +20,16 @@ function useSetChainStateMessages() {
       chains: { length: availableChains }
     }
   ] = useForgeUserConfigAtom()
+  const appType = getAppType()
   useEffect(() => {
     switch (chainState) {
       case ForgeW3ChainState.UNSUPPORTED: {
+        const isSafe = appType === AppType.SAFE_APP
+        const endMessage = isSafe
+          ? 'Select the appropriate Safe network from the network toggler in the upper right-hand-corner.'
+          : 'Click the network button above and switch to a supported network.'
         setAppMessages({
-          [AppMessagesKeys.UNSUPPORTED_CHAIN]:
-            'Unsupported network! Click the network button above and switch to a supported network.'
+          [AppMessagesKeys.UNSUPPORTED_CHAIN]: `Unsupported network! ${endMessage}`
         })
         break
       }
@@ -42,5 +46,5 @@ function useSetChainStateMessages() {
         break
       }
     }
-  }, [readonlyChain?.name, chainState, setAppMessages, availableChains])
+  }, [readonlyChain?.name, chainState, setAppMessages, availableChains, appType])
 }

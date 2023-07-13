@@ -4,7 +4,7 @@ import React, { ReactNode, useState } from 'react'
 import styled from 'styled-components'
 import { Connector } from 'wagmi'
 
-import { ConnectorEnhanced } from '../../types'
+import { ConnectorEnhanced } from '../../../types'
 
 const ConnectorHelperContainer = styled(ColumnCenter)<{ open: boolean; contentHeight?: number }>`
   cursor: pointer;

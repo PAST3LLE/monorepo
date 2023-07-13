@@ -2,25 +2,29 @@ import React, { Dispatch, SetStateAction } from 'react'
 import { DefaultTheme } from 'styled-components'
 
 import { ProviderMountedMap, PstlWeb3ConnectionModalProps } from '.'
-import { useConnectDisconnect, useUserConnectionInfo, useWeb3Modals } from '../../hooks'
-import { ConnectorEnhanced } from '../../types'
-import { runConnectorConnectionLogic, trimAndLowerCase } from '../../utils'
+import { ModalPropsCtrlState } from '../../../controllers/types/controllerTypes'
+import { useConnectDisconnect, useUserConnectionInfo, useWeb3Modals } from '../../../hooks'
+import { ConnectorEnhanced } from '../../../types'
+import { runConnectorConnectionLogic, trimAndLowerCase } from '../../../utils'
 import { ConnectorOption } from './ConnectorOption'
 
-type RenderConnectorOptionsProps = Pick<
+export type RenderConnectorOptionsProps = Pick<
   PstlWeb3ConnectionModalProps,
   'connectorDisplayOverrides' | 'hideInjectedFromRoot' | 'chainIdFromUrl' | 'buttonProps'
 > & {
+  openType: ModalPropsCtrlState['root']['openType']
   modalView: 'list' | 'grid'
   theme: DefaultTheme
   userConnectionInfo: ReturnType<typeof useUserConnectionInfo>
   connect: ReturnType<typeof useConnectDisconnect>['connect']['connectAsync']
+  disconnect: ReturnType<typeof useConnectDisconnect>['disconnect']['disconnectAsync']
   modalCallbacks: ReturnType<typeof useWeb3Modals>
   providerMountedState: [ProviderMountedMap, Dispatch<SetStateAction<ProviderMountedMap>>]
   providerLoadingState: [boolean, (loading: boolean) => void]
 }
 const RenderConnectorOptionsBase =
   ({
+    openType,
     connectorDisplayOverrides,
     hideInjectedFromRoot,
     chainIdFromUrl,
@@ -29,6 +33,7 @@ const RenderConnectorOptionsBase =
     theme,
     modalCallbacks: { root, walletConnect },
     connect,
+    disconnect,
     userConnectionInfo: { connector: currentConnector, chain, address },
     providerMountedState: [providerMountedMap, setProviderMountedMap],
     providerLoadingState: [, setProviderLoading]
@@ -43,6 +48,8 @@ const RenderConnectorOptionsBase =
       currentConnector,
       {
         connect,
+        disconnect,
+        open: openType === 'walletconnect' ? walletConnect.open : root.open,
         openWalletConnectModal: walletConnect.open,
         closeRootModal: root.close,
         setProviderModalMounted: (mounted: boolean) =>

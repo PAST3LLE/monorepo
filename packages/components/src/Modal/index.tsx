@@ -41,8 +41,8 @@ const StyledDialogOverlay = styled(({ zIndex, ...props }) => <AnimatedDialogOver
 const AnimatedDialogContent = animated(DialogContent)
 // destructure to not pass custom props to Dialog DOM element
 const StyledDialogContent = styled(
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  ({ margin, minHeight, maxHeight, maxWidth, width, mobile, isOpen, isLargeImageModal, tabIndex, zIndex, ...rest }) => (
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, prettier/prettier
+  ({ height, margin, minHeight, maxHeight, maxWidth, width, mobile, isOpen, isLargeImageModal, tabIndex, zIndex, ...rest }) => (
     <AnimatedDialogContent {...rest} tabIndex={tabIndex} />
   )
 ).attrs({
@@ -70,6 +70,7 @@ const StyledDialogContent = styled(
     width: ${({ isLargeImageModal, width = '50vh' }) => (isLargeImageModal ? '90vh' : width)};
     max-width: ${({ maxHeight, maxWidth = '42rem', isLargeImageModal = false }) =>
       `${isLargeImageModal ? maxHeight + 'vh' : maxWidth}`};
+    ${({ height }) => height && `height: ${height};`}
     ${({ maxHeight }) => maxHeight && `max-height: ${maxHeight};`}
     ${({ minHeight }) => minHeight && `min-height: ${minHeight};`}
   }
@@ -82,6 +83,7 @@ export interface ModalProps {
   onDismiss: () => void
   minHeight?: string
   maxHeight?: string
+  height?: string
   maxWidth?: string
   width?: string | number
   margin?: string
@@ -98,6 +100,7 @@ export function Modal({
   tabIndex,
   onDismiss,
   margin,
+  height,
   minHeight,
   maxHeight = '90vh',
   maxWidth,
@@ -131,6 +134,7 @@ export function Modal({
         maxHeight={maxHeight}
         maxWidth={maxWidth}
         width={width}
+        height={height}
         mobile={isMobile}
         tabIndex={tabIndex}
         isLargeImageModal={isLargeImageModal}
