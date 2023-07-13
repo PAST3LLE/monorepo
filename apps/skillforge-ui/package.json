@@ -25,7 +25,7 @@
     "start:mock": "REACT_APP_IS_MOCK=true && yarn start",
     "start": "PORT=6969 HTTPS=true GENERATE_SOURCEMAP=false react-app-rewired start",
     "build": "DISABLE_ESLINT_PLUGIN=true react-app-rewired build",
-    "serve": "npx serve build -l 7766",
+    "serve": "npx serve build -l 7766 --ssl-cert /Users/davidsato/Work/pastelle/localhost-cert/CA/localhost/localhost.crt --ssl-key /Users/davidsato/Work/pastelle/localhost-cert/CA/localhost/localhost.decrypted.key --cors",
     "build:serve": "yarn build && yarn serve",
     "test": "react-app-rewired test --env=jsdom",
     "test:debug": "react-app-rewired --inspect-brk test --runInBand --no-cache",
