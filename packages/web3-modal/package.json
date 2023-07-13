@@ -76,13 +76,11 @@
     "styled-components": ">=5"
   },
   "dependencies": {
-    "@gnosis.pm/safe-apps-wagmi": "2.1.0",
     "@past3lle/components": "^0.1.9",
     "@past3lle/hooks": "^0.1.9",
     "@past3lle/theme": "^0.1.1",
     "@past3lle/utils": "^0.1.1",
     "@past3lle/wagmi-connectors": "^0.1.1",
-    "@wagmi/connectors": "2.5.0",
     "@walletconnect/client": "1.8.0",
     "@walletconnect/utils": "2.8.3",
     "@web3auth/base": "6.1.1",
