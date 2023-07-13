@@ -2,7 +2,6 @@ import { useIsExtraSmallMediaWidth } from '@past3lle/hooks'
 import React, { memo, useMemo, useState } from 'react'
 import { useTheme } from 'styled-components'
 
-import { ModalPropsCtrl } from '../../../controllers'
 import { ModalPropsCtrlState } from '../../../controllers/types/controllerTypes'
 import { useConnectDisconnect, usePstlWeb3ModalState, useUserConnectionInfo, useWeb3Modals } from '../../../hooks'
 import { LoadingScreen } from '../../LoadingScreen'
@@ -23,6 +22,8 @@ export type ProviderMountedMap = {
 }
 
 function ConnectionModalContent({
+  openType = 'root',
+  hideInjectedFromRoot,
   closeModalOnConnect,
   connectorDisplayOverrides: connectorDisplayOverridesUnformatted,
   walletsView = 'list',
@@ -67,11 +68,12 @@ function ConnectionModalContent({
 
   const data = useMemo(
     () =>
-      userConnectionInfo.connectors.sort(sortConnectorsByRank(ModalPropsCtrl.state.root.connectorDisplayOverrides)).map(
+      userConnectionInfo.connectors.sort(sortConnectorsByRank(connectorDisplayOverrides)).map(
         RenderConnectorOptions({
           chainIdFromUrl,
-          openType: ModalPropsCtrl.state.root.openType,
-          connectorDisplayOverrides: ModalPropsCtrl.state.root.connectorDisplayOverrides,
+          hideInjectedFromRoot,
+          openType,
+          connectorDisplayOverrides,
           modalView,
           userConnectionInfo,
           connect,
@@ -85,13 +87,16 @@ function ConnectionModalContent({
     [
       connect,
       disconnect,
-      chainIdFromUrl,
-      modalCallbacks,
+      theme,
+      openType,
       modalView,
+      modalCallbacks,
+      chainIdFromUrl,
+      userConnectionInfo,
       providerLoadingState,
       providerMountedState,
-      theme,
-      userConnectionInfo
+      hideInjectedFromRoot,
+      connectorDisplayOverrides
     ]
   )
 

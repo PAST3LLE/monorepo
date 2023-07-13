@@ -27,6 +27,7 @@ export function ModalWithoutThemeProvider(baseProps: BaseModalProps) {
           ...baseProps,
           title: 'ACCOUNT',
           width: '650px',
+          maxWidth: 'unset',
           minHeight: 'unset',
           maxHeight: 'unset',
           height: 'auto'

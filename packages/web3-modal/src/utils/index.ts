@@ -1,3 +1,4 @@
+import { devError } from '@past3lle/utils'
 import { css } from 'styled-components'
 
 import { RenderConnectorOptionsProps } from '../components/modals/ConnectionModal/RenderConnectorOptions'
@@ -116,7 +117,8 @@ const loopFindElementById = async (id: string, limit = 10) => {
           return res
         })
         .catch((error) => {
-          throw error
+          devError(error)
+          return 'BAILED'
         })
       value = value + 1
     }
