@@ -1,13 +1,9 @@
-// import { SafeConnector } from '@gnosis.pm/safe-apps-wagmi'
-import { IFrameEthereumConnector } from '@past3lle/wagmi-connectors'
-import { w3mConnectors } from '@web3modal/ethereum'
-import React, { ReactNode, memo, useMemo } from 'react'
-import { Chain } from 'viem'
+import React, { ReactNode, memo } from 'react'
 
-import { PstlWeb3ConnectionModal } from '../components'
-import { PstlWeb3AuthConnector } from '../connectors/web3auth'
+import { PstlWeb3Modal } from '../components'
 import { useChainIdFromSearchParams } from '../hooks/useChainIdFromSearchParams'
-import { ConnectorEnhanced } from '../types/connectors'
+import { useConnectorAndChainConfig } from '../hooks/useConnectorAndChainConfig'
+import { useHydrateModals } from '../hooks/useHydrateModals'
 import type { ChainsPartialReadonly, PstlWeb3ModalProps } from './types'
 import {
   PstlWagmiClientOptions,
@@ -16,9 +12,8 @@ import {
   usePstlEthereumClient,
   usePstlWagmiClient
 } from './utils'
-import { AppStatus, getAppStatus, mapChainsToConnectors } from './utils/connectors'
 import { PstlWagmiProvider } from './wagmi'
-import { PstlWeb3Modal } from './web3Modal'
+import { Web3Modal } from './web3Modal'
 
 const PstlW3ProvidersBase = <ID extends number, SC extends ChainsPartialReadonly<ID>>({
   children,
@@ -27,83 +22,30 @@ const PstlW3ProvidersBase = <ID extends number, SC extends ChainsPartialReadonly
   children: ReactNode
   config: PstlWeb3ModalProps<ID, SC>
 }) => {
-  // We run this here in the case we're running this inside a dapp browser iFrame (e.g Ledger dapp browser)
-  const dynamicConnectors = useDynamicConnectors(config)
-  // Logic below applies to non-iframe dapp browsers
-  const wagmiClient = usePstlWagmiClient({
-    ...config,
-    connectors: dynamicConnectors
-  })
+  // Get any specific connector/chain config based on the type of app we're running
+  // e.g are we in a Safe app? If so, run the Safe connector automatically set with the URL shortName chain
+  const connectorAndChainConfig = useConnectorAndChainConfig(config)
+  // Set up the providers
+  const wagmiClient = usePstlWagmiClient(connectorAndChainConfig)
   const ethereumClient = usePstlEthereumClient(config.clients?.ethereum, wagmiClient, config.chains)
-  const chainIdFromUrl = useChainIdFromSearchParams(config.chains, config?.options?.chainFromUrlOptions)
+  // Get the chainId/network info from the URL, if applicable
+  const chainFromUrl = useChainIdFromSearchParams(config.chains, config?.options?.chainFromUrlOptions)
+  // Setup proxy modals state with user config
+  useHydrateModals(config.modals.root)
 
   return (
     <>
-      {config.modals?.walletConnect && <PstlWeb3Modal {...config} clients={{ ethereum: ethereumClient }} />}
+      {config.modals?.walletConnect && <Web3Modal {...config} clients={{ ethereum: ethereumClient }} />}
       <PstlWagmiProvider
         wagmiClient={wagmiClient}
-        persistOnRefresh={!!(config.options?.autoConnect || config.clients?.wagmi?.options?.autoConnect)}
-        chainIdFromUrl={chainIdFromUrl}
+        chainFromUrl={chainFromUrl}
+        autoConnect={config.options?.autoConnect}
       >
-        <PstlWeb3ConnectionModal {...config.modals.root} chainIdFromUrl={chainIdFromUrl} />
+        <PstlWeb3Modal {...config.modals.root} chainIdFromUrl={chainFromUrl?.id} />
         {children}
       </PstlWagmiProvider>
     </>
   )
-}
-
-/* 
-  isIframe()
-    ? config.frameConnectors?.length
-      ? config.frameConnectors
-      : [addConnector(IFrameEthereumConnector, {}), addConnector(SafeConnector, { options: { debug: true } })]
-    : config.connectors,
-*/
-
-function useDynamicConnectors(config: PstlWeb3ModalProps<number>): ConnectorEnhanced<any, any>[] {
-  const status = getAppStatus()
-  return useMemo((): ConnectorEnhanced<any, any>[] => {
-    const defaultConnectors = mapChainsToConnectors(config?.connectors || [], config)
-
-    switch (status) {
-      case AppStatus.COSMOS_APP:
-        return defaultConnectors
-      case AppStatus.SAFE_APP:
-      // return mapChainsToConnectors([addConnector(SafeConnector, { options: { debug: true } })], config)
-      case AppStatus.IFRAME:
-        return mapChainsToConnectors(
-          [addConnector(IFrameEthereumConnector, {}), ...(config?.frameConnectors || [])],
-          config
-        )
-      case AppStatus.DAPP:
-        const userConnectors = mapChainsToConnectors(config?.connectors || config?.connectors || [], config)
-        const walletConnectProviders = w3mConnectors({
-          projectId: config.modals.walletConnect.projectId,
-          chains: config.chains as Chain[]
-        })
-
-        const connectors = userConnectors.slice()
-        // Check user w3a props - if they exist, init web3auth connector
-        if (config.modals?.web3auth) {
-          connectors.push(PstlWeb3AuthConnector({ chains: config.chains as Chain[], ...config.modals.web3auth }))
-        }
-
-        // Check if we have multiple providers via window.ethereum.providersMap (coinbase wallet)
-        const userConnectorsContainInjected = userConnectors?.some(
-          (conn) => conn.id === 'injected' || conn.id === 'metaMask'
-        )
-        if (userConnectorsContainInjected) {
-          // filter injected providers passed by walletconnect to dedup
-          connectors.push(...walletConnectProviders.filter((connector) => connector.id !== 'injected'))
-        }
-        // otherwise push the walletConnect providers
-        // which includes any injected providers
-        else {
-          connectors.push(...walletConnectProviders)
-        }
-        return defaultConnectors
-    }
-  }, [config, status])
 }
 
 const PstlW3Providers = memo(PstlW3ProvidersBase)
@@ -111,7 +53,7 @@ const PstlW3Providers = memo(PstlW3ProvidersBase)
 export {
   PstlW3Providers,
   PstlWagmiProvider,
-  PstlWeb3Modal,
+  Web3Modal as PstlWeb3Modal,
   // hooks
   usePstlEthereumClient,
   usePstlWagmiClient,

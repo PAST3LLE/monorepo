@@ -1,10 +1,10 @@
 import { ColumnCenter, RowProps } from '@past3lle/components'
 import { SupportedForgeChains, useSupportedChainId } from '@past3lle/forge-web3'
 import { StaticGlobalCssProvider, ThemedGlobalCssProvider } from '@past3lle/theme'
-import React, { StrictMode, useMemo } from 'react'
+import React, { StrictMode } from 'react'
 import { useTheme } from 'styled-components'
 
-import { SkillForgeConnectedDataProviders, SkillForgeDisconnectedDataProviders } from '../state'
+import { useConfigMiddleware } from '../hooks/useConfigMiddleware'
 import { CustomStaticGlobalCss, CustomThemeGlobalCss } from '../theme/global'
 import { SkillForgeWidgetConfig } from '../types/appConfig'
 import { SkillForge as SkillForgeComponent } from './Board'
@@ -72,13 +72,11 @@ function SkillForge({
   RowProps & {
     render?: ({ chainId }: { chainId: SupportedForgeChains | undefined }) => React.ReactElement<any, any>
   }) {
-  const Provider = useMemo(
-    () => (config.web3.standalone ? SkillForgeDisconnectedDataProviders : SkillForgeConnectedDataProviders),
-    [config.web3.standalone]
-  )
+  const [Provider, modifiedConfig] = useConfigMiddleware(config)
+
   return (
     <StrictMode>
-      <Provider {...config}>
+      <Provider {...modifiedConfig}>
         <CssProviders />
         <ColumnCenter
           // Default
