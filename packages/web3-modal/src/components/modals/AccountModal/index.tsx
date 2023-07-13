@@ -3,6 +3,7 @@ import { useCopyClipboard, useIsSmallMediaWidth } from '@past3lle/hooks'
 import { truncateAddress } from '@past3lle/utils'
 import React, { memo, useCallback } from 'react'
 
+import { CHAIN_IMAGES } from '../../../constants'
 import { ModalPropsCtrlState } from '../../../controllers/types/controllerTypes'
 import { useConnectDisconnect, usePstlWeb3Modal, useUserConnectionInfo } from '../../../hooks'
 import { ConnectorEnhanced } from '../../../types'
@@ -38,6 +39,7 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
     connectorDisplayOverrides?.[trimAndLowerCase(userConnectionInfo.connector?.id)] ||
     connectorDisplayOverrides?.[trimAndLowerCase(userConnectionInfo.connector?.name)]
   )?.logo
+  const chainLogo = userConnectionInfo.chain?.id && CHAIN_IMAGES?.[userConnectionInfo.chain.id]
 
   const [isCopied, onCopy] = useCopyClipboard(3000)
   const onExplorer = useCallback(() => {
@@ -57,18 +59,39 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
       <Row width="100%">
         <ModalButton
           connected={false}
-          width="max-content"
+          width="100%"
+          maxWidth="400px"
+          marginRight="1rem"
           onClick={() => modalCallbacks.open({ route: 'ConnectWallet' })}
         >
-          <AccountText display="inline-flex" alignItems="center" width="auto">
-            Connected with:{' '}
-            <AccountText fontWeight={500} display={'inline-flex'} alignItems="center" padding={0} marginLeft="0.5rem">
-              {(userConnectionInfo.connector as ConnectorEnhanced<any, any>)?.customName ||
-                userConnectionInfo.connector?.name}
+          <Column width={'100%'}>
+            <AccountText display="inline-flex" alignItems="center" width="auto">
+              Wallet:{' '}
+              <AccountText fontWeight={500} display={'inline-flex'} alignItems="center" padding={0} marginLeft="0.5rem">
+                {(userConnectionInfo.connector as ConnectorEnhanced<any, any>)?.customName ||
+                  userConnectionInfo.connector?.name}
+              </AccountText>
             </AccountText>
-          </AccountText>
+            <AccountText display="inline-flex" alignItems="center" width="auto">
+              Network:{' '}
+              <AccountText fontWeight={500} display={'inline-flex'} alignItems="center" padding={0} marginLeft="0.5rem">
+                {userConnectionInfo.chain?.name || 'Unknown network'}
+              </AccountText>
+            </AccountText>
+          </Column>
         </ModalButton>
-        {logo && <img src={logo} style={{ marginLeft: 'auto', maxWidth: 150 }} />}
+        {logo && (
+          <img
+            src={logo}
+            style={{
+              marginLeft: 'auto',
+              maxWidth: 110,
+              borderRadius: '5rem',
+              overflow: 'hidden'
+            }}
+          />
+        )}
+        {chainLogo && <img src={chainLogo} style={{ marginLeft: -27.5, maxWidth: 110, borderRadius: '5rem' }} />}
       </Row>
       <br />
       <Column backgroundColor={'#370937c9'} borderRadius="1rem" padding="1rem">

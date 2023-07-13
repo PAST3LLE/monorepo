@@ -16,10 +16,11 @@ export const AccountModalButton = styled(ModalButton).attrs((props) => ({
 `
 export const FooterActionButtonsRow = styled(Row)``
 export const AccountText = styled(ModalTitleText).attrs((props) => ({
-  fontSize: props.fontSize || '1.2rem',
+  fontSize: props.fontSize || '1em',
   fontWeight: props.fontWeight || 150,
   margin: props.margin || 0,
   fontStyle: props.fontStyle || 'normal',
+  letterSpacing: props.letterSpacing || '-1.2px',
   ...props
 }))``
 
