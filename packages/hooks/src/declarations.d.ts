@@ -12,8 +12,5 @@ declare module '*.png' {
 }
 
 interface Window {
-  __PSTL_HOOKS_CONTEXT?: {
-    WindowSizeContext?: React.Context<WindowSizes>
-    setupComplete?: boolean
-  }
+  __PSTL_HOOKS_CONTEXT_LISTENERS: EventListener[]
 }

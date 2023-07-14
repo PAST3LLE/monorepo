@@ -1,5 +1,4 @@
 import { MEDIA_WIDTHS, MediaWidths } from '@past3lle/theme'
-import { devDebug, devError } from '@past3lle/utils'
 import debounce from 'lodash.debounce'
 import React, { ReactNode } from 'react'
 import { useContext, useEffect, useState } from 'react'
@@ -14,15 +13,24 @@ export interface UseWindowSizeOptions {
   debounceMs?: number
 }
 
-const WindowSizeContext = React.createContext<{ windowSizes: WindowSizes } | null>(null)
+const WindowSizeContext = React.createContext<WindowSizes | undefined>(undefined)
 
 const checkWindow = () => typeof globalThis?.window !== undefined
 
-export function useWindowSizeSetup(options?: UseWindowSizeOptions) {
+function useWindowSizeSetup(options?: UseWindowSizeOptions) {
   const [windowSize, setWindowSize] = useState<WindowSizes>(_getSize)
-
   useEffect(() => {
     if (!checkWindow()) return
+
+    // Cache event listeners
+    if (!globalThis.window.__PSTL_HOOKS_CONTEXT_LISTENERS) {
+      globalThis.window.__PSTL_HOOKS_CONTEXT_LISTENERS = []
+    }
+
+    // Remove previous event listeners and keep latest
+    globalThis.window.__PSTL_HOOKS_CONTEXT_LISTENERS.forEach((cb) =>
+      globalThis.window.removeEventListener('resize', cb as EventListener)
+    )
 
     const debouncedCb = debounce(function handleCheckWindowSize() {
       setWindowSize(_getSize)
@@ -30,8 +38,12 @@ export function useWindowSizeSetup(options?: UseWindowSizeOptions) {
 
     globalThis.window.addEventListener('resize', debouncedCb as EventListener)
 
+    // Push new one to list
+    globalThis.window.__PSTL_HOOKS_CONTEXT_LISTENERS = [debouncedCb]
+
     return () => {
       globalThis.window?.removeEventListener('resize', debouncedCb as EventListener)
+      globalThis.window.__PSTL_HOOKS_CONTEXT_LISTENERS?.pop()
     }
   }, [options?.debounceMs])
 
@@ -71,28 +83,15 @@ function _getSize(): WindowSizes {
  * @returns WindowSizes | undefined - width, height, and aspect ratio of globalThis.window (or undefined if not instantiated)
  */
 export function useWindowSize(): WindowSizes | undefined {
-  const [context, setContext] = useState<
-    React.Context<{
-      windowSizes: WindowSizes
-    } | null>
-  >(WindowSizeContext)
-  useEffect(() => {
-    if (
-      !!globalThis.window?.__PSTL_HOOKS_CONTEXT?.setupComplete &&
-      !(globalThis.window?.__PSTL_HOOKS_CONTEXT?.WindowSizeContext as any)?._currentValue
-    ) {
-      devError(
-        '[@past3lle/hooks]::useWindowSize::Warning! Cannot use <useWindowSize> hook outside of the PstlHooksProvider. Please add one to the root of your app, ABOVE where you are intending to use the hook. Hover over hook for example use-case.'
-      )
-      setContext(WindowSizeContext)
-    } else if (!!globalThis.window?.__PSTL_HOOKS_CONTEXT?.WindowSizeContext) {
-      setContext(globalThis.window?.__PSTL_HOOKS_CONTEXT?.WindowSizeContext)
-    }
-  }, [])
+  const windowSizeContext = useContext(WindowSizeContext)
 
-  const ctxt = useContext(context)
+  if (!windowSizeContext) {
+    throw new Error(
+      '[@past3lle/hooks::useWindowSize] - Missing top level PstlHooksProvider. You are attempting to use this hook outside of the provider. Hover over this function for example use-case.'
+    )
+  }
 
-  return ctxt?.windowSizes
+  return windowSizeContext
 }
 
 export function useWindowSmallerThan(media: MediaWidths) {
@@ -106,18 +105,6 @@ export const useIsSmallMediaWidth = () => useWindowSmallerThan(MEDIA_WIDTHS.upTo
 export const useIsMediumMediaWidth = () => useWindowSmallerThan(MEDIA_WIDTHS.upToMedium)
 export const useIsLargeMediaWidth = () => useWindowSmallerThan(MEDIA_WIDTHS.upToLarge)
 export const useIsExtraLargeMediaWidth = () => useWindowSmallerThan(MEDIA_WIDTHS.upToExtraLarge)
-
-/**
- * @name checkAndSetContextProvider
- * @description Context for useWindowSize hook. Checks if existing Context exists, otherwise creates one
- * @example see useWindowSize
- * @returns Context for useWindowSize hook (or undefined if already instantiated) - width, height, and aspect ratio of globalThis.window
- */
-export const checkAndSetContextProvider = () => {
-  if (!globalThis.window?.__PSTL_HOOKS_CONTEXT?.WindowSizeContext) {
-    globalThis.window.__PSTL_HOOKS_CONTEXT = { WindowSizeContext, setupComplete: true }
-  }
-}
 
 export interface PstlHooksProviderOptions {
   windowSizes?: {
@@ -147,33 +134,7 @@ export interface PstlHooksProviderOptions {
   )
  * @returns
  */
-export function PstlHooksProvider(props?: { children?: ReactNode } & PstlHooksProviderOptions) {
+export function PstlHooksProvider(props?: { children?: ReactNode; value?: WindowSizes } & PstlHooksProviderOptions) {
   const windowSizes = useWindowSizeSetup()
-
-  useEffect(checkAndSetContextProvider, [])
-
-  const [Context, setContext] = useState<
-    React.Context<{
-      windowSizes: WindowSizes
-    } | null>
-  >(WindowSizeContext)
-  useEffect(() => {
-    // No globalThis.window instance, bail
-    if (!checkWindow()) return
-    // Check if context already exists, if not, create one
-    else if (!globalThis.window?.__PSTL_HOOKS_CONTEXT?.WindowSizeContext?.Provider) {
-      devDebug('[@past3lle/hooks]::PstlHooksProvider::Context does not exist, creating new context')
-      setContext(WindowSizeContext)
-    } else {
-      const ContextProvider = globalThis.window?.__PSTL_HOOKS_CONTEXT.WindowSizeContext
-      devDebug('[@past3lle/hooks]::PstlHooksProvider::Context already exists, skipping creation')
-      setContext(ContextProvider)
-    }
-
-    return () => {
-      globalThis.window.__PSTL_HOOKS_CONTEXT = undefined
-    }
-  }, [])
-
-  return <Context.Provider value={{ windowSizes }}>{props?.children}</Context.Provider>
+  return <WindowSizeContext.Provider value={props?.value || windowSizes}>{props?.children}</WindowSizeContext.Provider>
 }
