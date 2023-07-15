@@ -1,5 +1,5 @@
 import { useW3Connection } from '@past3lle/forge-web3'
-import { useIsMobile } from '@past3lle/hooks'
+import { WindowSizeProvider, useIsMobile } from '@past3lle/hooks'
 import React from 'react'
 
 import { SkillForge } from '../components'
@@ -131,6 +131,10 @@ function App() {
   )
 }
 
+function withProvider(children: JSX.Element) {
+  return <WindowSizeProvider>{children}</WindowSizeProvider>
+}
+
 export default {
-  default: <App />
+  default: withProvider(<App />)
 }
