@@ -1,5 +1,4 @@
 import { Column, Row } from '@past3lle/components'
-import { useIsMobile } from '@past3lle/hooks'
 import SkillForge, { SkillForgeProps, SkillForgeConnectedHeader } from '@past3lle/skillforge-widget'
 import { RobotoVariableFontProvider } from '@past3lle/theme'
 import { AppVersion } from 'components/AppVersion'
@@ -36,8 +35,27 @@ const SKILLFORGE_CONFIG: SkillForgeProps = {
         gatewayApiUris: GATEWAY_API_URIS
       }
     }
+  },
+  dimensions: {
+    mobile: {
+      width: {
+        max: '100%'
+      },
+      height: {
+        max: '100%'
+      }
+    },
+    desktop: {
+      width: {
+        max: '90%'
+      },
+      height: {
+        max: '90%'
+      }
+    }
   }
 }
+
 const FontsAndCssProviders = ({ children }: { children?: ReactNode }) => (
   <>
     <RobotoVariableFontProvider />
@@ -48,17 +66,11 @@ const FontsAndCssProviders = ({ children }: { children?: ReactNode }) => (
 )
 
 export function App() {
-  const isMobile = useIsMobile()
   return (
     <FontsAndCssProviders>
       <Column width="100%">
         <Row height={'100vh'}>
-          <SkillForge
-            config={SKILLFORGE_CONFIG.config}
-            maxWidth={isMobile ? '100%' : '90%'}
-            maxHeight={isMobile ? '100%' : '90%'}
-            render={() => <SkillForgeConnectedHeader />}
-          />
+          <SkillForge {...SKILLFORGE_CONFIG} render={() => <SkillForgeConnectedHeader />} />
         </Row>
         <AppVersion />
       </Column>
