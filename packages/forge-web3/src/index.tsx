@@ -1,4 +1,4 @@
-import { PstlHooksProvider } from '@past3lle/hooks'
+import { WindowSizeProvider } from '@past3lle/hooks'
 import {
   AppType,
   type ChainsPartialReadonly,
@@ -39,9 +39,9 @@ interface ForgeW3CoreProvidersProps {
 function ForgeStateProviders({ config, children }: ForgeW3CoreProvidersProps) {
   return (
     <StrictMode>
-      <PstlHooksProvider {...config.hooksProviderOptions}>
+      <WindowSizeProvider {...config.hooksProviderOptions}>
         <ForgeW3StateUpdaters {...config}>{children}</ForgeW3StateUpdaters>
-      </PstlHooksProvider>
+      </WindowSizeProvider>
     </StrictMode>
   )
 }
@@ -49,7 +49,7 @@ function ForgeStateProviders({ config, children }: ForgeW3CoreProvidersProps) {
 function ForgeW3Providers({ config, children }: ForgeW3CoreProvidersProps) {
   return (
     <StrictMode>
-      <PstlHooksProvider {...config.hooksProviderOptions}>
+      <WindowSizeProvider {...config.hooksProviderOptions}>
         <PstlW3Providers
           config={{
             ...config.web3,
@@ -59,7 +59,7 @@ function ForgeW3Providers({ config, children }: ForgeW3CoreProvidersProps) {
           <W3aStyleResetProvider />
           <ForgeW3StateUpdaters {...config}>{children}</ForgeW3StateUpdaters>
         </PstlW3Providers>
-      </PstlHooksProvider>
+      </WindowSizeProvider>
     </StrictMode>
   )
 }
@@ -67,7 +67,7 @@ function ForgeW3Providers({ config, children }: ForgeW3CoreProvidersProps) {
 function ForgeW3BalancesAndWindowSizeProviders({ config, children }: ForgeW3CoreProvidersProps) {
   return (
     <StrictMode>
-      <PstlHooksProvider {...config.hooksProviderOptions}>
+      <WindowSizeProvider {...config.hooksProviderOptions}>
         <ForgeWindowSizeUpdater />
         <PstlW3Providers
           config={{
@@ -79,7 +79,7 @@ function ForgeW3BalancesAndWindowSizeProviders({ config, children }: ForgeW3Core
           <ForgeBalancesUpdater />
           {children}
         </PstlW3Providers>
-      </PstlHooksProvider>
+      </WindowSizeProvider>
     </StrictMode>
   )
 }

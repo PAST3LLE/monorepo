@@ -1,4 +1,4 @@
-import { PstlHooksProviderOptions } from '@past3lle/hooks'
+import { WindowSizeProviderOptions } from '@past3lle/hooks'
 import { PstlWeb3ModalProps } from '@past3lle/web3-modal'
 
 import { UserConfigState } from '../state'
@@ -52,5 +52,5 @@ export interface ForgeW3AppConfig {
    */
   metadataUris: ForgeMetadataUriMap
   skillOptions?: ForgeW3AppConfigSkillOptions
-  hooksProviderOptions?: PstlHooksProviderOptions
+  hooksProviderOptions?: WindowSizeProviderOptions
 }

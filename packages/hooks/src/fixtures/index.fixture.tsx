@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { PstlHooksProvider, useWindowSize } from '../useWindowSize'
+import { WindowSizeProvider, useWindowSize } from '../useWindowSize'
 
 function DefaultApp() {
   const windowSizes = useWindowSize()
@@ -17,8 +17,8 @@ function DefaultApp() {
 
 export default {
   default: (
-    <PstlHooksProvider>
+    <WindowSizeProvider>
       <DefaultApp />
-    </PstlHooksProvider>
+    </WindowSizeProvider>
   )
 }
