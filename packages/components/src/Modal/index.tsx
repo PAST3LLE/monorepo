@@ -1,6 +1,6 @@
 import { Z_INDICES } from '@past3lle/constants'
-import { useIsMobile } from '@past3lle/hooks'
 import { upToExtraSmall } from '@past3lle/theme'
+import { getIsMobile } from '@past3lle/utils'
 import { DialogContent, DialogOverlay } from '@reach/dialog'
 import { transparentize } from 'polished'
 import React, { useEffect } from 'react'
@@ -42,14 +42,14 @@ const AnimatedDialogContent = animated(DialogContent)
 // destructure to not pass custom props to Dialog DOM element
 const StyledDialogContent = styled(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, prettier/prettier
-  ({ height, margin, minHeight, maxHeight, maxWidth, width, mobile, isOpen, isLargeImageModal, tabIndex, zIndex, ...rest }) => (
+  ({ height, margin, minHeight, maxHeight, maxWidth, width, isOpen, isLargeImageModal, tabIndex, zIndex, ...rest }) => (
     <AnimatedDialogContent {...rest} tabIndex={tabIndex} />
   )
 ).attrs({
   'aria-label': 'dialog'
 })<Omit<ModalStyleProps, 'overlayBackgroundColor' | 'zIndex'>>`
   border: none;
-  height: ${({ mobile }) => (mobile ? '100%' : '100%')};
+  height: 100%;
   ${upToExtraSmall`
     height: 100%;
   `}
@@ -109,8 +109,6 @@ export function Modal({
   initialFocusRef,
   isLargeImageModal = false
 }: ModalProps) {
-  const isMobile = useIsMobile()
-
   useEffect(() => {
     return () => {
       onDismiss()
@@ -135,13 +133,12 @@ export function Modal({
         maxWidth={maxWidth}
         width={width}
         height={height}
-        mobile={isMobile}
         tabIndex={tabIndex}
         isLargeImageModal={isLargeImageModal}
         {...styleProps}
       >
         {/* prevents the automatic focusing of inputs on mobile by the reach dialog */}
-        {tabIndex === undefined || initialFocusRef || !isMobile ? null : <div tabIndex={1} />}
+        {tabIndex === undefined || initialFocusRef || !getIsMobile() ? null : <div tabIndex={1} />}
         {children}
       </StyledDialogContent>
     </StyledDialogOverlay>
