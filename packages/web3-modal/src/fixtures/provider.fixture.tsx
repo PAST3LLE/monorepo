@@ -1,4 +1,5 @@
 import { ButtonVariations, ColumnCenter, PstlButton } from '@past3lle/components'
+import { WindowSizeProvider } from '@past3lle/hooks'
 import { ThemeProvider, createCustomTheme } from '@past3lle/theme'
 import { devWarn } from '@past3lle/utils'
 import React, { ReactNode } from 'react'
@@ -7,10 +8,16 @@ import { useBalance } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 
 import { useUserConnectionInfo, useWeb3Modals } from '../hooks'
-import { PstlW3Providers } from '../providers'
+import { PstlWeb3ModalProps, PstlW3Providers as WalletModal } from '../providers'
 import { addConnector } from '../providers/utils'
 import { COMMON_CONNECTOR_OVERRIDES, DEFAULT_PROPS, DEFAULT_PROPS_WEB3AUTH } from './config'
 import { w3aPlugins, wagmiConnectors } from './connectorsAndPlugins'
+
+const PstlW3Providers = ({ children, config }: { children: ReactNode; config: PstlWeb3ModalProps<number> }) => (
+  <WindowSizeProvider>
+    <WalletModal config={config}>{children}</WalletModal>
+  </WindowSizeProvider>
+)
 
 interface Web3ButtonProps {
   children?: ReactNode
