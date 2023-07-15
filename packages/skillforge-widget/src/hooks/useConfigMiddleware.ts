@@ -1,7 +1,10 @@
 import { ChainsPartialReadonly, ForgeW3AppConfig, SupportedForgeChains } from '@past3lle/forge-web3'
-import { isIframe } from '@past3lle/wagmi-connectors'
-import { ReactNode, useEffect, useMemo, useState } from 'react'
-import { polygon } from 'wagmi/chains'
+// import { isIframe } from '@past3lle/wagmi-connectors'
+import {
+  ReactNode,
+  /* useEffect, */
+  useMemo
+} from 'react'
 
 import { SkillForgeProps } from '../components'
 import { SkillForgeConnectedDataProviders, SkillForgeDisconnectedDataProviders } from '../state'
@@ -21,13 +24,15 @@ export function useConfigMiddleware(config: SkillForgeProps['config']): [Provide
     [config.web3.standalone]
   )
 
-  const [modifiedConfig, setModdedConfig] = useState(config)
+  /*
+  const [modifiedConfig , setModdedConfig] = useState(config)
   useEffect(() => {
     // Not an iFrame dapp. This takes no effect.
     if (!isIframe()) return
 
     setModdedConfig({ ...config, web3: { ...config.web3, chains: [polygon] } })
   }, [config])
+  */
 
-  return [Provider, modifiedConfig]
+  return [Provider, config]
 }

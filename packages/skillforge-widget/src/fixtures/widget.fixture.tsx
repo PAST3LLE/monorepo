@@ -1,5 +1,4 @@
 import { useW3Connection } from '@past3lle/forge-web3'
-import { WindowSizeProvider, useIsMobile } from '@past3lle/hooks'
 import React from 'react'
 
 import { SkillForge } from '../components'
@@ -94,11 +93,23 @@ const skillforgeTheme = createTheme({
   }
 })
 function App() {
-  const isMobile = useIsMobile()
   return (
     <SkillForge
-      maxWidth={isMobile ? '100%' : '90%'}
-      maxHeight={isMobile ? '100%' : '90%'}
+      dimensions={{
+        mobile: {
+          width: {
+            max: '100%'
+          }
+        },
+        desktop: {
+          width: {
+            max: '80%'
+          },
+          height: {
+            max: '80%'
+          }
+        }
+      }}
       config={{
         ...contractProps,
         name: 'Skillforge Widget Fixture',
@@ -131,10 +142,6 @@ function App() {
   )
 }
 
-function withProvider(children: JSX.Element) {
-  return <WindowSizeProvider>{children}</WindowSizeProvider>
-}
-
 export default {
-  default: withProvider(<App />)
+  default: <App />
 }
