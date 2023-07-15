@@ -83,15 +83,7 @@ function _getSize(): WindowSizes {
  * @returns WindowSizes | undefined - width, height, and aspect ratio of globalThis.window (or undefined if not instantiated)
  */
 export function useWindowSize(): WindowSizes | undefined {
-  // const windowSizeContext = useContext(WindowSizeContext)
-  const [context, setContext] = useState<
-    | React.Context<WindowSizes | undefined>
-    | React.Context<{
-        width: number | undefined
-        height: number | undefined
-        ar: number | undefined
-      }>
-  >(WindowSizeContext)
+  const [context, setContext] = useState<React.Context<WindowSizes | undefined>>(WindowSizeContext)
   useEffect(() => {
     if (!checkWindow()) return
     const context = globalThis.window.__PSTL_HOOKS_CONTEXT || WindowSizeContext
