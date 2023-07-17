@@ -68,6 +68,7 @@
     "styled-components": ">=5"
   },
   "dependencies": {
+    "@ethersproject/providers": "^5.7.2",
     "@ledgerhq/connect-kit-loader": "1.1.0",
     "@ledgerhq/hw-app-eth": "6.33.6",
     "@ledgerhq/hw-transport-webhid": "^6.27.16",
