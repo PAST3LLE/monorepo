@@ -74,11 +74,11 @@ export type Web3ModalThemeVariables = {
   '--w3m-color-fg-1'?: string
 } & Web3ModalConfigOriginal['themeVariables']
 
-export type Web3ModalConfig<ID extends number, SC extends ChainsPartialReadonly<ID>> = Omit<
+type Web3ModalConfig<ID extends number> = Omit<
   ConfigCtrlState,
   'projectId' | 'enableStandaloneMode' | 'walletConnectVersion'
 > & {
-  chains?: SC
+  chains?: Chain<ID>[]
   projectId: string
   w3aProjectId: string
   zIndex?: number
@@ -104,7 +104,7 @@ export type PstlWeb3ModalOptions = Omit<
   },
   'publicClient' | 'publicClients' | 'connectors'
 >
-export interface Web3ModalProps<ID extends number, SC extends ChainsPartialReadonly<ID>> {
+export interface Web3ModalProps<ID extends number> {
   appName: string
   /**
    * @name chains
@@ -122,7 +122,7 @@ export interface Web3ModalProps<ID extends number, SC extends ChainsPartialReado
       />
     )
    */
-  chains: SC
+  chains: Chain<ID>[]
   /**
    * @name connectors
    * @description Optional. Custom wagmi connectors. Loaded in normal, non-iframe dapps (e.g skills.pastelle.shop). For iFrame connectors, see {@link frameConnectors}
@@ -189,7 +189,7 @@ export interface Web3ModalProps<ID extends number, SC extends ChainsPartialReado
      * @name walletConnect
      * @description WalletConnect (Web3Modal) props
      */
-    walletConnect: Omit<Web3ModalConfig<any, any>, 'w3aProjectId' | 'chains'>
+    walletConnect: Omit<Web3ModalConfig<ID>, 'w3aProjectId' | 'chains'>
     /**
      * @description Web3Auth modal props. Optional. Leave blank to exclude Web3Auth from modal.
      * @example 
@@ -220,17 +220,14 @@ export interface Web3ModalProps<ID extends number, SC extends ChainsPartialReado
     web3auth?: Omit<PstlWeb3AuthConnectorProps<ID>, 'chains'>
   }
   clients?: {
-    wagmi?: PstlWagmiClientOptions<ID, SC>
+    wagmi?: PstlWagmiClientOptions<ID>
     ethereum?: EthereumClient
   }
   options?: PstlWeb3ModalOptions
 }
 
-export type PstlWeb3ModalProps<
-  ID extends number,
-  SC extends ChainsPartialReadonly<ID> = ChainsPartialReadonly<ID>
-> = Web3ModalProps<ID, SC>
-export type PstlWeb3ProviderProps<ID extends number, SC extends ChainsPartialReadonly<ID>> = PstlWeb3ModalProps<ID, SC>
+export type PstlWeb3ModalProps<ID extends number> = Web3ModalProps<ID>
+export type PstlWeb3ProviderProps<ID extends number> = PstlWeb3ModalProps<ID>
 
 export type WithChainIdFromUrl = {
   chainIdFromUrl: number | undefined

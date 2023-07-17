@@ -15,12 +15,12 @@ import {
 import { PstlWagmiProvider } from './wagmi'
 import { Web3Modal } from './web3Modal'
 
-const PstlW3ProvidersBase = <ID extends number, SC extends ChainsPartialReadonly<ID>>({
+const PstlW3ProvidersBase = <ID extends number>({
   children,
   config
 }: {
   children: ReactNode
-  config: PstlWeb3ModalProps<ID, SC>
+  config: PstlWeb3ModalProps<ID>
 }) => {
   // Get any specific connector/chain config based on the type of app we're running
   // e.g are we in a Safe app? If so, run the Safe connector automatically set with the URL shortName chain

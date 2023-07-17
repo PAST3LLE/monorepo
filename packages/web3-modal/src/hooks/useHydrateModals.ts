@@ -1,11 +1,9 @@
 import { useEffect } from 'react'
 
-import { ChainsPartialReadonly, PstlWeb3ModalProps } from '../providers'
+import { PstlWeb3ModalProps } from '../providers'
 import { usePstlWeb3ModalState } from './usePstlWeb3ModalState'
 
-export function useHydrateModals<ID extends number, SC extends ChainsPartialReadonly<ID>>(
-  rootModalsConfig: PstlWeb3ModalProps<ID, SC>['modals']['root']
-) {
+export function useHydrateModals<ID extends number>(rootModalsConfig: PstlWeb3ModalProps<ID>['modals']['root']) {
   const { updateModalProps } = usePstlWeb3ModalState()
 
   useEffect(() => {

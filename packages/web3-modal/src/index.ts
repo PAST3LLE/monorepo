@@ -1,7 +1,5 @@
-import { ConnectedConnectionModalProps } from './components'
 import { PstlWeb3Modal } from './components/modals'
 import {
-  PstlW3mConnectionHook,
   useAccountNetworkActions as usePstlAccountNetworkActions,
   useConnectDisconnect as usePstlConnectDisconnect,
   useConnection as usePstlConnection,
@@ -25,7 +23,5 @@ export {
   usePstlConnectDisconnect,
   usePstlUserConnectionInfo,
   usePstlWeb3Modals,
-  usePstlAccountNetworkActions,
-  type ConnectedConnectionModalProps,
-  type PstlW3mConnectionHook
+  usePstlAccountNetworkActions
 }
