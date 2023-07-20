@@ -1,29 +1,23 @@
 import { Row } from '@past3lle/components'
-import { AppType, getAppType, useForgeGetUserConfigChainsAtom, useForgeWindowSizeAtom } from '@past3lle/forge-web3'
-import { MEDIA_WIDTHS } from '@past3lle/theme'
+import { AppType, getAppType, useForgeGetUserConfigChainsAtom } from '@past3lle/forge-web3'
 import React, { useEffect, useState } from 'react'
 
 import { AppMessagesBanner } from '../AppMessagesBanner'
 import { InventoryButton } from '../Common/Button'
-import { ConnectionInfoButton } from '../Common/Button/ConnectionInfoButton'
-import { NetworkInfoButton } from '../Common/Button/NetworkInfoButton'
-import { ShopExternalLinkButton } from '../Common/Button/ShopExternalLinkButton'
-import { HeaderContainer, Web3InfoContainer } from './styleds'
+import { HeaderContainer, Web3InfoContainer, StyledConnectionInfoButton, StyledNetworkInfoButton, StyledShopExternalLinkButton } from './styleds'
 
 export const SkillForgeHeader = () => {
-  const [{ width = 0 }] = useForgeWindowSizeAtom()
-  const isMobileWidth = width <= MEDIA_WIDTHS.upToSmall
-  const showNetworkButton = useShowNetworkButton(isMobileWidth)
+  const renderNetworkInfoButton = useRenderNetworkButton()
   return (
     <>
       <HeaderContainer>
         <Row gap="1rem" height="100%" width="100%" justifyContent={'space-between'}>
           <Web3InfoContainer>
-            <Row flexDirection={isMobileWidth ? 'row-reverse' : 'row'}>
-              {!isMobileWidth && <ShopExternalLinkButton />}
+            <Row>
+              <StyledShopExternalLinkButton />
               <InventoryButton />
-              {showNetworkButton && <NetworkInfoButton />}
-              {!isMobileWidth && <ConnectionInfoButton />}
+              {renderNetworkInfoButton && <StyledNetworkInfoButton />}
+              <StyledConnectionInfoButton />
             </Row>
           </Web3InfoContainer>
         </Row>
@@ -33,7 +27,7 @@ export const SkillForgeHeader = () => {
   )
 }
 
-function useShowNetworkButton(isMobileWidth: boolean) {
+function useRenderNetworkButton() {
   const [{ length: chainsLength }] = useForgeGetUserConfigChainsAtom()
 
   const [isDappBrowser, setIsDappBrowser] = useState(false)
@@ -45,6 +39,6 @@ function useShowNetworkButton(isMobileWidth: boolean) {
     setIsDappBrowser(isSafe || isFrame)
   }, [])
 
-  const isWebMultipleNetworks = !isMobileWidth && chainsLength > 1
-  return !isDappBrowser && (isWebMultipleNetworks || isMobileWidth)
+  const hasMultipleNetworks = chainsLength > 1
+  return !isDappBrowser && hasMultipleNetworks
 }
