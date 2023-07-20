@@ -8,15 +8,17 @@ import { useGenericImageSrcSet } from '../../../theme/global'
 import { useAssetsMap } from '../../../theme/utils'
 import { CursiveMonoHeader, CursiveMonoHeaderProps } from '../Text'
 
+export type ShopExternalLinkButtonProps = {
+  className?: string
+  capitalLetterProps?: CursiveMonoHeaderProps['capitalLetterProps']
+  restWordProps?: CursiveMonoHeaderProps['restWordProps']
+}
+
 export const ShopExternalLinkButton = ({
   className,
   capitalLetterProps,
   restWordProps
-}: {
-  className?: string
-  capitalLetterProps?: CursiveMonoHeaderProps['capitalLetterProps']
-  restWordProps?: CursiveMonoHeaderProps['restWordProps']
-}) => {
+}: ShopExternalLinkButtonProps) => {
   const assetsMap = useAssetsMap()
   const { EMPTY_SKILL_DDPX_URL_MAP } = useGenericImageSrcSet()
   return (
