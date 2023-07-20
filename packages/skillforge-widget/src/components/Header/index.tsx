@@ -12,18 +12,18 @@ import { HeaderContainer, Web3InfoContainer } from './styleds'
 
 export const SkillForgeHeader = () => {
   const [{ width = 0 }] = useForgeWindowSizeAtom()
-  const isNotMobileWidth = width > MEDIA_WIDTHS.upToSmall
-  const showNetworkButton = useShowNetworkButton(isNotMobileWidth)
+  const isMobileWidth = width <= MEDIA_WIDTHS.upToSmall
+  const showNetworkButton = useShowNetworkButton(isMobileWidth)
   return (
     <>
       <HeaderContainer>
         <Row gap="1rem" height="100%" width="100%" justifyContent={'space-between'}>
           <Web3InfoContainer>
-            <Row flexDirection={!isNotMobileWidth ? 'row-reverse' : 'row'}>
-              {isNotMobileWidth && <ShopExternalLinkButton />}
+            <Row flexDirection={isMobileWidth ? 'row-reverse' : 'row'}>
+              {!isMobileWidth && <ShopExternalLinkButton />}
               <InventoryButton />
               {showNetworkButton && <NetworkInfoButton />}
-              {isNotMobileWidth && <ConnectionInfoButton />}
+              {!isMobileWidth && <ConnectionInfoButton />}
             </Row>
           </Web3InfoContainer>
         </Row>
@@ -33,7 +33,7 @@ export const SkillForgeHeader = () => {
   )
 }
 
-function useShowNetworkButton(isNotMobileWidth: boolean) {
+function useShowNetworkButton(isMobileWidth: boolean) {
   const [{ length: chainsLength }] = useForgeGetUserConfigChainsAtom()
 
   const [isDappBrowser, setIsDappBrowser] = useState(false)
@@ -45,5 +45,6 @@ function useShowNetworkButton(isNotMobileWidth: boolean) {
     setIsDappBrowser(isSafe || isFrame)
   }, [])
 
-  return !isDappBrowser && isNotMobileWidth && chainsLength > 1
+  const isWebMultipleNetworks = !isMobileWidth && chainsLength > 1
+  return !isDappBrowser && (isWebMultipleNetworks || isMobileWidth)
 }
