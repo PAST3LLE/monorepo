@@ -5,9 +5,9 @@ import styled, { DefaultTheme } from 'styled-components'
 import { ThemedButton } from '../Common/Button'
 import { ConnectionInfoButton } from '../Common/Button/ConnectionInfoButton'
 import { NetworkInfoButton } from '../Common/Button/NetworkInfoButton'
-import { ShopExternalLinkButton } from '../Common/Button/ShopExternalLinkButton'
+import { ShopExternalLinkButton, ShopExternalLinkButtonProps } from '../Common/Button/ShopExternalLinkButton'
 
-export const StyledShopExternalLinkButton = styled(ShopExternalLinkButton)``
+export const StyledShopExternalLinkButton = styled(ShopExternalLinkButton)<ShopExternalLinkButtonProps>``
 export const StyledNetworkInfoButton = styled(NetworkInfoButton)``
 export const StyledConnectionInfoButton = styled(ConnectionInfoButton)``
 
