@@ -3,6 +3,13 @@ import { setBackgroundOrDefault, upToExtraSmall, upToSmall } from '@past3lle/the
 import styled, { DefaultTheme } from 'styled-components'
 
 import { ThemedButton } from '../Common/Button'
+import { ConnectionInfoButton } from '../Common/Button/ConnectionInfoButton'
+import { NetworkInfoButton } from '../Common/Button/NetworkInfoButton'
+import { ShopExternalLinkButton } from '../Common/Button/ShopExternalLinkButton'
+
+export const StyledShopExternalLinkButton = styled(ShopExternalLinkButton)``
+export const StyledNetworkInfoButton = styled(NetworkInfoButton)``
+export const StyledConnectionInfoButton = styled(ConnectionInfoButton)``
 
 export const Web3InfoContainer = styled(Row)`
   position: relative;
@@ -53,6 +60,7 @@ export const HeaderContainer = styled(PstlHeader)<{ isOpen?: boolean }>`
       display: flex;
       margin-left: auto;
       > ${Row} {
+        flex-direction: row;
         margin: 0.5rem;
         width: auto;
         height: 52px;
@@ -72,9 +80,15 @@ export const HeaderContainer = styled(PstlHeader)<{ isOpen?: boolean }>`
 
       > ${Row} {
         gap: 1rem;
+        flex-direction: row-reverse;
         // Inventory button
         > ${ThemedButton}:first-child {
           padding: 0 0.8rem;
+        }
+        > ${StyledShopExternalLinkButton},
+        > ${StyledNetworkInfoButton},
+        > ${StyledConnectionInfoButton} {
+          display: none;
         }
       }
     }
