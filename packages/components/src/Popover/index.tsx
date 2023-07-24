@@ -1,9 +1,9 @@
 import { useInterval } from '@past3lle/hooks'
 import { Placement } from '@popperjs/core'
-import { Portal } from '@reach/portal'
 import React, { useCallback, useState } from 'react'
 import { usePopper } from 'react-popper'
 
+import { Portal } from '../Portal'
 import { Arrow, PopoverContainer, ReferenceElement } from './styleds'
 
 export interface PopoverProps {

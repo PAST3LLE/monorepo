@@ -64,6 +64,7 @@
   },
   "dependencies": {
     "@past3lle/theme": "^0.1.2",
+    "@past3lle/utils": "^0.1.2",
     "copy-to-clipboard": "^3.3.3",
     "lodash.debounce": "^4.0.8"
   },

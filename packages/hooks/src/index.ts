@@ -15,6 +15,9 @@ export * from './useOnClickOutside'
 export * from './useOnResize'
 export * from './usePrevious'
 export * from './useOnKeyPress'
+export * from './useForceUpdate'
+export * from './useIsomorphicLayoutEffect'
+export * from './useComposeRefs'
 export {
   WindowSizes,
   useWindowSize,
