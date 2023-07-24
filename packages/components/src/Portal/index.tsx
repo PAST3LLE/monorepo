@@ -96,8 +96,4 @@ type PortalProps = {
 
 Portal.displayName = 'Portal'
 
-////////////////////////////////////////////////////////////////////////////////
-// Exports
-
-export type { PortalProps }
-export { Portal }
+export { Portal, PortalProps }

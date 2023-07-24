@@ -11,9 +11,9 @@ import React, { MutableRefObject } from 'react'
 import FocusLock from 'react-focus-lock'
 import { RemoveScroll } from 'react-remove-scroll'
 
-import { Portal, type PortalProps } from '../Portal'
+import { Portal, PortalProps } from '../Portal'
 import { composeEventHandlers, createContext } from '../utils'
-import type * as Polymorphic from './types'
+import * as Polymorphic from './types'
 
 enum DialogState {
   Opening = 'opening',
@@ -28,8 +28,6 @@ interface DialogContextValue {
 const [DialogContextProvider, useDialogContext] = createContext<DialogContextValue>('DialogContext', {
   isOpen: false
 })
-
-////////////////////////////////////////////////////////////////////////////////
 
 /**
  * DialogWrapper
@@ -70,8 +68,6 @@ interface DialogWrapperProps extends PortalProps {
    */
   isOpen?: boolean
 }
-
-////////////////////////////////////////////////////////////////////////////////
 
 /**
  * DialogInner
