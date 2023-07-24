@@ -44,7 +44,7 @@
     "@craco/craco": "^5.7.0",
     "@past3lle/forge-web3": "^0.1.13",
     "@past3lle/skillforge-widget": "^0.1.13",
-    "@past3lle/skilltree-contracts": "^0.0.1-rc.12",
+    "@past3lle/skilltree-contracts": "^0.0.1-rc.15",
     "@past3lle/theme": "^0.1.2",
     "@past3lle/utils": "^0.1.2",
     "@trivago/prettier-plugin-sort-imports": "^4.0.0",
