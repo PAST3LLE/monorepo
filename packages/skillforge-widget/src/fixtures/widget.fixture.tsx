@@ -1,8 +1,7 @@
 import { useW3Connection } from '@past3lle/forge-web3'
 import React from 'react'
 
-import { SkillForge } from '../components'
-import { SkillForgeHeader } from '../components/Header'
+import { SkillForge, SkillForgeConnectedHeader } from '../components'
 import { createTheme } from '../theme/utils'
 import { commonProps, contractProps } from './config'
 
@@ -133,10 +132,15 @@ function App() {
             walletConnect: commonProps.modals.walletConnect,
             web3auth: commonProps.modals.web3auth
           }
+        },
+        hooksProviderOptions: {
+          windowSizes: {
+            throttleMs: 1500
+          }
         }
       }}
+      render={() => <SkillForgeConnectedHeader />}
     >
-      <SkillForgeHeader />
       <InnerApp />
     </SkillForge>
   )
