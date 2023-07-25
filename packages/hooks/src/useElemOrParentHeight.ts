@@ -5,10 +5,10 @@ import { UseWindowSizeOptions, useWindowSize } from './useWindowSize'
 
 type ElemOrParentHeightProps = { findParent: boolean; elem: HTMLElement | null | undefined } & UseWindowSizeOptions
 
-export function useElemOrParentHeight({ elem, findParent, debounceMs }: ElemOrParentHeightProps) {
+export function useElemOrParentHeight({ elem, findParent, throttleMs }: ElemOrParentHeightProps) {
   const windowSizes = useWindowSize()
   const [pHeight, setpHeight] = useState<number>()
-  const [dpHeight, setdpHeight] = useDebouncedChangeHandler(pHeight, setpHeight, debounceMs)
+  const [dpHeight, setdpHeight] = useDebouncedChangeHandler(pHeight, setpHeight, throttleMs)
 
   useEffect(() => {
     function handleWindowResize() {

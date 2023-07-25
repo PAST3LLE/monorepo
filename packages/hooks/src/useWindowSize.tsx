@@ -1,6 +1,6 @@
 import { MEDIA_WIDTHS, MediaWidths } from '@past3lle/theme'
-import { devError } from '@past3lle/utils'
-import debounce from 'lodash.debounce'
+import { devDebug, devError } from '@past3lle/utils'
+import throttle from 'lodash.throttle'
 import React, { ReactNode } from 'react'
 import { useContext, useEffect, useState } from 'react'
 
@@ -11,42 +11,53 @@ export interface WindowSizes {
 }
 
 export interface UseWindowSizeOptions {
-  debounceMs?: number
+  throttleMs?: number
 }
 
 const WindowSizeContext = React.createContext<WindowSizes | undefined>(undefined)
 
 const checkWindow = () => typeof globalThis?.window !== undefined
 
-function useWindowSizeSetup(options?: UseWindowSizeOptions) {
+function useSetupCachedWindowResizeListeners(options?: UseWindowSizeOptions) {
   const [windowSize, setWindowSize] = useState<WindowSizes>(_getSize)
   useEffect(() => {
     if (!checkWindow()) return
 
-    // Cache event listeners
-    if (!globalThis.window.__PSTL_HOOKS_CONTEXT_LISTENERS) {
-      globalThis.window.__PSTL_HOOKS_CONTEXT_LISTENERS = []
+    const throttledCb = throttle(function handleCheckWindowSize() {
+      setWindowSize(_getSize)
+    }, options?.throttleMs || 150)
+
+    function handleResizeRequests(e: Event) {
+      globalThis.window?.__PSTL_HOOKS_CONTEXT_LISTENERS?.forEach((cb) => cb(e))
     }
 
-    // Remove previous event listeners and keep latest
-    globalThis.window.__PSTL_HOOKS_CONTEXT_LISTENERS.forEach((cb) =>
-      globalThis.window.removeEventListener('resize', cb as EventListener)
-    )
-
-    const debouncedCb = debounce(function handleCheckWindowSize() {
-      setWindowSize(_getSize)
-    }, options?.debounceMs || 150)
-
-    globalThis.window.addEventListener('resize', debouncedCb as EventListener)
-
-    // Push new one to list
-    globalThis.window.__PSTL_HOOKS_CONTEXT_LISTENERS = [debouncedCb]
+    if (!globalThis.window.__PSTL_HOOKS_CONTEXT_LISTENERS?.length) {
+      // Cache event listeners
+      globalThis.window.__PSTL_HOOKS_CONTEXT_LISTENERS = [throttledCb]
+      devDebug(
+        '[@past3lle/hooks:useSetupCachedWindowResizeListeners] Listener not already active. Setting listener and handler',
+        globalThis.window.__PSTL_HOOKS_CONTEXT_LISTENERS
+      )
+      // Set the listener (hasn't been set yet)
+      globalThis.window.addEventListener('resize', handleResizeRequests)
+    } else {
+      // Mutate listeners array by pushing new one to end
+      globalThis.window.__PSTL_HOOKS_CONTEXT_LISTENERS.push(throttledCb)
+      devDebug(
+        '[@past3lle/hooks:useSetupCachedWindowResizeListeners] Listener already active. Pushing new handler to existing listener list',
+        globalThis.window.__PSTL_HOOKS_CONTEXT_LISTENERS
+      )
+    }
 
     return () => {
-      globalThis.window?.removeEventListener('resize', debouncedCb as EventListener)
+      // Pop the last from list
       globalThis.window.__PSTL_HOOKS_CONTEXT_LISTENERS?.pop()
+      // Remove listener completely only if the listener list is on it's last listener (else others are still active)
+      if (globalThis.window.__PSTL_HOOKS_CONTEXT_LISTENERS?.length <= 1) {
+        globalThis.window?.removeEventListener('resize', handleResizeRequests)
+      }
     }
-  }, [options?.debounceMs])
+  }, [options?.throttleMs])
 
   return windowSize
 }
@@ -132,7 +143,7 @@ export const useIsExtraLargeMediaWidth = () => useWindowSmallerThan(MEDIA_WIDTHS
 
 export interface WindowSizeProviderOptions {
   windowSizes?: {
-    debounceMs?: number
+    throttleMs?: number
   }
 }
 /**
@@ -144,7 +155,7 @@ export interface WindowSizeProviderOptions {
  interface ProviderOptions {
     children?: ReactNode
     windowSizes?: {
-      debounceMs?: number
+      throttleMs?: number
     }
   }
   // EXAMPLE USE
@@ -158,7 +169,7 @@ export interface WindowSizeProviderOptions {
   )
  * @returns
  */
-export function WindowSizeProvider(props?: { children?: ReactNode; value?: WindowSizes } & WindowSizeProviderOptions) {
-  const windowSizes = useWindowSizeSetup()
-  return <WindowSizeContext.Provider value={props?.value || windowSizes}>{props?.children}</WindowSizeContext.Provider>
+export function WindowSizeProvider(props?: { children?: ReactNode } & WindowSizeProviderOptions) {
+  const windowSizes = useSetupCachedWindowResizeListeners(props?.windowSizes)
+  return <WindowSizeContext.Provider value={windowSizes}>{props?.children}</WindowSizeContext.Provider>
 }
