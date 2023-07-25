@@ -1,4 +1,4 @@
-import { useDebounce, useWindowSize } from '@past3lle/hooks'
+import { useWindowSize } from '@past3lle/hooks'
 import { useAtom } from 'jotai'
 import { useEffect } from 'react'
 
@@ -6,12 +6,11 @@ import { windowSizeAtom } from '..'
 
 export function ForgeWindowSizeUpdater() {
   const windowSizes = useWindowSize()
-  const debouncedWindowSizes = useDebounce(windowSizes, 300)
   const [, setWindowSize] = useAtom(windowSizeAtom)
 
   useEffect(() => {
-    debouncedWindowSizes && setWindowSize(debouncedWindowSizes)
-  }, [setWindowSize, debouncedWindowSizes])
+    windowSizes && setWindowSize(windowSizes)
+  }, [setWindowSize, windowSizes])
 
   return null
 }
