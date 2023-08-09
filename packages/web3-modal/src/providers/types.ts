@@ -66,7 +66,8 @@ export type Chain<ID extends number> = {
   testnet?: boolean
 }
 
-export type ChainsPartialReadonly<ID extends number> = DeepReadonly<Chain<ID>>[]
+export type ReadonlyChain<ID extends number> = DeepReadonly<Chain<ID>>
+export type ChainsPartialReadonly<ID extends number> = ReadonlyChain<ID>[]
 
 export type Web3ModalThemeVariables = {
   '--w3m-color-bg-1'?: string

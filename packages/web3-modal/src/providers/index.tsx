@@ -4,7 +4,7 @@ import { PstlWeb3Modal } from '../components'
 import { useChainIdFromSearchParams } from '../hooks/useChainIdFromSearchParams'
 import { useConnectorAndChainConfig } from '../hooks/useConnectorAndChainConfig'
 import { useHydrateModals } from '../hooks/useHydrateModals'
-import type { ChainsPartialReadonly, PstlWeb3ModalProps } from './types'
+import type { Chain, ChainsPartialReadonly, PstlWeb3ModalProps, ReadonlyChain } from './types'
 import {
   PstlWagmiClientOptions,
   addConnector,
@@ -63,5 +63,7 @@ export {
   // types
   type PstlWeb3ModalProps,
   type PstlWagmiClientOptions,
-  type ChainsPartialReadonly
+  type ChainsPartialReadonly,
+  type ReadonlyChain,
+  type Chain
 }
