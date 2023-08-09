@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/skillforge-widget",
   "sideEffects": false,
-  "version": "0.1.16",
+  "version": "0.1.17-alpha.0",
   "description": "PAST3LLE SKILLFORGE component as an NPM ESM pkg.",
   "main": "dist/esm/index.js",
   "typings": "dist/types/index.d.ts",
@@ -92,7 +92,7 @@
   },
   "dependencies": {
     "@past3lle/components": "^0.1.13",
-    "@past3lle/forge-web3": "^0.1.16",
+    "@past3lle/forge-web3": "^0.1.17-alpha.0",
     "@past3lle/hooks": "^0.1.13",
     "@past3lle/skills-nft": "^0.0.13",
     "@past3lle/theme": "^0.1.3",
