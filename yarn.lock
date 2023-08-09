@@ -3882,7 +3882,7 @@
     node-addon-api "^3.2.1"
     node-gyp-build "^4.3.0"
 
-"@past3lle/skilltree-contracts@^0.0.1-rc.12", "@past3lle/skilltree-contracts@^0.0.1-rc.13", "@past3lle/skilltree-contracts@^0.0.1-rc.15":
+"@past3lle/skilltree-contracts@^0.0.1-rc.13", "@past3lle/skilltree-contracts@^0.0.1-rc.15":
   version "0.0.1-rc.15"
   resolved "https://registry.yarnpkg.com/@past3lle/skilltree-contracts/-/skilltree-contracts-0.0.1-rc.15.tgz#3992fb962a1a8d3a338cf26d311baeba39da1b36"
   integrity sha512-FTLTOJWAlephS2xOjIEYT7x/nd1WMzLFbtjH2MbW0uAso4I7hHaTEjPJRPenZAI6X5jrRKQ4zlGqM4THot51lg==
