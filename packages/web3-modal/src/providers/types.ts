@@ -36,7 +36,7 @@ type NativeCurrency = {
   decimals: number
 }
 
-type Chain<ID extends number> = {
+export type Chain<ID extends number> = {
   /** ID in number form */
   id: ID
   /** Human-readable name */
