@@ -1,11 +1,10 @@
 import { devDebug } from '@past3lle/utils'
 import { IFrameEthereumConnector } from '@past3lle/wagmi-connectors'
+import { SafeConnector } from '@wagmi/connectors/safe'
 import { w3mConnectors } from '@web3modal/ethereum'
 import { useMemo } from 'react'
 import { Chain } from 'viem'
-import { SafeConnector } from 'wagmi/connectors/safe'
 
-import { PstlWeb3AuthConnector } from '../connectors'
 import { PstlWeb3ModalProps, addConnector } from '../providers'
 import { AppType, getAppType, mapChainsToConnectors } from '../providers/utils/connectors'
 import { ConnectorEnhanced } from '../types'
@@ -19,7 +18,7 @@ export function useConnectorAndChainConfig(
       case AppType.SAFE_APP: {
         devDebug('[@past3lle/web3-modal] App type detected: SAFE APP')
 
-        const connectors = mapChainsToConnectors([addConnector(SafeConnector, { options: { debug: true } })], config)
+        const connectors = mapChainsToConnectors([addConnector(SafeConnector, { debug: true })], config)
         return { ...config, connectors }
       }
       case AppType.IFRAME: {
@@ -42,10 +41,6 @@ export function useConnectorAndChainConfig(
         })
 
         const connectors = userConnectors.slice()
-        // Check user w3a props - if they exist, init web3auth connector
-        if (config.modals?.web3auth) {
-          connectors.push(PstlWeb3AuthConnector({ chains: config.chains as Chain[], ...config.modals.web3auth }))
-        }
 
         // Check if we have multiple providers via window.ethereum.providersMap (coinbase wallet)
         const userConnectorsContainInjected = userConnectors?.some(

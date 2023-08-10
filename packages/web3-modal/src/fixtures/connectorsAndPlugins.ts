@@ -1,9 +1,11 @@
-import { IFrameEthereumConnector, LedgerHIDConnector } from '@past3lle/wagmi-connectors'
+import { IFrameEthereumConnector, LedgerHIDConnector, PstlWeb3AuthConnector } from '@past3lle/wagmi-connectors'
 import { TorusWalletConnectorPlugin } from '@web3auth/torus-wallet-connector-plugin'
+import { Chain } from 'viem'
 import { LedgerConnector } from 'wagmi/connectors/ledger'
 
+import { ReadonlyChain } from '../providers'
 import { addConnector } from '../providers/utils'
-import { WALLETCONNECT_ID, WEB3AUTH_TEST_ID } from './config'
+import { FORGE_LOGO, WALLETCONNECT_ID, WEB3AUTH_TEST_ID } from './config'
 
 const TORUS_LOGO = 'https://web3auth.io/docs/contents/logo-ethereum.png'
 const torusPlugin = new TorusWalletConnectorPlugin({
@@ -28,13 +30,26 @@ export const w3aPlugins = {
 
 export const wagmiConnectors = {
   ledgerLiveModal: addConnector(LedgerConnector, {
-    options: {
-      enableDebugLogs: false,
-      walletConnectVersion: 2,
-      projectId: WALLETCONNECT_ID,
-      requiredChains: [1]
-    }
+    enableDebugLogs: false,
+    walletConnectVersion: 2,
+    projectId: WALLETCONNECT_ID,
+    requiredChains: [1]
   }),
-  ledgerHID: addConnector(LedgerHIDConnector, {}),
-  ledgerIFrame: addConnector(IFrameEthereumConnector, {})
+  ledgerHID: (_chains: Chain[]) => new LedgerHIDConnector({}),
+  ledgerIFrame: addConnector(IFrameEthereumConnector, undefined),
+  // Can also instantiate like this.
+  // addConnector is just syntactic sugar
+  // PstlWeb3AuthConnector requires this instantiation
+  web3auth: (chains: ReadonlyChain<number>[]) =>
+    PstlWeb3AuthConnector(chains, {
+      appName: 'SKILLFORGE TEST',
+      projectId: WEB3AUTH_TEST_ID,
+      network: 'cyan',
+      listingName: 'GOOGLE & MORE',
+      appLogoLight: FORGE_LOGO,
+      appLogoDark: FORGE_LOGO,
+      uxMode: 'redirect',
+      preset: 'DISALLOW_EXTERNAL_WALLETS'
+      // zIndex: 901
+    })
 }

@@ -15,7 +15,6 @@ export * from './providers'
 export * from './theme'
 
 export { getAppType, AppType } from './providers/utils/connectors'
-export { type PstlWeb3AuthConnectorProps } from './connectors'
 export {
   PstlWeb3Modal,
   usePstlConnection,

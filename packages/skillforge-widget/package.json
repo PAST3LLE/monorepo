@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/skillforge-widget",
   "sideEffects": false,
-  "version": "0.1.16",
+  "version": "0.1.23",
   "description": "PAST3LLE SKILLFORGE component as an NPM ESM pkg.",
   "main": "dist/esm/index.js",
   "typings": "dist/types/index.d.ts",
@@ -75,7 +75,7 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.13.8",
-    "@past3lle/types": "^0.0.20",
+    "@past3lle/types": "^0.0.21-alpha.0",
     "@trivago/prettier-plugin-sort-imports": "^4.0.0",
     "@types/jest": "^25.2.1",
     "@types/react": "^18.0.19",
@@ -91,17 +91,17 @@
     "styled-components": "^5.3.5"
   },
   "dependencies": {
-    "@past3lle/components": "^0.1.13",
-    "@past3lle/forge-web3": "^0.1.16",
-    "@past3lle/hooks": "^0.1.13",
-    "@past3lle/skills-nft": "^0.0.13",
-    "@past3lle/theme": "^0.1.3",
-    "@past3lle/utils": "^0.1.3",
+    "@past3lle/components": "^0.1.14-alpha.0",
+    "@past3lle/forge-web3": "^0.1.23",
+    "@past3lle/hooks": "^0.1.14-alpha.0",
+    "@past3lle/skills-nft": "^0.0.14-alpha.0",
+    "@past3lle/theme": "^0.1.4-alpha.0",
+    "@past3lle/utils": "^0.1.4-alpha.0",
     "jotai": "^1.13.1",
     "polished": "^4.2.2"
   },
   "bugs": {
     "url": "https://github.com/PAST3LLE/past3lle-monorepo/issues"
   },
-  "gitHead": "f852fe196f05c3b9111c9642af6df32c8bff7a6e"
+  "gitHead": "7d26e225d1a537b5e82914e83126a335318838ab"
 }

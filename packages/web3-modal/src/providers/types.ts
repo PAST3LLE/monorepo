@@ -6,7 +6,6 @@ import { Web3ModalProps as Web3ModalConfigOriginal } from '@web3modal/react'
 import { Chain as ChainWagmi } from 'wagmi'
 
 import { PstlWeb3ConnectionModalProps } from '../components/modals/ConnectionModal'
-import { PstlWeb3AuthConnectorProps } from '../connectors'
 import { ConnectorEnhanced } from '../types'
 import { PstlWagmiClientOptions } from './utils'
 
@@ -66,7 +65,8 @@ export type Chain<ID extends number> = {
   testnet?: boolean
 }
 
-export type ChainsPartialReadonly<ID extends number> = DeepReadonly<Chain<ID>>[]
+export type ReadonlyChain<ID extends number> = DeepReadonly<Chain<ID>>
+export type ChainsPartialReadonly<ID extends number> = ReadonlyChain<ID>[]
 
 export type Web3ModalThemeVariables = {
   '--w3m-color-bg-1'?: string
@@ -80,7 +80,6 @@ type Web3ModalConfig<ID extends number> = Omit<
 > & {
   chains?: Chain<ID>[]
   projectId: string
-  w3aProjectId: string
   zIndex?: number
   themeMode?: Web3ModalConfigOriginal['themeMode']
   themeVariables?: Web3ModalThemeVariables
@@ -189,35 +188,7 @@ export interface Web3ModalProps<ID extends number> {
      * @name walletConnect
      * @description WalletConnect (Web3Modal) props
      */
-    walletConnect: Omit<Web3ModalConfig<ID>, 'w3aProjectId' | 'chains'>
-    /**
-     * @description Web3Auth modal props. Optional. Leave blank to exclude Web3Auth from modal.
-     * @example 
-     interface PstlWeb3ModalProps.modals.web3auth {
-        themeInfo?: {
-          mode?: 'light' | 'dark'
-          primary?: string
-        }
-        chains: ChainsPartialReadonly<ID>
-        zIndex?: number
-        network: Web3AuthOptions['web3AuthNetwork']
-        storageKey?: Web3AuthOptions['storageKey']
-        preset?: 'DISALLOW_EXTERNAL_WALLETS' | 'ALLOW_EXTERNAL_WALLETS'
-        projectId: string
-        appName: string
-        url?: string
-        appLogoLight?: string
-        appLogoDark?: string
-        listingName?: string
-        listingLogo?: string
-        listingDetails?: string
-        loginMethodsOrder?: string[]
-        mfaLevel?: OpenloginLoginParams['mfaLevel']
-        uxMode?: 'popup' | 'redirect'
-        configureAdditionalConnectors?: () => IPlugin[] | undefined
-     }
-    */
-    web3auth?: Omit<PstlWeb3AuthConnectorProps<ID>, 'chains'>
+    walletConnect: Omit<Web3ModalConfig<ID>, 'chains'>
   }
   clients?: {
     wagmi?: PstlWagmiClientOptions<ID>

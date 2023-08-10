@@ -7,7 +7,6 @@ import { Config as ClientConfig, WagmiConfigProps, configureChains, createConfig
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { publicProvider } from 'wagmi/providers/public'
 
-import { PstlWeb3AuthConnectorProps } from '../../connectors/web3auth'
 import { ConnectorEnhanced } from '../../types'
 import { ChainsPartialReadonly, PstlWeb3ModalProps } from '../types'
 
@@ -19,7 +18,6 @@ interface CreateWagmiClientProps<ID extends number> {
   chains: ChainsPartialReadonly<ID>
   connectors: ConnectorEnhanced<any, any>[]
   w3mConnectorProps: PstlWeb3ModalProps<ID>['modals']['walletConnect']
-  w3aConnectorProps?: Omit<PstlWeb3AuthConnectorProps<ID>, 'chains'>
   options?: Partial<Pick<ClientConfigEnhanced, 'publicClient'>> & {
     publicClients?: (typeof publicProvider)[]
     pollingInterval?: number
@@ -69,7 +67,6 @@ export function usePstlWagmiClient<ID extends number>(
             chains: props.chains,
             connectors: props.connectors,
             w3mConnectorProps: props.modals.walletConnect,
-            w3aConnectorProps: props.modals.web3auth,
             options: { ...props?.clients?.wagmi?.options, ...props.options }
           })
         : props.clients.wagmi.client,
@@ -122,10 +119,9 @@ type InjectedConnectorOptions = MakeOptional<
 >
 type GetConnectorConstructorParams<C extends Instance<ConnectorEnhanced<any, any>>> =
   C extends Instance<InjectedConnector>
-    ? Omit<Required<Required<ConstructorParameters<C>>[0]>, 'chains'> & {
-        options: InjectedConnectorOptions
-      }
-    : Partial<Omit<ConstructorParameters<C>[0], 'chains'>>
+    ? InjectedConnectorOptions
+    : // @ts-expect-error - not inferring constructor args correctly
+      Omit<ConstructorParameters<C>[0], 'chains'>['options']
 
 export const addConnector =
   <C extends Instance<ConnectorEnhanced<any, any>>>(Connector: C, params: GetConnectorConstructorParams<C>) =>
