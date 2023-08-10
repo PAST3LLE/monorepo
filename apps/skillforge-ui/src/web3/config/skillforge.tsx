@@ -1,13 +1,10 @@
-import { frameConnectors } from '../connectors'
+import { connectors, frameConnectors } from '../connectors'
 import { SUPPORTED_CHAINS } from './chains'
-import { SupportedForgeChains, Web3ModalConfigWeb3Props } from '@past3lle/forge-web3'
-import { PstlWeb3ModalProps } from '@past3lle/web3-modal'
-import { TorusWalletConnectorPlugin } from '@web3auth/torus-wallet-connector-plugin'
-import { ASSETS_MAP } from 'assets'
+import { Web3ModalConfigWeb3Props } from '@past3lle/forge-web3'
 import GOOGLE_APPLE_LOGO from 'assets/png/google-apple.png'
 import React from 'react'
-import { FORGE_LOGO_URL_MAP, pstlModalTheme as PSTL_MODAL_THEME } from 'theme/pstlModal'
-import { skillforgeTheme as SKILLFORGE_THEME, skillforgeTheme } from 'theme/skillforge'
+import { pstlModalTheme as PSTL_MODAL_THEME } from 'theme/pstlModal'
+import { skillforgeTheme as SKILLFORGE_THEME } from 'theme/skillforge'
 
 if (
   !process.env.REACT_APP_WEB3MODAL_ID ||
@@ -20,6 +17,7 @@ if (
 export const SKILLFORGE_APP_NAME = 'SKILLFORGE'
 export const WEB3_PROPS: Web3ModalConfigWeb3Props = {
   chains: SUPPORTED_CHAINS,
+  connectors,
   frameConnectors,
   options: {
     pollingInterval: 10_000,
@@ -30,51 +28,6 @@ export const WEB3_PROPS: Web3ModalConfigWeb3Props = {
     }
   },
   modals: {
-    web3auth: {
-      appName: SKILLFORGE_APP_NAME,
-      // CYAN = USA focused
-      network: process.env.REACT_APP_WEB3_AUTH_NETWORK as Required<
-        PstlWeb3ModalProps<SupportedForgeChains>['modals']
-      >['web3auth']['network'],
-      projectId: process.env.REACT_APP_WEB3AUTH_ID as string,
-      storageKey: 'session',
-      preset: 'DISALLOW_EXTERNAL_WALLETS',
-      mfaLevel: 'none',
-      uxMode: 'redirect',
-      themeInfo: {
-        mode: 'dark',
-        primary: skillforgeTheme.modes.DEFAULT.mainBg
-      },
-      appLogoDark: ASSETS_MAP.logos.forge[512],
-      appLogoLight: ASSETS_MAP.logos.forge[512],
-      url: 'https://skills.pastelle.shop',
-      configureAdditionalConnectors() {
-        // Add Torus Wallet Plugin (optional)
-        const torusPlugin = new TorusWalletConnectorPlugin({
-          torusWalletOpts: {
-            buttonPosition: 'bottom-right',
-            modalZIndex: 999
-          },
-          walletInitOptions: {
-            whiteLabel: {
-              theme: {
-                isDark: true,
-                colors: {
-                  torusBrand1: SKILLFORGE_THEME.modes.ALT.mainBg,
-                  torusBrand2: SKILLFORGE_THEME.modes.DEFAULT.mainBg
-                }
-              },
-              logoDark: FORGE_LOGO_URL_MAP[500]['1x'],
-              logoLight: FORGE_LOGO_URL_MAP[500]['1x']
-            },
-            showTorusButton: true,
-            useWalletConnect: true
-          }
-        })
-
-        return [torusPlugin]
-      }
-    },
     walletConnect: {
       projectId: process.env.REACT_APP_WEB3MODAL_ID as string,
       themeMode: 'dark',
