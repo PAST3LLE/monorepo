@@ -51,8 +51,7 @@ function App() {
         web3: {
           chains: commonProps.chains,
           modals: {
-            walletConnect: commonProps.modals.walletConnect,
-            web3auth: commonProps.modals.web3auth
+            walletConnect: commonProps.modals.walletConnect
           }
         }
       }}
@@ -77,8 +76,7 @@ export default {
         web3: {
           chains: commonProps.chains,
           modals: {
-            walletConnect: commonProps.modals.walletConnect,
-            web3auth: commonProps.modals.web3auth
+            walletConnect: commonProps.modals.walletConnect
           }
         }
       }}
@@ -101,8 +99,7 @@ export default {
         web3: {
           chains: commonProps.chains,
           modals: {
-            walletConnect: commonProps.modals.walletConnect,
-            web3auth: commonProps.modals.web3auth
+            walletConnect: commonProps.modals.walletConnect
           }
         }
       }}

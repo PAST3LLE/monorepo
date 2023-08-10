@@ -1,5 +1,3 @@
-import { TorusWalletConnectorPlugin } from '@web3auth/torus-wallet-connector-plugin'
-
 import { ForgeContractAddressMap } from '../types'
 import { ForgeWeb3ModalProps } from '../types/web3modal'
 import { chains } from './chains'
@@ -7,7 +5,6 @@ import { chains } from './chains'
 // TESTING ID - DONT USE IN PROD
 const WALLETCONNECT_TEST_ID = 'a01e2f3b7c64ff495f9cb28e4e2d4b49'
 // TESTING KEY DO NOT USE IN PROD
-const WEB3AUTH_TEST_ID = 'BHloyoLW113nGn-mIfeeNqj2U0wNCXa4y83xLnR6d3FELPMz_oZ7rbY4ZEO3r0MVjQ_LX92obu1ta0NknOwfvtU'
 const DEFAULT_PROPS: ForgeWeb3ModalProps = {
   appName: 'COSMOS APP',
   chains,
@@ -17,38 +14,6 @@ const DEFAULT_PROPS: ForgeWeb3ModalProps = {
       walletImages: {
         web3auth: 'https://web3auth.io/images/w3a-L-Favicon-1.svg',
         safe: 'https://user-images.githubusercontent.com/3975770/212338977-5968eae5-bb1b-4e71-8f82-af5282564c66.png'
-      }
-    },
-    web3auth: {
-      appName: 'SKILLFORGE TEST',
-      projectId: WEB3AUTH_TEST_ID,
-      network: 'cyan',
-      storageKey: 'session',
-      preset: 'DISALLOW_EXTERNAL_WALLETS',
-      configureAdditionalConnectors() {
-        // Add Torus Wallet Plugin (optional)
-        const torusPlugin = new TorusWalletConnectorPlugin({
-          torusWalletOpts: {
-            buttonPosition: 'bottom-right',
-            modalZIndex: 999
-          },
-          walletInitOptions: {
-            whiteLabel: {
-              theme: {
-                isDark: true,
-                colors: {
-                  torusBrand1: '#ffc0cb',
-                  torusBrand2: '#ffc0cb'
-                }
-              },
-              logoDark: 'https://web3auth.io/images/w3a-L-Favicon-1.svg',
-              logoLight: 'https://web3auth.io/images/w3a-L-Favicon-1.svg'
-            },
-            useWalletConnect: true
-          }
-        })
-
-        return [torusPlugin]
       }
     }
   }
