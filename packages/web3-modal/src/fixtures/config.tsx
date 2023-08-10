@@ -209,16 +209,6 @@ const DEFAULT_PROPS_WEB3AUTH: PstlWeb3ModalProps<number> = {
           }
         }
       }
-    },
-    web3auth: {
-      appName: 'SKILLFORGE TEST',
-      projectId: WEB3AUTH_TEST_ID,
-      network: 'cyan',
-      listingName: 'GGOOGLE & MORE',
-      appLogoLight: FORGE_LOGO,
-      appLogoDark: FORGE_LOGO,
-      uxMode: 'redirect'
-      // zIndex: 901
     }
   }
 } as const
