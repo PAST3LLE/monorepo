@@ -32,8 +32,8 @@ export class LedgerHIDConnector extends Connector<LedgerHQProvider, LedgerHidOpt
   protected shimDisconnectKey = `${this.id}.shimDisconnect`
 
   // Ledger only accepts mainnet so these constuctor props are useless
-  constructor(/* props: { chains: Chain[]; options: LedgerHidOptions } */) {
-    super({ chains: [mainnet], options: { url: mainnet.rpcUrls.default.http[0] } })
+  constructor(config: { options?: LedgerHidOptions }) {
+    super({ chains: [mainnet], options: config?.options || { url: mainnet.rpcUrls.default.http[0] } })
 
     // Ledger only accepts 1 (mainnet ethereum) for now
     this.chainId = mainnet.id

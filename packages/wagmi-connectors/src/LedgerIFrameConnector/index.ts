@@ -2,7 +2,6 @@ import { ExternalProvider, Web3Provider } from '@ethersproject/providers'
 import { IFrameEthereumProvider } from '@ledgerhq/iframe-provider'
 import { ConnectorNotFoundError, normalizeChainId } from '@wagmi/connectors'
 import {
-  Account,
   Address,
   ProviderRpcError,
   ResourceUnavailableRpcError,
@@ -69,7 +68,7 @@ export class IFrameEthereumConnector extends Connector<IFrameEthereumProvider, I
     const chain = this.chains.find((x) => x.id === chainId)
     if (!provider) throw new Error('provider is required.')
     return createWalletClient({
-      account: account as Account | `0x${string}` | undefined,
+      account,
       chain,
       transport: http(chain?.rpcUrls.default.http[0] || DEFAULT_RPC_URL)
     })
