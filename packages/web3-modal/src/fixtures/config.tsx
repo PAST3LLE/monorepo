@@ -14,7 +14,8 @@ export const WEB3AUTH_TEST_ID =
 const WEB3AUTH_LOGO = 'https://www.getopensocial.com/wp-content/uploads/2020/12/social-login-COLOR_2.png'
 const WALLETCONNECT_LOGO =
   'https://repository-images.githubusercontent.com/204001588/a5169900-c66c-11e9-8592-33c7334dfd6d'
-const LOGO = 'https://raw.githubusercontent.com/PAST3LLE/monorepo/main/apps/skillforge-ui/public/512_logo.png'
+export const FORGE_LOGO =
+  'https://raw.githubusercontent.com/PAST3LLE/monorepo/main/apps/skillforge-ui/public/512_logo.png'
 
 export const pstlModalTheme = createTheme({
   DARK: {
@@ -214,8 +215,8 @@ const DEFAULT_PROPS_WEB3AUTH: PstlWeb3ModalProps<number> = {
       projectId: WEB3AUTH_TEST_ID,
       network: 'cyan',
       listingName: 'GGOOGLE & MORE',
-      appLogoLight: LOGO,
-      appLogoDark: LOGO,
+      appLogoLight: FORGE_LOGO,
+      appLogoDark: FORGE_LOGO,
       uxMode: 'redirect'
       // zIndex: 901
     }

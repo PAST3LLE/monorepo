@@ -122,10 +122,9 @@ type InjectedConnectorOptions = MakeOptional<
 >
 type GetConnectorConstructorParams<C extends Instance<ConnectorEnhanced<any, any>>> =
   C extends Instance<InjectedConnector>
-    ? Omit<Required<Required<ConstructorParameters<C>>[0]>, 'chains'> & {
-        options: InjectedConnectorOptions
-      }
-    : Partial<Omit<ConstructorParameters<C>[0], 'chains'>>
+    ? InjectedConnectorOptions
+    : // @ts-expect-error - not inferring constructor args correctly
+      Omit<ConstructorParameters<C>[0], 'chains'>['options']
 
 export const addConnector =
   <C extends Instance<ConnectorEnhanced<any, any>>>(Connector: C, params: GetConnectorConstructorParams<C>) =>

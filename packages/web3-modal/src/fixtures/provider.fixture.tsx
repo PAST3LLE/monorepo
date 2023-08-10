@@ -2,6 +2,7 @@ import { ButtonVariations, ColumnCenter, PstlButton } from '@past3lle/components
 import { WindowSizeProvider } from '@past3lle/hooks'
 import { ThemeProvider, createCustomTheme } from '@past3lle/theme'
 import { devWarn } from '@past3lle/utils'
+import { LedgerHIDConnector } from '@past3lle/wagmi-connectors'
 import React, { ReactNode } from 'react'
 import { useTheme } from 'styled-components'
 import { useBalance } from 'wagmi'
@@ -102,7 +103,7 @@ const withThemeProvider = (Component: () => JSX.Element | null) => (
 )
 
 export default {
-  List__Web3ModalWeb3AuthAndTorus: withThemeProvider(() => <DefaultApp />),
+  List__Web3Modal: withThemeProvider(() => <DefaultApp />),
   List__WalletConnectMetaMaskHidden: withThemeProvider(() => (
     <PstlW3Providers
       config={{
@@ -175,7 +176,7 @@ export default {
     <PstlW3Providers
       config={{
         ...DEFAULT_PROPS_WEB3AUTH,
-        connectors: [wagmiConnectors.ledgerLiveModal],
+        connectors: [wagmiConnectors.ledgerLiveModal, wagmiConnectors.web3auth],
         modals: {
           ...DEFAULT_PROPS_WEB3AUTH.modals,
           root: {
@@ -364,51 +365,45 @@ export default {
           chains: [DEFAULT_PROPS.chains[0]],
           connectors: [
             addConnector(InjectedConnector, {
-              options: {
-                name: 'MetaMask',
-                shimDisconnect: true,
-                getProvider() {
-                  if (typeof window === undefined) return undefined
-                  try {
-                    const provider = window?.ethereum?.providers?.find((provider) => provider?.isMetaMask)
-                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                    return provider
-                  } catch (error) {
-                    return undefined
-                  }
+              name: 'MetaMask',
+              shimDisconnect: true,
+              getProvider() {
+                if (typeof window === undefined) return undefined
+                try {
+                  const provider = window?.ethereum?.providers?.find((provider) => provider?.isMetaMask)
+                  if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
+                  return provider
+                } catch (error) {
+                  return undefined
                 }
               }
             }),
             addConnector(InjectedConnector, {
-              options: {
-                name: 'Taho',
-                shimDisconnect: true,
-                getProvider() {
-                  if (typeof window === undefined) return undefined
-                  try {
-                    const provider = window?.tally
-                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                    return provider
-                  } catch (error) {
-                    return undefined
-                  }
+              name: 'Taho',
+              shimDisconnect: true,
+              getProvider() {
+                if (typeof window === undefined) return undefined
+                try {
+                  const provider = window?.tally
+                  if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
+                  return provider
+                } catch (error) {
+                  return undefined
                 }
               }
             }),
             addConnector(InjectedConnector, {
-              options: {
-                name: 'Coinbase Wallet',
-                shimDisconnect: true,
-                getProvider() {
-                  if (typeof window === undefined) return undefined
-                  try {
-                    const provider =
-                      (window?.ethereum?.isCoinbaseWallet && window.ethereum) || window?.coinbaseWalletExtension
-                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                    return provider
-                  } catch (error) {
-                    return undefined
-                  }
+              name: 'Coinbase Wallet',
+              shimDisconnect: true,
+              getProvider() {
+                if (typeof window === undefined) return undefined
+                try {
+                  const provider =
+                    (window?.ethereum?.isCoinbaseWallet && window.ethereum) || window?.coinbaseWalletExtension
+                  if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
+                  return provider
+                } catch (error) {
+                  return undefined
                 }
               }
             })
@@ -450,51 +445,45 @@ export default {
             wagmiConnectors.ledgerHID,
             wagmiConnectors.ledgerLiveModal,
             addConnector(InjectedConnector, {
-              options: {
-                name: 'MetaMask',
-                shimDisconnect: true,
-                getProvider() {
-                  if (typeof window === undefined) return undefined
-                  try {
-                    const provider = window?.ethereum?.providers?.find((provider) => provider?.isMetaMask)
-                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                    return provider
-                  } catch (error) {
-                    return undefined
-                  }
+              name: 'MetaMask',
+              shimDisconnect: true,
+              getProvider() {
+                if (typeof window === undefined) return undefined
+                try {
+                  const provider = window?.ethereum?.providers?.find((provider) => provider?.isMetaMask)
+                  if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
+                  return provider
+                } catch (error) {
+                  return undefined
                 }
               }
             }),
             addConnector(InjectedConnector, {
-              options: {
-                name: 'Taho',
-                shimDisconnect: true,
-                getProvider() {
-                  if (typeof window === undefined) return undefined
-                  try {
-                    const provider = window?.tally
-                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                    return provider
-                  } catch (error) {
-                    return undefined
-                  }
+              name: 'Taho',
+              shimDisconnect: true,
+              getProvider() {
+                if (typeof window === undefined) return undefined
+                try {
+                  const provider = window?.tally
+                  if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
+                  return provider
+                } catch (error) {
+                  return undefined
                 }
               }
             }),
             addConnector(InjectedConnector, {
-              options: {
-                name: 'Coinbase Wallet',
-                shimDisconnect: true,
-                getProvider() {
-                  if (typeof window === undefined) return undefined
-                  try {
-                    const provider =
-                      (window?.ethereum?.isCoinbaseWallet && window.ethereum) || window?.coinbaseWalletExtension
-                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                    return provider
-                  } catch (error) {
-                    return undefined
-                  }
+              name: 'Coinbase Wallet',
+              shimDisconnect: true,
+              getProvider() {
+                if (typeof window === undefined) return undefined
+                try {
+                  const provider =
+                    (window?.ethereum?.isCoinbaseWallet && window.ethereum) || window?.coinbaseWalletExtension
+                  if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
+                  return provider
+                } catch (error) {
+                  return undefined
                 }
               }
             })
@@ -537,52 +526,47 @@ export default {
           connectors: [
             wagmiConnectors.ledgerHID,
             wagmiConnectors.ledgerLiveModal,
+            addConnector(LedgerHIDConnector, undefined),
             addConnector(InjectedConnector, {
-              options: {
-                name: 'MetaMask',
-                shimDisconnect: true,
-                getProvider() {
-                  if (typeof window === undefined) return undefined
-                  try {
-                    const provider = window?.ethereum?.providers?.find((provider) => provider?.isMetaMask)
-                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                    return provider
-                  } catch (error) {
-                    return undefined
-                  }
+              name: 'MetaMask',
+              shimDisconnect: true,
+              getProvider() {
+                if (typeof window === undefined) return undefined
+                try {
+                  const provider = window?.ethereum?.providers?.find((provider) => provider?.isMetaMask)
+                  if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
+                  return provider
+                } catch (error) {
+                  return undefined
                 }
               }
             }),
             addConnector(InjectedConnector, {
-              options: {
-                name: 'Taho',
-                shimDisconnect: true,
-                getProvider() {
-                  if (typeof window === undefined) return undefined
-                  try {
-                    const provider = window?.tally
-                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                    return provider
-                  } catch (error) {
-                    return undefined
-                  }
+              name: 'Taho',
+              shimDisconnect: true,
+              getProvider() {
+                if (typeof window === undefined) return undefined
+                try {
+                  const provider = window?.tally
+                  if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
+                  return provider
+                } catch (error) {
+                  return undefined
                 }
               }
             }),
             addConnector(InjectedConnector, {
-              options: {
-                name: 'Coinbase Wallet',
-                shimDisconnect: true,
-                getProvider() {
-                  if (typeof window === undefined) return undefined
-                  try {
-                    const provider =
-                      (window?.ethereum?.isCoinbaseWallet && window.ethereum) || window?.coinbaseWalletExtension
-                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                    return provider
-                  } catch (error) {
-                    return undefined
-                  }
+              name: 'Coinbase Wallet',
+              shimDisconnect: true,
+              getProvider() {
+                if (typeof window === undefined) return undefined
+                try {
+                  const provider =
+                    (window?.ethereum?.isCoinbaseWallet && window.ethereum) || window?.coinbaseWalletExtension
+                  if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
+                  return provider
+                } catch (error) {
+                  return undefined
                 }
               }
             })
