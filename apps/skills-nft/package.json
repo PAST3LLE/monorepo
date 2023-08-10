@@ -21,10 +21,6 @@
   },
   "scripts": {
     "test": "node ./__tests__/skills-nft.test.js",
-    "w3name:key": "node src/scripts/ipns/key.js",
-    "w3name:publish": "node src/scripts/ipns/publish.js",
-    "w3name:revise": "node src/scripts/ipns/revise.js",
-    "firebase:upload": "node src/scripts/firebase/upload.js",
     "metadata:write": "node src/scripts/metadata/writeSkills.js"
   },
   "bugs": {
@@ -32,9 +28,7 @@
   },
   "devDependencies": {
     "dotenv": "^16.0.3",
-    "firebase-admin": "^11.5.0",
     "is-ipfs": "^8.0.1",
-    "uuid": "^9.0.0",
-    "w3name": "^1.0.7"
+    "uuid": "^9.0.0"
   }
 }
