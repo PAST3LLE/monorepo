@@ -18,7 +18,7 @@ export function useConnectorAndChainConfig(
       case AppType.SAFE_APP: {
         devDebug('[@past3lle/web3-modal] App type detected: SAFE APP')
 
-        const connectors = mapChainsToConnectors([addConnector(SafeConnector, { options: { debug: true } })], config)
+        const connectors = mapChainsToConnectors([addConnector(SafeConnector, { debug: true })], config)
         return { ...config, connectors }
       }
       case AppType.IFRAME: {
