@@ -29,6 +29,34 @@ export interface PstlWeb3AuthConnectorProps {
   configureAdditionalConnectors?: () => IPlugin[] | undefined
 }
 
+/**
+     * @description Web3Auth modal connector
+     * @param options - options / config object:
+     * @example 
+     interface Options {
+        themeInfo?: {
+          mode?: 'light' | 'dark'
+          primary?: string
+        }
+        chains: ChainsPartialReadonly<ID>
+        zIndex?: number
+        network: Web3AuthOptions['web3AuthNetwork']
+        storageKey?: Web3AuthOptions['storageKey']
+        preset?: 'DISALLOW_EXTERNAL_WALLETS' | 'ALLOW_EXTERNAL_WALLETS'
+        projectId: string
+        appName: string
+        url?: string
+        appLogoLight?: string
+        appLogoDark?: string
+        listingName?: string
+        listingLogo?: string
+        listingDetails?: string
+        loginMethodsOrder?: string[]
+        mfaLevel?: OpenloginLoginParams['mfaLevel']
+        uxMode?: 'popup' | 'redirect'
+        configureAdditionalConnectors?: () => IPlugin[] | undefined
+     }
+    */
 export function PstlWeb3AuthConnector(chains: Chain[], options: PstlWeb3AuthConnectorProps): Web3AuthConnector {
   const {
     network = 'testnet',
