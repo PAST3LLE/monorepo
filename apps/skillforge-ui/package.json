@@ -34,10 +34,10 @@
     "cli": "npx @past3lle/forge-cli@latest"
   },
   "resolutions": {
-    "@web3modal/ethereum": ">=2.4.0",
-    "@web3modal/react": ">=2.4.0",
-    "wagmi": ">=1",
-    "**/*/@wagmi/core": ">=1"
+    "@web3modal/ethereum": "^2.x",
+    "@web3modal/react": "^2.x",
+    "wagmi": "^1.x",
+    "**/*/@wagmi/core": "^1.x"
   },
   "devDependencies": {
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.13.8",
@@ -56,7 +56,7 @@
     "@types/styled-components": "^5.1.0",
     "@typescript-eslint/eslint-plugin": "^5.48.2",
     "@typescript-eslint/parser": "^5.48.2",
-    "@web3auth/torus-wallet-connector-plugin": "^5.0.1",
+    "@web3auth/torus-wallet-connector-plugin": "^6.1.7",
     "assert": "^2.0.0",
     "browserify-zlib": "^0.2.0",
     "buffer": "^6.0.3",
