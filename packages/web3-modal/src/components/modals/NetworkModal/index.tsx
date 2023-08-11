@@ -7,6 +7,7 @@ import { ConnectorEnhanced } from '../../../types'
 import { AccountColumnContainer } from '../AccountModal/styled'
 import { ConnectorOption } from '../ConnectionModal/ConnectorOption'
 import { WalletsWrapper } from '../common/styled'
+import { ModalId } from '../common/types'
 
 function NetworkModalContent() {
   const modalCallbacks = usePstlWeb3Modal()
@@ -25,11 +26,12 @@ function NetworkModalContent() {
           const chainLogo = CHAIN_IMAGES?.[chain.id]
           return (
             <ConnectorOption
+              id={`${ModalId.NETWORK}__chain-${chain.id}-${chain.name}`}
+              key={chain.id}
               callback={() => switchNetworkAsync(chain.id) as any}
               modalView="grid"
               connected={false}
               connector={connector as ConnectorEnhanced<any, any>}
-              key={chain.id}
               label={chain.name}
               logo={chainLogo || undefined}
               buttonProps={{
