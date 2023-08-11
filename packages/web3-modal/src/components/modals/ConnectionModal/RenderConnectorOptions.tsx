@@ -6,7 +6,6 @@ import { ModalPropsCtrlState } from '../../../controllers/types/controllerTypes'
 import { useConnectDisconnect, useUserConnectionInfo, useWeb3Modals } from '../../../hooks'
 import { ConnectorEnhanced } from '../../../types'
 import { runConnectorConnectionLogic, trimAndLowerCase } from '../../../utils'
-import { ModalId } from '../common/types'
 import { ConnectorOption } from './ConnectorOption'
 
 export type RenderConnectorOptionsProps = Pick<
@@ -76,8 +75,11 @@ const RenderConnectorOptionsBase =
 
     return (
       <ConnectorOption
+        // keys and ids
         key={connector.id + '_' + index}
-        id={`${ModalId.WALLETS}__connector-${connector.id}-${connector.name}`}
+        optionType={'wallet'}
+        optionValue={connector.name}
+        // data props
         connector={connector}
         callback={callback}
         connected={connected}

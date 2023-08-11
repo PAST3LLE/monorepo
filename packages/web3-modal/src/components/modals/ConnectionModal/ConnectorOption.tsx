@@ -11,6 +11,8 @@ import { RecommendedLabel } from './RecommendedLabel'
 
 export type ConnectorOptionProps = ConnectorInfo & {
   id?: string
+  optionType?: string
+  optionValue?: string | number
   connector: ConnectorEnhanced<any, any>
   modalView: 'list' | 'grid'
   buttonProps?: ButtonProps
@@ -22,6 +24,8 @@ export type ConnectorOptionProps = ConnectorInfo & {
 }
 function ConnectorOptionBase({
   id,
+  optionType,
+  optionValue,
   connector,
   label,
   isRecommended,
@@ -34,7 +38,7 @@ function ConnectorOptionBase({
   callback
 }: ConnectorOptionProps) {
   return (
-    <div id={id}>
+    <div option-type={optionType} option-value={optionValue} id={id}>
       <ModalButton onClick={callback} connected={connected} {...buttonProps}>
         <img src={logo} />
         {label}
