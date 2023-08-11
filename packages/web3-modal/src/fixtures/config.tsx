@@ -161,7 +161,10 @@ const DEFAULT_PROPS: PstlWeb3ModalProps<number> = {
   chains,
   options: {
     chainFromUrlOptions: { type: 'network', key: 'web3-modal-network' },
-    pollingInterval: 10_000
+    pollingInterval: 10_000,
+    escapeHatches: {
+      appType: 'TEST_FRAMEWORK_IFRAME'
+    }
   },
   modals: {
     root: {

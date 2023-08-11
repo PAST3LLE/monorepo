@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { Chain } from 'wagmi'
 
 import { PstlWeb3ModalOptions, PstlWeb3ModalProps } from '../providers/types'
-import { AppType, getAppType } from '../providers/utils/connectors'
+import { getAppType } from '../providers/utils/connectors'
 
 export function useChainIdFromSearchParams(
   chains: PstlWeb3ModalProps<number>['chains'],
@@ -26,13 +26,13 @@ async function _getChainFromUrl(
   let type: 'id' | 'network' | undefined = undefined
   let param: string | number | undefined | null = undefined
   switch (status) {
-    case AppType.TEST_FRAMEWORK_IFRAME:
+    case 'TEST_FRAMEWORK_IFRAME':
       break
-    case AppType.SAFE_APP:
+    case 'SAFE_APP':
       break
-    case AppType.IFRAME:
+    case 'IFRAME':
       break
-    case AppType.DAPP: {
+    case 'DAPP': {
       if (typeof globalThis?.window === undefined || !configOptions?.chainFromUrlOptions?.key) return
 
       const chainParam = new URLSearchParams(location.search).get(configOptions?.chainFromUrlOptions.key)

@@ -6,7 +6,7 @@ import { useMemo } from 'react'
 import { Chain } from 'viem'
 
 import { PstlWeb3ModalProps, addConnector } from '../providers'
-import { AppType, getAppType, mapChainsToConnectors } from '../providers/utils/connectors'
+import { getAppType, mapChainsToConnectors } from '../providers/utils/connectors'
 import { ConnectorEnhanced } from '../types'
 
 export function useConnectorAndChainConfig(
@@ -15,13 +15,13 @@ export function useConnectorAndChainConfig(
   return useMemo(() => {
     const status = getAppType(config.options?.escapeHatches?.appType)
     switch (status) {
-      case AppType.SAFE_APP: {
+      case 'SAFE_APP': {
         devDebug('[@past3lle/web3-modal] App type detected: SAFE APP')
 
         const connectors = mapChainsToConnectors([addConnector(SafeConnector, { debug: true })], config)
         return { ...config, connectors }
       }
-      case AppType.IFRAME: {
+      case 'IFRAME': {
         devDebug('[@past3lle/web3-modal] App type detected: IFRAME APP')
 
         const connectors = mapChainsToConnectors(
@@ -30,8 +30,8 @@ export function useConnectorAndChainConfig(
         )
         return { ...config, connectors }
       }
-      case AppType.TEST_FRAMEWORK_IFRAME:
-      case AppType.DAPP: {
+      case 'TEST_FRAMEWORK_IFRAME':
+      case 'DAPP': {
         devDebug('[@past3lle/web3-modal] App type detected: NORMAL DAPP', config?.connectors)
 
         const userConnectors = mapChainsToConnectors(config?.connectors || [], config)
