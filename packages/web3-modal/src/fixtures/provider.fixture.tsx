@@ -2,7 +2,6 @@ import { ButtonVariations, ColumnCenter, PstlButton } from '@past3lle/components
 import { WindowSizeProvider } from '@past3lle/hooks'
 import { ThemeProvider, createCustomTheme } from '@past3lle/theme'
 import { devWarn } from '@past3lle/utils'
-import { LedgerHIDConnector } from '@past3lle/wagmi-connectors'
 import React, { ReactNode } from 'react'
 import { useTheme } from 'styled-components'
 import { useBalance } from 'wagmi'
@@ -522,7 +521,6 @@ export default {
           connectors: [
             wagmiConnectors.ledgerHID,
             wagmiConnectors.ledgerLiveModal,
-            addConnector(LedgerHIDConnector, undefined),
             addConnector(InjectedConnector, {
               name: 'MetaMask',
               shimDisconnect: true,
