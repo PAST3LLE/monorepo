@@ -1,5 +1,5 @@
 import { Row } from '@past3lle/components'
-import { AppType, getAppType, useForgeGetUserConfigChainsAtom, useForgeWindowSizeAtom } from '@past3lle/forge-web3'
+import { getAppType, useForgeGetUserConfigChainsAtom, useForgeWindowSizeAtom } from '@past3lle/forge-web3'
 import { MEDIA_WIDTHS } from '@past3lle/theme'
 import React, { useEffect, useState } from 'react'
 
@@ -39,8 +39,8 @@ function useShowNetworkButton(isMobileWidth: boolean) {
   const [isDappBrowser, setIsDappBrowser] = useState(false)
   useEffect(() => {
     const appType = getAppType()
-    const isSafe = appType === AppType.SAFE_APP
-    const isFrame = appType === AppType.IFRAME
+    const isSafe = appType === 'SAFE_APP'
+    const isFrame = appType === 'IFRAME'
 
     setIsDappBrowser(isSafe || isFrame)
   }, [])
