@@ -16,8 +16,9 @@ interface ModalStyleProps {
   mainBackgroundColor?: string
   width?: string
 }
+// Pick out the non-dom-compatible custom props
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const StyledDialogOverlay = styled(({ zIndex, ...props }) => <AnimatedDialogOverlay {...props} />)<
+const StyledDialogOverlay = styled(({ zIndex, mainBackgroundColor, ...props }) => <AnimatedDialogOverlay {...props} />)<
   Pick<ModalStyleProps, 'overlayBackgroundColor' | 'zIndex'>
 >`
   &[data-reach-dialog-overlay] {
@@ -43,7 +44,7 @@ const AnimatedDialogContent = animated(DialogContent)
 // destructure to not pass custom props to Dialog DOM element
 const StyledDialogContent = styled(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, prettier/prettier
-  ({ height, margin, minHeight, maxHeight, maxWidth, width, isOpen, isLargeImageModal, tabIndex, zIndex, ...rest }) => (
+  ({ mainBackgroundColor, height, margin, minHeight, maxHeight, maxWidth, width, isOpen, isLargeImageModal, tabIndex, zIndex, ...rest }) => (
     <AnimatedDialogContent {...rest} tabIndex={tabIndex} />
   )
 ).attrs({
@@ -78,23 +79,31 @@ const StyledDialogContent = styled(
 `
 
 export interface ModalProps {
+  // common dom props
+  id?: string
+  className?: string
+  children?: React.ReactNode
+  // flags
   isLargeImageModal?: boolean
   isOpen: boolean
+  // inline style props
   tabIndex?: 0 | -1
-  onDismiss: () => void
   minHeight?: string
   maxHeight?: string
   height?: string
   maxWidth?: string
   width?: string | number
   margin?: string
+  // ref
   initialFocusRef?: React.RefObject<any>
-  className?: string
-  children?: React.ReactNode
+  // custom style props
   styleProps?: ModalStyleProps
+  // callback
+  onDismiss: () => void
 }
 
 export function Modal({
+  id,
   isOpen,
   children,
   className,
@@ -120,6 +129,7 @@ export function Modal({
 
   return (
     <StyledDialogOverlay
+      id={id}
       className={className}
       onDismiss={onDismiss}
       initialFocusRef={initialFocusRef}
