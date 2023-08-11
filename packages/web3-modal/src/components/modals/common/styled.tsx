@@ -186,6 +186,8 @@ export const WalletsWrapper = styled.div<{
   width?: string
   view?: PstlWeb3ConnectionModalProps['walletsView']
 }>`
+  display: grid;
+  gap: 1rem;
   width: ${({ width = '100%' }) => width};
   padding: 0 1rem;
   z-index: 1;
@@ -197,14 +199,18 @@ export const WalletsWrapper = styled.div<{
     overflow-y: hidden;
   `}
 
-  > ${ModalButton} {
-    > img {
-      max-width: 50px;
+  ${upToExtraSmall`
+    grid-template-columns: 1fr;
+  `}
+
+  // Container
+  > div {
+    > ${ModalButton} {
+      > img {
+        max-width: 50px;
+      }
     }
   }
-
-  display: grid;
-  gap: 1rem;
 
   ${({ view }) =>
     view === 'grid' &&
@@ -214,21 +220,23 @@ export const WalletsWrapper = styled.div<{
     justify-content: center;
     padding: 1rem;
 
-    > ${ModalButton} {
-      flex-flow: column;
-      padding: 0.75rem;
-      justify-content: center;
-      font-size: 0.8rem;
-      
-      > ${RecommendedLabelWrapper} {
-        position: absolute;
-        bottom: 0.5rem;
-        height: min-content;
-        right: 0.5rem;
-      }
+    > div {
+      > ${ModalButton} {
+        flex-flow: column;
+        padding: 0.75rem;
+        justify-content: center;
+        font-size: 0.8rem;
+        
+        > ${RecommendedLabelWrapper} {
+          position: absolute;
+          bottom: 0.5rem;
+          height: min-content;
+          right: 0.5rem;
+        }
 
-      > img {
-        max-width: 30px;
+        > img {
+          max-width: 30px;
+        }
       }
     }
   `}
@@ -236,21 +244,19 @@ export const WalletsWrapper = styled.div<{
   ${({ view }) =>
     view === 'grid' &&
     upToSmall`
-      > ${ModalButton} {
-        padding: 0.25rem;
-        font-size: 0.75rem;
-      
-        > ${RecommendedLabelWrapper} {
-          display: none;
-        }
+      > div {
+        > ${ModalButton} {
+          padding: 0.25rem;
+          font-size: 0.75rem;
+        
+          > ${RecommendedLabelWrapper} {
+            display: none;
+          }
 
-        > img {
-          max-width: 25px;
+          > img {
+            max-width: 25px;
+          }
         }
       }
-  `}
-
-  ${upToExtraSmall`
-    grid-template-columns: 1fr;
   `}
 `
