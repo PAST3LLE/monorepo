@@ -7,36 +7,36 @@ import { AppType, getAppType } from '../providers/utils/connectors'
 
 export function useChainIdFromSearchParams(
   chains: PstlWeb3ModalProps<number>['chains'],
-  chainFromUrlOptions: PstlWeb3ModalOptions['chainFromUrlOptions']
+  configOptions?: PstlWeb3ModalOptions
 ) {
   const [derivedChainId, setDerivedChainId] = useState<Chain | undefined>(undefined)
 
   useEffect(() => {
-    _getChainFromUrl(chains, chainFromUrlOptions).then(setDerivedChainId).catch(devError)
-  }, [chainFromUrlOptions, chains])
+    _getChainFromUrl(chains, configOptions).then(setDerivedChainId).catch(devError)
+  }, [configOptions, chains])
 
   return derivedChainId
 }
 
 async function _getChainFromUrl(
   chains: PstlWeb3ModalProps<number>['chains'],
-  chainFromUrlOptions: PstlWeb3ModalOptions['chainFromUrlOptions']
+  configOptions?: PstlWeb3ModalOptions
 ): Promise<Chain | undefined> {
-  const status = getAppType()
+  const status = getAppType(configOptions?.escapeHatches?.appType)
   let type: 'id' | 'network' | undefined = undefined
   let param: string | number | undefined | null = undefined
   switch (status) {
-    case AppType.COSMOS_APP:
+    case AppType.TEST_FRAMEWORK_IFRAME:
       break
     case AppType.SAFE_APP:
       break
     case AppType.IFRAME:
       break
     case AppType.DAPP: {
-      if (typeof globalThis?.window === undefined || !chainFromUrlOptions?.key) return
+      if (typeof globalThis?.window === undefined || !configOptions?.chainFromUrlOptions?.key) return
 
-      const chainParam = new URLSearchParams(location.search).get(chainFromUrlOptions.key)
-      type = chainFromUrlOptions?.type
+      const chainParam = new URLSearchParams(location.search).get(configOptions?.chainFromUrlOptions.key)
+      type = configOptions?.chainFromUrlOptions?.type
       param = type === 'id' ? Number(chainParam) : chainParam
     }
   }

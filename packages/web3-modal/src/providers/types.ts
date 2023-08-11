@@ -8,6 +8,7 @@ import { Chain as ChainWagmi } from 'wagmi'
 import { PstlWeb3ConnectionModalProps } from '../components/modals/ConnectionModal'
 import { ConnectorEnhanced } from '../types'
 import { PstlWagmiClientOptions } from './utils'
+import { AppType } from './utils/connectors'
 
 type DeepReadonly<T> = {
   readonly [P in keyof T]: T[P] extends Record<string, unknown> ? DeepReadonly<T[P]> : T[P]
@@ -100,6 +101,17 @@ export type PstlWeb3ModalOptions = Omit<
      * @default false
      */
     autoConnect?: boolean
+    /**
+     * @name escapeHatches
+     * @description Collection of escape hatch override flags/properties
+     */
+    escapeHatches?: {
+      /**
+       * @name appType
+       * @description appType is detected and set automtically elsewhere. Escape hatch
+       */
+      appType?: AppType
+    }
   },
   'publicClient' | 'publicClients' | 'connectors'
 >

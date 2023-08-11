@@ -13,7 +13,7 @@ export function useConnectorAndChainConfig(
   config: PstlWeb3ModalProps<number>
 ): Omit<PstlWeb3ModalProps<number>, 'connectors'> & { connectors: ConnectorEnhanced<any, any>[] } {
   return useMemo(() => {
-    const status = getAppType()
+    const status = getAppType(config.options?.escapeHatches?.appType)
     switch (status) {
       case AppType.SAFE_APP: {
         devDebug('[@past3lle/web3-modal] App type detected: SAFE APP')
@@ -30,7 +30,7 @@ export function useConnectorAndChainConfig(
         )
         return { ...config, connectors }
       }
-      case AppType.COSMOS_APP:
+      case AppType.TEST_FRAMEWORK_IFRAME:
       case AppType.DAPP: {
         devDebug('[@past3lle/web3-modal] App type detected: NORMAL DAPP', config?.connectors)
 

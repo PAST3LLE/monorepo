@@ -29,7 +29,7 @@ const PstlW3ProvidersBase = <ID extends number>({
   const wagmiClient = usePstlWagmiClient(connectorAndChainConfig)
   const ethereumClient = usePstlEthereumClient(config.clients?.ethereum, wagmiClient, config.chains)
   // Get the chainId/network info from the URL, if applicable
-  const chainFromUrl = useChainIdFromSearchParams(config.chains, config?.options?.chainFromUrlOptions)
+  const chainFromUrl = useChainIdFromSearchParams(config.chains, config?.options)
   // Setup proxy modals state with user config
   useHydrateModals(config.modals.root)
 
