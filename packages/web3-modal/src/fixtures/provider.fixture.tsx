@@ -12,7 +12,7 @@ import { useUserConnectionInfo, useWeb3Modals } from '../hooks'
 import { PstlWeb3ModalProps, PstlW3Providers as WalletModal } from '../providers'
 import { addConnector } from '../providers/utils'
 import { COMMON_CONNECTOR_OVERRIDES, DEFAULT_PROPS, DEFAULT_PROPS_WEB3AUTH } from './config'
-import { w3aPlugins, wagmiConnectors } from './connectorsAndPlugins'
+import { wagmiConnectors } from './connectorsAndPlugins'
 
 const PstlW3Providers = ({ children, config }: { children: ReactNode; config: PstlWeb3ModalProps<number> }) => (
   <WindowSizeProvider>
@@ -52,10 +52,6 @@ function DefaultApp() {
 function InnerApp() {
   const { setMode, mode } = useTheme()
   const derivedConfig = Object.assign({}, DEFAULT_PROPS_WEB3AUTH)
-  // @ts-expect-error - readonly
-  derivedConfig.modals['web3auth'].configureAdditionalConnectors = function configureAdditionalConnectors() {
-    return [w3aPlugins.torusPlugin]
-  }
 
   return (
     <PstlW3Providers config={derivedConfig}>
