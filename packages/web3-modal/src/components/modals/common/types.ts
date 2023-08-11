@@ -5,6 +5,13 @@ import { ReactNode } from 'react'
 import { WithChainIdFromUrl } from '../../../providers/types'
 import { LoadingScreenProps } from '../../LoadingScreen'
 
+export enum ModalId {
+  BASE = 'pstl-w3modal',
+  WALLETS = 'pstl-w3modal-wallets',
+  NETWORK = 'pstl-w3modal-network',
+  ACCOUNT = 'pstl-w3modal-account'
+}
+
 /**
  * @name ThemeConfigProps
  * @description PSTL modal theme configuration
@@ -18,7 +25,6 @@ export interface ThemeConfigProps<
   theme: T
   mode?: K
 }
-
 export type BaseModalProps = Omit<ModalProps, 'isLargeImageModal'> &
   WithChainIdFromUrl & {
     title?: string

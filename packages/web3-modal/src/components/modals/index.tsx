@@ -11,7 +11,7 @@ import { ConnectionModal } from './ConnectionModal'
 import { ErrorModal } from './ErrorModal'
 import { NetworkModal } from './NetworkModal'
 import { BaseModal } from './common'
-import { BaseModalProps } from './common/types'
+import { BaseModalProps, ModalId } from './common/types'
 
 export function ModalWithoutThemeProvider(baseProps: BaseModalProps) {
   const modalState = usePstlWeb3Modal()
@@ -31,7 +31,8 @@ export function ModalWithoutThemeProvider(baseProps: BaseModalProps) {
           maxWidth: 'unset',
           minHeight: 'unset',
           maxHeight: 'unset',
-          height: 'auto'
+          height: 'auto',
+          id: ModalId.ACCOUNT
         }
 
         return [() => <AccountModal {...props} />, augmentedBaseProps]
@@ -46,7 +47,8 @@ export function ModalWithoutThemeProvider(baseProps: BaseModalProps) {
           maxWidth: '80vw',
           minHeight: '350px',
           maxHeight: '80vh',
-          height: 'auto'
+          height: 'auto',
+          id: ModalId.NETWORK
         }
 
         return [() => <NetworkModal />, augmentedBaseProps]
@@ -63,7 +65,8 @@ export function ModalWithoutThemeProvider(baseProps: BaseModalProps) {
           ...baseProps,
           width: baseProps.width || props?.walletsView === 'grid' ? '650px' : '50vh',
           maxWidth: baseProps.maxWidth || props?.walletsView === 'grid' ? '100%' : '360px',
-          maxHeight: baseProps.maxHeight || props?.walletsView === 'grid' ? '500px' : '600px'
+          maxHeight: baseProps.maxHeight || props?.walletsView === 'grid' ? '500px' : '600px',
+          id: ModalId.WALLETS
         }
 
         return [() => <ConnectionModal {...props} />, augmentedBaseProps]

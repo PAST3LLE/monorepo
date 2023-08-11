@@ -6,7 +6,7 @@ import { Z_INDICES } from '../../../constants'
 import { usePstlWeb3ModalState } from '../../../hooks'
 import { useAutoClearingTimeout } from '../../../hooks/useTimeout'
 import { ErrorMessageContainer, InnerContainer, ModalTitleText, StyledConnectionModal } from './styled'
-import { BaseModalProps } from './types'
+import { BaseModalProps, ModalId } from './types'
 
 export function BaseModal({
   title = 'PSTL MODAL',
@@ -29,6 +29,7 @@ export function BaseModal({
 
   return (
     <StyledConnectionModal
+      id={ModalId.BASE}
       className={restModalProps.className}
       isOpen={isOpen}
       onDismiss={onDismiss}
