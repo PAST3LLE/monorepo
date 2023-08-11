@@ -124,13 +124,13 @@ type GetConnectorConstructorParams<C extends Instance<ConnectorEnhanced<any, any
       Omit<ConstructorParameters<C>[0], 'chains'>['options']
 
 export const addConnector =
-  <C extends Instance<ConnectorEnhanced<any, any>>>(Connector: C, params: GetConnectorConstructorParams<C>) =>
+  <C extends Instance<ConnectorEnhanced<any, any>>>(Connector: C, options: GetConnectorConstructorParams<C>) =>
   (chains: Chain[]) =>
-    new Connector({ chains, options: params?.options })
+    new Connector({ chains, options })
 
 export const addFrameConnector =
-  <C extends Instance<IFrameEthereumConnector>>(Connector: C, params: GetConnectorConstructorParams<C>) =>
+  <C extends Instance<IFrameEthereumConnector>>(Connector: C, options: GetConnectorConstructorParams<C>) =>
   (chains: Chain[]) =>
-    new Connector({ chains, options: params?.options })
+    new Connector({ chains, options })
 
 type Instance<T> = new (...args: any[]) => T
