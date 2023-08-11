@@ -11,7 +11,7 @@ import BaseTheme from '../../../theme/baseTheme'
 import { ConnectorEnhanced } from '../../../types'
 import { trimAndLowerCase } from '../../../utils'
 import { ModalButton } from '../common/styled'
-import { BaseModalProps } from '../common/types'
+import { BaseModalProps, ModalId } from '../common/types'
 import {
   AccountBottomColumnContainer,
   AccountColumnContainer,
@@ -88,6 +88,7 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
       <Row width="100%">
         <Column width="100%" maxWidth={400}>
           <ModalButton
+            id={`${ModalId.ACCOUNT}__wallets-button`}
             connected={false}
             width="100%"
             marginRight="1rem"
@@ -133,6 +134,7 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
           <Row width="100%" marginTop="1rem" gap="1rem">
             {showNetworkButton && (
               <AccountModalButton
+                id={`${ModalId.ACCOUNT}__network-button`}
                 connected={false}
                 padding="0.6rem"
                 onClick={() => modalCallbacks.open({ route: 'SelectNetwork' })}
@@ -141,6 +143,7 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
               </AccountModalButton>
             )}
             <AccountModalButton
+              id={`${ModalId.ACCOUNT}__disconnect-button`}
               connected={false}
               padding="0.6rem"
               onClick={() => disconnectAsync()}
@@ -159,7 +162,8 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
                 marginLeft: 'auto',
                 maxWidth: 110,
                 borderRadius: '5rem',
-                overflow: 'hidden'
+                overflow: 'hidden',
+                zIndex: 1
               }}
             />
           )}
@@ -197,10 +201,14 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
           gap="2rem"
           style={{ zIndex: errorOptions?.show ? 0 : 1 }}
         >
-          <AccountModalButton connected={isCopied} onClick={() => onCopy(userConnectionInfo?.address || '')}>
+          <AccountModalButton
+            id={`${ModalId.ACCOUNT}__copy-button`}
+            connected={isCopied}
+            onClick={() => onCopy(userConnectionInfo?.address || '')}
+          >
             {isCopied ? 'Copied!' : `Copy ${isSmallerScreen ? '' : 'Address'}`}
           </AccountModalButton>
-          <AccountModalButton connected={false} onClick={() => onExplorer()}>
+          <AccountModalButton id={`${ModalId.ACCOUNT}__explorer-button`} connected={false} onClick={() => onExplorer()}>
             {`${isSmallerScreen ? '' : 'View on '}Explorer`}
           </AccountModalButton>
         </FooterActionButtonsRow>
