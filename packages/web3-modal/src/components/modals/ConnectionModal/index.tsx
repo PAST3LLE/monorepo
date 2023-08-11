@@ -6,7 +6,7 @@ import { ModalPropsCtrlState } from '../../../controllers/types/controllerTypes'
 import { useConnectDisconnect, usePstlWeb3ModalState, useUserConnectionInfo, useWeb3Modals } from '../../../hooks'
 import { LoadingScreen } from '../../LoadingScreen'
 import { WalletsWrapper } from '../common/styled'
-import { BaseModalProps } from '../common/types'
+import { BaseModalProps, ModalId } from '../common/types'
 import { ConnectorHelper } from './ConnectorHelper'
 import { RenderConnectorOptions } from './RenderConnectorOptions'
 import { cleanAndFormatConnectorOverrides, sortConnectorsByRank } from './utils'
@@ -110,7 +110,11 @@ function ConnectionModalContent({
       {providerLoadingState[0] ? (
         <LoadingScreen {...loaderProps} />
       ) : (
-        <WalletsWrapper view={modalView} isError={!!modalState.modalProps.connect.error?.message}>
+        <WalletsWrapper
+          id={`${ModalId.WALLETS}__wallets-wrapper`}
+          view={modalView}
+          isError={!!modalState.modalProps.connect.error?.message}
+        >
           {data}
         </WalletsWrapper>
       )}

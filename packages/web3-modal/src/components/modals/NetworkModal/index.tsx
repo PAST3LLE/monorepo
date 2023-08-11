@@ -7,6 +7,7 @@ import { ConnectorEnhanced } from '../../../types'
 import { AccountColumnContainer } from '../AccountModal/styled'
 import { ConnectorOption } from '../ConnectionModal/ConnectorOption'
 import { WalletsWrapper } from '../common/styled'
+import { ModalId } from '../common/types'
 
 function NetworkModalContent() {
   const modalCallbacks = usePstlWeb3Modal()
@@ -19,7 +20,7 @@ function NetworkModalContent() {
 
   return (
     <AccountColumnContainer width="100%">
-      <WalletsWrapper view={'grid'} width="auto">
+      <WalletsWrapper id={`${ModalId.WALLETS}__chains-wrapper`} view={'grid'} width="auto">
         {supportedChains.map((chain) => {
           if (!switchNetworkAsync || currentChain?.id === chain.id) return null
           const chainLogo = CHAIN_IMAGES?.[chain.id]
