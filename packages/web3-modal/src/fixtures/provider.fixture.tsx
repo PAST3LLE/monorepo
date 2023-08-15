@@ -1,10 +1,11 @@
 import { ButtonVariations, ColumnCenter, PstlButton } from '@past3lle/components'
 import { WindowSizeProvider } from '@past3lle/hooks'
 import { ThemeProvider, createCustomTheme } from '@past3lle/theme'
-import { devWarn } from '@past3lle/utils'
-import React, { ReactNode } from 'react'
+import { devWarn, getExpirementalCookieStore as getCookieStore } from '@past3lle/utils'
+import React, { ReactNode, useEffect } from 'react'
 import { useTheme } from 'styled-components'
-import { useBalance } from 'wagmi'
+import { goerli, polygon } from 'viem/chains'
+import { mainnet, useBalance } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 
 import { useUserConnectionInfo, useWeb3Modals } from '../hooks'
@@ -13,7 +14,7 @@ import { addConnector } from '../providers/utils'
 import { COMMON_CONNECTOR_OVERRIDES, DEFAULT_PROPS, DEFAULT_PROPS_WEB3AUTH } from './config'
 import { wagmiConnectors } from './connectorsAndPlugins'
 
-const PstlW3Providers = ({ children, config }: { children: ReactNode; config: PstlWeb3ModalProps<number> }) => (
+const PstlW3Providers = ({ children, config }: { children: ReactNode; config: PstlWeb3ModalProps }) => (
   <WindowSizeProvider>
     <WalletModal config={config}>{children}</WalletModal>
   </WindowSizeProvider>
@@ -571,6 +572,300 @@ export default {
               ...DEFAULT_PROPS.modals.root,
               closeModalOnConnect: true,
               walletsView: 'list',
+              // maxWidth: '650px',
+              // minHeight: '600px',
+              hideInjectedFromRoot: false,
+              connectorDisplayOverrides: COMMON_CONNECTOR_OVERRIDES,
+
+              loaderProps: {
+                containerProps: {
+                  backgroundColor: 'rgba(0,0,0,0.42)',
+                  borderRadius: '10px'
+                },
+                spinnerProps: {
+                  size: 80,
+                  invertColor: true
+                },
+                loadingText: 'FETCHING INFO...'
+              }
+            }
+          }
+        }}
+      >
+        <AppWithWagmiAccess />
+        <Web3Button />
+      </PstlW3Providers>
+    )
+  }),
+  List__AutoSwitchChainFromURL: withThemeProvider(() => {
+    return (
+      <PstlW3Providers
+        config={{
+          ...DEFAULT_PROPS_WEB3AUTH,
+          callbacks: {
+            switchChain: async (chains) => {
+              // IFrame so we need to do this
+              const search = window?.top?.location.search
+              const chainParam = Number(new URLSearchParams(search).get('cosmos-network') || 0)
+
+              return chains.filter((chain) => chain.id === chainParam)[0]
+            }
+          },
+          connectors: [
+            wagmiConnectors.ledgerHID,
+            wagmiConnectors.ledgerLiveModal,
+            addConnector(InjectedConnector, {
+              name: 'MetaMask',
+              shimDisconnect: true,
+              getProvider() {
+                if (typeof window === undefined) return undefined
+                try {
+                  const provider = window?.ethereum?.providers?.find((provider) => provider?.isMetaMask)
+                  if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
+                  return provider
+                } catch (error) {
+                  return undefined
+                }
+              }
+            }),
+            addConnector(InjectedConnector, {
+              name: 'Taho',
+              shimDisconnect: true,
+              getProvider() {
+                if (typeof window === undefined) return undefined
+                try {
+                  const provider = window?.tally
+                  if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
+                  return provider
+                } catch (error) {
+                  return undefined
+                }
+              }
+            }),
+            addConnector(InjectedConnector, {
+              name: 'Coinbase Wallet',
+              shimDisconnect: true,
+              getProvider() {
+                if (typeof window === undefined) return undefined
+                try {
+                  const provider =
+                    (window?.ethereum?.isCoinbaseWallet && window.ethereum) || window?.coinbaseWalletExtension
+                  if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
+                  return provider
+                } catch (error) {
+                  return undefined
+                }
+              }
+            })
+          ],
+          modals: {
+            ...DEFAULT_PROPS_WEB3AUTH.modals,
+            root: {
+              ...DEFAULT_PROPS.modals.root,
+              closeModalOnConnect: true,
+              walletsView: 'list',
+              // maxWidth: '650px',
+              // minHeight: '600px',
+              hideInjectedFromRoot: false,
+              connectorDisplayOverrides: COMMON_CONNECTOR_OVERRIDES,
+
+              loaderProps: {
+                containerProps: {
+                  backgroundColor: 'rgba(0,0,0,0.42)',
+                  borderRadius: '10px'
+                },
+                spinnerProps: {
+                  size: 80,
+                  invertColor: true
+                },
+                loadingText: 'FETCHING INFO...'
+              }
+            }
+          }
+        }}
+      >
+        <AppWithWagmiAccess />
+        <Web3Button />
+      </PstlW3Providers>
+    )
+  }),
+  List__AutoSwitchChainFromCookies: withThemeProvider(() => {
+    const COOKIE_KEY = 'cosmos-chain'
+    const COOKIE_VALUE = '137'
+
+    useEffect(() => {
+      getCookieStore()
+        ?.get(COOKIE_KEY)
+        .then((cookie?: { value: string }) => {
+          console.debug('COOKIE CURRENTLY SET', cookie)
+          if (cookie?.value !== COOKIE_VALUE) {
+            getCookieStore().set(COOKIE_KEY, COOKIE_VALUE)
+            window.location.reload()
+          }
+        })
+    }, [])
+
+    return (
+      <PstlW3Providers
+        config={{
+          ...DEFAULT_PROPS_WEB3AUTH,
+          callbacks: {
+            switchChain: async (chains) => {
+              // IFrame so we need to do this
+              const networkCookie = (await getCookieStore()?.get(COOKIE_KEY))?.value || 0
+
+              return chains.find((chain) => chain.id === Number(networkCookie))
+            }
+          },
+          connectors: [
+            wagmiConnectors.ledgerHID,
+            wagmiConnectors.ledgerLiveModal,
+            addConnector(InjectedConnector, {
+              name: 'MetaMask',
+              shimDisconnect: true,
+              getProvider() {
+                if (typeof window === undefined) return undefined
+                try {
+                  const provider = window?.ethereum?.providers?.find((provider) => provider?.isMetaMask)
+                  if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
+                  return provider
+                } catch (error) {
+                  return undefined
+                }
+              }
+            }),
+            addConnector(InjectedConnector, {
+              name: 'Taho',
+              shimDisconnect: true,
+              getProvider() {
+                if (typeof window === undefined) return undefined
+                try {
+                  const provider = window?.tally
+                  if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
+                  return provider
+                } catch (error) {
+                  return undefined
+                }
+              }
+            }),
+            addConnector(InjectedConnector, {
+              name: 'Coinbase Wallet',
+              shimDisconnect: true,
+              getProvider() {
+                if (typeof window === undefined) return undefined
+                try {
+                  const provider =
+                    (window?.ethereum?.isCoinbaseWallet && window.ethereum) || window?.coinbaseWalletExtension
+                  if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
+                  return provider
+                } catch (error) {
+                  return undefined
+                }
+              }
+            })
+          ],
+          modals: {
+            ...DEFAULT_PROPS_WEB3AUTH.modals,
+            root: {
+              ...DEFAULT_PROPS.modals.root,
+              closeModalOnConnect: true,
+              walletsView: 'list',
+              // maxWidth: '650px',
+              // minHeight: '600px',
+              hideInjectedFromRoot: false,
+              connectorDisplayOverrides: COMMON_CONNECTOR_OVERRIDES,
+
+              loaderProps: {
+                containerProps: {
+                  backgroundColor: 'rgba(0,0,0,0.42)',
+                  borderRadius: '10px'
+                },
+                spinnerProps: {
+                  size: 80,
+                  invertColor: true
+                },
+                loadingText: 'FETCHING INFO...'
+              }
+            }
+          }
+        }}
+      >
+        <AppWithWagmiAccess />
+        <Web3Button />
+      </PstlW3Providers>
+    )
+  }),
+  Grid__ChainsFiltering: withThemeProvider(() => {
+    const ENVIRONMENT_PARAM = 'chorus-environment'
+    return (
+      <PstlW3Providers
+        config={{
+          ...DEFAULT_PROPS_WEB3AUTH,
+          callbacks: {
+            filterChains: (chains) => {
+              const searchParams = new URLSearchParams(window?.top?.location.search)
+              if (searchParams.get(ENVIRONMENT_PARAM) === 'production') {
+                return [mainnet]
+              } else if (searchParams.get(ENVIRONMENT_PARAM) === 'develop') {
+                return [mainnet, goerli, polygon]
+              } else {
+                return chains
+              }
+            }
+          },
+          connectors: [
+            wagmiConnectors.ledgerHID,
+            wagmiConnectors.ledgerLiveModal,
+            addConnector(InjectedConnector, {
+              name: 'MetaMask',
+              shimDisconnect: true,
+              getProvider() {
+                if (typeof window === undefined) return undefined
+                try {
+                  const provider = window?.ethereum?.providers?.find((provider) => provider?.isMetaMask)
+                  if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
+                  return provider
+                } catch (error) {
+                  return undefined
+                }
+              }
+            }),
+            addConnector(InjectedConnector, {
+              name: 'Taho',
+              shimDisconnect: true,
+              getProvider() {
+                if (typeof window === undefined) return undefined
+                try {
+                  const provider = window?.tally
+                  if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
+                  return provider
+                } catch (error) {
+                  return undefined
+                }
+              }
+            }),
+            addConnector(InjectedConnector, {
+              name: 'Coinbase Wallet',
+              shimDisconnect: true,
+              getProvider() {
+                if (typeof window === undefined) return undefined
+                try {
+                  const provider =
+                    (window?.ethereum?.isCoinbaseWallet && window.ethereum) || window?.coinbaseWalletExtension
+                  if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
+                  return provider
+                } catch (error) {
+                  return undefined
+                }
+              }
+            })
+          ],
+          modals: {
+            ...DEFAULT_PROPS_WEB3AUTH.modals,
+            root: {
+              ...DEFAULT_PROPS.modals.root,
+              closeModalOnConnect: true,
+              walletsView: 'grid',
               // maxWidth: '650px',
               // minHeight: '600px',
               hideInjectedFromRoot: false,

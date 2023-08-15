@@ -156,14 +156,13 @@ export const COMMON_CONNECTOR_OVERRIDES = {
   }
 }
 
-const DEFAULT_PROPS: PstlWeb3ModalProps<number> = {
+const DEFAULT_PROPS: PstlWeb3ModalProps = {
   appName: 'COSMOS APP',
   chains,
   options: {
-    chainFromUrlOptions: { type: 'network', key: 'web3-modal-network' },
     pollingInterval: 10_000,
     escapeHatches: {
-      appType: 'TEST_FRAMEWORK_IFRAME'
+      appType: 'DAPP'
     }
   },
   modals: {
@@ -189,7 +188,7 @@ const DEFAULT_PROPS: PstlWeb3ModalProps<number> = {
   }
 }
 
-const DEFAULT_PROPS_WEB3AUTH: PstlWeb3ModalProps<number> = {
+const DEFAULT_PROPS_WEB3AUTH: PstlWeb3ModalProps = {
   ...DEFAULT_PROPS,
   modals: {
     ...DEFAULT_PROPS.modals,

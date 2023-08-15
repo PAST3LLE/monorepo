@@ -1,3 +1,6 @@
 import { goerli, mainnet, polygon, polygonMumbai } from 'wagmi/chains'
 
-export const chains = [mainnet, goerli, polygon, polygonMumbai]
+import { Chain } from '../providers'
+
+export type CosmosSupportedChainIds = 1 | 5 | 137 | 80001
+export const chains: Chain<CosmosSupportedChainIds>[] = [mainnet, goerli, polygon, polygonMumbai]
