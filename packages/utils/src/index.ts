@@ -10,6 +10,7 @@ export * from './uriToHttp'
 export * from './dom'
 export * from './noop'
 export * from './typeCheck'
+export * from './cookies'
 
 export function escapeRegExp(string: string): string {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
