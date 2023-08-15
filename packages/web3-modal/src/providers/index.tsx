@@ -1,7 +1,7 @@
 import React, { ReactNode, memo } from 'react'
 
 import { PstlWeb3Modal } from '../components'
-import { useChainIdFromSearchParams } from '../hooks/useChainIdFromSearchParams'
+import { useAutoSwitchToChain } from '../hooks/useAutoSwitchToChain'
 import { useConnectorAndChainConfig } from '../hooks/useConnectorAndChainConfig'
 import { useHydrateModals } from '../hooks/useHydrateModals'
 import type { Chain, ChainsPartialReadonly, PstlWeb3ModalProps, ReadonlyChain } from './types'
@@ -29,7 +29,7 @@ const PstlW3ProvidersBase = <ID extends number>({
   const wagmiClient = usePstlWagmiClient(connectorAndChainConfig)
   const ethereumClient = usePstlEthereumClient(config.clients?.ethereum, wagmiClient, config.chains)
   // Get the chainId/network info from the URL, if applicable
-  const chainFromUrl = useChainIdFromSearchParams(config.chains, config?.options)
+  const chainFromUrl = useAutoSwitchToChain(config.chains, config)
   // Setup proxy modals state with user config
   useHydrateModals(config.modals.root)
 

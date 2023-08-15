@@ -6,13 +6,16 @@ import { useMemo } from 'react'
 import { Chain } from 'viem'
 
 import { PstlWeb3ModalProps, addConnector } from '../providers'
-import { getAppType, mapChainsToConnectors } from '../providers/utils/connectors'
+import { filterChains, getAppType, mapChainsToConnectors } from '../providers/utils/connectors'
 import { ConnectorEnhanced } from '../types'
 
 export function useConnectorAndChainConfig(
-  config: PstlWeb3ModalProps<number>
+  configProps: PstlWeb3ModalProps<number>
 ): Omit<PstlWeb3ModalProps<number>, 'connectors'> & { connectors: ConnectorEnhanced<any, any>[] } {
   return useMemo(() => {
+    // Config.options.filterChainsCallback call
+    // Useful if you need to filter chains based on domain (prod vs dev)
+    const config = filterChains(configProps)
     const status = getAppType(config.options?.escapeHatches?.appType)
     switch (status) {
       case 'SAFE_APP': {
@@ -34,6 +37,7 @@ export function useConnectorAndChainConfig(
       case 'DAPP': {
         devDebug('[@past3lle/web3-modal] App type detected: NORMAL DAPP', config?.connectors)
 
+        // Map connectors and pass config chains
         const userConnectors = mapChainsToConnectors(config?.connectors || [], config)
         const walletConnectProviders = w3mConnectors({
           projectId: config.modals.walletConnect.projectId,
@@ -59,5 +63,5 @@ export function useConnectorAndChainConfig(
         return { ...config, connectors }
       }
     }
-  }, [config])
+  }, [configProps])
 }

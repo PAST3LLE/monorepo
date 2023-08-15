@@ -1,9 +1,8 @@
 import { devDebug } from '@past3lle/utils'
 import { isIframe } from '@past3lle/wagmi-connectors'
-import { Chain } from 'viem'
 
 import { ConnectorEnhanced } from '../../types'
-import { PstlWeb3ModalProps } from '../types'
+import { Chain, PstlWeb3ModalProps } from '../types'
 
 export type AppType = 'IFRAME' | 'SAFE_APP' | 'DAPP' | 'TEST_FRAMEWORK_IFRAME'
 export function getAppType(forcedAppType?: AppType) {
@@ -20,8 +19,18 @@ export function getAppType(forcedAppType?: AppType) {
 }
 
 export function mapChainsToConnectors(
-  connectors: ((chains: Chain[]) => ConnectorEnhanced<any, any>)[],
-  config: PstlWeb3ModalProps<number>
+  connectors: ((chains: Chain<number>[]) => ConnectorEnhanced<any, any>)[],
+  config: PstlWeb3ModalProps
 ) {
-  return connectors.map((conn) => conn?.(config.chains as Chain[]))
+  return connectors.map((conn) => conn?.(config.chains as Chain<number>[]))
+}
+
+export function filterChains(config: PstlWeb3ModalProps): PstlWeb3ModalProps {
+  if (!config.callbacks?.filterChains) return config
+
+  const filteredChains = config.callbacks?.filterChains(config.chains)
+  return {
+    ...config,
+    chains: filteredChains
+  }
 }

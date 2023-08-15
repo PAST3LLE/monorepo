@@ -86,15 +86,24 @@ type Web3ModalConfig<ID extends number> = Omit<
   themeVariables?: Web3ModalThemeVariables
 }
 
+export type PstlWeb3ModalCallbacks = {
+  /**
+   * @name switchChainCallback
+   * @description Custom chain switching callback. E.g cookies or from URL -> changes network automatically
+   */
+  switchChain?: (chains: Chain<number>[], ...params: any[]) => Promise<Chain<number> | undefined>
+  /**
+   * @name filterChainsCallback
+   * @description Custom callback for filtering available chains e.g production domain vs develop etc
+   * @param chains List of available chains
+   * @param params Any params
+   * @returns Filtered list of available chains
+   */
+  filterChains?: (chains: Chain<number>[], ...params: any[]) => Chain<number>[]
+}
+
 export type PstlWeb3ModalOptions = Omit<
   PstlWagmiClientOptions<number>['options'] & {
-    /**
-     * @name chainFromUrlOptions
-     * @description Load chain[number] or network[string] data from URL
-     * ! Use with caution. Depending on underlying app URL logic, this can be unreliable / broken!
-     * @warning this can be unreliable depending on the base app's existing URL logic
-     */
-    chainFromUrlOptions?: { key: string; type: 'network' | 'id' }
     /**
      * @name autoConnect
      * @description Boolean. Whether or not to attempt re-connect to last connected connector.
@@ -206,11 +215,18 @@ export interface Web3ModalProps<ID extends number> {
     wagmi?: PstlWagmiClientOptions<ID>
     ethereum?: EthereumClient
   }
+  /**
+   * Various modal options
+   */
   options?: PstlWeb3ModalOptions
+  /**
+   * Various modal logic callbacks
+   */
+  callbacks?: PstlWeb3ModalCallbacks
 }
 
-export type PstlWeb3ModalProps<ID extends number> = Web3ModalProps<ID>
-export type PstlWeb3ProviderProps<ID extends number> = PstlWeb3ModalProps<ID>
+export type PstlWeb3ModalProps<ID extends number = number> = Web3ModalProps<ID>
+export type PstlWeb3ProviderProps<ID extends number = number> = PstlWeb3ModalProps<ID>
 
 export type WithChainIdFromUrl = {
   chainIdFromUrl: number | undefined
