@@ -126,7 +126,10 @@ function App() {
         web3: {
           chains: commonProps.chains,
           options: {
-            pollingInterval: 15_000
+            pollingInterval: 15_000,
+            escapeHatches: {
+              appType: 'DAPP'
+            }
           },
           modals: {
             walletConnect: commonProps.modals.walletConnect
