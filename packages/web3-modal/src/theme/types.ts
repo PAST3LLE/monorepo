@@ -1,9 +1,34 @@
 import { BackgroundPropertyFull, ThemeBaseRequired, ThemeContentPartsRequired } from '@past3lle/theme'
 import { DeepRequired } from '@past3lle/types'
 
+export interface FontStyles {
+  color?: string
+  family?: string
+  style?: string
+  size?: string
+  weight?: number
+  letterSpacing?: string
+  lineHeight?: number
+  textShadow?: string
+  textTransform?: string
+}
+interface BackgroundStyles {
+  background?: string
+  backgroundImg?: BackgroundPropertyFull
+}
+
 export type PstlModalThemeExtension = Partial<ThemeContentPartsRequired> & DeepRequired<PstlModalTheme>
 export interface PstlModalTheme {
   modals?: {
+    base?: {
+      filter?: string
+      baseFontSize?: number
+      font?: FontStyles
+
+      title?: {
+        font?: FontStyles
+      }
+    }
     connection?: {
       filter?: string
       baseFontSize?: number
@@ -13,30 +38,21 @@ export interface PstlModalTheme {
       }
       closeIcon?: {
         color?: string
-        position?: 'top-left' | 'top-right' | 'bottom-right' | 'bottom-left'
         size?: string
+        position?: 'top-left' | 'top-right' | 'bottom-right' | 'bottom-left'
       }
-      title?: {
-        color?: string
-        fontSize?: string
-        fontWeight?: number
-        letterSpacing?: string
-        lineHeight?: number
-      }
-      backgroundImg?: BackgroundPropertyFull
-      backgroundColor?: string
+      background?: BackgroundStyles
       padding?: string
       button?: {
-        color?: string
-        textShadow?: string
-        backgroundImg?: BackgroundPropertyFull
-        backgroundColor?: string
-        connectedBackgroundColor?: string
-        fontSize?: string
-        fontStyle?: string
-        fontWeight?: number
-        letterSpacing?: string
-        textTransform?: string
+        font?: FontStyles
+        background?: BackgroundStyles & {
+          connected?: string
+        }
+        walletIcons?: {
+          filter?: string
+          height?: string
+          maxHeight?: string
+        }
         border?: {
           border?: string
           color?: string
@@ -46,8 +62,10 @@ export interface PstlModalTheme {
       }
     }
     account?: {
+      filter?: string
+      baseFontSize?: number
       balanceAndAddressContainer?: {
-        backgroundColor?: string
+        background?: BackgroundStyles
       }
     }
   }

@@ -16,10 +16,10 @@ export const ModalButton = styled(Button)<{ connected: boolean }>`
   height: 82px;
   ${({ theme }) =>
     setBackgroundOrDefault(theme, {
-      bgValue: theme?.modals?.connection?.button?.backgroundImg,
+      bgValue: theme?.modals?.connection?.button?.background?.backgroundImg,
       defaultValue:
-        theme?.modals?.connection?.button?.backgroundColor ||
-        BaseTheme.modes.DEFAULT.modals.connection.button.backgroundColor
+        theme?.modals?.connection?.button?.background?.background ||
+        BaseTheme.modes.DEFAULT.modals.connection.button.background.background
     })};
 
   border: ${({ theme }) =>
@@ -28,29 +28,32 @@ export const ModalButton = styled(Button)<{ connected: boolean }>`
   border-color: ${({ theme }) => theme?.modals?.connection?.button?.border?.color};
 
   font-style: ${({ theme }) =>
-    theme?.modals?.connection?.button?.fontStyle || BaseTheme.modes.DEFAULT.modals.connection.button.fontStyle};
+    theme?.modals?.connection?.button?.font?.style || BaseTheme.modes.DEFAULT.modals.connection.button.font.style};
   font-variation-settings: ${({ theme }) =>
     `'wght' ${
-      theme?.modals?.connection?.button?.fontWeight || BaseTheme.modes.DEFAULT.modals.connection.button.fontWeight
+      theme?.modals?.connection?.button?.font?.weight || BaseTheme.modes.DEFAULT.modals.connection.button.font.weight
     }`};
   color: ${({ theme }) =>
-    theme?.modals?.connection?.button?.color ||
+    theme?.modals?.connection?.button?.font?.color ||
     setBestTextColour(
-      theme?.modals?.connection?.button?.backgroundColor ||
-        BaseTheme.modes.DEFAULT.modals.connection.button.backgroundColor
+      theme?.modals?.connection?.button?.background?.background ||
+        BaseTheme.modes.DEFAULT.modals.connection.button.background.background
     )};
 
   letter-spacing: ${({ theme }) =>
-    theme?.modals?.connection?.button?.letterSpacing || BaseTheme.modes.DEFAULT.modals.connection.button.letterSpacing};
+    theme?.modals?.connection?.button?.font?.letterSpacing ||
+    BaseTheme.modes.DEFAULT.modals.connection.button.font.letterSpacing};
   ${({ theme }) =>
-    theme?.modals?.connection?.button?.textShadow && `text-shadow: ${theme?.modals?.connection?.button?.textShadow};`}
+    theme?.modals?.connection?.button?.font?.textShadow &&
+    `text-shadow: ${theme?.modals?.connection?.button?.font.textShadow};`}
 
   ${({ theme }) =>
-    theme?.modals?.connection?.button?.fontSize && `font-size: ${theme?.modals?.connection?.button?.fontSize};`}
+    theme?.modals?.connection?.button?.font?.size && `font-size: ${theme?.modals?.connection?.button?.font.size};`}
     
     ${({ theme }) =>
     `text-transform: ${
-      theme?.modals?.connection?.button?.textTransform || BaseTheme.modes.DEFAULT.modals.connection.button.textTransform
+      theme?.modals?.connection?.button?.font?.textTransform ||
+      BaseTheme.modes.DEFAULT.modals.connection.button.font.textTransform
     };`}
     
     gap: 10px;
@@ -69,32 +72,34 @@ export const ModalButton = styled(Button)<{ connected: boolean }>`
     connected &&
     `
       background: ${
-        theme?.modals?.connection?.button?.connectedBackgroundColor ||
-        BaseTheme.modes.DEFAULT.modals.connection.button.connectedBackgroundColor
+        theme?.modals?.connection?.button?.background?.connected ||
+        BaseTheme.modes.DEFAULT.modals.connection.button.background.connected
       };
       transform: scale(1.05);
       filter: saturate(2);
   `}
 `
 
-export const ModalTitleText = styled(Text.SubHeader)`
+export const ModalTitleText = styled(Text.SubHeader).attrs((props) => ({
+  fontStyle: props?.fontStyle || 'italic'
+}))`
   color: ${({ theme }) =>
-    theme?.modals?.connection?.title?.color || BaseTheme.modes.DEFAULT.modals.connection.title.color};
+    theme?.modals?.base?.title?.font?.color || BaseTheme.modes.DEFAULT.modals.base.title.font.color};
   letter-spacing: ${({ theme }) =>
-    theme?.modals?.connection?.title?.letterSpacing || BaseTheme.modes.DEFAULT.modals.connection.title.letterSpacing};
+    theme?.modals?.base?.title?.font?.letterSpacing || BaseTheme.modes.DEFAULT.modals.base.title.font.letterSpacing};
   line-height: ${({ theme }) =>
-    theme?.modals?.connection?.title?.lineHeight || BaseTheme.modes.DEFAULT.modals.connection.title.lineHeight};
+    theme?.modals?.base?.title?.font?.lineHeight || BaseTheme.modes.DEFAULT.modals.base.title.font.lineHeight};
 `
 
 export const InnerContainer = styled(ColumnCenter)<{ isError?: boolean }>`
-  filter: ${({ theme }) => theme?.modals?.connection?.filter};
+  filter: ${({ theme }) => theme?.modals?.base?.filter};
 
   position: relative;
   font-size: ${({ theme }) =>
     theme?.modals?.connection?.baseFontSize || BaseTheme.modes.DEFAULT.modals.connection.baseFontSize}px;
-  font-style: italic;
-  font-weight: 200;
-  font-family: 'Roboto Flex', 'Inter', sans-serif, system-ui;
+  font-style: ${({ theme }) => theme?.modals?.base?.font?.style || BaseTheme.modes.DEFAULT.modals.base.font.style};
+  font-weight: ${({ theme }) => theme?.modals?.base?.font?.weight || BaseTheme.modes.DEFAULT.modals.base.font.weight};
+  font-family: ${({ theme }) => theme?.modals?.base?.font?.family || BaseTheme.modes.DEFAULT.modals.base.font.family};
 
   &::-webkit-scrollbar {
     display: none;
@@ -126,9 +131,10 @@ export const InnerContainer = styled(ColumnCenter)<{ isError?: boolean }>`
 
   ${({ theme }) =>
     setBackgroundOrDefault(theme, {
-      bgValue: theme?.modals?.connection?.backgroundImg,
+      bgValue: theme?.modals?.connection?.background?.backgroundImg,
       defaultValue:
-        theme?.modals?.connection?.backgroundColor || BaseTheme.modes.DEFAULT.modals.connection.backgroundColor
+        theme?.modals?.connection?.background?.background ||
+        BaseTheme.modes.DEFAULT.modals.connection.background.background
     })};
 `
 
@@ -207,12 +213,30 @@ export const WalletsWrapper = styled.div<{
   > div {
     > ${ModalButton} {
       > img {
-        max-width: 50px;
+        height: 100%;
+        max-height: ${({ theme }) => theme.modals?.connection?.button?.walletIcons?.maxHeight || '50px'};
+
+        ${upToExtraSmall`
+          max-height: 100%;
+        `}
       }
     }
   }
 
   ${({ view }) =>
+    view === 'list' &&
+    `
+      > div {
+        > ${ModalButton} {
+          > img {
+            height: 100%;
+            max-height: 100%;
+          }
+        }
+      }
+  `}
+
+  ${({ view, theme }) =>
     view === 'grid' &&
     `
     grid-template-columns: repeat(3, 1fr);
@@ -235,13 +259,14 @@ export const WalletsWrapper = styled.div<{
         }
 
         > img {
-          max-width: 30px;
+          height: 100%;
+          max-height: ${theme.modals?.connection?.button?.walletIcons?.maxHeight || '64%'};
         }
       }
     }
   `}
 
-  ${({ view }) =>
+  ${({ view, theme }) =>
     view === 'grid' &&
     upToSmall`
       > div {
@@ -254,7 +279,7 @@ export const WalletsWrapper = styled.div<{
           }
 
           > img {
-            max-width: 25px;
+            max-height: ${theme.modals?.connection?.button?.walletIcons?.maxHeight || '64%'};
           }
         }
       }

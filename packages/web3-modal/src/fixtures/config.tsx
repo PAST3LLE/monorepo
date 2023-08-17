@@ -20,54 +20,104 @@ export const FORGE_LOGO =
 export const pstlModalTheme = createTheme({
   DARK: {
     modals: {
+      base: {
+        title: {
+          font: {
+            color: 'black',
+            weight: 900
+          }
+        }
+      },
       connection: {
         filter: 'invert(1) brightness(0.65) contrast(1.8) hue-rotate(247deg) saturate(2)',
-        backgroundImg: 'unset',
-        backgroundColor: 'indianred',
-        title: { color: 'black', fontWeight: 900 },
+        background: {
+          backgroundImg: 'unset',
+          background: 'indianred'
+        },
         button: {
-          backgroundColor: 'rgba(0,0,0,0.75)',
-          color: 'indianred',
-          connectedBackgroundColor: 'green',
-          fontWeight: 500
+          background: {
+            background: 'rgba(0,0,0,0.75)',
+            connected: 'green'
+          },
+          font: {
+            color: 'indianred',
+            weight: 500
+          }
         }
       }
     }
   },
   LIGHT: {
     modals: {
+      base: {
+        title: {
+          font: {
+            color: 'pink',
+            weight: 900
+          }
+        }
+      },
       connection: {
-        backgroundImg: 'unset',
-        backgroundColor: '#818ccaf2',
-        title: { color: 'pink', fontWeight: 900 },
-        button: {
+        background: {
           backgroundImg: 'unset',
-          backgroundColor: '#fec0cb7d',
-          color: 'ghostwhite',
-          connectedBackgroundColor: 'green',
-          fontWeight: 500
+          background: '#818ccaf2'
+        },
+        button: {
+          background: {
+            backgroundImg: 'unset',
+            background: '#fec0cb7d',
+            connected: 'green'
+          },
+          font: {
+            color: 'ghostwhite',
+            weight: 500
+          }
         }
       }
     }
   },
   DEFAULT: {
     modals: {
+      base: {
+        font: {
+          family: "'Roboto Flex', 'Inter', sans-serif, system-ui",
+          letterSpacing: '0px'
+        },
+        title: {
+          font: {
+            color: '#cbb9ee',
+            style: 'normal',
+            weight: 700,
+            letterSpacing: '-1.4px',
+            lineHeight: 0.82
+          }
+        }
+      },
       connection: {
         baseFontSize: 20,
         helpers: { show: true },
-        backgroundImg: BG_LOGO,
-        title: { color: '#cbb9ee', fontWeight: 700, letterSpacing: '-1.4px', lineHeight: 0.82 },
+        background: {
+          backgroundImg: BG_LOGO
+        },
         button: {
-          backgroundColor: '#301d4ea1',
-          connectedBackgroundColor: '#37b9927d',
+          background: {
+            background: '#301d4ea1',
+            connected: '#37b9927d'
+          },
+          walletIcons: {
+            // height: '100%',
+            maxHeight: '65%'
+          },
           border: { border: 'none', radius: '1em' },
-          color: 'ghostwhite',
-          fontSize: '1em',
-          fontStyle: 'normal',
-          fontWeight: 200,
-          letterSpacing: '-1px',
-          textShadow: '2px 2px 3px #0000005c',
-          textTransform: 'uppercase',
+          font: {
+            color: 'ghostwhite',
+            size: '0.75em',
+            style: 'normal',
+            weight: 200,
+            letterSpacing: '-1px',
+            textShadow: '2px 2px 3px #0000005c',
+            textTransform: 'uppercase'
+          },
           hoverAnimations: true
         }
       }

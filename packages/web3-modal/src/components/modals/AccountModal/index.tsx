@@ -95,15 +95,16 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
             backgroundColor={
               userConnectionInfo.chain?.unsupported
                 ? '#7f1d1db0'
-                : theme?.modals?.connection?.button?.backgroundColor ||
-                  BaseTheme.modes.DEFAULT.modals.connection.button.backgroundColor
+                : theme?.modals?.connection?.button?.background?.background ||
+                  BaseTheme.modes.DEFAULT.modals.connection.button.background.background
             }
             onClick={() => modalCallbacks.open({ route: 'ConnectWallet' })}
           >
             <Column width={'100%'}>
-              <AccountText display="inline-flex" alignItems="center" width="auto">
+              <AccountText fontStyle={'normal'} display="inline-flex" alignItems="center" width="auto">
                 Wallet:{' '}
                 <AccountText
+                  fontStyle={'normal'}
                   fontWeight={500}
                   display={'inline-flex'}
                   alignItems="center"
@@ -114,9 +115,10 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
                     userConnectionInfo.connector?.name}
                 </AccountText>
               </AccountText>
-              <AccountText display="inline-flex" alignItems="center" width="auto">
+              <AccountText fontStyle={'normal'} display="inline-flex" alignItems="center" width="auto">
                 Network:{' '}
                 <AccountText
+                  fontStyle={'normal'}
                   fontWeight={500}
                   display={'inline-flex'}
                   alignItems="center"
@@ -176,6 +178,7 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
       <AccountBottomColumnContainer borderRadius="1rem" padding="1em">
         <Row justifyContent="space-between" title={userConnectionInfo.address}>
           <AccountText
+            fontStyle={'normal'}
             fontWeight={500}
             fontSize={'1.2em'}
             onClick={() => onCopy(userConnectionInfo?.address || '')}
@@ -187,8 +190,8 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
           </AccountText>
         </Row>
         <Row>
-          <AccountText>Balance:</AccountText>
-          <AccountText title={userConnectionInfo.balance.data?.formatted || '0'}>
+          <AccountText fontStyle={'normal'}>Balance:</AccountText>
+          <AccountText fontStyle={'normal'} title={userConnectionInfo.balance.data?.formatted || '0'}>
             {Number(userConnectionInfo.balance.data?.formatted || 0).toLocaleString([], {
               maximumSignificantDigits: 4
             })}{' '}

@@ -27,8 +27,8 @@ export const AccountText = styled(ModalTitleText).attrs((props) => ({
 
 export const AccountBottomColumnContainer = styled(Column)`
   background-color: ${({ theme }) =>
-    theme?.modals?.account?.balanceAndAddressContainer?.backgroundColor ||
-    BaseTheme.modes.DEFAULT.modals?.account?.balanceAndAddressContainer?.backgroundColor};
+    theme?.modals?.account?.balanceAndAddressContainer?.background?.background ||
+    BaseTheme.modes.DEFAULT.modals?.account?.balanceAndAddressContainer?.background?.background};
 `
 
 export const AccountColumnContainer = styled(Column)`

@@ -5,6 +5,7 @@ import { useTheme } from 'styled-components'
 import { Z_INDICES } from '../../../constants'
 import { usePstlWeb3ModalState } from '../../../hooks'
 import { useAutoClearingTimeout } from '../../../hooks/useTimeout'
+import BaseTheme from '../../../theme/baseTheme'
 import { ErrorMessageContainer, InnerContainer, ModalTitleText, StyledConnectionModal } from './styled'
 import { BaseModalProps, ModalId } from './types'
 
@@ -48,9 +49,10 @@ export function BaseModal({
       <InnerContainer justifyContent="flex-start" gap="0.75rem" isError={!!modalProps.connect?.error?.message}>
         <CloseIcon height={30} width={100} onClick={onDismiss} />
         <ModalTitleText
-          fontSize={theme?.modals?.connection?.title?.fontSize || '2em'}
+          fontStyle={theme?.modals?.base?.title?.font?.style || BaseTheme.modes.DEFAULT.modals.base.title.font.style}
+          fontSize={theme?.modals?.base?.title?.font?.size || '2em'}
           fvs={{
-            wght: theme?.modals?.connection?.title?.fontWeight || 200
+            wght: theme?.modals?.base?.title?.font?.weight || 200
           }}
           margin="0.2em 0"
         >
