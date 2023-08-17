@@ -136,6 +136,11 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
           <Row width="100%" marginTop="1rem" gap="1rem">
             {showNetworkButton && (
               <AccountModalButton
+                color={
+                  theme.modals?.connection?.button?.font?.color ||
+                  theme.modals?.base?.font?.color ||
+                  BaseTheme.modes.DEFAULT.modals.connection.button.font.color
+                }
                 id={`${ModalId.ACCOUNT}__network-button`}
                 connected={false}
                 padding="0.6rem"
@@ -145,6 +150,11 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
               </AccountModalButton>
             )}
             <AccountModalButton
+              color={
+                theme.modals?.connection?.button?.font?.color ||
+                theme.modals?.base?.font?.color ||
+                BaseTheme.modes.DEFAULT.modals.connection.button.font.color
+              }
               id={`${ModalId.ACCOUNT}__disconnect-button`}
               connected={false}
               padding="0.6rem"
@@ -205,13 +215,27 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
           style={{ zIndex: errorOptions?.show ? 0 : 1 }}
         >
           <AccountModalButton
+            color={
+              theme.modals?.connection?.button?.font?.color ||
+              theme.modals?.base?.font?.color ||
+              BaseTheme.modes.DEFAULT.modals.connection.button.font.color
+            }
             id={`${ModalId.ACCOUNT}__copy-button`}
             connected={isCopied}
             onClick={() => onCopy(userConnectionInfo?.address || '')}
           >
             {isCopied ? 'Copied!' : `Copy ${isSmallerScreen ? '' : 'Address'}`}
           </AccountModalButton>
-          <AccountModalButton id={`${ModalId.ACCOUNT}__explorer-button`} connected={false} onClick={() => onExplorer()}>
+          <AccountModalButton
+            color={
+              theme.modals?.connection?.button?.font?.color ||
+              theme.modals?.base?.font?.color ||
+              BaseTheme.modes.DEFAULT.modals.connection.button.font.color
+            }
+            id={`${ModalId.ACCOUNT}__explorer-button`}
+            connected={false}
+            onClick={() => onExplorer()}
+          >
             {`${isSmallerScreen ? '' : 'View on '}Explorer`}
           </AccountModalButton>
         </FooterActionButtonsRow>
