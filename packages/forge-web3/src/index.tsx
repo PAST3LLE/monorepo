@@ -99,7 +99,7 @@ export {
   addConnector,
   addFrameConnector,
   getAppType,
-  AppType,
+  type AppType,
   type ForgeModalTheme,
   type ForgeW3CoreProvidersProps,
   type ChainsPartialReadonly

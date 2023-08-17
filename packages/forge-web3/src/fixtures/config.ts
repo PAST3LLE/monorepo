@@ -1,6 +1,28 @@
+import { createTheme } from '@past3lle/web3-modal'
+
 import { ForgeContractAddressMap } from '../types'
 import { ForgeWeb3ModalProps } from '../types/web3modal'
 import { chains } from './chains'
+
+const THEME = createTheme({
+  DEFAULT: {
+    modals: {
+      base: {
+        font: {
+          color: 'black',
+          weight: 700
+        }
+      },
+      connection: {
+        button: {
+          font: {
+            color: 'black'
+          }
+        }
+      }
+    }
+  }
+})
 
 // TESTING ID - DONT USE IN PROD
 const WALLETCONNECT_TEST_ID = 'a01e2f3b7c64ff495f9cb28e4e2d4b49'
@@ -9,6 +31,7 @@ const DEFAULT_PROPS: ForgeWeb3ModalProps = {
   appName: 'COSMOS APP',
   chains,
   modals: {
+    root: { themeConfig: { theme: THEME } },
     walletConnect: {
       projectId: WALLETCONNECT_TEST_ID,
       walletImages: {
@@ -36,4 +59,4 @@ const DEFAULT_CONFIG_PROPS = {
   } as ForgeContractAddressMap
 }
 
-export { WALLETCONNECT_TEST_ID as wcId, DEFAULT_PROPS as commonProps, DEFAULT_CONFIG_PROPS as contractProps }
+export { THEME, WALLETCONNECT_TEST_ID as wcId, DEFAULT_PROPS as commonProps, DEFAULT_CONFIG_PROPS as contractProps }
