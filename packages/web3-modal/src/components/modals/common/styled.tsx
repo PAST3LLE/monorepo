@@ -3,7 +3,6 @@ import { setBackgroundOrDefault, setBestTextColour, upToExtraSmall, upToSmall } 
 import styled from 'styled-components'
 
 import BaseTheme from '../../../theme/baseTheme'
-import { getPosition } from '../../../utils'
 import { PstlWeb3ConnectionModalProps } from '../ConnectionModal'
 import { RecommendedLabelWrapper } from '../ConnectionModal/RecommendedLabel'
 
@@ -91,6 +90,18 @@ export const ModalTitleText = styled(Text.Main).attrs((props) => ({
   line-height: ${({ theme }) => theme?.modals?.base?.title?.font?.lineHeight};
 `
 
+export const ModalTitle = styled(ModalTitleText)`
+  &&&&& {
+    text-align: ${({ theme }) => theme.modals?.base?.title?.font?.textAlign};
+    width: 100%;
+    max-width: 92%;
+
+    ${upToSmall`
+      text-align: center;
+    `}
+  }
+`
+
 export const InnerContainer = styled(ColumnCenter)<{ isError?: boolean }>`
   filter: ${({ theme }) => theme?.modals?.base?.filter};
 
@@ -114,26 +125,17 @@ export const InnerContainer = styled(ColumnCenter)<{ isError?: boolean }>`
 
   overflow-y: auto;
 
-  > ${CloseIcon} {
-    position: absolute;
-    color: ${({ theme }) =>
-      theme?.modals?.connection?.closeIcon?.color || BaseTheme.modes.DEFAULT.modals.connection.closeIcon.color};
-
-    width: ${({ theme }) =>
-      theme?.modals?.connection?.closeIcon?.size || BaseTheme.modes.DEFAULT.modals.connection.closeIcon.size};
-
-    ${({ theme }) => getPosition(theme?.modals?.connection?.closeIcon?.position)}
+  ${CloseIcon} {
+    color: ${({ theme }) => theme?.modals?.connection?.closeIcon?.color};
+    width: ${({ theme }) => theme?.modals?.connection?.closeIcon?.size};
   }
 
-  border-radius: ${({ theme: { modals } }) =>
-    modals?.connection?.button?.border?.radius || BaseTheme.modes.DEFAULT.modals.connection.button.border.radius};
+  border-radius: ${({ theme: { modals } }) => modals?.connection?.button?.border?.radius};
 
   ${({ theme }) =>
     setBackgroundOrDefault(theme, {
       bgValue: theme?.modals?.connection?.background?.backgroundImg,
-      defaultValue:
-        theme?.modals?.connection?.background?.background ||
-        BaseTheme.modes.DEFAULT.modals.connection.background.background
+      defaultValue: theme?.modals?.connection?.background?.background as string
     })};
 `
 

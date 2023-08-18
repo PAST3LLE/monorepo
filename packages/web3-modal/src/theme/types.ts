@@ -50,7 +50,6 @@ export interface PstlModalTheme {
       closeIcon?: {
         color?: string
         size?: string
-        position?: 'top-left' | 'top-right' | 'bottom-right' | 'bottom-left'
       }
       background?: BackgroundStyles
       padding?: string

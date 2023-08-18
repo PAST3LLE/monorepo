@@ -89,7 +89,6 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
           },
           closeIcon: {
             color: BASE_TEXT_COLOUR,
-            position: 'top-right',
             size: '2.5em'
           },
           background: {

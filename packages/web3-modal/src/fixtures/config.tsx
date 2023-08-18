@@ -93,7 +93,8 @@ export const pstlModalTheme = createTheme({
             style: 'italic',
             weight: 700,
             letterSpacing: '-1.4px',
-            lineHeight: 0.82
+            lineHeight: 0.82,
+            textAlign: 'center'
           }
         }
       },
