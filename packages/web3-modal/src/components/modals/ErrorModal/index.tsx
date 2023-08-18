@@ -9,7 +9,7 @@ export function ErrorModal() {
     <ModalTitleText
       fontSize={'1.2em'}
       fvs={{
-        wght: theme?.modals?.connection?.title?.fontWeight || 200
+        wght: theme?.modals?.base?.title?.font?.weight || 200
       }}
     >
       Please refresh the page.

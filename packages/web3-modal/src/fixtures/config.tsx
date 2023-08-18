@@ -17,58 +17,136 @@ const WALLETCONNECT_LOGO =
 export const FORGE_LOGO =
   'https://raw.githubusercontent.com/PAST3LLE/monorepo/main/apps/skillforge-ui/public/512_logo.png'
 
+const BASE_BUTTON_BACKGROUND = {
+  background: '#301d4ea1',
+  connected: '#37b9927d'
+}
 export const pstlModalTheme = createTheme({
   DARK: {
     modals: {
+      base: {
+        title: {
+          font: {
+            color: 'black',
+            weight: 900
+          }
+        }
+      },
       connection: {
         filter: 'invert(1) brightness(0.65) contrast(1.8) hue-rotate(247deg) saturate(2)',
-        backgroundImg: 'unset',
-        backgroundColor: 'indianred',
-        title: { color: 'black', fontWeight: 900 },
+        background: {
+          backgroundImg: 'unset',
+          background: 'indianred'
+        },
         button: {
-          backgroundColor: 'rgba(0,0,0,0.75)',
-          color: 'indianred',
-          connectedBackgroundColor: 'green',
-          fontWeight: 500
+          background: {
+            background: 'rgba(0,0,0,0.75)',
+            connected: 'green'
+          },
+          font: {
+            color: 'indianred',
+            weight: 500
+          }
         }
       }
     }
   },
   LIGHT: {
     modals: {
+      base: {
+        title: {
+          font: {
+            color: 'pink',
+            weight: 900
+          }
+        }
+      },
       connection: {
-        backgroundImg: 'unset',
-        backgroundColor: '#818ccaf2',
-        title: { color: 'pink', fontWeight: 900 },
-        button: {
+        background: {
           backgroundImg: 'unset',
-          backgroundColor: '#fec0cb7d',
-          color: 'ghostwhite',
-          connectedBackgroundColor: 'green',
-          fontWeight: 500
+          background: '#818ccaf2'
+        },
+        button: {
+          background: {
+            backgroundImg: 'unset',
+            background: '#fec0cb7d',
+            connected: 'green'
+          },
+          font: {
+            color: 'ghostwhite',
+            weight: 500
+          }
         }
       }
     }
   },
   DEFAULT: {
     modals: {
+      base: {
+        font: {
+          family: "'Roboto Flex', 'Inter', sans-serif, system-ui",
+          letterSpacing: '0px'
+        },
+        title: {
+          font: {
+            color: '#cbb9ee',
+            style: 'italic',
+            weight: 700,
+            letterSpacing: '-1.4px',
+            lineHeight: 0.82,
+            textAlign: 'center'
+          }
+        }
+      },
       connection: {
         baseFontSize: 20,
         helpers: { show: true },
-        backgroundImg: BG_LOGO,
-        title: { color: '#cbb9ee', fontWeight: 700, letterSpacing: '-1.4px', lineHeight: 0.82 },
+        background: {
+          backgroundImg: BG_LOGO
+        },
         button: {
-          backgroundColor: '#301d4ea1',
-          connectedBackgroundColor: '#37b9927d',
+          background: BASE_BUTTON_BACKGROUND,
+          icons: {
+            maxHeight: '65%'
+          },
           border: { border: 'none', radius: '1em' },
-          color: 'ghostwhite',
-          fontSize: '1em',
-          fontStyle: 'normal',
-          fontWeight: 200,
-          letterSpacing: '-1px',
-          textShadow: '2px 2px 3px #0000005c',
-          textTransform: 'uppercase',
+          font: {
+            color: 'ghostwhite',
+            size: '0.75em',
+            style: 'normal',
+            weight: 200,
+            letterSpacing: '-1px',
+            textShadow: '2px 2px 3px #0000005c',
+            textTransform: 'uppercase'
+          },
           hoverAnimations: true
+        }
+      },
+      account: {
+        text: {
+          address: {},
+          balance: {},
+          main: {}
+        },
+        button: {
+          explorer: {
+            background: {
+              ...BASE_BUTTON_BACKGROUND,
+              background: '#5a3e85a1'
+            }
+          },
+          copy: {
+            background: {
+              ...BASE_BUTTON_BACKGROUND,
+              background: '#5a3e85a1'
+            }
+          },
+          switchNetwork: {
+            background: {
+              ...BASE_BUTTON_BACKGROUND,
+              background: '#5a3e85a1'
+            }
+          }
         }
       }
     }
@@ -167,7 +245,7 @@ const DEFAULT_PROPS: PstlWeb3ModalProps = {
   },
   modals: {
     root: {
-      title: 'PSTL CONNECT',
+      title: 'PAST3LLE W3M',
       themeConfig: { theme: pstlModalTheme },
       closeModalOnConnect: false,
       hideInjectedFromRoot: true,

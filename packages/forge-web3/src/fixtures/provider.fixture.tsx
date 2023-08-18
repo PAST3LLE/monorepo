@@ -2,7 +2,7 @@ import { Web3Button } from '@web3modal/react'
 import React from 'react'
 
 import { ForgeW3Providers, useForgeUnpreparedClaimLockedSkill, useW3Modal, useW3UserConnectionInfo } from '..'
-import { commonProps, contractProps } from './config'
+import { THEME, commonProps, contractProps } from './config'
 
 /* 
     interface Web3ModalProps {
@@ -51,7 +51,15 @@ function App() {
         web3: {
           chains: commonProps.chains,
           modals: {
+            root: {
+              themeConfig: { theme: THEME }
+            },
             walletConnect: commonProps.modals.walletConnect
+          },
+          options: {
+            escapeHatches: {
+              appType: 'DAPP'
+            }
           }
         }
       }}
@@ -77,6 +85,11 @@ export default {
           chains: commonProps.chains,
           modals: {
             walletConnect: commonProps.modals.walletConnect
+          },
+          options: {
+            escapeHatches: {
+              appType: 'DAPP'
+            }
           }
         }
       }}
@@ -100,6 +113,11 @@ export default {
           chains: commonProps.chains,
           modals: {
             walletConnect: commonProps.modals.walletConnect
+          },
+          options: {
+            escapeHatches: {
+              appType: 'DAPP'
+            }
           }
         }
       }}

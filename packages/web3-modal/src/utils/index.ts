@@ -1,5 +1,4 @@
 import { devError } from '@past3lle/utils'
-import { css } from 'styled-components'
 
 import { RenderConnectorOptionsProps } from '../components/modals/ConnectionModal/RenderConnectorOptions'
 import { useConnection, usePstlWeb3Modal } from '../hooks'
@@ -128,31 +127,6 @@ const loopFindElementById = async (id: string, limit = 10) => {
   }
 
   return result
-}
-
-export function getPosition(position?: 'top-left' | 'top-right' | 'bottom-right' | 'bottom-left') {
-  switch (position) {
-    case 'top-left':
-      return css`
-        top: 0.75em;
-        left: 0.75em;
-      `
-    case 'bottom-left':
-      return css`
-        bottom: 0.75em;
-        left: 0.75em;
-      `
-    case 'bottom-right':
-      return css`
-        bottom: 0.75em;
-        right: 0.75em;
-      `
-    default:
-      return css`
-        top: 0.75em;
-        right: 0.75em;
-      `
-  }
 }
 
 async function _connectProvider(

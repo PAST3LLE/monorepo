@@ -19,13 +19,19 @@ export const WEB3_PROPS: Web3ModalConfigWeb3Props = {
   chains: SUPPORTED_CHAINS,
   connectors,
   frameConnectors,
+  callbacks: {
+    switchChain: async (chains) => {
+      if (typeof globalThis?.window == 'undefined') return undefined
+      const searchParams = new URLSearchParams(window.location.search)
+      const dirtyParams = searchParams.get('forge-network')
+
+      const decodedSearchParam = dirtyParams ? decodeURI(dirtyParams) : undefined
+      return decodedSearchParam ? chains.find((chain) => chain.network === decodedSearchParam.toLowerCase()) : undefined
+    }
+  },
   options: {
     pollingInterval: 10_000,
-    autoConnect: true,
-    chainFromUrlOptions: {
-      type: 'network',
-      key: 'forge-network'
-    }
+    autoConnect: true
   },
   modals: {
     walletConnect: {
