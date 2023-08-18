@@ -16,7 +16,8 @@ const DEFAULT_FONT_PROPS = {
   lineHeight: 1.5,
   textShadow: 'none',
   textTransform: 'none',
-  family: 'inherit'
+  family: 'inherit',
+  textAlign: 'initial'
 } as const
 
 const DEFAULT_BUTTON_PROPS = {
@@ -72,15 +73,11 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
           font: DEFAULT_FONT_PROPS,
           title: {
             font: {
-              color: BASE_TEXT_COLOUR,
+              ...DEFAULT_FONT_PROPS,
               size: '2em',
               weight: 700,
-              letterSpacing: '-0.5px',
               lineHeight: 1,
-              family: 'inherit',
-              style: 'normal',
-              textShadow: 'none',
-              textTransform: 'none'
+              textAlign: 'center'
             }
           }
         },
