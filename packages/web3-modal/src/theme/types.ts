@@ -17,6 +17,14 @@ interface BackgroundStyles {
   backgroundImg?: BackgroundPropertyFull
 }
 
+interface AccountModalButtons {
+  font?: FontStyles
+  background?: {
+    background?: string
+    backgroundImg?: BackgroundPropertyFull
+  }
+}
+
 export type PstlModalThemeExtension = Partial<ThemeContentPartsRequired> & DeepRequired<PstlModalTheme>
 export interface PstlModalTheme {
   modals?: {
@@ -48,7 +56,7 @@ export interface PstlModalTheme {
         background?: BackgroundStyles & {
           connected?: string
         }
-        walletIcons?: {
+        icons?: {
           filter?: string
           height?: string
           maxHeight?: string
@@ -65,7 +73,24 @@ export interface PstlModalTheme {
       filter?: string
       baseFontSize?: number
       balanceAndAddressContainer?: {
-        background?: BackgroundStyles
+        background?: BackgroundStyles & { unsupported?: string }
+      }
+      button?: {
+        disconnect?: AccountModalButtons
+        switchNetwork?: AccountModalButtons
+        explorer?: AccountModalButtons
+        copy?: AccountModalButtons
+      }
+      text?: {
+        main?: {
+          font?: FontStyles
+        }
+        balance?: {
+          font?: FontStyles
+        }
+        address?: {
+          font?: FontStyles
+        }
       }
     }
   }

@@ -1,4 +1,4 @@
-import { ThemeByModes } from '@past3lle/theme'
+import { BLACK_TRANSPARENT, ThemeByModes } from '@past3lle/theme'
 
 import { PstlModalThemeExtension } from './types'
 
@@ -11,12 +11,54 @@ const DEFAULT_FONT_PROPS = {
   color: BASE_TEXT_COLOUR,
   size: '1em',
   weight: 300,
-  style: 'none',
-  letterSpacing: '0px',
-  lineHeight: 1,
+  style: 'normal',
+  letterSpacing: '-0.5px',
+  lineHeight: 1.5,
   textShadow: 'none',
   textTransform: 'none',
   family: 'inherit'
+} as const
+
+const DEFAULT_BUTTON_PROPS = {
+  font: {
+    ...DEFAULT_FONT_PROPS,
+    color: BASE_TEXT_COLOUR,
+    size: '1.5em',
+    weight: 300,
+    textTransform: 'uppercase'
+  },
+  background: {
+    background: BLACK_TRANSPARENT,
+    backgroundImg: 'unset',
+    connected: '#8576f2cc'
+  },
+  border: {
+    border: 'unset',
+    color: 'unset',
+    radius: '1em'
+  },
+  icons: {
+    height: '100%',
+    maxHeight: '64%',
+    filter: 'none'
+  },
+  hoverAnimations: true
+} as const
+
+const DEFAULT_ACCOUNT_BUTTON_FONT_PROPS = {
+  ...DEFAULT_FONT_PROPS,
+  color: BASE_TEXT_COLOUR,
+  size: '1em',
+  weight: 300,
+  textTransform: 'uppercase'
+} as const
+
+const DEFAULT_ACCOUNT_BUTTON_BACKGROUND_PROPS = {
+  font: DEFAULT_ACCOUNT_BUTTON_FONT_PROPS,
+  background: {
+    background: DEFAULT_BUTTON_PROPS.background.connected,
+    backgroundImg: DEFAULT_BUTTON_PROPS.background.backgroundImg
+  }
 } as const
 
 const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
@@ -33,10 +75,10 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
               color: BASE_TEXT_COLOUR,
               size: '2em',
               weight: 700,
-              letterSpacing: '0px',
+              letterSpacing: '-0.5px',
               lineHeight: 1,
               family: 'inherit',
-              style: 'none',
+              style: 'normal',
               textShadow: 'none',
               textTransform: 'none'
             }
@@ -54,47 +96,59 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
             size: '2.5em'
           },
           background: {
-            background: 'lightsalmon',
+            background: '#2a7f70',
             backgroundImg: 'unset'
           },
           padding: '1em',
-          button: {
-            font: {
-              ...DEFAULT_FONT_PROPS,
-              color: BASE_TEXT_COLOUR,
-              size: '1.5em',
-              weight: 300,
-              textTransform: 'uppercase'
-            },
-            background: {
-              background: BASE_TEXT_COLOUR,
-              backgroundImg: 'unset',
-              connected: 'darkpurple'
-            },
-            border: {
-              border: '1px solid black',
-              color: 'none',
-              radius: '1em'
-            },
-            walletIcons: {
-              height: '100%',
-              maxHeight: '64%',
-              filter: 'none'
-            },
-            hoverAnimations: true
-          }
+          button: DEFAULT_BUTTON_PROPS
         },
         account: {
           ...DEFAULT_BASE_MODAL_PROPS,
           balanceAndAddressContainer: {
             background: {
               backgroundImg: 'none',
-              background: '#370937c9'
+              background: DEFAULT_BUTTON_PROPS.background.background,
+              unsupported: '#7f1d1db0'
             }
+          },
+          text: {
+            main: {
+              font: DEFAULT_ACCOUNT_BUTTON_FONT_PROPS
+            },
+            balance: {
+              font: {
+                ...DEFAULT_ACCOUNT_BUTTON_FONT_PROPS,
+                color: 'lightgrey',
+                size: '1em',
+                weight: 100,
+                letterSpacing: '-1px'
+              }
+            },
+            address: {
+              font: {
+                ...DEFAULT_ACCOUNT_BUTTON_FONT_PROPS,
+                size: '1.4em',
+                weight: 600,
+                letterSpacing: '-0.8px'
+              }
+            }
+          },
+          button: {
+            disconnect: {
+              font: DEFAULT_ACCOUNT_BUTTON_FONT_PROPS,
+              background: {
+                background: '#7b2727b0',
+                backgroundImg: 'unset'
+              }
+            },
+            switchNetwork: DEFAULT_ACCOUNT_BUTTON_BACKGROUND_PROPS,
+            copy: DEFAULT_ACCOUNT_BUTTON_BACKGROUND_PROPS,
+            explorer: DEFAULT_ACCOUNT_BUTTON_BACKGROUND_PROPS
           }
         }
       }
     }
   }
 }
+
 export default PstlModalTheme

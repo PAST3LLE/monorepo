@@ -17,6 +17,10 @@ const WALLETCONNECT_LOGO =
 export const FORGE_LOGO =
   'https://raw.githubusercontent.com/PAST3LLE/monorepo/main/apps/skillforge-ui/public/512_logo.png'
 
+const BASE_BUTTON_BACKGROUND = {
+  background: '#301d4ea1',
+  connected: '#37b9927d'
+}
 export const pstlModalTheme = createTheme({
   DARK: {
     modals: {
@@ -86,7 +90,7 @@ export const pstlModalTheme = createTheme({
         title: {
           font: {
             color: '#cbb9ee',
-            style: 'normal',
+            style: 'italic',
             weight: 700,
             letterSpacing: '-1.4px',
             lineHeight: 0.82
@@ -100,12 +104,8 @@ export const pstlModalTheme = createTheme({
           backgroundImg: BG_LOGO
         },
         button: {
-          background: {
-            background: '#301d4ea1',
-            connected: '#37b9927d'
-          },
-          walletIcons: {
-            // height: '100%',
+          background: BASE_BUTTON_BACKGROUND,
+          icons: {
             maxHeight: '65%'
           },
           border: { border: 'none', radius: '1em' },
@@ -119,6 +119,33 @@ export const pstlModalTheme = createTheme({
             textTransform: 'uppercase'
           },
           hoverAnimations: true
+        }
+      },
+      account: {
+        text: {
+          address: {},
+          balance: {},
+          main: {}
+        },
+        button: {
+          explorer: {
+            background: {
+              ...BASE_BUTTON_BACKGROUND,
+              background: '#5a3e85a1'
+            }
+          },
+          copy: {
+            background: {
+              ...BASE_BUTTON_BACKGROUND,
+              background: '#5a3e85a1'
+            }
+          },
+          switchNetwork: {
+            background: {
+              ...BASE_BUTTON_BACKGROUND,
+              background: '#5a3e85a1'
+            }
+          }
         }
       }
     }
@@ -217,7 +244,7 @@ const DEFAULT_PROPS: PstlWeb3ModalProps = {
   },
   modals: {
     root: {
-      title: 'PSTL CONNECT',
+      title: 'PAST3LLE W3M',
       themeConfig: { theme: pstlModalTheme },
       closeModalOnConnect: false,
       hideInjectedFromRoot: true,

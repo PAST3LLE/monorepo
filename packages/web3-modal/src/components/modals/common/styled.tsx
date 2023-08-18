@@ -80,26 +80,25 @@ export const ModalButton = styled(Button)<{ connected: boolean }>`
   `}
 `
 
-export const ModalTitleText = styled(Text.SubHeader).attrs((props) => ({
-  fontStyle: props?.fontStyle || 'italic'
+export const ModalTitleText = styled(Text.Main).attrs((props) => ({
+  fontWeight: props.theme.modals?.base?.title?.font?.weight
 }))`
-  color: ${({ theme }) =>
-    theme?.modals?.base?.title?.font?.color || BaseTheme.modes.DEFAULT.modals.base.title.font.color};
-  letter-spacing: ${({ theme }) =>
-    theme?.modals?.base?.title?.font?.letterSpacing || BaseTheme.modes.DEFAULT.modals.base.title.font.letterSpacing};
-  line-height: ${({ theme }) =>
-    theme?.modals?.base?.title?.font?.lineHeight || BaseTheme.modes.DEFAULT.modals.base.title.font.lineHeight};
+  font-size: ${({ theme }) => theme?.modals?.base?.title?.font?.size};
+  font-style: ${({ theme }) => theme?.modals?.base?.title?.font?.style};
+  font-weight: ${({ theme }) => theme?.modals?.base?.title?.font?.weight};
+  color: ${({ theme }) => theme?.modals?.base?.title?.font?.color};
+  letter-spacing: ${({ theme }) => theme?.modals?.base?.title?.font?.letterSpacing};
+  line-height: ${({ theme }) => theme?.modals?.base?.title?.font?.lineHeight};
 `
 
 export const InnerContainer = styled(ColumnCenter)<{ isError?: boolean }>`
   filter: ${({ theme }) => theme?.modals?.base?.filter};
 
   position: relative;
-  font-size: ${({ theme }) =>
-    theme?.modals?.connection?.baseFontSize || BaseTheme.modes.DEFAULT.modals.connection.baseFontSize}px;
-  font-style: ${({ theme }) => theme?.modals?.base?.font?.style || BaseTheme.modes.DEFAULT.modals.base.font.style};
-  font-weight: ${({ theme }) => theme?.modals?.base?.font?.weight || BaseTheme.modes.DEFAULT.modals.base.font.weight};
-  font-family: ${({ theme }) => theme?.modals?.base?.font?.family || BaseTheme.modes.DEFAULT.modals.base.font.family};
+  font-size: ${({ theme }) => theme?.modals?.connection?.baseFontSize}px;
+  font-style: ${({ theme }) => theme?.modals?.base?.font?.style};
+  font-weight: ${({ theme }) => theme?.modals?.base?.font?.weight};
+  font-family: ${({ theme }) => theme?.modals?.base?.font?.family};
 
   &::-webkit-scrollbar {
     display: none;
@@ -214,7 +213,7 @@ export const WalletsWrapper = styled.div<{
     > ${ModalButton} {
       > img {
         height: 100%;
-        max-height: ${({ theme }) => theme.modals?.connection?.button?.walletIcons?.maxHeight || '50px'};
+        max-height: ${({ theme }) => theme.modals?.connection?.button?.icons?.maxHeight || '50px'};
 
         ${upToExtraSmall`
           max-height: 100%;
@@ -260,7 +259,7 @@ export const WalletsWrapper = styled.div<{
 
         > img {
           height: 100%;
-          max-height: ${theme.modals?.connection?.button?.walletIcons?.maxHeight || '64%'};
+          max-height: ${theme.modals?.connection?.button?.icons?.maxHeight || '64%'};
         }
       }
     }
@@ -279,7 +278,7 @@ export const WalletsWrapper = styled.div<{
           }
 
           > img {
-            max-height: ${theme.modals?.connection?.button?.walletIcons?.maxHeight || '64%'};
+            max-height: ${theme.modals?.connection?.button?.icons?.maxHeight || '64%'};
           }
         }
       }
