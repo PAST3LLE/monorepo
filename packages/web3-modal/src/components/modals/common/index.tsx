@@ -1,11 +1,11 @@
-import { CloseIcon } from '@past3lle/components'
+import { CloseIcon, Row } from '@past3lle/components'
 import React from 'react'
 import { useTheme } from 'styled-components'
 
 import { Z_INDICES } from '../../../constants'
 import { usePstlWeb3ModalState } from '../../../hooks'
 import { useAutoClearingTimeout } from '../../../hooks/useTimeout'
-import { ErrorMessageContainer, InnerContainer, ModalTitleText, StyledConnectionModal } from './styled'
+import { ErrorMessageContainer, InnerContainer, ModalTitle, StyledConnectionModal } from './styled'
 import { BaseModalProps, ModalId } from './types'
 
 export function BaseModal({
@@ -23,7 +23,7 @@ export function BaseModal({
 
   const { modalProps, updateModalProps } = usePstlWeb3ModalState()
 
-  const showError = useAutoClearingTimeout(!!modalProps.connect?.error?.message, 7000, () =>
+  const [showError, hideError] = useAutoClearingTimeout(!!modalProps.connect?.error?.message, 7000, () =>
     updateModalProps({ connect: { error: null } })
   )
 
@@ -46,14 +46,22 @@ export function BaseModal({
       {...restModalProps}
     >
       <InnerContainer justifyContent="flex-start" gap="0.75rem" isError={!!modalProps.connect?.error?.message}>
-        <CloseIcon height={30} width={100} onClick={onDismiss} />
-        <ModalTitleText margin="0.2em 0">{title}</ModalTitleText>
+        <Row width="100%" marginBottom="0.5em">
+          <ModalTitle>{title}</ModalTitle>
+          <CloseIcon height={30} width={100} onClick={onDismiss} />
+        </Row>
         {children}
         <ErrorMessageContainer hide={!showError || !modalProps.connect?.error?.message}>
           <p>ERROR!</p>
-          <p style={{ color: theme?.modals?.connection?.helpers?.color || 'ghostwhite', fontSize: 14 }}>
+          <p style={{ color: theme?.modals?.connection?.helpers?.color, fontSize: '0.75em' }}>
             {modalProps.connect?.error?.message}
           </p>
+          <span
+            onClick={hideError}
+            style={{ position: 'absolute', color: 'ghostwhite', cursor: 'pointer', top: '0.75em', right: '0.75em' }}
+          >
+            X
+          </span>
         </ErrorMessageContainer>
       </InnerContainer>
     </StyledConnectionModal>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { ModalPropsCtrl } from '../controllers'
 import { ModalPropsCtrlState } from '../controllers/types/controllerTypes'
@@ -6,6 +6,15 @@ import { ModalPropsCtrlState } from '../controllers/types/controllerTypes'
 interface PstlWeb3ModalStateHook {
   modalProps: ModalPropsCtrlState
   updateModalProps: (typeof ModalPropsCtrl)['update']
+  resetErrors: () => void
+}
+const NULL_ERROR_STATE = {
+  connect: {
+    error: null
+  },
+  account: {
+    error: null
+  }
 }
 export function usePstlWeb3ModalState(): PstlWeb3ModalStateHook {
   const [modalProps, setModalProps] = useState(ModalPropsCtrl.state)
@@ -20,8 +29,11 @@ export function usePstlWeb3ModalState(): PstlWeb3ModalStateHook {
     }
   }, [])
 
+  const resetErrors = useCallback(() => ModalPropsCtrl.update(NULL_ERROR_STATE), [])
+
   return {
     modalProps,
-    updateModalProps: ModalPropsCtrl.update
+    updateModalProps: ModalPropsCtrl.update,
+    resetErrors
   }
 }

@@ -1,11 +1,11 @@
 import { ErrorBoundary } from '@past3lle/components'
 import { ThemeProvider } from '@past3lle/theme'
 import { devWarn } from '@past3lle/utils'
-import React, { memo, useMemo } from 'react'
+import React, { memo, useEffect, useMemo } from 'react'
 import { useSnapshot } from 'valtio'
 
 import { ModalPropsCtrl, RouterCtrl } from '../../controllers'
-import { useModalTheme, usePstlWeb3Modal } from '../../hooks'
+import { useModalTheme, usePstlWeb3Modal, usePstlWeb3ModalState } from '../../hooks'
 import { AccountModal } from './AccountModal'
 import { ConnectionModal } from './ConnectionModal'
 import { ErrorModal } from './ErrorModal'
@@ -15,7 +15,13 @@ import { BaseModalProps, ModalId } from './common/types'
 
 export function ModalWithoutThemeProvider(baseProps: BaseModalProps) {
   const modalState = usePstlWeb3Modal()
+  const { resetErrors } = usePstlWeb3ModalState()
   const view = useSnapshot(RouterCtrl.state).view
+
+  // Reset all error state on view change
+  useEffect(() => {
+    resetErrors()
+  }, [resetErrors, view])
 
   const [Modal, auxBaseProps] = useMemo(() => {
     switch (view) {
