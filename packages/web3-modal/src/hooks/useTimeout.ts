@@ -1,7 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 let timeout: NodeJS.Timeout | undefined = undefined
-export function useAutoClearingTimeout(flag: boolean, time = 3000, callback?: (error: Error | null) => void) {
+export function useAutoClearingTimeout(
+  flag: boolean,
+  time = 3000,
+  callback?: (error: Error | null) => void
+): [boolean, () => void] {
   const [showError, setShowError] = useState(false)
   useEffect(() => {
     setShowError(true)
@@ -9,6 +13,7 @@ export function useAutoClearingTimeout(flag: boolean, time = 3000, callback?: (e
       clearTimeout(timeout)
       timeout = undefined
     }
+    // Only set timeout on flag == true
     timeout = setTimeout(() => {
       setShowError(false)
       callback?.(null)
@@ -19,5 +24,13 @@ export function useAutoClearingTimeout(flag: boolean, time = 3000, callback?: (e
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [flag, time])
-  return showError
+
+  const resetError = useCallback(() => {
+    clearTimeout(timeout)
+    setShowError(false)
+    callback?.(null)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  return [showError, resetError]
 }
