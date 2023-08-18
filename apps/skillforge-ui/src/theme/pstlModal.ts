@@ -14,7 +14,8 @@ export const pstlModalTheme = createTheme({
             color: '#cbb9ee',
             weight: 700,
             letterSpacing: '-1.4px',
-            lineHeight: 0.82
+            lineHeight: 0.82,
+            textAlign: 'left'
           }
         }
       },
