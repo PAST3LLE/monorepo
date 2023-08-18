@@ -77,6 +77,11 @@ export interface PstlModalTheme {
       balanceAndAddressContainer?: {
         background?: BackgroundStyles & { unsupported?: string }
       }
+      icons?: {
+        wallet?: { url: string; invert?: boolean }
+        network?: { url: string; invert?: boolean }
+        copy?: { url: string; invert?: boolean }
+      }
       button?: {
         disconnect?: AccountModalButtons
         switchNetwork?: AccountModalButtons

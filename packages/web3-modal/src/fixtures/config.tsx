@@ -2,6 +2,9 @@ import React from 'react'
 
 import { PstlWeb3ModalProps } from '../providers'
 import { createTheme } from '../theme'
+import CopySVG from './assets/copy.svg'
+import NetworkSVG from './assets/network.svg'
+import WalletSVG from './assets/wallet.svg'
 import { chains } from './chains'
 
 const BG_LOGO = 'https://ik.imagekit.io/pastelle/SKILLFORGE/forge-background.png'
@@ -99,7 +102,7 @@ export const pstlModalTheme = createTheme({
         }
       },
       connection: {
-        baseFontSize: 20,
+        baseFontSize: 16,
         helpers: { show: true },
         background: {
           backgroundImg: BG_LOGO
@@ -123,6 +126,11 @@ export const pstlModalTheme = createTheme({
         }
       },
       account: {
+        icons: {
+          copy: { url: CopySVG, invert: true },
+          network: { url: NetworkSVG, invert: true },
+          wallet: { url: WalletSVG, invert: true }
+        },
         text: {
           address: {},
           balance: {},
@@ -132,7 +140,7 @@ export const pstlModalTheme = createTheme({
           disconnect: {
             background: {
               ...BASE_BUTTON_BACKGROUND,
-              background: 'pink'
+              background: 'indianred'
             }
           },
           explorer: {

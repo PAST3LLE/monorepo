@@ -129,6 +129,11 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
               }
             }
           },
+          icons: {
+            wallet: { url: '', invert: false },
+            network: { url: '', invert: false },
+            copy: { url: '', invert: false }
+          },
           button: {
             disconnect: {
               font: DEFAULT_ACCOUNT_BUTTON_FONT_PROPS,
