@@ -27,7 +27,7 @@ module.exports = (webpackConfig) => (
                     loader: 'json-loader'
                 },
                 {
-                    test: /\.png$/,
+                    test: /\.(png|svg)$/,
                     loader: 'file-loader'
                 },
                 {
