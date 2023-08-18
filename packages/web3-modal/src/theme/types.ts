@@ -1,16 +1,19 @@
 import { BackgroundPropertyFull, ThemeBaseRequired, ThemeContentPartsRequired } from '@past3lle/theme'
 import { DeepRequired } from '@past3lle/types'
 
+type DefaultCSSProps = string | 'initial' | 'none' | 'unset' | 'inherit'
+
 export interface FontStyles {
-  color?: string
-  family?: string
-  style?: string
-  size?: string
+  color?: DefaultCSSProps
+  family?: DefaultCSSProps
+  style?: DefaultCSSProps
+  size?: DefaultCSSProps
   weight?: number
-  letterSpacing?: string
+  letterSpacing?: DefaultCSSProps
   lineHeight?: number
-  textShadow?: string
-  textTransform?: string
+  textShadow?: DefaultCSSProps
+  textTransform?: DefaultCSSProps
+  textAlign?: 'left' | 'right' | 'center' | DefaultCSSProps
 }
 interface BackgroundStyles {
   background?: string
