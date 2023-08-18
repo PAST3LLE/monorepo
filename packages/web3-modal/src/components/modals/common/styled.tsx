@@ -16,22 +16,14 @@ export const ModalButton = styled(Button)<{ connected: boolean }>`
   ${({ theme }) =>
     setBackgroundOrDefault(theme, {
       bgValue: theme?.modals?.connection?.button?.background?.backgroundImg,
-      defaultValue:
-        theme?.modals?.connection?.button?.background?.background ||
-        BaseTheme.modes.DEFAULT.modals.connection.button.background.background
+      defaultValue: theme?.modals?.connection?.button?.background?.background as string
     })};
 
-  border: ${({ theme }) =>
-    theme?.modals?.connection?.button?.border?.border ||
-    BaseTheme.modes.DEFAULT.modals.connection.button.border.border};
+  border: ${({ theme }) => theme?.modals?.connection?.button?.border?.border};
   border-color: ${({ theme }) => theme?.modals?.connection?.button?.border?.color};
 
-  font-style: ${({ theme }) =>
-    theme?.modals?.connection?.button?.font?.style || BaseTheme.modes.DEFAULT.modals.connection.button.font.style};
-  font-variation-settings: ${({ theme }) =>
-    `'wght' ${
-      theme?.modals?.connection?.button?.font?.weight || BaseTheme.modes.DEFAULT.modals.connection.button.font.weight
-    }`};
+  font-style: ${({ theme }) => theme?.modals?.connection?.button?.font?.style};
+  font-variation-settings: ${({ theme }) => `'wght' ${theme?.modals?.connection?.button?.font?.weight}`};
   color: ${({ theme }) =>
     theme?.modals?.connection?.button?.font?.color ||
     setBestTextColour(
@@ -39,9 +31,7 @@ export const ModalButton = styled(Button)<{ connected: boolean }>`
         BaseTheme.modes.DEFAULT.modals.connection.button.background.background
     )};
 
-  letter-spacing: ${({ theme }) =>
-    theme?.modals?.connection?.button?.font?.letterSpacing ||
-    BaseTheme.modes.DEFAULT.modals.connection.button.font.letterSpacing};
+  letter-spacing: ${({ theme }) => theme?.modals?.connection?.button?.font?.letterSpacing};
   ${({ theme }) =>
     theme?.modals?.connection?.button?.font?.textShadow &&
     `text-shadow: ${theme?.modals?.connection?.button?.font.textShadow};`}
@@ -49,11 +39,7 @@ export const ModalButton = styled(Button)<{ connected: boolean }>`
   ${({ theme }) =>
     theme?.modals?.connection?.button?.font?.size && `font-size: ${theme?.modals?.connection?.button?.font.size};`}
     
-    ${({ theme }) =>
-    `text-transform: ${
-      theme?.modals?.connection?.button?.font?.textTransform ||
-      BaseTheme.modes.DEFAULT.modals.connection.button.font.textTransform
-    };`}
+    ${({ theme }) => `text-transform: ${theme?.modals?.connection?.button?.font?.textTransform};`}
     
     gap: 10px;
 
@@ -70,10 +56,7 @@ export const ModalButton = styled(Button)<{ connected: boolean }>`
   ${({ connected, theme }) =>
     connected &&
     `
-      background: ${
-        theme?.modals?.connection?.button?.background?.connected ||
-        BaseTheme.modes.DEFAULT.modals.connection.button.background.connected
-      };
+      background: ${theme?.modals?.connection?.button?.background?.connected};
       transform: scale(1.05);
       filter: saturate(2);
   `}
@@ -118,8 +101,7 @@ export const InnerContainer = styled(ColumnCenter)<{ isError?: boolean }>`
   -ms-overflow-style: none;
   scrollbar-width: none;
 
-  padding: ${({ theme: { modals } }) =>
-    modals?.connection?.padding || BaseTheme.modes.DEFAULT.modals.connection.padding};
+  padding: ${({ theme: { modals } }) => modals?.connection?.padding};
 
   ${({ isError }) => isError && `padding-bottom: ${ERROR_CONTAINER_HEIGHT_PX}px;`}
 

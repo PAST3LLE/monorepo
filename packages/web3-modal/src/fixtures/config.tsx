@@ -129,6 +129,12 @@ export const pstlModalTheme = createTheme({
           main: {}
         },
         button: {
+          disconnect: {
+            background: {
+              ...BASE_BUTTON_BACKGROUND,
+              background: 'pink'
+            }
+          },
           explorer: {
             background: {
               ...BASE_BUTTON_BACKGROUND,

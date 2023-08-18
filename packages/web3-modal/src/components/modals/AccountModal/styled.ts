@@ -10,6 +10,7 @@ export const AccountModalButton = styled(ModalButton).attrs((props) => ({
   color: props.color || 'ghostwhite',
   fontSize: props.fontSize || '0.8em',
   padding: props.padding || '0.3rem 0.75rem',
+  background: props.backgroundColor,
   ...props
 }))`
   font-variation-settings: 'wght' 100;
