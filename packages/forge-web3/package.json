@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/forge-web3",
   "sideEffects": false,
-  "version": "0.2.0-alpha.0",
+  "version": "0.2.1-alpha.0",
   "description": "PAST3LLE FORGE Web3 hooks and tings",
   "main": "dist/esm/index.js",
   "typings": "dist/types/index.d.ts",
@@ -116,7 +116,7 @@
     "@past3lle/hooks": "^0.1.16-alpha.0",
     "@past3lle/skilltree-contracts": "^0.0.1-rc.15",
     "@past3lle/utils": "^0.1.6-alpha.0",
-    "@past3lle/web3-modal": "^1.4.1-alpha.0",
+    "@past3lle/web3-modal": "^1.4.2-alpha.0",
     "jotai": "^1.13.0"
   },
   "devDependencies": {
