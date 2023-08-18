@@ -2,56 +2,43 @@ import { Column, Row } from '@past3lle/components'
 import { upToExtraSmall, upToSmall } from '@past3lle/theme'
 import styled from 'styled-components'
 
+import { PstlModalThemeExtension } from '../../../theme'
 import { ModalButton, ModalTitleText } from '../common/styled'
+
+export const Icon = styled.img`
+  margin-right: 10px;
+  max-width: 20px;
+  width: 100%;
+  filter: ${({ theme }) => (theme?.modals?.account?.icons?.wallet?.invert ? 'invert(1)' : 'none')};
+  opacity: 0.8;
+`
 
 export const AccountModalButton = styled(ModalButton).attrs((props) => ({
   height: props.height || 'auto',
   justifyContent: props.justifyContent || 'center',
-  color: props.color || 'ghostwhite',
-  fontSize: props.fontSize || '0.8em',
   padding: props.padding || '0.3rem 0.75rem',
-  background: props.backgroundColor,
   ...props
-}))`
-  font-variation-settings: 'wght' 100;
+}))<{ type: keyof PstlModalThemeExtension['modals']['account']['button'] }>`
+  background: ${({ theme, type }) => theme?.modals?.account?.button?.[type]?.background?.background};
+  color: ${({ theme, type }) => theme?.modals?.account?.button?.[type]?.font?.color};
+  font-size: ${({ theme, type }) => theme?.modals?.account?.button?.[type]?.font?.size};
+  font-style: ${({ theme, type }) => theme?.modals?.account?.button?.[type]?.font?.style};
+  letter-spacing: ${({ theme, type }) => theme?.modals?.account?.button?.[type]?.font?.letterSpacing};
+  font-weight: ${({ theme, type }) => theme?.modals?.account?.button?.[type]?.font?.weight};
+  font-variation-settings: 'wght' ${({ theme, type }) => theme?.modals?.account?.button?.[type]?.font?.weight};
 `
 export const FooterActionButtonsRow = styled(Row)``
-export const AccountText = styled(ModalTitleText)`
-  font-size: 1em;
+export const AccountText = styled(ModalTitleText)<{
+  type: keyof PstlModalThemeExtension['modals']['account']['text']
+}>`
   line-height: 1.2;
-`
 
-export const AccountMainText = styled(AccountText).attrs(({ theme }) => ({
-  fontWeight: theme?.modals?.account?.text?.main?.font?.weight,
-  letterSpacing: theme?.modals?.account?.text?.main?.font?.letterSpacing
-}))`
-  color: ${({ theme }) => theme?.modals?.account?.text?.main?.font?.color};
-  font-size: ${({ theme }) => theme?.modals?.account?.text?.main?.font?.size};
-  font-style: ${({ theme }) => theme?.modals?.account?.text?.main?.font?.style};
-  font-weight: ${({ theme }) => theme?.modals?.account?.text?.main?.font?.weight};
-  letter-spacing: ${({ theme }) => theme?.modals?.account?.text?.main?.font?.letterSpacing};
-`
-
-export const AccountBalanceText = styled(AccountText).attrs(({ theme }) => ({
-  fontWeight: theme?.modals?.account?.text?.balance?.font?.weight,
-  letterSpacing: theme?.modals?.account?.text?.balance?.font?.letterSpacing
-}))`
-  color: ${({ theme }) => theme?.modals?.account?.text?.balance?.font?.color};
-  font-size: ${({ theme }) => theme?.modals?.account?.text?.balance?.font?.size};
-  font-style: ${({ theme }) => theme?.modals?.account?.text?.balance?.font?.style};
-  font-weight: ${({ theme }) => theme?.modals?.account?.text?.balance?.font?.weight};
-  letter-spacing: ${({ theme }) => theme?.modals?.account?.text?.balance?.font?.letterSpacing};
-`
-
-export const AccountAddressText = styled(AccountText).attrs(({ theme }) => ({
-  fontWeight: theme?.modals?.account?.text?.address?.font?.weight,
-  letterSpacing: theme?.modals?.account?.text?.address?.font?.letterSpacing
-}))`
-  color: ${({ theme }) => theme?.modals?.account?.text?.address?.font?.color};
-  font-size: ${({ theme }) => theme?.modals?.account?.text?.address?.font?.size};
-  font-style: ${({ theme }) => theme?.modals?.account?.text?.address?.font?.style};
-  font-weight: ${({ theme }) => theme?.modals?.account?.text?.address?.font?.weight};
-  letter-spacing: ${({ theme }) => theme?.modals?.account?.text?.address?.font?.letterSpacing};
+  color: ${({ theme, type }) => theme?.modals?.account?.text?.[type]?.font?.color};
+  font-size: ${({ theme, type }) => theme?.modals?.account?.text?.[type]?.font?.size};
+  font-style: ${({ theme, type }) => theme?.modals?.account?.text?.[type]?.font?.style};
+  font-weight: ${({ theme, type }) => theme?.modals?.account?.text?.[type]?.font?.weight};
+  letter-spacing: ${({ theme, type }) => theme?.modals?.account?.text?.[type]?.font?.letterSpacing};
+  font-variation-settings: 'wght' ${({ theme, type }) => theme?.modals?.account?.text?.[type]?.font?.weight};
 `
 
 export const AccountBottomColumnContainer = styled(Column)`

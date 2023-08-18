@@ -13,13 +13,12 @@ import { trimAndLowerCase } from '../../../utils'
 import { ModalButton } from '../common/styled'
 import { BaseModalProps, ModalId } from '../common/types'
 import {
-  AccountAddressText,
-  AccountBalanceText,
   AccountBottomColumnContainer,
   AccountColumnContainer,
-  AccountMainText,
   AccountModalButton,
-  FooterActionButtonsRow
+  AccountText,
+  FooterActionButtonsRow,
+  Icon
 } from './styled'
 
 type PstlAccountModalProps = ModalPropsCtrlState['root'] &
@@ -92,6 +91,9 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
           <ModalButton
             id={`${ModalId.ACCOUNT}__wallets-button`}
             connected={false}
+            fontSize="unset"
+            height="auto"
+            minHeight={82}
             width="100%"
             marginRight="1rem"
             backgroundColor={
@@ -101,30 +103,45 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
             }
             onClick={() => modalCallbacks.open({ route: 'ConnectWallet' })}
           >
-            <Column width={'100%'}>
-              <AccountMainText display="inline-flex" alignItems="center" width="auto">
+            <Column width={'100%'} gap="0.3rem">
+              <AccountText type="main" display="inline-flex" alignItems="center" width="auto">
+                {theme?.account?.icons?.wallet && <Icon src={theme?.account?.icons?.wallet?.url} />}
                 Wallet:{' '}
-                <AccountMainText display={'inline-flex'} alignItems="center" padding={0} marginLeft="0.5rem">
+                <AccountText
+                  type="main"
+                  fontSize="inherit"
+                  display={'inline-flex'}
+                  alignItems="center"
+                  padding={0}
+                  marginLeft="0.5rem"
+                >
                   {(userConnectionInfo.connector as ConnectorEnhanced<any, any>)?.customName ||
                     userConnectionInfo.connector?.name}
-                </AccountMainText>
-              </AccountMainText>
-              <AccountMainText display="inline-flex" alignItems="center" width="auto">
+                </AccountText>
+              </AccountText>
+              <AccountText type="main" display="inline-flex" alignItems="center" width="auto">
+                {theme?.account?.icons?.network?.url && <Icon src={theme?.account?.icons?.network?.url} />}
                 Network:{' '}
-                <AccountMainText display={'inline-flex'} alignItems="center" padding={0} marginLeft="0.5rem">
+                <AccountText
+                  type="main"
+                  fontSize="inherit"
+                  display={'inline-flex'}
+                  alignItems="center"
+                  padding={0}
+                  marginLeft="0.5rem"
+                >
                   {userConnectionInfo.chain?.name || 'Unknown network'}
                   {userConnectionInfo.chain?.unsupported && (
                     <small className="unsupported-small-text">[unsupported]</small>
                   )}
-                </AccountMainText>
-              </AccountMainText>
+                </AccountText>
+              </AccountText>
             </Column>
           </ModalButton>
           <Row width="100%" marginTop="1rem" gap="1rem">
             {showNetworkButton && (
               <AccountModalButton
-                backgroundColor={theme?.account?.button?.switchNetwork?.background?.background}
-                color={theme?.connection?.button?.font?.color}
+                type="switchNetwork"
                 id={`${ModalId.ACCOUNT}__network-button`}
                 connected={false}
                 padding="0.6rem"
@@ -134,8 +151,7 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
               </AccountModalButton>
             )}
             <AccountModalButton
-              backgroundColor={theme?.account?.button?.disconnect?.background?.background}
-              color={theme?.connection?.button?.font?.color}
+              type="disconnect"
               id={`${ModalId.ACCOUNT}__disconnect-button`}
               connected={false}
               padding="0.6rem"
@@ -170,21 +186,28 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
         padding="1em"
         backgroundColor={theme?.connection?.button?.background?.background}
       >
-        <Row justifyContent="space-between" title={userConnectionInfo.address}>
-          <AccountAddressText onClick={() => onCopy(userConnectionInfo?.address || '')} style={{ cursor: 'pointer' }}>
+        <Row
+          justifyContent="flex-start"
+          gap="10px"
+          style={{ cursor: 'pointer', zIndex: 1 }}
+          title={userConnectionInfo.address}
+          onClick={() => onCopy(userConnectionInfo?.address || '')}
+        >
+          <AccountText type="address">
             {userConnectionInfo.address
               ? truncateAddress(userConnectionInfo.address, { type: 'long' })
               : 'Disconnected'}
-          </AccountAddressText>
+          </AccountText>
+          {theme?.account?.icons?.copy && <Icon src={theme?.account?.icons?.copy?.url} />}
         </Row>
         <Row>
-          <AccountBalanceText>Balance:</AccountBalanceText>
-          <AccountBalanceText title={userConnectionInfo.balance.data?.formatted || '0'} marginLeft={'5px'}>
+          <AccountText type="balance">Balance:</AccountText>
+          <AccountText type="balance" title={userConnectionInfo.balance.data?.formatted || '0'} marginLeft={'5px'}>
             {Number(userConnectionInfo.balance.data?.formatted || 0).toLocaleString([], {
               maximumSignificantDigits: 4
             })}{' '}
             {userConnectionInfo.balance.data?.symbol || 'N/A'}
-          </AccountBalanceText>
+          </AccountText>
         </Row>
         <FooterActionButtonsRow
           marginTop={'1rem'}
@@ -193,19 +216,19 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
           style={{ zIndex: errorOptions?.show ? 0 : 1 }}
         >
           <AccountModalButton
-            backgroundColor={theme?.account?.button?.copy?.background?.background}
-            color={theme?.connection?.button?.font?.color}
+            type="copy"
             id={`${ModalId.ACCOUNT}__copy-button`}
             connected={isCopied}
+            padding="0.6rem"
             onClick={() => onCopy(userConnectionInfo?.address || '')}
           >
             {isCopied ? 'Copied!' : `Copy ${isSmallerScreen ? '' : 'Address'}`}
           </AccountModalButton>
           <AccountModalButton
-            backgroundColor={theme?.account?.button?.explorer?.background?.background}
-            color={theme?.connection?.button?.font?.color}
+            type="explorer"
             id={`${ModalId.ACCOUNT}__explorer-button`}
             connected={false}
+            padding="0.6rem"
             onClick={() => onExplorer()}
           >
             {`${isSmallerScreen ? '' : 'View on '}Explorer`}
