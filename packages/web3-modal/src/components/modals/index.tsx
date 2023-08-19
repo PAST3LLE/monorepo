@@ -32,7 +32,7 @@ export function ModalWithoutThemeProvider(baseProps: BaseModalProps) {
         }
         const augmentedBaseProps: BaseModalProps = {
           ...baseProps,
-          title: 'ACCOUNT',
+          title: baseProps?.headers?.account || 'ACCOUNT',
           width: '650px',
           maxWidth: 'unset',
           minHeight: 'unset',
@@ -48,8 +48,8 @@ export function ModalWithoutThemeProvider(baseProps: BaseModalProps) {
       case 'SelectNetwork': {
         const augmentedBaseProps: BaseModalProps = {
           ...baseProps,
-          title: 'NETWORK',
-          width: '450px',
+          title: baseProps?.headers?.networks || 'NETWORK',
+          width: '650px',
           maxWidth: '80vw',
           minHeight: '350px',
           maxHeight: '80vh',
@@ -69,6 +69,7 @@ export function ModalWithoutThemeProvider(baseProps: BaseModalProps) {
         }
         const augmentedBaseProps = {
           ...baseProps,
+          title: baseProps?.headers?.wallets || baseProps?.title || 'CONNECT',
           width: baseProps.width || props?.walletsView === 'grid' ? '650px' : '50vh',
           maxWidth: baseProps.maxWidth || props?.walletsView === 'grid' ? '100%' : '360px',
           maxHeight: baseProps.maxHeight || props?.walletsView === 'grid' ? '500px' : '600px',

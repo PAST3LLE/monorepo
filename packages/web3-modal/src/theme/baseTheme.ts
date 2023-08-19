@@ -79,23 +79,23 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
               lineHeight: 1,
               textAlign: 'center'
             }
-          }
-        },
-        connection: {
-          ...DEFAULT_BASE_MODAL_PROPS,
+          },
           helpers: {
             show: true,
             color: BASE_TEXT_COLOUR
           },
           closeIcon: {
             color: BASE_TEXT_COLOUR,
-            size: '2.5em'
+            size: 40
           },
           background: {
             background: '#2a7f70',
             backgroundImg: 'unset'
           },
-          padding: '1em',
+          padding: '1em'
+        },
+        connection: {
+          ...DEFAULT_BASE_MODAL_PROPS,
           button: DEFAULT_BUTTON_PROPS
         },
         account: {

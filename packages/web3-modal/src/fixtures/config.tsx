@@ -2,9 +2,6 @@ import React from 'react'
 
 import { PstlWeb3ModalProps } from '../providers'
 import { createTheme } from '../theme'
-import CopySVG from './assets/copy.svg'
-import NetworkSVG from './assets/network.svg'
-import WalletSVG from './assets/wallet.svg'
 import { chains } from './chains'
 
 const BG_LOGO = 'https://ik.imagekit.io/pastelle/SKILLFORGE/forge-background.png'
@@ -33,14 +30,14 @@ export const pstlModalTheme = createTheme({
             color: 'black',
             weight: 900
           }
+        },
+        background: {
+          backgroundImg: 'unset',
+          background: 'indianred'
         }
       },
       connection: {
         filter: 'invert(1) brightness(0.65) contrast(1.8) hue-rotate(247deg) saturate(2)',
-        background: {
-          backgroundImg: 'unset',
-          background: 'indianred'
-        },
         button: {
           background: {
             background: 'rgba(0,0,0,0.75)',
@@ -62,13 +59,13 @@ export const pstlModalTheme = createTheme({
             color: 'pink',
             weight: 900
           }
-        }
-      },
-      connection: {
+        },
         background: {
           backgroundImg: 'unset',
           background: '#818ccaf2'
-        },
+        }
+      },
+      connection: {
         button: {
           background: {
             backgroundImg: 'unset',
@@ -90,6 +87,9 @@ export const pstlModalTheme = createTheme({
           family: "'Roboto Flex', 'Inter', sans-serif, system-ui",
           letterSpacing: '0px'
         },
+        closeIcon: {
+          size: 40
+        },
         title: {
           font: {
             color: '#cbb9ee',
@@ -99,14 +99,14 @@ export const pstlModalTheme = createTheme({
             lineHeight: 0.82,
             textAlign: 'center'
           }
-        }
-      },
-      connection: {
-        baseFontSize: 16,
-        helpers: { show: true },
+        },
         background: {
           backgroundImg: BG_LOGO
         },
+        helpers: { show: true }
+      },
+      connection: {
+        baseFontSize: 16,
         button: {
           background: BASE_BUTTON_BACKGROUND,
           icons: {
@@ -127,9 +127,9 @@ export const pstlModalTheme = createTheme({
       },
       account: {
         icons: {
-          copy: { url: CopySVG, invert: true },
-          network: { url: NetworkSVG, invert: true },
-          wallet: { url: WalletSVG, invert: true }
+          copy: { url: 'https://img.icons8.com/?size=512&id=PoI08DwSsc7G&format=png', invert: false },
+          network: { url: 'https://img.icons8.com/?size=512&id=PrryJ8KTxcOv&format=png', invert: false },
+          wallet: { url: 'https://img.icons8.com/?size=512&id=O7exVeEFSVr3&format=png', invert: false }
         },
         text: {
           address: {},
@@ -259,7 +259,11 @@ const DEFAULT_PROPS: PstlWeb3ModalProps = {
   },
   modals: {
     root: {
-      title: 'PAST3LLE W3M',
+      headers: {
+        wallets: 'Select wallet',
+        account: 'Your account',
+        networks: 'Select network'
+      },
       themeConfig: { theme: pstlModalTheme },
       closeModalOnConnect: false,
       hideInjectedFromRoot: true,

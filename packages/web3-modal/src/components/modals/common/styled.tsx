@@ -76,8 +76,9 @@ export const ModalTitleText = styled(Text.Main).attrs((props) => ({
 export const ModalTitle = styled(ModalTitleText)`
   &&&&& {
     text-align: ${({ theme }) => theme.modals?.base?.title?.font?.textAlign};
-    width: 100%;
-    max-width: 92%;
+    flex: 1;
+
+    margin-left: ${({ theme }) => theme?.modals?.base?.closeIcon?.size}px;
 
     ${upToSmall`
       text-align: center;
@@ -101,23 +102,24 @@ export const InnerContainer = styled(ColumnCenter)<{ isError?: boolean }>`
   -ms-overflow-style: none;
   scrollbar-width: none;
 
-  padding: ${({ theme: { modals } }) => modals?.connection?.padding};
+  padding: ${({ theme: { modals } }) => modals?.base?.padding};
 
   ${({ isError }) => isError && `padding-bottom: ${ERROR_CONTAINER_HEIGHT_PX}px;`}
 
   overflow-y: auto;
 
   ${CloseIcon} {
-    color: ${({ theme }) => theme?.modals?.connection?.closeIcon?.color};
-    width: ${({ theme }) => theme?.modals?.connection?.closeIcon?.size};
+    color: ${({ theme }) => theme?.modals?.base?.closeIcon?.color};
+    flex: 0 1 ${({ theme }) => theme?.modals?.base?.closeIcon?.size}px;
+    height: ${({ theme }) => theme?.modals?.base?.closeIcon?.size}px;
   }
 
   border-radius: ${({ theme: { modals } }) => modals?.connection?.button?.border?.radius};
 
   ${({ theme }) =>
     setBackgroundOrDefault(theme, {
-      bgValue: theme?.modals?.connection?.background?.backgroundImg,
-      defaultValue: theme?.modals?.connection?.background?.background as string
+      bgValue: theme?.modals?.base?.background?.backgroundImg,
+      defaultValue: theme?.modals?.base?.background?.background as string
     })};
 `
 

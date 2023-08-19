@@ -35,24 +35,27 @@ export interface PstlModalTheme {
       filter?: string
       baseFontSize?: number
       font?: FontStyles
-
       title?: {
         font?: FontStyles
       }
-    }
-    connection?: {
-      filter?: string
-      baseFontSize?: number
       helpers?: {
         show?: boolean
         color?: string
       }
       closeIcon?: {
         color?: string
-        size?: string
+        /**
+         * Size of icon in pixels
+         * @type number
+         */
+        size?: number
       }
       background?: BackgroundStyles
       padding?: string
+    }
+    connection?: {
+      filter?: string
+      baseFontSize?: number
       button?: {
         font?: FontStyles
         background?: BackgroundStyles & {

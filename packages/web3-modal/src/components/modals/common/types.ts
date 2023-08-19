@@ -12,6 +12,12 @@ export enum ModalId {
   ACCOUNT = 'pstl-w3modal-account'
 }
 
+interface ModalHeaders {
+  account?: string
+  networks?: string
+  wallets?: string
+}
+
 /**
  * @name ThemeConfigProps
  * @description PSTL modal theme configuration
@@ -27,7 +33,17 @@ export interface ThemeConfigProps<
 }
 export type BaseModalProps = Omit<ModalProps, 'isLargeImageModal'> &
   WithChainIdFromUrl & {
+    /**
+     * @name title
+     * @description Main title of modal. Wallet selection screen.
+     * To be removed in v2. @see ModalHeaders
+     */
     title?: string
+    /**
+     * @name ModalHeaders
+     * @description Modal headers object key: Modal type, value: name
+     */
+    headers?: ModalHeaders
     /**
      * @name themeConfig
      * @description Optional. PSTL modal theme configuration. See {@link ThemeConfigProps}. 
