@@ -9,6 +9,7 @@ export const pstlModalTheme = createTheme({
   DEFAULT: {
     modals: {
       base: {
+        baseFontSize: 16,
         title: {
           font: {
             color: '#cbb9ee',
@@ -17,17 +18,16 @@ export const pstlModalTheme = createTheme({
             lineHeight: 0.82,
             textAlign: 'left'
           }
-        }
-      },
-      connection: {
+        },
         background: {
           backgroundImg: ASSETS_MAP.images.background.app
         },
-        baseFontSize: 20,
         helpers: { show: true },
         closeIcon: {
-          size: '40px'
-        },
+          size: 40
+        }
+      },
+      connection: {
         button: {
           background: {
             background: '#301d4ea1',
