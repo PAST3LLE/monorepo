@@ -57,9 +57,9 @@ export const AccountBottomColumnContainer = styled(Column)`
 export const AccountLogosRow = styled(Row)<{ backgroundFrameColor?: string }>`
   width: 100%;
   > img {
-    width: 50px;
+    width: ${({ theme }) => theme.modals?.account?.connectionImages?.size};
     padding: 1rem;
-    background-color: ${({ backgroundFrameColor = 'rgba(0,0,0,0.5)' }) => backgroundFrameColor};
+    background-color: ${({ theme }) => theme.modals?.account?.connectionImages?.background?.background};
   }
   > img:first-child {
     margin-left: auto;

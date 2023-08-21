@@ -195,7 +195,7 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
           >
             <Column width={'100%'} gap="0.3rem">
               <AccountText type="main" display="inline-flex" alignItems="center" width="auto">
-                {theme?.account?.icons?.wallet && <Icon src={theme?.account?.icons?.wallet?.url} />}
+                {theme?.account?.icons?.wallet?.url && <Icon src={theme?.account?.icons?.wallet?.url} />}
                 Wallet:{' '}
                 <AccountText
                   type="main"

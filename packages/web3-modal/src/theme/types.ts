@@ -89,6 +89,12 @@ export interface PstlModalTheme {
           border?: BorderStyles
         }
       }
+      connectionImages?: {
+        size?: string
+        background?: {
+          background?: string
+        }
+      }
       icons?: {
         wallet?: { url: string; invert?: boolean }
         network?: { url: string; invert?: boolean }

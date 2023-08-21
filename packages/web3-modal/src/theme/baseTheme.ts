@@ -118,6 +118,12 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
               }
             }
           },
+          connectionImages: {
+            size: '3.5em',
+            background: {
+              background: 'rgba(0,0,0,0.5)'
+            }
+          },
           text: {
             main: {
               font: {
