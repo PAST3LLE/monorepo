@@ -122,7 +122,7 @@ export const pstlModalTheme = createTheme({
         baseFontSize: 16,
         button: {
           background: BASE_BUTTON_BACKGROUND,
-          height: '110px',
+          height: '80px',
           icons: {
             height: '80%'
           },
@@ -235,11 +235,7 @@ export const COMMON_CONNECTOR_OVERRIDES = {
     customName: 'LEDGER HID',
     logo: 'https://crypto-central.io/library/uploads/Ledger-Logo-3.png',
     rank: 10,
-    isRecommended: true,
-    infoText: {
-      title: 'What is Ledger HID?',
-      content: <strong>Ledger wallet is a cold storage hardware wallet.</strong>
-    }
+    isRecommended: true
   },
   coinbasewallet: {
     customName: 'Coinbase Wallet',

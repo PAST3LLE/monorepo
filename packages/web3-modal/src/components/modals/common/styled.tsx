@@ -200,9 +200,9 @@ export const WalletsWrapper = styled.div<{
 
   // Container
   > div {
-    height: ${(props) => props.theme?.modals?.connection?.button?.height};
+    height: auto;
     > ${ModalButton} {
-      height: 100%;
+      height: ${(props) => props.theme?.modals?.connection?.button?.height};
       > img {
         height: ${({ theme }) => theme.modals?.connection?.button?.icons?.height};
         max-height: 80%;
@@ -214,18 +214,12 @@ export const WalletsWrapper = styled.div<{
     }
   }
 
-  ${({ view, theme }) =>
+  ${({ view }) =>
     view === 'list' &&
     `
-      > div {
-        height: ${theme?.modals?.connection?.button?.height};
-        > ${ModalButton} {
-          height: 100%;
-          > img {
-            height: 100%;
-            max-height: 100%;
-          }
-        }
+      > div > ${ModalButton} > img {
+        height: 100%;
+        max-height: 100%;
       }
   `}
 
