@@ -214,11 +214,13 @@ export const WalletsWrapper = styled.div<{
     }
   }
 
-  ${({ view }) =>
+  ${({ view, theme }) =>
     view === 'list' &&
     `
       > div {
+        height: ${theme?.modals?.connection?.button?.height};
         > ${ModalButton} {
+          height: 100%;
           > img {
             height: 100%;
             max-height: 100%;

@@ -101,7 +101,7 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
           ...DEFAULT_BASE_MODAL_PROPS,
           button: {
             ...DEFAULT_BUTTON_PROPS,
-            height: 'auto'
+            height: '90px'
           }
         },
         account: {
