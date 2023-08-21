@@ -82,7 +82,7 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
           },
           helpers: {
             show: true,
-            color: BASE_TEXT_COLOUR
+            font: { color: BASE_TEXT_COLOUR, size: '0.55em' }
           },
           closeIcon: {
             color: BASE_TEXT_COLOUR,

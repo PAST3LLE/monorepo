@@ -46,7 +46,7 @@ export interface PstlModalTheme {
       }
       helpers?: {
         show?: boolean
-        color?: string
+        font?: Pick<FontStyles, 'color' | 'size'>
       }
       closeIcon?: {
         color?: string

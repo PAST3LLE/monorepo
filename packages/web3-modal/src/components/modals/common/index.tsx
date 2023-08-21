@@ -1,6 +1,5 @@
 import { CloseIcon, Row } from '@past3lle/components'
 import React from 'react'
-import { useTheme } from 'styled-components'
 
 import { Z_INDICES } from '../../../constants'
 import { usePstlWeb3ModalState } from '../../../hooks'
@@ -19,8 +18,6 @@ export function BaseModal({
   children,
   ...restModalProps
 }: BaseModalProps) {
-  const theme = useTheme()
-
   const { modalProps, updateModalProps } = usePstlWeb3ModalState()
 
   const [showError, hideError] = useAutoClearingTimeout(!!modalProps.connect?.error?.message, 7000, () =>
@@ -53,9 +50,7 @@ export function BaseModal({
         {children}
         <ErrorMessageContainer hide={!showError || !modalProps.connect?.error?.message}>
           <p>ERROR!</p>
-          <p style={{ color: theme?.modals?.base?.helpers?.color, fontSize: '0.75em' }}>
-            {modalProps.connect?.error?.message}
-          </p>
+          <p style={{ color: 'ghostwhite', fontSize: '0.75em' }}>{modalProps.connect?.error?.message}</p>
           <span
             onClick={hideError}
             style={{ position: 'absolute', color: 'ghostwhite', cursor: 'pointer', top: '0.75em', right: '0.75em' }}

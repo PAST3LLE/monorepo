@@ -227,7 +227,7 @@ export const WalletsWrapper = styled.div<{
       }
   `}
 
-  ${({ view, theme }) =>
+  ${({ view }) =>
     view === 'grid' &&
     `
     grid-template-columns: repeat(3, 1fr);
@@ -248,16 +248,11 @@ export const WalletsWrapper = styled.div<{
           height: min-content;
           right: 0.5rem;
         }
-
-        > img {
-          height: 100%;
-          max-height: ${theme.modals?.connection?.button?.icons?.height};
-        }
       }
     }
   `}
 
-  ${({ view, theme }) =>
+  ${({ view }) =>
     view === 'grid' &&
     upToSmall`
       > div {
@@ -270,7 +265,7 @@ export const WalletsWrapper = styled.div<{
           }
 
           > img {
-            max-height: ${theme.modals?.connection?.button?.icons?.height};
+            max-height: 65%;
           }
         }
       }
