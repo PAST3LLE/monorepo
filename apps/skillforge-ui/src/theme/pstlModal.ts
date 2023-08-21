@@ -45,6 +45,11 @@ export const pstlModalTheme = createTheme({
           border: { border: 'none', radius: '1em' },
           hoverAnimations: true
         }
+      },
+      account: {
+        connectionImages: {
+          size: '5.5em'
+        }
       }
     }
   }
