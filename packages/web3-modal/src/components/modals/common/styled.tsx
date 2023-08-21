@@ -49,7 +49,7 @@ export const ModalButton = styled(Button)<{ connected: boolean }>`
       !!theme?.modals?.connection?.button?.hoverAnimations &&
       `
     transform: scale(1.05);
-    filter: saturate(2);
+    filter: saturate(1.2);
   `}
   }
 
@@ -58,8 +58,12 @@ export const ModalButton = styled(Button)<{ connected: boolean }>`
     `
       background: ${theme?.modals?.connection?.button?.background?.connected};
       transform: scale(1.05);
-      filter: saturate(2);
+      filter: saturate(1.2);
   `}
+
+  > img {
+    border-radius: 50%;
+  }
 `
 
 export const ModalTitleText = styled(Text.Main).attrs((props) => ({

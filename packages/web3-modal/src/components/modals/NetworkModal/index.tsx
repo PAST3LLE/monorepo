@@ -37,9 +37,6 @@ function NetworkModalContent() {
               connector={connector as ConnectorEnhanced<any, any>}
               label={chain.name}
               logo={chainLogo || undefined}
-              buttonProps={{
-                fontSize: '0.5em !important'
-              }}
             />
           )
         })}

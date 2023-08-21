@@ -83,8 +83,8 @@ export const AccountWalletNetworkRow = styled(Row)`
     cursor: pointer;
     > ${Column} {
       > ${AccountText} {
-        font-weight: 200;
-        font-variation-settings: 'wght' 200;
+        font-weight: 300;
+        font-variation-settings: 'wght' 300;
       }
     }
   }
