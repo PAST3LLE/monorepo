@@ -79,20 +79,27 @@ export const AccountLogosRow = styled(Row)<{ backgroundFrameColor?: string }>`
 
 export const AccountWalletNetworkRow = styled(Row)`
   z-index: 1;
-  > ${Row}#${ModalId.ACCOUNT}__wallets-button {
+  ${Row}#${ModalId.ACCOUNT}__wallets-button {
     cursor: pointer;
+    > ${Column} {
+      > ${AccountText} {
+        font-weight: 200;
+        font-variation-settings: 'wght' 200;
+      }
+    }
   }
   #${ModalId.ACCOUNT}__network-disconnect-buttons {
+    gap: 10px;
     > ${AccountModalButton} {
       min-width: max-content;
     }
   }
   cursor: pointer;
   ${upToExtraSmall`
-    > ${Column} > ${Row} {
+    > ${Column} > ${Row}#${ModalId.ACCOUNT}__network-disconnect-buttons {
       flex-flow: row wrap;
       ${AccountModalButton} {
-        min-width: 170px;
+        min-width: 180px;
         flex: 1;
       }
     }
@@ -164,13 +171,9 @@ export const AccountColumnContainer = styled(Column)`
   `}
 
   ${({ theme }) => upToExtraSmall`
-    > ${Column} {
-      > ${Row} {
-        // Address text
-        > ${AccountText} {
-          font-size: calc(${theme.modals?.account?.text?.address?.font?.size} * 0.8);
-        }
-      }
+    // Address text
+    ${AccountText}#pstl-web3-modal-address-text, ${AccountText}#pstl-web3-modal-wallet-text, ${AccountText}#pstl-web3-modal-network-text {
+      font-size: calc(${theme.modals?.account?.text?.address?.font?.size} * 0.8);
     }
   `}
 

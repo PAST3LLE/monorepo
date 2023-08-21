@@ -125,7 +125,7 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
             title={userConnectionInfo.address}
             onClick={() => onCopy(userConnectionInfo?.address || '')}
           >
-            <AccountText type="address">
+            <AccountText id="pstl-web3-modal-address-text" type="address">
               {userConnectionInfo.address
                 ? isCopied
                   ? 'Copied!'
@@ -194,12 +194,19 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
             onClick={() => modalCallbacks.open({ route: 'ConnectWallet' })}
           >
             <Column width={'100%'} gap="0.3rem">
-              <AccountText type="main" display="inline-flex" alignItems="center" width="auto">
+              <AccountText
+                id="pstl-web3-modal-wallet-text"
+                type="main"
+                display="inline-flex"
+                alignItems="center"
+                width="auto"
+              >
                 {theme?.account?.icons?.wallet?.url && <Icon src={theme?.account?.icons?.wallet?.url} />}
                 Wallet:{' '}
                 <AccountText
                   type="main"
                   fontSize="inherit"
+                  fontWeight={700}
                   display={'inline-flex'}
                   alignItems="center"
                   padding={0}
@@ -209,7 +216,13 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
                     userConnectionInfo.connector?.name}
                 </AccountText>
               </AccountText>
-              <AccountText type="main" display="inline-flex" alignItems="center" width="auto">
+              <AccountText
+                id="pstl-web3-modal-wallet-text"
+                type="main"
+                display="inline-flex"
+                alignItems="center"
+                width="auto"
+              >
                 {theme?.account?.icons?.network?.url && <Icon src={theme?.account?.icons?.network?.url} />}
                 Network:{' '}
                 <AccountText
