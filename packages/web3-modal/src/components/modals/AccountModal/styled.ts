@@ -28,6 +28,10 @@ export const AccountModalButton = styled(ModalButton).attrs((props) => ({
   font-weight: ${({ theme, type }) => theme?.modals?.account?.button?.[type]?.font?.weight};
   font-variation-settings: 'wght' ${({ theme, type }) => theme?.modals?.account?.button?.[type]?.font?.weight};
 
+  text-transform: ${({ theme, type }) => theme?.modals?.account?.button?.[type]?.font?.textTransform};
+  text-shadow: ${({ theme, type }) => theme?.modals?.account?.button?.[type]?.font?.textShadow};
+  text-align: ${({ theme, type }) => theme?.modals?.account?.button?.[type]?.font?.textAlign};
+
   border: ${({ theme, type }) => theme?.modals?.account?.button?.[type]?.border?.border};
 `
 export const FooterActionButtonsRow = styled(Row)`
@@ -44,6 +48,10 @@ export const AccountText = styled(ModalTitleText)<{
   font-weight: ${({ theme, type }) => theme?.modals?.account?.text?.[type]?.font?.weight};
   letter-spacing: ${({ theme, type }) => theme?.modals?.account?.text?.[type]?.font?.letterSpacing};
   font-variation-settings: 'wght' ${({ theme, type }) => theme?.modals?.account?.text?.[type]?.font?.weight};
+
+  text-transform: ${({ theme, type }) => theme?.modals?.account?.text?.[type]?.font?.textTransform};
+  text-shadow: ${({ theme, type }) => theme?.modals?.account?.text?.[type]?.font?.textShadow};
+  text-align: ${({ theme, type }) => theme?.modals?.account?.text?.[type]?.font?.textAlign};
 `
 
 export const AccountBottomColumnContainer = styled(Column)`

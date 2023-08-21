@@ -109,9 +109,13 @@ export const InnerContainer = styled(ColumnCenter)<{ isError?: boolean }>`
   overflow-y: auto;
 
   ${CloseIcon} {
+    padding: 5px;
+    border-radius: 50%;
+    background-color: ${(props) => props.theme?.modals?.base?.closeIcon?.background?.background};
+
     color: ${({ theme }) => theme?.modals?.base?.closeIcon?.color};
-    flex: 0 1 ${({ theme }) => theme?.modals?.base?.closeIcon?.size}px;
-    height: ${({ theme }) => theme?.modals?.base?.closeIcon?.size}px;
+    flex: 0 1 ${({ theme }) => (theme?.modals?.base?.closeIcon?.size as number) - 5}px;
+    height: ${({ theme }) => (theme?.modals?.base?.closeIcon?.size as number) - 5}px;
   }
 
   border-radius: ${({ theme: { modals } }) => modals?.connection?.button?.border?.radius};
@@ -196,10 +200,12 @@ export const WalletsWrapper = styled.div<{
 
   // Container
   > div {
+    height: ${(props) => props.theme?.modals?.connection?.button?.height};
     > ${ModalButton} {
+      height: 100%;
       > img {
-        height: 100%;
-        max-height: ${({ theme }) => theme.modals?.connection?.button?.icons?.maxHeight || '50px'};
+        height: ${({ theme }) => theme.modals?.connection?.button?.icons?.height};
+        max-height: 80%;
 
         ${upToExtraSmall`
           max-height: 100%;
@@ -245,7 +251,7 @@ export const WalletsWrapper = styled.div<{
 
         > img {
           height: 100%;
-          max-height: ${theme.modals?.connection?.button?.icons?.maxHeight || '64%'};
+          max-height: ${theme.modals?.connection?.button?.icons?.height};
         }
       }
     }
@@ -264,7 +270,7 @@ export const WalletsWrapper = styled.div<{
           }
 
           > img {
-            max-height: ${theme.modals?.connection?.button?.icons?.maxHeight || '64%'};
+            max-height: ${theme.modals?.connection?.button?.icons?.height};
           }
         }
       }

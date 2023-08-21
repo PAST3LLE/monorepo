@@ -55,6 +55,7 @@ export interface PstlModalTheme {
          * @type number
          */
         size?: number
+        background?: Omit<BackgroundStyles, 'backgroundImg'>
       }
       background?: BackgroundStyles
       padding?: string
@@ -67,10 +68,10 @@ export interface PstlModalTheme {
         background?: BackgroundStyles & {
           connected?: string
         }
+        height?: string
         icons?: {
           filter?: string
           height?: string
-          maxHeight?: string
         }
         border?: BorderStyles
         hoverAnimations?: boolean

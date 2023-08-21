@@ -39,8 +39,7 @@ const DEFAULT_BUTTON_PROPS = {
     color: 'inherit'
   },
   icons: {
-    height: '100%',
-    maxHeight: '64%',
+    height: '70%',
     filter: 'none'
   },
   hoverAnimations: true
@@ -87,7 +86,10 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
           },
           closeIcon: {
             color: BASE_TEXT_COLOUR,
-            size: 40
+            size: 40,
+            background: {
+              background: 'transparent'
+            }
           },
           background: {
             background: '#2a7f70',
@@ -97,7 +99,10 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
         },
         connection: {
           ...DEFAULT_BASE_MODAL_PROPS,
-          button: DEFAULT_BUTTON_PROPS
+          button: {
+            ...DEFAULT_BUTTON_PROPS,
+            height: 'auto'
+          }
         },
         account: {
           ...DEFAULT_BASE_MODAL_PROPS,

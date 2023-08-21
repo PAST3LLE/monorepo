@@ -21,6 +21,15 @@ const BASE_BUTTON_BACKGROUND = {
   background: '#301d4ea1',
   connected: '#37b9927d'
 }
+const ACCOUNT_BUTTON = {
+  font: {
+    textTransform: 'inherit'
+  },
+  background: {
+    ...BASE_BUTTON_BACKGROUND,
+    background: '#5a3e85a1'
+  }
+}
 export const pstlModalTheme = createTheme({
   DARK: {
     modals: {
@@ -88,7 +97,11 @@ export const pstlModalTheme = createTheme({
           letterSpacing: '0px'
         },
         closeIcon: {
-          size: 40
+          size: 45,
+          color: 'ghostwhite',
+          background: {
+            background: 'rgba(255,255,255,0.1)'
+          }
         },
         title: {
           font: {
@@ -109,8 +122,9 @@ export const pstlModalTheme = createTheme({
         baseFontSize: 16,
         button: {
           background: BASE_BUTTON_BACKGROUND,
+          height: '110px',
           icons: {
-            maxHeight: '65%'
+            height: '80%'
           },
           border: { border: 'none', radius: '1em' },
           font: {
@@ -143,28 +157,23 @@ export const pstlModalTheme = createTheme({
         },
         button: {
           disconnect: {
+            font: ACCOUNT_BUTTON.font,
             background: {
               ...BASE_BUTTON_BACKGROUND,
               background: 'indianred'
             }
           },
           switchNetwork: {
-            background: {
-              ...BASE_BUTTON_BACKGROUND,
-              background: '#5a3e85a1'
-            }
+            font: ACCOUNT_BUTTON.font,
+            background: ACCOUNT_BUTTON.background
           },
           explorer: {
-            background: {
-              ...BASE_BUTTON_BACKGROUND,
-              background: '#5a3e85a1'
-            }
+            font: ACCOUNT_BUTTON.font,
+            background: ACCOUNT_BUTTON.background
           },
           copy: {
-            background: {
-              ...BASE_BUTTON_BACKGROUND,
-              background: '#5a3e85a1'
-            }
+            font: ACCOUNT_BUTTON.font,
+            background: ACCOUNT_BUTTON.background
           }
         }
       }
