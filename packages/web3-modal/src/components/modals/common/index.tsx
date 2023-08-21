@@ -53,7 +53,7 @@ export function BaseModal({
         {children}
         <ErrorMessageContainer hide={!showError || !modalProps.connect?.error?.message}>
           <p>ERROR!</p>
-          <p style={{ color: theme?.modals?.connection?.helpers?.color, fontSize: '0.75em' }}>
+          <p style={{ color: theme?.modals?.base?.helpers?.color, fontSize: '0.75em' }}>
             {modalProps.connect?.error?.message}
           </p>
           <span

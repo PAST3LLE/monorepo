@@ -115,7 +115,7 @@ export const pstlModalTheme = createTheme({
           border: { border: 'none', radius: '1em' },
           font: {
             color: 'ghostwhite',
-            size: '0.75em',
+            size: '1em',
             style: 'normal',
             weight: 200,
             letterSpacing: '-1px',
@@ -126,6 +126,7 @@ export const pstlModalTheme = createTheme({
         }
       },
       account: {
+        container: {},
         icons: {
           copy: { url: 'https://img.icons8.com/?size=512&id=PoI08DwSsc7G&format=png', invert: false },
           network: { url: 'https://img.icons8.com/?size=512&id=PrryJ8KTxcOv&format=png', invert: false },
@@ -134,13 +135,23 @@ export const pstlModalTheme = createTheme({
         text: {
           address: {},
           balance: {},
-          main: {}
+          main: {
+            font: {
+              weight: 500
+            }
+          }
         },
         button: {
           disconnect: {
             background: {
               ...BASE_BUTTON_BACKGROUND,
               background: 'indianred'
+            }
+          },
+          switchNetwork: {
+            background: {
+              ...BASE_BUTTON_BACKGROUND,
+              background: '#5a3e85a1'
             }
           },
           explorer: {
@@ -150,12 +161,6 @@ export const pstlModalTheme = createTheme({
             }
           },
           copy: {
-            background: {
-              ...BASE_BUTTON_BACKGROUND,
-              background: '#5a3e85a1'
-            }
-          },
-          switchNetwork: {
             background: {
               ...BASE_BUTTON_BACKGROUND,
               background: '#5a3e85a1'

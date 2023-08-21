@@ -10,13 +10,14 @@ import { useConnectDisconnect, usePstlWeb3Modal, useUserConnectionInfo } from '.
 import { PstlModalTheme } from '../../../theme'
 import { ConnectorEnhanced } from '../../../types'
 import { trimAndLowerCase } from '../../../utils'
-import { ModalButton } from '../common/styled'
 import { BaseModalProps, ModalId } from '../common/types'
 import {
-  AccountBottomColumnContainer,
+  AccountBottomColumnContainer as AccountAddressBalanceRow,
   AccountColumnContainer,
+  AccountLogosRow,
   AccountModalButton,
   AccountText,
+  AccountWalletNetworkRow,
   FooterActionButtonsRow,
   Icon
 } from './styled'
@@ -69,7 +70,7 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
     ]
   )
 
-  const [isCopied, onCopy] = useCopyClipboard(3000)
+  const [isCopied, onCopy] = useCopyClipboard(1500)
   const onExplorer = useCallback(() => {
     if (
       typeof globalThis?.window === undefined ||
@@ -85,22 +86,111 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
   const theme = useModalTheme()
 
   return (
-    <AccountColumnContainer width="100%">
-      <Row width="100%">
-        <Column width="100%" maxWidth={400}>
-          <ModalButton
-            id={`${ModalId.ACCOUNT}__wallets-button`}
+    <AccountColumnContainer width="100%" gap="1rem">
+      {/* Logos Row */}
+      <AccountLogosRow id={`${ModalId.ACCOUNT}__provider-network-logos`}>
+        {logo && (
+          <img
+            title={userConnectionInfo?.connector?.name || userConnectionInfo?.connector?.id || 'Unknown provider'}
+            src={logo}
+            style={{
+              marginLeft: 'auto',
+              maxWidth: 110,
+              borderRadius: '5rem',
+              overflow: 'hidden',
+              zIndex: 1
+            }}
+          />
+        )}
+        {chainLogo && (
+          <img
+            src={chainLogo}
+            title={userConnectionInfo?.chain?.name || userConnectionInfo?.chain?.id?.toString() || 'Unknown chain'}
+            style={{ marginLeft: logo ? -27.5 : 'auto', maxWidth: 110, borderRadius: '5rem' }}
+          />
+        )}
+      </AccountLogosRow>
+      {/* Address and Balance Row */}
+      <AccountAddressBalanceRow
+        borderRadius="1rem"
+        padding="1em"
+        backgroundColor={theme?.connection?.button?.background?.background}
+        border={theme?.account?.container.walletAndNetwork.border?.border}
+      >
+        <Column>
+          <Row
+            justifyContent="flex-start"
+            gap="10px"
+            style={{ cursor: 'pointer', zIndex: 1 }}
+            title={userConnectionInfo.address}
+            onClick={() => onCopy(userConnectionInfo?.address || '')}
+          >
+            <AccountText type="address">
+              {userConnectionInfo.address
+                ? isCopied
+                  ? 'Copied!'
+                  : truncateAddress(userConnectionInfo.address, { type: 'long' })
+                : 'Disconnected'}
+            </AccountText>
+            {theme?.account?.icons?.copy && <Icon src={theme?.account?.icons?.copy?.url} />}
+          </Row>
+          <Row id={`${ModalId.ACCOUNT}__balance-text`}>
+            <AccountText type="balance">Balance:</AccountText>
+            <AccountText type="balance" title={userConnectionInfo.balance.data?.formatted || '0'} marginLeft={'5px'}>
+              {Number(userConnectionInfo.balance.data?.formatted || 0).toLocaleString([], {
+                maximumSignificantDigits: 4
+              })}{' '}
+              {userConnectionInfo.balance.data?.symbol || 'N/A'}
+            </AccountText>
+          </Row>
+        </Column>
+        <FooterActionButtonsRow
+          marginTop={'1rem'}
+          justifyContent={'space-evenly'}
+          gap="2rem"
+          style={{ zIndex: errorOptions?.show ? 0 : 1 }}
+        >
+          {/* <AccountModalButton
+            type="copy"
+            id={`${ModalId.ACCOUNT}__copy-button`}
+            connected={isCopied}
+            padding="0.6rem"
+            onClick={() => onCopy(userConnectionInfo?.address || '')}
+          >
+            {isCopied ? 'Copied!' : `Copy ${isSmallerScreen ? '' : 'Address'}`}
+          </AccountModalButton> */}
+          <AccountModalButton
+            type="explorer"
+            id={`${ModalId.ACCOUNT}__explorer-button`}
             connected={false}
+            padding="0.6rem"
+            onClick={() => onExplorer()}
+          >
+            {`${isSmallerScreen ? '' : 'View on '}Explorer`}
+          </AccountModalButton>
+        </FooterActionButtonsRow>
+      </AccountAddressBalanceRow>
+      {/* Wallet & Network Row */}
+      <AccountWalletNetworkRow
+        width="100%"
+        border={theme?.account?.container.addressAndBalance.border?.border}
+        borderRadius={theme?.account?.container.addressAndBalance.border?.radius}
+        padding="1em"
+        backgroundColor={
+          userConnectionInfo.chain?.unsupported
+            ? theme?.account?.container?.addressAndBalance?.background?.unsupported
+            : theme?.connection?.button?.background?.background
+        }
+      >
+        <Column width="100%" maxWidth={400}>
+          {/* Wallet & Network Row */}
+          <Row
+            id={`${ModalId.ACCOUNT}__wallets-button`}
             fontSize="unset"
             height="auto"
             minHeight={82}
             width="100%"
             marginRight="1rem"
-            backgroundColor={
-              userConnectionInfo.chain?.unsupported
-                ? theme?.account?.balanceAndAddressContainer?.background?.unsupported
-                : theme?.connection?.button?.background?.background
-            }
             onClick={() => modalCallbacks.open({ route: 'ConnectWallet' })}
           >
             <Column width={'100%'} gap="0.3rem">
@@ -137,8 +227,9 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
                 </AccountText>
               </AccountText>
             </Column>
-          </ModalButton>
-          <Row width="100%" marginTop="1rem" gap="1rem">
+          </Row>
+          {/* Switch Network & Disconnect Buttons */}
+          <Row id={`${ModalId.ACCOUNT}__network-disconnect-buttons`} width="100%" marginTop="1rem" gap="1rem">
             {showNetworkButton && (
               <AccountModalButton
                 type="switchNetwork"
@@ -161,80 +252,7 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
             </AccountModalButton>
           </Row>
         </Column>
-        <Row width="100%">
-          {logo && (
-            <img
-              title={'Provider image'}
-              src={logo}
-              style={{
-                marginLeft: 'auto',
-                maxWidth: 110,
-                borderRadius: '5rem',
-                overflow: 'hidden',
-                zIndex: 1
-              }}
-            />
-          )}
-          {chainLogo && (
-            <img src={chainLogo} style={{ marginLeft: logo ? -27.5 : 'auto', maxWidth: 110, borderRadius: '5rem' }} />
-          )}
-        </Row>
-      </Row>
-      <br />
-      <AccountBottomColumnContainer
-        borderRadius="1rem"
-        padding="1em"
-        backgroundColor={theme?.connection?.button?.background?.background}
-      >
-        <Row
-          justifyContent="flex-start"
-          gap="10px"
-          style={{ cursor: 'pointer', zIndex: 1 }}
-          title={userConnectionInfo.address}
-          onClick={() => onCopy(userConnectionInfo?.address || '')}
-        >
-          <AccountText type="address">
-            {userConnectionInfo.address
-              ? truncateAddress(userConnectionInfo.address, { type: 'long' })
-              : 'Disconnected'}
-          </AccountText>
-          {theme?.account?.icons?.copy && <Icon src={theme?.account?.icons?.copy?.url} />}
-        </Row>
-        <Row>
-          <AccountText type="balance">Balance:</AccountText>
-          <AccountText type="balance" title={userConnectionInfo.balance.data?.formatted || '0'} marginLeft={'5px'}>
-            {Number(userConnectionInfo.balance.data?.formatted || 0).toLocaleString([], {
-              maximumSignificantDigits: 4
-            })}{' '}
-            {userConnectionInfo.balance.data?.symbol || 'N/A'}
-          </AccountText>
-        </Row>
-        <FooterActionButtonsRow
-          marginTop={'1rem'}
-          justifyContent={'space-evenly'}
-          gap="2rem"
-          style={{ zIndex: errorOptions?.show ? 0 : 1 }}
-        >
-          <AccountModalButton
-            type="copy"
-            id={`${ModalId.ACCOUNT}__copy-button`}
-            connected={isCopied}
-            padding="0.6rem"
-            onClick={() => onCopy(userConnectionInfo?.address || '')}
-          >
-            {isCopied ? 'Copied!' : `Copy ${isSmallerScreen ? '' : 'Address'}`}
-          </AccountModalButton>
-          <AccountModalButton
-            type="explorer"
-            id={`${ModalId.ACCOUNT}__explorer-button`}
-            connected={false}
-            padding="0.6rem"
-            onClick={() => onExplorer()}
-          >
-            {`${isSmallerScreen ? '' : 'View on '}Explorer`}
-          </AccountModalButton>
-        </FooterActionButtonsRow>
-      </AccountBottomColumnContainer>
+      </AccountWalletNetworkRow>
     </AccountColumnContainer>
   )
 }

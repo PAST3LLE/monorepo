@@ -67,7 +67,7 @@ const RenderConnectorOptionsBase =
       }
     )
 
-    const showHelperText = theme?.modals?.connection?.helpers?.show
+    const showHelperText = theme?.modals?.base?.helpers?.show
     const helperContent = (
       connectorDisplayOverrides?.[trimAndLowerCase(connector?.id)] ||
       connectorDisplayOverrides?.[trimAndLowerCase(connector?.name)]

@@ -15,6 +15,11 @@ export interface FontStyles {
   textTransform?: DefaultCSSProps
   textAlign?: 'left' | 'right' | 'center' | DefaultCSSProps
 }
+interface BorderStyles {
+  border?: string
+  color?: string
+  radius?: string
+}
 interface BackgroundStyles {
   background?: string
   backgroundImg?: BackgroundPropertyFull
@@ -26,6 +31,7 @@ interface AccountModalButtons {
     background?: string
     backgroundImg?: BackgroundPropertyFull
   }
+  border?: BorderStyles
 }
 
 export type PstlModalThemeExtension = Partial<ThemeContentPartsRequired> & DeepRequired<PstlModalTheme>
@@ -66,19 +72,22 @@ export interface PstlModalTheme {
           height?: string
           maxHeight?: string
         }
-        border?: {
-          border?: string
-          color?: string
-          radius?: string
-        }
+        border?: BorderStyles
         hoverAnimations?: boolean
       }
     }
     account?: {
       filter?: string
       baseFontSize?: number
-      balanceAndAddressContainer?: {
-        background?: BackgroundStyles & { unsupported?: string }
+      container: {
+        addressAndBalance: {
+          background?: BackgroundStyles & { unsupported?: string }
+          border?: BorderStyles
+        }
+        walletAndNetwork: {
+          background?: BackgroundStyles
+          border?: BorderStyles
+        }
       }
       icons?: {
         wallet?: { url: string; invert?: boolean }

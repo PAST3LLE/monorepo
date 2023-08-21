@@ -35,8 +35,8 @@ const DEFAULT_BUTTON_PROPS = {
   },
   border: {
     border: 'unset',
-    color: 'unset',
-    radius: '1em'
+    radius: '1em',
+    color: 'inherit'
   },
   icons: {
     height: '100%',
@@ -59,7 +59,8 @@ const DEFAULT_ACCOUNT_BUTTON_BACKGROUND_PROPS = {
   background: {
     background: DEFAULT_BUTTON_PROPS.background.connected,
     backgroundImg: DEFAULT_BUTTON_PROPS.background.backgroundImg
-  }
+  },
+  border: DEFAULT_BUTTON_PROPS.border
 } as const
 
 const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
@@ -100,16 +101,29 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
         },
         account: {
           ...DEFAULT_BASE_MODAL_PROPS,
-          balanceAndAddressContainer: {
-            background: {
-              backgroundImg: 'none',
-              background: DEFAULT_BUTTON_PROPS.background.background,
-              unsupported: '#7f1d1db0'
+          container: {
+            addressAndBalance: {
+              border: DEFAULT_BUTTON_PROPS.border,
+              background: {
+                backgroundImg: 'none',
+                background: DEFAULT_BUTTON_PROPS.background.background,
+                unsupported: '#7f1d1db0'
+              }
+            },
+            walletAndNetwork: {
+              border: DEFAULT_BUTTON_PROPS.border,
+              background: {
+                backgroundImg: 'none',
+                background: DEFAULT_BUTTON_PROPS.background.background
+              }
             }
           },
           text: {
             main: {
-              font: DEFAULT_ACCOUNT_BUTTON_FONT_PROPS
+              font: {
+                ...DEFAULT_ACCOUNT_BUTTON_FONT_PROPS,
+                size: '1.2em'
+              }
             },
             balance: {
               font: {
@@ -136,6 +150,7 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
           },
           button: {
             disconnect: {
+              border: DEFAULT_BUTTON_PROPS.border,
               font: DEFAULT_ACCOUNT_BUTTON_FONT_PROPS,
               background: {
                 background: '#7b2727b0',

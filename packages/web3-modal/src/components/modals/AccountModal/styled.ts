@@ -1,13 +1,14 @@
 import { Column, Row } from '@past3lle/components'
-import { upToExtraSmall, upToSmall } from '@past3lle/theme'
+import { fromExtraSmall, upToExtraSmall, upToSmall } from '@past3lle/theme'
 import styled from 'styled-components'
 
 import { PstlModalThemeExtension } from '../../../theme'
 import { ModalButton, ModalTitleText } from '../common/styled'
+import { ModalId } from '../common/types'
 
 export const Icon = styled.img`
   margin-right: 10px;
-  max-width: 20px;
+  max-width: 23px;
   width: 100%;
   filter: ${({ theme }) => (theme?.modals?.account?.icons?.wallet?.invert ? 'invert(1)' : 'none')};
   opacity: 0.8;
@@ -26,8 +27,12 @@ export const AccountModalButton = styled(ModalButton).attrs((props) => ({
   letter-spacing: ${({ theme, type }) => theme?.modals?.account?.button?.[type]?.font?.letterSpacing};
   font-weight: ${({ theme, type }) => theme?.modals?.account?.button?.[type]?.font?.weight};
   font-variation-settings: 'wght' ${({ theme, type }) => theme?.modals?.account?.button?.[type]?.font?.weight};
+
+  border: ${({ theme, type }) => theme?.modals?.account?.button?.[type]?.border?.border};
 `
-export const FooterActionButtonsRow = styled(Row)``
+export const FooterActionButtonsRow = styled(Row)`
+  flex: 1 1 max-content;
+`
 export const AccountText = styled(ModalTitleText)<{
   type: keyof PstlModalThemeExtension['modals']['account']['text']
 }>`
@@ -42,7 +47,48 @@ export const AccountText = styled(ModalTitleText)<{
 `
 
 export const AccountBottomColumnContainer = styled(Column)`
-  background-color: ${({ theme }) => theme?.modals?.account?.balanceAndAddressContainer?.background?.background};
+  background-color: ${({ theme }) => theme?.modals?.account?.container?.addressAndBalance?.background?.background};
+  > ${Column}:first-child {
+    flex: 0 1 68%;
+    min-width: max-content;
+  }
+`
+
+export const AccountLogosRow = styled(Row)<{ backgroundFrameColor?: string }>`
+  width: 100%;
+  > img {
+    width: 50px;
+    padding: 1rem;
+    background-color: ${({ backgroundFrameColor = 'rgba(0,0,0,0.5)' }) => backgroundFrameColor};
+  }
+  > img:first-child {
+    margin-left: auto;
+  }
+  > img:last-child {
+    margin-right: auto;
+  }
+`
+
+export const AccountWalletNetworkRow = styled(Row)`
+  z-index: 1;
+  > ${Row}#${ModalId.ACCOUNT}__wallets-button {
+    cursor: pointer;
+  }
+  #${ModalId.ACCOUNT}__network-disconnect-buttons {
+    > ${AccountModalButton} {
+      min-width: max-content;
+    }
+  }
+  cursor: pointer;
+  ${upToExtraSmall`
+    > ${Column} > ${Row} {
+      flex-flow: row wrap;
+      ${AccountModalButton} {
+        min-width: 170px;
+        flex: 1;
+      }
+    }
+  `}
 `
 
 export const AccountColumnContainer = styled(Column)`
@@ -52,6 +98,10 @@ export const AccountColumnContainer = styled(Column)`
     margin-left: 0.35rem;
     font-variation-settings: 'wght' 100;
     letter-spacing: -0.6px;
+  }
+
+  ${AccountModalButton} {
+    height: 35px;
   }
 
   > ${Row} {
@@ -68,55 +118,93 @@ export const AccountColumnContainer = styled(Column)`
   }
 
   ${upToSmall`
-      > ${Row} {
-        flex-flow: row wrap;
-        // Details column
-        > ${Column} {
-          order: 2;
-          margin: auto;
-        }
-        // Logo row
-        > ${Row} {
-          order: 1;
-          margin-bottom: 1rem;
-          min-width: 150px;
-          > img {
-            width: 17vw;
-            margin: auto;
-          }
-        }
-        > ${ModalButton} {
-            order: 2;
-            margin: 1rem auto 0.5rem auto;
-        } 
-      }
-      > ${Column} {
-        > ${Row} {
-          > ${AccountText} {
-            font-size: 1.1em;
-          }
-        }
-        > ${FooterActionButtonsRow} {
-          flex-flow: column nowrap;
-          gap: 0.5rem 0;
-          width: 100%;
-          > ${AccountModalButton} {
-            height: 50px;
-          }
-        }
-      }
-    `}
-
-  ${upToExtraSmall`
     > ${Row} {
+      flex-flow: row wrap;
+      
+      // Details column
       > ${Column} {
+        order: 2;
+        margin: auto;
         max-width: unset;
       }
+
+      // Logo row
+      > ${Row} {
+        order: 1;
+        margin-bottom: 1rem;
+        min-width: 150px;
+        width: 100%;
+        > img {
+          width: 17vw;
+          margin-left: auto;
+        }
+      }
+
+      > ${ModalButton} {
+          order: 2;
+          margin: 1rem auto 0.5rem auto;
+      } 
     }
+
+    > ${Column} {
+      > ${FooterActionButtonsRow} {
+        flex-flow: column nowrap;
+        gap: 0.5rem 0;
+        width: 100%;
+      }
+    }
+  `}
+
+  ${({ theme }) => upToExtraSmall`
     > ${Column} {
       > ${Row} {
+        // Address text
         > ${AccountText} {
-          font-size: 0.9em;
+          font-size: calc(${theme.modals?.account?.text?.address?.font?.size} * 0.8);
+        }
+      }
+    }
+  `}
+
+  ${fromExtraSmall`
+    ${AccountBottomColumnContainer} {
+      flex-flow: row wrap;
+
+      > #${ModalId.ACCOUNT}__balance-text {
+        order: 2;
+      }
+
+      > ${FooterActionButtonsRow} {
+        margin: 0 0 0 auto;
+        order: 1;
+
+        > ${AccountModalButton}#${ModalId.ACCOUNT}__copy-button {
+          display: none;
+        }
+      }
+    }
+
+    > ${Row} {
+      // network/wallet wrapper
+      > ${Column}:first-child {
+        flex-flow: row nowrap;
+        max-width: unset;
+
+        div#pstl-w3modal-account__wallets-button {
+          background: transparent;
+          padding: 0;
+          height: 100%;
+          > ${Column} {
+            height: 100%;
+            justify-content: space-evenly;
+          }
+        }
+        // Switch/Disconnect buttons
+        > ${Row}:last-child {
+          flex-flow: column nowrap;
+          height: 100%;
+          max-width: 32%;
+          margin-top: 0;
         }
       }
     }
