@@ -12,7 +12,8 @@ module.exports = (webpackConfig) => (
                 Buffer: ["buffer", "Buffer"],
             }),
             new webpack.DefinePlugin({
-                "process.env.IS_COSMOS": JSON.stringify(process.env.IS_COSMOS)
+                "process.env.IS_COSMOS": JSON.stringify(process.env.IS_COSMOS),
+                "process.env.REACT_APP_INFURA_ID": JSON.stringify(process.env.REACT_APP_INFURA_ID)
             }),
         
         ],
