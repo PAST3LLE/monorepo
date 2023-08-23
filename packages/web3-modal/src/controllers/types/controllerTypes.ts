@@ -49,6 +49,11 @@ export interface ModalCtrlState {
 
 interface RootModalState {
   /**
+   * @name softLimitedChains
+   * @description Optional. Cosmetically limited chains.
+   */
+  softLimitedChains?: Chain[]
+  /**
    * @name connectorDisplayOverrides
    * @description Optional. Key value pair overriding connector info. Displays in root modal. See {@link ConnectorOverrides}
    */

@@ -31,7 +31,7 @@ const PstlW3ProvidersBase = <ID extends number>({
   // Get the chainId/network info from the URL, if applicable
   const chainFromUrl = useAutoSwitchToChain(config.chains, config)
   // Setup proxy modals state with user config
-  useHydrateModals(config.modals.root)
+  useHydrateModals(config)
 
   return (
     <>

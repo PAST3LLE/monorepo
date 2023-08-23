@@ -16,6 +16,7 @@ import {
 
 import { ModalPropsCtrl } from '../controllers'
 import { usePstlWeb3Modal } from './usePstlWeb3Modal'
+import { usePstlWeb3ModalState } from './usePstlWeb3ModalState'
 
 type Callbacks = Pick<ReturnType<typeof useDisconnectWagmi>, 'disconnect'> & {
   openWalletConnectModal: ReturnType<typeof useWeb3Modal>['open']
@@ -62,7 +63,10 @@ export function useConnectDisconnect(props?: UseConnectDisconnectProps): {
 export function useUserConnectionInfo() {
   const { address, connector, isConnected, isConnecting, isDisconnected, isReconnecting } = useAccount()
   const { chain, chains } = useNetwork()
-  const balanceInfo = useBalance({
+  const {
+    modalProps: { root }
+  } = usePstlWeb3ModalState()
+  const balance = useBalance({
     address,
     chainId: chain?.id
   })
@@ -78,8 +82,8 @@ export function useUserConnectionInfo() {
     isDisconnected,
     isReconnecting,
     chain,
-    supportedChains: chains,
-    balance: balanceInfo
+    supportedChains: root?.softLimitedChains || chains,
+    balance
   }
 }
 

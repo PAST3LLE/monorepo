@@ -6,16 +6,16 @@ import { useMemo } from 'react'
 import { Chain } from 'viem'
 
 import { PstlWeb3ModalProps, addConnector } from '../providers'
-import { filterChains, getAppType, mapChainsToConnectors } from '../providers/utils/connectors'
+import { getAppType, hardFilterChains, mapChainsToConnectors } from '../providers/utils/connectors'
 import { ConnectorEnhanced } from '../types'
 
 export function useConnectorAndChainConfig(
   configProps: PstlWeb3ModalProps<number>
 ): Omit<PstlWeb3ModalProps<number>, 'connectors'> & { connectors: ConnectorEnhanced<any, any>[] } {
   return useMemo(() => {
-    // Config.options.filterChainsCallback call
+    // Config.options.hardFilterChainsCallback call
     // Useful if you need to filter chains based on domain (prod vs dev)
-    const config = filterChains(configProps)
+    const config = hardFilterChains(configProps)
     const status = getAppType(config.options?.escapeHatches?.appType)
     switch (status) {
       case 'SAFE_APP': {

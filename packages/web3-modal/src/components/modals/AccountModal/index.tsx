@@ -44,14 +44,16 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
     }
   })
 
-  const showNetworkButton = useMemo(() => {
+  const { isUnsupportedChain, showNetworkButton } = useMemo(() => {
+    const isUnsupportedChain =
+      userConnectionInfo.chain?.unsupported ||
+      !userConnectionInfo.supportedChains.some((chain) => chain.id === userConnectionInfo.chain?.id)
     const supportsSeveralChains = (userConnectionInfo?.supportedChains?.length || 0) > 1
-    const currentChainUnsupported = !userConnectionInfo.supportedChains.some(
-      (suppChain) => suppChain.id === userConnectionInfo.chain?.id
-    )
-
-    return supportsSeveralChains || currentChainUnsupported
-  }, [userConnectionInfo.chain?.id, userConnectionInfo.supportedChains])
+    return {
+      isUnsupportedChain,
+      showNetworkButton: supportsSeveralChains || isUnsupportedChain
+    }
+  }, [userConnectionInfo.chain?.id, userConnectionInfo.chain?.unsupported, userConnectionInfo.supportedChains])
 
   const isSmallerScreen = useIsSmallMediaWidth()
   const [logo, chainLogo] = useMemo(
@@ -177,7 +179,7 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
         borderRadius={theme?.account?.container.addressAndBalance.border?.radius}
         padding="1em"
         backgroundColor={
-          userConnectionInfo.chain?.unsupported
+          isUnsupportedChain
             ? theme?.account?.container?.addressAndBalance?.background?.unsupported
             : theme?.connection?.button?.background?.background
         }
@@ -233,10 +235,8 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
                   padding={0}
                   marginLeft="0.5rem"
                 >
-                  {userConnectionInfo.chain?.name || 'Unknown network'}
-                  {userConnectionInfo.chain?.unsupported && (
-                    <small className="unsupported-small-text">[unsupported]</small>
-                  )}
+                  {userConnectionInfo.chain?.name || userConnectionInfo.chain?.id || 'Unknown network'}
+                  {isUnsupportedChain && <small className="unsupported-small-text">[unsupported]</small>}
                 </AccountText>
               </AccountText>
             </Column>

@@ -7,6 +7,7 @@ import { useTheme } from 'styled-components'
 import { goerli, polygon } from 'viem/chains'
 import { mainnet, useBalance } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected'
+import { infuraProvider } from 'wagmi/providers/infura'
 
 import { useUserConnectionInfo, useWeb3Modals } from '../hooks'
 import { PstlWeb3ModalProps, PstlW3Providers as WalletModal } from '../providers'
@@ -796,17 +797,28 @@ export default {
     )
   }),
   Grid__ChainsFiltering: withThemeProvider(() => {
-    const ENVIRONMENT_PARAM = 'chorus-environment'
+    const HARD_ENVIRONMENT_PARAM = 'hard-env'
+    const SOFT_ENVIRONMENT_PARAM = 'soft-env'
     return (
       <PstlW3Providers
         config={{
           ...DEFAULT_PROPS_WEB3AUTH,
           callbacks: {
-            filterChains: (chains) => {
+            softLimitChains: (chains) => {
               const searchParams = new URLSearchParams(window?.top?.location.search)
-              if (searchParams.get(ENVIRONMENT_PARAM) === 'production') {
+              if (searchParams.get(SOFT_ENVIRONMENT_PARAM) === 'prod') {
                 return [mainnet]
-              } else if (searchParams.get(ENVIRONMENT_PARAM) === 'develop') {
+              } else if (searchParams.get(SOFT_ENVIRONMENT_PARAM) === 'dev') {
+                return [mainnet, goerli, polygon]
+              } else {
+                return chains
+              }
+            },
+            hardLimitChains: (chains) => {
+              const searchParams = new URLSearchParams(window?.top?.location.search)
+              if (searchParams.get(HARD_ENVIRONMENT_PARAM) === 'prod') {
+                return [mainnet]
+              } else if (searchParams.get(HARD_ENVIRONMENT_PARAM) === 'dev') {
                 return [mainnet, goerli, polygon]
               } else {
                 return chains
@@ -881,6 +893,16 @@ export default {
                   invertColor: true
                 },
                 loadingText: 'FETCHING INFO...'
+              }
+            }
+          },
+          clients: {
+            wagmi: {
+              options: {
+                ...DEFAULT_PROPS_WEB3AUTH.clients?.wagmi?.options,
+                publicClients: process.env.REACT_APP_INFURA_ID
+                  ? [infuraProvider({ apiKey: process.env.REACT_APP_INFURA_ID })]
+                  : []
               }
             }
           }

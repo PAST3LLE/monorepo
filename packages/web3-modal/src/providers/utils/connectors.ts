@@ -25,10 +25,22 @@ export function mapChainsToConnectors(
   return connectors.map((conn) => conn?.(config.chains as Chain<number>[]))
 }
 
-export function filterChains(config: PstlWeb3ModalProps): PstlWeb3ModalProps {
-  if (!config.callbacks?.filterChains) return config
+export function hardFilterChains(config: PstlWeb3ModalProps): PstlWeb3ModalProps {
+  const limitChainsFn = config.callbacks?.filterChains || config.callbacks?.hardLimitChains
+  if (!limitChainsFn) return config
 
-  const filteredChains = config.callbacks?.filterChains(config.chains)
+  const filteredChains = limitChainsFn(config.chains)
+  return {
+    ...config,
+    chains: filteredChains
+  }
+}
+
+export function softFilterChains(config: PstlWeb3ModalProps): PstlWeb3ModalProps {
+  if (!config.callbacks?.softLimitChains) return config
+  const limitChainsFn = config.callbacks.softLimitChains
+
+  const filteredChains = limitChainsFn(config.chains)
   return {
     ...config,
     chains: filteredChains

@@ -93,13 +93,34 @@ export type PstlWeb3ModalCallbacks = {
    */
   switchChain?: (chains: Chain<number>[], ...params: any[]) => Promise<Chain<number> | undefined>
   /**
-   * @name filterChainsCallback
+   * @name filterChains
    * @description Custom callback for filtering available chains e.g production domain vs develop etc
    * @param chains List of available chains
    * @param params Any params
+   * @note this will REMOVE compatibility for chains filtered out. If you just want COSMETIC filtering, see softLimitChains. Will be DEPRECATED next minor release.
+   * @alias hardLimitChains
    * @returns Filtered list of available chains
    */
   filterChains?: (chains: Chain<number>[], ...params: any[]) => Chain<number>[]
+  /**
+   * @name hardLimitChains
+   * @description Custom callback for filtering available chains e.g production domain vs develop etc
+   * @param chains List of available chains
+   * @param params Any params
+   * @note this will REMOVE compatibility for chains filtered out. If you just want COSMETIC filtering, see softLimitChains
+   * @alias filterChains
+   * @returns Filtered list of available chains
+   */
+  hardLimitChains?: (chains: Chain<number>[], ...params: any[]) => Chain<number>[]
+  /**
+   * @name softLimitChains
+   * @description Custom callback for softly (cosmetically) filtering available chains e.g production domain vs develop etc
+   * @param chains List of available chains
+   * @param params Any params
+   * @note this will REMOVE compatibility for chains filtered out. If you just want COSMETIC filtering, see hardLimitChains
+   * @returns Cosmetically filtered list of available chains
+   */
+  softLimitChains?: (chains: Chain<number>[], ...params: any[]) => Chain<number>[]
 }
 
 export type PstlWeb3ModalOptions = Omit<
