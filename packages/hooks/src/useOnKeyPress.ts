@@ -8,18 +8,20 @@ import { useEffect } from 'react'
  * @example
  * useOnKeyPress(['Esc', 'Escape'], (event) => console.log(event))
  */
-export function useOnKeyPress(key: KeyboardEvent['key'][], handler: (...params: any[]) => void) {
+export function useOnKeyPress(keys: KeyboardEvent['key'][], handler: (...params: any[]) => void) {
   useEffect(() => {
-    if (typeof document !== undefined) return
+    if (typeof globalThis?.window?.document === 'undefined' || keys.length < 1) return
+
     const listener = function listener(event: KeyboardEvent) {
-      if (key.some((key) => key === event.key)) {
+      if (keys.some((key) => key === event.key)) {
         devDebug('[@past3lle/hooks]::useOnKeyPress::Firing handler!', event.key)
         handler()
       }
     }
-    document.addEventListener('keydown', listener)
+    globalThis.window.document.addEventListener('keydown', listener)
     return () => {
-      typeof document !== undefined && document.removeEventListener('keydown', listener)
+      if (typeof globalThis?.window?.document === 'undefined') return
+      globalThis.window.document.removeEventListener('keydown', listener)
     }
-  }, [handler, key])
+  }, [handler, keys])
 }
