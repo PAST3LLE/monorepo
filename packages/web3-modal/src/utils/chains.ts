@@ -24,7 +24,7 @@ export const getAllChainsInfo = async (): Promise<ChainInfo[]> => {
 }
 
 export function getSafeAppChainShortName() {
-  if (typeof globalThis?.window === undefined || !window?.top?.location?.search) return undefined
+  if (typeof globalThis?.window === 'undefined' || !window?.top?.location?.search) return undefined
 
   return new URLSearchParams(window.top.location.search).get('safe')?.split(':')[0]
 }

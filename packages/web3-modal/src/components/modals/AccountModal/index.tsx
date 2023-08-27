@@ -75,7 +75,7 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
   const [isCopied, onCopy] = useCopyClipboard(1500)
   const onExplorer = useCallback(() => {
     if (
-      typeof globalThis?.window === undefined ||
+      typeof globalThis?.window === 'undefined' ||
       !userConnectionInfo?.chain?.blockExplorers?.default ||
       !userConnectionInfo?.address
     )

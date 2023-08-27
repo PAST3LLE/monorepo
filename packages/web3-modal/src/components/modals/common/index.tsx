@@ -1,4 +1,5 @@
 import { CloseIcon, Row } from '@past3lle/components'
+import { useOnKeyPress } from '@past3lle/hooks'
 import React from 'react'
 
 import { Z_INDICES } from '../../../constants'
@@ -24,6 +25,9 @@ export function BaseModal({
   const [showError, hideError] = useAutoClearingTimeout(!!modalProps.connect?.error?.message, 7000, () =>
     updateModalProps({ connect: { error: null } })
   )
+
+  // Close modal on key press
+  useOnKeyPress(restModalProps.closeModalOnKeys || [], onDismiss)
 
   return (
     <StyledConnectionModal

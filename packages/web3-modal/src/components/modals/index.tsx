@@ -11,9 +11,9 @@ import { ConnectionModal } from './ConnectionModal'
 import { ErrorModal } from './ErrorModal'
 import { NetworkModal } from './NetworkModal'
 import { BaseModal } from './common'
-import { BaseModalProps, ModalId } from './common/types'
+import { ModalId, StatelessBaseModalProps } from './common/types'
 
-export function ModalWithoutThemeProvider(baseProps: BaseModalProps) {
+export function ModalWithoutThemeProvider(baseProps: StatelessBaseModalProps) {
   const modalState = usePstlWeb3Modal()
   const { resetErrors } = usePstlWeb3ModalState()
   const view = useSnapshot(RouterCtrl.state).view
@@ -30,7 +30,7 @@ export function ModalWithoutThemeProvider(baseProps: BaseModalProps) {
           ...ModalPropsCtrl.state.root,
           error: ModalPropsCtrl.state.account.error
         }
-        const augmentedBaseProps: BaseModalProps = {
+        const augmentedBaseProps: StatelessBaseModalProps = {
           ...baseProps,
           title: baseProps?.headers?.account || 'ACCOUNT',
           width: '650px',
@@ -46,7 +46,7 @@ export function ModalWithoutThemeProvider(baseProps: BaseModalProps) {
 
       case 'SwitchNetwork':
       case 'SelectNetwork': {
-        const augmentedBaseProps: BaseModalProps = {
+        const augmentedBaseProps: StatelessBaseModalProps = {
           ...baseProps,
           title: baseProps?.headers?.networks || 'NETWORK',
           width: '650px',
@@ -88,7 +88,7 @@ export function ModalWithoutThemeProvider(baseProps: BaseModalProps) {
   )
 }
 
-function ModalWithThemeProvider({ themeConfig, ...modalProps }: any) {
+function ModalWithThemeProvider({ themeConfig, ...modalProps }: StatelessBaseModalProps) {
   const builtTheme = useModalTheme(themeConfig?.theme)
 
   if (!builtTheme) {

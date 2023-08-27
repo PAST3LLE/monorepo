@@ -142,9 +142,15 @@ export type PstlWeb3ModalOptions = Omit<
        */
       appType?: AppType
     }
+    /**
+     * @name closeModalOnKeys
+     * @description List of string key names to listen for and close modal
+     */
+    closeModalOnKeys?: string[]
   },
   'publicClient' | 'publicClients' | 'connectors'
 >
+export type RootModalProps = Omit<PstlWeb3ConnectionModalProps, 'isOpen' | 'onDismiss' | 'chainIdFromUrl' | 'error'>
 export interface Web3ModalProps<ID extends number> {
   appName: string
   /**
@@ -225,7 +231,7 @@ export interface Web3ModalProps<ID extends number> {
         zIndex?: number
     }
      */
-    root?: Omit<PstlWeb3ConnectionModalProps, 'isOpen' | 'onDismiss' | 'chainIdFromUrl' | 'error'>
+    root?: RootModalProps
     /**
      * @name walletConnect
      * @description WalletConnect (Web3Modal) props
@@ -252,3 +258,4 @@ export type PstlWeb3ProviderProps<ID extends number = number> = PstlWeb3ModalPro
 export type WithChainIdFromUrl = {
   chainIdFromUrl: number | undefined
 }
+export type WithCloseModalOnKeys = Pick<PstlWeb3ModalOptions, 'closeModalOnKeys'>

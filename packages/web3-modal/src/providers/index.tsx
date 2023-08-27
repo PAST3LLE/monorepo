@@ -41,7 +41,11 @@ const PstlW3ProvidersBase = <ID extends number>({
         chainFromUrl={chainFromUrl}
         autoConnect={config.options?.autoConnect}
       >
-        <PstlWeb3Modal {...config.modals.root} chainIdFromUrl={chainFromUrl?.id} />
+        <PstlWeb3Modal
+          {...config.modals.root}
+          chainIdFromUrl={chainFromUrl?.id}
+          closeModalOnKeys={config.options?.closeModalOnKeys}
+        />
         {children}
       </PstlWagmiProvider>
     </>

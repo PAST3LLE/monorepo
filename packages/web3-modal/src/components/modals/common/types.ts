@@ -2,7 +2,7 @@ import { ButtonProps, ModalProps } from '@past3lle/components'
 import { BasicUserTheme, ThemeByModes, ThemeModesRequired } from '@past3lle/theme'
 import { ReactNode } from 'react'
 
-import { WithChainIdFromUrl } from '../../../providers/types'
+import { WithChainIdFromUrl, WithCloseModalOnKeys } from '../../../providers/types'
 import { LoadingScreenProps } from '../../LoadingScreen'
 
 export enum ModalId {
@@ -32,7 +32,8 @@ export interface ThemeConfigProps<
   mode?: K
 }
 export type BaseModalProps = Omit<ModalProps, 'isLargeImageModal'> &
-  WithChainIdFromUrl & {
+  WithChainIdFromUrl &
+  WithCloseModalOnKeys & {
     /**
      * @name title
      * @description Main title of modal. Wallet selection screen.
@@ -92,3 +93,5 @@ export type BaseModalProps = Omit<ModalProps, 'isLargeImageModal'> &
     openType?: 'root' | 'walletconnect'
     children?: ReactNode
   }
+
+export type StatelessBaseModalProps = Omit<BaseModalProps, 'isOpen' | 'onDismiss'>
