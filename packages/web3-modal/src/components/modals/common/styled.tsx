@@ -134,13 +134,15 @@ export const InnerContainer = styled(ColumnCenter)<{ isError?: boolean }>`
 export const ErrorMessageContainer = styled(InnerContainer)<{ hide: boolean }>`
   opacity: ${({ hide }) => (hide ? 0 : 1)};
 
+  z-index: ${({ hide }) => (hide ? 0 : 9999)};
+
   overflow: auto;
   align-items: start;
   height: ${ERROR_CONTAINER_HEIGHT_PX}px;
   padding: 1rem 2rem;
   border-radius: 0 0 0.4rem 0.4rem;
   border-left: 0.5rem solid indianred;
-  background: #00000070;
+  background: ${(props) => props.theme.modals?.base?.error?.background?.background};
   position: absolute;
   bottom: 0;
   > p:first-child {
@@ -150,8 +152,21 @@ export const ErrorMessageContainer = styled(InnerContainer)<{ hide: boolean }>`
     font-family: monospace;
     color: indianred;
     font-variation-settings: 'wght' 500;
-    font-size: 1rem;
+    font-size: 1em;
     font-style: normal;
+  }
+
+  > p#error-message {
+    color: ${(props) => props.theme.modals?.base?.error?.font?.color};
+    font-size: 0.75em;
+  }
+
+  > span#error-close-icon {
+    position: absolute;
+    color: ${(props) => props.theme.modals?.base?.error?.font?.color};
+    cursor: pointer;
+    top: 0.75em;
+    right: 0.75em;
   }
 
   transition: opacity 0.5s ease-in-out;

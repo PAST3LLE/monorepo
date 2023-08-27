@@ -44,6 +44,10 @@ export interface PstlModalTheme {
       title?: {
         font?: FontStyles
       }
+      error?: {
+        font?: Pick<FontStyles, 'color'>
+        background?: Pick<BackgroundStyles, 'background'>
+      }
       helpers?: {
         show?: boolean
         font?: Pick<FontStyles, 'color' | 'size'>

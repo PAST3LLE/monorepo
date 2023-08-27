@@ -80,6 +80,14 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
               textAlign: 'center'
             }
           },
+          error: {
+            font: {
+              color: 'ghostwhite'
+            },
+            background: {
+              background: '#000000de'
+            }
+          },
           helpers: {
             show: true,
             font: { color: BASE_TEXT_COLOUR, size: '0.55em' }

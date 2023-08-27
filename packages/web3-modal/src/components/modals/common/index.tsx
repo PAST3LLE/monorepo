@@ -4,7 +4,8 @@ import React from 'react'
 import { Z_INDICES } from '../../../constants'
 import { usePstlWeb3ModalState } from '../../../hooks'
 import { useAutoClearingTimeout } from '../../../hooks/useTimeout'
-import { ErrorMessageContainer, InnerContainer, ModalTitle, StyledConnectionModal } from './styled'
+import { ErrorMessage } from './ErrorMessage'
+import { InnerContainer, ModalTitle, StyledConnectionModal } from './styled'
 import { BaseModalProps, ModalId } from './types'
 
 export function BaseModal({
@@ -48,16 +49,11 @@ export function BaseModal({
           <CloseIcon height={30} width={100} onClick={onDismiss} />
         </Row>
         {children}
-        <ErrorMessageContainer hide={!showError || !modalProps.connect?.error?.message}>
-          <p>ERROR!</p>
-          <p style={{ color: 'ghostwhite', fontSize: '0.75em' }}>{modalProps.connect?.error?.message}</p>
-          <span
-            onClick={hideError}
-            style={{ position: 'absolute', color: 'ghostwhite', cursor: 'pointer', top: '0.75em', right: '0.75em' }}
-          >
-            X
-          </span>
-        </ErrorMessageContainer>
+        <ErrorMessage
+          message={modalProps.connect?.error?.message}
+          hide={!showError || !modalProps.connect?.error?.message}
+          onClick={hideError}
+        />
       </InnerContainer>
     </StyledConnectionModal>
   )
