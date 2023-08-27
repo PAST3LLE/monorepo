@@ -31,7 +31,8 @@ export const WEB3_PROPS: Web3ModalConfigWeb3Props = {
   },
   options: {
     pollingInterval: 10_000,
-    autoConnect: true
+    autoConnect: false,
+    closeModalOnKeys: ['Escape', 'Esc']
   },
   modals: {
     walletConnect: {
