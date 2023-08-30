@@ -25,8 +25,8 @@ interface AuxProps {
   fvs?: FVSMap
   fontVariationSettings?: FVSMap
 }
-const TextWrapper = styled(RebassText)<AuxProps>`
-  font-size: ${({ fontStyle = '1.2rem' }) => fontStyle};
+const TextWrapper = styled(RebassText)<AuxProps & { fontSize?: string }>`
+  font-size: ${({ fontSize = '1.2rem' }) => fontSize};
   color: ${({ colour, theme }): string => colour && (theme as any)[colour]};
   ${({ fvs, fontVariationSettings }) => {
     const style = _formatFvsMap(fvs || fontVariationSettings)
