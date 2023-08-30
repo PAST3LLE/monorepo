@@ -43,6 +43,7 @@ export interface PstlModalTheme {
       font?: FontStyles
       title?: {
         font?: FontStyles
+        margin?: string
       }
       error?: {
         font?: Pick<FontStyles, 'color'>

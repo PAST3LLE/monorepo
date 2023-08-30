@@ -82,7 +82,7 @@ export const ModalTitle = styled(ModalTitleText)`
     text-align: ${({ theme }) => theme.modals?.base?.title?.font?.textAlign};
     flex: 1;
 
-    margin-left: ${({ theme }) => theme?.modals?.base?.closeIcon?.size}px;
+    margin: ${({ theme }) => theme?.modals?.base?.title?.margin};
 
     ${upToSmall`
       text-align: center;

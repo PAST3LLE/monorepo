@@ -38,7 +38,8 @@ export const pstlModalTheme = createTheme({
           font: {
             color: 'black',
             weight: 900
-          }
+          },
+          margin: '0px 60px 0px 10px'
         },
         background: {
           backgroundImg: 'unset',
@@ -111,7 +112,8 @@ export const pstlModalTheme = createTheme({
             letterSpacing: '-1.4px',
             lineHeight: 0.82,
             textAlign: 'center'
-          }
+          },
+          margin: '0px 60px 0px 10px'
         },
         background: {
           backgroundImg: BG_LOGO

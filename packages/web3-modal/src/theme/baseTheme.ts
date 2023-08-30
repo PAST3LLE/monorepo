@@ -78,7 +78,8 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
               weight: 700,
               lineHeight: 1,
               textAlign: 'center'
-            }
+            },
+            margin: '0 20px'
           },
           error: {
             font: {
