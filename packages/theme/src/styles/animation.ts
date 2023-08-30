@@ -97,31 +97,31 @@ const fadeInAnimation = css`
 const flickerAnimation = css<{ frameBgColor?: string }>`
   @keyframes flickerIn {
     0% {
-      background-color: ${({ frameBgColor = '#000' }) => transparentize(1, frameBgColor)};
+      background-color: ${({ frameBgColor = '#ffc1ff' }) => transparentize(1, frameBgColor)};
     }
     5% {
-      background-color: ${({ frameBgColor = '#000' }) => transparentize(0, frameBgColor)};
+      background-color: ${({ frameBgColor = '#ffc1ff' }) => transparentize(0, frameBgColor)};
     }
     8% {
-      background-color: ${({ frameBgColor = '#000' }) => transparentize(1, frameBgColor)};
+      background-color: ${({ frameBgColor = '#ffc1ff' }) => transparentize(1, frameBgColor)};
     }
     9% {
-      background-color: ${({ frameBgColor = '#000' }) => transparentize(0, frameBgColor)};
+      background-color: ${({ frameBgColor = '#ffc1ff' }) => transparentize(0, frameBgColor)};
     }
     12% {
-      background-color: ${({ frameBgColor = '#000' }) => transparentize(1, frameBgColor)};
+      background-color: ${({ frameBgColor = '#ffc1ff' }) => transparentize(1, frameBgColor)};
     }
     18% {
-      background-color: ${({ frameBgColor = '#000' }) => transparentize(0, frameBgColor)};
+      background-color: ${({ frameBgColor = '#ffc1ff' }) => transparentize(0, frameBgColor)};
     }
     24% {
-      background-color: ${({ frameBgColor = '#000' }) => transparentize(0, frameBgColor)};
+      background-color: ${({ frameBgColor = '#ffc1ff' }) => transparentize(0, frameBgColor)};
     }
     28% {
-      background-color: ${({ frameBgColor = '#000' }) => transparentize(1, frameBgColor)};
+      background-color: ${({ frameBgColor = '#ffc1ff' }) => transparentize(1, frameBgColor)};
     }
     42% {
-      background-color: ${({ frameBgColor = '#000' }) => transparentize(0, frameBgColor)};
+      background-color: ${({ frameBgColor = '#ffc1ff' }) => transparentize(0, frameBgColor)};
     }
   }
 `
