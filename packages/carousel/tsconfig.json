@@ -29,6 +29,7 @@
         "./src/**/*"
     ],
     "exclude": [
+        "./src/__mocks__",
         "./src/**/*.fixture.tsx?",
         "./src/**/*.decorator.tsx?"
     ]

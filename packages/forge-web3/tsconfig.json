@@ -14,6 +14,10 @@
         "src/mock/**/*.json",
         "src/mock/**/*.js"
     ],
+    "exclude": [
+        "./src/**/*.fixture.tsx?",
+        "./src/**/*.decorator.tsx?",
+    ],
     "references": [
         {
             "path": "../hooks"
