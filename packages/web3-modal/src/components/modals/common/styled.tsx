@@ -224,7 +224,7 @@ export const WalletsWrapper = styled.div<{
       height: ${(props) => props.theme?.modals?.connection?.button?.height};
       > img {
         height: ${({ theme }) => theme.modals?.connection?.button?.icons?.height};
-        max-height: 80%;
+        max-height: 62%;
 
         ${upToExtraSmall`
           max-height: 100%;
@@ -253,7 +253,7 @@ export const WalletsWrapper = styled.div<{
     > div {
       > ${ModalButton} {
         flex-flow: column;
-        padding: 0.75rem;
+        padding: 5px;
         justify-content: center;
         font-size: 0.8rem;
         
@@ -272,7 +272,7 @@ export const WalletsWrapper = styled.div<{
     upToSmall`
       > div {
         > ${ModalButton} {
-          padding: 0.25rem;
+          padding: 5px;
           font-size: 0.75rem;
         
           > ${RecommendedLabelWrapper} {

@@ -64,15 +64,18 @@ export const AccountBottomColumnContainer = styled(Column)`
 
 export const AccountLogosRow = styled(Row)<{ backgroundFrameColor?: string }>`
   width: 100%;
-  > img {
+  > img,
+  > svg {
     width: ${({ theme }) => theme.modals?.account?.connectionImages?.size};
     padding: 1rem;
     background-color: ${({ theme }) => theme.modals?.account?.connectionImages?.background?.background};
   }
-  > img:first-child {
+  > img:first-child,
+  > svg:first-child {
     margin-left: auto;
   }
-  > img:last-child {
+  > img:last-child,
+  > svg:last-child {
     margin-right: auto;
   }
 `

@@ -9,12 +9,11 @@ import { useConnectDisconnect, usePstlWeb3Modal, useUserConnectionInfo } from '.
 import { useConnectedChainAndWalletLogo } from '../../../hooks/useLogos'
 import { PstlModalTheme } from '../../../theme'
 import { ConnectorEnhanced } from '../../../types'
-import { NoChainLogo } from '../../NoChainLogo'
 import { BaseModalProps, ModalId } from '../common/types'
+import { WalletChainLogos } from './WalletChainLogos'
 import {
   AccountBottomColumnContainer as AccountAddressBalanceRow,
   AccountColumnContainer,
-  AccountLogosRow,
   AccountModalButton,
   AccountText,
   AccountWalletNetworkRow,
@@ -77,31 +76,16 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
   return (
     <AccountColumnContainer width="100%" gap="1rem">
       {/* Logos Row */}
-      <AccountLogosRow id={`${ModalId.ACCOUNT}__provider-network-logos`}>
-        {walletLogo && (
-          <img
-            title={userConnectionInfo?.connector?.name || userConnectionInfo?.connector?.id || 'Unknown provider'}
-            src={walletLogo}
-            style={{
-              marginLeft: 'auto',
-              maxWidth: 110,
-              borderRadius: '5rem',
-              overflow: 'hidden',
-              zIndex: 1
-            }}
-          />
-        )}
-
-        {chainLogo ? (
-          <img
-            src={chainLogo}
-            title={userConnectionInfo?.chain?.name || userConnectionInfo?.chain?.id?.toString() || 'Unknown chain'}
-            style={{ marginLeft: walletLogo ? -27.5 : 'auto', maxWidth: 110, borderRadius: '5rem' }}
-          />
-        ) : (
-          <NoChainLogo />
-        )}
-      </AccountLogosRow>
+      <WalletChainLogos
+        wallet={{
+          title: userConnectionInfo?.connector?.name || userConnectionInfo?.connector?.id || 'Unknown provider',
+          logo: walletLogo
+        }}
+        chain={{
+          title: userConnectionInfo?.chain?.name || userConnectionInfo?.chain?.id?.toString() || 'Unknown chain',
+          logo: chainLogo
+        }}
+      />
       {/* Address and Balance Row */}
       <AccountAddressBalanceRow
         borderRadius="1rem"

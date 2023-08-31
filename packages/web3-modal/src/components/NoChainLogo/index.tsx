@@ -1,12 +1,16 @@
 import React from 'react'
 
-export const NoChainLogo = () => (
+interface Props {
+  style?: React.CSSProperties
+}
+export const NoChainLogo = ({ style }: Props) => (
   <svg
     version="1.1"
     xmlns="http://www.w3.org/2000/svg"
     xmlnsXlink="http://www.w3.org/1999/xlink"
     transform="scale(1.85)"
     viewBox="0,0,256,256"
+    style={style}
   >
     <g
       fill="none"
