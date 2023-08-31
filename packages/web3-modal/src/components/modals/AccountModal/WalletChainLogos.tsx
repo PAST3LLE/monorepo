@@ -31,7 +31,7 @@ export function WalletChainLogos({ wallet, chain }: Props) {
     <AccountLogosRow id={`${ModalId.ACCOUNT}__provider-network-logos`}>
       {wallet?.logo && <img title={wallet.title} src={wallet.logo} style={walletLogoStyles} />}
 
-      {!chain?.logo ? (
+      {chain?.logo ? (
         <img src={chain.logo} title={chain.title} style={chainLogoStyles} />
       ) : (
         <NoChainLogo style={{ ...chainLogoStyles, width: 50, padding: 0 }} />
