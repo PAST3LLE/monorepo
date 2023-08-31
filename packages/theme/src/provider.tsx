@@ -1,3 +1,4 @@
+import merge from 'lodash.merge'
 import React, {
   Children,
   Dispatch,
@@ -98,7 +99,7 @@ export function useConstructTheme<
     return computedTheme
   }, [autoDetect, mode, modeCustom, theme])
 
-  return { ...staticTheme, ...dynamicTheme }
+  return merge({}, staticTheme, dynamicTheme)
 }
 
 export function ThemeProvider<
