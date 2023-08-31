@@ -8,6 +8,7 @@ import { ModalPropsCtrlState } from '../../../controllers/types/controllerTypes'
 import { useConnectDisconnect, usePstlWeb3Modal, useUserConnectionInfo } from '../../../hooks'
 import { useConnectedChainAndWalletLogo } from '../../../hooks/useLogos'
 import { PstlModalTheme } from '../../../theme'
+import BaseTheme from '../../../theme/baseTheme'
 import { ConnectorEnhanced } from '../../../types'
 import { BaseModalProps, ModalId } from '../common/types'
 import { WalletChainLogos } from './WalletChainLogos'
@@ -90,8 +91,14 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
       <AccountAddressBalanceRow
         borderRadius="1rem"
         padding="1em"
-        backgroundColor={theme?.connection?.button?.background?.background}
-        border={theme?.account?.container.walletAndNetwork.border?.border}
+        backgroundColor={
+          theme?.connection?.button?.background?.background ||
+          BaseTheme.modes.DEFAULT.modals.connection.button.background.background
+        }
+        border={
+          theme?.account?.container?.walletAndNetwork?.border?.border ||
+          BaseTheme.modes.DEFAULT.modals.account.container.walletAndNetwork.border.border
+        }
       >
         <Column>
           <Row
@@ -140,13 +147,21 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
       {/* Wallet & Network Row */}
       <AccountWalletNetworkRow
         width="100%"
-        border={theme?.account?.container.addressAndBalance.border?.border}
-        borderRadius={theme?.account?.container.addressAndBalance.border?.radius}
         padding="1em"
+        border={
+          theme?.account?.container?.addressAndBalance?.border?.border ||
+          BaseTheme.modes.DEFAULT.modals.account.container.addressAndBalance.border.border
+        }
+        borderRadius={
+          theme?.account?.container?.addressAndBalance?.border?.radius ||
+          BaseTheme.modes.DEFAULT.modals.account.container.addressAndBalance.border.radius
+        }
         backgroundColor={
           isUnsupportedChain
-            ? theme?.account?.container?.addressAndBalance?.background?.unsupported
-            : theme?.connection?.button?.background?.background
+            ? theme?.account?.container?.addressAndBalance?.background?.unsupported ||
+              BaseTheme.modes.DEFAULT.modals.account.container.addressAndBalance.background.unsupported
+            : theme?.connection?.button?.background?.background ||
+              BaseTheme.modes.DEFAULT.modals.connection.button.background.background
         }
       >
         <Column width="100%" maxWidth={400}>
