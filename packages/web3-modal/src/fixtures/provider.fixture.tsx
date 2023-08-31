@@ -12,7 +12,7 @@ import { infuraProvider } from 'wagmi/providers/infura'
 import { useUserConnectionInfo, useWeb3Modals } from '../hooks'
 import { PstlWeb3ModalProps, PstlW3Providers as WalletModal } from '../providers'
 import { addConnector } from '../providers/utils'
-import { COMMON_CONNECTOR_OVERRIDES, DEFAULT_PROPS, DEFAULT_PROPS_WEB3AUTH } from './config'
+import { COMMON_CONNECTOR_OVERRIDES, DEFAULT_PROPS, DEFAULT_PROPS_WEB3AUTH, pstlModalTheme } from './config'
 import { wagmiConnectors } from './connectorsAndPlugins'
 
 const PstlW3Providers = ({ children, config }: { children: ReactNode; config: PstlWeb3ModalProps }) => (
@@ -914,6 +914,7 @@ export default {
     )
   }),
   Grid__CloseOnEscapeKey: withThemeProvider(() => {
+    const { mode, setMode } = useTheme()
     return (
       <PstlW3Providers
         config={{
@@ -973,6 +974,10 @@ export default {
             ...DEFAULT_PROPS_WEB3AUTH.modals,
             root: {
               ...DEFAULT_PROPS.modals.root,
+              themeConfig: {
+                theme: pstlModalTheme,
+                mode
+              },
               closeModalOnConnect: true,
               walletsView: 'grid',
               maxWidth: '650px',
@@ -996,6 +1001,9 @@ export default {
       >
         <AppWithWagmiAccess />
         <Web3Button />
+        Theme: {mode}
+        <button onClick={() => setMode(mode === 'LIGHT' ? 'DARK' : 'LIGHT')}>Change theme mode</button>
+        <button onClick={() => setMode('DEFAULT')}>Revert to default</button>
       </PstlW3Providers>
     )
   })
