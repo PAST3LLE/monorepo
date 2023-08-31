@@ -1,8 +1,8 @@
 import { devDebug } from '@past3lle/utils'
 import { isIframe } from '@past3lle/wagmi-connectors'
 
-import { ConnectorEnhanced } from '../../types'
-import { Chain, PstlWeb3ModalProps } from '../types'
+import { Chain, ConnectorEnhanced } from '../../types'
+import { PstlWeb3ModalProps } from '../types'
 
 export type AppType = 'IFRAME' | 'SAFE_APP' | 'DAPP' | 'TEST_FRAMEWORK_IFRAME'
 export function getAppType(forcedAppType?: AppType) {

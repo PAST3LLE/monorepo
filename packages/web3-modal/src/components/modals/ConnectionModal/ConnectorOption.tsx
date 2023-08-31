@@ -1,6 +1,6 @@
 import { ButtonProps } from '@past3lle/components'
 import { ConnectArgs, ConnectResult, PublicClient } from '@wagmi/core'
-import React, { memo } from 'react'
+import React, { ReactNode, memo } from 'react'
 
 import { ConnectorEnhanced } from '../../../types'
 import { ConnectorInfo } from '../../../utils'
@@ -8,7 +8,7 @@ import { ModalButton } from '../common/styled'
 import { ConnectorHelper } from './ConnectorHelper'
 import { RecommendedLabel } from './RecommendedLabel'
 
-export type ConnectorOptionProps = ConnectorInfo & {
+export type ConnectorOptionProps = Omit<ConnectorInfo, 'logo'> & {
   id?: string
   optionType?: string
   optionValue?: string | number
@@ -18,6 +18,7 @@ export type ConnectorOptionProps = ConnectorInfo & {
   buttonProps?: ButtonProps
   helperContent?: ConnectorEnhanced<any, any>['infoText']
   showHelperText?: boolean
+  logo: ReactNode
   callback?:
     | ((options?: any) => Promise<void>)
     | ((args?: Partial<ConnectArgs> | undefined) => Promise<ConnectResult<PublicClient>>)
@@ -34,14 +35,13 @@ function ConnectorOptionBase({
   modalView,
   helperContent,
   showHelperText,
-  logoStyleProps = {},
   buttonProps = {},
   callback
 }: ConnectorOptionProps) {
   return (
     <div option-type={optionType} option-value={optionValue} id={id}>
       <ModalButton onClick={callback} connected={connected} {...buttonProps}>
-        <img src={logo} style={logoStyleProps} />
+        {logo}
         {label}
         {isRecommended && <RecommendedLabel />}
       </ModalButton>

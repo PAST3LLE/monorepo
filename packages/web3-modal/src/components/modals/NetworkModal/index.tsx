@@ -1,9 +1,9 @@
 import React, { memo } from 'react'
 import { useSwitchNetwork } from 'wagmi'
 
-import { NO_CHAIN_LOGO } from '../../../constants'
 import { useGetChainLogoCallback, usePstlWeb3Modal, useUserConnectionInfo } from '../../../hooks'
 import { ConnectorEnhanced } from '../../../types'
+import { NoChainLogo } from '../../NoChainLogo'
 import { AccountColumnContainer } from '../AccountModal/styled'
 import { ConnectorOption } from '../ConnectionModal/ConnectorOption'
 import { WalletsWrapper } from '../common/styled'
@@ -38,7 +38,7 @@ function NetworkModalContent() {
               connected={false}
               connector={connector as ConnectorEnhanced<any, any>}
               label={chain.name}
-              logo={chainLogo || NO_CHAIN_LOGO}
+              logo={chainLogo ? <img src={chainLogo} /> : <NoChainLogo />}
             />
           )
         })}

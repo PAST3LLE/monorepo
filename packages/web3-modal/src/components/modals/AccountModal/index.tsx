@@ -4,12 +4,12 @@ import { truncateAddress } from '@past3lle/utils'
 import React, { memo, useCallback, useMemo } from 'react'
 import { useTheme } from 'styled-components'
 
-import { NO_CHAIN_LOGO } from '../../../constants'
 import { ModalPropsCtrlState } from '../../../controllers/types/controllerTypes'
 import { useConnectDisconnect, usePstlWeb3Modal, useUserConnectionInfo } from '../../../hooks'
 import { useConnectedChainAndWalletLogo } from '../../../hooks/useLogos'
 import { PstlModalTheme } from '../../../theme'
 import { ConnectorEnhanced } from '../../../types'
+import { NoChainLogo } from '../../NoChainLogo'
 import { BaseModalProps, ModalId } from '../common/types'
 import {
   AccountBottomColumnContainer as AccountAddressBalanceRow,
@@ -92,11 +92,15 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
           />
         )}
 
-        <img
-          src={chainLogo || NO_CHAIN_LOGO}
-          title={userConnectionInfo?.chain?.name || userConnectionInfo?.chain?.id?.toString() || 'Unknown chain'}
-          style={{ marginLeft: walletLogo ? -27.5 : 'auto', maxWidth: 110, borderRadius: '5rem' }}
-        />
+        {chainLogo ? (
+          <img
+            src={chainLogo}
+            title={userConnectionInfo?.chain?.name || userConnectionInfo?.chain?.id?.toString() || 'Unknown chain'}
+            style={{ marginLeft: walletLogo ? -27.5 : 'auto', maxWidth: 110, borderRadius: '5rem' }}
+          />
+        ) : (
+          <NoChainLogo />
+        )}
       </AccountLogosRow>
       {/* Address and Balance Row */}
       <AccountAddressBalanceRow

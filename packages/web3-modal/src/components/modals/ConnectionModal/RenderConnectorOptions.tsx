@@ -89,7 +89,7 @@ const RenderConnectorOptionsBase =
         isRecommended={isRecommended}
         modalView={modalView}
         helperContent={helperContent}
-        logo={logo}
+        logo={<img src={logo} />}
       />
     )
   }

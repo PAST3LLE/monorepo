@@ -13,8 +13,8 @@ import {
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { publicProvider } from 'wagmi/providers/public'
 
-import { ConnectorEnhanced } from '../../types'
-import { ChainsPartialReadonly, PstlWeb3ModalProps } from '../types'
+import { ChainsPartialReadonly, ConnectorEnhanced } from '../../types'
+import { PstlWeb3ModalProps } from '../types'
 
 interface ClientConfigEnhanced extends Omit<ClientConfig, 'connectors'> {
   connectors?: (() => ConnectorEnhanced<any, any>[]) | ConnectorEnhanced<any, any>[]
