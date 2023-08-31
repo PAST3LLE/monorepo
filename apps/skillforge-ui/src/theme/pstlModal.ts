@@ -13,6 +13,7 @@ export const pstlModalTheme = createTheme({
         title: {
           font: {
             color: '#cbb9ee',
+            size: '2.5em',
             weight: 700,
             letterSpacing: '-1.4px',
             lineHeight: 0.82,
