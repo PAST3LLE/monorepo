@@ -64,6 +64,7 @@ export const AccountBottomColumnContainer = styled(Column)`
 
 export const AccountLogosRow = styled(Row)<{ backgroundFrameColor?: string }>`
   width: 100%;
+  height: 88px;
   > img,
   > svg {
     width: ${({ theme }) => theme.modals?.account?.connectionImages?.size};
