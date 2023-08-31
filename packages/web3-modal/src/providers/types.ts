@@ -1,4 +1,3 @@
-import { Address } from '@past3lle/types'
 import { IFrameEthereumConnector } from '@past3lle/wagmi-connectors'
 import { ConfigCtrlState } from '@web3modal/core'
 import { EthereumClient } from '@web3modal/ethereum'
@@ -7,67 +6,9 @@ import { Chain as ChainWagmi } from 'wagmi'
 
 import { PstlWeb3ConnectionModalProps } from '../components/modals/ConnectionModal'
 import { ConnectorEnhanced } from '../types'
+import { Chain } from '../types/chains'
 import { PstlWagmiClientOptions } from './utils'
 import { AppType } from './utils/connectors'
-
-type DeepReadonly<T> = {
-  readonly [P in keyof T]: T[P] extends Record<string, unknown> ? DeepReadonly<T[P]> : T[P]
-}
-
-type Contract = {
-  address: Address
-  blockCreated?: number
-}
-
-type RpcUrls = {
-  http: readonly string[]
-  webSocket?: readonly string[]
-}
-
-type BlockExplorer = {
-  name: string
-  url: string
-}
-
-type NativeCurrency = {
-  name: string
-  /** 2-6 characters long */
-  symbol: string
-  decimals: number
-}
-
-export type Chain<ID extends number> = {
-  /** ID in number form */
-  id: ID
-  /** Human-readable name */
-  name: string
-  /** Internal network name */
-  network: string
-  /** Currency used by chain */
-  nativeCurrency: NativeCurrency
-  /** Collection of RPC endpoints */
-  rpcUrls: {
-    [key: string]: RpcUrls
-    default: RpcUrls
-    public: RpcUrls
-  }
-  /** Collection of block explorers */
-  blockExplorers?: {
-    [key: string]: BlockExplorer
-    default: BlockExplorer
-  }
-  /** Collection of contracts */
-  contracts?: {
-    ensRegistry?: Contract
-    ensUniversalResolver?: Contract
-    multicall3?: Contract
-  }
-  /** Flag for test networks */
-  testnet?: boolean
-}
-
-export type ReadonlyChain<ID extends number> = DeepReadonly<Chain<ID>>
-export type ChainsPartialReadonly<ID extends number> = ReadonlyChain<ID>[]
 
 export type Web3ModalThemeVariables = {
   '--w3m-color-bg-1'?: string

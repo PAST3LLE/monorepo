@@ -5,7 +5,6 @@ import React, { memo } from 'react'
 import { ConnectorEnhanced } from '../../../types'
 import { ConnectorInfo } from '../../../utils'
 import { ModalButton } from '../common/styled'
-// import { ConnectedCheckMark } from './ConnectedCheckMark'
 import { ConnectorHelper } from './ConnectorHelper'
 import { RecommendedLabel } from './RecommendedLabel'
 
@@ -15,6 +14,7 @@ export type ConnectorOptionProps = ConnectorInfo & {
   optionValue?: string | number
   connector: ConnectorEnhanced<any, any>
   modalView: 'list' | 'grid'
+  logoStyleProps?: React.CSSProperties
   buttonProps?: ButtonProps
   helperContent?: ConnectorEnhanced<any, any>['infoText']
   showHelperText?: boolean
@@ -34,15 +34,15 @@ function ConnectorOptionBase({
   modalView,
   helperContent,
   showHelperText,
+  logoStyleProps = {},
   buttonProps = {},
   callback
 }: ConnectorOptionProps) {
   return (
     <div option-type={optionType} option-value={optionValue} id={id}>
       <ModalButton onClick={callback} connected={connected} {...buttonProps}>
-        <img src={logo} />
+        <img src={logo} style={logoStyleProps} />
         {label}
-        {/* {connected && <ConnectedCheckMark />} */}
         {isRecommended && <RecommendedLabel />}
       </ModalButton>
       {modalView !== 'grid' && showHelperText && !!helperContent?.content && (

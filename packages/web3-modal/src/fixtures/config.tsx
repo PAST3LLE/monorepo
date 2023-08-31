@@ -2,6 +2,7 @@ import React from 'react'
 
 import { PstlWeb3ModalProps } from '../providers'
 import { createTheme } from '../theme'
+import { ChainImages } from '../types'
 import { chains } from './chains'
 
 const BG_LOGO = 'https://ik.imagekit.io/pastelle/SKILLFORGE/forge-background.png'
@@ -107,13 +108,14 @@ export const pstlModalTheme = createTheme({
         title: {
           font: {
             color: '#cbb9ee',
+            size: '2.5em',
             style: 'italic',
             weight: 700,
             letterSpacing: '-1.4px',
             lineHeight: 0.82,
             textAlign: 'center'
           },
-          margin: '0px 60px 0px 10px'
+          margin: '0px 20px'
         },
         background: {
           backgroundImg: BG_LOGO
@@ -265,6 +267,11 @@ export const COMMON_CONNECTOR_OVERRIDES = {
   }
 }
 
+const CHAIN_IMAGES: ChainImages = {
+  // unknown: 'https://img.freepik.com/premium-vector/unknown-mysterious-logo-sports_67734-82.jpg',
+  137: 'https://icons.llamao.fi/icons/chains/rsz_polygon.jpg'
+}
+
 const DEFAULT_PROPS: PstlWeb3ModalProps = {
   appName: 'COSMOS APP',
   chains,
@@ -282,6 +289,7 @@ const DEFAULT_PROPS: PstlWeb3ModalProps = {
         networks: 'Select network'
       },
       themeConfig: { theme: pstlModalTheme },
+      chainImages: CHAIN_IMAGES,
       closeModalOnConnect: false,
       hideInjectedFromRoot: true,
       connectorDisplayOverrides: COMMON_CONNECTOR_OVERRIDES,

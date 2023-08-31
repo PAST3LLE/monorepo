@@ -1,8 +1,8 @@
 import React, { memo } from 'react'
 import { useSwitchNetwork } from 'wagmi'
 
-import { CHAIN_IMAGES } from '../../../constants'
-import { usePstlWeb3Modal, useUserConnectionInfo } from '../../../hooks'
+import { NO_CHAIN_LOGO } from '../../../constants'
+import { useGetChainLogoCallback, usePstlWeb3Modal, useUserConnectionInfo } from '../../../hooks'
 import { ConnectorEnhanced } from '../../../types'
 import { AccountColumnContainer } from '../AccountModal/styled'
 import { ConnectorOption } from '../ConnectionModal/ConnectorOption'
@@ -18,12 +18,14 @@ function NetworkModalContent() {
     }
   })
 
+  const getChainLogo = useGetChainLogoCallback()
+
   return (
     <AccountColumnContainer width="100%">
       <WalletsWrapper id={`${ModalId.WALLETS}__chains-wrapper`} view={'grid'} width="auto">
         {supportedChains.map((chain) => {
           if (!switchNetworkAsync || currentChain?.id === chain.id) return null
-          const chainLogo = CHAIN_IMAGES?.[chain.id]
+          const chainLogo = getChainLogo(chain.id)
           return (
             <ConnectorOption
               // keys & ids
@@ -36,7 +38,7 @@ function NetworkModalContent() {
               connected={false}
               connector={connector as ConnectorEnhanced<any, any>}
               label={chain.name}
-              logo={chainLogo || undefined}
+              logo={chainLogo || NO_CHAIN_LOGO}
             />
           )
         })}

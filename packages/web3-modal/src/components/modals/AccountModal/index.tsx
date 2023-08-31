@@ -4,12 +4,12 @@ import { truncateAddress } from '@past3lle/utils'
 import React, { memo, useCallback, useMemo } from 'react'
 import { useTheme } from 'styled-components'
 
-import { CHAIN_IMAGES } from '../../../constants'
+import { NO_CHAIN_LOGO } from '../../../constants'
 import { ModalPropsCtrlState } from '../../../controllers/types/controllerTypes'
 import { useConnectDisconnect, usePstlWeb3Modal, useUserConnectionInfo } from '../../../hooks'
+import { useConnectedChainAndWalletLogo } from '../../../hooks/useLogos'
 import { PstlModalTheme } from '../../../theme'
 import { ConnectorEnhanced } from '../../../types'
-import { trimAndLowerCase } from '../../../utils'
 import { BaseModalProps, ModalId } from '../common/types'
 import {
   AccountBottomColumnContainer as AccountAddressBalanceRow,
@@ -26,7 +26,7 @@ type PstlAccountModalProps = ModalPropsCtrlState['root'] &
   ModalPropsCtrlState['account'] &
   Pick<BaseModalProps, 'errorOptions'>
 
-function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, errorOptions }: PstlAccountModalProps) {
+function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountModalProps) {
   const modalCallbacks = usePstlWeb3Modal()
   const userConnectionInfo = useUserConnectionInfo()
   const {
@@ -56,21 +56,8 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
   }, [userConnectionInfo.chain?.id, userConnectionInfo.chain?.unsupported, userConnectionInfo.supportedChains])
 
   const isSmallerScreen = useIsSmallMediaWidth()
-  const [logo, chainLogo] = useMemo(
-    () => [
-      (
-        connectorDisplayOverrides?.[trimAndLowerCase(userConnectionInfo.connector?.id)] ||
-        connectorDisplayOverrides?.[trimAndLowerCase(userConnectionInfo.connector?.name)]
-      )?.logo,
-      userConnectionInfo?.chain?.id ? CHAIN_IMAGES?.[userConnectionInfo.chain.id] : undefined
-    ],
-    [
-      connectorDisplayOverrides,
-      userConnectionInfo.chain?.id,
-      userConnectionInfo.connector?.id,
-      userConnectionInfo.connector?.name
-    ]
-  )
+
+  const { chain: chainLogo, wallet: walletLogo } = useConnectedChainAndWalletLogo()
 
   const [isCopied, onCopy] = useCopyClipboard(1500)
   const onExplorer = useCallback(() => {
@@ -91,10 +78,10 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
     <AccountColumnContainer width="100%" gap="1rem">
       {/* Logos Row */}
       <AccountLogosRow id={`${ModalId.ACCOUNT}__provider-network-logos`}>
-        {logo && (
+        {walletLogo && (
           <img
             title={userConnectionInfo?.connector?.name || userConnectionInfo?.connector?.id || 'Unknown provider'}
-            src={logo}
+            src={walletLogo}
             style={{
               marginLeft: 'auto',
               maxWidth: 110,
@@ -104,13 +91,12 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
             }}
           />
         )}
-        {chainLogo && (
-          <img
-            src={chainLogo}
-            title={userConnectionInfo?.chain?.name || userConnectionInfo?.chain?.id?.toString() || 'Unknown chain'}
-            style={{ marginLeft: logo ? -27.5 : 'auto', maxWidth: 110, borderRadius: '5rem' }}
-          />
-        )}
+
+        <img
+          src={chainLogo || NO_CHAIN_LOGO}
+          title={userConnectionInfo?.chain?.name || userConnectionInfo?.chain?.id?.toString() || 'Unknown chain'}
+          style={{ marginLeft: walletLogo ? -27.5 : 'auto', maxWidth: 110, borderRadius: '5rem' }}
+        />
       </AccountLogosRow>
       {/* Address and Balance Row */}
       <AccountAddressBalanceRow
@@ -152,15 +138,6 @@ function AccountModalContent({ closeModalOnConnect, connectorDisplayOverrides, e
           gap="2rem"
           style={{ zIndex: errorOptions?.show ? 0 : 1 }}
         >
-          {/* <AccountModalButton
-            type="copy"
-            id={`${ModalId.ACCOUNT}__copy-button`}
-            connected={isCopied}
-            padding="0.6rem"
-            onClick={() => onCopy(userConnectionInfo?.address || '')}
-          >
-            {isCopied ? 'Copied!' : `Copy ${isSmallerScreen ? '' : 'Address'}`}
-          </AccountModalButton> */}
           <AccountModalButton
             type="explorer"
             id={`${ModalId.ACCOUNT}__explorer-button`}

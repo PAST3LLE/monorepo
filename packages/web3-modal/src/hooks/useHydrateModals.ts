@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 
+import { CHAIN_IMAGES } from '../constants'
 import { PstlWeb3ModalProps } from '../providers'
 import { usePstlWeb3ModalState } from './usePstlWeb3ModalState'
 
@@ -11,6 +12,10 @@ export function useHydrateModals<ID extends number>(config: PstlWeb3ModalProps<I
     updateModalProps({
       root: {
         softLimitedChains: config?.callbacks?.softLimitChains?.(config.chains) || config?.chains,
+        chainImages: {
+          ...CHAIN_IMAGES,
+          ...rootConfig?.chainImages
+        },
         connectorDisplayOverrides: rootConfig?.connectorDisplayOverrides,
         closeModalOnConnect: rootConfig?.closeModalOnConnect,
         openType: rootConfig?.openType || 'root'

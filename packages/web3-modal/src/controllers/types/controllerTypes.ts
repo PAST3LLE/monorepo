@@ -1,6 +1,7 @@
 import type { EthereumClient } from '@web3modal/ethereum'
 import { Chain } from 'viem'
 
+import { ChainImages } from '../../types'
 import { ConnectorOverrides } from '../../types/connectors'
 
 export interface MobileWallet {
@@ -58,6 +59,15 @@ interface RootModalState {
    * @description Optional. Key value pair overriding connector info. Displays in root modal. See {@link ConnectorOverrides}
    */
   connectorDisplayOverrides?: ConnectorOverrides
+  /**
+   * @name chainImages
+   * @default {
+      1: 'https://swap.cow.fi/assets/network-mainnet-logo-ac64fb79.svg',
+      5: 'https://swap.cow.fi/assets/network-goerli-logo-2b81b421.svg'
+    }
+   * @description Optional. Key/value pair overriding/setting chain images by chain ID.
+   */
+  chainImages?: ChainImages
   /**
    * @name closeModalOnConnect
    * @default false
