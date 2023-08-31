@@ -80,23 +80,23 @@ export function useConstructTheme<
 
   const dynamicTheme = useMemo(() => {
     const {
-      modes: { [mode]: CURRENT_THEME = {} },
+      modes: { DEFAULT: DEFAULT_MODE, [mode]: CURRENT_MODE = {} },
       baseContent: {
         modes: { [mode]: CURRENT_CONTENT = {} }
       }
     } = theme
 
-    const computedTheme = {
-      ...CURRENT_CONTENT,
-      ...CURRENT_THEME,
-      // state
-      mode,
-      autoDetect,
-      setMode,
-      setAutoDetect
-    } as const
-
-    return computedTheme
+    return merge(
+      {
+        mode,
+        autoDetect,
+        setMode,
+        setAutoDetect
+      },
+      CURRENT_CONTENT,
+      DEFAULT_MODE,
+      CURRENT_MODE
+    )
   }, [autoDetect, mode, modeCustom, theme])
 
   return merge({}, staticTheme, dynamicTheme)
