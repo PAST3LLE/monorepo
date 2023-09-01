@@ -222,7 +222,8 @@ export const WalletsWrapper = styled.div<{
     height: auto;
     > ${ModalButton} {
       height: ${(props) => props.theme?.modals?.connection?.button?.height};
-      > img {
+      > img,
+      > svg {
         height: ${({ theme }) => theme.modals?.connection?.button?.icons?.height};
         max-height: 62%;
 
@@ -236,9 +237,12 @@ export const WalletsWrapper = styled.div<{
   ${({ view }) =>
     view === 'list' &&
     `
-      > div > ${ModalButton} > img {
-        height: 100%;
-        max-height: 100%;
+      > div > ${ModalButton} {
+        > img, 
+        > svg {
+          height: 100%;
+          max-height: 100%;
+        }
       }
   `}
 
@@ -255,7 +259,7 @@ export const WalletsWrapper = styled.div<{
         flex-flow: column;
         padding: 5px;
         justify-content: center;
-        font-size: 0.8rem;
+        font-size: 0.75em;
         
         > ${RecommendedLabelWrapper} {
           position: absolute;
@@ -272,15 +276,8 @@ export const WalletsWrapper = styled.div<{
     upToSmall`
       > div {
         > ${ModalButton} {
-          padding: 5px;
-          font-size: 0.75rem;
-        
           > ${RecommendedLabelWrapper} {
             display: none;
-          }
-
-          > img {
-            max-height: 65%;
           }
         }
       }

@@ -1,3 +1,4 @@
+import { useIsExtraSmallMediaWidth } from '@past3lle/hooks'
 import React, { memo } from 'react'
 import { useSwitchNetwork } from 'wagmi'
 
@@ -20,9 +21,13 @@ function NetworkModalContent() {
 
   const getChainLogo = useGetChainLogoCallback()
 
+  // We always show list view in tiny screens
+  const isExtraSmallScreen = useIsExtraSmallMediaWidth()
+  const modalView = isExtraSmallScreen ? 'list' : 'grid'
+
   return (
     <AccountColumnContainer width="100%">
-      <WalletsWrapper id={`${ModalId.WALLETS}__chains-wrapper`} view={'grid'} width="auto">
+      <WalletsWrapper id={`${ModalId.WALLETS}__chains-wrapper`} view={modalView} width="auto">
         {supportedChains.map((chain) => {
           if (!switchNetworkAsync || currentChain?.id === chain.id) return null
           const chainLogo = getChainLogo(chain.id)
@@ -34,7 +39,7 @@ function NetworkModalContent() {
               key={chain.id}
               // data props
               callback={() => switchNetworkAsync(chain.id) as any}
-              modalView="grid"
+              modalView={modalView}
               connected={false}
               connector={connector as ConnectorEnhanced<any, any>}
               label={chain.name}
