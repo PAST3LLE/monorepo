@@ -5,7 +5,7 @@ import React, { memo, useEffect, useMemo } from 'react'
 import { useSnapshot } from 'valtio'
 
 import { ModalPropsCtrl, RouterCtrl } from '../../controllers'
-import { useModalTheme, usePstlWeb3Modal, usePstlWeb3ModalState } from '../../hooks'
+import { useMergeThemes, usePstlWeb3Modal, usePstlWeb3ModalState } from '../../hooks'
 import { AccountModal } from './AccountModal'
 import { ConnectionModal } from './ConnectionModal'
 import { ErrorModal } from './ErrorModal'
@@ -89,7 +89,7 @@ export function ModalWithoutThemeProvider(baseProps: StatelessBaseModalProps) {
 }
 
 function ModalWithThemeProvider({ themeConfig, ...modalProps }: StatelessBaseModalProps) {
-  const builtTheme = useModalTheme(themeConfig?.theme)
+  const builtTheme = useMergeThemes(themeConfig?.theme)
 
   if (!builtTheme) {
     devWarn('[@past3lle/web3-modal::ConnectionModal] No theme detected!')

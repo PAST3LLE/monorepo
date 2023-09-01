@@ -120,11 +120,6 @@ export const pstlModalTheme = createTheme({
         background: {
           backgroundImg: BG_LOGO
         },
-        error: {
-          background: {
-            // background: '#0000008c'
-          }
-        },
         helpers: { show: true }
       },
       connection: {
