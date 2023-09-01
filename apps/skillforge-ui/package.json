@@ -14,7 +14,7 @@
     "url": "git+https://github.com/PAST3LLE/past3lle-monorepo.git"
   },
   "private": true,
-  "version": "0.1.41-alpha.1",
+  "version": "0.1.41-alpha.2",
   "engines": {
     "node": ">=18.12.0"
   },
@@ -42,8 +42,8 @@
   "devDependencies": {
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.13.8",
     "@craco/craco": "^5.7.0",
-    "@past3lle/forge-web3": "^0.2.9-alpha.3",
-    "@past3lle/skillforge-widget": "^0.2.9-alpha.3",
+    "@past3lle/forge-web3": "^0.2.9-alpha.4",
+    "@past3lle/skillforge-widget": "^0.2.9-alpha.4",
     "@past3lle/skilltree-contracts": "^0.0.1-rc.15",
     "@past3lle/theme": "^0.1.7-alpha.1",
     "@past3lle/utils": "^0.1.6-alpha.0",
