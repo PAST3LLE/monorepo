@@ -33,6 +33,7 @@
         "./src/utils"
     ],
     "exclude": [
+        "./src/fixtures",
         "./src/**/*.fixture.tsx?",
         "./src/**/*.decorator.tsx?",
         "./src/__mocks__",
