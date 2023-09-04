@@ -34,7 +34,7 @@ export function WalletChainLogos({ wallet, chain }: Props) {
       {chain?.logo ? (
         <img src={chain.logo} title={chain.title} style={chainLogoStyles} />
       ) : (
-        <NoChainLogo style={{ ...chainLogoStyles, width: 50, padding: 0 }} />
+        <NoChainLogo style={{ ...chainLogoStyles, boxSizing: 'content-box', height: 'calc(100% - 2rem)' }} />
       )}
     </AccountLogosRow>
   )

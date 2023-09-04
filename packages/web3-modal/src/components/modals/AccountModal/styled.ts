@@ -67,7 +67,9 @@ export const AccountLogosRow = styled(Row)<{ backgroundFrameColor?: string }>`
   height: 88px;
   > img,
   > svg {
-    width: ${({ theme }) => theme.modals?.account?.connectionImages?.size};
+    box-sizing: border-box;
+    height: 100%;
+    max-width: ${({ theme }) => theme.modals?.account?.connectionImages?.size};
     padding: 1rem;
     background-color: ${({ theme }) => theme.modals?.account?.connectionImages?.background?.background};
   }
