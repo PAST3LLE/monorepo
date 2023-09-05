@@ -1,8 +1,5 @@
 import { proxy, subscribe as valtioSub } from 'valtio/vanilla'
 
-import { AccountCtrl } from './AccountCtrl'
-import { ConfigCtrl } from './ConfigCtrl'
-import { OptionsCtrl } from './OptionsCtrl'
 import { RouterCtrl } from './RouterCtrl'
 import type { ModalCtrlState } from './types/controllerTypes'
 
@@ -30,20 +27,8 @@ export const ModalCtrl = {
     return new Promise<void>((resolve) => {
       state.open = false
 
-      const { isStandalone } = OptionsCtrl.state
-      const { isConnected } = AccountCtrl.state
-      const { enableNetworkView } = ConfigCtrl.state
-
-      if (isStandalone) {
-        OptionsCtrl.setStandaloneUri(options?.uri)
-        OptionsCtrl.setStandaloneChains(options?.standaloneChains)
-        RouterCtrl.replace('ConnectWallet')
-      } else if (options?.route) {
+      if (options?.route) {
         RouterCtrl.replace(options.route)
-      } else if (isConnected) {
-        RouterCtrl.replace('Account')
-      } else if (enableNetworkView) {
-        RouterCtrl.replace('SelectNetwork')
       } else {
         RouterCtrl.replace('ConnectWallet')
       }
