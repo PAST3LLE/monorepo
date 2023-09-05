@@ -14,6 +14,9 @@ const NULL_ERROR_STATE = {
   },
   account: {
     error: null
+  },
+  network: {
+    error: null
   }
 }
 export function usePstlWeb3ModalStore(): PstlWeb3ModalStateHook {

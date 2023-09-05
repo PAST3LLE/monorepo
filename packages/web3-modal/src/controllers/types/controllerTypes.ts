@@ -83,11 +83,14 @@ interface RootModalState {
   openType: 'root' | 'walletconnect'
 }
 
-type AccountModalState = {
+interface WithError {
   error?: Error | null
 }
 
-interface ConnectModalState extends AccountModalState {
+type AccountModalState = WithError
+type NetworkModalState = WithError
+
+interface ConnectModalState extends WithError {
   /**
    * @name hideInjectedFromRoot
    * @description Optional. Hide (potentially) unknown injected wallet from modal root.
@@ -109,6 +112,7 @@ export type ModalPropsCtrlState = {
   root: RootModalState
   account: AccountModalState
   connect: ConnectModalState
+  network: NetworkModalState
 }
 
 // -- OptionsCtrl --------------------------------------- //

@@ -17,6 +17,9 @@ const state = proxy<ModalPropsCtrlState>({
   },
   account: {
     error: null
+  },
+  network: {
+    error: null
   }
 })
 
@@ -39,6 +42,10 @@ export const ModalPropsCtrl = {
     state.account = {
       ...state.account,
       ...props.account
+    }
+    state.network = {
+      ...state.network,
+      ...props.network
     }
   }
 }

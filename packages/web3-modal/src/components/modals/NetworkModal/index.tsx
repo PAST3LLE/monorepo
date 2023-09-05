@@ -2,7 +2,7 @@ import { useIsExtraSmallMediaWidth } from '@past3lle/hooks'
 import React, { memo } from 'react'
 import { useSwitchNetwork } from 'wagmi'
 
-import { useGetChainLogoCallback, usePstlWeb3Modal, useUserConnectionInfo } from '../../../hooks'
+import { useGetChainLogoCallback, usePstlWeb3Modal, usePstlWeb3ModalStore, useUserConnectionInfo } from '../../../hooks'
 import { ConnectorEnhanced } from '../../../types'
 import { NoChainLogo } from '../../NoChainLogo'
 import { AccountColumnContainer } from '../AccountModal/styled'
@@ -12,10 +12,20 @@ import { ModalId } from '../common/types'
 
 function NetworkModalContent() {
   const modalCallbacks = usePstlWeb3Modal()
+  const modalStore = usePstlWeb3ModalStore()
+
   const { connector, chain: currentChain, supportedChains } = useUserConnectionInfo()
+
   const { switchNetworkAsync } = useSwitchNetwork({
     onSuccess() {
       modalCallbacks.close()
+    },
+    onError(error) {
+      modalStore.updateModalProps({
+        network: {
+          error
+        }
+      })
     }
   })
 

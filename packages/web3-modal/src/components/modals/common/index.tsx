@@ -1,6 +1,6 @@
 import { CloseIcon, Row } from '@past3lle/components'
 import { useOnKeyPress } from '@past3lle/hooks'
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import { Z_INDICES } from '../../../constants'
 import { usePstlWeb3ModalStore } from '../../../hooks'
@@ -20,11 +20,9 @@ export function BaseModal({
   children,
   ...restModalProps
 }: BaseModalProps) {
-  const { state, updateModalProps } = usePstlWeb3ModalStore()
-
-  const [showError, hideError] = useAutoClearingTimeout(!!state.connect?.error?.message, 7000, () =>
-    updateModalProps({ connect: { error: null } })
-  )
+  const { state, resetErrors } = usePstlWeb3ModalStore()
+  const error = useMemo(() => state.account?.error || state.connect?.error || state.network?.error, [state])
+  const [showError, hideError] = useAutoClearingTimeout(!!error?.message, 7000, resetErrors)
 
   // Close modal on key press
   useOnKeyPress(restModalProps.closeModalOnKeys || [], onDismiss)
@@ -54,11 +52,7 @@ export function BaseModal({
           <CloseIcon height={30} width={100} onClick={onDismiss} />
         </Row>
         {children}
-        <ErrorMessage
-          message={state.connect?.error?.message}
-          hide={!showError || !state.connect?.error?.message}
-          onClick={hideError}
-        />
+        <ErrorMessage message={error?.message} hide={!showError || !error?.message} onClick={hideError} />
       </InnerContainer>
     </StyledConnectionModal>
   )
