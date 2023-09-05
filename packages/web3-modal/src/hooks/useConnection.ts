@@ -16,7 +16,7 @@ import {
 
 import { ModalPropsCtrl, OpenOptions } from '../controllers'
 import { usePstlWeb3Modal } from './usePstlWeb3Modal'
-import { usePstlWeb3ModalState } from './usePstlWeb3ModalState'
+import { usePstlWeb3ModalStore } from './usePstlWeb3ModalStore'
 
 type Callbacks = Pick<ReturnType<typeof useDisconnectWagmi>, 'disconnect'> & {
   openWalletConnectModal: ReturnType<typeof useWeb3Modal>['open']
@@ -64,8 +64,8 @@ export function useUserConnectionInfo() {
   const { address, connector, isConnected, isConnecting, isDisconnected, isReconnecting } = useAccount()
   const { chain, chains } = useNetwork()
   const {
-    modalProps: { root }
-  } = usePstlWeb3ModalState()
+    state: { root }
+  } = usePstlWeb3ModalStore()
   const balance = useBalance({
     address,
     chainId: chain?.id
@@ -89,7 +89,7 @@ export function useUserConnectionInfo() {
 
 export function useWeb3Modal(): ReturnType<typeof useWeb3ModalBase> {
   const baseApi = useWeb3ModalBase()
-  const modalState = usePstlWeb3ModalState()
+  const modalStore = usePstlWeb3ModalStore()
 
   return useMemo(() => {
     return {
@@ -97,9 +97,9 @@ export function useWeb3Modal(): ReturnType<typeof useWeb3ModalBase> {
       setDefaultChain: baseApi.setDefaultChain,
       close: () => {
         // Re-enable root modal's trap scroll locking
-        modalState.updateModalProps({
+        modalStore.updateModalProps({
           root: {
-            openType: 'root',
+            ...modalStore.state.root,
             bypassScrollLock: false
           }
         })
@@ -108,16 +108,16 @@ export function useWeb3Modal(): ReturnType<typeof useWeb3ModalBase> {
       open: (options?: OpenOptions) => {
         // Disable root modal's scroll lock
         // And allow walletconnect to scroll internally
-        modalState.updateModalProps({
+        modalStore.updateModalProps({
           root: {
-            openType: 'walletconnect',
+            ...modalStore.state.root,
             bypassScrollLock: true
           }
         })
         return baseApi.open(options)
       }
     }
-  }, [baseApi, modalState])
+  }, [baseApi, modalStore])
 }
 
 export function useWeb3Modals(): {

@@ -4,7 +4,7 @@ import { ModalPropsCtrl } from '../controllers'
 import { ModalPropsCtrlState } from '../controllers/types/controllerTypes'
 
 interface PstlWeb3ModalStateHook {
-  modalProps: ModalPropsCtrlState
+  state: ModalPropsCtrlState
   updateModalProps: (typeof ModalPropsCtrl)['update']
   resetErrors: () => void
 }
@@ -16,8 +16,8 @@ const NULL_ERROR_STATE = {
     error: null
   }
 }
-export function usePstlWeb3ModalState(): PstlWeb3ModalStateHook {
-  const [modalProps, setModalProps] = useState(ModalPropsCtrl.state)
+export function usePstlWeb3ModalStore(): PstlWeb3ModalStateHook {
+  const [state, setModalProps] = useState(ModalPropsCtrl.state)
 
   useEffect(() => {
     const unsubscribeModalPropsState = ModalPropsCtrl.subscribe((newModalProps) => {
@@ -32,7 +32,7 @@ export function usePstlWeb3ModalState(): PstlWeb3ModalStateHook {
   const resetErrors = useCallback(() => ModalPropsCtrl.update(NULL_ERROR_STATE), [])
 
   return {
-    modalProps,
+    state,
     updateModalProps: ModalPropsCtrl.update,
     resetErrors
   }
