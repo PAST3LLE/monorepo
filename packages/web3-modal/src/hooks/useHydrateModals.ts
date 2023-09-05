@@ -2,10 +2,10 @@ import { useEffect } from 'react'
 
 import { CHAIN_IMAGES } from '../constants'
 import { PstlWeb3ModalProps } from '../providers'
-import { usePstlWeb3ModalStore } from './usePstlWeb3ModalStore'
+import { usePstlWeb3ModalState } from './usePstlWeb3ModalState'
 
 export function useHydrateModals<ID extends number>(config: PstlWeb3ModalProps<ID>) {
-  const { updateModalProps } = usePstlWeb3ModalStore()
+  const { updateModalProps } = usePstlWeb3ModalState()
 
   useEffect(() => {
     const rootConfig = config?.modals?.root

@@ -1,7 +1,9 @@
 import React, { ReactNode, memo } from 'react'
 
 import { PstlWeb3Modal } from '../components'
-import { useAutoSwitchToChain, useConnectorAndChainConfig, useHydrateModals } from '../hooks'
+import { useAutoSwitchToChain } from '../hooks/useAutoSwitchToChain'
+import { useConnectorAndChainConfig } from '../hooks/useConnectorAndChainConfig'
+import { useHydrateModals } from '../hooks/useHydrateModals'
 import type { Chain, ChainsPartialReadonly, ReadonlyChain } from '../types'
 import type { PstlWeb3ModalProps } from './types'
 import {

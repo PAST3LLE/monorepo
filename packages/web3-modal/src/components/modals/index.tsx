@@ -5,7 +5,7 @@ import React, { memo, useEffect, useMemo } from 'react'
 import { useSnapshot } from 'valtio'
 
 import { ModalPropsCtrl, RouterCtrl } from '../../controllers'
-import { useMergeThemes, usePstlWeb3Modal, usePstlWeb3ModalStore } from '../../hooks'
+import { useMergeThemes, usePstlWeb3Modal, usePstlWeb3ModalState } from '../../hooks'
 import { AccountModal } from './AccountModal'
 import { ConnectionModal } from './ConnectionModal'
 import { ErrorModal } from './ErrorModal'
@@ -15,7 +15,7 @@ import { ModalId, StatelessBaseModalProps } from './common/types'
 
 export function ModalWithoutThemeProvider(baseProps: StatelessBaseModalProps) {
   const modalState = usePstlWeb3Modal()
-  const { resetErrors } = usePstlWeb3ModalStore()
+  const { resetErrors } = usePstlWeb3ModalState()
   const view = useSnapshot(RouterCtrl.state).view
 
   // Reset all error state on view change

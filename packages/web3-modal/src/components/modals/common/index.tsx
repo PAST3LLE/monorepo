@@ -3,7 +3,8 @@ import { useOnKeyPress } from '@past3lle/hooks'
 import React from 'react'
 
 import { Z_INDICES } from '../../../constants'
-import { useAutoClearingTimeout, usePstlWeb3ModalStore } from '../../../hooks'
+import { usePstlWeb3ModalState } from '../../../hooks'
+import { useAutoClearingTimeout } from '../../../hooks/useTimeout'
 import { ErrorMessage } from './ErrorMessage'
 import { InnerContainer, ModalTitle, StyledConnectionModal } from './styled'
 import { BaseModalProps, ModalId } from './types'
@@ -19,9 +20,9 @@ export function BaseModal({
   children,
   ...restModalProps
 }: BaseModalProps) {
-  const { state, updateModalProps } = usePstlWeb3ModalStore()
+  const { modalProps, updateModalProps } = usePstlWeb3ModalState()
 
-  const [showError, hideError] = useAutoClearingTimeout(!!state.connect?.error?.message, 7000, () =>
+  const [showError, hideError] = useAutoClearingTimeout(!!modalProps.connect?.error?.message, 7000, () =>
     updateModalProps({ connect: { error: null } })
   )
 
@@ -39,7 +40,7 @@ export function BaseModal({
       maxHeight={maxHeight}
       // to prevent locking of focus on modal (with web3auth this blocks using their modal e.g)
       tabIndex={undefined}
-      bypassConfig={{ scroll: !!state.root?.bypassScrollLock }}
+      bypassConfig={{ scroll: !!modalProps.root?.bypassScrollLock }}
       styleProps={{
         // w3modal has 89 zindex
         zIndex,
@@ -47,15 +48,15 @@ export function BaseModal({
       }}
       {...restModalProps}
     >
-      <InnerContainer justifyContent="flex-start" gap="0.75rem" isError={!!state.connect?.error?.message}>
+      <InnerContainer justifyContent="flex-start" gap="0.75rem" isError={!!modalProps.connect?.error?.message}>
         <Row width="100%" marginBottom="0.5em">
           <ModalTitle>{title}</ModalTitle>
           <CloseIcon height={30} width={100} onClick={onDismiss} />
         </Row>
         {children}
         <ErrorMessage
-          message={state.connect?.error?.message}
-          hide={!showError || !state.connect?.error?.message}
+          message={modalProps.connect?.error?.message}
+          hide={!showError || !modalProps.connect?.error?.message}
           onClick={hideError}
         />
       </InnerContainer>

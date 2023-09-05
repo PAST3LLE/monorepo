@@ -16,7 +16,7 @@ import {
 
 import { ModalPropsCtrl, OpenOptions } from '../controllers'
 import { usePstlWeb3Modal } from './usePstlWeb3Modal'
-import { usePstlWeb3ModalStore } from './usePstlWeb3ModalStore'
+import { usePstlWeb3ModalState } from './usePstlWeb3ModalState'
 
 type Callbacks = Pick<ReturnType<typeof useDisconnectWagmi>, 'disconnect'> & {
   openWalletConnectModal: ReturnType<typeof useWeb3Modal>['open']
@@ -64,8 +64,8 @@ export function useUserConnectionInfo() {
   const { address, connector, isConnected, isConnecting, isDisconnected, isReconnecting } = useAccount()
   const { chain, chains } = useNetwork()
   const {
-    state: { root }
-  } = usePstlWeb3ModalStore()
+    modalProps: { root }
+  } = usePstlWeb3ModalState()
   const balance = useBalance({
     address,
     chainId: chain?.id
@@ -89,7 +89,7 @@ export function useUserConnectionInfo() {
 
 export function useWeb3Modal(): ReturnType<typeof useWeb3ModalBase> {
   const baseApi = useWeb3ModalBase()
-  const modalState = usePstlWeb3ModalStore()
+  const modalState = usePstlWeb3ModalState()
 
   return useMemo(() => {
     return {
@@ -110,7 +110,7 @@ export function useWeb3Modal(): ReturnType<typeof useWeb3ModalBase> {
         // And allow walletconnect to scroll internally
         modalState.updateModalProps({
           root: {
-            ...modalState.state.root,
+            openType: 'walletconnect',
             bypassScrollLock: true
           }
         })
