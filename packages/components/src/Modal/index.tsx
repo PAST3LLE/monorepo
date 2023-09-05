@@ -6,7 +6,7 @@ import React, { useEffect } from 'react'
 import { animated } from 'react-spring'
 import styled from 'styled-components'
 
-import { DialogContent, DialogOverlay } from '../Dialog'
+import { DialogContent, DialogOverlay, DialogOverlayProps } from '../Dialog'
 
 const AnimatedDialogOverlay = animated(DialogOverlay)
 interface ModalStyleProps {
@@ -16,11 +16,18 @@ interface ModalStyleProps {
   mainBackgroundColor?: string
   width?: string
 }
-// Pick out the non-dom-compatible custom props
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const StyledDialogOverlay = styled(({ zIndex, mainBackgroundColor, ...props }) => <AnimatedDialogOverlay {...props} />)<
-  Pick<ModalStyleProps, 'overlayBackgroundColor' | 'zIndex'>
->`
+const StyledDialogOverlay = styled(
+  ({
+    // Pick out the non-dom-compatible custom props
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    zIndex,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    mainBackgroundColor,
+    ...props
+  }: DialogOverlayProps & { zIndex?: number; mainBackgroundColor?: string; id?: string; className?: string }) => (
+    <AnimatedDialogOverlay {...props} />
+  )
+)<Pick<ModalStyleProps, 'overlayBackgroundColor' | 'zIndex'>>`
   &[data-reach-dialog-overlay] {
     z-index: ${({ zIndex = Z_INDICES.MODALS }) => zIndex};
     position: fixed;
@@ -84,6 +91,7 @@ export interface ModalProps {
   className?: string
   children?: React.ReactNode
   // flags
+  bypassConfig?: { scroll?: boolean; focus?: boolean }
   isLargeImageModal?: boolean
   isOpen: boolean
   // inline style props
@@ -104,6 +112,7 @@ export interface ModalProps {
 
 export function Modal({
   id,
+  bypassConfig,
   isOpen,
   children,
   className,
@@ -134,6 +143,8 @@ export function Modal({
       onDismiss={onDismiss}
       initialFocusRef={initialFocusRef}
       unstable_lockFocusAcrossFrames={false}
+      dangerouslyBypassFocusLock={bypassConfig?.focus}
+      dangerouslyBypassScrollLock={bypassConfig?.scroll}
       {...styleProps}
     >
       <StyledDialogContent
