@@ -2,13 +2,13 @@ import { useCallback, useMemo } from 'react'
 
 import { trimAndLowerCase } from '../utils'
 import { useUserConnectionInfo } from './useConnection'
-import { usePstlWeb3ModalState } from './usePstlWeb3ModalState'
+import { usePstlWeb3ModalStore } from './usePstlWeb3ModalStore'
 
 export function useConnectedChainAndWalletLogo() {
   const userConnectionInfo = useUserConnectionInfo()
   const {
-    modalProps: { root }
-  } = usePstlWeb3ModalState()
+    state: { root }
+  } = usePstlWeb3ModalStore()
 
   return useMemo(
     () => ({
@@ -33,8 +33,8 @@ export const useConnectedWalletLogo = () => useConnectedChainAndWalletLogo().wal
 
 export const useGetChainLogoCallback = () => {
   const {
-    modalProps: { root }
-  } = usePstlWeb3ModalState()
+    state: { root }
+  } = usePstlWeb3ModalStore()
   return useCallback(
     (chainId: number) => (chainId ? root.chainImages?.[chainId] ?? root.chainImages?.unknown : undefined),
     [root?.chainImages]

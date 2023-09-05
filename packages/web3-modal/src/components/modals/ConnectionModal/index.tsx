@@ -3,7 +3,7 @@ import React, { memo, useMemo, useState } from 'react'
 import { useTheme } from 'styled-components'
 
 import { ModalPropsCtrlState } from '../../../controllers/types/controllerTypes'
-import { useConnectDisconnect, usePstlWeb3ModalState, useUserConnectionInfo, useWeb3Modals } from '../../../hooks'
+import { useConnectDisconnect, usePstlWeb3ModalStore, useUserConnectionInfo, useWeb3Modals } from '../../../hooks'
 import { LoadingScreen } from '../../LoadingScreen'
 import { WalletsWrapper } from '../common/styled'
 import { BaseModalProps, ModalId } from '../common/types'
@@ -36,7 +36,7 @@ function ConnectionModalContent({
   const modalView = isExtraSmallScreen ? 'list' : walletsView
 
   const modalCallbacks = useWeb3Modals()
-  const modalState = usePstlWeb3ModalState()
+  const modalStore = usePstlWeb3ModalStore()
   const userConnectionInfo = useUserConnectionInfo()
   const {
     connect: { connectAsync: connect },
@@ -47,7 +47,7 @@ function ConnectionModalContent({
         closeModalOnConnect && modalCallbacks.root.close()
       },
       onError(error) {
-        modalState.updateModalProps({
+        modalStore.updateModalProps({
           connect: {
             error
           }
@@ -113,7 +113,7 @@ function ConnectionModalContent({
         <WalletsWrapper
           id={`${ModalId.WALLETS}__wallets-wrapper`}
           view={modalView}
-          isError={!!modalState.modalProps.connect.error?.message}
+          isError={!!modalStore.state.connect.error?.message}
         >
           {data}
         </WalletsWrapper>

@@ -5,8 +5,12 @@ import React, { memo, useCallback, useMemo } from 'react'
 import { useTheme } from 'styled-components'
 
 import { ModalPropsCtrlState } from '../../../controllers/types/controllerTypes'
-import { useConnectDisconnect, usePstlWeb3Modal, useUserConnectionInfo } from '../../../hooks'
-import { useConnectedChainAndWalletLogo } from '../../../hooks/useLogos'
+import {
+  useConnectDisconnect,
+  useConnectedChainAndWalletLogo,
+  usePstlWeb3Modal,
+  useUserConnectionInfo
+} from '../../../hooks'
 import { PstlModalTheme } from '../../../theme'
 import BaseTheme from '../../../theme/baseTheme'
 import { ConnectorEnhanced } from '../../../types'
