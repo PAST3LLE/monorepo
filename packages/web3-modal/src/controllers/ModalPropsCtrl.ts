@@ -7,7 +7,8 @@ const state = proxy<ModalPropsCtrlState>({
   root: {
     connectorDisplayOverrides: {},
     closeModalOnConnect: false,
-    openType: 'root'
+    openType: 'root',
+    bypassScrollLock: false
   },
   connect: {
     walletsView: 'list',

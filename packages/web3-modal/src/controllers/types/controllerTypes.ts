@@ -50,6 +50,12 @@ export interface ModalCtrlState {
 
 interface RootModalState {
   /**
+   * @name bypassScrollLock
+   * @description Optional. Bypass scroll locking. By default @past3lle/web3-modal freezes scrolling when modal is open.
+   * @default undefined
+   */
+  bypassScrollLock?: boolean
+  /**
    * @name softLimitedChains
    * @description Optional. Cosmetically limited chains.
    */

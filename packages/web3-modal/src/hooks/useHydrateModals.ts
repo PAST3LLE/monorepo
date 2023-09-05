@@ -18,7 +18,8 @@ export function useHydrateModals<ID extends number>(config: PstlWeb3ModalProps<I
         },
         connectorDisplayOverrides: rootConfig?.connectorDisplayOverrides,
         closeModalOnConnect: rootConfig?.closeModalOnConnect,
-        openType: rootConfig?.openType || 'root'
+        openType: rootConfig?.openType || 'root',
+        bypassScrollLock: false
       },
       connect: {
         hideInjectedFromRoot: rootConfig?.hideInjectedFromRoot,

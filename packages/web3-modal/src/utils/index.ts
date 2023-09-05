@@ -85,7 +85,7 @@ export function runConnectorConnectionLogic(
   ]
 }
 
-const delayWithCondition = async ({
+const _delayWithCondition = async ({
   value,
   limit = 15,
   freq = 1000,
@@ -110,7 +110,7 @@ const loopFindElementById = async (id: string, limit = 10) => {
   let result: HTMLElement | null | 'BAILED' = null
   try {
     while (!result) {
-      result = await delayWithCondition({ value, limit, id })
+      result = await _delayWithCondition({ value, limit, id })
         .then((res) => {
           if (res === 'BAILED') throw '[loopFindElementById] Timeout searching for ' + id
           return res
@@ -248,12 +248,24 @@ async function _handleConnectorClick(
   }
 }
 
-async function _connectToProvider({ connector, openWalletConnectModal, connect, baseConnectorKey, chainId }: any) {
+async function _connectToProvider({
+  connector,
+  openWalletConnectModal,
+  connect,
+  baseConnectorKey,
+  chainId
+}: Pick<GetConnectorInfoCallbacks, 'openWalletConnectModal' | 'connect'> & {
+  connector: ConnectorEnhanced<any, any>
+  baseConnectorKey: ConnectorEnhancedExtras | undefined
+  chainId?: number
+}) {
   switch (connector.id) {
     case DefaultWallets.WEB3MODAL:
       return openWalletConnectModal({ route: 'ConnectWallet' })
     default: {
-      await connect({ connector, chainId }).catch((error: any) => {
+      try {
+        await connect({ connector, chainId })
+      } catch (error: any) {
         const errorMessage = new Error(error).message
         const connectorNotFoundError = errorMessage?.includes('ConnectorNotFoundError')
 
@@ -262,7 +274,7 @@ async function _connectToProvider({ connector, openWalletConnectModal, connect, 
         }
 
         throw error
-      })
+      }
     }
   }
 }

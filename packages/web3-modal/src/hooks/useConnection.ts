@@ -1,7 +1,7 @@
 import { useIsSmallMediaWidth } from '@past3lle/hooks'
 import { ConnectArgs, ConnectResult } from '@wagmi/core'
-import { useWeb3Modal } from '@web3modal/react'
-import { useCallback } from 'react'
+import { useWeb3Modal as useWeb3ModalBase } from '@web3modal/react'
+import { useCallback, useMemo } from 'react'
 import { useSnapshot } from 'valtio'
 import {
   Address,
@@ -14,7 +14,7 @@ import {
   useNetwork
 } from 'wagmi'
 
-import { ModalPropsCtrl } from '../controllers'
+import { ModalPropsCtrl, OpenOptions } from '../controllers'
 import { usePstlWeb3Modal } from './usePstlWeb3Modal'
 import { usePstlWeb3ModalState } from './usePstlWeb3ModalState'
 
@@ -85,6 +85,39 @@ export function useUserConnectionInfo() {
     supportedChains: root?.softLimitedChains || chains,
     balance
   }
+}
+
+export function useWeb3Modal(): ReturnType<typeof useWeb3ModalBase> {
+  const baseApi = useWeb3ModalBase()
+  const modalState = usePstlWeb3ModalState()
+
+  return useMemo(() => {
+    return {
+      isOpen: baseApi.isOpen,
+      setDefaultChain: baseApi.setDefaultChain,
+      close: () => {
+        // Re-enable root modal's trap scroll locking
+        modalState.updateModalProps({
+          root: {
+            openType: 'root',
+            bypassScrollLock: false
+          }
+        })
+        return baseApi.close()
+      },
+      open: (options?: OpenOptions) => {
+        // Disable root modal's scroll lock
+        // And allow walletconnect to scroll internally
+        modalState.updateModalProps({
+          root: {
+            openType: 'walletconnect',
+            bypassScrollLock: true
+          }
+        })
+        return baseApi.open(options)
+      }
+    }
+  }, [baseApi, modalState])
 }
 
 export function useWeb3Modals(): {

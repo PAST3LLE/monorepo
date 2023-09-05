@@ -1,7 +1,7 @@
 export { AccountCtrl } from './AccountCtrl'
 export { ClientCtrl } from './ClientCtrl'
 export { ConfigCtrl } from './ConfigCtrl'
-export { ModalCtrl } from './ModalCtrl'
+export { ModalCtrl, type OpenOptions } from './ModalCtrl'
 export { OptionsCtrl } from './OptionsCtrl'
 export { RouterCtrl } from './RouterCtrl'
 export { ModalPropsCtrl } from './ModalPropsCtrl'
