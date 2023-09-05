@@ -81,9 +81,9 @@
     "@past3lle/theme": "^0.1.7",
     "@past3lle/utils": "^0.1.6",
     "@past3lle/wagmi-connectors": "^0.1.7",
-    "@web3modal/ethereum": "^2.6.0",
-    "@web3modal/html": "^2.6.0",
-    "@web3modal/react": "^2.6.0",
+    "@web3modal/ethereum": "^2.7.1",
+    "@web3modal/html": "^2.7.1",
+    "@web3modal/react": "^2.7.1",
     "valtio": "^1.10.3"
   },
   "devDependencies": {
