@@ -9,7 +9,7 @@ import { WindowProvider, mainnet, useBalance } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { infuraProvider } from 'wagmi/providers/infura'
 
-import { useUserConnectionInfo, useWeb3Modals } from '../hooks'
+import { useAccountNetworkActions, useUserConnectionInfo } from '../hooks'
 import { PstlWeb3ModalProps, PstlW3Providers as WalletModal } from '../providers'
 import { addConnector } from '../providers/utils'
 import { COMMON_CONNECTOR_OVERRIDES, DEFAULT_PROPS, DEFAULT_PROPS_WEB3AUTH, pstlModalTheme } from './config'
@@ -36,15 +36,12 @@ interface Web3ButtonProps {
   children?: ReactNode
 }
 const Web3Button = ({ children = <div>Show PSTL Wallet Modal</div> }: Web3ButtonProps) => {
-  const { root } = useWeb3Modals()
+  const { onAccountClick } = useAccountNetworkActions()
   const { address, connector } = useUserConnectionInfo()
 
   return (
     <ColumnCenter>
-      <PstlButton
-        buttonVariant={ButtonVariations.PRIMARY}
-        onClick={() => (address ? root.open({ route: 'Account' }) : root.open({ route: 'ConnectWallet' }))}
-      >
+      <PstlButton buttonVariant={ButtonVariations.PRIMARY} onClick={onAccountClick}>
         {children}
       </PstlButton>
       <h3>Connected to {address || 'DISCONNECTED!'}</h3>
@@ -992,6 +989,7 @@ export default {
                 mode
               },
               closeModalOnConnect: true,
+              openType: 'root',
               walletsView: 'grid',
               maxWidth: '650px',
               minHeight: '600px',

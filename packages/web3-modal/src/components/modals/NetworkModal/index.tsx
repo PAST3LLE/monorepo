@@ -48,7 +48,7 @@ function NetworkModalContent() {
               optionValue={chain.id}
               key={chain.id}
               // data props
-              callback={() => switchNetworkAsync(chain.id) as any}
+              callback={async () => switchNetworkAsync(chain.id)}
               modalView={modalView}
               connected={false}
               connector={connector as ConnectorEnhanced<any, any>}

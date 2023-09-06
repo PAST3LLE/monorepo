@@ -1,6 +1,7 @@
 import { ButtonProps } from '@past3lle/components'
 import { ConnectArgs, ConnectResult, PublicClient } from '@wagmi/core'
 import React, { ReactNode, memo } from 'react'
+import { Chain } from 'viem'
 
 import { ConnectorEnhanced } from '../../../types'
 import { ConnectorInfo } from '../../../utils'
@@ -20,6 +21,7 @@ export type ConnectorOptionProps = Omit<ConnectorInfo, 'logo'> & {
   showHelperText?: boolean
   logo: ReactNode
   callback?:
+    | (() => Promise<Chain>)
     | ((options?: any) => Promise<void>)
     | ((args?: Partial<ConnectArgs> | undefined) => Promise<ConnectResult<PublicClient>>)
 }
