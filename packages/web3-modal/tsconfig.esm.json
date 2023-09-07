@@ -4,5 +4,8 @@
         "module": "ES2020",
         "outDir": "./dist/esm",
         "declarationDir": "./dist/types"
-    }
+    },
+    "exclude": [
+        "./src/fixtures"
+    ]
 }
