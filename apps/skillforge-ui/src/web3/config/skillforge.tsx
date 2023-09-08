@@ -50,6 +50,12 @@ export const WEB3_PROPS: Web3ModalConfigWeb3Props = {
       }
     },
     root: {
+      chainImages: {
+        [1]: 'https://cryptologos.cc/logos/versions/ethereum-eth-logo-colored.svg',
+        [5]: 'https://cryptologos.cc/logos/versions/ethereum-eth-logo-colored.svg',
+        [137]:
+          'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Polygon_Blockchain_Matic_Logo.svg/1200px-Polygon_Blockchain_Matic_Logo.svg.png'
+      },
       title: SKILLFORGE_APP_NAME + ' LOGIN',
       themeConfig: { theme: PSTL_MODAL_THEME },
       walletsView: 'list',
@@ -75,7 +81,8 @@ export const WEB3_PROPS: Web3ModalConfigWeb3Props = {
         web3auth: {
           isRecommended: true,
           logo: GOOGLE_APPLE_LOGO,
-          customName: 'Google & more'
+          customName: 'Google & more',
+          rank: 1000
         },
         walletconnect: {
           logo: 'https://raw.githubusercontent.com/WalletConnect/walletconnect-assets/master/Logo/Gradient/Logo.png',
@@ -89,7 +96,12 @@ export const WEB3_PROPS: Web3ModalConfigWeb3Props = {
                 blockchain knowledge.
               </strong>
             )
-          }
+          },
+          rank: 100
+        },
+        'ledger-hid': {
+          logo: 'https://crypto-central.io/library/uploads/Ledger-Logo-3.png',
+          rank: 0
         }
       },
       loaderProps: {
