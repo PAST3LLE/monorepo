@@ -1,5 +1,5 @@
 import { DDPXImageUrlMap, GenericImageSrcSet } from '@past3lle/types'
-import { transparentize } from 'polished'
+import { darken, lighten, transparentize } from 'polished'
 import { CSSObject, DefaultTheme, SimpleInterpolation, css } from 'styled-components'
 import { hex } from 'wcag-contrast'
 
@@ -356,6 +356,5 @@ export const getThemeColoursCurried =
   (mode: keyof T['modes'] | 'DEFAULT') =>
     (theme.modes as T['modes'])?.[mode]
 
-export function isObjectEmpty(obj: Record<any, any>): boolean {
-  return Object.keys(obj).length === 0
-}
+// re-exported polished utils
+export { transparentize, darken as darkenColor, lighten as lightenColor }
