@@ -1,43 +1,44 @@
+import { devDebug } from '@past3lle/utils'
 import { ChainNotConfiguredForConnectorError, normalizeChainId } from '@wagmi/connectors'
 import invariant from 'tiny-invariant'
-import {
-  Account,
-  ProviderRpcError,
-  SwitchChainError,
-  UserRejectedRequestError,
-  createWalletClient,
-  custom,
-  getAddress,
-  numberToHex
-} from 'viem'
-import { Address, Connector, ConnectorData, ConnectorNotFoundError, WalletClient, mainnet } from 'wagmi'
+import { Account, Chain, SwitchChainError, createWalletClient, custom, getAddress, numberToHex } from 'viem'
+import { Address, Connector, ConnectorData, ConnectorNotFoundError, WalletClient } from 'wagmi'
 
+import { ERROR_MESSAGES, ErrorCodes } from './errorCodes'
 import { checkError, isHIDSupported } from './helpers'
 import type { LedgerHQProvider } from './provider'
 import { ConnectorUpdate } from './types'
 
 export { checkError, isHIDSupported }
 
-type LedgerHidOptions = { url: string; shimDisconnect?: boolean; onDeviceDisconnect?: () => Promise<void> }
+type LedgerHidOptions = { shimDisconnect?: boolean; onDeviceDisconnect?: () => Promise<void> }
 export class LedgerHIDConnector extends Connector<LedgerHQProvider, LedgerHidOptions> {
-  public provider?: LedgerHQProvider
-  public url: string
-  public chainId: number
-
-  ready: boolean
-
+  // name & id
   id = 'ledger-hid'
   name = 'Ledger HID'
+  // provider/chain info
+  url: string
+  provider?: LedgerHQProvider
+  // flags
+  ready: boolean
+
+  // ========
+  // PRIVATE
+  // ========
+  private chainId: number
+  // saves each ledger instance per chain id
+  private providerByChainMap: Map<number, LedgerHQProvider | undefined> = new Map()
 
   protected shimDisconnectKey = `${this.id}.shimDisconnect`
 
   // Ledger only accepts mainnet so these constuctor props are useless
-  constructor(config: { options?: LedgerHidOptions }) {
-    super({ chains: [mainnet], options: config?.options || { url: mainnet.rpcUrls.default.http[0] } })
+  constructor(config: { chains: Chain[]; options?: LedgerHidOptions }) {
+    super({ chains: config.chains, options: config?.options || {} })
 
-    // Ledger only accepts 1 (mainnet ethereum) for now
-    this.chainId = mainnet.id
-    this.url = mainnet.rpcUrls.default.http[0]
+    const { id, rpcUrls } = config.chains[0]
+
+    this.chainId = id
+    this.url = rpcUrls?.default?.http?.[0]
 
     this.handleDisconnect = this.handleDisconnect.bind(this)
     this.ready = true
@@ -45,7 +46,7 @@ export class LedgerHIDConnector extends Connector<LedgerHQProvider, LedgerHidOpt
 
   async connect({ chainId }: { chainId?: number } = {}): Promise<Required<ConnectorData>> {
     try {
-      const { account, provider } = await this.activate()
+      const { account, provider } = await this.activate(chainId)
 
       if (!provider) throw new ConnectorNotFoundError()
 
@@ -71,10 +72,13 @@ export class LedgerHIDConnector extends Connector<LedgerHQProvider, LedgerHidOpt
 
       return { account: account as Address, chain: { id, unsupported } }
     } catch (error) {
-      if ((error as any)?.statusCode === 27906) {
-        throw new Error('Ledger locked! Please unlock and make sure your Ethereum app is open.')
+      const statusCode: ErrorCodes | undefined = (error as any)?.statusCode
+      switch (statusCode) {
+        case 27906:
+          throw new Error(ERROR_MESSAGES[statusCode])
+        default:
+          throw error
       }
-      throw error
     }
   }
 
@@ -82,16 +86,19 @@ export class LedgerHIDConnector extends Connector<LedgerHQProvider, LedgerHidOpt
   async disconnect() {
     invariant(this.provider, 'Provider not available')
 
-    this.provider.removeListener('accountsChanged', this.onAccountsChanged)
-    this.provider.removeListener('chainChanged', this.onChainChanged)
-    this.provider.removeListener('disconnect', this.onDisconnect)
+    // desub all providers on disconnect (not just current)
+    this.providerByChainMap.forEach((provider) => {
+      provider?.removeListener('accountsChanged', this.onAccountsChanged)
+      provider?.removeListener('chainChanged', this.onChainChanged)
+      provider?.removeListener('disconnect', this.onDisconnect)
+    })
 
     // Remove shim signalling wallet is disconnected
     if (this.options.shimDisconnect) this.storage?.removeItem(this.shimDisconnectKey)
   }
 
   async getWalletClient({ chainId }: { chainId?: number } = {}): Promise<WalletClient> {
-    const [provider, account] = await Promise.all([this.getProvider(), this.getAccount()])
+    const [provider, account] = await Promise.all([this.getProvider({ chainId }), this.getAccount()])
     const chain = this.chains.find((x) => x.id === chainId)
     if (!provider) throw new Error('provider is required.')
     return createWalletClient({
@@ -110,7 +117,7 @@ export class LedgerHIDConnector extends Connector<LedgerHQProvider, LedgerHidOpt
       )
         return false
 
-      const provider = await this.getProvider()
+      const provider = await this.getProvider({ chainId: this.chainId })
       if (!provider) throw new ConnectorNotFoundError()
       const account = await this.getAccount()
       return !!account
@@ -120,70 +127,36 @@ export class LedgerHIDConnector extends Connector<LedgerHQProvider, LedgerHidOpt
   }
 
   async switchChain(chainId: number) {
-    const provider = await this.getProvider()
-    if (!provider) throw new ConnectorNotFoundError()
-    const id = numberToHex(chainId)
+    const providerAtChainExists = !!this.providerByChainMap.get(chainId)
 
+    const provider = await (!providerAtChainExists ? this.activate(chainId) : this.getProvider({ chainId }))
+    if (!provider) throw new ConnectorNotFoundError()
+
+    const id = numberToHex(chainId)
+    const currentChain = this.chains.find((x) => x.id === chainId)
     try {
-      await Promise.all([
-        provider.request({
-          method: 'wallet_switchEthereumChain',
-          params: [{ chainId: id }]
-        }),
-        new Promise<void>((res) =>
-          this.on('change', ({ chain }) => {
-            if (chain?.id === chainId) res()
-          })
-        )
-      ])
-      return (
-        this.chains.find((x) => x.id === chainId) ?? {
-          id: chainId,
-          name: `Chain ${id}`,
-          network: `${id}`,
-          nativeCurrency: { name: 'Ether', decimals: 18, symbol: 'ETH' },
-          rpcUrls: { default: { http: [''] }, public: { http: [''] } }
-        }
-      )
+      const derivedChain = currentChain ?? {
+        id: chainId,
+        name: `Chain ${id}`,
+        network: `${id}`,
+        nativeCurrency: { name: 'Ether', decimals: 18, symbol: 'ETH' },
+        rpcUrls: { default: { http: [''] }, public: { http: [''] } }
+      }
+
+      this.chainId = derivedChain.id
+      this.url = derivedChain.rpcUrls.default.http[0]
+
+      this.onChainChanged(this.chainId)
+
+      return derivedChain
     } catch (error) {
-      const chain = this.chains.find((x) => x.id === chainId)
-      if (!chain)
+      if (!currentChain)
         throw new ChainNotConfiguredForConnectorError({
           chainId,
           connectorId: this.id
         })
 
       // Indicates chain is not added to provider
-      if (
-        (error as ProviderRpcError).code === 4902 ||
-        // Unwrapping for MetaMask Mobile
-        // https://github.com/MetaMask/metamask-mobile/issues/2944#issuecomment-976988719
-        (error as ProviderRpcError<{ originalError: { code: number } }>)?.data?.originalError?.code === 4902
-      ) {
-        try {
-          await provider.request({
-            method: 'wallet_addEthereumChain',
-            params: [
-              {
-                chainId: id,
-                chainName: chain.name,
-                nativeCurrency: chain.nativeCurrency,
-                rpcUrls: [chain.rpcUrls.public?.http[0] ?? ''],
-                blockExplorerUrls: this.getBlockExplorerUrls(chain)
-              }
-            ]
-          })
-
-          const currentChainId = await this.getChainId()
-          if (currentChainId !== chainId)
-            throw new UserRejectedRequestError(new Error('User rejected switch after adding network.'))
-
-          return chain
-        } catch (error) {
-          throw new UserRejectedRequestError(error as Error)
-        }
-      }
-
       throw new SwitchChainError(error as Error)
     }
   }
@@ -199,22 +172,28 @@ export class LedgerHIDConnector extends Connector<LedgerHQProvider, LedgerHidOpt
     image?: string
     symbol: string
   }): Promise<boolean> {
-    const provider = await this.getProvider()
+    const provider = await this.getProvider({ chainId: this.chainId })
     if (!provider) throw new ConnectorNotFoundError()
-    return provider.request({
-      method: 'wallet_watchAsset',
-      params: [
-        {
-          type: 'ERC20',
-          options: {
-            address,
-            decimals,
-            image,
-            symbol
+
+    try {
+      return provider.request({
+        method: 'wallet_watchAsset',
+        params: [
+          {
+            type: 'ERC20',
+            options: {
+              address,
+              decimals,
+              image,
+              symbol
+            }
           }
-        }
-      ]
-    }) as Promise<boolean>
+        ]
+      }) as Promise<boolean>
+    } catch (error) {
+      console.error('[Ledger HID] Asset watching not supported by Ledger HID device.')
+      return false
+    }
   }
 
   protected onAccountsChanged = (accounts: string[]) => {
@@ -241,26 +220,53 @@ export class LedgerHIDConnector extends Connector<LedgerHQProvider, LedgerHidOpt
     this.emit('change', { chain: { id, unsupported } })
   }
 
-  public isSupported(): boolean {
+  static isSupported(): boolean {
     return isHIDSupported()
   }
 
   public async getProvider(config?: { chainId?: number | undefined } | undefined): Promise<LedgerHQProvider> {
-    invariant(this.provider, 'Provider is not defined. ChainId: ' + config?.chainId)
-    return this.provider
+    invariant(config?.chainId, '[Ledger HID] No passed chain id.')
+    invariant(
+      this.providerByChainMap.get(config.chainId),
+      '[Ledger HID] Provider is not defined. ChainId: ' + config?.chainId
+    )
+
+    return this.providerByChainMap.get(config.chainId) as LedgerHQProvider
   }
 
-  public async getProviderInstance(): Promise<LedgerHQProvider> {
+  public async getProviderInstance(id?: number): Promise<LedgerHQProvider> {
     const { LedgerHQProvider } = await import('./provider')
-    const Provider = new LedgerHQProvider(this.url, this.chainId)
+    // getProviderInstance queried without a chain id
+    if (!id) {
+      // No provider and no id? throw error
+      if (!!this.provider?.connection)
+        throw new Error('[Ledger HID] Cannot re-instantiate provider without a new chain ID!')
+      // Else is initial instantiation, use current chain id
+      else
+        devDebug(
+          '[Ledger HID Connector] Missing instantiation chain ID. Instantiating with constructor chain:',
+          this.chainId
+        )
+    }
 
-    return Provider
+    const derivedId = id ?? this.chainId
+
+    const url = this.chains.find((chain) => chain.id === derivedId)?.rpcUrls?.default?.http?.[0]
+    if (!url) throw new Error('[Ledger HID] Missing chain URL. Please check chain configuration options.')
+
+    const provider = new LedgerHQProvider(url, derivedId)
+
+    // set the provider mapping with our new provider instance
+    this.providerByChainMap.set(derivedId, provider)
+    return provider
   }
 
-  private async activate(): Promise<ConnectorUpdate<LedgerHQProvider>> {
+  private async activate(id?: number): Promise<ConnectorUpdate<LedgerHQProvider>> {
+    const noProviderAtChainId = id && !this.providerByChainMap.get(id)
+
     try {
-      if (!this.provider) {
-        this.provider = await this.getProviderInstance()
+      if (noProviderAtChainId || !this.provider) {
+        this.provider = await this.getProviderInstance(id)
       }
 
       const account = await this.provider.enable()
@@ -277,13 +283,16 @@ export class LedgerHIDConnector extends Connector<LedgerHQProvider, LedgerHidOpt
   }
 
   public async getAccount(): Promise<Address> {
-    invariant(this.provider, 'Provider is not defined')
+    invariant(this.provider, '[Ledger HID] getAccount: Provider is not defined!')
     return this.provider.getAddress() as Promise<Address>
   }
 
   public deactivate(): void {
-    invariant(this.provider, 'Provider is not defined')
-    this.provider.removeListener('disconnect', this.handleDisconnect)
+    invariant(this.provider, '[Ledger HID] deactivate: Provider is not defined')
+    // deactivate all providers in map
+    this.providerByChainMap.forEach((provider) => {
+      provider?.removeListener('disconnect', this.handleDisconnect)
+    })
   }
 
   // =====================
