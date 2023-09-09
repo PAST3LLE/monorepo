@@ -83,7 +83,7 @@
     "test:watch": "tsc test --env=jsdom --watchAll",
     "test:ci": "yarn alt-test --coverage --no-watch --watch=false --watchAll=false --no-watchman --forceExit --detectOpenHandles",
     "pre-commit": "pretty-quick --staged && yarn test:ci && yarn build",
-    "lint": "prettier --write ./src/** --ignore-path '../../.prettierignore'",
+    "lint": "prettier --write './src/**/*' --ignore-path '../../.prettierignore'",
     "depcheck": "npx npm-check",
     "write-version": "echo {'\"version\"': '\"'$npm_package_version'\"' } > ./src/version.json",
     "postversion": "yarn write-version && git add -- src/version.json && git commit -m 'forge-web3: version.json update'"

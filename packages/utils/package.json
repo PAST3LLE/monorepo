@@ -22,7 +22,7 @@
     "prepack": "yarn build",
     "start": "tsdx watch",
     "pre-commit": "pretty-quick --staged && yarn test:ci && yarn build",
-    "lint": "prettier --write ./src/** --ignore-path '../../.prettierignore'",
+    "lint": "prettier --write './src/**/*' --ignore-path '../../.prettierignore'",
     "depcheck": "npx npm-check"
   },
   "publishConfig": {

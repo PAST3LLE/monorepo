@@ -11,14 +11,13 @@
     "build": "lerna run build --stream",
     "build:public": "lerna run build --no-private --stream",
     "lint": "lerna run lint --stream --parallel",
+    "lint:scope": "lerna run lint --scope",
     "lint:examples": "npx prettier --write examples --ignore-file './prettierignore'",
     "start:skillforge": "lerna run start --scope @past3lle/skillforge-ui",
     "start:landing-ui": "lerna run start --scope @past3lle/pastellelabs-landing-ui",
     "test": "yarn jest --coverage",
     "test:watch": "yarn test --watch",
     "install:examples": "cd examples/generic && yarn && cd ../../",
-    "publish:all": "lerna publish",
-    "prepare:publish": "node ./configure-references.js && lerna publish",
     "nft:write": "lerna run metadata:write --scope @past3lle/skills-nft --",
     "build:scope": "lerna run build --scope",
     "build-serve:scope": "lerna run build:serve --scope",
@@ -28,7 +27,10 @@
     "cosmos:scope": "lerna run cosmos --scope",
     "forge-cli:scope": "lerna run forge-cli --scope",
     "cli-ui": "yarn forge-cli:scope @past3lle/skillforge-ui",
-    "example:next": "cd examples/next-app && rm -rf yarn.lock node_modules && yarn install --force && yarn dev && cd ../.."
+    "example:next": "cd examples/next-app && rm -rf yarn.lock node_modules && yarn install --force && yarn dev && cd ../..",
+    "pre-publish": "yarn lint && lerna run check-types && yarn build;",
+    "publish:all": "lerna publish",
+    "prepare:publish": "node ./configure-references.js && lerna publish"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.18.6",
