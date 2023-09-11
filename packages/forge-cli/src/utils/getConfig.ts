@@ -26,7 +26,7 @@ const DEFAULT_CONFIG: ForgeConfig = {
     polygon: {
       id: 137,
       rpcUrl: 'https://rpc-mainnet.maticvigil.com/v1/INSERT_MATIC_VIGIL_KEY_HERE'
-    },
+    }
   },
   mnemonic: 'test test test test test',
   etherscanApiKey: 'INSERT_ETHERSCAN_API_KEY_HERE'

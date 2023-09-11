@@ -49,11 +49,23 @@ const StyledDialogOverlay = styled(
 
 const AnimatedDialogContent = animated(DialogContent)
 // destructure to not pass custom props to Dialog DOM element
+// need to disable the rule here and re-enable later (as it's formatted by eslint)
+/* eslint-disable @typescript-eslint/no-unused-vars */
 const StyledDialogContent = styled(
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, prettier/prettier
-  ({ mainBackgroundColor, height, margin, minHeight, maxHeight, maxWidth, width, isOpen, isLargeImageModal, tabIndex, zIndex, ...rest }) => (
-    <AnimatedDialogContent {...rest} tabIndex={tabIndex} />
-  )
+  ({
+    mainBackgroundColor,
+    height,
+    margin,
+    minHeight,
+    maxHeight,
+    maxWidth,
+    width,
+    isOpen,
+    isLargeImageModal,
+    tabIndex,
+    zIndex,
+    ...rest
+  }) => <AnimatedDialogContent {...rest} tabIndex={tabIndex} />
 ).attrs({
   'aria-label': 'dialog'
 })<Omit<ModalStyleProps, 'overlayBackgroundColor' | 'zIndex'>>`
@@ -84,7 +96,8 @@ const StyledDialogContent = styled(
     ${({ minHeight }) => minHeight && `min-height: ${minHeight};`}
   }
 `
-
+// re-enable no-unused-vars
+/* eslint-enable @typescript-eslint/no-unused-vars */
 export interface ModalProps {
   // common dom props
   id?: string
