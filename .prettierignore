@@ -31,5 +31,8 @@ tsconfig.*.json
 .yalc
 .vscode
 
-src/fonts
-src/svg
+/fonts
+/**/*.svg
+/**/*.png
+/**/*.d.ts
+/**/*.md
