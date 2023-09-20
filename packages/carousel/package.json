@@ -1,6 +1,6 @@
 {
   "name": "@past3lle/carousel",
-  "version": "0.1.24-alpha.0",
+  "version": "0.1.23",
   "description": "PAST3LLE animated carousel built with @past3lle/carousel-hooks, usegesture, and react-springs",
   "keywords": [
     "springs",
@@ -10,8 +10,7 @@
     "swipe"
   ],
   "sideEffects": false,
-  "type": "module",
-  "export": "dist/index.js",
+  "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
     "dist"
@@ -34,7 +33,7 @@
     "test:watch": "tsc test --env=jsdom --watchAll",
     "test:ci": "yarn alt-test --coverage --no-watch --watch=false --watchAll=false --no-watchman --forceExit --detectOpenHandles",
     "pre-commit": "pretty-quick --staged && yarn test:ci && yarn build",
-    "lint": "prettier --write './src/**/*' --ignore-path '../../.prettierignore'",
+    "lint": "prettier --write ./src/** --ignore-path '../../.prettierignore'",
     "cosmos": "cosmos",
     "cosmos:export": "cosmos-export",
     "depcheck": "npx npm-check"
