@@ -1,5 +1,6 @@
+export * from './useCloseAndUpdateModals'
 export * from './useConnection'
+export * from './useLogos'
 export * from './useMergeThemes'
 export * from './usePstlWeb3Modal'
 export * from './usePstlWeb3ModalStore'
-export * from './useLogos'

@@ -3,7 +3,13 @@ import React, { memo, useMemo, useState } from 'react'
 import { useTheme } from 'styled-components'
 
 import { ModalPropsCtrlState } from '../../../controllers/types/controllerTypes'
-import { useConnectDisconnect, usePstlWeb3ModalStore, useUserConnectionInfo, useWeb3Modals } from '../../../hooks'
+import {
+  useCloseAndUpdateModals,
+  useConnectDisconnect,
+  usePstlWeb3ModalStore,
+  useUserConnectionInfo,
+  useWeb3Modals
+} from '../../../hooks'
 import { LoadingScreen } from '../../LoadingScreen'
 import { WalletsWrapper } from '../common/styled'
 import { BaseModalProps, ModalId } from '../common/types'
@@ -38,22 +44,16 @@ function ConnectionModalContent({
   const modalCallbacks = useWeb3Modals()
   const modalState = usePstlWeb3ModalStore()
   const userConnectionInfo = useUserConnectionInfo()
+
   const {
     connect: { connectAsync: connect },
     disconnect: { disconnectAsync: disconnect }
-  } = useConnectDisconnect({
-    connect: {
-      onSuccess() {
-        closeModalOnConnect && modalCallbacks.root.close()
-      },
-      onError(error) {
-        modalState.updateModalProps({
-          connect: {
-            error
-          }
-        })
-      }
-    }
+  } = useConnectDisconnect()
+
+  // Close modal(s) on successful connection & report any errors
+  useCloseAndUpdateModals(!!closeModalOnConnect, {
+    closeModal: modalCallbacks.root.close,
+    updateState: modalState.updateModalProps
   })
 
   const connectorDisplayOverrides = useMemo(
