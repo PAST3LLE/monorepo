@@ -30,7 +30,7 @@
     "cli-ui": "yarn forge-cli:scope @past3lle/skillforge-ui",
     "pre-publish": "yarn lint && lerna run check-types && yarn build;",
     "prepare:publish": "node ./configure-references.js && lerna publish",
-    "publish:all": "lerna publish"
+    "publish:all": "yarn pre-publish && lerna publish"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.18.6",
