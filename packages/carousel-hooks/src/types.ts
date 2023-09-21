@@ -1,5 +1,5 @@
+import { SpringConfig, useSprings } from '@react-spring/web'
 import { DOMAttributes, MutableRefObject } from 'react'
-import { SpringConfig, useSprings } from 'react-spring'
 
 /**
  * @name AxisDirection

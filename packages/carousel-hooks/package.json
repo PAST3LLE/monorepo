@@ -11,6 +11,7 @@
     "scroll"
   ],
   "main": "dist/index.js",
+  "exports": "./dist/carousel-hooks.esm.js",
   "typings": "dist/index.d.ts",
   "files": [
     "dist"
@@ -48,8 +49,20 @@
       "<rootDir>src/**/__tests__/*.{ts,tsx}"
     ]
   },
+  "resolutions": {
+    "@react-spring/web": ">=9 < 10",
+    "@use-gesture/react": ">=10 < 11"
+  },
+  "peerDependencies": {
+    "@react-spring/web": ">=9 < 10",
+    "@use-gesture/react": ">=10 < 11",
+    "react": ">=16",
+    "react-dom": ">=16"
+  },
   "devDependencies": {
     "@babel/core": "^7.20.12",
+    "@react-spring/web": "^9.7.3",
+    "@use-gesture/react": "^10.3.0",
     "@rollup/plugin-image": "^3.0.1",
     "@testing-library/jest-dom": "^5.1.1",
     "@testing-library/react": "^13.4.0",
@@ -69,9 +82,7 @@
   },
   "dependencies": {
     "@past3lle/hooks": "^0.1.20",
-    "@use-gesture/react": "^10.2.6",
-    "lodash.clamp": "^4.0.3",
-    "react-spring": "^9.4.3"
+    "lodash.clamp": "^4.0.3"
   },
   "gitHead": "f852fe196f05c3b9111c9642af6df32c8bff7a6e"
 }

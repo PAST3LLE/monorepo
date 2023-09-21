@@ -1,5 +1,5 @@
+import { useSprings } from '@react-spring/web'
 import { useDrag } from '@use-gesture/react'
-import { useSprings } from 'react-spring'
 
 import { InfiniteScrollOptions, SpringAnimationHookReturn } from '../types'
 import { runInfiniteScrollSprings } from '../utils'

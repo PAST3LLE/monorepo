@@ -1,4 +1,4 @@
-import { SpringConfig } from 'react-spring'
+import { SpringConfig } from '@react-spring/web'
 
 export const STIFF_SPRINGS: SpringConfig = {
   tension: 260,

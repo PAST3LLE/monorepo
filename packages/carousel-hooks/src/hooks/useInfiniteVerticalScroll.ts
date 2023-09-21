@@ -1,7 +1,7 @@
 import { useIsMobile } from '@past3lle/hooks'
+import { useSprings } from '@react-spring/web'
 import { useGesture } from '@use-gesture/react'
 import { useRef } from 'react'
-import { useSprings } from 'react-spring'
 
 import { STIFF_SPRINGS } from '../constants/springs'
 import { InfiniteScrollOptions, SpringAnimationHookReturn } from '../types'

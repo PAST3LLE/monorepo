@@ -1,6 +1,6 @@
+import { useSprings } from '@react-spring/web'
 import { useDrag } from '@use-gesture/react'
 import { useRef, useState } from 'react'
-import { useSprings } from 'react-spring'
 
 import { AxisDirection, OverwritingOptions, SpringAnimationHookReturn } from '../types'
 import utils from '../utils'

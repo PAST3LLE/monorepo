@@ -1,5 +1,5 @@
+import { useSprings } from '@react-spring/web'
 import { useGesture } from '@use-gesture/react'
-import { useSprings } from 'react-spring'
 
 import { OverwritingOptions, SpringAnimationHookReturn } from '../types'
 import utils from '../utils'

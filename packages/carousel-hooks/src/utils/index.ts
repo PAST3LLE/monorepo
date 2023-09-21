@@ -1,7 +1,7 @@
+import { SpringConfig, SpringRef } from '@react-spring/web'
 import { DragState, PinchState } from '@use-gesture/react'
 import clamp from 'lodash.clamp'
 import { MutableRefObject, SetStateAction } from 'react'
-import { SpringConfig, SpringRef } from 'react-spring'
 
 import { AxisDirection, InfiniteScrollHookOptions, InifniteScrollDataParams, WheelGestureParams } from '../types'
 
