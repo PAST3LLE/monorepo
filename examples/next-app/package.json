@@ -13,9 +13,12 @@
     "react-dom": "../../node_modules/react-dom",
     "@past3lle/web3-modal": "@past3lle/web3-modal",
     "@past3lle/hooks": "@past3lle/hooks",
-    "@past3lle/wagmi-connectors": "@past3lle/wagmi-connectors"
+    "@past3lle/wagmi-connectors": "@past3lle/wagmi-connectors",
+    "@past3lle/theme": "@past3lle/theme"
   },
   "dependencies": {
+    "@past3lle/carousel": "latest",
+    "@past3lle/carousel-hooks": "latest",
     "next": "13.4.9"
   },
   "devDependencies": {
