@@ -11,6 +11,7 @@
   ],
   "sideEffects": false,
   "main": "dist/index.js",
+  "exports": "./dist/carousel.esm.js",
   "typings": "dist/index.d.ts",
   "files": [
     "dist"
@@ -51,13 +52,18 @@
       "<rootDir>src/**/__tests__/*.{ts,tsx}"
     ]
   },
+  "resolutions": {
+    "@react-spring/web": ">=9 < 10"
+  },
   "peerDependencies": {
     "react": ">=16",
-    "react-router-dom": ">=6",
-    "styled-components": ">=5"
+    "react-router-dom": ">=16",
+    "styled-components": ">=5 < 6",
+    "@react-spring/web": ">=9 < 10"
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",
+    "@react-spring/web": "^9.4.3",
     "@rollup/plugin-image": "^3.0.1",
     "@testing-library/jest-dom": "^5.1.1",
     "@testing-library/react": "^13.4.0",
@@ -89,7 +95,6 @@
     "@past3lle/hooks": "^0.1.20",
     "@past3lle/theme": "^0.1.9",
     "@past3lle/utils": "^0.1.7",
-    "@react-spring/web": "^9.4.3",
     "polished": "^4.2.2",
     "react-feather": "^2.0.10"
   },

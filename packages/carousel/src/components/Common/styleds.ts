@@ -1,7 +1,7 @@
 import { AxisDirection } from '@past3lle/carousel-hooks'
 import { Row } from '@past3lle/components'
 import { BLACK, OFF_WHITE } from '@past3lle/theme'
-import { a } from '@react-spring/web'
+import { animated } from '@react-spring/web'
 import { transparentize } from 'polished'
 import styled, { css } from 'styled-components'
 
@@ -37,7 +37,7 @@ export const CarouselItemContainer = styled(BaseCarouselStep)<{
   z-index: ${({ $transformAmount }) => ($transformAmount > 0 ? 1 : 0)};
 `
 
-export const AnimatedDivContainer = styled(a.div)<{
+export const AnimatedDivContainer = styled(animated.div)<{
   $axis: AxisDirection
   $fillContainer?: boolean
   $withBoxShadow?: boolean
