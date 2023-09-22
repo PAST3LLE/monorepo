@@ -81,6 +81,9 @@ function AppControl() {
         web3: commonProps,
         contractAddresses: contractProps.contractAddresses,
         metadataUris: contractProps.metadataUris,
+        contactInfo: {
+          email: '123'
+        },
         skillOptions: {
           metadataFetchOptions: {
             gatewayUris: GATEWAY_URIS

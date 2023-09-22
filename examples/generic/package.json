@@ -18,6 +18,9 @@
     "react-app-polyfill": "^3.0.0"
   },
   "alias": {
+    "@ledgerhq/domain-service": "@ledgerhq/domain-service/lib-es",
+    "@ledgerhq/cryptoassets": "@ledgerhq/cryptoassets/lib-es",
+    "@ledgerhq/devices": "@ledgerhq/devices/lib-es",
     "@past3lle/assets": "@past3lle/assets",
     "@past3lle/components": "@past3lle/components",
     "@past3lle/constants": "@past3lle/constants",
@@ -27,6 +30,8 @@
     "@past3lle/utils": "@past3lle/utils",
     "@past3lle/skillforge-web3": "@past3lle/skillforge-web3",
     "@past3lle/skillforge-widget": "@past3lle/skillforge-widget",
+    "@past3lle/web3-modal": "@past3lle/web3-modal",
+    "@past3lle/wagmi-connectors": "@past3lle/wagmi-connectors",
     "react": "../../node_modules/react",
     "react-dom": "../../node_modules/react-dom",
     "scheduler/tracing": "../../node_modules/scheduler/tracing-profiling",
