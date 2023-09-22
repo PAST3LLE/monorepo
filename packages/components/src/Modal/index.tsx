@@ -90,7 +90,7 @@ const StyledDialogContent = styled(
     padding-top: 2rem;
     width: ${({ isLargeImageModal, width = '50vh' }) => (isLargeImageModal ? '90vh' : width)};
     max-width: ${({ maxHeight, maxWidth = '42rem', isLargeImageModal = false }) =>
-      `${isLargeImageModal ? maxHeight + 'vh' : maxWidth}`};
+      `${isLargeImageModal ? maxHeight : maxWidth}`};
     ${({ height }) => height && `height: ${height};`}
     ${({ maxHeight }) => maxHeight && `max-height: ${maxHeight};`}
     ${({ minHeight }) => minHeight && `min-height: ${minHeight};`}
