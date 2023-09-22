@@ -4,6 +4,7 @@
 node_modules
 .parcel-cache
 .cache
+.rollup.cache
 .rts2_cache_cjs
 .rts2_cache_esm
 .rts2_cache_umd
