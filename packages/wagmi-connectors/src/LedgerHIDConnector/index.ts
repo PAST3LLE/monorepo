@@ -1,4 +1,3 @@
-import { devDebug } from '@past3lle/utils'
 import { ChainNotConfiguredForConnectorError, normalizeChainId } from '@wagmi/connectors'
 import invariant from 'tiny-invariant'
 import { Account, Chain, SwitchChainError, createWalletClient, custom, getAddress, numberToHex } from 'viem'
@@ -243,7 +242,7 @@ export class LedgerHIDConnector extends Connector<LedgerHQProvider, LedgerHidOpt
         throw new Error('[Ledger HID] Cannot re-instantiate provider without a new chain ID!')
       // Else is initial instantiation, use current chain id
       else
-        devDebug(
+        console.debug(
           '[Ledger HID Connector] Missing instantiation chain ID. Instantiating with constructor chain:',
           this.chainId
         )
