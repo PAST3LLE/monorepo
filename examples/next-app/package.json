@@ -11,15 +11,19 @@
   "alias": {
     "react": "../../node_modules/react",
     "react-dom": "../../node_modules/react-dom",
-    "@past3lle/web3-modal": "@past3lle/web3-modal",
-    "@past3lle/hooks": "@past3lle/hooks",
-    "@past3lle/wagmi-connectors": "@past3lle/wagmi-connectors",
-    "@past3lle/theme": "@past3lle/theme"
+    "@past3lle/web3-modal": "../../packages/web3-modal/dist",
+    "@past3lle/hooks": "../../packages/hooks/dist",
+    "@past3lle/theme": "../../packages/theme/dist",
+    "@past3lle/wagmi-connectors": "../../packages/wagmi-connectors/dist",
+    "@react-spring/web": "../../node_modules/@react-spring/web",
+    "@use-gesture/react": "../../node_modules/@use-gesture/react"
   },
   "dependencies": {
+    "@react-spring/web": "latest",
+    "@use-gesture/react": "latest",
     "@past3lle/carousel": "latest",
     "@past3lle/carousel-hooks": "latest",
-    "next": "13.4.9"
+    "next": "latest"
   },
   "devDependencies": {
     "@types/node": "20.4.0",

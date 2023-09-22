@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   transpilePackages: [
+    '@past3lle/carousel', 
+    '@past3lle/carousel-hooks', 
     '@past3lle/web3-modal', 
     '@past3lle/wagmi-connectors', 
     '@past3lle/hooks'
