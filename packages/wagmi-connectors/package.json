@@ -14,7 +14,7 @@
   "author": "w3stside <pastelle.portugal@gmail.com>",
   "homepage": "https://github.com/past3lle/monorepo/tree/main/packages/wagmi-connectors#readme",
   "license": "MIT",
-  "main": "dist/cjs/index.js",
+  "main": "dist/esm/index.js",
   "module": "dist/esm/index.js",
   "exports": {
     "require": "./dist/cjs/index.js",
