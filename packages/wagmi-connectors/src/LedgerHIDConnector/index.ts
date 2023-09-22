@@ -113,9 +113,9 @@ export class LedgerHIDConnector extends Connector<LedgerHQProvider, LedgerHidOpt
         this.options.shimDisconnect &&
         // If shim does not exist in storage, wallet is disconnected
         !this.storage?.getItem(this.shimDisconnectKey)
-      )
-        return false
-
+      ) {
+        throw 'Wallet disconneted'
+      }
       const provider = await this.getProvider({ chainId: this.chainId })
       if (!provider) throw new ConnectorNotFoundError()
       const account = await this.getAccount()
