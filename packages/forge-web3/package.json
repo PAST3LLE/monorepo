@@ -114,7 +114,7 @@
   },
   "dependencies": {
     "@past3lle/hooks": "^0.1.20",
-    "@past3lle/skilltree-contracts": "^0.0.1-rc.15",
+    "@past3lle/skilltree-contracts": "^0.1.1",
     "@past3lle/utils": "^0.1.7",
     "@past3lle/web3-modal": "^1.5.8-alpha.1",
     "jotai": "^1.13.0"

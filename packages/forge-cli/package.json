@@ -44,14 +44,19 @@
     "url": "https://github.com/PAST3LLE/past3lle-monorepo/issues"
   },
   "dependencies": {
-    "@past3lle/skilltree-contracts": "^0.0.1-rc.13",
-    "@types/inquirer": "^9.0.3",
-    "dotenv": "^16.0.3",
-    "ethers": "^5.0.0",
+    "@past3lle/skilltree-contracts": "^0.1.1",
     "inquirer": "^8.0.0",
-    "verify-on-etherscan": "^1.2.1"
+    "verify-on-etherscan": "^1.2.1",
+    "@ethersproject/wallet": "^5.7.0",
+    "@ethersproject/providers": "^5.7.0",
+    "@ethersproject/bignumber": "^5.7.0",
+    "@ethersproject/units": "^5.7.0",
+    "@ethersproject/contracts": "^5.7.0",
+    "@ethersproject/address": "^5.7.0"
   },
   "devDependencies": {
+    "@types/inquirer": "^9.0.3",
+    "dotenv": "^16.0.3",
     "@typescript-eslint/eslint-plugin": "^5.50.0",
     "@typescript-eslint/parser": "^5.50.0",
     "eslint": "^8.8.0",
