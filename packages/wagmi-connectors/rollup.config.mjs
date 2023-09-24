@@ -1,11 +1,8 @@
-import babel from '@rollup/plugin-babel';
-import resolve from '@rollup/plugin-node-resolve';
+import typescript from "@rollup/plugin-typescript";
 import terser from "@rollup/plugin-terser";
 
-const extensions = ['.js', '.jsx', '.ts', '.tsx' ];
-
 export default  {
-  input: 'src/index.ts',
+  input: 'dist/cjs/index.js',
   output: [
     {
       file: 'dist/bundles/bundle.esm.js',
@@ -37,7 +34,6 @@ export default  {
     }
   ],
   plugins: [
-    resolve({ extensions, moduleDirectories: ["src"] }),
-    babel({ babelHelpers: 'bundled', include: ['src/**/*.tsx', 'src/**/*.ts'], extensions, exclude: 'node_modules/**'})
+    typescript()
   ]
 }

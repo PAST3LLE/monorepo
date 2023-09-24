@@ -10,7 +10,7 @@ import { ConnectorUpdate } from './types'
 
 export { checkError, isHIDSupported }
 
-type LedgerHidOptions = { shimDisconnect?: boolean; onDeviceDisconnect?: () => Promise<void> }
+export type LedgerHidOptions = { shimDisconnect?: boolean; onDeviceDisconnect?: () => Promise<void> }
 export class LedgerHIDConnector extends Connector<LedgerHQProvider, LedgerHidOptions> {
   // name & id
   id = 'ledger-hid'
