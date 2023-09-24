@@ -1,5 +1,5 @@
 import { addFrameConnector } from '@past3lle/forge-web3'
-import { IFrameEthereumConnector, PstlWeb3AuthConnector } from '@past3lle/wagmi-connectors'
+import { LedgerLiveFrameConnector, PstlWeb3AuthConnector } from '@past3lle/wagmi-connectors'
 import { Chain } from '@past3lle/web3-modal'
 import { TorusWalletConnectorPlugin } from '@web3auth/torus-wallet-connector-plugin'
 import { ASSETS_MAP } from 'assets'
@@ -55,5 +55,5 @@ const connectors = [
       }
     })
 ]
-const frameConnectors = [addFrameConnector(IFrameEthereumConnector, {})]
+const frameConnectors = [addFrameConnector(LedgerLiveFrameConnector, {})]
 export { connectors, frameConnectors }
