@@ -1,6 +1,6 @@
-import { ContractTransaction } from 'ethers'
+import { TransactionResponse } from '@ethersproject/providers'
 
-export function logFormattedTxInfo(txInfo: ContractTransaction) {
+export function logFormattedTxInfo(txInfo: TransactionResponse) {
   console.debug(`
 Transaction info:
 

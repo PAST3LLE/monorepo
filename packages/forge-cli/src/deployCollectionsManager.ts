@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { ContractFactory } from '@ethersproject/contracts'
 import { CollectionsManager__factory as CollectionsManager } from '@past3lle/skilltree-contracts'
 import dotEnv from 'dotenv'
-import { ethers } from 'ethers'
 import inquirer from 'inquirer'
 
 import deployCollectionAndAddToManager from './deployCollectionAndAddToManager'
@@ -106,7 +106,7 @@ Metadata folder URI:`,
   const { wallet, provider } = getWalletInfo({ rpcUrl, mnemonic })
 
   // Create a contract factory
-  const factory = new ethers.ContractFactory(CollectionsManager.abi, CollectionsManager.bytecode, wallet)
+  const factory = new ContractFactory(CollectionsManager.abi, CollectionsManager.bytecode, wallet)
 
   const constructorArgs = [metadataUri]
 

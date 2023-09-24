@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { isAddress } from '@ethersproject/address'
+import { Contract } from '@ethersproject/contracts'
 import { CollectionsManager__factory as CollectionsManager } from '@past3lle/skilltree-contracts'
 import mergeManagerNetworks from '@past3lle/skilltree-contracts/networks.json'
-import { ethers } from 'ethers'
 import inquirer from 'inquirer'
 
 import { networksToChainId } from './constants/chains'
@@ -103,7 +104,7 @@ async function mintCollectionSkills(props?: { tryHigherValues?: boolean }): Prom
         'To which address are you minting new skills? Any locked skills will ignore this param, so if you plan on only minting locked skills, you can just leave blank! Address:',
       default: '',
       validate(input) {
-        if (!input || ethers.utils.isAddress(input)) {
+        if (!input || isAddress(input)) {
           return true
         }
 
@@ -295,7 +296,7 @@ IDs:`,
   `)
 
   // Get Collection contract instance
-  const CollectionsManagerContract = new ethers.Contract(collectionsManagerAddr, CollectionsManager.abi, wallet)
+  const CollectionsManagerContract = new Contract(collectionsManagerAddr, CollectionsManager.abi, wallet)
   const collectionsManager = CollectionsManagerContract.attach(collectionsManagerAddr)
 
   const feeData = await getFeeData(network, props?.tryHigherValues)

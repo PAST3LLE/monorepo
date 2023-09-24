@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { Contract, ContractFactory } from '@ethersproject/contracts'
 import {
   Collection__factory as Collection,
   CollectionsManager__factory as CollectionsManager
 } from '@past3lle/skilltree-contracts'
-import { ethers } from 'ethers'
 import inquirer from 'inquirer'
 
 import { networksToChainId } from './constants/chains'
@@ -157,13 +157,13 @@ Metadata URI:`,
   `)
 
   // Get Collection contract instance
-  const CollectionsManagerContract = new ethers.Contract(collectionsManagerAddr, CollectionsManager.abi, wallet)
+  const CollectionsManagerContract = new Contract(collectionsManagerAddr, CollectionsManager.abi, wallet)
 
   // Load the contract's bytecode and ABI
   const collectionAbi = Collection.abi
   const collection = Collection.bytecode
 
-  const factory = new ethers.ContractFactory(collectionAbi, collection, wallet)
+  const factory = new ContractFactory(collectionAbi, collection, wallet)
 
   const constructorArgs = [metadataUri, collectionName, collectionsManagerAddr]
 
