@@ -1,5 +1,5 @@
+import { createWeb3ModalTheme as createTheme } from '@past3lle/forge-web3'
 import { ikUrlToSimpleImageSrcSet } from '@past3lle/theme'
-import { createTheme } from '@past3lle/web3-modal'
 import { ASSETS_MAP } from 'assets'
 
 const FORGE_LOGO_URL = 'https://ik.imagekit.io/pastelle/SKILLFORGE/forge-512-logo.png'

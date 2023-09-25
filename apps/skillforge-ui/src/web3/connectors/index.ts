@@ -1,6 +1,6 @@
 import { addFrameConnector } from '@past3lle/forge-web3'
 import { LedgerLiveFrameConnector, PstlWeb3AuthConnector } from '@past3lle/wagmi-connectors'
-import { Chain } from '@past3lle/web3-modal'
+import { Chain } from '@wagmi/chains'
 import { TorusWalletConnectorPlugin } from '@web3auth/torus-wallet-connector-plugin'
 import { ASSETS_MAP } from 'assets'
 import { FORGE_LOGO_URL_MAP } from 'theme/pstlModal'
@@ -8,7 +8,7 @@ import { skillforgeTheme as SKILLFORGE_THEME, skillforgeTheme } from 'theme/skil
 import { SKILLFORGE_APP_NAME } from 'web3/config/skillforge'
 
 const connectors = [
-  (chains: Chain<number>[]) =>
+  (chains: Chain[]) =>
     PstlWeb3AuthConnector(chains, {
       appName: SKILLFORGE_APP_NAME,
       // CYAN = USA focused
