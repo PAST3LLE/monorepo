@@ -6,7 +6,8 @@
         "composite": true,
         "declarationMap": true,
         "allowJs": true,
-        "module": "ESNext"
+        "module": "ESNext",
+        "declarationDir": "./dist/types"
     },
     "include": [
         "./src/**/*"

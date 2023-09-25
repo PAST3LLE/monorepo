@@ -5,7 +5,7 @@ import { devWarn, getExpirementalCookieStore as getCookieStore } from '@past3lle
 import React, { ReactNode, useEffect } from 'react'
 import { useTheme } from 'styled-components'
 import { goerli, polygon } from 'viem/chains'
-import { WindowProvider, mainnet, useBalance } from 'wagmi'
+import { mainnet, useBalance } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { infuraProvider } from 'wagmi/providers/infura'
 
@@ -14,17 +14,6 @@ import { PstlWeb3ModalProps, PstlW3Providers as WalletModal } from '../providers
 import { addConnector } from '../providers/utils'
 import { COMMON_CONNECTOR_OVERRIDES, DEFAULT_PROPS, DEFAULT_PROPS_WEB3AUTH, pstlModalTheme } from './config'
 import { wagmiConnectors } from './connectorsAndPlugins'
-
-declare global {
-  interface Window {
-    ethereum?: WindowProvider & {
-      providers?: WindowProvider[]
-      providerMap?: Map<string, WindowProvider>
-    }
-    tally?: WindowProvider
-    coinbaseWalletExtension?: WindowProvider
-  }
-}
 
 const PstlW3Providers = ({ children, config }: { children: ReactNode; config: PstlWeb3ModalProps }) => (
   <WindowSizeProvider>

@@ -1,6 +1,6 @@
 import { devDebug } from '@past3lle/utils'
-import { IFrameEthereumConnector } from '@past3lle/wagmi-connectors'
-import { SafeConnector } from '@wagmi/connectors/safe'
+import { IFrameEthereumConnector, LedgerLiveFrameConnector } from '@past3lle/wagmi-connectors'
+import { SafeConnector } from 'wagmi/connectors/safe'
 import { w3mConnectors } from '@web3modal/ethereum'
 import { useMemo } from 'react'
 import { Chain } from 'viem'
@@ -22,6 +22,12 @@ export function useConnectorAndChainConfig(
         devDebug('[@past3lle/web3-modal] App type detected: SAFE APP')
 
         const connectors = mapChainsToConnectors([addConnector(SafeConnector, { debug: true })], config)
+        return { ...config, connectors }
+      }
+      case 'LEDGER_LIVE': {
+        devDebug('[@past3lle/web3-modal] App type detected: LEDGER LIVE')
+
+        const connectors = mapChainsToConnectors([addConnector(LedgerLiveFrameConnector, {})], config)
         return { ...config, connectors }
       }
       case 'IFRAME': {

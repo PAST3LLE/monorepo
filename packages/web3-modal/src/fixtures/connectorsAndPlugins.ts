@@ -1,4 +1,4 @@
-import { IFrameEthereumConnector, LedgerHIDConnector, PstlWeb3AuthConnector } from '@past3lle/wagmi-connectors'
+import { LedgerLiveFrameConnector, LedgerHIDConnector, PstlWeb3AuthConnector } from '@past3lle/wagmi-connectors'
 import { TorusWalletConnectorPlugin } from '@web3auth/torus-wallet-connector-plugin'
 import { LedgerConnector } from 'wagmi/connectors/ledger'
 
@@ -35,7 +35,7 @@ export const wagmiConnectors = {
     requiredChains: [1]
   }),
   ledgerHID: addConnector(LedgerHIDConnector, {}),
-  ledgerIFrame: addConnector(IFrameEthereumConnector, undefined),
+  ledgerIFrame: addConnector(LedgerLiveFrameConnector, {}),
   // Can also instantiate like this.
   // addConnector is just syntactic sugar
   // PstlWeb3AuthConnector requires this instantiation

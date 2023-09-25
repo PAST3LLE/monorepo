@@ -24,6 +24,7 @@ async function _getChainFromUrl(
   switch (status) {
     case 'TEST_FRAMEWORK_IFRAME':
     case 'SAFE_APP':
+    case 'LEDGER_LIVE':
     case 'IFRAME':
       return undefined
     case 'DAPP': {

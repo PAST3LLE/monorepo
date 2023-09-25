@@ -5,7 +5,7 @@ const isLedgerDappBrowserProvider = (() => {
 
   return (): boolean => {
     if (typeof state === 'boolean') return state
-    if (typeof window === 'undefined') return false
+    if (typeof globalThis?.window === 'undefined') return false
 
     try {
       const params = new URLSearchParams(window.self.location.search)

@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import { Connector } from 'wagmi'
+import { Connector } from 'wagmi/connectors'
 
 type InfoTextMap = { title: ReactNode; content: ReactNode }
 export type ConnectorEnhancedExtras = {
@@ -30,7 +30,7 @@ export type ConnectorEnhancedExtras = {
    */
   downloadUrl?: string
 }
-export type ConnectorEnhanced<P, O> = Connector<P, O> & ConnectorEnhancedExtras
+export interface ConnectorEnhanced<P, O> extends Connector<P, O>, ConnectorEnhancedExtras {}
 /**
  * @name ConnectorOverrides
  * @description Key/Value pair overriding connector info. Displays in root modal. See {@link ConnectorEnhancedExtras}
