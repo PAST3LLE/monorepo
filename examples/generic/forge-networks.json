@@ -1,0 +1,53 @@
+{
+  "5": {
+    "CollectionsManager": {
+      "timestamp": "2023-06-14T13:59:26.512Z",
+      "address": "0x1e4d9aC52C7356E00A4e9b732Dbd6377EcE19EE4",
+      "transactionHash": "0x0b9996e40dc89315f1f113a67b6e890c46445f062f368aedee4222b6c30fc5e7"
+    },
+    "Collection-1": {
+      "timestamp": "2023-06-14T14:00:43.011Z",
+      "address": "0xv3422B1Cd9812415f9C9Ba8740f9E24132FDe1F1",
+      "transactionHash": "0x192f918fbb98daa3c778ce9394e3293e1fd19ff302339ee31ac740392ed60690"
+    },
+    "Collection-2": {
+      "timestamp": "2023-06-14T14:15:30.333Z",
+      "address": "0x6h18aC6D5371FeD52521964145E2c8aAF7571a88",
+      "transactionHash": "0xf14eb827f7c97b495d6a2e57233256b1b7b7fe7e4e80a451d4bbc86e279298f7"
+    }
+  },
+  "137": {
+    "CollectionsManager": {
+      "timestamp": "2023-06-02T18:53:40.549Z",
+      "address": "0xa32AB9071A7814258aBbe06c7FbB815d8d4e1B19",
+      "transactionHash": "0xdf11012688ea94e415193cd729c80b039522ad3996f09e2fa9f002a5fab94c94"
+    },
+    "Collection-1": {
+      "timestamp": "2023-06-12T12:48:33.933Z",
+      "address": "0xCc45915AB63A4A48eFE227845d7df2baD380E418",
+      "transactionHash": "0xe7b394eb09f638301a390fff0e7a20ff75557c6abc830f2864303f2547658bb1"
+    },
+    "Collection-2": {
+      "timestamp": "2023-06-12T14:14:11.146Z",
+      "address": "0xa4bAfCB71a6E15421bF70110aD8Cd95e311bd770",
+      "transactionHash": "0x2ca184043acbf127e543afa9f13caf19c08feecc56ddfced00bafa06b757af39"
+    }
+  },
+  "80001": {
+    "CollectionsManager": {
+      "timestamp": "2023-06-02T18:14:39.947Z",
+      "address": "0xbb76e8eeBe675787B1056A8418733F13967Be209",
+      "transactionHash": "0xcadce97ef5ceffd8712bc999dd9a4f7c2470971534925613439205a1799d4f4d"
+    },
+    "Collection-1": {
+      "timestamp": "2023-06-02T16:01:43.858Z",
+      "address": "0x1D578A2C3ef456012a08Ed6a349565e6229e1d00",
+      "transactionHash": "0x03f6689fae838464830c90c1f6bf0987b9aabdd053628eb8512c6d09f50457b8"
+    },
+    "Collection-2": {
+      "timestamp": "2023-06-02T16:01:43.858Z",
+      "address": "0x03b5d78E489b2bdF57Be8b1e2c0A5fFF369b030F",
+      "transactionHash": "0x687cfbca737dd0da0a646773988f063951d99f9f81baba4fa16b7c5d5e5c3df7"
+    }
+  }
+}

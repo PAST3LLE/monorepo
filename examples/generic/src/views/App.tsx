@@ -1,5 +1,5 @@
 import { ColumnCenter, CookieBanner, PstlButton, Row } from '@past3lle/components'
-import { useW3Connection } from '@past3lle/forge-web3'
+import { usePstlAccountNetworkActions, usePstlUserConnectionInfo } from '@past3lle/web3-modal'
 import * as React from 'react'
 
 import { PstlMain } from '../components/Layout'
@@ -36,11 +36,12 @@ const App = () => {
 
 // InnerApp is a component that calls the useForgeW3 hook
 function InnerApp() {
-  const [, { openWalletConnectModal }, { address }] = useW3Connection()
+  const { address } = usePstlUserConnectionInfo()
+  const api = usePstlAccountNetworkActions()
 
   return (
     <ColumnCenter>
-      <PstlButton onClick={() => openWalletConnectModal({ route: 'ConnectWallet' })} backgroundColor="indianred">
+      <PstlButton onClick={api.onAccountClick} backgroundColor="indianred">
         Open Modal
       </PstlButton>
       <Row>Address: {address}</Row>
