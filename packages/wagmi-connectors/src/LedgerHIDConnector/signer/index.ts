@@ -1,3 +1,4 @@
+import invariant from 'tiny-invariant'
 import { Signer, TypedDataDomain, TypedDataField, TypedDataSigner } from '@ethersproject/abstract-signer'
 import { BigNumber } from '@ethersproject/bignumber'
 import { Bytes, hexlify, joinSignature } from '@ethersproject/bytes'
@@ -5,10 +6,6 @@ import { _TypedDataEncoder } from '@ethersproject/hash'
 import { JsonRpcSigner, TransactionRequest } from '@ethersproject/providers'
 import { toUtf8Bytes } from '@ethersproject/strings'
 import { UnsignedTransaction, serialize } from '@ethersproject/transactions'
-import Eth from '@ledgerhq/hw-app-eth'
-import { EIP712Message, EIP712MessageTypes } from '@ledgerhq/hw-app-eth/lib/modules/EIP712/EIP712.types'
-import ledgerService from '@ledgerhq/hw-app-eth/lib/services/ledger'
-import { LoadConfig, ResolutionConfig } from '@ledgerhq/hw-app-eth/lib/services/types'
 
 import { checkError, convertToUnsigned, toNumber } from '../helpers'
 import { LedgerHQProvider } from '../provider'
@@ -20,6 +17,9 @@ export class LedgerHQSigner extends Signer implements TypedDataSigner {
   readonly path: string
   readonly provider: LedgerHQProvider
 
+  ledgerService: typeof import('@ledgerhq/hw-app-eth/lib-es/services/ledger').default | undefined
+  Eth: typeof import("@ledgerhq/hw-app-eth").default | undefined
+
   _index = 0
   _address = ''
 
@@ -30,11 +30,17 @@ export class LedgerHQSigner extends Signer implements TypedDataSigner {
     this.provider = provider
   }
 
-  async withEthApp<T>(callback: (eth: Eth) => T): Promise<T> {
+  async withEthApp<T>(callback: (eth: import("@ledgerhq/hw-app-eth").default) => T): Promise<T> {
+    // Import libraries
+    await this.init()
+    // Check all parts instantiated
+    await this.checkHidStatus()
+    
     const transport = await this.provider.getTransport()
 
     try {
-      const eth = new Eth(transport)
+      // Safe as we check status in this.checkHidStatus() above
+      const eth = new this.Eth!(transport)
       await eth.getAppConfiguration()
 
       return await callback(eth)
@@ -86,14 +92,18 @@ export class LedgerHQSigner extends Signer implements TypedDataSigner {
 
   async signTransaction(
     transaction: TransactionRequest,
-    loadConfig: LoadConfig = {},
-    resolutionConfig: ResolutionConfig = {}
+    loadConfig: import('@ledgerhq/hw-app-eth/lib-es/services/types').LoadConfig = {},
+    resolutionConfig: import('@ledgerhq/hw-app-eth/lib-es/services/types').ResolutionConfig = {}
   ): Promise<string> {
+    // Check all parts instantiated
+    await this.checkHidStatus()
+
     const unsignedTx = await convertToUnsigned(transaction)
     const populatedTx = await this.populateUnsigned(unsignedTx)
 
     const serializedTx = serialize(populatedTx).substring(2)
-    const resolution = await ledgerService.resolveTransaction(serializedTx, loadConfig, resolutionConfig)
+    // Safe as checked above in this.checkHidStatus()
+    const resolution = await this.ledgerService!.resolveTransaction(serializedTx, loadConfig, resolutionConfig)
 
     const sig = await this.withEthApp((eth) => eth.signTransaction(this.path, serializedTx, resolution))
 
@@ -134,7 +144,7 @@ export class LedgerHQSigner extends Signer implements TypedDataSigner {
     const types = { ..._types }
     delete types['EIP712Domain']
     const encoder = new _TypedDataEncoder(types)
-    const data: EIP712Message = {
+    const data: import('@ledgerhq/hw-app-eth/lib-es/modules/EIP712/EIP712.types').EIP712Message = {
       domain: {
         name: domain.name,
         verifyingContract: domain.verifyingContract,
@@ -149,7 +159,7 @@ export class LedgerHQSigner extends Signer implements TypedDataSigner {
           { name: 'chainId', type: 'uint256' },
           { name: 'verifyingContract', type: 'address' }
         ]
-      } as EIP712MessageTypes,
+      } as import('@ledgerhq/hw-app-eth/lib-es/modules/EIP712/EIP712.types').EIP712MessageTypes,
       primaryType: encoder.primaryType,
       message: value
     }
@@ -158,9 +168,22 @@ export class LedgerHQSigner extends Signer implements TypedDataSigner {
   }
 
   // custom method, also called directly on eth_signTypedData_v4 RPC request
-  async __signEIP712Message(data: EIP712Message): Promise<string> {
+  async __signEIP712Message(data: import('@ledgerhq/hw-app-eth/lib-es/modules/EIP712/EIP712.types').EIP712Message): Promise<string> {
     const { r, s, v } = await this.withEthApp((eth) => eth.signEIP712Message(this.path, data))
 
     return joinSignature({ r: '0x' + r, s: '0x' + s, v })
+  }
+
+  private async init() {
+    const ledgerService = (await import('@ledgerhq/hw-app-eth/lib-es/services/ledger')).default
+    const Eth = (await import('@ledgerhq/hw-app-eth')).default
+
+    this.ledgerService = ledgerService
+    this.Eth = Eth
+  }
+
+  private async checkHidStatus() {
+    invariant(!!this.ledgerService, "Ledger service not instantiated!")
+    invariant(!!this.Eth, "Eth not instantiated!")
   }
 }
