@@ -7,9 +7,21 @@ import {
   usePstlWeb3Modal,
   useWeb3Modals as usePstlWeb3Modals
 } from './hooks'
-
-export * from './types'
-
+import {
+  type Chain,
+  type ChainsPartialReadonly,
+  PstlW3Providers,
+  type PstlWagmiClientOptions,
+  PstlWagmiProvider,
+  type PstlWeb3ModalProps,
+  type ReadonlyChain,
+  addConnector,
+  addFrameConnector,
+  usePstlEthereumClient,
+  usePstlWagmiClient
+} from './providers'
+import { AppType, getAppType } from './providers/utils/connectors'
+import { type PstlModalTheme, type PstlModalThemeExtension, W3aStyleResetProvider, createTheme } from './theme'
 import {
   getAllChainsInfo,
   getChainInfoFromShortName,
@@ -17,28 +29,7 @@ import {
   getSafeAppChainShortName
 } from './utils/chains'
 
-import {
-  createTheme,
-  W3aStyleResetProvider,
-  type PstlModalThemeExtension,
-  type PstlModalTheme,
-} from './theme'
-
-import {
-  PstlW3Providers,
-  PstlWagmiProvider,
-  usePstlEthereumClient,
-  usePstlWagmiClient,
-  addConnector,
-  addFrameConnector,
-  type PstlWeb3ModalProps,
-  type PstlWagmiClientOptions,
-  type ChainsPartialReadonly,
-  type ReadonlyChain,
-  type Chain
-} from './providers'
-
-import { getAppType, AppType } from './providers/utils/connectors'
+export * from './types'
 
 export {
   PstlWeb3Modal,

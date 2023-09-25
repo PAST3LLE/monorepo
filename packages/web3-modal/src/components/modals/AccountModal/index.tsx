@@ -7,6 +7,7 @@ import { useTheme } from 'styled-components'
 import { ModalPropsCtrlState } from '../../../controllers/types/controllerTypes'
 import { useConnectDisconnect, usePstlWeb3Modal, useUserConnectionInfo } from '../../../hooks'
 import { useConnectedChainAndWalletLogo } from '../../../hooks/useLogos'
+import { getAppType } from '../../../providers/utils/connectors'
 import { PstlModalTheme } from '../../../theme'
 import { ConnectorEnhanced } from '../../../types'
 import { BaseModalProps, ModalId } from '../common/types'
@@ -20,7 +21,6 @@ import {
   FooterActionButtonsRow,
   Icon
 } from './styled'
-import { getAppType } from '../../../providers/utils/connectors'
 
 type PstlAccountModalProps = ModalPropsCtrlState['root'] &
   ModalPropsCtrlState['account'] &
@@ -49,8 +49,8 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
       userConnectionInfo.chain?.unsupported ||
       !userConnectionInfo.supportedChains.some((chain) => chain.id === userConnectionInfo.chain?.id)
     const supportsSeveralChains = (userConnectionInfo?.supportedChains?.length || 0) > 1
-    const appType = getAppType() 
-    
+    const appType = getAppType()
+
     return {
       isUnsupportedChain,
       showNetworkButton: supportsSeveralChains || isUnsupportedChain,
@@ -224,15 +224,17 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
                 Switch Network
               </AccountModalButton>
             )}
-            {isNonFrameWalletApp && <AccountModalButton
-              type="disconnect"
-              id={`${ModalId.ACCOUNT}__disconnect-button`}
-              connected={false}
-              padding="0.6rem"
-              onClick={() => disconnectAsync()}
-            >
-              Disconnect
-            </AccountModalButton>}
+            {isNonFrameWalletApp && (
+              <AccountModalButton
+                type="disconnect"
+                id={`${ModalId.ACCOUNT}__disconnect-button`}
+                connected={false}
+                padding="0.6rem"
+                onClick={() => disconnectAsync()}
+              >
+                Disconnect
+              </AccountModalButton>
+            )}
           </Row>
         </Column>
       </AccountWalletNetworkRow>
