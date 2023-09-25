@@ -1,4 +1,4 @@
-import { LedgerLiveFrameConnector, LedgerHIDConnector, PstlWeb3AuthConnector } from '@past3lle/wagmi-connectors'
+import { LedgerHIDConnector, LedgerLiveFrameConnector, PstlWeb3AuthConnector } from '@past3lle/wagmi-connectors'
 import { TorusWalletConnectorPlugin } from '@web3auth/torus-wallet-connector-plugin'
 import { LedgerConnector } from 'wagmi/connectors/ledger'
 

@@ -1,9 +1,9 @@
 import { devDebug } from '@past3lle/utils'
 import { IFrameEthereumConnector, LedgerLiveFrameConnector } from '@past3lle/wagmi-connectors'
-import { SafeConnector } from 'wagmi/connectors/safe'
 import { w3mConnectors } from '@web3modal/ethereum'
 import { useMemo } from 'react'
 import { Chain } from 'viem'
+import { SafeConnector } from 'wagmi/connectors/safe'
 
 import { PstlWeb3ModalProps, addConnector } from '../providers'
 import { getAppType, hardFilterChains, mapChainsToConnectors } from '../providers/utils/connectors'
