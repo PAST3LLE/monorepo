@@ -3,7 +3,12 @@
   "sideEffects": false,
   "version": "0.0.22",
   "description": "common types",
-  "main": "dist/index.js",
+  "main": "dist/types.esm.js",
+  "module": "dist/types.esm.js",
+  "exports": {
+    "require": "./dist/index.js",
+    "import": "./dist/types.esm.js"
+  },
   "typings": "dist/index.d.ts",
   "files": [
     "dist"

@@ -10,8 +10,12 @@
     "swipe"
   ],
   "sideEffects": false,
-  "main": "dist/index.js",
-  "exports": "./dist/carousel.esm.js",
+  "main": "dist/carousel.esm.js",
+  "module": "dist/carousel.esm.js",
+  "exports": {
+    "import": "./dist/carousel.esm.js",
+    "require": "./dist/index.js"
+  },
   "typings": "dist/index.d.ts",
   "files": [
     "dist"
@@ -68,8 +72,6 @@
     "@testing-library/jest-dom": "^5.1.1",
     "@testing-library/react": "^13.4.0",
     "@types/lodash.clamp": "^4.0.7",
-    "@types/react": "^18.0.10",
-    "@types/react-dom": "^18.0.10",
     "@types/react-router-hash-link": "^2.4.5",
     "@types/rebass": "^4.0.10",
     "@types/styled-components": "^5.1.26",
@@ -79,15 +81,16 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "path-browserify": "^1.0.1",
     "pretty-quick": "^2.0.1",
-    "react": "^18.0.10",
     "react-cosmos": "^5.7.2",
-    "react-dom": "^18.0.10",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-router-dom": "^6.7.0",
     "rollup-plugin-svg": "^2.0.0",
     "styled-components": "^5.3.6",
     "tsdx": "^0.14.1",
-    "tslib": "^2.4.1",
-    "typescript": "^4.9.4"
+    "tslib": "^2.4.1"
   },
   "dependencies": {
     "@past3lle/carousel-hooks": "^0.1.21-alpha.0",

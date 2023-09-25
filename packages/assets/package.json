@@ -3,7 +3,12 @@
   "sideEffects": false,
   "version": "0.0.22-alpha.0",
   "description": "common assets",
-  "main": "dist/index.js",
+  "main": "dist/assets.esm.js",
+  "module": "dist/assets.esm.js",
+  "exports": {
+    "require": "./dist/index.js",
+    "import": "./dist/assets.esm.js"
+  },
   "typings": "dist/index.d.ts",
   "files": [
     "dist"
@@ -37,8 +42,7 @@
     "pretty-quick": "^2.0.1",
     "source-map-explorer": "^2.0.1",
     "tsdx": "^0.14.1",
-    "tslib": "^2.4.1",
-    "typescript": "^4.9.4"
+    "tslib": "^2.4.1"
   },
   "gitHead": "5e49f48f540a2eb11b63050c2685accd8e77f41f"
 }

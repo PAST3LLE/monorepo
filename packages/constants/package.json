@@ -3,7 +3,12 @@
   "sideEffects": false,
   "version": "0.1.7",
   "description": "common constants",
-  "main": "dist/index.js",
+  "main": "dist/constants.esm.js",
+  "module": "dist/constants.esm.js",
+  "exports": {
+    "require": "./dist/index.js",
+    "import": "./dist/constants.esm.js"
+  },
   "typings": "dist/index.d.ts",
   "files": [
     "dist"

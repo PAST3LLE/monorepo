@@ -3,7 +3,12 @@
   "sideEffects": false,
   "version": "0.1.20",
   "description": "PAST3LLE common hooks e.g useDetectIntoView, useDebounce, etc.",
-  "main": "dist/index.js",
+  "main": "dist/hooks.esm.js",
+  "module": "dist/hooks.esm.js",
+  "exports": {
+    "import": "./dist/hooks.esm.js",
+    "require": "./dist/index.js"
+  },
   "repository": {
     "type": "git",
     "directory": "packages/hooks",
@@ -49,18 +54,18 @@
     "@testing-library/react": "^13.4.0",
     "@types/lodash.debounce": "^4.0.7",
     "@types/lodash.throttle": "^4.1.7",
-    "@types/react": "^18.0.10",
-    "@types/react-dom": "^18.0.10",
     "babel-plugin-annotate-pure-calls": "^0.4.0",
     "babel-plugin-styled-components": "^1.10.6",
     "eslint-plugin-react": "^7.32.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "pretty-quick": "^2.0.1",
-    "react": "^18.0.10",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "rollup-plugin-svg": "^2.0.0",
     "tsdx": "^0.14.1",
-    "tslib": "^2.4.1",
-    "typescript": "^4.9.4"
+    "tslib": "^2.4.1"
   },
   "dependencies": {
     "@past3lle/theme": "^0.1.9",
