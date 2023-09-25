@@ -1,9 +1,9 @@
 import { Z_INDICES } from '@past3lle/constants'
 import { upToExtraSmall } from '@past3lle/theme'
 import { getIsMobile } from '@past3lle/utils'
+import { animated } from '@react-spring/web'
 import { transparentize } from 'polished'
 import React, { useEffect } from 'react'
-import { animated } from 'react-spring'
 import styled from 'styled-components'
 
 import { DialogContent, DialogOverlay, DialogOverlayProps } from '../Dialog'
