@@ -8,4 +8,4 @@ export const GothicFontCssProvider = createGlobalStyle`
         font-style: normal;
         font-weight: 500;
     }
-` as unknown as () => JSX.Element // problems w/styled-component v5 and TS v5
+`
