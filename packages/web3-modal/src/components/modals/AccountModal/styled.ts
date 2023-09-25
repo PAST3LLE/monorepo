@@ -83,10 +83,10 @@ export const AccountLogosRow = styled(Row)<{ backgroundFrameColor?: string }>`
   }
 `
 
-export const AccountWalletNetworkRow = styled(Row)`
+export const AccountWalletNetworkRow = styled(Row)<{ cursor: string }>`
   z-index: 1;
   ${Row}#${ModalId.ACCOUNT}__wallets-button {
-    cursor: pointer;
+    cursor: ${({ cursor }) => cursor};
     > ${Column} {
       > ${AccountText} {
         font-weight: 300;

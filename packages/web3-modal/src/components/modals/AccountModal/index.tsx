@@ -20,6 +20,7 @@ import {
   FooterActionButtonsRow,
   Icon
 } from './styled'
+import { getAppType } from '../../../providers/utils/connectors'
 
 type PstlAccountModalProps = ModalPropsCtrlState['root'] &
   ModalPropsCtrlState['account'] &
@@ -43,14 +44,17 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
     }
   })
 
-  const { isUnsupportedChain, showNetworkButton } = useMemo(() => {
+  const { isUnsupportedChain, showNetworkButton, isNonFrameWalletApp } = useMemo(() => {
     const isUnsupportedChain =
       userConnectionInfo.chain?.unsupported ||
       !userConnectionInfo.supportedChains.some((chain) => chain.id === userConnectionInfo.chain?.id)
     const supportsSeveralChains = (userConnectionInfo?.supportedChains?.length || 0) > 1
+    const appType = getAppType() 
+    
     return {
       isUnsupportedChain,
-      showNetworkButton: supportsSeveralChains || isUnsupportedChain
+      showNetworkButton: supportsSeveralChains || isUnsupportedChain,
+      isNonFrameWalletApp: appType === 'DAPP' || appType === 'TEST_FRAMEWORK_IFRAME'
     }
   }, [userConnectionInfo.chain?.id, userConnectionInfo.chain?.unsupported, userConnectionInfo.supportedChains])
 
@@ -139,6 +143,7 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
       </AccountAddressBalanceRow>
       {/* Wallet & Network Row */}
       <AccountWalletNetworkRow
+        cursor={isNonFrameWalletApp ? 'pointer' : 'initial'}
         width="100%"
         padding="1em"
         border={theme?.account?.container?.addressAndBalance?.border?.border}
@@ -158,7 +163,7 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
             minHeight={82}
             width="100%"
             marginRight="1rem"
-            onClick={() => modalCallbacks.open({ route: 'ConnectWallet' })}
+            onClick={() => isNonFrameWalletApp && modalCallbacks.open({ route: 'ConnectWallet' })}
           >
             <Column width={'100%'} gap="0.3rem">
               <AccountText
@@ -219,7 +224,7 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
                 Switch Network
               </AccountModalButton>
             )}
-            <AccountModalButton
+            {isNonFrameWalletApp && <AccountModalButton
               type="disconnect"
               id={`${ModalId.ACCOUNT}__disconnect-button`}
               connected={false}
@@ -227,7 +232,7 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
               onClick={() => disconnectAsync()}
             >
               Disconnect
-            </AccountModalButton>
+            </AccountModalButton>}
           </Row>
         </Column>
       </AccountWalletNetworkRow>

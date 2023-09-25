@@ -3,7 +3,7 @@ import { DeepRequired } from '@past3lle/types'
 
 type DefaultCSSProps = string | 'initial' | 'none' | 'unset' | 'inherit'
 
-export interface FontStyles {
+interface FontStyles {
   color?: DefaultCSSProps
   family?: DefaultCSSProps
   style?: DefaultCSSProps

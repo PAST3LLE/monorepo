@@ -11,7 +11,7 @@ export function getAppType(forcedAppType?: AppType) {
   else if (process.env.IS_COSMOS) {
     devDebug('[@past3lle/web3-modal::getAppType] TEST_FRAMEWORK_IFRAME detected, returning connectors unaffected')
     return 'TEST_FRAMEWORK_IFRAME'
-  } else if (isIframe()) {
+  } else if (isIframe() || isLedgerDappBrowserProvider()) {
     const isLedgerLive = isLedgerDappBrowserProvider()
     const isSafe = window?.location.ancestorOrigins.item(0)?.includes('app.safe.global')
     return isSafe ? 'SAFE_APP' : isLedgerLive ? 'LEDGER_LIVE' : 'IFRAME'
