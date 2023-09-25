@@ -2,6 +2,9 @@
 /* config-overrides.js */
 const webpack = require('webpack')
 const fs = require('fs')
+const WorkBoxPlugin = require('workbox-webpack-plugin')
+// 8MB
+const preCachedLimitInBytes = 8 * 1024 * 1024
 
 module.exports = {
   webpack(config) {
@@ -30,6 +33,14 @@ module.exports = {
       loader: require.resolve('source-map-loader'),
       resolve: {
         fullySpecified: false
+      }
+    })
+
+    // Bundle size warning bypass
+    config.plugins.forEach((plugin) => {
+      if (plugin instanceof WorkBoxPlugin.InjectManifest) {
+        // 8MB
+        plugin.config.maximumFileSizeToCacheInBytes = preCachedLimitInBytes
       }
     })
 

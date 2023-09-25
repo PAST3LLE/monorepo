@@ -1,6 +1,8 @@
 // see https://github.com/gsoft-inc/craco/blob/master/packages/craco/README.md#configuration-overview
 const webpack = require('webpack')
-
+const WorkBoxPlugin = require('workbox-webpack-plugin');
+// 8MB
+const preCachedLimitInBytes = 8*1024*1024
 module.exports = {
   babel: {
     plugins: ['@babel/plugin-proposal-nullish-coalescing-operator']
@@ -28,7 +30,15 @@ module.exports = {
           Buffer: ['buffer', 'Buffer']
         })
       ])
-      config.maximumFileSizeToCacheInBytes = 7240000
+
+      // Bundle size warning bypass
+      config.plugins.forEach(plugin => {
+        if ( plugin instanceof WorkBoxPlugin.InjectManifest) {
+          // 8MB
+          plugin.config.maximumFileSizeToCacheInBytes = preCachedLimitInBytes;
+        }
+      })
+
       config.ignoreWarnings = [/Failed to parse source map/]
       config.module.rules.push({
         test: /\.(ts|tsx|js|mjs|jsx)$/,
