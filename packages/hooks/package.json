@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/hooks",
   "sideEffects": false,
-  "version": "0.1.20",
+  "version": "0.1.21-alpha.0",
   "description": "PAST3LLE common hooks e.g useDetectIntoView, useDebounce, etc.",
   "main": "dist/hooks.esm.js",
   "module": "dist/hooks.esm.js",
@@ -54,13 +54,13 @@
     "@testing-library/react": "^13.4.0",
     "@types/lodash.debounce": "^4.0.7",
     "@types/lodash.throttle": "^4.1.7",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
     "babel-plugin-annotate-pure-calls": "^0.4.0",
     "babel-plugin-styled-components": "^1.10.6",
     "eslint-plugin-react": "^7.32.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "pretty-quick": "^2.0.1",
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "rollup-plugin-svg": "^2.0.0",
@@ -68,8 +68,8 @@
     "tslib": "^2.4.1"
   },
   "dependencies": {
-    "@past3lle/theme": "^0.1.9",
-    "@past3lle/utils": "^0.1.7",
+    "@past3lle/theme": "^0.1.10-alpha.0",
+    "@past3lle/utils": "^0.1.8-alpha.0",
     "copy-to-clipboard": "^3.3.3",
     "lodash.debounce": "^4.0.8"
   },
