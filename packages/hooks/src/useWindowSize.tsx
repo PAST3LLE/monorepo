@@ -1,5 +1,5 @@
 import { MEDIA_WIDTHS, MediaWidths } from '@past3lle/theme'
-import { devDebug, devError } from '@past3lle/utils'
+import { devDebug } from '@past3lle/utils'
 import throttle from 'lodash.throttle'
 import React, { ReactNode } from 'react'
 import { useContext, useEffect, useState } from 'react'
@@ -104,25 +104,13 @@ export function useWindowSize(): WindowSizes | undefined {
     }
 
     setContext(context)
+
+    return () => {
+      globalThis.window.__PSTL_HOOKS_CONTEXT = undefined
+    }
   }, [])
 
-  const windowSizeContext = useContext(context as React.Context<WindowSizes | undefined>)
-  if (!windowSizeContext) {
-    devError(`
-      [@past3lle/hooks::useWindowSize] - Missing top level WindowSizeProvider! 
-      You are attempting to use this hook outside of a WindowSizeProvider which won't have any effect.
-
-      // somewhere in app architecture - e.g render
-      // useWindowSize hook used in <App />, below
-      root.render(
-        <WindowSizeProvider>
-          <App />
-        </WindowSizeProvider>
-      )
-    `)
-  }
-
-  return windowSizeContext
+  return useContext(context as React.Context<WindowSizes | undefined>)
 }
 
 export function useWindowSmallerThan(media: MediaWidths) {
