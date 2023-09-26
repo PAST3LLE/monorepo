@@ -104,10 +104,6 @@ export function useWindowSize(): WindowSizes | undefined {
     }
 
     setContext(context)
-
-    return () => {
-      globalThis.window.__PSTL_HOOKS_CONTEXT = undefined
-    }
   }, [])
 
   const windowSizeContext = useContext(context as React.Context<WindowSizes | undefined>)
