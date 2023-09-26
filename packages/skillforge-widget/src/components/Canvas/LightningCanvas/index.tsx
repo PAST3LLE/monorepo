@@ -27,7 +27,7 @@ export function LightningCanvas() {
 
   const [{ width, height }, setCanvasDimensions] = useState({ width: 0, height: 0 })
   useEffect(() => {
-    if (typeof document === undefined) return
+    if (typeof globalThis?.window?.document === undefined) return
     const height = Math.max(canvasDOM?.parentElement?.clientHeight || 0, MINIMUM_BOARD_HEIGHT - 30)
     const width = widgetWidth || calculateCanvasWidth(document.body.clientWidth)
 

@@ -99,7 +99,9 @@ const _delayWithCondition = async ({
   return new Promise((resolve) =>
     setTimeout(
       () =>
-        typeof document === undefined || value >= limit ? resolve('BAILED') : resolve(document.getElementById(id)),
+        typeof globalThis?.window?.document === 'undefined' || value >= limit
+          ? resolve('BAILED')
+          : resolve(document.getElementById(id)),
       freq
     )
   )
@@ -269,7 +271,7 @@ async function _connectToProvider({
         const errorMessage = new Error(error).message
         const connectorNotFoundError = errorMessage?.includes('ConnectorNotFoundError')
 
-        if (baseConnectorKey?.downloadUrl && connectorNotFoundError && typeof window !== undefined) {
+        if (baseConnectorKey?.downloadUrl && connectorNotFoundError && typeof globalThis?.window !== 'undefined') {
           window.open(baseConnectorKey.downloadUrl, '_newtab')
         }
 

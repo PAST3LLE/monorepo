@@ -238,7 +238,7 @@ export default {
           //   options: {
           //     name: 'Coinbase Wallet',
           //     getProvider() {
-          //       if (typeof window === 'undefined') return undefined
+          //       if (typeof globalThis?.window === 'undefined') return undefined
           //       return window?.ethereum?.isCoinbaseWallet
           //         ? window.ethereum.providerMap?.get('CoinbaseWallet')
           //         : window?.coinbaseWalletExtension
@@ -362,7 +362,7 @@ export default {
               name: 'MetaMask',
               shimDisconnect: true,
               getProvider() {
-                if (typeof window === 'undefined') return undefined
+                if (typeof globalThis?.window === 'undefined') return undefined
                 try {
                   const provider = window?.ethereum?.providers?.find((provider) => provider?.isMetaMask)
                   if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
@@ -376,7 +376,7 @@ export default {
               name: 'Taho',
               shimDisconnect: true,
               getProvider() {
-                if (typeof window === 'undefined') return undefined
+                if (typeof globalThis?.window === 'undefined') return undefined
                 try {
                   const provider = window?.tally
                   if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
@@ -390,7 +390,7 @@ export default {
               name: 'Coinbase Wallet',
               shimDisconnect: true,
               getProvider() {
-                if (typeof window === 'undefined') return undefined
+                if (typeof globalThis?.window === 'undefined') return undefined
                 try {
                   const provider =
                     (window?.ethereum?.isCoinbaseWallet && window.ethereum) || window?.coinbaseWalletExtension
@@ -442,7 +442,7 @@ export default {
               name: 'MetaMask',
               shimDisconnect: true,
               getProvider() {
-                if (typeof window === 'undefined') return undefined
+                if (typeof globalThis?.window === 'undefined') return undefined
                 try {
                   const provider = window?.ethereum?.providers?.find((provider) => provider?.isMetaMask)
                   if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
@@ -456,7 +456,7 @@ export default {
               name: 'Taho',
               shimDisconnect: true,
               getProvider() {
-                if (typeof window === 'undefined') return undefined
+                if (typeof globalThis?.window === 'undefined') return undefined
                 try {
                   const provider = window?.tally
                   if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
@@ -470,7 +470,7 @@ export default {
               name: 'Coinbase Wallet',
               shimDisconnect: true,
               getProvider() {
-                if (typeof window === 'undefined') return undefined
+                if (typeof globalThis?.window === 'undefined') return undefined
                 try {
                   const provider =
                     (window?.ethereum?.isCoinbaseWallet && window.ethereum) || window?.coinbaseWalletExtension
@@ -524,7 +524,7 @@ export default {
               name: 'MetaMask',
               shimDisconnect: true,
               getProvider() {
-                if (typeof window === 'undefined') return undefined
+                if (typeof globalThis?.window === 'undefined') return undefined
                 try {
                   const provider = window?.ethereum?.providers?.find((provider) => provider?.isMetaMask)
                   if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
@@ -538,7 +538,7 @@ export default {
               name: 'Taho',
               shimDisconnect: true,
               getProvider() {
-                if (typeof window === 'undefined') return undefined
+                if (typeof globalThis?.window === 'undefined') return undefined
                 try {
                   const provider = window?.tally
                   if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
@@ -552,7 +552,7 @@ export default {
               name: 'Coinbase Wallet',
               shimDisconnect: true,
               getProvider() {
-                if (typeof window === 'undefined') return undefined
+                if (typeof globalThis?.window === 'undefined') return undefined
                 try {
                   const provider =
                     (window?.ethereum?.isCoinbaseWallet && window.ethereum) || window?.coinbaseWalletExtension
@@ -616,7 +616,7 @@ export default {
               name: 'MetaMask',
               shimDisconnect: true,
               getProvider() {
-                if (typeof window === 'undefined') return undefined
+                if (typeof globalThis?.window === 'undefined') return undefined
                 try {
                   const provider = window?.ethereum?.providers?.find((provider) => provider?.isMetaMask)
                   if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
@@ -630,7 +630,7 @@ export default {
               name: 'Taho',
               shimDisconnect: true,
               getProvider() {
-                if (typeof window === 'undefined') return undefined
+                if (typeof globalThis?.window === 'undefined') return undefined
                 try {
                   const provider = window?.tally
                   if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
@@ -644,7 +644,7 @@ export default {
               name: 'Coinbase Wallet',
               shimDisconnect: true,
               getProvider() {
-                if (typeof window === 'undefined') return undefined
+                if (typeof globalThis?.window === 'undefined') return undefined
                 try {
                   const provider =
                     (window?.ethereum?.isCoinbaseWallet && window.ethereum) || window?.coinbaseWalletExtension
@@ -722,7 +722,7 @@ export default {
               name: 'MetaMask',
               shimDisconnect: true,
               getProvider() {
-                if (typeof window === 'undefined') return undefined
+                if (typeof globalThis?.window === 'undefined') return undefined
                 try {
                   const provider = window?.ethereum?.providers?.find((provider) => provider?.isMetaMask)
                   if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
@@ -736,7 +736,7 @@ export default {
               name: 'Taho',
               shimDisconnect: true,
               getProvider() {
-                if (typeof window === 'undefined') return undefined
+                if (typeof globalThis?.window === 'undefined') return undefined
                 try {
                   const provider = window?.tally
                   if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
@@ -750,7 +750,7 @@ export default {
               name: 'Coinbase Wallet',
               shimDisconnect: true,
               getProvider() {
-                if (typeof window === 'undefined') return undefined
+                if (typeof globalThis?.window === 'undefined') return undefined
                 try {
                   const provider =
                     (window?.ethereum?.isCoinbaseWallet && window.ethereum) || window?.coinbaseWalletExtension
@@ -829,7 +829,7 @@ export default {
               name: 'MetaMask',
               shimDisconnect: true,
               getProvider() {
-                if (typeof window === 'undefined') return undefined
+                if (typeof globalThis?.window === 'undefined') return undefined
                 try {
                   const provider = window?.ethereum?.providers?.find((provider) => provider?.isMetaMask)
                   if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
@@ -843,7 +843,7 @@ export default {
               name: 'Taho',
               shimDisconnect: true,
               getProvider() {
-                if (typeof window === 'undefined') return undefined
+                if (typeof globalThis?.window === 'undefined') return undefined
                 try {
                   const provider = window?.tally
                   if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
@@ -857,7 +857,7 @@ export default {
               name: 'Coinbase Wallet',
               shimDisconnect: true,
               getProvider() {
-                if (typeof window === 'undefined') return undefined
+                if (typeof globalThis?.window === 'undefined') return undefined
                 try {
                   const provider =
                     (window?.ethereum?.isCoinbaseWallet && window.ethereum) || window?.coinbaseWalletExtension
@@ -927,7 +927,7 @@ export default {
               name: 'MetaMask',
               shimDisconnect: true,
               getProvider() {
-                if (typeof window === 'undefined') return undefined
+                if (typeof globalThis?.window === 'undefined') return undefined
                 try {
                   const provider =
                     window?.ethereum?.providers?.find((provider) => provider?.isMetaMask) ||
@@ -943,7 +943,7 @@ export default {
               name: 'Taho',
               shimDisconnect: true,
               getProvider() {
-                if (typeof window === 'undefined') return undefined
+                if (typeof globalThis?.window === 'undefined') return undefined
                 try {
                   const provider = window?.tally
                   if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
@@ -957,7 +957,7 @@ export default {
               name: 'Coinbase Wallet',
               shimDisconnect: true,
               getProvider() {
-                if (typeof window === 'undefined') return undefined
+                if (typeof globalThis?.window === 'undefined') return undefined
                 try {
                   const provider =
                     (window?.ethereum?.isCoinbaseWallet && window.ethereum) || window?.coinbaseWalletExtension

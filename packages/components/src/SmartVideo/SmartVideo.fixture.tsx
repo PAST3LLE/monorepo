@@ -35,7 +35,7 @@ function SmartVideoWrapper(props: SmartVideoProps) {
   )
 }
 
-const container = typeof document !== undefined ? document.createElement('div') : undefined
+const container = typeof globalThis?.window?.document !== 'undefined' ? document.createElement('div') : undefined
 export default {
   default: (
     <SmartVideo

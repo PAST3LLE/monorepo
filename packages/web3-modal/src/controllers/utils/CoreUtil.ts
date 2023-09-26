@@ -4,7 +4,7 @@ export const CoreUtil = {
   W3M_VERSION: 'W3M_VERSION',
 
   isMobile() {
-    if (typeof window !== 'undefined') {
+    if (typeof globalThis?.window !== 'undefined') {
       return Boolean(
         window.matchMedia('(pointer:coarse)').matches ||
           /Android|webOS|iPhone|iPad|iPod|BlackBerry|Opera Mini/u.test(navigator.userAgent)

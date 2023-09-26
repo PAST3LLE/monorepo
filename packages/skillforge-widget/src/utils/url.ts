@@ -1,7 +1,7 @@
 import { ForgeSearchParamKeys } from '../state'
 
 function _updateURL(searchParams: URLSearchParams) {
-  if (typeof window === undefined) return
+  if (typeof globalThis?.window === 'undefined') return
 
   const newURL = new URL(window.location.href)
   newURL.search = searchParams.toString()
@@ -9,7 +9,7 @@ function _updateURL(searchParams: URLSearchParams) {
 }
 
 export function updateSearchParams(key: ForgeSearchParamKeys, value: string) {
-  if (typeof window === undefined) return
+  if (typeof globalThis?.window === 'undefined') return
 
   const searchParams = new URLSearchParams(window.location.search)
   searchParams.delete(key)
@@ -19,7 +19,7 @@ export function updateSearchParams(key: ForgeSearchParamKeys, value: string) {
 }
 
 export function removeSearchParams(...keys: ForgeSearchParamKeys[]) {
-  if (typeof window === undefined) return
+  if (typeof globalThis?.window === 'undefined') return
 
   const searchParams = new URLSearchParams(window.location.search)
   keys.forEach((key) => {

@@ -38,7 +38,7 @@ export function isIOSDevice() {
 }
 
 const getParser = () =>
-  globalThis?.window !== undefined ? new UAParser(globalThis.window.navigator.userAgent) : undefined
+  typeof globalThis?.window !== 'undefined' ? new UAParser(globalThis.window.navigator.userAgent) : undefined
 const getType = () => getParser()?.getDevice()?.type
 
 export const getUserAgent = () => getParser()?.getResult()

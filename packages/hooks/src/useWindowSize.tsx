@@ -16,7 +16,7 @@ export interface UseWindowSizeOptions {
 
 const WindowSizeContext = React.createContext<WindowSizes | undefined>(undefined)
 
-const checkWindow = () => typeof globalThis?.window !== undefined
+const checkWindow = () => typeof globalThis?.window !== 'undefined'
 
 function useSetupCachedWindowResizeListeners(options?: UseWindowSizeOptions) {
   const [windowSize, setWindowSize] = useState<WindowSizes>(_getSize)

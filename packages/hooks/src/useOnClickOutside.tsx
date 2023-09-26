@@ -11,7 +11,7 @@ export function useOnClickOutside<T extends HTMLElement>(
   }, [handler])
 
   useEffect(() => {
-    if (typeof document === undefined) return
+    if (typeof globalThis?.window?.document === 'undefined') return
     const handleClickOutside = (e: MouseEvent) => {
       // If click target node is present in the ref, or if the conditional callback returns true, do nothing
       if ((node.current?.contains(e.target as Node) || conditionalCb?.(e.target as Node)) ?? false) {
@@ -23,7 +23,8 @@ export function useOnClickOutside<T extends HTMLElement>(
     document.addEventListener('mousedown', handleClickOutside)
 
     return () => {
-      typeof document !== undefined && document.removeEventListener('mousedown', handleClickOutside)
+      typeof globalThis?.window?.document !== 'undefined' &&
+        document.removeEventListener('mousedown', handleClickOutside)
     }
   }, [node, conditionalCb])
 }

@@ -22,7 +22,7 @@ export function GridPositionUpdater() {
 
   const [gridConstants, setGridConstants] = useState<VectorsState['dimensions']>(null)
   useEffect(() => {
-    if (typeof global?.window?.document === undefined) return
+    if (typeof globalThis?.window?.document === 'undefined') return
 
     const container = global.window.document.getElementById(CANVAS_CONTAINER_ID)
     if (!container) return

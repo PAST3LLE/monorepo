@@ -33,7 +33,7 @@ function ExternalLink({
         event.preventDefault()
         // send a ReactGA event and then trigger a location change
         ReactGA.outboundLink({ label: href }, () => {
-          if (typeof window !== undefined) {
+          if (typeof globalThis?.window !== 'undefined') {
             window.location.href = href
           } else {
             devError('[@past3lle/components - ExternalLink] Window does not exist. Are you sure your app is running?')
@@ -72,7 +72,7 @@ function ScrollableLink(props: LinkRendererProps): JSX.Element {
 
   const scrollWithOffset = (el: HTMLElement) => {
     const yCoordinate = el.getBoundingClientRect().top + (window?.pageYOffset || 0)
-    if (typeof window !== undefined) {
+    if (typeof globalThis?.window !== 'undefined') {
       window.scrollTo({ top: yCoordinate - SCROLL_OFFSET, behavior: 'smooth' })
     } else {
       devWarn('[@past3lle/components - ScrollableLink] Window object not defined.')

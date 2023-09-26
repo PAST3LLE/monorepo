@@ -41,7 +41,7 @@ export class LedgerHQProvider extends JsonRpcBatchProvider {
       const { default: TransportHID } = await import('@ledgerhq/hw-transport-webhid')
       this.transport = TransportHID
 
-      const hid = typeof window !== undefined && window?.navigator?.hid
+      const hid = typeof globalThis?.window !== 'undefined' && window?.navigator?.hid
 
       if (!hid) throw new Error('User navigator missing HID property! Incompatible.')
 

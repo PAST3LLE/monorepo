@@ -1,9 +1,13 @@
 import { useCallback, useEffect, useState } from 'react'
 
-const getIsVisibilityStateSupported = () => Boolean(typeof document !== undefined && 'visibilityState' in document)
+const getIsVisibilityStateSupported = () =>
+  Boolean(typeof globalThis?.window?.document !== 'undefined' && 'visibilityState' in document)
 
 function isWindowVisible() {
-  return !getIsVisibilityStateSupported() || (typeof document !== undefined && document?.visibilityState !== 'hidden')
+  return (
+    !getIsVisibilityStateSupported() ||
+    (typeof globalThis?.window?.document !== 'undefined' && document?.visibilityState !== 'hidden')
+  )
 }
 
 /**

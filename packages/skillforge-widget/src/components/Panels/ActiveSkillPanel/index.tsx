@@ -61,7 +61,7 @@ export function ActiveSkillPanel() {
   )
 
   const skillContainerRef = useRef<HTMLElement>(
-    typeof document !== undefined ? document.getElementById(SKILLPOINTS_CONTAINER_ID) : null
+    typeof globalThis?.window?.document !== 'undefined' ? document.getElementById(SKILLPOINTS_CONTAINER_ID) : null
   )
 
   if (!metadataExplorerUri || !activeSkill || !rarity || !deps || !cardColour || !setSkillState) return null

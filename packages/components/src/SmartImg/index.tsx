@@ -119,12 +119,14 @@ export function ApiImage({
     {
       ...BASE_INTERSECTION_OPTIONS,
       // root component to use as "in view" containment
-      root: loadInViewOptions?.container || (typeof document !== undefined ? (document as any) : undefined)
+      root:
+        loadInViewOptions?.container ||
+        (typeof globalThis?.window?.document !== 'undefined' ? (document as any) : undefined)
     },
     // default view state
     // if left blank will show
     // else use explicitly set boolean value
-    loadInViewOptions === undefined
+    loadInViewOptions === undefined || typeof loadInViewOptions === 'undefined'
   )
 
   const [LQIP, derivedTransformations] = useMemo(

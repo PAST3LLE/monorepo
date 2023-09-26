@@ -40,7 +40,7 @@ export function TradeAndUnlockPanel() {
   const [metadataMap] = useForgeMetadataMapReadAtom(chainId)
 
   const skillContainerRef = useRef<HTMLElement>(
-    typeof document !== undefined ? document.getElementById(SKILLPOINTS_CONTAINER_ID) : null
+    typeof globalThis?.window?.document !== 'undefined' ? document.getElementById(SKILLPOINTS_CONTAINER_ID) : null
   )
 
   const theme = useTheme()
