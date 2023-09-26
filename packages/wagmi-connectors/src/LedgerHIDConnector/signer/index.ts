@@ -9,7 +9,7 @@ import invariant from 'tiny-invariant'
 
 import { checkError, convertToUnsigned, toNumber } from '../helpers'
 import { LedgerHQProvider } from '../provider'
-import { UnsignedTransactionStrict } from '../types'
+import { LoadConfig, ResolutionConfig, UnsignedTransactionStrict } from '../types'
 
 const defaultPath = "m/44'/60'/0'/0/0"
 
@@ -17,7 +17,7 @@ export class LedgerHQSigner extends Signer implements TypedDataSigner {
   readonly path: string
   readonly provider: LedgerHQProvider
 
-  ledgerService: typeof import('@ledgerhq/hw-app-eth/lib-es/services/ledger').default | undefined
+  ledgerService: typeof import('@ledgerhq/hw-app-eth').ledgerService | undefined
   Eth: typeof import('@ledgerhq/hw-app-eth').default | undefined
 
   _index = 0
@@ -32,14 +32,14 @@ export class LedgerHQSigner extends Signer implements TypedDataSigner {
 
   async withEthApp<T>(callback: (eth: import('@ledgerhq/hw-app-eth').default) => T): Promise<T> {
     // Import libraries
-    await this.init()
+    await this._loadServices()
     // Check all parts instantiated
-    await this.checkHidStatus()
+    await this._checkHidStatus()
 
     const transport = await this.provider.getTransport()
 
     try {
-      // Safe as we check status in this.checkHidStatus() above
+      // Safe as we check status in this._checkHidStatus() above
       const eth = new this.Eth!(transport)
       await eth.getAppConfiguration()
 
@@ -92,17 +92,17 @@ export class LedgerHQSigner extends Signer implements TypedDataSigner {
 
   async signTransaction(
     transaction: TransactionRequest,
-    loadConfig: import('@ledgerhq/hw-app-eth/lib-es/services/types').LoadConfig = {},
-    resolutionConfig: import('@ledgerhq/hw-app-eth/lib-es/services/types').ResolutionConfig = {}
+    loadConfig: LoadConfig = {},
+    resolutionConfig: ResolutionConfig = {}
   ): Promise<string> {
     // Check all parts instantiated
-    await this.checkHidStatus()
+    await this._checkHidStatus()
 
     const unsignedTx = await convertToUnsigned(transaction)
     const populatedTx = await this.populateUnsigned(unsignedTx)
 
     const serializedTx = serialize(populatedTx).substring(2)
-    // Safe as checked above in this.checkHidStatus()
+    // Safe as checked above in this._checkHidStatus()
     const resolution = await this.ledgerService!.resolveTransaction(serializedTx, loadConfig, resolutionConfig)
 
     const sig = await this.withEthApp((eth) => eth.signTransaction(this.path, serializedTx, resolution))
@@ -176,15 +176,17 @@ export class LedgerHQSigner extends Signer implements TypedDataSigner {
     return joinSignature({ r: '0x' + r, s: '0x' + s, v })
   }
 
-  private async init() {
-    const ledgerService = (await import('@ledgerhq/hw-app-eth/lib-es/services/ledger')).default
-    const Eth = (await import('@ledgerhq/hw-app-eth')).default
+  // Asynchronously load libraries necessary for HID connector
+  private async _loadServices() {
+    const ledgerService = this.ledgerService || (await import('@ledgerhq/hw-app-eth/lib-es/services/ledger')).default
+    const Eth = this.Eth || (await import('@ledgerhq/hw-app-eth')).default
 
     this.ledgerService = ledgerService
     this.Eth = Eth
   }
 
-  private async checkHidStatus() {
+  // Check that HID services available
+  private async _checkHidStatus() {
     invariant(!!this.ledgerService, 'Ledger service not instantiated!')
     invariant(!!this.Eth, 'Eth not instantiated!')
   }
