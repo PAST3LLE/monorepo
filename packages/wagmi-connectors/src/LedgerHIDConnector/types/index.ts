@@ -14,20 +14,20 @@ export type TransactionRequestExtended = TransactionRequest & {
 export type ConnectorUpdate<P> = { provider: P; account: string | Address }
 
 export type LoadConfig = {
-  nftExplorerBaseURL?: string | null;
-  pluginBaseURL?: string | null;
-  extraPlugins?: any | null;
-  cryptoassetsBaseURL?: string | null;
+  nftExplorerBaseURL?: string | null
+  pluginBaseURL?: string | null
+  extraPlugins?: any | null
+  cryptoassetsBaseURL?: string | null
 }
 
-export type SupportedRegistries = "ens";
+export type SupportedRegistries = 'ens'
 
 export type DomainServiceResolution = {
-  registry: SupportedRegistries;
-  domain: string;
-  address: string;
-  type: "forward" | "reverse";
-};
+  registry: SupportedRegistries
+  domain: string
+  address: string
+  type: 'forward' | 'reverse'
+}
 
 /**
  * Allows to configure precisely what the service need to resolve.
@@ -35,11 +35,11 @@ export type DomainServiceResolution = {
  */
 export type ResolutionConfig = {
   // NFT resolution service
-  nft?: boolean;
+  nft?: boolean
   // external plugins resolution service (e.G. LIDO)
-  externalPlugins?: boolean;
+  externalPlugins?: boolean
   // ERC20 resolution service (to clear sign erc20 transfers & other actions)
-  erc20?: boolean;
+  erc20?: boolean
   // List of trusted names (ENS for now) to clear sign
-  domains?: DomainServiceResolution[];
-};
+  domains?: DomainServiceResolution[]
+}
