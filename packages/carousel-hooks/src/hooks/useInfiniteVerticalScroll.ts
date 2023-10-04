@@ -1,7 +1,7 @@
 import { useIsMobile } from '@past3lle/hooks'
 import { useSprings } from '@react-spring/web'
 import { useGesture } from '@use-gesture/react'
-import { useRef } from 'react'
+import { useCallback, useRef } from 'react'
 
 import { STIFF_SPRINGS } from '../constants/springs'
 import { InfiniteScrollOptions, SpringAnimationHookReturn } from '../types'
@@ -29,9 +29,8 @@ export default function useInfiniteVerticalScroll(
 
   const lastIndex = items.length - 1
 
-  const gestureApi = useSprings(
-    items.length,
-    (i) => ({
+  const getDefaultPosition = useCallback(
+    (i: number) => ({
       ...options?.styleMixin,
       scale: options.scaleOptions.initialScale || 0.92,
       y: (i < lastIndex ? i : -1) * gestureParams.itemSize,
@@ -44,12 +43,13 @@ export default function useInfiniteVerticalScroll(
       },
       config: STIFF_SPRINGS
     }),
-    [gestureParams.itemSize]
+    [lastIndex, gestureParams.itemSize, firstAnimationOver]
   )
+
+  const gestureApi = useSprings(items.length, getDefaultPosition, [gestureParams.itemSize])
 
   const wheelOffset = useRef(0)
   const dragOffset = useRef(0)
-
   const dragIndexRef = useRef(0)
 
   const bind = useGesture(
