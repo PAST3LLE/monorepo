@@ -1,6 +1,6 @@
 import { InfiniteScrollOptions, useInfiniteVerticalScroll, useLimitedVerticalSwipe } from '@past3lle/carousel-hooks'
 import { useIsMobile } from '@past3lle/hooks'
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import { BaseCarouselProps, WithTouchAction } from '../types'
 import AnimatedCarousel from './AnimatedCarousel'
@@ -23,6 +23,10 @@ export default function VerticalSwipeCarousel({
   })
 
   const isMobile = useIsMobile()
+  const animationProps = useMemo(
+    () => (isMobile ? mobileAnimationProps : webAnimationProps),
+    [isMobile, mobileAnimationProps, webAnimationProps]
+  )
 
   return (
     <AnimatedCarousel
@@ -32,7 +36,7 @@ export default function VerticalSwipeCarousel({
       indicatorOptions={indicatorOptions}
       touchAction={touchAction}
       dimensions={dimensions}
-      animationProps={isMobile ? mobileAnimationProps : webAnimationProps}
+      animationProps={animationProps}
     />
   )
 }

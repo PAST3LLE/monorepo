@@ -1,7 +1,8 @@
 import { WindowSizeProvider } from '@past3lle/hooks'
 import { ThemeProvider, createPast3lleTemplateTheme } from '@past3lle/theme'
-import React from 'react'
+import React, { ReactNode, useState } from 'react'
 
+import HorizontalSwipeCarousel from '../components/HorizontalSwipeCarousel'
 import VerticalSwipeCarousel from '../components/VerticalSwipeCarousel'
 
 const DATA = [
@@ -25,14 +26,24 @@ const DATA = [
   )
 ]
 
-export default {
-  default: (
+function Providers({ children }: { children: ReactNode }) {
+  return (
     <WindowSizeProvider>
       <ThemeProvider theme={createPast3lleTemplateTheme('PASTELLE')}>
+        <div style={{ height: '100vh', width: '100%' }}>{children}</div>
+      </ThemeProvider>
+    </WindowSizeProvider>
+  )
+}
+
+function VerticalCarousel() {
+  return (
+    <Providers>
+      <div style={{ height: 500, width: '100%' }}>
         <VerticalSwipeCarousel
           data={DATA}
           startIndex={0}
-          touchAction={'auto'}
+          touchAction="none"
           infiniteScrollOptions={{ visible: 1, scaleOptions: { initialScale: 1 } }}
         >
           {({ index }) => {
@@ -44,7 +55,31 @@ export default {
             )
           }}
         </VerticalSwipeCarousel>
-      </ThemeProvider>
-    </WindowSizeProvider>
+      </div>
+    </Providers>
   )
+}
+
+function HorizontalCarousel() {
+  return (
+    <Providers>
+      <div style={{ height: 500, width: '100%' }}>
+        <HorizontalSwipeCarousel data={DATA} axis="x" startIndex={0} touchAction="none">
+          {({ index }) => {
+            const Comp = DATA[index]
+            return (
+              <div style={{ height: '100vh', width: '100%' }}>
+                <Comp key={index} />
+              </div>
+            )
+          }}
+        </HorizontalSwipeCarousel>
+      </div>
+    </Providers>
+  )
+}
+
+export default {
+  vertical: <VerticalCarousel />,
+  horizontal: <HorizontalCarousel />
 }
