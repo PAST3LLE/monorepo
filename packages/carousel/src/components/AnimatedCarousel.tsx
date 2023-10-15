@@ -13,7 +13,7 @@ export default function AnimatedCarousel<D extends any[]>({
   dimensions,
   touchAction,
   animationProps,
-  indicatorOptions = { showIndicators: true },
+  indicatorOptions = { showIndicators: false },
   children
 }: BaseAnimatedCarouselProps<D>) {
   const {
@@ -49,17 +49,16 @@ export default function AnimatedCarousel<D extends any[]>({
       $fixedHeight={dimensions?.fixedSizes?.height || parentSizes?.height || parentSizes?.width}
       $touchAction={touchAction}
     >
-      {indicatorOptions.showIndicators ||
-        (indicatorOptions?.position && (
+      {(indicatorOptions.showIndicators ||
+        indicatorOptions?.position) && 
           <CarouselIndicators
-            position={indicatorOptions.position}
+            {...indicatorOptions}
             axis={axis}
             size={data.length}
             currentIndex={currentIndex}
             accent={colors?.accent}
-            zIndex={indicatorOptions.zIndex}
           />
-        ))}
+        }
       {/* CAROUSEL CONTENT */}
       {springs.map((interpolatedProps, index, { length }) => {
         if (!parentSizes?.width || !parentSizes?.height) return null

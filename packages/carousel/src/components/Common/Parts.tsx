@@ -1,5 +1,5 @@
 import { AxisDirection } from '@past3lle/carousel-hooks'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { ChevronLeft, ChevronRight } from 'react-feather'
 
 import { DEFAULT_CAROUSEL_ACCENT_COLOR } from '../../constants/config'
@@ -68,26 +68,26 @@ export interface CarouselIndicatorProps {
   size: number
   axis: AxisDirection
   accent?: string
-  zIndex?: number
   position?: AbsolutePosition
   currentIndex: number
+  barStyles?: string
 }
 export const CarouselIndicators = ({
   axis,
   size,
-  zIndex = 900,
   accent = DEFAULT_CAROUSEL_ACCENT_COLOR,
-  position = 'bottom-right',
-  currentIndex
+  position = 'bottom',
+  currentIndex,
+  barStyles,
 }: CarouselIndicatorProps) => {
   if (size <= 1) return null
 
+  const itemWidth = useMemo(() => Number((100/size).toFixed(1)), [])
+
   return (
-    <CarouselIndicatorWrapper axis={axis} zIndex={zIndex} position={position}>
+    <CarouselIndicatorWrapper axis={axis} position={position} css={barStyles}>
       {Array.from({ length: size }).map((_, index) => (
-        <CarouselIndicator key={index} isCurrent={currentIndex === index} color={accent}>
-          {index + 1}
-        </CarouselIndicator>
+        <CarouselIndicator key={index} isCurrent={currentIndex === index} color={accent} indicatorWidth={itemWidth} />
       ))}
     </CarouselIndicatorWrapper>
   )

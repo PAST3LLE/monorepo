@@ -38,7 +38,7 @@ export interface OptionalCarouselProps {
   imageKit?: {
     transformation?: SmartImageProps['transformation']
   }
-  indicatorOptions?: Pick<CarouselIndicatorProps, 'position' | 'zIndex'> & { showIndicators?: boolean }
+  indicatorOptions?: Pick<CarouselIndicatorProps, 'position' | 'barStyles'> & { showIndicators?: boolean }
 }
 export interface BaseCarouselProps<T extends any[]> extends OptionalCarouselProps {
   data: T
