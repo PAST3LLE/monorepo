@@ -76,7 +76,13 @@ function HorizontalCarousel({ indicatorOptions }: Pick<OptionalCarouselProps, 'i
   return (
     <Providers>
       <div style={{ height: ITEM_HEIGHT, width: '100%' }}>
-        <HorizontalSwipeCarousel data={DATA} axis="x" startIndex={0} touchAction="none" indicatorOptions={indicatorOptions}>
+        <HorizontalSwipeCarousel
+          data={DATA}
+          axis="x"
+          startIndex={0}
+          touchAction="none"
+          indicatorOptions={indicatorOptions}
+        >
           {({ index }) => {
             const Comp = DATA[index]
             return <Comp key={index} />
@@ -88,8 +94,24 @@ function HorizontalCarousel({ indicatorOptions }: Pick<OptionalCarouselProps, 'i
 }
 
 export default {
-  vertical: <VerticalCarousel indicatorOptions={{ showIndicators: false }}/>,
-  verticalWithIndicators: <VerticalCarousel indicatorOptions={{ showIndicators: true, position: 'bottom', barStyles: `background-color: rgba(0 0 0 / 0.25); height: 10px; z-index: 99999; opacity: 1;` }}/>,
+  vertical: <VerticalCarousel indicatorOptions={{ showIndicators: false }} />,
+  verticalWithIndicators: (
+    <VerticalCarousel
+      indicatorOptions={{
+        showIndicators: true,
+        position: 'bottom',
+        barStyles: `background-color: rgba(0 0 0 / 0.25); height: 10px; z-index: 99999; opacity: 1;`
+      }}
+    />
+  ),
   horizontal: <HorizontalCarousel />,
-  horizontalWithIndicators: <HorizontalCarousel indicatorOptions={{ showIndicators: true, position: 'bottom', barStyles: `background-color: rgba(0 0 0 / 0.25); height: 10px; z-index: 99999; opacity: 1;` }}/>,
+  horizontalWithIndicators: (
+    <HorizontalCarousel
+      indicatorOptions={{
+        showIndicators: true,
+        position: 'bottom',
+        barStyles: `background-color: rgba(0 0 0 / 0.25); height: 10px; z-index: 99999; opacity: 1;`
+      }}
+    />
+  )
 }

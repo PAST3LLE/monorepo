@@ -144,11 +144,11 @@ export const CarouselButtonContainer = styled.div`
   cursor: pointer;
 `
 
-export const CarouselIndicator = styled.div<{ isCurrent: boolean; color?: string; indicatorWidth: number; }>`
+export const CarouselIndicator = styled.div<{ isCurrent: boolean; color?: string; indicatorWidth: number }>`
   color: ${({ isCurrent }) => (isCurrent ? BLACK : OFF_WHITE)};
   background: ${({ isCurrent, theme, color = theme.blackOpaqueMore }) => (isCurrent ? color : 'transparent')};
   border-radius: 0;
-  flex: 0 1 ${props => props.indicatorWidth}%;
+  flex: 0 1 ${(props) => props.indicatorWidth}%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -157,30 +157,38 @@ export const CarouselIndicator = styled.div<{ isCurrent: boolean; color?: string
   padding: 0.25rem 0;
 `
 
-export type AbsolutePosition =
-  | 'bottom'
-  | 'top'
-  | 'left'
-  | 'right'
+export type AbsolutePosition = 'bottom' | 'top' | 'left' | 'right'
 
 export function getAbsolutePosition(position: AbsolutePosition, axis: AxisDirection) {
   if (axis === 'x') {
     switch (position) {
       case 'bottom':
-        return css`bottom: 0;`
+        return css`
+          bottom: 0;
+        `
       case 'top':
-        return css`top: 0;`
+        return css`
+          top: 0;
+        `
       default:
-        return css`top: 0;`
+        return css`
+          top: 0;
+        `
     }
   } else {
     switch (position) {
       case 'right':
-        return css`right: 0;`
+        return css`
+          right: 0;
+        `
       case 'left':
-        return css`left: 0;`
+        return css`
+          left: 0;
+        `
       default:
-       return css`right: 0;`
+        return css`
+          right: 0;
+        `
     }
   }
 }
@@ -218,5 +226,5 @@ export const CarouselIndicatorWrapper = styled(Row)<{
         ${getAbsolutePosition(position, 'y')}
       `}
 
-  ${props => props?.css && props.css}
+  ${(props) => props?.css && props.css}
 `

@@ -78,11 +78,11 @@ export const CarouselIndicators = ({
   accent = DEFAULT_CAROUSEL_ACCENT_COLOR,
   position = 'bottom',
   currentIndex,
-  barStyles,
+  barStyles
 }: CarouselIndicatorProps) => {
   if (size <= 1) return null
 
-  const itemWidth = useMemo(() => Number((100/size).toFixed(1)), [])
+  const itemWidth = useMemo(() => Number((100 / size).toFixed(1)), [])
 
   return (
     <CarouselIndicatorWrapper axis={axis} position={position} css={barStyles}>

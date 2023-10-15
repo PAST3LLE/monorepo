@@ -49,16 +49,15 @@ export default function AnimatedCarousel<D extends any[]>({
       $fixedHeight={dimensions?.fixedSizes?.height || parentSizes?.height || parentSizes?.width}
       $touchAction={touchAction}
     >
-      {(indicatorOptions.showIndicators ||
-        indicatorOptions?.position) && 
-          <CarouselIndicators
-            {...indicatorOptions}
-            axis={axis}
-            size={data.length}
-            currentIndex={currentIndex}
-            accent={colors?.accent}
-          />
-        }
+      {(indicatorOptions.showIndicators || indicatorOptions?.position) && (
+        <CarouselIndicators
+          {...indicatorOptions}
+          axis={axis}
+          size={data.length}
+          currentIndex={currentIndex}
+          accent={colors?.accent}
+        />
+      )}
       {/* CAROUSEL CONTENT */}
       {springs.map((interpolatedProps, index, { length }) => {
         if (!parentSizes?.width || !parentSizes?.height) return null
