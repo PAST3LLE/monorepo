@@ -28,6 +28,7 @@
   "author": "pas3lle",
   "license": "MIT",
   "scripts": {
+    "check-types": "npx tsc --noEmit",
     "clean": "rm -rf dist && rm -rf tsconfig.tsbuildinfo",
     "compile": "tsdx build && cp \"./package.json\" ./dist/",
     "build": "yarn clean && yarn compile",
