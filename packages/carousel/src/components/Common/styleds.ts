@@ -146,7 +146,6 @@ export const CarouselButtonContainer = styled.div`
 
 export const CarouselIndicator = styled.div<{ isCurrent: boolean; color?: string; indicatorWidth: number }>`
   color: ${({ isCurrent }) => (isCurrent ? BLACK : OFF_WHITE)};
-  background: ${({ isCurrent, theme, color = theme.blackOpaqueMore }) => (isCurrent ? color : 'transparent')};
   border-radius: 0;
   flex: 0 1 ${(props) => props.indicatorWidth}%;
   display: flex;
@@ -154,7 +153,11 @@ export const CarouselIndicator = styled.div<{ isCurrent: boolean; color?: string
   justify-content: center;
   font-size: 1.4rem;
   font-weight: 400;
-  padding: 0.25rem 0;
+
+  background: #f8f8ff30;
+  &.active-indicator {
+    background: ${props => props.color};
+  }
 `
 
 export type AbsolutePosition = 'bottom' | 'top' | 'left' | 'right'
@@ -205,7 +208,6 @@ export const CarouselIndicatorWrapper = styled(Row)<{
   width: 100%;
   justify-content: stretch;
   align-items: stretch;
-  background: transparent;
 
   &:hover {
     opacity: 1;

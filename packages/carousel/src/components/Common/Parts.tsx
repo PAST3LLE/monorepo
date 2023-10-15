@@ -87,7 +87,7 @@ export const CarouselIndicators = ({
   return (
     <CarouselIndicatorWrapper axis={axis} position={position} css={barStyles}>
       {Array.from({ length: size }).map((_, index) => (
-        <CarouselIndicator key={index} isCurrent={currentIndex === index} color={accent} indicatorWidth={itemWidth} />
+        <CarouselIndicator key={index} className={currentIndex === index ? 'active-indicator' : ''} isCurrent={currentIndex === index} color={accent} indicatorWidth={itemWidth} />
       ))}
     </CarouselIndicatorWrapper>
   )

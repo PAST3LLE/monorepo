@@ -100,7 +100,16 @@ export default {
       indicatorOptions={{
         showIndicators: true,
         position: 'bottom',
-        barStyles: `background-color: rgba(0 0 0 / 0.25); height: 10px; z-index: 99999; opacity: 1;`
+        barStyles: `
+          gap: 0.4rem;
+          width: 5px;
+          z-index: 99999; 
+          opacity: 1;
+
+          > div:not(.active-indicator) {
+            background-color: rgba(0 0 0 / 0.1);
+          }
+        `
       }}
     />
   ),
@@ -110,7 +119,16 @@ export default {
       indicatorOptions={{
         showIndicators: true,
         position: 'bottom',
-        barStyles: `background-color: rgba(0 0 0 / 0.25); height: 10px; z-index: 99999; opacity: 1;`
+        barStyles: `
+          gap: 0.4rem; 
+          height: 5px; 
+          z-index: 99999; 
+          opacity: 1;
+
+          > div:not(.active-indicator) {
+            background-color: rgba(0 0 0 / 0.1);
+          }
+        `
       }}
     />
   )
