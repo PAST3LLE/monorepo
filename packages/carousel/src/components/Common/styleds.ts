@@ -156,7 +156,7 @@ export const CarouselIndicator = styled.div<{ isCurrent: boolean; color?: string
 
   background: #f8f8ff30;
   &.active-indicator {
-    background: ${props => props.color};
+    background: ${(props) => props.color};
   }
 `
 
