@@ -1,5 +1,5 @@
 import { PNG_LogoCircle_2x } from '@past3lle/assets'
-import { useDetectScrollIntoView } from '@past3lle/hooks'
+import { DetectScrollIntoViewOptions, useDetectScrollIntoView } from '@past3lle/hooks'
 import { OFF_WHITE } from '@past3lle/theme'
 import React, { ForwardedRef, forwardRef, useEffect, useState } from 'react'
 import { Play } from 'react-feather'
@@ -21,6 +21,7 @@ export type SmartVideoProps = {
   sourcesProps: React.DetailedHTMLProps<React.SourceHTMLAttributes<HTMLSourceElement>, HTMLSourceElement>[]
   videoProps?: React.DetailedHTMLProps<React.VideoHTMLAttributes<HTMLVideoElement>, HTMLVideoElement>
   loadInView?: boolean
+  loadInViewOptions?: DetectScrollIntoViewOptions
   forceLoad?: boolean
   showTapToPlay?: boolean
   showError?: boolean
@@ -68,6 +69,7 @@ export const SmartVideo = forwardRef(function LazyVideo(
     // e.g useSprings animating components
     // and we dont want to check if in view before animation ends
     loadInView = true,
+    loadInViewOptions,
     forceLoad = false,
     showTapToPlay = false,
     videoDelay = false,
@@ -100,6 +102,7 @@ export const SmartVideo = forwardRef(function LazyVideo(
     loadInView ? videoElement : undefined,
     {
       ...BASE_INTERSECTION_OPTIONS,
+      ...loadInViewOptions,
       root: container
     },
     !loadInView
