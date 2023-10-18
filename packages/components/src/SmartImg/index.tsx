@@ -9,10 +9,11 @@ import { MediaWidths, getLqIkUrl } from '@past3lle/theme'
 import { DDPXImageUrlMap } from '@past3lle/types'
 import { setForwardedRef } from '@past3lle/utils'
 import { IKContext, IKImage } from 'imagekitio-react'
-import React, { ForwardedRef, Fragment, forwardRef, memo, useMemo } from 'react'
+import React, { ForwardedRef, Fragment, ReactNode, forwardRef, memo, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { ColumnCenter } from '../Layout'
+import { Text } from '../Text'
 
 export type ImageKitTransformation = { [x: string]: undefined | number | string | boolean }[]
 
@@ -29,7 +30,7 @@ interface BaseImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   transformation?: ImageKitTransformation
   loadInViewOptions?: LoadInViewOptions
   lqImageOptions?: LqImageOptions
-  placeholderStyleProps?: { bgColor: string }
+  placeholderProps?: PlaceholderLoaderProps
 }
 
 type ImagePropsWithDefaultImage = BaseImageProps & {
@@ -145,13 +146,7 @@ export function ApiImage({
 
   return (
     <>
-      {lqImageOptions.showLoadingIndicator && !imageLoaded && (
-        <PlaceholderPicture {...rest.placeholderStyleProps}>
-          <ColumnCenter>
-            <div>Loading content...</div>
-          </ColumnCenter>
-        </PlaceholderPicture>
-      )}
+      {lqImageOptions.showLoadingIndicator && !imageLoaded && <PlaceholderLoader {...rest.placeholderProps} />}
       {path?.ikPath ? (
         <IKContext
           publicKey={process.env.REACT_APP_IMAGEKIT_PUBLIC_KEY}
@@ -250,5 +245,21 @@ const SmartImg = memo(
   ))
 )
 SmartImg.displayName = 'SmartImg'
+
+interface PlaceholderLoaderProps {
+  loadingContent?: ReactNode
+  styles?: { bgColor: string }
+}
+
+function PlaceholderLoader({
+  loadingContent = <Text.Main fontWeight={100}>Loading...</Text.Main>,
+  ...rest
+}: PlaceholderLoaderProps) {
+  return (
+    <PlaceholderPicture {...rest}>
+      <ColumnCenter>{loadingContent}</ColumnCenter>
+    </PlaceholderPicture>
+  )
+}
 
 export { SmartImg }
