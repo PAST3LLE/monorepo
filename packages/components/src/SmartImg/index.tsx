@@ -9,7 +9,7 @@ import { MediaWidths, getLqIkUrl } from '@past3lle/theme'
 import { DDPXImageUrlMap } from '@past3lle/types'
 import { setForwardedRef } from '@past3lle/utils'
 import { IKContext, IKImage } from 'imagekitio-react'
-import React, { ForwardedRef, Fragment, forwardRef, useMemo } from 'react'
+import React, { ForwardedRef, Fragment, forwardRef, memo, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { ColumnCenter } from '../Layout'
@@ -137,6 +137,12 @@ export function ApiImage({
   const [innerImgRef, setInnerRef] = useStateRef(null, (node) => node)
   const imageLoaded = useImageLoadingEvent(innerImgRef)
 
+  const memoedStyleProps = useMemo(
+    () =>
+      imageLoaded || !lqImageOptions ? rest.style : { ...rest.style, ..._getLqImageOptions(path, lqImageOptions) },
+    [imageLoaded, lqImageOptions, path, rest.style]
+  )
+
   return (
     <>
       {lqImageOptions.showLoadingIndicator && !imageLoaded && (
@@ -193,7 +199,7 @@ export function ApiImage({
               loading="lazy"
               ref={(node) => _setImgRef(forwardedRef, setInnerRef, node)}
               {...rest}
-              style={imageLoaded || !lqImageOptions ? undefined : _getLqImageOptions(path, lqImageOptions)}
+              style={memoedStyleProps}
             />
           </StyledPicture>
         </>
@@ -238,9 +244,11 @@ function _getLqImageOptions(path: SmartImageProps['path'], lqImageOptions: Smart
         1440: { '1x': '123' }
       }
  */
-const SmartImg = forwardRef((props: SmartImageProps, ref: ForwardedRef<HTMLImageElement>) => (
-  <ApiImage {...props} forwardedRef={ref} />
-))
+const SmartImg = memo(
+  forwardRef((props: SmartImageProps, ref: ForwardedRef<HTMLImageElement>) => (
+    <ApiImage {...props} forwardedRef={ref} />
+  ))
+)
 SmartImg.displayName = 'SmartImg'
 
 export { SmartImg }
