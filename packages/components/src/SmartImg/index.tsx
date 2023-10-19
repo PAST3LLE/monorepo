@@ -108,6 +108,7 @@ export function ApiImage({
   transformation = DEFAULT_TRANSFORMATIONS,
   loadInViewOptions,
   lqImageOptions = DEFAULT_LQ_IMAGE_OPTIONS,
+  placeholderProps,
   lazy = true,
   forwardedRef,
   ...rest
@@ -146,7 +147,7 @@ export function ApiImage({
 
   return (
     <>
-      {lqImageOptions.showLoadingIndicator && !imageLoaded && <PlaceholderLoader {...rest.placeholderProps} />}
+      {lqImageOptions.showLoadingIndicator && !imageLoaded && <PlaceholderLoader {...placeholderProps} />}
       {path?.ikPath ? (
         <IKContext
           publicKey={process.env.REACT_APP_IMAGEKIT_PUBLIC_KEY}
