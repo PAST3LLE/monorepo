@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/components",
   "sideEffects": false,
-  "version": "0.1.28",
+  "version": "0.1.29",
   "description": "common components",
   "main": "dist/components.esm.js",
   "module": "dist/components.esm.js",
