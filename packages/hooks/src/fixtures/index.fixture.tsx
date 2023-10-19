@@ -6,12 +6,12 @@ import { WindowSizeProvider, useWindowSize } from '../useWindowSize'
 function DefaultApp() {
   const windowSizes = useWindowSize()
   const [showInnerApp, setShowInnerApp] = useState(true)
-  
+
   useOfflineOnlineDetection({
     handleOnline: () => alert('Back online!'),
     handleOffline: () => alert('Gone offline!')
   })
-  
+
   return (
     <div>
       <h1>CONTENT</h1>
