@@ -19,6 +19,7 @@ export * from './useOnKeyPress'
 export * from './useForceUpdate'
 export * from './useIsomorphicLayoutEffect'
 export * from './useComposeRefs'
+export * from './useOfflineOnlineDetection'
 export {
   WindowSizes,
   useWindowSize,
