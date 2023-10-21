@@ -18974,6 +18974,14 @@ rlp@^2.2.4:
   dependencies:
     bn.js "^5.2.0"
 
+rollup-plugin-generate-package-json@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-generate-package-json/-/rollup-plugin-generate-package-json-3.2.0.tgz#e9c1d358f2be6c58b49853af58205292d45a33ff"
+  integrity sha512-+Kq1kFVr+maxW/mZB+E+XuaieCXVZqjl2tNU9k3TtAMs3NOaeREa5sRHy67qKDmcnFtZZukIQ3dFCcnV+r0xyw==
+  dependencies:
+    read-pkg "^5.2.0"
+    write-pkg "^4.0.0"
+
 rollup-plugin-sourcemaps@^0.6.2:
   version "0.6.3"
   resolved "https://registry.yarnpkg.com/rollup-plugin-sourcemaps/-/rollup-plugin-sourcemaps-0.6.3.tgz#bf93913ffe056e414419607f1d02780d7ece84ed"
@@ -22734,7 +22742,7 @@ write-json-file@^3.2.0:
     sort-keys "^2.0.0"
     write-file-atomic "^2.4.2"
 
-write-pkg@4.0.0:
+write-pkg@4.0.0, write-pkg@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/write-pkg/-/write-pkg-4.0.0.tgz#675cc04ef6c11faacbbc7771b24c0abbf2a20039"
   integrity sha512-v2UQ+50TNf2rNHJ8NyWttfm/EJUBWMJcx6ZTYZr6Qp52uuegWw/lBkCtCbnYZEmPRNL61m+u67dAmGxo+HTULA==

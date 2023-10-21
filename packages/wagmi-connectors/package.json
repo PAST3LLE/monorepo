@@ -1,5 +1,6 @@
 {
   "name": "@past3lle/wagmi-connectors",
+  "sideEffects": false,
   "version": "0.1.10",
   "description": "Past3lle enhanced v1 wagmi connectors",
   "keywords": [
@@ -17,12 +18,33 @@
   "main": "dist/esm/index.js",
   "module": "dist/esm/index.js",
   "exports": {
-    "require": "./dist/cjs/index.js",
-    "import": "./dist/esm/index.js"
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    },
+    "./IFrameConnector": {
+      "default": "./dist/esm/IFrameConnector",
+      "types": "./dist/types/IFrameConnector/index.d.ts"
+    },
+    "./LedgerHIDConnector": {
+      "default": "./dist/esm/LedgerHIDConnector",
+      "types": "./dist/types/LedgerHIDConnector/index.d.ts"
+    },
+    "./LedgerIFrameConnector": {
+      "default": "./dist/esm/LedgerIFrameConnector",
+      "types": "./dist/types/LedgerIFrameConnector/index.d.ts"
+    },
+    "./Web3AuthConnector": {
+      "default": "./dist/esm/Web3AuthConnector",
+      "types": "./dist/types/Web3AuthConnector/index.d.ts"
+    },
+    "./package.json": "./package.json"
   },
+  "types": "dist/types/index.d.ts",
   "typings": "dist/types/index.d.ts",
   "files": [
-    "dist"
+    "/src",
+    "/dist"
   ],
   "repository": {
     "type": "git",
@@ -36,7 +58,8 @@
     "check-types": "npx tsc --noEmit",
     "build:old": "yarn clean && yarn compile",
     "build:bundles": "rollup -c",
-    "build": "yarn clean && yarn compile && yarn build:bundles",
+    "build": "yarn clean && yarn compile && yarn build:bundles && yarn post:build",
+    "post:build": "node ./scripts/subpath-import-postbuild.js",
     "clean": "rm -rf dist && rm -rf tsconfig.tsbuildinfo",
     "compile": "tsc --emitDeclarationOnly --outDir './dist/types' & tsc --project tsconfig.esm.json & tsc --project tsconfig.cjs.json && cp \"./package.json\" ./dist/",
     "cosmos": "cosmos",
@@ -52,7 +75,8 @@
   },
   "publishConfig": {
     "access": "public",
-    "registry": "https://registry.npmjs.org"
+    "registry": "https://registry.npmjs.org",
+    "directory": "dist"
   },
   "jest": {
     "moduleNameMapper": {
@@ -89,6 +113,7 @@
     "@rollup/plugin-node-resolve": "^15.2.1",
     "@rollup/plugin-terser": "^0.4.3",
     "@rollup/plugin-typescript": "^11.1.3",
+    "rollup-plugin-generate-package-json": "^3.2.0",
     "@types/w3c-web-hid": "^1.0.3",
     "@wagmi/connectors": "^2.5.0",
     "json-loader": "^0.5.7",
