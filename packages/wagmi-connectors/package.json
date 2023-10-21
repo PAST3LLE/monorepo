@@ -23,20 +23,20 @@
       "require": "./dist/cjs/index.js"
     },
     "./IFrameConnector": {
-      "default": "./dist/esm/IFrameConnector",
-      "types": "./dist/types/IFrameConnector/index.d.ts"
+      "types": "./dist/types/IFrameConnector/index.d.ts",
+      "default": "./dist/esm/IFrameConnector"
     },
     "./LedgerHIDConnector": {
-      "default": "./dist/esm/LedgerHIDConnector",
-      "types": "./dist/types/LedgerHIDConnector/index.d.ts"
+      "types": "./dist/types/LedgerHIDConnector/index.d.ts",
+      "default": "./dist/esm/LedgerHIDConnector"
     },
     "./LedgerIFrameConnector": {
-      "default": "./dist/esm/LedgerIFrameConnector",
-      "types": "./dist/types/LedgerIFrameConnector/index.d.ts"
+      "types": "./dist/types/LedgerIFrameConnector/index.d.ts",
+      "default": "./dist/esm/LedgerIFrameConnector"
     },
     "./Web3AuthConnector": {
-      "default": "./dist/esm/Web3AuthConnector",
-      "types": "./dist/types/Web3AuthConnector/index.d.ts"
+      "types": "./dist/types/Web3AuthConnector/index.d.ts",
+      "default": "./dist/esm/Web3AuthConnector"
     },
     "./package.json": "./package.json"
   },
