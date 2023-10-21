@@ -4,10 +4,9 @@ import { Account, Chain, SwitchChainError, createWalletClient, custom, getAddres
 import { Address, Connector, ConnectorData, ConnectorNotFoundError, WalletClient } from 'wagmi'
 
 import { ERROR_MESSAGES, ErrorCodes } from './errorCodes'
+import { checkError, isHIDSupported } from './helpers'
 import type { LedgerHQProvider } from './provider'
 import { ConnectorUpdate } from './types'
-
-import { checkError, isHIDSupported } from './helpers'
 
 export type LedgerHidOptions = { shimDisconnect?: boolean; onDeviceDisconnect?: () => Promise<void> }
 export class LedgerHIDConnector extends Connector<LedgerHQProvider, LedgerHidOptions> {

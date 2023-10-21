@@ -5,12 +5,11 @@ import { _TypedDataEncoder } from '@ethersproject/hash'
 import { JsonRpcSigner, TransactionRequest } from '@ethersproject/providers'
 import { toUtf8Bytes } from '@ethersproject/strings'
 import { UnsignedTransaction, serialize } from '@ethersproject/transactions'
+import Eth, { ledgerService } from '@ledgerhq/hw-app-eth'
 
 import { checkError, convertToUnsigned, toNumber } from '../helpers'
 import { LedgerHQProvider } from '../provider'
 import { LoadConfig, ResolutionConfig, UnsignedTransactionStrict } from '../types'
-
-import Eth, { ledgerService } from '@ledgerhq/hw-app-eth'
 
 const defaultPath = "m/44'/60'/0'/0/0"
 
