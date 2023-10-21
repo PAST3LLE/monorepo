@@ -15,36 +15,35 @@
   "author": "w3stside <pastelle.portugal@gmail.com>",
   "homepage": "https://github.com/past3lle/monorepo/tree/main/packages/wagmi-connectors#readme",
   "license": "MIT",
-  "main": "dist/esm/index.js",
-  "module": "dist/esm/index.js",
+  "main": "dist/cjs/index.js",
+  "module": "dist/index.js",
   "exports": {
     ".": {
-      "import": "./dist/esm/index.js",
+      "import": "./dist/index.js",
       "require": "./dist/cjs/index.js"
     },
     "./IFrameConnector": {
       "types": "./dist/types/IFrameConnector/index.d.ts",
-      "default": "./dist/esm/IFrameConnector"
+      "default": "./dist/IFrameConnector"
     },
     "./LedgerHIDConnector": {
       "types": "./dist/types/LedgerHIDConnector/index.d.ts",
-      "default": "./dist/esm/LedgerHIDConnector"
+      "default": "./dist/LedgerHIDConnector"
     },
     "./LedgerIFrameConnector": {
       "types": "./dist/types/LedgerIFrameConnector/index.d.ts",
-      "default": "./dist/esm/LedgerIFrameConnector"
+      "default": "./dist/LedgerIFrameConnector"
     },
     "./Web3AuthConnector": {
       "types": "./dist/types/Web3AuthConnector/index.d.ts",
-      "default": "./dist/esm/Web3AuthConnector"
+      "default": "./dist/Web3AuthConnector"
     },
     "./package.json": "./package.json"
   },
   "types": "dist/types/index.d.ts",
   "typings": "dist/types/index.d.ts",
   "files": [
-    "/src",
-    "/dist"
+    "dist"
   ],
   "repository": {
     "type": "git",

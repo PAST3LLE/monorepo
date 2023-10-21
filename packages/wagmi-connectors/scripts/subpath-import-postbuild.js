@@ -18,8 +18,32 @@ async function createPackageFile() {
     ...packageOthers,
     private: false,
     typings: './types/index.d.ts',
+    types: './types/index.d.ts',
     main: './cjs/index.js',
-    module: './esm/index.js',
+    module: './index.js',
+    exports: {
+      ".": {
+        "import": "./index.js",
+        "require": "./cjs/index.js"
+      },
+      "./IFrameConnector": {
+        "types": "./types/IFrameConnector/index.d.ts",
+        "default": "./IFrameConnector"
+      },
+      "./LedgerHIDConnector": {
+        "types": "./types/LedgerHIDConnector/index.d.ts",
+        "default": "./LedgerHIDConnector"
+      },
+      "./LedgerIFrameConnector": {
+        "types": "./types/LedgerIFrameConnector/index.d.ts",
+        "default": "./LedgerIFrameConnector"
+      },
+      "./Web3AuthConnector": {
+        "types": "./types/Web3AuthConnector/index.d.ts",
+        "default": "./Web3AuthConnector"
+      },
+      "./package.json": "./package.json"
+    },
   };
 
   const targetPath = resolve(distPath, './package.json');

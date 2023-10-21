@@ -54,7 +54,7 @@ export default [
   ...fileNames.map(name => ({
     input: `dist/cjs/${name}/index.js`,
     output: {
-      file: `dist/esm/${name}/index.js`,
+      file: `dist/${name}/index.js`,
       sourcemap: true,
       exports: 'named',
       format: 'esm',
@@ -65,9 +65,9 @@ export default [
         baseContents: {
           name: `${packageJson.name}/${name}`,
           private: true,
-          main: `../../cjs/${name}/index.js`, // --> points to cjs format entry point of whole library
+          main: `../cjs/${name}/index.js`, // --> points to cjs format entry point of whole library
           module: "./index.js", // --> points to esm format entry point of individual component
-          types: `../../types/${name}/index.d.ts`, // --> points to types definition file of individual component
+          types: `../types/${name}/index.d.ts`, // --> points to types definition file of individual component
         },
       }),
     ]
