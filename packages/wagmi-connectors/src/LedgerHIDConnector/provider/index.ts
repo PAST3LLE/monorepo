@@ -1,4 +1,5 @@
 import { JsonRpcBatchProvider, Network } from '@ethersproject/providers'
+import TransportWebHID from '@ledgerhq/hw-transport-webhid'
 import invariant from 'tiny-invariant'
 import { Address } from 'viem'
 
@@ -9,7 +10,7 @@ import { TransactionRequestExtended } from '../types'
 export class LedgerHQProvider extends JsonRpcBatchProvider {
   public signer?: LedgerHQSigner
   public device?: HIDDevice
-  public transport?: typeof import('@ledgerhq/hw-transport-webhid').default
+  public transport?: typeof TransportWebHID
 
   getSigner(): LedgerHQSigner {
     return new LedgerHQSigner(this)
@@ -23,11 +24,11 @@ export class LedgerHQProvider extends JsonRpcBatchProvider {
     return this._network
   }
 
-  async getTransport(): Promise<import('@ledgerhq/hw-transport-webhid').default> {
+  async getTransport(): Promise<TransportWebHID> {
     invariant(!!this.transport?.request, 'Transport is not defined')
 
     try {
-      const transport = (await this.transport.create()) as import('@ledgerhq/hw-transport-webhid').default
+      const transport = (await this.transport.create()) as TransportWebHID
       this.device = transport.device
 
       return transport
@@ -38,8 +39,7 @@ export class LedgerHQProvider extends JsonRpcBatchProvider {
 
   async enable(callback?: (...args: any[]) => void): Promise<Address> {
     try {
-      const { default: TransportHID } = await import('@ledgerhq/hw-transport-webhid')
-      this.transport = TransportHID
+      this.transport = TransportWebHID
 
       const hid = typeof globalThis?.window !== 'undefined' && window?.navigator?.hid
 
