@@ -103,5 +103,8 @@
             "path": "apps/skills-nft"
         }
     ],
+    "include": [
+        "scripts/**/*",
+    ],
     "files": []
 }
