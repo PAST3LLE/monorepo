@@ -14,7 +14,7 @@
     "url": "git+https://github.com/PAST3LLE/past3lle-monorepo.git"
   },
   "private": true,
-  "version": "0.1.59-alpha.2",
+  "version": "0.1.59-alpha.3",
   "engines": {
     "node": ">=18.12.0"
   },
@@ -40,8 +40,8 @@
     "**/*/@wagmi/core": "^1.x"
   },
   "dependencies": {
-    "@past3lle/forge-web3": "^0.3.18-alpha.2",
-    "@past3lle/skillforge-widget": "^0.3.18-alpha.2",
+    "@past3lle/forge-web3": "^0.3.18-alpha.3",
+    "@past3lle/skillforge-widget": "^0.3.18-alpha.3",
     "@past3lle/skilltree-contracts": "^0.1.1",
     "@past3lle/theme": "^0.1.12-alpha.0",
     "@past3lle/utils": "^0.1.10-alpha.0",
