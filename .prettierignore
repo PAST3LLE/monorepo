@@ -25,6 +25,9 @@ src/**/*.md
 .yarn.rc
 tsconfig.json
 tsconfig.*.json
+tsconfig.tsbuildinfo
+version.json
+
 .eslintrc.json
 
 # local stuff
