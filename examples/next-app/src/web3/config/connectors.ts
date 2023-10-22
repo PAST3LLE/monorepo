@@ -1,4 +1,4 @@
-import { LedgerHIDConnector } from '@past3lle/wagmi-connectors'
+import { LedgerHIDConnector } from '@past3lle/wagmi-connectors/LedgerHIDConnector'
 import { addConnector } from '@past3lle/web3-modal'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { LedgerConnector } from 'wagmi/connectors/ledger'
