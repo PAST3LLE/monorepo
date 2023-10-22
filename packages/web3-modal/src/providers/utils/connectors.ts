@@ -1,5 +1,5 @@
 import { devDebug } from '@past3lle/utils'
-import { isIframe } from '@past3lle/wagmi-connectors'
+import { isIframe } from '@past3lle/wagmi-connectors/utils'
 
 import { Chain, ConnectorEnhanced } from '../../types'
 import { isLedgerDappBrowserProvider } from '../../utils/iframe'

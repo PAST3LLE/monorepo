@@ -1,4 +1,4 @@
-import { IFrameEthereumConnector } from '@past3lle/wagmi-connectors'
+import { IFrameEthereumConnector } from '@past3lle/wagmi-connectors/IFrameConnector'
 import { ConfigCtrlState } from '@web3modal/core'
 import { EthereumClient } from '@web3modal/ethereum'
 import { Web3ModalProps as Web3ModalConfigOriginal } from '@web3modal/react'

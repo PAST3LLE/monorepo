@@ -1,5 +1,6 @@
 import { devDebug } from '@past3lle/utils'
-import { IFrameEthereumConnector, LedgerIFrameConnector } from '@past3lle/wagmi-connectors'
+import { IFrameEthereumConnector } from '@past3lle/wagmi-connectors/IFrameConnector'
+import { LedgerIFrameConnector } from '@past3lle/wagmi-connectors/LedgerIFrameConnector'
 import { w3mConnectors } from '@web3modal/ethereum'
 import { useMemo } from 'react'
 import { Chain } from 'viem'

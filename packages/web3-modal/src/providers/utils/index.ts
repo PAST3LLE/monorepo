@@ -1,5 +1,5 @@
 import { MakeOptional } from '@past3lle/types'
-import { IFrameEthereumConnector } from '@past3lle/wagmi-connectors'
+import { IFrameEthereumConnector } from '@past3lle/wagmi-connectors/IFrameConnector'
 import { EthereumClient, w3mProvider } from '@web3modal/ethereum'
 import { useMemo } from 'react'
 import { Chain } from 'viem'

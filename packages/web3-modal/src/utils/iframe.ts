@@ -1,4 +1,4 @@
-import { isIframe } from '@past3lle/wagmi-connectors'
+import { isIframe } from '@past3lle/wagmi-connectors/utils'
 
 const isLedgerDappBrowserProvider = (() => {
   let state: boolean | null = null
