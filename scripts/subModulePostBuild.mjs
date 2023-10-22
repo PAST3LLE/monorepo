@@ -21,10 +21,11 @@ async function createPackageFile() {
   const subExportsMap = srcFolderAndFileNames.reduce((acc, name) => {
     const isFile = RegExp(/.(j|t)s/).test(name)
     const cleanName = name.split('.')[0]
+    const key = './' + cleanName
 
-    acc[name] = {
+    acc[key] = {
       types: './types/' + cleanName + (isFile ? '.d.ts' : '/index.d.ts'),
-      import: './esm/' + isFile ? `${cleanName}.js` : cleanName
+      import: './esm/' + (isFile ? `${cleanName}.js` : cleanName)
     }
 
     return acc
