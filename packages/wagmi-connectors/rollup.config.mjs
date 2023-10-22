@@ -7,7 +7,7 @@ import { getSubModuleConfig } from "../../scripts/getSubModuleConfig.mjs";
 import { getFolderFiles } from "../../scripts/getFolderFiles.mjs";
 
 // Get every folder and file name in /src/
-const srcFolderAndFileNames = await getFolderFiles('/src', ['index.ts'])
+const srcFolderAndFileNames = await getFolderFiles('/src', [/index.tsx?/])
 
 const CONFIG = srcFolderAndFileNames.map(name => {
   const isFile = RegExp(/.(j|t)s/).test(name)
