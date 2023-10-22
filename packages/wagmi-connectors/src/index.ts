@@ -8,8 +8,8 @@ import {
   checkError as checkLedgerHidError,
   isHIDSupported
 } from './LedgerHIDConnector'
-import { LedgerLiveFrameConnector } from './LedgerIFrameConnector'
-import { PstlWeb3AuthConnector, PstlWeb3AuthConnectorProps } from './Web3AuthConnector'
+import { LedgerIFrameConnector } from './LedgerIFrameConnector'
+import { PstlWeb3AuthConnector, PstlWeb3AuthConnectorProps } from './PstlWeb3AuthConnector'
 import { isIframe } from './utils'
 
 export {
@@ -17,7 +17,7 @@ export {
   type IFrameEthereumConnectorOptions,
   LedgerHIDConnector,
   type LedgerHidOptions,
-  LedgerLiveFrameConnector,
+  LedgerIFrameConnector,
   PstlWeb3AuthConnector,
   type PstlWeb3AuthConnectorProps,
   // Utils

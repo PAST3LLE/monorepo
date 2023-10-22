@@ -1,6 +1,6 @@
 import { IFrameEthereumConnector } from '../IFrameConnector'
 
-export class LedgerLiveFrameConnector extends IFrameEthereumConnector {
+export class LedgerIFrameConnector extends IFrameEthereumConnector {
   readonly id = 'ledgerLive'
   readonly name = 'Ledger Live'
   readonly ready = true
