@@ -1,5 +1,5 @@
 import { devDebug } from '@past3lle/utils'
-import { IFrameEthereumConnector, LedgerLiveFrameConnector } from '@past3lle/wagmi-connectors'
+import { IFrameEthereumConnector, LedgerIFrameConnector } from '@past3lle/wagmi-connectors'
 import { w3mConnectors } from '@web3modal/ethereum'
 import { useMemo } from 'react'
 import { Chain } from 'viem'
@@ -27,7 +27,7 @@ export function useConnectorAndChainConfig(
       case 'LEDGER_LIVE': {
         devDebug('[@past3lle/web3-modal] App type detected: LEDGER LIVE')
 
-        const connectors = mapChainsToConnectors([addConnector(LedgerLiveFrameConnector, {})], config)
+        const connectors = mapChainsToConnectors([addConnector(LedgerIFrameConnector, {})], config)
         return { ...config, connectors }
       }
       case 'IFRAME': {
