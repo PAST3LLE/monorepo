@@ -6,7 +6,8 @@ import packageJson from "./package.json" assert { type: "json" };
 import { getSubModuleConfig } from "../../scripts/getSubModuleConfig.mjs";
 import { getFolderFiles } from "../../scripts/getFolderFiles.mjs";
 
-const srcFolderAndFileNames = await getFolderFiles('/src')
+// Get every folder and file name in /src/
+const srcFolderAndFileNames = await getFolderFiles('/src', ['index.ts'])
 
 const CONFIG = srcFolderAndFileNames.map(name => {
   const isFile = RegExp(/.(j|t)s/).test(name)
@@ -14,14 +15,8 @@ const CONFIG = srcFolderAndFileNames.map(name => {
   
   return {
     input: `dist/cjs/${isFile ? cleanName : `${cleanName}/index`}.js`,
-    output: {
-      file: `dist/esm/${isFile ? cleanName : `${cleanName}/index`}.js`,
-      sourcemap: true,
-      exports: 'named',
-      format: 'esm',
-    },
     plugins: [
-      typescript(),
+      // Generate a package.json sub module file for each entry point
       generatePackageJson(getSubModuleConfig(name, packageJson)),
     ]
   }
