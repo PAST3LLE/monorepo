@@ -1,5 +1,6 @@
 import { addFrameConnector } from '@past3lle/forge-web3'
-import { LedgerIFrameConnector, PstlWeb3AuthConnector } from '@past3lle/wagmi-connectors'
+import { LedgerIFrameConnector } from '@past3lle/wagmi-connectors/LedgerIFrameConnector'
+import { PstlWeb3AuthConnector } from '@past3lle/wagmi-connectors/PstlWeb3AuthConnector'
 import { Chain } from '@wagmi/chains'
 import { TorusWalletConnectorPlugin } from '@web3auth/torus-wallet-connector-plugin'
 import { ASSETS_MAP } from 'assets'
