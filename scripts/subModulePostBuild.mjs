@@ -25,7 +25,8 @@ async function createPackageFile() {
 
     acc[key] = {
       types: './types/' + cleanName + (isFile ? '.d.ts' : '/index.d.ts'),
-      import: './esm/' + (isFile ? `${cleanName}.js` : cleanName)
+      import: './esm/' + (isFile ? `${cleanName}.js` : cleanName),
+      default: './esm/' + (isFile ? `${cleanName}.js` : cleanName)
     }
 
     return acc

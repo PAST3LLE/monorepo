@@ -20,31 +20,36 @@
     "registry": "https://registry.npmjs.org"
   },
   "main": "dist/cjs/index.js",
-  "module": "dist/index.js",
+  "module": "dist/esm/index.js",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
+      "import": "./dist/esm/index.js",
       "require": "./dist/cjs/index.js"
     },
     "./IFrameConnector": {
       "types": "./dist/types/IFrameConnector/index.d.ts",
-      "default": "./dist/IFrameConnector"
+      "import": "./dist/esm/IFrameConnector",
+      "default": "./dist/esm/IFrameConnector"
     },
     "./LedgerHIDConnector": {
       "types": "./dist/types/LedgerHIDConnector/index.d.ts",
-      "default": "./dist/LedgerHIDConnector"
+      "import": "./dist/esm/LedgerHIDConnector",
+      "default": "./dist/esm/LedgerHIDConnector"
     },
     "./LedgerIFrameConnector": {
       "types": "./dist/types/LedgerIFrameConnector/index.d.ts",
-      "default": "./dist/LedgerIFrameConnector"
+      "import": "./dist/esm/LedgerIFrameConnector",
+      "default": "./dist/esm/LedgerIFrameConnector"
     },
     "./PstlWeb3AuthConnector": {
       "types": "./dist/types/PstlWeb3AuthConnector/index.d.ts",
-      "default": "./dist/PstlWeb3AuthConnector"
+      "import": "./dist/esm/PstlWeb3AuthConnector",
+      "default": "./dist/esm/PstlWeb3AuthConnector"
     },
     "./utils": {
       "types": "./dist/types/utils.d.ts",
-      "default": "./dist/utils.js"
+      "import": "./dist/esm/utils.js",
+      "default": "./dist/esm/utils.js"
     },
     "./package.json": "./package.json"
   },
