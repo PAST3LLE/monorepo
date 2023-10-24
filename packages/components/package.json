@@ -158,7 +158,7 @@
     "react-router-hash-link": "^2.4.3",
     "rebass": "^4.0.7"
   },
-  "gitHead": "f852fe196f05c3b9111c9642af6df32c8bff7a6e",
+  "gitHead": "c856d01d5723ca07470fa146af0281f01472ea55",
   "private": false,
   "types": "dist/types/index.d.ts",
   "scripts": {
