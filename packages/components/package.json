@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/components",
   "sideEffects": false,
-  "version": "0.1.30-alpha.0",
+  "version": "0.1.30-alpha.1",
   "description": "common components",
   "publishConfig": {
     "access": "public",
@@ -200,8 +200,8 @@
     "react-cosmos": "^5.7.2",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.7.0",
-    "rollup-plugin-svg": "^2.0.0",
     "rollup-plugin-generate-package-json": "^3.2.0",
+    "rollup-plugin-svg": "^2.0.0",
     "styled-components": "^5.3.6",
     "tslib": "^2.4.1"
   }
