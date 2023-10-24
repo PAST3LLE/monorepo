@@ -3,6 +3,10 @@
   "sideEffects": false,
   "version": "0.1.30-alpha.0",
   "description": "common components",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "exports": {
@@ -11,90 +15,106 @@
       "require": "./dist/cjs/index.js"
     },
     "./Button": {
-      "types": "./types/Button/index.d.ts",
-      "import": "./esm/Button",
-      "default": "./esm/Button"
+      "types": "./dist/types/Button/index.d.ts",
+      "import": "./dist/esm/Button",
+      "default": "./dist/esm/Button"
     },
     "./Cookies": {
-      "types": "./types/Cookies/index.d.ts",
-      "import": "./esm/Cookies",
-      "default": "./esm/Cookies"
+      "types": "./dist/types/Cookies/index.d.ts",
+      "import": "./dist/esm/Cookies",
+      "default": "./dist/esm/Cookies"
     },
     "./Dialog": {
-      "types": "./types/Dialog/index.d.ts",
-      "import": "./esm/Dialog",
-      "default": "./esm/Dialog"
+      "types": "./dist/types/Dialog/index.d.ts",
+      "import": "./dist/esm/Dialog",
+      "default": "./dist/esm/Dialog"
     },
     "./Error": {
-      "types": "./types/Error/index.d.ts",
-      "import": "./esm/Error",
-      "default": "./esm/Error"
+      "types": "./dist/types/Error/index.d.ts",
+      "import": "./dist/esm/Error",
+      "default": "./dist/esm/Error"
     },
     "./Icons": {
-      "types": "./types/Icons/index.d.ts",
-      "import": "./esm/Icons",
-      "default": "./esm/Icons"
+      "types": "./dist/types/Icons/index.d.ts",
+      "import": "./dist/esm/Icons",
+      "default": "./dist/esm/Icons"
     },
     "./Layout": {
-      "types": "./types/Layout/index.d.ts",
-      "import": "./esm/Layout",
-      "default": "./esm/Layout"
+      "types": "./dist/types/Layout/index.d.ts",
+      "import": "./dist/esm/Layout",
+      "default": "./dist/esm/Layout"
     },
     "./Links": {
-      "types": "./types/Links/index.d.ts",
-      "import": "./esm/Links",
-      "default": "./esm/Links"
+      "types": "./dist/types/Links/index.d.ts",
+      "import": "./dist/esm/Links",
+      "default": "./dist/esm/Links"
     },
     "./Loaders": {
-      "types": "./types/Loaders/index.d.ts",
-      "import": "./esm/Loaders",
-      "default": "./esm/Loaders"
+      "types": "./dist/types/Loaders/index.d.ts",
+      "import": "./dist/esm/Loaders",
+      "default": "./dist/esm/Loaders"
     },
     "./Modal": {
-      "types": "./types/Modal/index.d.ts",
-      "import": "./esm/Modal",
-      "default": "./esm/Modal"
+      "types": "./dist/types/Modal/index.d.ts",
+      "import": "./dist/esm/Modal",
+      "default": "./dist/esm/Modal"
     },
     "./Pastellecon": {
-      "types": "./types/Pastellecon/index.d.ts",
-      "import": "./esm/Pastellecon",
-      "default": "./esm/Pastellecon"
+      "types": "./dist/types/Pastellecon/index.d.ts",
+      "import": "./dist/esm/Pastellecon",
+      "default": "./dist/esm/Pastellecon"
     },
     "./Popover": {
-      "types": "./types/Popover/index.d.ts",
-      "import": "./esm/Popover",
-      "default": "./esm/Popover"
+      "types": "./dist/types/Popover/index.d.ts",
+      "import": "./dist/esm/Popover",
+      "default": "./dist/esm/Popover"
     },
     "./Portal": {
-      "types": "./types/Portal/index.d.ts",
-      "import": "./esm/Portal",
-      "default": "./esm/Portal"
+      "types": "./dist/types/Portal/index.d.ts",
+      "import": "./dist/esm/Portal",
+      "default": "./dist/esm/Portal"
     },
     "./SmartImg": {
-      "types": "./types/SmartImg/index.d.ts",
-      "import": "./esm/SmartImg",
-      "default": "./esm/SmartImg"
+      "types": "./dist/types/SmartImg/index.d.ts",
+      "import": "./dist/esm/SmartImg",
+      "default": "./dist/esm/SmartImg"
     },
     "./SmartVideo": {
-      "types": "./types/SmartVideo/index.d.ts",
-      "import": "./esm/SmartVideo",
-      "default": "./esm/SmartVideo"
+      "types": "./dist/types/SmartVideo/index.d.ts",
+      "import": "./dist/esm/SmartVideo",
+      "default": "./dist/esm/SmartVideo"
     },
     "./Text": {
-      "types": "./types/Text/index.d.ts",
-      "import": "./esm/Text",
-      "default": "./esm/Text"
+      "types": "./dist/types/Text/index.d.ts",
+      "import": "./dist/esm/Text",
+      "default": "./dist/esm/Text"
     },
     "./Tooltip": {
-      "types": "./types/Tooltip/index.d.ts",
-      "import": "./esm/Tooltip",
-      "default": "./esm/Tooltip"
+      "types": "./dist/types/Tooltip/index.d.ts",
+      "import": "./dist/esm/Tooltip",
+      "default": "./dist/esm/Tooltip"
     },
     "./package.json": "./package.json"
   },
-  "typings": "dist/index.d.ts",
+  "typings": "dist/types/index.d.ts",
   "files": [
-    "dist"
+    "/Button",
+    "/Cookies",
+    "/Dialog",
+    "/Error",
+    "/Icons",
+    "/Layout",
+    "/Links",
+    "/Loaders",
+    "/Modal",
+    "/Pastellecon",
+    "/Popover",
+    "/Portal",
+    "/SmartImg",
+    "/SmartVideo",
+    "/Text",
+    "/Tooltip",
+    "/dist"
   ],
   "repository": {
     "type": "git",
@@ -103,28 +123,6 @@
   },
   "author": "pas3lle",
   "license": "MIT",
-  "scripts": {
-    "clean": "rm -rf dist && rm -rf tsconfig.tsbuildinfo",
-    "compile:tsdx": "tsdx build && cp \"./package.json\" ./dist/",
-    "compile": "tsc --emitDeclarationOnly --outDir './dist/types' & tsc --project tsconfig.cjs.json & tsc --project tsconfig.esm.json && cp \"./package.json\" ./dist/",
-    "build": "yarn clean && yarn compile && yarn post:build",
-    "post:build": "node ../../scripts/subModulePostBuild.mjs",
-    "prepack": "yarn build",
-    "start": "tsdx watch",
-    "test": "echo 'removed default test' ",
-    "alt-test": "tsc test --env=jsdom",
-    "test:watch": "tsc test --env=jsdom --watchAll",
-    "test:ci": "yarn alt-test --coverage --no-watch --watch=false --watchAll=false --no-watchman --forceExit --detectOpenHandles",
-    "pre-commit": "pretty-quick --staged && yarn test:ci && yarn build",
-    "lint": "prettier --write './src/**/*' --ignore-path '../../.prettierignore'",
-    "cosmos": "cosmos",
-    "cosmos:export": "cosmos-export",
-    "depcheck": "npx npm-check"
-  },
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org"
-  },
   "jest": {
     "moduleNameMapper": {
       "\\.(css|less)$": "identity-obj-proxy",
@@ -139,6 +137,48 @@
     "react-ga": ">=3",
     "react-router-dom": ">=6",
     "styled-components": ">=5"
+  },
+  "dependencies": {
+    "@past3lle/assets": "^0.0.23-alpha.0",
+    "@past3lle/constants": "^0.1.10-alpha.0",
+    "@past3lle/hooks": "^0.1.24-alpha.0",
+    "@past3lle/theme": "^0.1.12-alpha.0",
+    "@past3lle/types": "^0.0.24-alpha.0",
+    "@past3lle/utils": "^0.1.10-alpha.0",
+    "@popperjs/core": "^2.11.6",
+    "@react-spring/web": "^9.7.3",
+    "imagekitio-react": "^2.0.0",
+    "lodash.throttle": "^4.1.1",
+    "polished": "^4.2.2",
+    "react-feather": "^2.0.10",
+    "react-focus-lock": "^2.9.5",
+    "react-ga": "^3.3.1",
+    "react-popper": "^2.3.0",
+    "react-remove-scroll": "^2.5.6",
+    "react-router-hash-link": "^2.4.3",
+    "rebass": "^4.0.7"
+  },
+  "gitHead": "f852fe196f05c3b9111c9642af6df32c8bff7a6e",
+  "private": false,
+  "types": "dist/types/index.d.ts",
+  "scripts": {
+    "clean": "rm -rf dist && rm -rf tsconfig.tsbuildinfo",
+    "compile:tsdx": "tsdx build && cp \"./package.json\" ./dist/",
+    "compile": "tsc --emitDeclarationOnly --outDir './dist/types' & tsc --project tsconfig.cjs.json & tsc --project tsconfig.esm.json && cp \"./package.json\" ./dist/",
+    "compile:submodules": "rollup -c",
+    "build": "yarn clean && yarn compile && yarn compile:submodules && yarn post:build",
+    "post:build": "node ../../scripts/subModulePostBuild.mjs --ignoreFiles '[\"types.ts\",\"theme.ts\"]'",
+    "prepack": "yarn build",
+    "start": "tsdx watch",
+    "test": "echo 'removed default test' ",
+    "alt-test": "tsc test --env=jsdom",
+    "test:watch": "tsc test --env=jsdom --watchAll",
+    "test:ci": "yarn alt-test --coverage --no-watch --watch=false --watchAll=false --no-watchman --forceExit --detectOpenHandles",
+    "pre-commit": "pretty-quick --staged && yarn test:ci && yarn build",
+    "lint": "prettier --write './src/**/*' --ignore-path '../../.prettierignore'",
+    "cosmos": "cosmos",
+    "cosmos:export": "cosmos-export",
+    "depcheck": "npx npm-check"
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",
@@ -161,29 +201,8 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.7.0",
     "rollup-plugin-svg": "^2.0.0",
+    "rollup-plugin-generate-package-json": "^3.2.0",
     "styled-components": "^5.3.6",
-    "tsdx": "^0.14.1",
     "tslib": "^2.4.1"
-  },
-  "dependencies": {
-    "@past3lle/assets": "^0.0.23-alpha.0",
-    "@past3lle/constants": "^0.1.10-alpha.0",
-    "@past3lle/hooks": "^0.1.24-alpha.0",
-    "@past3lle/theme": "^0.1.12-alpha.0",
-    "@past3lle/types": "^0.0.24-alpha.0",
-    "@past3lle/utils": "^0.1.10-alpha.0",
-    "@popperjs/core": "^2.11.6",
-    "@react-spring/web": "^9.7.3",
-    "imagekitio-react": "^2.0.0",
-    "lodash.throttle": "^4.1.1",
-    "polished": "^4.2.2",
-    "react-feather": "^2.0.10",
-    "react-focus-lock": "^2.9.5",
-    "react-ga": "^3.3.1",
-    "react-popper": "^2.3.0",
-    "react-remove-scroll": "^2.5.6",
-    "react-router-hash-link": "^2.4.3",
-    "rebass": "^4.0.7"
-  },
-  "gitHead": "f852fe196f05c3b9111c9642af6df32c8bff7a6e"
+  }
 }

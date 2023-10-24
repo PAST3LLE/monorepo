@@ -1,93 +1,132 @@
 // @ts-check
+
 /* eslint-disable no-console */
-import { resolve, join, basename } from 'path';
-import { readFile, writeFile, cp as copy } from 'fs/promises';
-import { getFolderFiles } from './getFolderFiles.mjs';
-const packagePath = process.cwd();
-const distPath = join(packagePath, './dist');
+import { cp as copy, readFile, writeFile } from 'fs/promises'
+import { basename, join, resolve } from 'path'
 
-const writeJson = (targetPath, obj) =>
-  writeFile(targetPath, JSON.stringify(obj, null, 2), 'utf8');
+import { getFolderFiles } from './getFolderFiles.mjs'
 
-async function createPackageFile() {
-  const packageData = await readFile(
-    resolve(packagePath, './package.json'),
-    { encoding: 'utf8' }
-  );
+const packagePath = process.cwd()
+const distPath = join(packagePath, './dist')
 
-  // @ts-ignore
-  const srcFolderAndFileNames = await getFolderFiles('/src')
+function _argVToMap() {
+  const args = process.argv.slice(2) || []
+  const mapArgs = args.reduce((acc, _, index, oArr) => {
+    const argsF = [oArr[index], oArr[index + 1]]
+    if (!argsF[0] || !argsF[1]) {
+      return acc
+    }
+    let mapItems = [oArr[index], oArr[index + 1]]
+    // @ts-ignore
+    acc.push(mapItems)
+    return acc
+  }, [])
+  return new Map(mapArgs)
+}
 
-  const subExportsMap = srcFolderAndFileNames.reduce((acc, name) => {
+const _writeCommonPackageJson = (root, basePkg, filesAndFolderNames, addFiles) => {
+  let cleanNames = []
+  const subExportsMap = filesAndFolderNames.reduce((acc, name) => {
     const isFile = RegExp(/.(j|t)s/).test(name)
     const cleanName = name.split('.')[0]
     const key = './' + cleanName
+    // create clean names array to avoid making it again later
+    cleanNames.push(key.slice(1))
 
     acc[key] = {
-      types: './types/' + cleanName + (isFile ? '.d.ts' : '/index.d.ts'),
-      import: './esm/' + (isFile ? `${cleanName}.js` : cleanName),
-      default: './esm/' + (isFile ? `${cleanName}.js` : cleanName)
+      types: `${root}/types/${cleanName}` + (isFile ? '.d.ts' : '/index.d.ts'),
+      import: `${root}/esm/` + (isFile ? `${cleanName}.js` : cleanName),
+      default: `${root}/esm/` + (isFile ? `${cleanName}.js` : cleanName)
     }
 
     return acc
   }, {})
 
-  const { scripts, devDependencies, ...packageOthers } =
-    JSON.parse(packageData);
-  
-    const newPackageData = {
-    ...packageOthers,
+  const entryNames = root.replace('./', '')
+
+  return {
+    ...basePkg,
     private: false,
-    typings: './types/index.d.ts',
-    types: './types/index.d.ts',
-    main: 'cjs/index.js',
-    module: 'esm/index.js',
+    typings: `${entryNames}/types/index.d.ts`,
+    types: `${entryNames}/types/index.d.ts`,
+    main: `${entryNames}/cjs/index.js`,
+    module: `${entryNames}/esm/index.js`,
     exports: {
-      ".": {
-        "import": "./esm/index.js",
-        "require": "./cjs/index.js"
+      '.': {
+        import: `${root}/esm/index.js`,
+        require: `${root}/cjs/index.js`
       },
       ...subExportsMap,
-      "./package.json": "./package.json"
-    }
-  };
+      './package.json': './package.json'
+    },
+    files: addFiles ? cleanNames.concat('/dist') : basePkg.files
+  }
+}
 
-  const targetPath = resolve(distPath, './package.json');
+const _writeJson = (targetPath, obj) => writeFile(targetPath, JSON.stringify(obj, null, 2), 'utf8')
 
-  await writeJson(targetPath, newPackageData);
-  console.log(`Created package.json in ${targetPath}`);
+async function _createPackageFile(ignoreFiles) {
+  const packageData = await readFile(resolve(packagePath, './package.json'), { encoding: 'utf8' })
+
+  // @ts-ignore
+  const srcFolderAndFileNames = await getFolderFiles('/src', ignoreFiles)
+
+  const { scripts, devDependencies, ...packageOthers } = JSON.parse(packageData)
+
+  const newPkgJson = _writeCommonPackageJson('.', packageOthers, srcFolderAndFileNames, true)
+  const updatedPkgJson = _writeCommonPackageJson(
+    './dist',
+    { ...packageOthers, scripts, devDependencies },
+    srcFolderAndFileNames,
+    true
+  )
+
+  const newPkgJsonTargetPath = resolve(distPath, './package.json')
+  const rootPkgJsonTargetPath = resolve(packagePath, './package.json')
+
+  // write the dist package.json
+  await _writeJson(newPkgJsonTargetPath, newPkgJson)
+  console.log(`Created new package.json in ${newPkgJsonTargetPath}`)
+
+  // update the root package.json
+  await _writeJson(rootPkgJsonTargetPath, updatedPkgJson)
+  console.log(`Updated root package.json in ${packagePath}`)
 
   return srcFolderAndFileNames.map((name) => name?.split('.')[0])
 }
 
-async function includeFileInBuild(file) {
-  const sourcePath = resolve(packagePath, file);
-  const targetPath = resolve(distPath, basename(file));
-  await copy(sourcePath, targetPath);
-  console.log(`Copied ${sourcePath} to ${targetPath}`);
+async function _includeFileInBuild(file) {
+  const sourcePath = resolve(packagePath, file)
+  const targetPath = resolve(distPath, basename(file))
+  await copy(sourcePath, targetPath)
+  console.log(`Copied ${sourcePath} to ${targetPath}`)
 }
 
-async function writeGitIgnore(ignorePaths) {
+async function _writeGitIgnore(ignorePaths) {
   if (ignorePaths.length === 0) return
+  const gitIgnorePath = packagePath + '/.gitignore'
+  const originalContents = await readFile(resolve(gitIgnorePath), { encoding: 'utf8' })
   await writeFile(
-    packagePath + '/.gitignore',
-`
+    gitIgnorePath,
+    `
 # Generated file. Do not edit directly.
+${originalContents}
 ${ignorePaths.join('/\n')}/
-`,
+`
   )
   console.log('Wrote new .gitignore')
 }
 
 async function run() {
+  const ignoreFiles = JSON.parse(_argVToMap().get('--ignoreFiles') || '')
   try {
-    const files = await createPackageFile();
-    await includeFileInBuild('./README.md');
-    await writeGitIgnore(files || [])
+    const files = await _createPackageFile(ignoreFiles)
+    await _includeFileInBuild('./README.md')
+    await _writeGitIgnore(files || [])
   } catch (err) {
-    console.error(err);
-    process.exit(1);
+    console.error(err)
+    process.exit(1)
   }
 }
 
-run();
+run()
