@@ -8,7 +8,7 @@ export const Spinner = styled.img<{ size?: number; invertColor?: boolean }>`
   width: ${({ size = 16 }) => size}px;
   height: ${({ size = 16 }) => size}px;
 
-  filter: inverse(${({ invertColor }) => (invertColor ? 1 : 0)});
+  filter: invert(${({ invertColor }) => (invertColor ? 1 : 0)});
 `
 
 export const SpinnerCircle = ({
