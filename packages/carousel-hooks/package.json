@@ -1,6 +1,6 @@
 {
   "name": "@past3lle/carousel-hooks",
-  "version": "0.1.25-alpha.0",
+  "version": "0.1.25-alpha.1",
   "description": "PASTELLE carousel animation hooks built on top of @usegesture and react-springs",
   "sideEffects": false,
   "keywords": [
@@ -84,7 +84,7 @@
     "tslib": "^2.4.1"
   },
   "dependencies": {
-    "@past3lle/hooks": "^0.1.24-alpha.0",
+    "@past3lle/hooks": "^0.1.24-alpha.1",
     "lodash.clamp": "^4.0.3"
   },
   "gitHead": "f852fe196f05c3b9111c9642af6df32c8bff7a6e"
