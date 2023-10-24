@@ -105,12 +105,10 @@ async function _includeFileInBuild(file) {
 async function _writeGitIgnore(ignorePaths) {
   if (ignorePaths.length === 0) return
   const gitIgnorePath = packagePath + '/.gitignore'
-  const originalContents = await readFile(resolve(gitIgnorePath), { encoding: 'utf8' })
   await writeFile(
     gitIgnorePath,
     `
 # Generated file. Do not edit directly.
-${originalContents}
 ${ignorePaths.join('/\n')}/
 `
   )
