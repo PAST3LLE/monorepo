@@ -116,7 +116,8 @@ ${ignorePaths.join('/\n')}/
 }
 
 async function run() {
-  const ignoreFiles = JSON.parse(_argVToMap().get('--ignoreFiles') || '')
+  const ignoreFilesArg = _argVToMap().get('--ignoreFiles')
+  const ignoreFiles = !!ignoreFilesArg ? JSON.parse(ignoreFilesArg) : undefined
   try {
     const files = await _createPackageFile(ignoreFiles)
     await _includeFileInBuild('./README.md')

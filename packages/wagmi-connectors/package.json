@@ -56,12 +56,12 @@
   "types": "dist/types/index.d.ts",
   "typings": "dist/types/index.d.ts",
   "files": [
-    "/dist",
     "/IFrameConnector",
     "/LedgerHIDConnector",
     "/LedgerIFrameConnector",
     "/PstlWeb3AuthConnector",
-    "/utils"
+    "/utils",
+    "/dist"
   ],
   "repository": {
     "type": "git",
@@ -69,25 +69,6 @@
   },
   "bugs": {
     "url": "https://github.com/PAST3LLE/past3lle-monorepo/issues"
-  },
-  "scripts": {
-    "analyze": "npx source-map-explorer dist/index.js{,.map}",
-    "check-types": "npx tsc --noEmit",
-    "build:old": "yarn clean && yarn compile",
-    "build:bundles": "rollup -c",
-    "build": "yarn clean && yarn compile && yarn build:bundles && yarn post:build",
-    "post:build": "node ../../scripts/subModulePostBuild.mjs",
-    "clean": "rm -rf dist && rm -rf tsconfig.tsbuildinfo",
-    "compile": "tsc --emitDeclarationOnly --outDir './dist/types' & tsc --project tsconfig.cjs.json & tsc --project tsconfig.esm.json && cp \"./package.json\" ./dist/",
-    "cosmos": "cosmos",
-    "prepack": "yarn build",
-    "test": "echo 'removed default test' ",
-    "alt-test": "tsc test --env=jsdom",
-    "test:watch": "tsc test --env=jsdom --watchAll",
-    "test:ci": "yarn alt-test --coverage --no-watch --watch=false --watchAll=false --no-watchman --forceExit --detectOpenHandles",
-    "pre-commit": "pretty-quick --staged && yarn test:ci && yarn build",
-    "lint": "prettier --write './src/**/*' --ignore-path '../../.prettierignore'",
-    "depcheck": "npx npm-check"
   },
   "jest": {
     "moduleNameMapper": {
@@ -119,6 +100,38 @@
     "@web3auth/web3auth-wagmi-connector": "^4.0.0",
     "tiny-invariant": "^1.3.1"
   },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "gitHead": "c856d01d5723ca07470fa146af0281f01472ea55",
+  "scripts": {
+    "analyze": "npx source-map-explorer dist/index.js{,.map}",
+    "check-types": "npx tsc --noEmit",
+    "build:old": "yarn clean && yarn compile",
+    "build:bundles": "rollup -c",
+    "build": "yarn clean && yarn compile && yarn build:bundles && yarn post:build",
+    "post:build": "node ../../scripts/subModulePostBuild.mjs",
+    "clean": "rm -rf dist && rm -rf tsconfig.tsbuildinfo",
+    "compile": "tsc --emitDeclarationOnly --outDir './dist/types' & tsc --project tsconfig.cjs.json & tsc --project tsconfig.esm.json && cp \"./package.json\" ./dist/",
+    "cosmos": "cosmos",
+    "prepack": "yarn build",
+    "test": "echo 'removed default test' ",
+    "alt-test": "tsc test --env=jsdom",
+    "test:watch": "tsc test --env=jsdom --watchAll",
+    "test:ci": "yarn alt-test --coverage --no-watch --watch=false --watchAll=false --no-watchman --forceExit --detectOpenHandles",
+    "pre-commit": "pretty-quick --staged && yarn test:ci && yarn build",
+    "lint": "prettier --write './src/**/*' --ignore-path '../../.prettierignore'",
+    "depcheck": "npx npm-check"
+  },
   "devDependencies": {
     "@rollup/plugin-babel": "^6.0.3",
     "@rollup/plugin-node-resolve": "^15.2.1",
@@ -132,17 +145,5 @@
     "viem": "1.1.7",
     "wagmi": "^1.3.10"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "gitHead": "c856d01d5723ca07470fa146af0281f01472ea55"
+  "private": false
 }
