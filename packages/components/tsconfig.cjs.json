@@ -5,5 +5,12 @@
         "outDir": "./dist/cjs",
         "moduleResolution": "Node",
         "declarationDir": "./dist/types"
-    }
+    },
+    "exclude": [
+        "./src/fixtures",
+        "./src/**/*.fixture.*",
+        "./src/**/*.decorator.*",
+        "./src/__mocks__",
+        "./src/__tests__"
+    ]
 }

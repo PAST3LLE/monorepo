@@ -3,6 +3,13 @@
     "compilerOptions": {
         "module": "ES2020",
         "outDir": "./dist/esm",
-        "declarationDir": "./dist/types"
-    }
+        "declarationDir": "./dist/types",
+    },
+    "exclude": [
+        "./src/fixtures",
+        "./src/**/*.fixture.*",
+        "./src/**/*.decorator.*",
+        "./src/__mocks__",
+        "./src/__tests__"
+    ]
 }
