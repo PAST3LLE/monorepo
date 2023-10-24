@@ -29,8 +29,7 @@
         }
     ],
     "include": [
-        "./src",
-        "./src/utils"
+        "./src"
     ],
     "exclude": [
         "./src/fixtures",

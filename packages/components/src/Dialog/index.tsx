@@ -12,7 +12,7 @@ import FocusLock from 'react-focus-lock'
 import { RemoveScroll } from 'react-remove-scroll'
 
 import { Portal, PortalProps } from '../Portal'
-import { composeEventHandlers, createContext } from '../utils'
+import { composeEventHandlers, createContext } from './utils'
 import * as Polymorphic from './types'
 
 enum DialogState {
