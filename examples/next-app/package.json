@@ -11,6 +11,7 @@
   "alias": {
     "react": "../../node_modules/react",
     "react-dom": "../../node_modules/react-dom",
+    "@past3lle/components": "../../node_modules/@past3lle/components",
     "@past3lle/web3-modal": "../../packages/web3-modal/dist",
     "@past3lle/hooks": "../../packages/hooks/dist",
     "@past3lle/theme": "../../packages/theme/dist",
