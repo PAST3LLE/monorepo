@@ -1,7 +1,7 @@
 import { SVG_LoadingCircleLight } from '@past3lle/assets'
 import { rotateKeyframe } from '@past3lle/theme'
 import React from 'react'
-import styled from 'styled-components/macro'
+import styled from 'styled-components'
 
 export const Spinner = styled.img<{ size?: number; invertColor?: boolean }>`
   animation: 2s ${rotateKeyframe} linear infinite;

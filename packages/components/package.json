@@ -181,7 +181,7 @@
   "private": false,
   "scripts": {
     "clean": "rm -rf dist && rm -rf tsconfig.tsbuildinfo",
-    "compile:tsup": "tsc --emitDeclarationOnly & tsup && cp \"./package.json\" ./dist/",
+    "compile:tsup": "tsup && tsc --emitDeclarationOnly",
     "compile": "tsc --emitDeclarationOnly --outDir './dist/types' & tsc --project tsconfig.cjs.json & tsc --project tsconfig.esm.json && cp \"./package.json\" ./dist/",
     "compile:submodules": "rollup -c",
     "build": "yarn clean && yarn compile:tsup",
