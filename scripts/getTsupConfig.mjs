@@ -5,8 +5,8 @@ import { default as fs } from 'fs-extra'
 import path from 'path'
 /**
  * 
- * @param {*} param0 
- * @returns {any}
+ * @param {import('tsup').Options & { dev?: boolean }} options 
+ * @returns {import('tsup').Options}
  */
 export function getConfig({ format = ['esm'], dev, noExport, ...options }) {
   if (!options.entry?.length) throw new Error('entry is required')
@@ -54,6 +54,7 @@ export function getConfig({ format = ['esm'], dev, noExport, ...options }) {
     bundle: true,
     clean: true,
     dts: false,
+    treeshake: true,
     format,
     splitting: true,
     target: 'es2021',
