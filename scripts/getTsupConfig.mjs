@@ -83,11 +83,11 @@ async function generateExports(entry, noExport) {
     const distEsmSourceFile = `${fileWithoutExtension.replace(
       /^src\//g,
       './dist/',
-    )}.mjs`
-    const distCjsSourceFile = distEsmSourceFile.replace(/.mjs/g, '.js')
+    )}.js`
+    const distCjsSourceFile = distEsmSourceFile.replace(/.js/g, '.cjs')
     const distTypesFile = `${fileWithoutExtension.replace(
       /^src\//g,
-      './dist/types/',
+      './dist/',
     )}.d.ts`
     exports[name] = {
       types: distTypesFile,
@@ -121,7 +121,8 @@ async function generateProxyPackages(exports) {
     if (!value.import) continue
     await fs.ensureDir(key)
     const esmEntrypoint = path.relative(key, value.import)
-    const cjsEntrypoint = esmEntrypoint.replace(/.mjs/g, '.js')
+    const typesEntrypoint = path.relative(key, value.types)
+    // const cjsEntrypoint = esmEntrypoint.replace(/.js/g, '.cjs')
     const fileExists = await fs.pathExists(value.import)
     if (!fileExists)
       throw new Error(
@@ -132,9 +133,10 @@ async function generateProxyPackages(exports) {
       `${key}/package.json`,
       dedent`{
         "private": "true",
-        "main": "${cjsEntrypoint}",
-        "module": "${esmEntrypoint}",
-        "types": "${value.types}"
+        "type": "module",
+        "main": "${esmEntrypoint}",
+        "types": "${typesEntrypoint}",
+        "typings": "${typesEntrypoint}"
       }`,
     )
     // @ts-ignore
