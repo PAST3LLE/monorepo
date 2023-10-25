@@ -83,8 +83,8 @@ async function generateExports(entry, noExport) {
     const distEsmSourceFile = `${fileWithoutExtension.replace(
       /^src\//g,
       './dist/',
-    )}.js`
-    const distCjsSourceFile = distEsmSourceFile.replace(/.js/g, '.cjs')
+    )}.mjs`
+    const distCjsSourceFile = distEsmSourceFile.replace(/.mjs/g, '.js')
     const distTypesFile = `${fileWithoutExtension.replace(
       /^src\//g,
       './dist/',
@@ -122,7 +122,7 @@ async function generateProxyPackages(exports) {
     await fs.ensureDir(key)
     const esmEntrypoint = path.relative(key, value.import)
     const typesEntrypoint = path.relative(key, value.types)
-    // const cjsEntrypoint = esmEntrypoint.replace(/.js/g, '.cjs')
+    const cjsEntrypoint = esmEntrypoint.replace(/.mjs/g, '.js')
     const fileExists = await fs.pathExists(value.import)
     if (!fileExists)
       throw new Error(
@@ -134,7 +134,8 @@ async function generateProxyPackages(exports) {
       dedent`{
         "private": "true",
         "type": "module",
-        "main": "${esmEntrypoint}",
+        "main": "${cjsEntrypoint}",
+        "module": "${esmEntrypoint}",
         "types": "${typesEntrypoint}",
         "typings": "${typesEntrypoint}"
       }`,
