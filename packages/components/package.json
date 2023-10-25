@@ -7,112 +7,112 @@
     "access": "public",
     "registry": "https://registry.npmjs.org"
   },
-  "type": "module",
   "main": "dist/index.js",
+  "module": "dist/index.mjs",
   "typings": "dist/index.d.ts",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.js",
-      "default": "./dist/index.js"
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "default": "./dist/index.mjs"
     },
     "./Button": {
       "types": "./dist/Button/index.d.ts",
-      "require": "./dist/Button/index.cjs",
-      "import": "./dist/Button/index.js",
-      "default": "./dist/Button/index.js"
+      "require": "./dist/Button/index.js",
+      "import": "./dist/Button/index.mjs",
+      "default": "./dist/Button/index.mjs"
     },
     "./Cookies": {
       "types": "./dist/Cookies/index.d.ts",
-      "require": "./dist/Cookies/index.cjs",
-      "import": "./dist/Cookies/index.js",
-      "default": "./dist/Cookies/index.js"
+      "require": "./dist/Cookies/index.js",
+      "import": "./dist/Cookies/index.mjs",
+      "default": "./dist/Cookies/index.mjs"
     },
     "./Dialog": {
       "types": "./dist/Dialog/index.d.ts",
-      "require": "./dist/Dialog/index.cjs",
-      "import": "./dist/Dialog/index.js",
-      "default": "./dist/Dialog/index.js"
+      "require": "./dist/Dialog/index.js",
+      "import": "./dist/Dialog/index.mjs",
+      "default": "./dist/Dialog/index.mjs"
     },
     "./Error": {
       "types": "./dist/Error/index.d.ts",
-      "require": "./dist/Error/index.cjs",
-      "import": "./dist/Error/index.js",
-      "default": "./dist/Error/index.js"
+      "require": "./dist/Error/index.js",
+      "import": "./dist/Error/index.mjs",
+      "default": "./dist/Error/index.mjs"
     },
     "./Icons": {
       "types": "./dist/Icons/index.d.ts",
-      "require": "./dist/Icons/index.cjs",
-      "import": "./dist/Icons/index.js",
-      "default": "./dist/Icons/index.js"
+      "require": "./dist/Icons/index.js",
+      "import": "./dist/Icons/index.mjs",
+      "default": "./dist/Icons/index.mjs"
     },
     "./Layout": {
       "types": "./dist/Layout/index.d.ts",
-      "require": "./dist/Layout/index.cjs",
-      "import": "./dist/Layout/index.js",
-      "default": "./dist/Layout/index.js"
+      "require": "./dist/Layout/index.js",
+      "import": "./dist/Layout/index.mjs",
+      "default": "./dist/Layout/index.mjs"
     },
     "./Links": {
       "types": "./dist/Links/index.d.ts",
-      "require": "./dist/Links/index.cjs",
-      "import": "./dist/Links/index.js",
-      "default": "./dist/Links/index.js"
+      "require": "./dist/Links/index.js",
+      "import": "./dist/Links/index.mjs",
+      "default": "./dist/Links/index.mjs"
     },
     "./Loaders": {
       "types": "./dist/Loaders/index.d.ts",
-      "require": "./dist/Loaders/index.cjs",
-      "import": "./dist/Loaders/index.js",
-      "default": "./dist/Loaders/index.js"
+      "require": "./dist/Loaders/index.js",
+      "import": "./dist/Loaders/index.mjs",
+      "default": "./dist/Loaders/index.mjs"
     },
     "./Modal": {
       "types": "./dist/Modal/index.d.ts",
-      "require": "./dist/Modal/index.cjs",
-      "import": "./dist/Modal/index.js",
-      "default": "./dist/Modal/index.js"
+      "require": "./dist/Modal/index.js",
+      "import": "./dist/Modal/index.mjs",
+      "default": "./dist/Modal/index.mjs"
     },
     "./Pastellecon": {
       "types": "./dist/Pastellecon/index.d.ts",
-      "require": "./dist/Pastellecon/index.cjs",
-      "import": "./dist/Pastellecon/index.js",
-      "default": "./dist/Pastellecon/index.js"
+      "require": "./dist/Pastellecon/index.js",
+      "import": "./dist/Pastellecon/index.mjs",
+      "default": "./dist/Pastellecon/index.mjs"
     },
     "./Popover": {
       "types": "./dist/Popover/index.d.ts",
-      "require": "./dist/Popover/index.cjs",
-      "import": "./dist/Popover/index.js",
-      "default": "./dist/Popover/index.js"
+      "require": "./dist/Popover/index.js",
+      "import": "./dist/Popover/index.mjs",
+      "default": "./dist/Popover/index.mjs"
     },
     "./Portal": {
       "types": "./dist/Portal/index.d.ts",
-      "require": "./dist/Portal/index.cjs",
-      "import": "./dist/Portal/index.js",
-      "default": "./dist/Portal/index.js"
+      "require": "./dist/Portal/index.js",
+      "import": "./dist/Portal/index.mjs",
+      "default": "./dist/Portal/index.mjs"
     },
     "./SmartImg": {
       "types": "./dist/SmartImg/index.d.ts",
-      "require": "./dist/SmartImg/index.cjs",
-      "import": "./dist/SmartImg/index.js",
-      "default": "./dist/SmartImg/index.js"
+      "require": "./dist/SmartImg/index.js",
+      "import": "./dist/SmartImg/index.mjs",
+      "default": "./dist/SmartImg/index.mjs"
     },
     "./SmartVideo": {
       "types": "./dist/SmartVideo/index.d.ts",
-      "require": "./dist/SmartVideo/index.cjs",
-      "import": "./dist/SmartVideo/index.js",
-      "default": "./dist/SmartVideo/index.js"
+      "require": "./dist/SmartVideo/index.js",
+      "import": "./dist/SmartVideo/index.mjs",
+      "default": "./dist/SmartVideo/index.mjs"
     },
     "./Text": {
       "types": "./dist/Text/index.d.ts",
-      "require": "./dist/Text/index.cjs",
-      "import": "./dist/Text/index.js",
-      "default": "./dist/Text/index.js"
+      "require": "./dist/Text/index.js",
+      "import": "./dist/Text/index.mjs",
+      "default": "./dist/Text/index.mjs"
     },
     "./Tooltip": {
       "types": "./dist/Tooltip/index.d.ts",
-      "require": "./dist/Tooltip/index.cjs",
-      "import": "./dist/Tooltip/index.js",
-      "default": "./dist/Tooltip/index.js"
+      "require": "./dist/Tooltip/index.js",
+      "import": "./dist/Tooltip/index.mjs",
+      "default": "./dist/Tooltip/index.mjs"
     },
     "./package.json": "./package.json"
   },
