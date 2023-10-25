@@ -1,6 +1,8 @@
 import { useForceUpdate, useIsomorphicLayoutEffect as useLayoutEffect } from '@past3lle/hooks'
 import { devWarn } from '@past3lle/utils'
-import React from 'react'
+// Need this to make package work with tsup & it's esm config
+// See: https://github.com/egoist/tsup/issues/927
+import * as React from 'react'
 import { createPortal } from 'react-dom'
 
 /**

@@ -5,6 +5,8 @@ import { dependencies, peerDependencies } from './package.json'
 export default defineConfig(getConfig({
     format: ['esm', 'cjs'],
     dev: false,
+    // already true, just explicit setting here
+    treeshake: true,
     entry: [
         'src/index.ts',
         'src/Button/index.tsx',
