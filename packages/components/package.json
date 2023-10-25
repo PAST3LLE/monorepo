@@ -8,109 +8,109 @@
     "registry": "https://registry.npmjs.org"
   },
   "main": "dist/index.js",
-  "module": "dist/esm/index.js",
+  "module": "dist/index.mjs",
   "exports": {
     ".": {
       "types": "./dist/types/index.d.ts",
       "require": "./dist/index.js",
-      "import": "./dist/esm/index.js",
-      "default": "./dist/esm/index.js"
+      "import": "./dist/index.mjs",
+      "default": "./dist/index.mjs"
     },
     "./Button": {
       "types": "./dist/types/Button/index.d.ts",
       "require": "./dist/Button/index.js",
-      "import": "./dist/esm/Button/index.js",
-      "default": "./dist/esm/Button/index.js"
+      "import": "./dist/Button/index.mjs",
+      "default": "./dist/Button/index.mjs"
     },
     "./Cookies": {
       "types": "./dist/types/Cookies/index.d.ts",
       "require": "./dist/Cookies/index.js",
-      "import": "./dist/esm/Cookies/index.js",
-      "default": "./dist/esm/Cookies/index.js"
+      "import": "./dist/Cookies/index.mjs",
+      "default": "./dist/Cookies/index.mjs"
     },
     "./Dialog": {
       "types": "./dist/types/Dialog/index.d.ts",
       "require": "./dist/Dialog/index.js",
-      "import": "./dist/esm/Dialog/index.js",
-      "default": "./dist/esm/Dialog/index.js"
+      "import": "./dist/Dialog/index.mjs",
+      "default": "./dist/Dialog/index.mjs"
     },
     "./Error": {
       "types": "./dist/types/Error/index.d.ts",
       "require": "./dist/Error/index.js",
-      "import": "./dist/esm/Error/index.js",
-      "default": "./dist/esm/Error/index.js"
+      "import": "./dist/Error/index.mjs",
+      "default": "./dist/Error/index.mjs"
     },
     "./Icons": {
       "types": "./dist/types/Icons/index.d.ts",
       "require": "./dist/Icons/index.js",
-      "import": "./dist/esm/Icons/index.js",
-      "default": "./dist/esm/Icons/index.js"
+      "import": "./dist/Icons/index.mjs",
+      "default": "./dist/Icons/index.mjs"
     },
     "./Layout": {
       "types": "./dist/types/Layout/index.d.ts",
       "require": "./dist/Layout/index.js",
-      "import": "./dist/esm/Layout/index.js",
-      "default": "./dist/esm/Layout/index.js"
+      "import": "./dist/Layout/index.mjs",
+      "default": "./dist/Layout/index.mjs"
     },
     "./Links": {
       "types": "./dist/types/Links/index.d.ts",
       "require": "./dist/Links/index.js",
-      "import": "./dist/esm/Links/index.js",
-      "default": "./dist/esm/Links/index.js"
+      "import": "./dist/Links/index.mjs",
+      "default": "./dist/Links/index.mjs"
     },
     "./Loaders": {
       "types": "./dist/types/Loaders/index.d.ts",
       "require": "./dist/Loaders/index.js",
-      "import": "./dist/esm/Loaders/index.js",
-      "default": "./dist/esm/Loaders/index.js"
+      "import": "./dist/Loaders/index.mjs",
+      "default": "./dist/Loaders/index.mjs"
     },
     "./Modal": {
       "types": "./dist/types/Modal/index.d.ts",
       "require": "./dist/Modal/index.js",
-      "import": "./dist/esm/Modal/index.js",
-      "default": "./dist/esm/Modal/index.js"
+      "import": "./dist/Modal/index.mjs",
+      "default": "./dist/Modal/index.mjs"
     },
     "./Pastellecon": {
       "types": "./dist/types/Pastellecon/index.d.ts",
       "require": "./dist/Pastellecon/index.js",
-      "import": "./dist/esm/Pastellecon/index.js",
-      "default": "./dist/esm/Pastellecon/index.js"
+      "import": "./dist/Pastellecon/index.mjs",
+      "default": "./dist/Pastellecon/index.mjs"
     },
     "./Popover": {
       "types": "./dist/types/Popover/index.d.ts",
       "require": "./dist/Popover/index.js",
-      "import": "./dist/esm/Popover/index.js",
-      "default": "./dist/esm/Popover/index.js"
+      "import": "./dist/Popover/index.mjs",
+      "default": "./dist/Popover/index.mjs"
     },
     "./Portal": {
       "types": "./dist/types/Portal/index.d.ts",
       "require": "./dist/Portal/index.js",
-      "import": "./dist/esm/Portal/index.js",
-      "default": "./dist/esm/Portal/index.js"
+      "import": "./dist/Portal/index.mjs",
+      "default": "./dist/Portal/index.mjs"
     },
     "./SmartImg": {
       "types": "./dist/types/SmartImg/index.d.ts",
       "require": "./dist/SmartImg/index.js",
-      "import": "./dist/esm/SmartImg/index.js",
-      "default": "./dist/esm/SmartImg/index.js"
+      "import": "./dist/SmartImg/index.mjs",
+      "default": "./dist/SmartImg/index.mjs"
     },
     "./SmartVideo": {
       "types": "./dist/types/SmartVideo/index.d.ts",
       "require": "./dist/SmartVideo/index.js",
-      "import": "./dist/esm/SmartVideo/index.js",
-      "default": "./dist/esm/SmartVideo/index.js"
+      "import": "./dist/SmartVideo/index.mjs",
+      "default": "./dist/SmartVideo/index.mjs"
     },
     "./Text": {
       "types": "./dist/types/Text/index.d.ts",
       "require": "./dist/Text/index.js",
-      "import": "./dist/esm/Text/index.js",
-      "default": "./dist/esm/Text/index.js"
+      "import": "./dist/Text/index.mjs",
+      "default": "./dist/Text/index.mjs"
     },
     "./Tooltip": {
       "types": "./dist/types/Tooltip/index.d.ts",
       "require": "./dist/Tooltip/index.js",
-      "import": "./dist/esm/Tooltip/index.js",
-      "default": "./dist/esm/Tooltip/index.js"
+      "import": "./dist/Tooltip/index.mjs",
+      "default": "./dist/Tooltip/index.mjs"
     },
     "./package.json": "./package.json"
   },
@@ -181,10 +181,11 @@
   "types": "dist/types/index.d.ts",
   "scripts": {
     "clean": "rm -rf dist && rm -rf tsconfig.tsbuildinfo",
-    "compile:tsup": "yarn clean && tsc --emitDeclarationOnly --outDir './dist/types' & tsup --legacy-output",
+    "compile:tsup": "tsc --emitDeclarationOnly --outDir './dist/types' & tsup",
     "compile": "tsc --emitDeclarationOnly --outDir './dist/types' & tsc --project tsconfig.cjs.json & tsc --project tsconfig.esm.json && cp \"./package.json\" ./dist/",
     "compile:submodules": "rollup -c",
-    "build": "yarn clean && yarn compile && yarn compile:submodules && yarn post:build",
+    "build": "yarn clean && yarn compile:tsup",
+    "build:tsc": "yarn clean && yarn compile && yarn compile:submodules && yarn post:build",
     "post:build": "node ../../scripts/subModulePostBuild.mjs --ignoreFiles '[\"types.ts\",\"theme.ts\"]'",
     "prepack": "yarn build",
     "start": "tsdx watch",
