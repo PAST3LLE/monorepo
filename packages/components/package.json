@@ -181,7 +181,7 @@
   "types": "dist/types/index.d.ts",
   "scripts": {
     "clean": "rm -rf dist && rm -rf tsconfig.tsbuildinfo",
-    "compile:tsup": "tsc --emitDeclarationOnly --outDir './dist/types' & tsup",
+    "compile:tsup": "tsc --emitDeclarationOnly --outDir './dist/types' & tsup && cp \"./package.json\" ./dist/",
     "compile": "tsc --emitDeclarationOnly --outDir './dist/types' & tsc --project tsconfig.cjs.json & tsc --project tsconfig.esm.json && cp \"./package.json\" ./dist/",
     "compile:submodules": "rollup -c",
     "build": "yarn clean && yarn compile:tsup",
