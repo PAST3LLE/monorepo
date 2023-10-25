@@ -7,92 +7,110 @@
     "access": "public",
     "registry": "https://registry.npmjs.org"
   },
-  "main": "dist/cjs/index.js",
+  "main": "dist/index.js",
   "module": "dist/esm/index.js",
   "exports": {
     ".": {
+      "types": "./dist/types/index.d.ts",
+      "require": "./dist/index.js",
       "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.js"
+      "default": "./dist/esm/index.js"
     },
     "./Button": {
       "types": "./dist/types/Button/index.d.ts",
-      "import": "./dist/esm/Button",
-      "default": "./dist/esm/Button"
+      "require": "./dist/Button/index.js",
+      "import": "./dist/esm/Button/index.js",
+      "default": "./dist/esm/Button/index.js"
     },
     "./Cookies": {
       "types": "./dist/types/Cookies/index.d.ts",
-      "import": "./dist/esm/Cookies",
-      "default": "./dist/esm/Cookies"
+      "require": "./dist/Cookies/index.js",
+      "import": "./dist/esm/Cookies/index.js",
+      "default": "./dist/esm/Cookies/index.js"
     },
     "./Dialog": {
       "types": "./dist/types/Dialog/index.d.ts",
-      "import": "./dist/esm/Dialog",
-      "default": "./dist/esm/Dialog"
+      "require": "./dist/Dialog/index.js",
+      "import": "./dist/esm/Dialog/index.js",
+      "default": "./dist/esm/Dialog/index.js"
     },
     "./Error": {
       "types": "./dist/types/Error/index.d.ts",
-      "import": "./dist/esm/Error",
-      "default": "./dist/esm/Error"
+      "require": "./dist/Error/index.js",
+      "import": "./dist/esm/Error/index.js",
+      "default": "./dist/esm/Error/index.js"
     },
     "./Icons": {
       "types": "./dist/types/Icons/index.d.ts",
-      "import": "./dist/esm/Icons",
-      "default": "./dist/esm/Icons"
+      "require": "./dist/Icons/index.js",
+      "import": "./dist/esm/Icons/index.js",
+      "default": "./dist/esm/Icons/index.js"
     },
     "./Layout": {
       "types": "./dist/types/Layout/index.d.ts",
-      "import": "./dist/esm/Layout",
-      "default": "./dist/esm/Layout"
+      "require": "./dist/Layout/index.js",
+      "import": "./dist/esm/Layout/index.js",
+      "default": "./dist/esm/Layout/index.js"
     },
     "./Links": {
       "types": "./dist/types/Links/index.d.ts",
-      "import": "./dist/esm/Links",
-      "default": "./dist/esm/Links"
+      "require": "./dist/Links/index.js",
+      "import": "./dist/esm/Links/index.js",
+      "default": "./dist/esm/Links/index.js"
     },
     "./Loaders": {
       "types": "./dist/types/Loaders/index.d.ts",
-      "import": "./dist/esm/Loaders",
-      "default": "./dist/esm/Loaders"
+      "require": "./dist/Loaders/index.js",
+      "import": "./dist/esm/Loaders/index.js",
+      "default": "./dist/esm/Loaders/index.js"
     },
     "./Modal": {
       "types": "./dist/types/Modal/index.d.ts",
-      "import": "./dist/esm/Modal",
-      "default": "./dist/esm/Modal"
+      "require": "./dist/Modal/index.js",
+      "import": "./dist/esm/Modal/index.js",
+      "default": "./dist/esm/Modal/index.js"
     },
     "./Pastellecon": {
       "types": "./dist/types/Pastellecon/index.d.ts",
-      "import": "./dist/esm/Pastellecon",
-      "default": "./dist/esm/Pastellecon"
+      "require": "./dist/Pastellecon/index.js",
+      "import": "./dist/esm/Pastellecon/index.js",
+      "default": "./dist/esm/Pastellecon/index.js"
     },
     "./Popover": {
       "types": "./dist/types/Popover/index.d.ts",
-      "import": "./dist/esm/Popover",
-      "default": "./dist/esm/Popover"
+      "require": "./dist/Popover/index.js",
+      "import": "./dist/esm/Popover/index.js",
+      "default": "./dist/esm/Popover/index.js"
     },
     "./Portal": {
       "types": "./dist/types/Portal/index.d.ts",
-      "import": "./dist/esm/Portal",
-      "default": "./dist/esm/Portal"
+      "require": "./dist/Portal/index.js",
+      "import": "./dist/esm/Portal/index.js",
+      "default": "./dist/esm/Portal/index.js"
     },
     "./SmartImg": {
       "types": "./dist/types/SmartImg/index.d.ts",
-      "import": "./dist/esm/SmartImg",
-      "default": "./dist/esm/SmartImg"
+      "require": "./dist/SmartImg/index.js",
+      "import": "./dist/esm/SmartImg/index.js",
+      "default": "./dist/esm/SmartImg/index.js"
     },
     "./SmartVideo": {
       "types": "./dist/types/SmartVideo/index.d.ts",
-      "import": "./dist/esm/SmartVideo",
-      "default": "./dist/esm/SmartVideo"
+      "require": "./dist/SmartVideo/index.js",
+      "import": "./dist/esm/SmartVideo/index.js",
+      "default": "./dist/esm/SmartVideo/index.js"
     },
     "./Text": {
       "types": "./dist/types/Text/index.d.ts",
-      "import": "./dist/esm/Text",
-      "default": "./dist/esm/Text"
+      "require": "./dist/Text/index.js",
+      "import": "./dist/esm/Text/index.js",
+      "default": "./dist/esm/Text/index.js"
     },
     "./Tooltip": {
       "types": "./dist/types/Tooltip/index.d.ts",
-      "import": "./dist/esm/Tooltip",
-      "default": "./dist/esm/Tooltip"
+      "require": "./dist/Tooltip/index.js",
+      "import": "./dist/esm/Tooltip/index.js",
+      "default": "./dist/esm/Tooltip/index.js"
     },
     "./package.json": "./package.json"
   },
@@ -163,7 +181,7 @@
   "types": "dist/types/index.d.ts",
   "scripts": {
     "clean": "rm -rf dist && rm -rf tsconfig.tsbuildinfo",
-    "compile:tsdx": "tsdx build && cp \"./package.json\" ./dist/",
+    "compile:tsup": "yarn clean && tsc --emitDeclarationOnly --outDir './dist/types' & tsup --legacy-output",
     "compile": "tsc --emitDeclarationOnly --outDir './dist/types' & tsc --project tsconfig.cjs.json & tsc --project tsconfig.esm.json && cp \"./package.json\" ./dist/",
     "compile:submodules": "rollup -c",
     "build": "yarn clean && yarn compile && yarn compile:submodules && yarn post:build",
@@ -203,6 +221,7 @@
     "rollup-plugin-generate-package-json": "^3.2.0",
     "rollup-plugin-svg": "^2.0.0",
     "styled-components": "^5.3.6",
-    "tslib": "^2.4.1"
+    "tslib": "^2.4.1",
+    "tsup": "^7.2.0"
   }
 }
