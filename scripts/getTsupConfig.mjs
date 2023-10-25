@@ -87,7 +87,7 @@ async function generateExports(entry, noExport) {
     const distCjsSourceFile = distEsmSourceFile.replace(/\/esm/, '')
     const distTypesFile = `${fileWithoutExtension.replace(
       /^src\//g,
-      './dist/esm/',
+      './dist/types/',
     )}.d.ts`
     exports[name] = {
       types: distTypesFile,
