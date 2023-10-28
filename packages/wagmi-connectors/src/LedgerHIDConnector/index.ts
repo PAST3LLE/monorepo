@@ -224,13 +224,9 @@ export class LedgerHIDConnector extends Connector<LedgerHQProvider, LedgerHidOpt
   }
 
   public async getProvider(config?: { chainId?: number | undefined } | undefined): Promise<LedgerHQProvider> {
-    invariant(config?.chainId, '[Ledger HID] No passed chain id.')
-    invariant(
-      this.providerByChainMap.get(config.chainId),
-      '[Ledger HID] Provider is not defined. ChainId: ' + config?.chainId
-    )
-
-    return this.providerByChainMap.get(config.chainId) as LedgerHQProvider
+    const chainId = config?.chainId || this.chainId
+    invariant(chainId, '[Ledger HID] No detected chain id! Check configuration.')
+    return this.provider || this.getProviderInstance(chainId) // || this.providerByChainMap.get(config.chainId) as LedgerHQProvider
   }
 
   public async getProviderInstance(id?: number): Promise<LedgerHQProvider> {
@@ -257,6 +253,7 @@ export class LedgerHIDConnector extends Connector<LedgerHQProvider, LedgerHidOpt
 
     // set the provider mapping with our new provider instance
     this.providerByChainMap.set(derivedId, provider)
+    this.provider = provider
     return provider
   }
 
