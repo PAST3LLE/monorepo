@@ -21,9 +21,9 @@
   "dependencies": {
     "@react-spring/web": "latest",
     "@use-gesture/react": "latest",
-    "@past3lle/carousel": "latest",
-    "@past3lle/carousel-hooks": "latest",
-    "next": "latest"
+    "@past3lle/carousel": "../../packages/carousel",
+    "@past3lle/carousel-hooks": "../../packages/carousel-hooks",
+    "next": "^13.x"
   },
   "devDependencies": {
     "@types/node": "20.4.0",
