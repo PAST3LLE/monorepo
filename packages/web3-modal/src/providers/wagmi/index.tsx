@@ -3,7 +3,7 @@ import { WagmiConfig } from 'wagmi'
 
 import { SmartAutoConnectProps } from '../../hooks/useSmartAutoConnect'
 import { WagmiClient } from '../utils'
-import { SmartConnect } from './SmartConnect'
+import { ConnectedUpdaters } from './ConnectedUpdaters'
 
 interface WagmiProviderProps extends SmartAutoConnectProps {
   children: ReactNode
@@ -12,7 +12,7 @@ interface WagmiProviderProps extends SmartAutoConnectProps {
 
 export const PstlWagmiProvider = ({ children, wagmiClient, ...smartConnectProps }: WagmiProviderProps) => (
   <WagmiConfig config={wagmiClient}>
-    <SmartConnect {...smartConnectProps} />
+    <ConnectedUpdaters {...smartConnectProps} />
     {children}
   </WagmiConfig>
 )

@@ -34,6 +34,7 @@ export class LedgerHIDConnector extends Connector<LedgerHQProvider, LedgerHidOpt
   constructor(config: { chains: Chain[]; options?: LedgerHidOptions }) {
     super({ chains: config.chains, options: config?.options || {} })
 
+    // default chain is first index in chains configuration list
     const { id, rpcUrls } = config.chains[0]
 
     this.chainId = id
