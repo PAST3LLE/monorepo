@@ -248,7 +248,7 @@ async function _handleConnectorClick(
       } else {
         await _connectToProvider({ connector, connect, baseConnectorKey, openWalletConnectModal, chainId })
       }
-    } 
+    }
   } catch (error: any) {
     devError('[__handleConnectorClick] Error handling connection.', error)
   }
