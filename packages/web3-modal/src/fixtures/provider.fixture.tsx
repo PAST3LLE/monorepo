@@ -4,12 +4,13 @@ import { ThemeProvider, createCustomTheme } from '@past3lle/theme'
 import { devWarn, getExpirementalCookieStore as getCookieStore } from '@past3lle/utils'
 import React, { ReactNode, useEffect } from 'react'
 import { useTheme } from 'styled-components'
-import { goerli, polygon } from 'viem/chains'
+import { goerli, polygon, polygonMumbai } from 'viem/chains'
 import { mainnet, useBalance } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { infuraProvider } from 'wagmi/providers/infura'
 
 import { useAccountNetworkActions, useUserConnectionInfo } from '../hooks'
+import { useLimitChainsAndSwitchCallback } from '../hooks/useLimitChainsAndSwitchCallback'
 import { PstlWeb3ModalProps, PstlW3Providers as WalletModal } from '../providers'
 import { addConnector } from '../providers/utils'
 import { COMMON_CONNECTOR_OVERRIDES, DEFAULT_PROPS, DEFAULT_PROPS_WEB3AUTH, pstlModalTheme } from './config'
@@ -796,6 +797,7 @@ export default {
   Grid__ChainsFiltering: withThemeProvider(() => {
     const HARD_ENVIRONMENT_PARAM = 'hard-env'
     const SOFT_ENVIRONMENT_PARAM = 'soft-env'
+    const limitChains = useLimitChainsAndSwitchCallback()
     return (
       <PstlW3Providers
         config={{
@@ -907,6 +909,9 @@ export default {
       >
         <AppWithWagmiAccess />
         <Web3Button />
+        <button onClick={() => limitChains([mainnet])}>Limit chains to just MAINNET</button>
+        <button onClick={() => limitChains([goerli])}>Limit chains to just GOERLI</button>
+        <button onClick={() => limitChains([polygonMumbai])}>Limit chains to just MUMMBAI</button>
       </PstlW3Providers>
     )
   }),

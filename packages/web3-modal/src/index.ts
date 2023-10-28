@@ -1,5 +1,6 @@
 import { PstlWeb3Modal } from './components/modals'
 import {
+  useLimitChainsAndSwitchCallback,
   useAccountNetworkActions as usePstlAccountNetworkActions,
   useConnectDisconnect as usePstlConnectDisconnect,
   useConnection as usePstlConnection,
@@ -39,6 +40,7 @@ export {
   usePstlUserConnectionInfo,
   usePstlWeb3Modal,
   usePstlWeb3Modals,
+  useLimitChainsAndSwitchCallback,
   // theme
   createTheme,
   W3aStyleResetProvider,

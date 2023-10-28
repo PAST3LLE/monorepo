@@ -73,7 +73,7 @@ async function writeGitIgnore(ignorePaths) {
     packagePath + '/.gitignore',
 `
 # Generated file. Do not edit directly.
-${ignorePaths.join('/\n')}/
+${ignorePaths.map(p => p.startsWith('/') ? p : `/${p}`).join('/\n')}/
 `,
   )
   console.log('Wrote new .gitignore')

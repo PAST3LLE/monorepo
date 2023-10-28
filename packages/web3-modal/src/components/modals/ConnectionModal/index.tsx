@@ -48,7 +48,26 @@ function ConnectionModalContent({
   const {
     connect: { connectAsync: connect },
     disconnect: { disconnectAsync: disconnect }
-  } = useConnectDisconnect()
+  } = useConnectDisconnect({
+    connect: {
+      onError(error) {
+        modalState.updateModalProps({
+          network: {
+            error
+          }
+        })
+      }
+    },
+    disconnect: {
+      onError(error) {
+        modalState.updateModalProps({
+          network: {
+            error
+          }
+        })
+      }
+    }
+  })
 
   // Close modal(s) on successful connection & report any errors
   useCloseAndUpdateModals(!!closeModalOnConnect, {

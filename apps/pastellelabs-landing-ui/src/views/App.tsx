@@ -30,7 +30,7 @@ export function App() {
           startIndex={0}
           colors={{ accent: 'white' }}
           indicatorOptions={{
-            position: 'top-right'
+            position: 'right'
           }}
           dimensions={{
             minSize: 1200

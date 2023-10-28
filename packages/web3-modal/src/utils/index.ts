@@ -235,18 +235,22 @@ async function _handleConnectorClick(
       : connector.id === currentConnector?.id
   )
 
-  if (address && isConnectedConnector) {
-    return open({ route: 'Account' })
-  } else {
-    if (!!currentConnector) {
-      await disconnect(undefined, {
-        async onSuccess() {
-          await _connectToProvider({ connector, connect, baseConnectorKey, openWalletConnectModal, chainId })
-        }
-      })
+  try {
+    if (address && isConnectedConnector) {
+      return open({ route: 'Account' })
     } else {
-      await _connectToProvider({ connector, connect, baseConnectorKey, openWalletConnectModal, chainId })
+      if (!!currentConnector) {
+        await disconnect(undefined, {
+          async onSuccess() {
+            await _connectToProvider({ connector, connect, baseConnectorKey, openWalletConnectModal, chainId })
+          }
+        })
+      } else {
+        await _connectToProvider({ connector, connect, baseConnectorKey, openWalletConnectModal, chainId })
+      }
     }
+  } catch (error: any) {
+    devError('[__handleConnectorClick] Error handling connection.', error)
   }
 }
 
