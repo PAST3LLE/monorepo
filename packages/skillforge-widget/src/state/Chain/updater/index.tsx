@@ -4,7 +4,7 @@ import {
   useW3UserConnectionInfo
 } from '@past3lle/forge-web3'
 import { devDebug } from '@past3lle/utils'
-import { isIframe } from '@past3lle/wagmi-connectors/utils'
+import { isIframe } from '@past3lle/wagmi-connectors'
 import { useEffect, useState } from 'react'
 
 import { updateSearchParams } from '../../../utils/url'
