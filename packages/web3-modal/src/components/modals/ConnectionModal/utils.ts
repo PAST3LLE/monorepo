@@ -1,3 +1,4 @@
+import { DEFAULT_CONNECTOR_OVERRIDES } from '../../../constants'
 import { ConnectorEnhanced, ConnectorOverrides } from '../../../types'
 import { trimAndLowerCase } from '../../../utils/misc'
 
@@ -23,7 +24,10 @@ export function cleanAndFormatConnectorOverrides(overrides: ConnectorOverrides |
   return Object.entries(overrides).reduce((acc, [key, value]) => {
     const formattedKey = trimAndLowerCase(key)
     if (formattedKey) {
-      acc[formattedKey] = value
+      acc[formattedKey] = {
+        ...DEFAULT_CONNECTOR_OVERRIDES[key],
+        ...value
+      }
     }
     return acc
   }, {} as ConnectorOverrides)

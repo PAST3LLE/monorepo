@@ -83,7 +83,7 @@ function ConnectionModalContent({
     }),
     [connectorDisplayOverridesUnformatted]
   )
-
+  
   // flag for setting whether or not web3auth modal has mounted as it takes a few seconds first time around
   // and we want to close the pstlModal only after the web3auth modal has mounted
   const providerMountedState = useState<ProviderMountedMap>({})

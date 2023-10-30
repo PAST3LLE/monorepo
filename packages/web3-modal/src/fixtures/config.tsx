@@ -199,13 +199,9 @@ export const COMMON_CONNECTOR_OVERRIDES: ConnectorOverrides = {
     }
   },
   walletconnect: {
-    async customConnect(store) {
-      console.debug('HERE! INSIDE CUSTOM')
-      return store.walletConnect.open()
-    },
     logo: WALLETCONNECT_LOGO,
     infoText: {
-      title: 'What is WalletConnect?',
+      title: 'What is WalletConnect? Why WalletConnect?',
       content: (
         <strong>
           Web3Modal/WalletConnect is a simple blockchain wallet aggregator modal that facilitates the choice of
