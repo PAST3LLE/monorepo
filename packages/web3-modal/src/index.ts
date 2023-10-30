@@ -6,7 +6,8 @@ import {
   useConnection as usePstlConnection,
   useUserConnectionInfo as usePstlUserConnectionInfo,
   usePstlWeb3Modal,
-  useWeb3Modals as usePstlWeb3Modals
+  useAllWeb3Modals,
+  useAllWeb3Modals as usePstlWeb3Modals
 } from './hooks'
 import {
   type Chain,
@@ -40,6 +41,7 @@ export {
   usePstlUserConnectionInfo,
   usePstlWeb3Modal,
   usePstlWeb3Modals,
+  useAllWeb3Modals,
   useLimitChainsAndSwitchCallback,
   // theme
   createTheme,

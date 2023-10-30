@@ -1,5 +1,5 @@
 import { ConnectorEnhanced, ConnectorOverrides } from '../../../types'
-import { trimAndLowerCase } from '../../../utils'
+import { trimAndLowerCase } from '../../../utils/misc'
 
 export const sortConnectorsByRank =
   (connectorDisplayOverrides?: ConnectorOverrides) =>

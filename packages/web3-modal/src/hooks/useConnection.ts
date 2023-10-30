@@ -17,6 +17,7 @@ import {
 import { ModalPropsCtrl, OpenOptions } from '../controllers'
 import { usePstlWeb3Modal } from './usePstlWeb3Modal'
 import { usePstlWeb3ModalStore } from './usePstlWeb3ModalStore'
+import { useAllWeb3Modals } from './useAllWeb3Modals'
 
 type Callbacks = Pick<ReturnType<typeof useDisconnectWagmi>, 'disconnect'> & {
   openWalletConnectModal: ReturnType<typeof useWeb3Modal>['open']
@@ -120,19 +121,9 @@ export function useWeb3Modal(): ReturnType<typeof useWeb3ModalBase> {
   }, [baseApi, modalStore])
 }
 
-export function useWeb3Modals(): {
-  root: ReturnType<typeof usePstlWeb3Modal>
-  walletConnect: ReturnType<typeof useWeb3Modal>
-} {
-  return {
-    root: usePstlWeb3Modal(),
-    walletConnect: useWeb3Modal()
-  }
-}
-
 export function useAccountNetworkActions() {
   const { chain } = useUserConnectionInfo()
-  const { root, walletConnect } = useWeb3Modals()
+  const { root, walletConnect } = useAllWeb3Modals()
   const { openType } = useSnapshot(ModalPropsCtrl.state.root)
 
   const isMobileWidth = useIsSmallMediaWidth()
@@ -217,7 +208,7 @@ type UseConnectionProps = {
   disconnect: UseConnectDisconnectProps['disconnect']
 }
 export function useConnection(props?: UseConnectionProps): PstlW3mConnectionHook {
-  const { root, walletConnect } = useWeb3Modals()
+  const { root, walletConnect } = useAllWeb3Modals()
 
   const {
     connect: { connectAsync: connect, connectors, error, isLoading, pendingConnector, isError, isIdle, isSuccess },

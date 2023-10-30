@@ -2,7 +2,7 @@ import React from 'react'
 
 import { PstlWeb3ModalProps } from '../providers'
 import { createTheme } from '../theme'
-import { ChainImages } from '../types'
+import { ChainImages, ConnectorOverrides } from '../types'
 import { chains } from './chains'
 
 const BG_LOGO = 'https://ik.imagekit.io/pastelle/SKILLFORGE/forge-background.png'
@@ -185,7 +185,7 @@ export const pstlModalTheme = createTheme({
   }
 })
 
-export const COMMON_CONNECTOR_OVERRIDES = {
+export const COMMON_CONNECTOR_OVERRIDES: ConnectorOverrides = {
   general: {
     infoText: {
       title: 'What is this?',
@@ -199,6 +199,10 @@ export const COMMON_CONNECTOR_OVERRIDES = {
     }
   },
   walletconnect: {
+    async customConnect(store) {
+      console.debug('HERE! INSIDE CUSTOM')
+      return store.walletConnect.open()
+    },
     logo: WALLETCONNECT_LOGO,
     infoText: {
       title: 'What is WalletConnect?',

@@ -1,4 +1,5 @@
 import { ReactNode } from 'react'
+import { AllWeb3ModalStore } from '../hooks';
 import { Connector } from 'wagmi/connectors'
 
 type InfoTextMap = { title: ReactNode; content: ReactNode }
@@ -9,6 +10,14 @@ export type ConnectorEnhancedExtras = {
   customName?: string
   logo?: string
   details?: string
+  /**
+   * @name customConnect
+   * @description - custom connect function to call in place of the default connect. Does not need to extend the default connect but should eventually call it!
+   * @param modalsStore - all web3 modals store
+   * @see {AllWeb3ModalStore}
+   * @returns whatever it needs to return but should connect to the connector!
+   */
+  customConnect?: (store: AllWeb3ModalStore) => unknown
   /**
    * @name modalNodeId Optional. String ID name of modal node. Used to show async loader on mount
    */

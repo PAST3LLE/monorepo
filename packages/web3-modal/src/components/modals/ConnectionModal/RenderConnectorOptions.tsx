@@ -3,9 +3,10 @@ import { DefaultTheme } from 'styled-components'
 
 import { ProviderMountedMap, PstlWeb3ConnectionModalProps } from '.'
 import { ModalPropsCtrlState } from '../../../controllers/types/controllerTypes'
-import { useConnectDisconnect, useUserConnectionInfo, useWeb3Modals } from '../../../hooks'
+import { AllWeb3ModalStore, useConnectDisconnect, useUserConnectionInfo } from '../../../hooks'
 import { ConnectorEnhanced } from '../../../types'
-import { runConnectorConnectionLogic, trimAndLowerCase } from '../../../utils'
+import { runConnectorConnectionLogic } from '../../../utils/connectConnector'
+import { trimAndLowerCase } from '../../../utils/misc'
 import { ConnectorOption } from './ConnectorOption'
 
 export type RenderConnectorOptionsProps = Pick<
@@ -18,7 +19,7 @@ export type RenderConnectorOptionsProps = Pick<
   userConnectionInfo: ReturnType<typeof useUserConnectionInfo>
   connect: ReturnType<typeof useConnectDisconnect>['connect']['connectAsync']
   disconnect: ReturnType<typeof useConnectDisconnect>['disconnect']['disconnectAsync']
-  modalCallbacks: ReturnType<typeof useWeb3Modals>
+  modalsStore: AllWeb3ModalStore
   providerMountedState: [ProviderMountedMap, Dispatch<SetStateAction<ProviderMountedMap>>]
   providerLoadingState: [boolean, (loading: boolean) => void]
 }
@@ -31,7 +32,7 @@ const RenderConnectorOptionsBase =
     buttonProps,
     modalView,
     theme,
-    modalCallbacks: { root, walletConnect },
+    modalsStore,
     connect,
     disconnect,
     userConnectionInfo: { connector: currentConnector, chain, address },
@@ -46,12 +47,12 @@ const RenderConnectorOptionsBase =
     const [{ label, logo, connected, isRecommended }, callback] = runConnectorConnectionLogic(
       connector,
       currentConnector,
+      modalsStore,
       {
         connect,
         disconnect,
-        open: openType === 'walletconnect' ? walletConnect.open : root.open,
-        openWalletConnectModal: walletConnect.open,
-        closeRootModal: root.close,
+        open: openType === 'walletconnect' ? modalsStore.walletConnect.open : modalsStore.root.open,
+        closeRootModal: modalsStore.root.close,
         setProviderModalMounted: (mounted: boolean) =>
           setProviderMountedMap((currState) => ({
             ...currState,

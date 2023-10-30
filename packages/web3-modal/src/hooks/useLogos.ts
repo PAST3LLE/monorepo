@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react'
 
-import { trimAndLowerCase } from '../utils'
+import { trimAndLowerCase } from '../utils/misc'
 import { useUserConnectionInfo } from './useConnection'
 import { usePstlWeb3ModalStore } from './usePstlWeb3ModalStore'
 

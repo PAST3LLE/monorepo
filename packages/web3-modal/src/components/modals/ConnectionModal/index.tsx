@@ -8,11 +8,12 @@ import {
   useConnectDisconnect,
   usePstlWeb3ModalStore,
   useUserConnectionInfo,
-  useWeb3Modals
+  useAllWeb3Modals as useWeb3Modals
 } from '../../../hooks'
 import { LoadingScreen } from '../../LoadingScreen'
 import { WalletsWrapper } from '../common/styled'
 import { BaseModalProps, ModalId } from '../common/types'
+import { DEFAULT_CONNECTOR_OVERRIDES } from '../../../constants/wallets'
 import { ConnectorHelper } from './ConnectorHelper'
 import { RenderConnectorOptions } from './RenderConnectorOptions'
 import { cleanAndFormatConnectorOverrides, sortConnectorsByRank } from './utils'
@@ -41,7 +42,7 @@ function ConnectionModalContent({
   // We always show list view in tiny screens
   const modalView = isExtraSmallScreen ? 'list' : walletsView
 
-  const modalCallbacks = useWeb3Modals()
+  const modalsStore = useWeb3Modals()
   const modalState = usePstlWeb3ModalStore()
   const userConnectionInfo = useUserConnectionInfo()
 
@@ -71,12 +72,15 @@ function ConnectionModalContent({
 
   // Close modal(s) on successful connection & report any errors
   useCloseAndUpdateModals(!!closeModalOnConnect, {
-    closeModal: modalCallbacks.root.close,
+    closeModal: modalsStore.root.close,
     updateState: modalState.updateModalProps
   })
 
   const connectorDisplayOverrides = useMemo(
-    () => cleanAndFormatConnectorOverrides(connectorDisplayOverridesUnformatted),
+    () => ({
+      ...DEFAULT_CONNECTOR_OVERRIDES,
+      ...cleanAndFormatConnectorOverrides(connectorDisplayOverridesUnformatted)
+    }),
     [connectorDisplayOverridesUnformatted]
   )
 
@@ -97,7 +101,7 @@ function ConnectionModalContent({
           userConnectionInfo,
           connect,
           disconnect,
-          modalCallbacks,
+          modalsStore,
           providerMountedState,
           providerLoadingState,
           theme
@@ -109,7 +113,7 @@ function ConnectionModalContent({
       theme,
       openType,
       modalView,
-      modalCallbacks,
+      modalsStore,
       chainIdFromUrl,
       userConnectionInfo,
       providerLoadingState,
