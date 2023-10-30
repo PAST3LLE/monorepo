@@ -109,6 +109,10 @@
     "viem": "^1.x",
     "wagmi": "^1.x"
   },
+  "alias": {
+    "@ledgerhq/hw-app-eth": "@ledgerhq/hw-app-eth/lib-es",
+    "@ledgerhq/hw-transport-webhid": "@ledgerhq/hw-transport-webhid/lib-es"
+  },
   "dependencies": {
     "@ethersproject/providers": "^5.7.2",
     "@ledgerhq/hw-app-eth": "6.33.6",
