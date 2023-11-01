@@ -12,17 +12,17 @@ import { LedgerHQProvider } from '../provider'
 import { LoadConfig, ResolutionConfig, UnsignedTransactionStrict } from '../types'
 
 const defaultPath = "m/44'/60'/0'/0/0"
-
 export class LedgerHQSigner extends Signer implements TypedDataSigner {
   readonly path: string
   readonly provider: LedgerHQProvider
 
   _index = 0
   _address = ''
+  _addressMap = new Map<string, string>()
 
   constructor(provider: LedgerHQProvider, path: string = defaultPath) {
     super()
-
+    
     this.path = path
     this.provider = provider
   }
@@ -43,14 +43,27 @@ export class LedgerHQSigner extends Signer implements TypedDataSigner {
     }
   }
 
-  async getAddress(): Promise<string> {
-    if (!this._address) {
-      const account = await this.withEthApp((eth) => eth.getAddress(this.path))
-
-      const address = this.provider.formatter.address(account.address)
+  async getAddress(path = this.path): Promise<string> {
+    if (!this._addressMap.has(path)) {
+      const address = await this._queryAndFormatAddress(path)
       this._address = address
+      this._addressMap.set(path, address)
     }
 
+    return this._addressMap.get(path)!
+  }
+
+  async setAddress(path = this.path): Promise<void> {
+    if (!this._addressMap.has(path)) {
+      const address = await this._queryAndFormatAddress(path)
+      this._address = address
+      this._addressMap.set(path, address)
+    }
+
+    this._address = this._addressMap.get(path)!
+  }
+
+  public getConnectedAddress() {
     return this._address
   }
 
@@ -163,5 +176,12 @@ export class LedgerHQSigner extends Signer implements TypedDataSigner {
     const { r, s, v } = await this.withEthApp((eth) => eth.signEIP712Message(this.path, data))
 
     return joinSignature({ r: '0x' + r, s: '0x' + s, v })
+  }
+
+  private async _queryAndFormatAddress(path: string) {
+    const account = await this.withEthApp((eth) => eth.getAddress(path))
+
+    const address = this.provider.formatter.address(account.address)
+    return address
   }
 }

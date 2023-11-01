@@ -9,6 +9,7 @@ import type { LedgerHQProvider } from './provider'
 import { ConnectorUpdate } from './types'
 
 export { isHIDSupported, checkError }
+type Options = { callback?: (...args: any[]) => void; path?: string, reset?: boolean }
 export type LedgerHidOptions = { shimDisconnect?: boolean; onDeviceDisconnect?: () => Promise<void> }
 export class LedgerHIDConnector extends Connector<LedgerHQProvider, LedgerHidOptions> {
   // name & id
@@ -29,7 +30,6 @@ export class LedgerHIDConnector extends Connector<LedgerHQProvider, LedgerHidOpt
 
   protected shimDisconnectKey = `${this.id}.shimDisconnect`
 
-  // Ledger only accepts mainnet so these constuctor props are useless
   constructor(config: { chains: Chain[]; options?: LedgerHidOptions }) {
     super({ chains: config.chains, options: config?.options || {} })
 
@@ -43,9 +43,9 @@ export class LedgerHIDConnector extends Connector<LedgerHQProvider, LedgerHidOpt
     this.ready = true
   }
 
-  async connect({ chainId }: { chainId?: number } = {}): Promise<Required<ConnectorData>> {
+  async connect({ chainId }: { chainId?: number } = {}, options?: Options): Promise<Required<ConnectorData>> {
     try {
-      const { account, provider } = await this.activate(chainId)
+      const { account, provider } = await this.activate(chainId, options)
 
       if (!provider) throw new ConnectorNotFoundError()
 
@@ -125,10 +125,10 @@ export class LedgerHIDConnector extends Connector<LedgerHQProvider, LedgerHidOpt
     }
   }
 
-  async switchChain(chainId: number) {
+  async switchChain(chainId: number, options?: Options) {
     const providerAtChainExists = !!this.providerByChainMap.get(chainId)
 
-    const provider = await (!providerAtChainExists ? this.activate(chainId) : this.getProvider({ chainId }))
+    const provider = await (!providerAtChainExists ? this.activate(chainId, options) : this.getProvider({ chainId }))
     if (!provider) throw new ConnectorNotFoundError()
 
     const id = numberToHex(chainId)
@@ -257,15 +257,15 @@ export class LedgerHIDConnector extends Connector<LedgerHQProvider, LedgerHidOpt
     return provider
   }
 
-  private async activate(id?: number): Promise<ConnectorUpdate<LedgerHQProvider>> {
+  private async activate(id?: number, options?: Options): Promise<ConnectorUpdate<LedgerHQProvider>> {
     const noProviderAtChainId = id && !this.providerByChainMap.get(id)
 
     try {
-      if (noProviderAtChainId || !this.provider) {
+      if (options?.reset || noProviderAtChainId || !this.provider) {
         this.provider = await this.getProviderInstance(id)
       }
 
-      const account = await this.provider.enable()
+      const account = await this.provider.enable(options?.callback, options?.path, options?.reset)
       this.provider.on('disconnect', this.handleDisconnect)
 
       return { provider: this.provider, account: account as Address }
@@ -278,11 +278,37 @@ export class LedgerHIDConnector extends Connector<LedgerHQProvider, LedgerHidOpt
     return this.chainId
   }
 
-  public async getAccount(): Promise<Address> {
+  /**
+   * 
+   * @param path - derivation path (default: m/44'/60')
+   * @returns address/account as string
+   */
+  public async getAccount(path?: string): Promise<Address> {
     invariant(this.provider, '[Ledger HID] getAccount: Provider is not defined!')
-    return this.provider.getAddress() as Promise<Address>
+    try {
+      return this.provider.getAddress(path) as Promise<Address>
+    } catch (error) {
+      throw new Error('Error getting address. Check that HID device is properly activated.')
+    }
   }
 
+  /**
+   * 
+   * @param path - derivation path (default: m/44'/60')
+   * @returns void
+   */
+  public async setAccount(path?: string): Promise<void> {
+    invariant(this.provider, '[Ledger HID] getAccount: Provider is not defined!')
+    try {
+      this.provider.setAddress(path)
+      this.emit('change', {
+        account: await this.getAccount(path)
+      })
+    } catch (error) {
+      throw new Error('Error setting address. Check that HID device is properly activated.')
+    }
+  }
+ 
   public deactivate(): void {
     invariant(this.provider, '[Ledger HID] deactivate: Provider is not defined')
     // deactivate all providers in map

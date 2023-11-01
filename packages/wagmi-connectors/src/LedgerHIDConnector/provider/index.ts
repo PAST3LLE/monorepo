@@ -12,8 +12,8 @@ export class LedgerHQProvider extends JsonRpcBatchProvider {
   public device?: HIDDevice
   public transport?: typeof TransportWebHID
 
-  getSigner(): LedgerHQSigner {
-    return new LedgerHQSigner(this)
+  getSigner(path?: string): LedgerHQSigner {
+    return new LedgerHQSigner(this, path)
   }
 
   listAccounts(): Promise<Array<string>> {
@@ -37,7 +37,7 @@ export class LedgerHQProvider extends JsonRpcBatchProvider {
     }
   }
 
-  async enable(callback?: (...args: any[]) => void): Promise<Address> {
+  async enable(callback?: (...args: any[]) => void, path?: string, reset?: boolean): Promise<Address> {
     try {
       this.transport = TransportWebHID
 
@@ -55,19 +55,28 @@ export class LedgerHQProvider extends JsonRpcBatchProvider {
 
       hid.addEventListener('disconnect', onDisconnect)
 
-      if (!this.signer) {
-        this.signer = this.getSigner()
+      if (!!reset || !this.signer) {
+        this.signer = this.getSigner(path)
       }
 
-      return (await this.getAddress()) as Address
+      return (await this.getAddress(path)) as Address
     } catch (error) {
       return checkError(error)
     }
   }
 
-  async getAddress(): Promise<string> {
+  async getAddress(path?: string): Promise<string> {
     invariant(this.signer, 'Signer is not defined')
-    return await this.signer.getAddress()
+    return this.signer.getAddress(path)
+  }
+
+  async setAddress(path?: string): Promise<void> {
+    invariant(this.signer, 'Signer is not defined')
+    return this.signer.setAddress(path)
+  }
+
+  public getConnectedAddress(): string | undefined {
+    return this.signer?._address
   }
 
   async request({ method, params }: { method: string; params: Array<unknown> }): Promise<unknown> {
