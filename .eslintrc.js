@@ -17,7 +17,6 @@ module.exports = {
     ]
   },
   extends: ['plugin:@typescript-eslint/recommended', 'plugin:prettier/recommended'],
-  include: ['./scripts/**/*'],
   root: true,
   ignorePatterns: ['node_modules/**/*', '.github/*', 'build', 'dist', '.eslintrc.js', '*.config.js'],
   settings: {
