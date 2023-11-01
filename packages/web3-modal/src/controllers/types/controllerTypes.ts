@@ -26,13 +26,13 @@ interface RootModalState {
    */
   connectorDisplayOverrides?: ConnectorOverrides
   /**
-   * @name chainImages
-   * @default {
-      1: 'https://swap.cow.fi/assets/network-mainnet-logo-ac64fb79.svg',
-      5: 'https://swap.cow.fi/assets/network-goerli-logo-2b81b421.svg'
-    }
-   * @description Optional. Key/value pair overriding/setting chain images by chain ID.
-   */
+ * @name chainImages
+ * @default {
+1: 'https://swap.cow.fi/assets/network-mainnet-logo-ac64fb79.svg',
+5: 'https://swap.cow.fi/assets/network-goerli-logo-2b81b421.svg'
+}
+* @description Optional. Key/value pair overriding/setting chain images by chain ID.
+*/
   chainImages?: ChainImages
   /**
    * @name closeModalOnConnect
@@ -49,6 +49,10 @@ interface WithError {
 
 type AccountModalState = WithError
 type NetworkModalState = WithError
+
+type HidDeviceModalState = WithError & {
+  hidDeviceId?: string
+}
 
 interface ConnectModalState extends WithError {
   /**
@@ -73,6 +77,7 @@ export type ModalPropsCtrlState = {
   account: AccountModalState
   connect: ConnectModalState
   network: NetworkModalState
+  hidDeviceOptions: HidDeviceModalState
 }
 
 // -- ToastCtrl ------------------------------------------ //
@@ -92,6 +97,7 @@ export type RouterView =
   | 'Help'
   | 'InjectedConnector'
   | 'InstallConnector'
+  | 'HidDeviceOptions'
   | 'Qrcode'
   | 'SelectNetwork'
   | 'SwitchNetwork'

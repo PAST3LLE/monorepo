@@ -6,7 +6,6 @@ import { usePstlWeb3ModalStore } from './usePstlWeb3ModalStore'
 
 export function useHydrateModals<ID extends number>(config: PstlWeb3ModalProps<ID>) {
   const { updateModalProps } = usePstlWeb3ModalStore()
-
   useEffect(() => {
     const rootConfig = config?.modals?.root
     updateModalProps({
@@ -26,7 +25,11 @@ export function useHydrateModals<ID extends number>(config: PstlWeb3ModalProps<I
         walletsView: rootConfig?.walletsView,
         error: null
       },
-      account: { error: null }
+      account: { error: null },
+      hidDeviceOptions: {
+        error: null,
+        hidDeviceId: ''
+      }
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [config])

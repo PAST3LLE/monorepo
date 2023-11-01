@@ -1,17 +1,23 @@
 import { ErrorBoundary } from '@past3lle/components'
 import { ThemeProvider } from '@past3lle/theme'
 import { devWarn } from '@past3lle/utils'
-import React, { memo, useEffect, useMemo } from 'react'
+import React, { Suspense, lazy, memo, useEffect, useMemo } from 'react'
 import { useSnapshot } from 'valtio'
 
 import { ModalPropsCtrl, RouterCtrl } from '../../controllers'
 import { useMergeThemes, usePstlWeb3Modal, usePstlWeb3ModalStore } from '../../hooks'
-import { AccountModal } from './AccountModal'
-import { ConnectionModal } from './ConnectionModal'
-import { ErrorModal } from './ErrorModal'
-import { NetworkModal } from './NetworkModal'
 import { BaseModal } from './common'
 import { ModalId, StatelessBaseModalProps } from './common/types'
+
+const AccountModal = lazy(() => import(/* webpackPrefetch: true,  webpackChunkName: "AccountModal" */ './AccountModal'))
+const ConnectionModal = lazy(
+  () => import(/* webpackPrefetch: true,  webpackChunkName: "ConnectionModal" */ './ConnectionModal')
+)
+const ErrorModal = lazy(() => import(/* webpackPrefetch: true,  webpackChunkName: "ErrorModal" */ './ErrorModal'))
+const NetworkModal = lazy(() => import(/* webpackPrefetch: true,  webpackChunkName: "NetworkModal" */ './NetworkModal'))
+const HidDeviceOptionsModal = lazy(
+  () => import(/* webpackPrefetch: true,  webpackChunkName: "HidDeviceOptionsModal" */ './HidDeviceOptionsModal')
+)
 
 export function ModalWithoutThemeProvider(baseProps: StatelessBaseModalProps) {
   const modalState = usePstlWeb3Modal()
@@ -60,6 +66,25 @@ export function ModalWithoutThemeProvider(baseProps: StatelessBaseModalProps) {
         return [() => <NetworkModal />, augmentedBaseProps]
       }
 
+      case 'HidDeviceOptions': {
+        const props = {
+          ...ModalPropsCtrl.state.root,
+          ...ModalPropsCtrl.state.hidDeviceOptions
+        }
+        const augmentedBaseProps = {
+          ...baseProps,
+          title: 'HID DEVICE OPTIONS',
+          width: '650px',
+          maxWidth: '80vw',
+          minHeight: '350px',
+          maxHeight: '80vh',
+          height: 'auto',
+          id: ModalId.HID_DEVICE_OPTIONS
+        }
+
+        return [() => <HidDeviceOptionsModal {...props} />, augmentedBaseProps]
+      }
+
       case 'ConnectWallet':
       default: {
         const props = {
@@ -83,9 +108,15 @@ export function ModalWithoutThemeProvider(baseProps: StatelessBaseModalProps) {
 
   return (
     <BaseModal {...baseProps} {...auxBaseProps} isOpen={modalState.isOpen} onDismiss={modalState.close}>
-      <Modal />
+      <Suspense fallback={renderFallback()}>
+        <Modal />
+      </Suspense>
     </BaseModal>
   )
+}
+
+function renderFallback() {
+  return <h1>Loading modal...</h1>
 }
 
 function ModalWithThemeProvider({ themeConfig, ...modalProps }: StatelessBaseModalProps) {

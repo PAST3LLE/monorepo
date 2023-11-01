@@ -62,4 +62,4 @@ function NetworkModalContent() {
   )
 }
 
-export const NetworkModal = memo(NetworkModalContent)
+export default memo(NetworkModalContent)

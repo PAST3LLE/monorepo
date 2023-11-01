@@ -3,7 +3,7 @@ import { useTheme } from 'styled-components'
 
 import { ModalTitleText } from '../common/styled'
 
-export function ErrorModal() {
+export default function ErrorModal() {
   const theme = useTheme()
   return (
     <ModalTitleText

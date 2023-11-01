@@ -9,7 +9,8 @@ export enum ModalId {
   BASE = 'pstl-w3modal',
   WALLETS = 'pstl-w3modal-wallets',
   NETWORK = 'pstl-w3modal-network',
-  ACCOUNT = 'pstl-w3modal-account'
+  ACCOUNT = 'pstl-w3modal-account',
+  HID_DEVICE_OPTIONS = 'pstl-we3modal-hid-device-options'
 }
 
 interface ModalHeaders {

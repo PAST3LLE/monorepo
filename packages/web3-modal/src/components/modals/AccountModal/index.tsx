@@ -247,4 +247,4 @@ function useModalTheme(): PstlModalTheme['modals'] {
   return theme.modals
 }
 
-export const AccountModal = memo(AccountModalContent)
+export default memo(AccountModalContent)

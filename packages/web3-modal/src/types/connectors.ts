@@ -1,6 +1,11 @@
 import { ReactNode } from 'react'
-import { AllWeb3ModalStore } from '../hooks';
+import { useConnect } from 'wagmi'
 import { Connector } from 'wagmi/connectors'
+
+import { ModalPropsCtrl } from '../controllers/ModalPropsCtrl'
+import { AllWeb3ModalStore } from '../hooks'
+
+export type FullWeb3ModalStore = { ui: AllWeb3ModalStore; updateModalConfig: (typeof ModalPropsCtrl)['update'] }
 
 type InfoTextMap = { title: ReactNode; content: ReactNode }
 export type ConnectorEnhancedExtras = {
@@ -17,7 +22,11 @@ export type ConnectorEnhancedExtras = {
    * @see {AllWeb3ModalStore}
    * @returns whatever it needs to return but should connect to the connector!
    */
-  customConnect?: (store: AllWeb3ModalStore) => unknown
+  customConnect?: <C extends ConnectorEnhanced<any, any>>(params: {
+    store: FullWeb3ModalStore
+    connector?: C
+    wagmiConnect: ReturnType<typeof useConnect>['connectAsync']
+  }) => unknown
   /**
    * @name modalNodeId Optional. String ID name of modal node. Used to show async loader on mount
    */

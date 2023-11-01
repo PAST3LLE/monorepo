@@ -20,6 +20,10 @@ const state = proxy<ModalPropsCtrlState>({
   },
   network: {
     error: null
+  },
+  hidDeviceOptions: {
+    error: null,
+    hidDeviceId: undefined
   }
 })
 
@@ -46,6 +50,10 @@ export const ModalPropsCtrl = {
     state.network = {
       ...state.network,
       ...props.network
+    }
+    state.hidDeviceOptions = {
+      ...state.hidDeviceOptions,
+      ...props.hidDeviceOptions
     }
   }
 }

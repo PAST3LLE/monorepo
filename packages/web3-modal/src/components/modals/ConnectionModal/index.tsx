@@ -2,6 +2,7 @@ import { useIsExtraSmallMediaWidth } from '@past3lle/hooks'
 import React, { memo, useMemo, useState } from 'react'
 import { useTheme } from 'styled-components'
 
+import { DEFAULT_CONNECTOR_OVERRIDES } from '../../../constants/wallets'
 import { ModalPropsCtrlState } from '../../../controllers/types/controllerTypes'
 import {
   useCloseAndUpdateModals,
@@ -13,7 +14,6 @@ import {
 import { LoadingScreen } from '../../LoadingScreen'
 import { WalletsWrapper } from '../common/styled'
 import { BaseModalProps, ModalId } from '../common/types'
-import { DEFAULT_CONNECTOR_OVERRIDES } from '../../../constants/wallets'
 import { ConnectorHelper } from './ConnectorHelper'
 import { RenderConnectorOptions } from './RenderConnectorOptions'
 import { cleanAndFormatConnectorOverrides, sortConnectorsByRank } from './utils'
@@ -42,7 +42,7 @@ function ConnectionModalContent({
   // We always show list view in tiny screens
   const modalView = isExtraSmallScreen ? 'list' : walletsView
 
-  const modalsStore = useWeb3Modals()
+  const uiModalStore = useWeb3Modals()
   const modalState = usePstlWeb3ModalStore()
   const userConnectionInfo = useUserConnectionInfo()
 
@@ -72,7 +72,7 @@ function ConnectionModalContent({
 
   // Close modal(s) on successful connection & report any errors
   useCloseAndUpdateModals(!!closeModalOnConnect, {
-    closeModal: modalsStore.root.close,
+    closeModal: uiModalStore.root.close,
     updateState: modalState.updateModalProps
   })
 
@@ -83,7 +83,7 @@ function ConnectionModalContent({
     }),
     [connectorDisplayOverridesUnformatted]
   )
-  
+
   // flag for setting whether or not web3auth modal has mounted as it takes a few seconds first time around
   // and we want to close the pstlModal only after the web3auth modal has mounted
   const providerMountedState = useState<ProviderMountedMap>({})
@@ -101,7 +101,10 @@ function ConnectionModalContent({
           userConnectionInfo,
           connect,
           disconnect,
-          modalsStore,
+          modalsStore: {
+            ui: uiModalStore,
+            updateModalConfig: modalState.updateModalProps
+          },
           providerMountedState,
           providerLoadingState,
           theme
@@ -113,7 +116,8 @@ function ConnectionModalContent({
       theme,
       openType,
       modalView,
-      modalsStore,
+      uiModalStore,
+      modalState.updateModalProps,
       chainIdFromUrl,
       userConnectionInfo,
       providerLoadingState,
@@ -145,4 +149,4 @@ function ConnectionModalContent({
   )
 }
 
-export const ConnectionModal = memo(ConnectionModalContent)
+export default memo(ConnectionModalContent)

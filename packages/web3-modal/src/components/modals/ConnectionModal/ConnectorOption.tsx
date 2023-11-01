@@ -4,7 +4,7 @@ import React, { ReactNode, memo } from 'react'
 import { Chain } from 'viem'
 
 import { ConnectorEnhanced } from '../../../types'
-import { ConnectorInfo } from '../../../utils'
+import { ConnectorInfo } from '../../../utils/connectConnector'
 import { ModalButton } from '../common/styled'
 import { ConnectorHelper } from './ConnectorHelper'
 import { RecommendedLabel } from './RecommendedLabel'

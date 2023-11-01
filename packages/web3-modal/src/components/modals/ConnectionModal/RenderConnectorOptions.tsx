@@ -3,8 +3,8 @@ import { DefaultTheme } from 'styled-components'
 
 import { ProviderMountedMap, PstlWeb3ConnectionModalProps } from '.'
 import { ModalPropsCtrlState } from '../../../controllers/types/controllerTypes'
-import { AllWeb3ModalStore, useConnectDisconnect, useUserConnectionInfo } from '../../../hooks'
-import { ConnectorEnhanced } from '../../../types'
+import { useConnectDisconnect, useUserConnectionInfo } from '../../../hooks'
+import { ConnectorEnhanced, FullWeb3ModalStore } from '../../../types'
 import { runConnectorConnectionLogic } from '../../../utils/connectConnector'
 import { trimAndLowerCase } from '../../../utils/misc'
 import { ConnectorOption } from './ConnectorOption'
@@ -19,7 +19,7 @@ export type RenderConnectorOptionsProps = Pick<
   userConnectionInfo: ReturnType<typeof useUserConnectionInfo>
   connect: ReturnType<typeof useConnectDisconnect>['connect']['connectAsync']
   disconnect: ReturnType<typeof useConnectDisconnect>['disconnect']['disconnectAsync']
-  modalsStore: AllWeb3ModalStore
+  modalsStore: FullWeb3ModalStore
   providerMountedState: [ProviderMountedMap, Dispatch<SetStateAction<ProviderMountedMap>>]
   providerLoadingState: [boolean, (loading: boolean) => void]
 }
@@ -51,8 +51,8 @@ const RenderConnectorOptionsBase =
       {
         connect,
         disconnect,
-        open: openType === 'walletconnect' ? modalsStore.walletConnect.open : modalsStore.root.open,
-        closeRootModal: modalsStore.root.close,
+        open: openType === 'walletconnect' ? modalsStore.ui.walletConnect.open : modalsStore.ui.root.open,
+        closeRootModal: modalsStore.ui.root.close,
         setProviderModalMounted: (mounted: boolean) =>
           setProviderMountedMap((currState) => ({
             ...currState,

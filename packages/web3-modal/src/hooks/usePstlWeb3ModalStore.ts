@@ -17,6 +17,9 @@ const NULL_ERROR_STATE = {
   },
   network: {
     error: null
+  },
+  hidDeviceOptions: {
+    error: null
   }
 }
 export function usePstlWeb3ModalStore(): PstlWeb3ModalStateHook {

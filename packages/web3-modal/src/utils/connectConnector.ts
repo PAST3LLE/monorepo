@@ -1,8 +1,9 @@
 import { devError } from '@past3lle/utils'
+import isEqual from 'lodash.isequal'
 
 import { RenderConnectorOptionsProps } from '../components/modals/ConnectionModal/RenderConnectorOptions'
-import { AllWeb3ModalStore, useConnection, usePstlWeb3Modal } from '../hooks'
-import { ConnectorEnhanced, ConnectorEnhancedExtras } from '../types'
+import { useConnection, usePstlWeb3Modal } from '../hooks'
+import { ConnectorEnhanced, ConnectorEnhancedExtras, FullWeb3ModalStore } from '../types'
 import { trimAndLowerCase } from './misc'
 
 type GetConnectorInfoCallbacks = {
@@ -28,7 +29,7 @@ export type ConnectorInfo = { label: string; logo?: string; connected: boolean; 
 export function runConnectorConnectionLogic(
   connector: ConnectorEnhanced<any, any>,
   currentConnector: ConnectorEnhanced<any, any> | undefined,
-  modalsStore: AllWeb3ModalStore,
+  modalsStore: FullWeb3ModalStore,
   {
     connect,
     disconnect,
@@ -42,7 +43,7 @@ export function runConnectorConnectionLogic(
   ConnectorInfo,
   ReturnType<typeof useConnection>[1]['connect'] | ReturnType<typeof useConnection>[1]['openWalletConnectModal']
 ] {
-  let modalType: ProviderModalType = (
+  const modalType: ProviderModalType = (
     connectorDisplayOverrides?.[trimAndLowerCase(connector?.name)] ||
     connectorDisplayOverrides?.[trimAndLowerCase(connector?.id)]
   )?.modalNodeId
@@ -73,13 +74,17 @@ async function _connectProvider(
   modalId: ProviderModalType,
   connector: ConnectorEnhanced<any, any>,
   currentConnector: ConnectorEnhanced<any, any> | undefined,
-  modalsStore: AllWeb3ModalStore,
+  modalsStore: FullWeb3ModalStore,
   constants: Pick<GetConnectorInfoConstants, 'address' | 'chainId' | 'closeOnConnect' | 'connectorDisplayOverrides'> & {
     isModalMounted?: boolean
   },
   callbacks: Omit<
     GetConnectorInfoCallbacks,
-    'setProviderModaLoading' | 'setProviderModalMounted' | 'setW3mModalLoading' | 'setW3mModalMounted' | 'openWalletConnectModal'
+    | 'setProviderModaLoading'
+    | 'setProviderModalMounted'
+    | 'setW3mModalLoading'
+    | 'setW3mModalMounted'
+    | 'openWalletConnectModal'
   > & {
     setModalLoading?: (status: boolean) => void
     setModalMounted?: (status: boolean) => void
@@ -94,7 +99,7 @@ async function _connectProvider(
   const connectCallbackParams: [
     ConnectorEnhanced<any, any>,
     ConnectorEnhanced<any, any> | undefined,
-    AllWeb3ModalStore,
+    FullWeb3ModalStore,
     Pick<GetConnectorInfoConstants, 'address' | 'chainId' | 'connectorDisplayOverrides'>,
     Pick<GetConnectorInfoCallbacks, 'open' | 'connect' | 'disconnect'>
   ] = [
@@ -142,11 +147,13 @@ function _getProviderInfo(
     currentConnector,
     connectorDisplayOverrides
   )
-  const connected = Boolean(
-    baseCurrentConnectorKey
-      ? JSON.stringify(baseCurrentConnectorKey) === JSON.stringify(baseConnectorKey)
-      : connector.id === currentConnector?.id
-  )
+  let connected = false
+  if (baseCurrentConnectorKey) {
+    connected = isEqual(baseCurrentConnectorKey, baseConnectorKey)
+  } else {
+    connected = connector.id === currentConnector?.id
+  }
+  connected = Boolean()
   return {
     label: baseConnectorKey?.customName || connector.name,
     logo: baseConnectorKey?.logo || connector?.logo,
@@ -158,7 +165,7 @@ function _getProviderInfo(
 async function _handleConnectorClick(
   connector: ConnectorEnhanced<any, any>,
   currentConnector: ConnectorEnhanced<any, any> | undefined,
-  modalsStore: AllWeb3ModalStore,
+  modalsStore: FullWeb3ModalStore,
   {
     address,
     chainId,
@@ -177,7 +184,7 @@ async function _handleConnectorClick(
       : connector.id === currentConnector?.id
   )
 
-    const connectToProviderParams = { connector, connect, modalsStore, connectorOverride: baseConnectorKey, chainId }
+  const connectToProviderParams = { connector, connect, modalsStore, connectorOverride: baseConnectorKey, chainId }
 
   try {
     if (address && isConnectedConnector) {
@@ -205,13 +212,14 @@ async function _connectToProvider({
   connectorOverride,
   chainId
 }: Pick<GetConnectorInfoCallbacks, 'connect'> & {
-  modalsStore: AllWeb3ModalStore
+  modalsStore: FullWeb3ModalStore
   connector: ConnectorEnhanced<any, any>
   connectorOverride: ConnectorEnhancedExtras | undefined
   chainId?: number
 }) {
   try {
-    await (connectorOverride?.customConnect?.(modalsStore) || connect({ connector, chainId }))
+    await (connectorOverride?.customConnect?.({ store: modalsStore, connector, wagmiConnect: connect }) ||
+      connect({ connector, chainId }))
   } catch (error: any) {
     const errorMessage = new Error(error).message
     const connectorNotFoundError = errorMessage?.includes('ConnectorNotFoundError')
