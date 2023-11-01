@@ -1,4 +1,4 @@
-import { ConnectorOverrides } from "../types"
+import { ConnectorOverrides } from '../types'
 
 export const WALLET_IMAGES = {
   web3auth: 'https://web3auth.io/images/w3a-L-Favicon-1.svg',
@@ -7,6 +7,6 @@ export const WALLET_IMAGES = {
 
 export const DEFAULT_CONNECTOR_OVERRIDES: ConnectorOverrides = {
   walletconnect: {
-    customConnect: async (store) => store.walletConnect.open()
+    customConnect: async ({ store }) => store.ui.walletConnect.open()
   }
 }

@@ -1,12 +1,12 @@
 import { PstlWeb3Modal } from './components/modals'
 import {
+  useAllWeb3Modals,
   useLimitChainsAndSwitchCallback,
   useAccountNetworkActions as usePstlAccountNetworkActions,
   useConnectDisconnect as usePstlConnectDisconnect,
   useConnection as usePstlConnection,
   useUserConnectionInfo as usePstlUserConnectionInfo,
   usePstlWeb3Modal,
-  useAllWeb3Modals,
   useAllWeb3Modals as usePstlWeb3Modals
 } from './hooks'
 import {

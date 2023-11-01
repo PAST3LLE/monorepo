@@ -15,9 +15,9 @@ import {
 } from 'wagmi'
 
 import { ModalPropsCtrl, OpenOptions } from '../controllers'
+import { useAllWeb3Modals } from './useAllWeb3Modals'
 import { usePstlWeb3Modal } from './usePstlWeb3Modal'
 import { usePstlWeb3ModalStore } from './usePstlWeb3ModalStore'
-import { useAllWeb3Modals } from './useAllWeb3Modals'
 
 type Callbacks = Pick<ReturnType<typeof useDisconnectWagmi>, 'disconnect'> & {
   openWalletConnectModal: ReturnType<typeof useWeb3Modal>['open']
