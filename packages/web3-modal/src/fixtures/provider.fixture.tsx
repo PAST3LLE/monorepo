@@ -1,9 +1,8 @@
 import { ButtonVariations, ColumnCenter, PstlButton } from '@past3lle/components'
-import { WindowSizeProvider, useDebounce } from '@past3lle/hooks'
+import { WindowSizeProvider } from '@past3lle/hooks'
 import { ThemeProvider, createCustomTheme } from '@past3lle/theme'
 import { devWarn, getExpirementalCookieStore as getCookieStore } from '@past3lle/utils'
-import { LedgerHIDConnector } from '@past3lle/wagmi-connectors'
-import React, { ReactNode, useCallback, useEffect, useState } from 'react'
+import React, { ReactNode, useEffect } from 'react'
 import { useTheme } from 'styled-components'
 import { goerli, polygon, polygonMumbai } from 'viem/chains'
 import { mainnet, useBalance } from 'wagmi'
@@ -65,21 +64,8 @@ function InnerApp() {
 }
 
 function AppWithWagmiAccess() {
-  const { address, connector } = useUserConnectionInfo()
+  const { address } = useUserConnectionInfo()
   const { data, refetch } = useBalance({ address })
-  const [path, setPath] = useState("m/44'/60'/0'/0/0")
-  const [pathAddressMap, setPathAddressMap] = useState(new Map<string, string>())
-
-  const getAccounts = useCallback(async () => {
-    const account = await (connector as LedgerHIDConnector)?.getAccount?.(path)
-    setPathAddressMap((state) => new Map(state.set(path, account)))
-  }, [connector, path])
-
-  const dbPath = useDebounce(path, 500)
-
-  useEffect(() => {
-    getAccounts()
-  }, [dbPath, getAccounts])
 
   return (
     <>
@@ -87,11 +73,6 @@ function AppWithWagmiAccess() {
       <p>Address: {address}</p>
       <button onClick={() => refetch()}>Get balance</button>
       <p>Balance: {data?.formatted}</p>
-      <p>Set custom path</p>
-      <input value={path} onChange={(e) => setPath(e.target.value)} />
-
-      <h1>Account at current path:</h1>
-      <h1>{pathAddressMap.get(dbPath) || 'No address at path'}</h1>
     </>
   )
 }

@@ -36,7 +36,7 @@ export const useGetChainLogoCallback = () => {
     state: { root }
   } = usePstlWeb3ModalStore()
   return useCallback(
-    (chainId: number) => (chainId ? root.chainImages?.[chainId] ?? root.chainImages?.unknown : undefined),
+    (chainId?: number) => (chainId ? root.chainImages?.[chainId] ?? root.chainImages?.unknown : undefined),
     [root?.chainImages]
   )
 }

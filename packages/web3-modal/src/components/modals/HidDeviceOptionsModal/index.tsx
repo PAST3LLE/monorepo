@@ -12,9 +12,8 @@ import { useGetChainLogoCallback, usePstlWeb3Modal, useUserConnectionInfo } from
 import { NoChainLogo } from '../../NoChainLogo'
 import { AccountColumnContainer, AccountModalButton, AccountText, FooterActionButtonsRow } from '../AccountModal/styled'
 import { ConnectorOption } from '../ConnectionModal/ConnectorOption'
-import { WalletsWrapper } from '../common/styled'
 import { BaseModalProps, ModalId } from '../common/types'
-import { HidModalContainer } from './styleds'
+import { HidModalContainer, HidModalWalletsWrapper } from './styleds'
 
 const SUPPORTED_BIP_DERIVATION_PATHS = [
   // Ledger Live
@@ -37,15 +36,18 @@ const INPUT_STYLES = {
   color: 'ghostwhite',
   outline: 'none',
   border: '1px solid ghostwhite',
-  borderRadius: 5
+  borderRadius: 5,
+  cursor: 'pointer'
 }
 const PAGINATION_AMT = 5
+const CHAIN_IMAGE_STYLES = { width: 20, marginLeft: '0.2rem', borderRadius: '30%' }
 
 function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
   const { close } = usePstlWeb3Modal()
-  const getChainLogo = useGetChainLogoCallback()
-  const { switchNetworkAsync } = useSwitchNetwork()
   const { chain, supportedChains } = useUserConnectionInfo()
+  const getChainLogo = useGetChainLogoCallback()
+  const currChainLogo = getChainLogo(chain?.id)
+  const { switchNetworkAsync } = useSwitchNetwork()
   const chainId = chain?.id
 
   const [accountsAndBalances, setAccountsAndBalances] = useState<{ address: string; balance: string | undefined }[]>([])
@@ -57,6 +59,7 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
 
   const [path, setPath] = useState<string | null>(SUPPORTED_BIP_DERIVATION_PATHS[0])
   const dbPath = useDebounce(path, 500)
+  const [isCustomPath, setCustom] = useState(false)
   const [, setPathAddressMap] = useState(new Map<string, string>())
 
   const { handleSelectAccount, resetAndConnectProvider, getAccount, getAccounts } = useMemo(() => {
@@ -110,6 +113,20 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
     }
   }, [chainId, close, dbPath, hidConnector, paginationIdx])
 
+  const {
+    Component: Selector,
+    store: [selection, setSelection]
+  } = useSelector({
+    options: SELECTOR_OPTIONS,
+    defaultValue: SELECTOR_OPTIONS[0].value,
+    name: 'HID Derivation Paths',
+    callback: (selection) => {
+      setCustom(false)
+      setPath(selection)
+      resetAndConnectProvider()
+    }
+  })
+
   useEffect(() => {
     async function resetAndGetAccount() {
       try {
@@ -124,23 +141,17 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
 
     if (!dbPath || !chainId) return
 
+    const samePath = SUPPORTED_BIP_DERIVATION_PATHS.find((val) => val === dbPath)
+    if (isCustomPath && samePath) setSelection(samePath)
+
     resetAndGetAccount()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dbPath, chainId])
+  }, [dbPath, chainId, isCustomPath])
 
   // We always show list view in tiny screens
   const isSmallerScreen = useIsExtraSmallMediaWidth()
 
   const { modals: theme } = useTheme()
-  const [Selector, selection] = useSelector({
-    options: SELECTOR_OPTIONS,
-    defaultValue: SELECTOR_OPTIONS[0].value,
-    name: 'HID Derivation Paths',
-    callback: (selection) => {
-      setPath(selection)
-      resetAndConnectProvider()
-    }
-  })
 
   return (
     <AccountColumnContainer width="100%" color={'ghostwhite'}>
@@ -153,14 +164,19 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
       >
         <Column flex="0 1 100%">
           {hidConnector && (
-            <Column height={150} overflow={'auto'}>
+            <Column maxHeight={115} height="auto" overflow={'auto'}>
               <AccountText type="main">
                 Network:{' '}
-                <AccountText type="balance" display="inline-block">
-                  {chain?.name || chain?.id || 'disconnected'}
+                <AccountText type="balance" display="inline-flex" justifyContent={'center'}>
+                  {chain?.name || chain?.id || 'disconnected'}{' '}
+                  {currChainLogo ? (
+                    <img src={currChainLogo} style={CHAIN_IMAGE_STYLES} />
+                  ) : (
+                    <NoChainLogo style={CHAIN_IMAGE_STYLES} />
+                  )}
                 </AccountText>
               </AccountText>
-              <WalletsWrapper view="grid">
+              <HidModalWalletsWrapper view="grid" width="auto">
                 {supportedChains.map((sChain) => {
                   if (!switchNetworkAsync || chain?.id === sChain.id) return null
                   const chainLogo = getChainLogo(sChain.id)
@@ -180,10 +196,10 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
                     />
                   )
                 })}
-              </WalletsWrapper>
+              </HidModalWalletsWrapper>
             </Column>
           )}
-          <Row justifyContent="flex-start" gap="10px" style={{ cursor: 'pointer', zIndex: 1 }} title="derivation-path">
+          <Row justifyContent="flex-start" gap="10px" style={{ zIndex: 1 }} title="derivation-path">
             <AccountText id="pstl-web3-modal-address-text" type="main">
               Select a derivation path
             </AccountText>
@@ -222,7 +238,9 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
         </FooterActionButtonsRow>
         <Row marginTop={'1rem'} width="100%" gap="1rem" flexWrap="wrap">
           <Column maxWidth={220}>
-            <label>PRESET PATH</label>
+            <AccountText fontSize="0.8em" marginBottom="0.25rem" type="balance">
+              PRESET PATH
+            </AccountText>
             <Selector style={INPUT_STYLES} />
           </Column>
           <Row minWidth={300} width="auto">
@@ -234,12 +252,17 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
               `}
               marginLeft="0.5rem"
             >
-              <label>OR CUSTOM PATH</label>
+              <AccountText fontSize="0.8em" marginBottom="0.25rem" type="balance">
+                OR CUSTOM PATH
+              </AccountText>
               <input
                 type="text"
-                value={path ?? ''}
+                value={isCustomPath ? path ?? '' : ''}
                 placeholder={'m/TYPE/PATH/HERE'}
-                onChange={(e) => setPath(e.target.value)}
+                onChange={(e) => {
+                  setCustom(true)
+                  setPath(e.target.value)
+                }}
                 style={{ ...INPUT_STYLES, minWidth: 300 }}
               />
             </Column>
@@ -250,7 +273,7 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
           gap="0.5rem"
           padding="1rem"
           css={`
-            z-index: 100;
+            z-index: ${errorOptions?.show ? 0 : 1};
             > ${Row} {
               > strong {
                 font-weight: 100;
@@ -326,7 +349,10 @@ function useSelector<V extends number | string>({
   options,
   defaultValue,
   callback
-}: SelectorProps<V>): [(props: { style?: CSSProperties }) => React.JSX.Element, V] {
+}: SelectorProps<V>): {
+  Component: (props: { style?: CSSProperties }) => React.JSX.Element
+  store: [V, React.Dispatch<React.SetStateAction<V>>]
+} {
   const [selection, setSelection] = useState<V>(defaultValue)
 
   const handleChange = useCallback(
@@ -339,7 +365,7 @@ function useSelector<V extends number | string>({
 
   const Component = useCallback(
     ({ style }: { style?: CSSProperties }) => (
-      <select name={name} onChange={handleChange} style={style}>
+      <select name={name} onChange={handleChange} style={style} value={selection}>
         {options.map((opt) => (
           <option key={opt.value + '_' + opt.label} value={opt.value}>
             {opt.label}
@@ -348,10 +374,15 @@ function useSelector<V extends number | string>({
       </select>
     ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [name, options]
+    [name, options, selection]
   )
 
-  return [Component, selection]
+  const memoisedSetSelection: React.Dispatch<React.SetStateAction<V>> = useCallback(
+    (value) => setSelection(value as V),
+    []
+  )
+
+  return { Component, store: [selection, memoisedSetSelection] }
 }
 
 export default memo(HidDeviceOptionsContent)
