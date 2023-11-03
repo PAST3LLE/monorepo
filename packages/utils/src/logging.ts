@@ -5,7 +5,7 @@ export const devConsole =
   (type: LogType) =>
   (...args: any[]) => {
     if (process.env.NODE_ENV !== 'production') {
-      return console[type](...args)
+      return console[type]('** DEV LOG ONLY **', ...args)
     }
   }
 
