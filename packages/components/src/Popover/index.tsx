@@ -1,6 +1,6 @@
-import { useInterval } from '@past3lle/hooks'
+import { useInterval, useStateRef } from '@past3lle/hooks'
 import { Placement } from '@popperjs/core'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback } from 'react'
 import { usePopper } from 'react-popper'
 
 import { Portal } from '../Portal'
@@ -11,13 +11,18 @@ export interface PopoverProps {
   show: boolean
   children: React.ReactNode
   placement?: Placement
+  styles?: React.CSSProperties
 }
 
-export function Popover({ content, show, children, placement = 'auto' }: PopoverProps) {
-  const [referenceElement, setReferenceElement] = useState<HTMLDivElement | null>(null)
-  const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(null)
-  const [arrowElement, setArrowElement] = useState<HTMLDivElement | null>(null)
-  const { styles, update, attributes } = usePopper(referenceElement, popperElement, {
+export function Popover({ content, show, children, placement = 'auto', styles }: PopoverProps) {
+  const [referenceElement, setReferenceElement] = useStateRef<HTMLDivElement | null>(null, (node) => node)
+  const [popperElement, setPopperElement] = useStateRef<HTMLDivElement | null>(null, (node) => node)
+  const [arrowElement, setArrowElement] = useStateRef<HTMLDivElement | null>(null, (node) => node)
+  const {
+    styles: pStyles,
+    update,
+    attributes
+  } = usePopper(referenceElement, popperElement, {
     placement,
     strategy: 'fixed',
     modifiers: [
@@ -32,14 +37,19 @@ export function Popover({ content, show, children, placement = 'auto' }: Popover
 
   return (
     <>
-      <ReferenceElement ref={setReferenceElement as any}>{children}</ReferenceElement>
+      <ReferenceElement ref={setReferenceElement}>{children}</ReferenceElement>
       <Portal>
-        <PopoverContainer show={show} ref={setPopperElement as any} style={styles.popper} {...attributes.popper}>
+        <PopoverContainer
+          show={show}
+          ref={setPopperElement}
+          style={{ ...pStyles.popper, ...styles }}
+          {...attributes.popper}
+        >
           {content}
           <Arrow
             className={`arrow-${attributes.popper?.['data-popper-placement'] ?? ''}`}
-            ref={setArrowElement as any}
-            style={styles.arrow}
+            ref={setArrowElement}
+            style={{ ...pStyles.arrow, backgroundColor: styles?.backgroundColor }}
             {...attributes.arrow}
           />
         </PopoverContainer>
