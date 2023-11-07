@@ -15,12 +15,16 @@ type GetConnectorInfoCallbacks = {
   setProviderModaLoading: (val: boolean) => void
 }
 
-type GetConnectorInfoConstants = {
+interface BaseConnectorInfoConstants {
   chainId?: number
   address?: string
+  isConnected: boolean
+  connectorDisplayOverrides?: { [id: string]: ConnectorEnhancedExtras | undefined }
+}
+
+interface AuxConnectorInfoConstants extends BaseConnectorInfoConstants {
   isProviderModalMounted?: boolean
   closeOnConnect?: boolean
-  connectorDisplayOverrides?: { [id: string]: ConnectorEnhancedExtras | undefined }
 }
 
 type ProviderModalType = 'w3a-modal' | 'w3m-modal' | string | null | undefined
@@ -38,7 +42,7 @@ export function runConnectorConnectionLogic(
     setProviderModalMounted,
     setProviderModaLoading
   }: GetConnectorInfoCallbacks,
-  { chainId, address, isProviderModalMounted, closeOnConnect, connectorDisplayOverrides }: GetConnectorInfoConstants
+  { chainId, address, isProviderModalMounted, closeOnConnect, connectorDisplayOverrides }: AuxConnectorInfoConstants
 ): [
   ConnectorInfo,
   ReturnType<typeof useConnection>[1]['connect'] | ReturnType<typeof useConnection>[1]['openWalletConnectModal']
@@ -48,16 +52,23 @@ export function runConnectorConnectionLogic(
     connectorDisplayOverrides?.[trimAndLowerCase(connector?.id)]
   )?.modalNodeId
   const isModalMounted = !modalType || !!isProviderModalMounted
-
+  const providerInfo = _getProviderInfo(connector, currentConnector, connectorDisplayOverrides)
   return [
-    _getProviderInfo(connector, currentConnector, connectorDisplayOverrides),
+    providerInfo,
     async () =>
       _connectProvider(
         modalType,
         connector,
         currentConnector,
         modalsStore,
-        { chainId, address, closeOnConnect, isModalMounted, connectorDisplayOverrides },
+        {
+          chainId,
+          address,
+          closeOnConnect,
+          isModalMounted,
+          isConnected: providerInfo.connected,
+          connectorDisplayOverrides
+        },
         {
           connect,
           disconnect,
@@ -75,7 +86,7 @@ async function _connectProvider(
   connector: ConnectorEnhanced<any, any>,
   currentConnector: ConnectorEnhanced<any, any> | undefined,
   modalsStore: FullWeb3ModalStore,
-  constants: Pick<GetConnectorInfoConstants, 'address' | 'chainId' | 'closeOnConnect' | 'connectorDisplayOverrides'> & {
+  constants: AuxConnectorInfoConstants & {
     isModalMounted?: boolean
   },
   callbacks: Omit<
@@ -90,7 +101,7 @@ async function _connectProvider(
     setModalMounted?: (status: boolean) => void
   }
 ) {
-  const { address, chainId, isModalMounted, connectorDisplayOverrides } = constants
+  const { address, chainId, isModalMounted, isConnected, connectorDisplayOverrides } = constants
   const { connect, disconnect, setModalLoading, setModalMounted, open } = callbacks
 
   const modalNodeSyncCheck =
@@ -100,13 +111,13 @@ async function _connectProvider(
     ConnectorEnhanced<any, any>,
     ConnectorEnhanced<any, any> | undefined,
     FullWeb3ModalStore,
-    Pick<GetConnectorInfoConstants, 'address' | 'chainId' | 'connectorDisplayOverrides'>,
+    BaseConnectorInfoConstants,
     Pick<GetConnectorInfoCallbacks, 'open' | 'connect' | 'disconnect'>
   ] = [
     connector,
     currentConnector,
     modalsStore,
-    { chainId, address, connectorDisplayOverrides },
+    { chainId, address, connectorDisplayOverrides, isConnected },
     { connect, disconnect, open }
   ]
 
@@ -140,7 +151,7 @@ async function _connectProvider(
 function _getProviderInfo(
   connector: ConnectorEnhanced<any, any>,
   currentConnector: ConnectorEnhanced<any, any> | undefined,
-  connectorDisplayOverrides: GetConnectorInfoConstants['connectorDisplayOverrides']
+  connectorDisplayOverrides: BaseConnectorInfoConstants['connectorDisplayOverrides']
 ) {
   const { baseConnectorKey, baseCurrentConnectorKey } = _getConnectorOverrideInfo(
     connector,
@@ -153,7 +164,7 @@ function _getProviderInfo(
   } else {
     connected = connector.id === currentConnector?.id
   }
-  connected = Boolean()
+
   return {
     label: baseConnectorKey?.customName || connector.name,
     logo: baseConnectorKey?.logo || connector?.logo,
@@ -166,28 +177,15 @@ async function _handleConnectorClick(
   connector: ConnectorEnhanced<any, any>,
   currentConnector: ConnectorEnhanced<any, any> | undefined,
   modalsStore: FullWeb3ModalStore,
-  {
-    address,
-    chainId,
-    connectorDisplayOverrides
-  }: Pick<GetConnectorInfoConstants, 'address' | 'chainId' | 'connectorDisplayOverrides'>,
+  { address, chainId, connectorDisplayOverrides, isConnected }: BaseConnectorInfoConstants,
   { connect, disconnect, open }: Pick<GetConnectorInfoCallbacks, 'open' | 'connect' | 'disconnect'>
 ) {
-  const { baseConnectorKey, baseCurrentConnectorKey } = _getConnectorOverrideInfo(
-    connector,
-    currentConnector,
-    connectorDisplayOverrides
-  )
-  const isConnectedConnector = Boolean(
-    baseCurrentConnectorKey
-      ? JSON.stringify(baseCurrentConnectorKey) === JSON.stringify(baseConnectorKey)
-      : connector.id === currentConnector?.id
-  )
+  const { baseConnectorKey } = _getConnectorOverrideInfo(connector, currentConnector, connectorDisplayOverrides)
 
   const connectToProviderParams = { connector, connect, modalsStore, connectorOverride: baseConnectorKey, chainId }
 
   try {
-    if (address && isConnectedConnector) {
+    if (address && isConnected) {
       return open({ route: 'Account' })
     } else {
       if (!!currentConnector) {
@@ -202,6 +200,7 @@ async function _handleConnectorClick(
     }
   } catch (error: any) {
     devError('[__handleConnectorClick] Error handling connection.', error)
+    throw error
   }
 }
 
@@ -235,7 +234,7 @@ async function _connectToProvider({
 function _getConnectorOverrideInfo(
   connector: ConnectorEnhanced<any, any>,
   currentConnector: ConnectorEnhanced<any, any> | undefined,
-  connectorDisplayOverrides: GetConnectorInfoConstants['connectorDisplayOverrides']
+  connectorDisplayOverrides: BaseConnectorInfoConstants['connectorDisplayOverrides']
 ) {
   const trimmedId = trimAndLowerCase(connector?.id)
   const trimmedName = trimAndLowerCase(connector?.name)

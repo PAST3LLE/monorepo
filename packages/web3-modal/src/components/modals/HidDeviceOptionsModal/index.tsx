@@ -1,19 +1,28 @@
-import { Column, ColumnCenter, Row, SpinnerCircle } from '@past3lle/components'
-import { useDebounce, useIsExtraSmallMediaWidth } from '@past3lle/hooks'
+import { Column, InfoCircle, MouseoverTooltip, Row, SpinnerCircle, useSelect } from '@past3lle/components'
+import { useDebounce } from '@past3lle/hooks'
+import { BLACK_TRANSPARENT, OFF_WHITE } from '@past3lle/theme'
 import { devError } from '@past3lle/utils'
 import type { LedgerHIDConnector } from '@past3lle/wagmi-connectors'
-import React, { CSSProperties, memo, useCallback, useEffect, useMemo, useState } from 'react'
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTheme } from 'styled-components'
 import { formatEther } from 'viem'
 import { Address, useSwitchNetwork } from 'wagmi'
 
 import { ModalPropsCtrlState } from '../../../controllers/types/controllerTypes'
-import { useGetChainLogoCallback, usePstlWeb3Modal, useUserConnectionInfo } from '../../../hooks'
+import { useGetChainLogoCallback, usePstlWeb3Modal, usePstlWeb3ModalStore, useUserConnectionInfo } from '../../../hooks'
 import { NoChainLogo } from '../../NoChainLogo'
-import { AccountColumnContainer, AccountModalButton, AccountText, FooterActionButtonsRow } from '../AccountModal/styled'
+import { AccountModalButton, AccountText, FooterActionButtonsRow, ModalColumnContainer } from '../AccountModal/styled'
 import { ConnectorOption } from '../ConnectionModal/ConnectorOption'
 import { BaseModalProps, ModalId } from '../common/types'
-import { HidModalContainer, HidModalWalletsWrapper } from './styleds'
+import {
+  HidModalAddresseRow,
+  HidModalAddressesList,
+  HidModalContainer,
+  HidModalHeaderRow,
+  HidModalTextInput,
+  HidModalWalletsWrapper,
+  PathSelectAndInputContainer
+} from './styleds'
 
 const SUPPORTED_BIP_DERIVATION_PATHS = [
   // Ledger Live
@@ -28,23 +37,13 @@ type PstlHidDeviceModalProps = ModalPropsCtrlState['root'] &
   ModalPropsCtrlState['hidDeviceOptions'] &
   Pick<BaseModalProps, 'errorOptions'>
 
-const INPUT_STYLES = {
-  fontSize: '1rem',
-  fontWeight: 100,
-  padding: '0.5rem',
-  backgroundColor: 'transparent',
-  color: 'ghostwhite',
-  outline: 'none',
-  border: '1px solid ghostwhite',
-  borderRadius: 5,
-  cursor: 'pointer'
-}
 const PAGINATION_AMT = 5
 const CHAIN_IMAGE_STYLES = { width: 20, marginLeft: '0.2rem', borderRadius: '30%' }
 
 function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
   const { close } = usePstlWeb3Modal()
-  const { chain, supportedChains } = useUserConnectionInfo()
+  const { updateModalProps } = usePstlWeb3ModalStore()
+  const { address, chain, supportedChains } = useUserConnectionInfo()
   const getChainLogo = useGetChainLogoCallback()
   const currChainLogo = getChainLogo(chain?.id)
   const { switchNetworkAsync } = useSwitchNetwork()
@@ -60,7 +59,23 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
   const [path, setPath] = useState<string | null>(SUPPORTED_BIP_DERIVATION_PATHS[0])
   const dbPath = useDebounce(path, 500)
   const [isCustomPath, setCustom] = useState(false)
-  const [, setPathAddressMap] = useState(new Map<string, string>())
+
+  const setHidError = useCallback(
+    (error: unknown) => {
+      devError(error)
+      updateModalProps({
+        hidDeviceOptions: {
+          error:
+            error instanceof Error
+              ? error
+              : typeof error === 'string'
+              ? new Error(error)
+              : new Error('Unknown error occured!')
+        }
+      })
+    },
+    [updateModalProps]
+  )
 
   const { handleSelectAccount, resetAndConnectProvider, getAccount, getAccounts } = useMemo(() => {
     const replacedDbPath = dbPath?.replace('*', '0') ?? null
@@ -68,28 +83,44 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
     return {
       handleSelectAccount: async (sPath: string) => {
         const hid = hidConnector as LedgerHIDConnector
-        await hid?.setAccount(sPath)
-        close()
+        try {
+          _isConnectedOrThrow(hid)
+          await hid?.setAccount(sPath)
+          close()
+        } catch (error) {
+          setHidError(error)
+        }
       },
       resetAndConnectProvider: async () => {
         const hid = hidConnector as LedgerHIDConnector
         setPaginationIdx(PAGINATION_AMT)
         setAccountsAndBalances([])
         if (replacedDbPath) {
-          await hid?.disconnect()
-          await hid?.connect({ chainId }, { path: replacedDbPath, reset: true })
+          try {
+            _isConnectedOrThrow(hid)
+            await hid?.disconnect()
+            await hid?.connect({ chainId }, { path: replacedDbPath, reset: true })
+          } catch (error) {
+            setHidError(error)
+          }
         }
       },
       getAccount: async () => {
-        if (!replacedDbPath) return null
-        const account = await (hidConnector as LedgerHIDConnector).getAccount(replacedDbPath)
-        return setPathAddressMap((state) => new Map(state.set(replacedDbPath, account)))
+        if (!replacedDbPath) return
+        const hid = hidConnector as LedgerHIDConnector
+        try {
+          _isConnectedOrThrow(hid)
+          await hid.getAccount(replacedDbPath)
+        } catch (error) {
+          setHidError(error)
+        }
       },
       getAccounts: async () => {
         if (!dbPath) return null
         const hid = hidConnector as LedgerHIDConnector
 
         try {
+          _isConnectedOrThrow(hid)
           setLoading(true)
 
           const accountsAndBalances: { address: Address; balance: string | undefined }[] = []
@@ -104,19 +135,20 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
           setAccountsAndBalances((state) => [...state, ...accountsAndBalances])
           setPaginationIdx((state) => state + PAGINATION_AMT)
         } catch (error) {
-          console.error(error)
+          setHidError(error)
           setAccountsAndBalances([])
         } finally {
           return setLoading(false)
         }
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chainId, close, dbPath, hidConnector, paginationIdx])
 
   const {
     Component: Selector,
     store: [selection, setSelection]
-  } = useSelector({
+  } = useSelect({
     options: SELECTOR_OPTIONS,
     defaultValue: SELECTOR_OPTIONS[0].value,
     name: 'HID Derivation Paths',
@@ -135,7 +167,7 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
         // get account
         await getAccount()
       } catch (error) {
-        devError(error)
+        setHidError(error)
       }
     }
 
@@ -148,13 +180,10 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dbPath, chainId, isCustomPath])
 
-  // We always show list view in tiny screens
-  const isSmallerScreen = useIsExtraSmallMediaWidth()
-
   const { modals: theme } = useTheme()
 
   return (
-    <AccountColumnContainer width="100%" color={'ghostwhite'}>
+    <ModalColumnContainer width="100%" color={'ghostwhite'} layout="Other">
       {/* Address and Balance Row */}
       <HidModalContainer
         borderRadius="1rem"
@@ -211,6 +240,94 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
             </AccountText>
           </Row>
         </Column>
+        {/* PATH SELECTOR / INPUT */}
+        <PathSelectAndInputContainer marginTop={'1rem'} width="100%" gap="1rem" flexWrap="wrap">
+          <Column flex="1 1 220px">
+            <AccountText fontSize="0.8em" marginBottom="0.25rem" type="balance">
+              PRESET PATH
+            </AccountText>
+            <Selector arrowStrokeColor="ghostwhite" arrowSize={30} />
+          </Column>
+          <Row flex="1 1 350px" width="auto">
+            <Column width="100%">
+              <AccountText fontSize="0.8em" marginBottom="0.25rem" type="balance">
+                OR CUSTOM ETH PATH{' '}
+                <MouseoverTooltip
+                  text="Set your own ETH derivation path where * indicates the index of user accounts. e.g m/44'/60'/*'/0/0"
+                  placement="top"
+                  styles={{
+                    fontFamily: 'monospace, arial, system-ui',
+                    fontSize: '0.75em',
+                    color: theme?.base?.font?.color || OFF_WHITE,
+                    border: 'none',
+                    backgroundColor: theme?.base?.background?.background || BLACK_TRANSPARENT
+                  }}
+                >
+                  <InfoCircle label="?" size={15} color="black" marginLeft="3px" />
+                </MouseoverTooltip>
+              </AccountText>
+              <HidModalTextInput
+                type="text"
+                value={isCustomPath ? path ?? '' : ''}
+                placeholder={'m/TYPE/PATH/HERE'}
+                onChange={(e) => {
+                  setCustom(true)
+                  setPath(e.target.value)
+                }}
+              />
+            </Column>
+          </Row>
+        </PathSelectAndInputContainer>
+        {/* ADDRESSES TABLE / LIST */}
+        <Column margin="1rem 0 0">
+          <Row justifyContent="flex-start" gap="10px" style={{ zIndex: 1 }} title="derivation-path">
+            <AccountText id="pstl-web3-modal-address-text" type="main">
+              Scan and select an account
+            </AccountText>
+          </Row>
+          <Row id={`${ModalId.ACCOUNT}__balance-text`}>
+            <AccountText type="balance">Current Account:</AccountText>
+            <AccountText type="balance" title="current-path" marginLeft={'5px'}>
+              {address || 'Disconnected'}
+            </AccountText>
+          </Row>
+        </Column>
+        <HidModalAddressesList width="100%" gap="0" margin="1rem 0" zIndex={errorOptions?.show ? 0 : 1}>
+          <HidModalHeaderRow padding="0rem 0.25rem">
+            <AccountText type="balance" as="strong">
+              Address
+            </AccountText>
+            <AccountText type="balance" as="strong">
+              Path
+            </AccountText>
+            <AccountText type="balance" as="strong">
+              Balance
+            </AccountText>
+          </HidModalHeaderRow>
+          {accountsAndBalances?.length ? (
+            accountsAndBalances.map(({ address: acct, balance }, idx) => {
+              const sPath = dbPath?.replace('*', idx.toString())
+              return (
+                <HidModalAddresseRow
+                  key={idx + '_' + acct}
+                  onClick={() => sPath && handleSelectAccount(sPath)}
+                  padding="0.15rem 0.25rem"
+                >
+                  <strong>{acct}</strong>
+                  <strong>{sPath}</strong>
+                  <strong>{balance || 0}</strong>
+                </HidModalAddresseRow>
+              )
+            })
+          ) : (
+            <Row padding="0.15rem 0.25rem">
+              <span style={{ width: '100%', textAlign: 'center', fontSize: '0.8rem', marginTop: '1rem' }}>
+                Click below to query accounts for this path
+              </span>
+            </Row>
+          )}
+        </HidModalAddressesList>
+        {/* SHOW ACCOUNTS CTA */}
         <FooterActionButtonsRow
           marginTop={'1rem'}
           justifyContent={'space-evenly'}
@@ -230,100 +347,14 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
                 Fetching... <SpinnerCircle />
               </>
             ) : paginationIdx === PAGINATION_AMT ? (
-              `${isSmallerScreen ? '' : 'View '}Accounts`
+              'Scan Accounts'
             ) : (
               'Load more'
             )}
           </AccountModalButton>
         </FooterActionButtonsRow>
-        <Row marginTop={'1rem'} width="100%" gap="1rem" flexWrap="wrap">
-          <Column maxWidth={220}>
-            <AccountText fontSize="0.8em" marginBottom="0.25rem" type="balance">
-              PRESET PATH
-            </AccountText>
-            <Selector style={INPUT_STYLES} />
-          </Column>
-          <Row minWidth={300} width="auto">
-            <Column
-              css={`
-                > input[type='text'] {
-                  font-size: 0.85rem;
-                }
-              `}
-              marginLeft="0.5rem"
-            >
-              <AccountText fontSize="0.8em" marginBottom="0.25rem" type="balance">
-                OR CUSTOM PATH
-              </AccountText>
-              <input
-                type="text"
-                value={isCustomPath ? path ?? '' : ''}
-                placeholder={'m/TYPE/PATH/HERE'}
-                onChange={(e) => {
-                  setCustom(true)
-                  setPath(e.target.value)
-                }}
-                style={{ ...INPUT_STYLES, minWidth: 300 }}
-              />
-            </Column>
-          </Row>
-        </Row>
-        <ColumnCenter
-          width="100%"
-          gap="0.5rem"
-          padding="1rem"
-          css={`
-            z-index: ${errorOptions?.show ? 0 : 1};
-            > ${Row} {
-              > strong {
-                font-weight: 100;
-                font-size: 0.85em;
-
-                &:first-child {
-                  width: 65%;
-                }
-                &:nth-child(2) {
-                  width: 25%;
-                }
-                &:last-child {
-                  width: 10%;
-                }
-              }
-            }
-          `}
-        >
-          <Row>
-            <strong>Address</strong>
-            <strong>Path</strong>
-            <strong>Balance</strong>
-          </Row>
-          {accountsAndBalances.map(({ address: acct, balance }, idx) => {
-            const sPath = dbPath?.replace('*', idx.toString())
-            return (
-              <Row
-                key={idx + '_' + acct}
-                width="100%"
-                color="ghostwhite"
-                fontWeight={500}
-                padding="0.25rem 0"
-                css={`
-                  cursor: pointer;
-                  &:hover {
-                    background-color: #848aff4d;
-                  }
-                  transition: background-color 0.3s ease-in-out;
-                `}
-                onClick={() => sPath && handleSelectAccount(sPath)}
-              >
-                <strong>{acct}</strong>
-                <strong>{sPath}</strong>
-                <strong>{balance || 0}</strong>
-              </Row>
-            )
-          })}
-        </ColumnCenter>
       </HidModalContainer>
-    </AccountColumnContainer>
+    </ModalColumnContainer>
   )
 }
 
@@ -338,51 +369,12 @@ const SELECTOR_OPTIONS = [
     label: 'BIP44 Standard - ' + SUPPORTED_BIP_DERIVATION_PATHS[2]
   }
 ]
-interface SelectorProps<V extends number | string> {
-  defaultValue: V
-  options: { value: V; label: string }[]
-  name: string
-  callback?: (value: V) => void
-}
-function useSelector<V extends number | string>({
-  name,
-  options,
-  defaultValue,
-  callback
-}: SelectorProps<V>): {
-  Component: (props: { style?: CSSProperties }) => React.JSX.Element
-  store: [V, React.Dispatch<React.SetStateAction<V>>]
-} {
-  const [selection, setSelection] = useState<V>(defaultValue)
 
-  const handleChange = useCallback(
-    (e: React.ChangeEvent<HTMLSelectElement>) => {
-      setSelection(e.target.value as V)
-      callback?.(e.target.value as V)
-    },
-    [callback]
-  )
-
-  const Component = useCallback(
-    ({ style }: { style?: CSSProperties }) => (
-      <select name={name} onChange={handleChange} style={style} value={selection}>
-        {options.map((opt) => (
-          <option key={opt.value + '_' + opt.label} value={opt.value}>
-            {opt.label}
-          </option>
-        ))}
-      </select>
-    ),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [name, options, selection]
-  )
-
-  const memoisedSetSelection: React.Dispatch<React.SetStateAction<V>> = useCallback(
-    (value) => setSelection(value as V),
-    []
-  )
-
-  return { Component, store: [selection, memoisedSetSelection] }
+function _isConnectedOrThrow(hid: LedgerHIDConnector | undefined) {
+  if (!hid)
+    throw new Error(
+      'No HID connector detected. Please check that device is plugged in, unlocked, and that the Ethereum app is open.'
+    )
 }
 
 export default memo(HidDeviceOptionsContent)

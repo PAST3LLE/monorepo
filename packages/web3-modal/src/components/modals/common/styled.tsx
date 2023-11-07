@@ -93,7 +93,6 @@ export const ModalTitle = styled(ModalTitleText)`
 export const InnerContainer = styled(ColumnCenter)<{ isError?: boolean }>`
   filter: ${({ theme }) => theme?.modals?.base?.filter};
 
-  position: relative;
   font-size: ${({ theme }) => theme?.modals?.connection?.baseFontSize}px;
   font-style: ${({ theme }) => theme?.modals?.base?.font?.style};
   font-weight: ${({ theme }) => theme?.modals?.base?.font?.weight};
@@ -173,9 +172,10 @@ export const ErrorMessageContainer = styled(InnerContainer)<{ hide: boolean }>`
 `
 
 export const StyledConnectionModal = styled(Modal)`
-  ${upToSmall`
-    div {
-      &[data-reach-dialog-content] {
+  div {
+    &[data-reach-dialog-content] {
+      position: relative;
+      ${upToSmall`
           max-height: 500px;
           max-width: unset;
           width: 100%;
@@ -185,14 +185,13 @@ export const StyledConnectionModal = styled(Modal)`
             border-bottom-left-radius: 0;
             border-bottom-right-radius: 0;
             
-             > ${ErrorMessageContainer} {
+              > ${ErrorMessageContainer} {
               border-radius: 0.4rem 0.4rem 0 0;
             }
-          }
-
-        }
-      }
-  `}
+          }                       
+      `}
+    }
+  }
 `
 
 export const WalletsWrapper = styled.div<{

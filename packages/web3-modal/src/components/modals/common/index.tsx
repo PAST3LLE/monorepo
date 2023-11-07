@@ -3,6 +3,7 @@ import { useOnKeyPress } from '@past3lle/hooks'
 import React, { useMemo } from 'react'
 
 import { Z_INDICES } from '../../../constants'
+import { WithError } from '../../../controllers/types/controllerTypes'
 import { usePstlWeb3ModalStore } from '../../../hooks'
 import { useAutoClearingTimeout } from '../../../hooks/useTimeout'
 import { ErrorMessage } from './ErrorMessage'
@@ -21,7 +22,12 @@ export function BaseModal({
   ...restModalProps
 }: BaseModalProps) {
   const { state, resetErrors } = usePstlWeb3ModalStore()
-  const error = useMemo(() => state.account?.error || state.connect?.error || state.network?.error, [state])
+  const error = useMemo(
+    // We can safely typecase here as we are conditinoally checking the error prop
+    // that doesn't exist on the 'root' state slice but does exist on the others
+    () => (Object.values(state).filter((value) => !!(value as WithError)?.error)?.[0] as WithError)?.error,
+    [state]
+  )
   const [showError, hideError] = useAutoClearingTimeout(!!error?.message, 7000, resetErrors)
 
   // Close modal on key press

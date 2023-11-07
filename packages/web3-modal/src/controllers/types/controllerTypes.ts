@@ -43,7 +43,7 @@ interface RootModalState {
   openType: 'root' | 'walletconnect'
 }
 
-interface WithError {
+export interface WithError {
   error?: Error | null
 }
 

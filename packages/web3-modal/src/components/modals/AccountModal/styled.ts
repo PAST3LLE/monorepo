@@ -112,7 +112,7 @@ export const AccountWalletNetworkRow = styled(Row)<{ cursor: string }>`
   `}
 `
 
-export const AccountColumnContainer = styled(Column)`
+export const ModalColumnContainer = styled(Column)<{ layout: 'Account' | 'Other' }>`
   .unsupported-small-text {
     font-size: 0.6em;
     color: darkgrey;
@@ -138,20 +138,20 @@ export const AccountColumnContainer = styled(Column)`
     }
   }
 
-  ${upToSmall`
+  ${({ layout = 'Account' }) => upToSmall`
     > ${Row} {
       flex-flow: row wrap;
       
       // Details column
       > ${Column} {
-        order: 2;
+        order: ${layout === 'Account' ? 2 : 1};
         margin: auto;
         max-width: unset;
       }
 
       // Logo row
       > ${Row} {
-        order: 1;
+        order: ${layout === 'Account' ? 1 : 2};
         margin-bottom: 1rem;
         min-width: 150px;
         width: 100%;
@@ -162,7 +162,7 @@ export const AccountColumnContainer = styled(Column)`
       }
 
       > ${ModalButton} {
-          order: 2;
+          order: ${layout === 'Account' ? 2 : 1};
           margin: 1rem auto 0.5rem auto;
       } 
     }
@@ -175,7 +175,6 @@ export const AccountColumnContainer = styled(Column)`
       }
     }
   `}
-
   ${({ theme }) => upToExtraSmall`
     // Address text
     ${AccountText}#pstl-web3-modal-address-text, ${AccountText}#pstl-web3-modal-wallet-text, ${AccountText}#pstl-web3-modal-network-text {
@@ -183,17 +182,17 @@ export const AccountColumnContainer = styled(Column)`
     }
   `}
 
-  ${fromExtraSmall`
+  ${({ layout = 'Account' }) => fromExtraSmall`
     ${AccountBottomColumnContainer} {
       flex-flow: row wrap;
 
       > #${ModalId.ACCOUNT}__balance-text {
-        order: 2;
+        order: ${layout === 'Account' ? 2 : 1};
       }
 
       > ${FooterActionButtonsRow} {
         margin: 0 0 0 auto;
-        order: 1;
+        order: ${layout === 'Account' ? 1 : 0};
 
         > ${AccountModalButton}#${ModalId.ACCOUNT}__copy-button {
           display: none;
@@ -227,3 +226,5 @@ export const AccountColumnContainer = styled(Column)`
     }
   `}
 `
+
+export const AccountColumnContainer = styled(ModalColumnContainer).attrs({ layout: 'Account' })``

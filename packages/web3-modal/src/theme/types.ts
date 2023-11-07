@@ -45,6 +45,11 @@ export interface PstlModalTheme {
         font?: FontStyles
         margin?: string
       }
+      input?: {
+        border?: BorderStyles
+        background?: BackgroundStyles
+        font?: FontStyles
+      }
       error?: {
         font?: Pick<FontStyles, 'color'>
         background?: Pick<BackgroundStyles, 'background'>

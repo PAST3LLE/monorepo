@@ -45,6 +45,12 @@ export const pstlModalTheme = createTheme({
         background: {
           backgroundImg: 'unset',
           background: 'indianred'
+        },
+        input: {
+          border: {
+            color: 'rgba(255 255 255 / 45%)',
+            border: '1px solid rgba(255 255 255 / 45%)'
+          }
         }
       },
       connection: {

@@ -81,6 +81,18 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
             },
             margin: '0 20px'
           },
+          input: {
+            font: DEFAULT_FONT_PROPS,
+            border: {
+              radius: '0.3em',
+              border: '1px solid rgba(255 255 255 / 45%)',
+              color: 'rgba(255 255 255 / 45%)'
+            },
+            background: {
+              background: 'transparent',
+              backgroundImg: 'none'
+            }
+          },
           error: {
             font: {
               color: 'ghostwhite'
