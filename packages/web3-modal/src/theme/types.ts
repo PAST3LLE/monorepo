@@ -87,6 +87,18 @@ export interface PstlModalTheme {
         hoverAnimations?: boolean
       }
     }
+    hidDevice?: {
+      container?: {
+        main?: {
+          background?: BackgroundStyles
+          border?: BorderStyles
+        }
+        addressesList?: {
+          background?: BackgroundStyles
+          border?: BorderStyles
+        }
+      }
+    }
     account?: {
       filter?: string
       baseFontSize?: number

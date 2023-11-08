@@ -113,7 +113,7 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
             }
           },
           background: {
-            background: '#2a7f70',
+            background: '#8984cfeb',
             backgroundImg: 'unset'
           },
           padding: '1em'
@@ -123,6 +123,24 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
           button: {
             ...DEFAULT_BUTTON_PROPS,
             height: '90px'
+          }
+        },
+        hidDevice: {
+          container: {
+            main: {
+              background: {
+                backgroundImg: 'unset',
+                background: '#292531e3'
+              },
+              border: DEFAULT_BUTTON_PROPS.border
+            },
+            addressesList: {
+              background: {
+                backgroundImg: 'unset',
+                background: '#f8f8ff2e'
+              },
+              border: DEFAULT_BUTTON_PROPS.border
+            }
           }
         },
         account: {
