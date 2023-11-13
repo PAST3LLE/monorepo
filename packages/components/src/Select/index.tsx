@@ -4,13 +4,13 @@ import React from 'react'
 import { Select, SelectProps } from './styleds'
 
 type ComponentProps = SelectProps & { style?: CSSProperties }
-interface SelectorProps<V extends number | string> {
+interface SelectorProps<V extends number | string | undefined> {
   defaultValue: V
   options: { value: V; label: string }[]
   name: string
   callback?: (value: V) => void
 }
-export function useSelect<V extends number | string>({
+export function useSelect<V extends number | string | undefined>({
   name,
   options,
   defaultValue,
