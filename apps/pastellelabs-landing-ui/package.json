@@ -14,7 +14,7 @@
     "url": "git+https://github.com/PAST3LLE/past3lle-monorepo.git"
   },
   "private": true,
-  "version": "0.0.218-alpha.6",
+  "version": "0.0.218",
   "engines": {
     "node": ">=18.12.0"
   },
@@ -60,15 +60,15 @@
     "web-vitals": "^3.1.0"
   },
   "dependencies": {
-    "@past3lle/assets": "^0.0.23-alpha.2.0",
-    "@past3lle/carousel": "^0.1.32-alpha.10.0",
-    "@past3lle/components": "^0.1.30-alpha.10.0",
-    "@past3lle/constants": "^0.1.10-alpha.2.0",
-    "@past3lle/hooks": "^0.1.24-alpha.2.0",
-    "@past3lle/skillforge-widget": "^0.3.18-prod.0",
-    "@past3lle/theme": "^0.1.12-alpha.2.0",
-    "@past3lle/types": "^0.0.24-alpha.2.0",
-    "@past3lle/utils": "^0.1.10-alpha.2",
+    "@past3lle/assets": "^0.0.23",
+    "@past3lle/carousel": "^0.1.32",
+    "@past3lle/components": "^0.1.30",
+    "@past3lle/constants": "^0.1.10",
+    "@past3lle/hooks": "^0.1.24",
+    "@past3lle/skillforge-widget": "^0.3.18",
+    "@past3lle/theme": "^0.1.12",
+    "@past3lle/types": "^0.0.24",
+    "@past3lle/utils": "^0.1.10",
     "polished": "^4.2.2",
     "react-feather": "^2.0.10",
     "rebass": "^4.0.7",
