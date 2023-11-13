@@ -52,6 +52,8 @@ export const AccountText = styled(ModalTitleText)<{
   text-transform: ${({ theme, type }) => theme?.modals?.account?.text?.[type]?.font?.textTransform};
   text-shadow: ${({ theme, type }) => theme?.modals?.account?.text?.[type]?.font?.textShadow};
   text-align: ${({ theme, type }) => theme?.modals?.account?.text?.[type]?.font?.textAlign};
+
+  ${(props) => props?.css}
 `
 
 export const AccountBottomColumnContainer = styled(Column)`
@@ -181,7 +183,6 @@ export const ModalColumnContainer = styled(Column)<{ layout: 'Account' | 'Other'
       font-size: calc(${theme.modals?.account?.text?.address?.font?.size} * 0.8);
     }
   `}
-
   ${({ layout = 'Account' }) => fromExtraSmall`
     ${AccountBottomColumnContainer} {
       flex-flow: row wrap;

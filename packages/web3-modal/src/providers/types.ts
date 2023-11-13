@@ -88,6 +88,23 @@ export type PstlWeb3ModalOptions = Omit<
      * @description List of string key names to listen for and close modal
      */
     closeModalOnKeys?: string[]
+    /**
+     * @name expiremental
+     * @description Map of experimental feature flags
+     */
+    experimental?: {
+      /**
+       * @name hidDeviceOptions
+       * @description HID-specific device options
+       */
+      hidDeviceOptions?: {
+        /**
+         * @name enableConfigurationModal
+         * @description enable the HID device configuration modal - i.e choose derivation path
+         */
+        enableConfigurationModal?: boolean
+      }
+    }
   },
   'publicClient' | 'publicClients' | 'connectors'
 >

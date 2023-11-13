@@ -48,8 +48,8 @@ export const pstlModalTheme = createTheme({
         },
         input: {
           border: {
-            color: 'rgba(255 255 255 / 45%)',
-            border: '1px solid rgba(255 255 255 / 45%)'
+            color: 'rgba(255,255,255,0.45)',
+            border: '1px solid rgba(255,255,255,0.45)'
           }
         }
       },

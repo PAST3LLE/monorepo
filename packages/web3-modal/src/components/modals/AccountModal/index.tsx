@@ -105,7 +105,13 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
             title={userConnectionInfo.address}
             onClick={() => onCopy(userConnectionInfo?.address || '')}
           >
-            <AccountText id="pstl-web3-modal-address-text" type="address">
+            <AccountText
+              id="pstl-web3-modal-address-text"
+              type="address"
+              css={`
+                text-transform: initial;
+              `}
+            >
               {userConnectionInfo.address
                 ? isCopied
                   ? 'Copied!'
