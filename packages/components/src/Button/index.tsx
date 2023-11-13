@@ -160,8 +160,17 @@ const DISABLED_BUTTON_STYLES = css`
   }
 `
 
-const THEME_BUTTON_STYLES = css`
-  color: ${({ theme }): string =>
+const THEME_BUTTON_STYLES = css<{
+  color?: string
+  filter?: string
+  hoverFilter?: string
+  innerBgColor?: string
+  innerOpacity?: number
+  innerFilter?: string
+  innerHoverFilter?: string
+}>`
+  color: ${({ theme, color }): string =>
+    color ||
     setBestContrastingColour({
       bgColour: theme.black,
       fgColour: theme.offwhite,
@@ -170,29 +179,32 @@ const THEME_BUTTON_STYLES = css`
     })};
   border-color: ${({ theme }): string => theme.offwhite};
 
-  filter: contrast(1.5) saturate(10);
+  filter: ${({ filter = 'contrast(1.5) saturate(10)' }) => filter};
 
   border-color: ${({ theme }): string => theme.text1};
   text-shadow: 0px 0px 12px #fff;
 
   > div {
-    filter: ${({ theme: { mode } }) => `invert(${mode === 'DARK' ? 1 : 1})`};
+    filter: ${({ theme: { mode }, innerFilter = `invert(${mode === 'DARK' ? 1 : 1})` }) => innerFilter};
 
     border-radius: 0.1rem;
 
-    background-color: ${({ theme }) => theme.black};
-    opacity: 0.66;
+    background-color: ${({ theme, innerBgColor = theme.black }) => innerBgColor};
+    opacity: ${({ innerOpacity = 0.8 }) => innerOpacity};
 
     transition: background-color, filter, opacity 0.2s ease-out;
   }
 
   &:hover {
-    filter: ${({ theme: { mode } }) => (mode === 'DARK' ? 'contrast(1.5) saturate(10)' : 'contrast(2) saturate(3)')};
+    filter: ${({
+      theme: { mode },
+      hoverFilter = mode === 'DARK' ? 'contrast(1.5) saturate(10)' : 'contrast(2) saturate(3)'
+    }) => hoverFilter};
 
     border-color: ${({ theme }): string => theme.text1};
 
     > div {
-      filter: ${({ theme: { mode } }) => `invert(${mode === 'DARK' ? 0 : 1})`};
+      filter: ${({ theme: { mode }, innerHoverFilter = `invert(${mode === 'DARK' ? 0 : 1})` }) => innerHoverFilter};
     }
   }
 
