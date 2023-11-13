@@ -18,7 +18,7 @@ module.exports = {
   },
   extends: ['plugin:@typescript-eslint/recommended', 'plugin:prettier/recommended'],
   root: true,
-  ignorePatterns: ['node_modules/**/*', '.github/*', 'build', 'dist', '.eslintrc.js', '*.config.js'],
+  ignorePatterns: ['node_modules/**/*', '.github/*', 'build', 'dist', '.eslintrc.js', '.eslintrc.mjs', '*.config.js'],
   settings: {
     react: {
       version: 'detect'
