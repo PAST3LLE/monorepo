@@ -83,7 +83,7 @@
     "lodash.merge": "^4.6.2",
     "polished": "^4.2.2",
     "react-helmet": "^6.1.0",
-    "wcag-contrast": "^3.0.0"
+    "get-contrast": "3.0.0"
   },
   "gitHead": "9aa2cea4e1db3f2a1f8fce04ef83295c05a5d9e0"
 }
