@@ -160,7 +160,7 @@ const DISABLED_BUTTON_STYLES = css`
   }
 `
 
-const THEME_BUTTON_STYLES = css<{
+export type SpecialThemedButtonProps = {
   color?: string
   filter?: string
   hoverFilter?: string
@@ -168,7 +168,8 @@ const THEME_BUTTON_STYLES = css<{
   innerOpacity?: number
   innerFilter?: string
   innerHoverFilter?: string
-}>`
+}
+const THEME_BUTTON_STYLES = css<SpecialThemedButtonProps>`
   color: ${({ theme, color }): string =>
     color ||
     setBestContrastingColour({
