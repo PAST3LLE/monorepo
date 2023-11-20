@@ -20,7 +20,7 @@ function _formatFvsMap(fvsMap?: FVSMap) {
     .join(', ')
 }
 
-interface AuxProps {
+export interface AuxProps {
   colour?: string
   fvs?: FVSMap
   fontVariationSettings?: FVSMap
