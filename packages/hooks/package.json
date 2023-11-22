@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/hooks",
   "sideEffects": false,
-  "version": "0.1.25",
+  "version": "0.2.0",
   "description": "PAST3LLE common hooks e.g useDetectIntoView, useDebounce, etc.",
   "main": "dist/hooks.esm.js",
   "module": "dist/hooks.esm.js",

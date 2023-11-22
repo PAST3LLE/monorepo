@@ -1,6 +1,6 @@
 {
   "name": "@past3lle/web3-modal",
-  "version": "1.5.16",
+  "version": "1.6.0",
   "sideEffects": false,
   "description": "PAST3LLE's Web3 connection modal",
   "keywords": [
@@ -82,8 +82,8 @@
     "wagmi": "^1.x"
   },
   "dependencies": {
-    "@past3lle/components": "^0.1.31",
-    "@past3lle/hooks": "^0.1.25",
+    "@past3lle/components": "^0.2.0",
+    "@past3lle/hooks": "^0.2.0",
     "@past3lle/theme": "^0.1.13",
     "@past3lle/utils": "^0.1.11",
     "@past3lle/wagmi-connectors": "^0.1.14",
