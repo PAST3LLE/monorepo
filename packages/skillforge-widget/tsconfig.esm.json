@@ -3,6 +3,11 @@
     "compilerOptions": {
         "module": "ES2020",
         "outDir": "./dist/esm",
-        "declarationDir": "./dist/types"
-    }
+        "declarationDir": "./dist/types",
+    },
+    "exclude": [
+        "./src/**/*.fixture.tsx?",
+        "./src/**/*.decorator.tsx?",
+        "./src/fixtures"
+    ]
 }

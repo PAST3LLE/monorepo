@@ -1,4 +1,4 @@
-import { useW3Connection } from '@past3lle/forge-web3'
+import { RobotoVariableFontProvider } from '@past3lle/theme'
 import React from 'react'
 
 import { SkillForge, SkillForgeConnectedHeader } from '../components'
@@ -13,23 +13,6 @@ import { commonProps, contractProps } from './config'
         ethereumClient?: EthereumClient
     }
 */
-
-function InnerApp() {
-  const [, { openRootModal, openWalletConnectModal }, { address }] = useW3Connection()
-
-  return (
-    <div>
-      <button
-        onClick={() =>
-          address ? openWalletConnectModal({ route: 'Account' }) : openRootModal({ route: 'ConnectWallet' })
-        }
-      >
-        Open Pstl Web3 Modal
-      </button>
-      <h1>{address || 'Disconnected'}</h1>
-    </div>
-  )
-}
 
 const skillforgeTheme = createTheme({
   ALT: {
@@ -124,6 +107,7 @@ function App() {
           FAQ: 'faq.thing.io'
         },
         web3: {
+          ...commonProps,
           chains: commonProps.chains,
           options: {
             pollingInterval: 15_000,
@@ -132,7 +116,7 @@ function App() {
             }
           },
           modals: {
-            walletConnect: commonProps.modals.walletConnect
+            ...commonProps.modals
           }
         },
         hooksProviderOptions: {
@@ -142,12 +126,15 @@ function App() {
         }
       }}
       render={() => <SkillForgeConnectedHeader />}
-    >
-      <InnerApp />
-    </SkillForge>
+    />
   )
 }
 
 export default {
-  default: <App />
+  default: (
+    <>
+      <RobotoVariableFontProvider />
+      <App />
+    </>
+  )
 }

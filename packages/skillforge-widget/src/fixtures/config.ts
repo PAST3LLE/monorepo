@@ -1,9 +1,90 @@
-import { ForgeW3CoreProvidersProps } from '@past3lle/forge-web3'
+import { ForgeW3CoreProvidersProps, addConnector, createWeb3ModalTheme } from '@past3lle/forge-web3'
+import { LedgerHIDConnector } from '@past3lle/wagmi-connectors'
 import { goerli } from 'wagmi/chains'
 
+const MODAL_THEME = createWeb3ModalTheme({
+  DEFAULT: {
+    modals: {
+      base: {
+        input: {
+          font: {
+            color: 'black'
+          }
+        },
+        title: {
+          font: {
+            color: 'navajowhite'
+          }
+        },
+        background: {
+          main: 'rgba(0,0,0,0.6)'
+        }
+      },
+      connection: {
+        button: {
+          main: {
+            font: { color: 'black' },
+            background: {
+              default: 'navajowhite'
+            }
+          }
+        }
+      },
+      account: {
+        text: {
+          main: {
+            color: 'black',
+            weight: 500
+          },
+          header: {
+            color: 'navajowhite'
+          }
+        },
+        container: {
+          main: {
+            background: '#202020'
+          },
+          alternate: {
+            background: 'navajowhite'
+          }
+        },
+        button: {
+          main: {
+            font: {
+              color: 'black'
+            },
+            background: {
+              default: 'navajowhite'
+            }
+          },
+          alternate: {
+            background: {
+              default: 'indianred'
+            }
+          }
+        }
+      }
+    }
+  }
+})
 const DEFAULT_PROPS: ForgeW3CoreProvidersProps['config']['web3'] = {
   chains: [goerli],
+  connectors: [addConnector(LedgerHIDConnector, {})],
   modals: {
+    root: {
+      connectorDisplayOverrides: {
+        'ledger-hid': {
+          customName: 'Ledger HID Device',
+          async customConnect({ store, connector, wagmiConnect }) {
+            await wagmiConnect({ connector })
+            store.ui.root.open({ route: 'HidDeviceOptions' })
+          }
+        }
+      },
+      themeConfig: {
+        theme: MODAL_THEME
+      }
+    },
     walletConnect: {
       projectId: process.env.REACT_APP_WEB3MODAL_ID || '',
       walletImages: {
