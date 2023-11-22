@@ -78,24 +78,33 @@ function AppWithWagmiAccess() {
   )
 }
 
+function Updater() {
+  useEffect(() => {
+    if (typeof globalThis?.window === 'undefined') return
+    window.document.body.setAttribute('style', `font-family: system-ui;`)
+  }, [])
+  return null
+}
+const THEME = createCustomTheme({
+  modes: {
+    LIGHT: {
+      header: 'white'
+    },
+    DARK: {
+      header: 'black'
+    },
+    DEFAULT: {
+      header: 'red'
+    }
+  }
+})
 const withThemeProvider = (Component: () => JSX.Element | null) => (
-  <ThemeProvider
-    theme={createCustomTheme({
-      modes: {
-        LIGHT: {
-          header: 'white'
-        },
-        DARK: {
-          header: 'black'
-        },
-        DEFAULT: {
-          header: 'red'
-        }
-      }
-    })}
-  >
-    <Component />
-  </ThemeProvider>
+  <div style={{ fontFamily: 'system-ui' }}>
+    <ThemeProvider theme={THEME}>
+      <Updater />
+      <Component />
+    </ThemeProvider>
+  </div>
 )
 
 export default {

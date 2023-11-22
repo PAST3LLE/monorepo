@@ -37,7 +37,13 @@ function NetworkModalContent() {
 
   return (
     <AccountColumnContainer width="100%">
-      <WalletsWrapper id={`${ModalId.WALLETS}__chains-wrapper`} view={modalView} width="auto">
+      <WalletsWrapper
+        id={`${ModalId.WALLETS}__chains-wrapper`}
+        modal="connection"
+        node="main"
+        view={modalView}
+        width="auto"
+      >
         {supportedChains.map((chain) => {
           if (!switchNetworkAsync || currentChain?.id === chain.id) return null
           const chainLogo = getChainLogo(chain.id)

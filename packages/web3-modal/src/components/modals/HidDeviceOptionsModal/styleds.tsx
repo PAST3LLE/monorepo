@@ -2,19 +2,25 @@ import { Column, ColumnCenter, Row } from '@past3lle/components'
 import { upToExtraSmall } from '@past3lle/theme'
 import styled, { css } from 'styled-components'
 
-import { AccountBottomColumnContainer, AccountText } from '../AccountModal/styled'
-import { ModalButton, WalletsWrapper } from '../common/styled'
+import { ModalButton, ModalContainer, ModalText, WalletsWrapper } from '../common/styled'
 
-export const HidModalContainer = styled(AccountBottomColumnContainer)`
-  background: ${({ theme }) => theme?.modals?.hidDevice?.container?.main?.background?.backgroundImg};
-  background-color: ${({ theme }) => theme?.modals?.hidDevice?.container?.main?.background?.background};
-  border: ${({ theme }) => theme?.modals?.hidDevice?.container?.main?.border?.border};
-  border-radius: ${({ theme }) => theme?.modals?.hidDevice?.container?.main?.border?.radius};
-  border-color: ${({ theme }) => theme?.modals?.hidDevice?.container?.main?.border?.color};
+export const ModalHeaderText = styled(ModalText).attrs({ modal: 'hidDevice', node: 'header' })``
+export const ModalSubHeaderText = styled(ModalText).attrs({ modal: 'hidDevice', node: 'subHeader' })``
+
+export const HidModalContainer = styled(ModalContainer)`
   > ${Column}:first-child {
     flex: 0 1 100%;
     min-width: unset;
   }
+
+  ${(props) => upToExtraSmall`
+    ${ModalHeaderText} {
+      font-size: calc(${props.theme.modals?.hidDevice?.text?.header?.size} * 0.8);
+    }
+    ${ModalSubHeaderText} {
+      font-size: calc(${props.theme.modals?.hidDevice?.text?.subHeader?.size} * 0.8);
+    }
+  `}
 `
 
 export const HidModalWalletsWrapper = styled(WalletsWrapper)`
@@ -22,7 +28,7 @@ export const HidModalWalletsWrapper = styled(WalletsWrapper)`
   margin-bottom: 1rem;
   > div {
     > ${ModalButton} {
-      background-color: ${(props) => props.theme?.modals?.account?.button?.['explorer']?.background?.background};
+      background-color: ${(props) => props.theme?.modals?.account?.button?.main?.background};
       height: 40px;
       flex-flow: row nowrap;
       > img,
@@ -49,7 +55,7 @@ export const HidModalAddresseRow = styled(HidBaseRow)`
   padding: 0.25rem 0;
 
   &:hover {
-    background-color: ${(props) => props.theme.modals?.base?.background?.background};
+    background-color: ${(props) => props.theme.modals?.base?.background?.main};
   }
   transition: background-color 0.3s ease-in-out;
 `
@@ -66,8 +72,8 @@ export const HidModalAddressPlaceholder = styled(Row)`
 
 export const HidModalAddressesList = styled(ColumnCenter)<{ zIndex?: number }>`
   z-index: ${({ zIndex = 1 }) => zIndex};
-  background-color: ${(props) => props.theme.modals?.hidDevice?.container?.addressesList?.background?.background};
-  border-radius: ${(props) => props.theme.modals?.account?.container.addressAndBalance.border?.radius};
+  background-color: ${({ theme }) => theme.modals?.base?.background?.main};
+  border-radius: ${({ theme }) => theme.modals?.hidDevice?.container?.main?.border?.radius};
   align-items: start;
   overflow: hidden;
   overflow-x: auto;
@@ -101,7 +107,7 @@ const BASE_INPUT_STYLES = css`
   font-size: 1em;
   font-variation-settings: 'wght' 100;
   padding: 0.5rem 37px 0.5rem 0.5rem;
-  background-color: ${(props) => props.theme.modals?.base?.input?.background?.background};
+  background-color: ${(props) => props.theme.modals?.base?.input?.background};
   color: ${(props) => props.theme.modals?.base?.font?.color};
   outline: none;
   border: ${(props) => props.theme.modals?.base?.input?.border?.border};
@@ -117,6 +123,10 @@ export const HidModalTextInput = styled.input<{ minWidth?: string; fontWeight?: 
   ${upToExtraSmall`
     min-width: unset;
   `}
+
+  &:before {
+    content: "m/44'/60'/";
+  }
 `
 
 export const PathSelectAndInputContainer = styled(Row)<{ fontWeight?: number }>`
@@ -124,7 +134,7 @@ export const PathSelectAndInputContainer = styled(Row)<{ fontWeight?: number }>`
     transition: flex 0.3s ease-in-out, background-color 0.7s ease-in-out;
     overflow-x: hidden;
 
-    > ${Column} > ${AccountText} {
+    > ${Column} > ${ModalText} {
       white-space: nowrap;
     }
   }
@@ -137,20 +147,23 @@ export const PathSelectAndInputContainer = styled(Row)<{ fontWeight?: number }>`
   }
 `
 
-export const HighlightedAccountText = styled(AccountText).attrs({
-  type: 'balance',
+export const HighlightedModalText = styled(ModalText).attrs((props) => ({
+  modal: 'hidDevice',
+  node: 'main',
   title: 'current-path',
   marginLeft: '5px',
-  padding: '0.1rem 0.2rem'
-})<{ backgroundColor?: string; color?: string }>`
+  padding: '0.1rem 0.25rem 0.1rem 0.2rem',
+  ...props
+}))<{ backgroundColor?: string; color?: string }>`
   text-transform: initial;
   font-variation-settings: 'wght' 300;
   color: ${(props) => props.color};
   background-color: ${(props) => props.backgroundColor};
 `
 
-export const UnderlinedAccountCTA = styled(AccountText).attrs({
-  type: 'balance',
+export const UnderlinedModalTextCTA = styled(ModalText).attrs({
+  modal: 'hidDevice',
+  node: 'small',
   minWidth: 'max-content',
   fontSize: 'smaller',
   justifyContent: 'center'

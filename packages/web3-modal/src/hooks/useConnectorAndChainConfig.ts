@@ -13,42 +13,53 @@ import { ConnectorEnhanced } from '../types'
 export function useConnectorAndChainConfig(
   configProps: PstlWeb3ModalProps<number>
 ): Omit<PstlWeb3ModalProps<number>, 'connectors'> & { connectors: ConnectorEnhanced<any, any>[] } {
+  // Pick out the deps
+  const {
+    chains,
+    callbacks,
+    connectors,
+    frameConnectors,
+    modals: {
+      walletConnect: { projectId: wcProjectId }
+    },
+    options
+  } = configProps
   return useMemo(() => {
     // Config.options.hardFilterChainsCallback call
     // Useful if you need to filter chains based on domain (prod vs dev)
-    const config = hardFilterChains(configProps)
-    const status = getAppType(config.options?.escapeHatches?.appType)
+    const chains = hardFilterChains({ callbacks: configProps.callbacks, chains: configProps.chains })
+    const status = getAppType(configProps.options?.escapeHatches?.appType)
     switch (status) {
       case 'SAFE_APP': {
         devDebug('[@past3lle/web3-modal] App type detected: SAFE APP')
 
-        const connectors = mapChainsToConnectors([addConnector(SafeConnector, { debug: true })], config)
-        return { ...config, connectors }
+        const connectors = mapChainsToConnectors([addConnector(SafeConnector, { debug: true })], chains)
+        return { ...configProps, chains, connectors }
       }
       case 'LEDGER_LIVE': {
         devDebug('[@past3lle/web3-modal] App type detected: LEDGER LIVE')
 
-        const connectors = mapChainsToConnectors([addConnector(LedgerIFrameConnector, {})], config)
-        return { ...config, connectors }
+        const connectors = mapChainsToConnectors([addConnector(LedgerIFrameConnector, {})], chains)
+        return { ...configProps, chains, connectors }
       }
       case 'IFRAME': {
         devDebug('[@past3lle/web3-modal] App type detected: IFRAME APP')
 
         const connectors = mapChainsToConnectors(
-          [addConnector(IFrameEthereumConnector, {}), ...(config?.frameConnectors || [])],
-          config
+          [addConnector(IFrameEthereumConnector, {}), ...(configProps?.frameConnectors || [])],
+          chains
         )
-        return { ...config, connectors }
+        return { ...configProps, connectors }
       }
       case 'TEST_FRAMEWORK_IFRAME':
       case 'DAPP': {
-        devDebug('[@past3lle/web3-modal] App type detected: NORMAL DAPP', config?.connectors)
+        devDebug('[@past3lle/web3-modal] App type detected: NORMAL DAPP', configProps?.connectors)
 
-        // Map connectors and pass config chains
-        const userConnectors = mapChainsToConnectors(config?.connectors || [], config)
+        // Map connectors and pass configProps chains
+        const userConnectors = mapChainsToConnectors(configProps?.connectors || [], chains)
         const walletConnectProviders = w3mConnectors({
-          projectId: config.modals.walletConnect.projectId,
-          chains: config.chains as Chain[]
+          projectId: wcProjectId,
+          chains: configProps.chains as Chain[]
         })
 
         const connectors = userConnectors.slice()
@@ -67,8 +78,18 @@ export function useConnectorAndChainConfig(
           connectors.push(...walletConnectProviders)
         }
 
-        return { ...config, connectors }
+        return { ...configProps, connectors }
       }
     }
-  }, [configProps])
+    // We dont need to pass the entire configs object as a dep
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    callbacks?.filterChains,
+    callbacks?.hardLimitChains,
+    chains,
+    connectors,
+    frameConnectors,
+    options?.escapeHatches?.appType,
+    wcProjectId
+  ])
 }

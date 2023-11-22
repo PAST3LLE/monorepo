@@ -22,20 +22,16 @@ export function getAppType(forcedAppType?: AppType) {
 
 export function mapChainsToConnectors(
   connectors: ((chains: Chain<number>[]) => ConnectorEnhanced<any, any>)[],
-  config: PstlWeb3ModalProps
+  chains: PstlWeb3ModalProps['chains']
 ) {
-  return connectors.map((conn) => conn?.(config.chains as Chain<number>[]))
+  return connectors.map((conn) => conn?.(chains as Chain<number>[]))
 }
 
-export function hardFilterChains(config: PstlWeb3ModalProps): PstlWeb3ModalProps {
-  const limitChainsFn = config.callbacks?.filterChains || config.callbacks?.hardLimitChains
-  if (!limitChainsFn) return config
+export function hardFilterChains({ callbacks, chains }: Pick<PstlWeb3ModalProps, 'chains' | 'callbacks'>) {
+  const limitChainsFn = callbacks?.filterChains || callbacks?.hardLimitChains
+  if (!limitChainsFn) return chains
 
-  const filteredChains = limitChainsFn(config.chains)
-  return {
-    ...config,
-    chains: filteredChains
-  }
+  return limitChainsFn(chains)
 }
 
 export function softFilterChains(config: PstlWeb3ModalProps): PstlWeb3ModalProps {

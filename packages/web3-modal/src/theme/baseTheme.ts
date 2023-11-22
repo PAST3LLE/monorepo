@@ -1,4 +1,4 @@
-import { BLACK_TRANSPARENT, ThemeByModes } from '@past3lle/theme'
+import { ThemeByModes } from '@past3lle/theme'
 
 import { PstlModalThemeExtension } from './types'
 
@@ -19,8 +19,8 @@ const DEFAULT_FONT_PROPS = {
   family: 'inherit',
   textAlign: 'initial'
 } as const
-
 const DEFAULT_BUTTON_PROPS = {
+  height: 'auto',
   font: {
     ...DEFAULT_FONT_PROPS,
     color: BASE_TEXT_COLOUR,
@@ -28,11 +28,7 @@ const DEFAULT_BUTTON_PROPS = {
     weight: 300,
     textTransform: 'uppercase'
   },
-  background: {
-    background: BLACK_TRANSPARENT,
-    backgroundImg: 'unset',
-    connected: '#8576f2cc'
-  },
+  background: { default: '#383e3d', url: 'none' },
   border: {
     border: 'unset',
     radius: '1em',
@@ -45,7 +41,7 @@ const DEFAULT_BUTTON_PROPS = {
   hoverAnimations: true
 } as const
 
-const DEFAULT_ACCOUNT_BUTTON_FONT_PROPS = {
+const DEFAULT_BUTTON_FONT_PROPS = {
   ...DEFAULT_FONT_PROPS,
   color: BASE_TEXT_COLOUR,
   size: '1em',
@@ -54,13 +50,20 @@ const DEFAULT_ACCOUNT_BUTTON_FONT_PROPS = {
 } as const
 
 const DEFAULT_ACCOUNT_BUTTON_BACKGROUND_PROPS = {
-  font: DEFAULT_ACCOUNT_BUTTON_FONT_PROPS,
-  background: {
-    background: DEFAULT_BUTTON_PROPS.background.connected,
-    backgroundImg: DEFAULT_BUTTON_PROPS.background.backgroundImg
-  },
+  font: DEFAULT_BUTTON_FONT_PROPS,
+  background: { default: DEFAULT_BUTTON_PROPS.background.default, url: 'none' },
   border: DEFAULT_BUTTON_PROPS.border
 } as const
+
+const MAIN_COLOURS = {
+  main: '#4f6d6beb',
+  secondary: '#383e3d',
+  alternate: 'rgba(0,0,0,0.5)',
+  success: '#8576f2cc',
+  error: '#7f1d1db0',
+  warning: 'navajowhite',
+  url: 'unset'
+}
 
 const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
   modes: {
@@ -71,6 +74,69 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
         base: {
           ...DEFAULT_BASE_MODAL_PROPS,
           font: DEFAULT_FONT_PROPS,
+          button: {
+            main: DEFAULT_BUTTON_PROPS,
+            secondary: {
+              ...DEFAULT_BUTTON_PROPS,
+              background: {
+                default: 'coral',
+                url: 'none'
+              }
+            },
+            alternate: {
+              ...DEFAULT_BUTTON_PROPS,
+              background: { default: 'navajowhite', url: 'none' }
+            }
+          },
+          container: {
+            main: {
+              background: 'navajowhite',
+              border: DEFAULT_BUTTON_PROPS.border
+            },
+            secondary: {
+              background: 'slategray',
+              border: DEFAULT_BUTTON_PROPS.border
+            },
+            alternate: {
+              background: 'coral',
+              border: DEFAULT_BUTTON_PROPS.border
+            }
+          },
+          text: {
+            main: DEFAULT_FONT_PROPS,
+            header: {
+              ...DEFAULT_FONT_PROPS,
+              textTransform: 'uppercase',
+              size: '1.4em',
+              weight: 600,
+              letterSpacing: '-1px'
+            },
+            subHeader: {
+              ...DEFAULT_FONT_PROPS,
+              color: '#bebebe',
+              textTransform: 'uppercase',
+              size: '1.2em',
+              weight: 100,
+              letterSpacing: '-1px'
+            },
+            small: {
+              ...DEFAULT_FONT_PROPS,
+              weight: 500,
+              size: '0.7em'
+            },
+            error: {
+              ...DEFAULT_FONT_PROPS,
+              color: '#7f1d1db0',
+              textTransform: 'uppercase',
+              weight: 300
+            },
+            warning: {
+              ...DEFAULT_FONT_PROPS,
+              color: 'navajowhite',
+              textTransform: 'uppercase',
+              weight: 300
+            }
+          },
           title: {
             font: {
               ...DEFAULT_FONT_PROPS,
@@ -88,57 +154,48 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
               border: '1px solid rgba(255 255 255 / 45%)',
               color: 'rgba(255 255 255 / 45%)'
             },
-            background: {
-              background: 'transparent',
-              backgroundImg: 'none'
-            }
+            background: 'transparent'
           },
           error: {
             font: {
               color: 'ghostwhite'
             },
-            background: {
-              background: '#000000de'
-            }
+            background: 'black' || '#000000de'
           },
           helpers: {
             show: true,
-            font: { color: BASE_TEXT_COLOUR, size: '0.55em' }
+            font: { color: BASE_TEXT_COLOUR, size: '0.7em' }
           },
           closeIcon: {
             color: BASE_TEXT_COLOUR,
             size: 40,
-            background: {
-              background: 'transparent'
-            }
+            background: 'transparent'
           },
-          background: {
-            background: '#8984cfeb',
-            backgroundImg: 'unset'
-          },
+          background: MAIN_COLOURS,
+
           padding: '1em'
         },
         connection: {
           ...DEFAULT_BASE_MODAL_PROPS,
           button: {
-            ...DEFAULT_BUTTON_PROPS,
-            height: '90px'
+            main: {
+              ...DEFAULT_BUTTON_PROPS,
+              height: '90px'
+            }
           }
         },
         hidDevice: {
           container: {
             main: {
-              background: {
-                backgroundImg: 'unset',
-                background: '#292531e3'
-              },
+              background: MAIN_COLOURS.main,
               border: DEFAULT_BUTTON_PROPS.border
             },
-            addressesList: {
-              background: {
-                backgroundImg: 'unset',
-                background: '#f8f8ff2e'
-              },
+            secondary: {
+              background: MAIN_COLOURS.secondary,
+              border: DEFAULT_BUTTON_PROPS.border
+            },
+            alternate: {
+              background: MAIN_COLOURS.alternate,
               border: DEFAULT_BUTTON_PROPS.border
             }
           }
@@ -146,51 +203,23 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
         account: {
           ...DEFAULT_BASE_MODAL_PROPS,
           container: {
-            addressAndBalance: {
+            main: {
               border: DEFAULT_BUTTON_PROPS.border,
-              background: {
-                backgroundImg: 'none',
-                background: DEFAULT_BUTTON_PROPS.background.background,
-                unsupported: '#7f1d1db0'
-              }
+              background: DEFAULT_BUTTON_PROPS.background.default
             },
-            walletAndNetwork: {
+            alternate: {
               border: DEFAULT_BUTTON_PROPS.border,
-              background: {
-                backgroundImg: 'none',
-                background: DEFAULT_BUTTON_PROPS.background.background
-              }
+              background: DEFAULT_BUTTON_PROPS.background.default
             }
           },
           connectionImages: {
             size: '3.5em',
-            background: {
-              background: 'rgba(0,0,0,0.5)'
-            }
+            background: 'rgba(0,0,0,0.5)'
           },
           text: {
             main: {
-              font: {
-                ...DEFAULT_ACCOUNT_BUTTON_FONT_PROPS,
-                size: '1.2em'
-              }
-            },
-            balance: {
-              font: {
-                ...DEFAULT_ACCOUNT_BUTTON_FONT_PROPS,
-                color: 'lightgrey',
-                size: '1em',
-                weight: 100,
-                letterSpacing: '-1px'
-              }
-            },
-            address: {
-              font: {
-                ...DEFAULT_ACCOUNT_BUTTON_FONT_PROPS,
-                size: '1.4em',
-                weight: 600,
-                letterSpacing: '-0.8px'
-              }
+              ...DEFAULT_BUTTON_FONT_PROPS,
+              size: '1.2em'
             }
           },
           icons: {
@@ -199,17 +228,18 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
             copy: { url: '', invert: false }
           },
           button: {
-            disconnect: {
+            alternate: {
               border: DEFAULT_BUTTON_PROPS.border,
-              font: DEFAULT_ACCOUNT_BUTTON_FONT_PROPS,
-              background: {
-                background: '#7b2727b0',
-                backgroundImg: 'unset'
-              }
+              font: DEFAULT_BUTTON_FONT_PROPS,
+              background: { default: '#7b2727b0', url: 'none' }
             },
-            switchNetwork: DEFAULT_ACCOUNT_BUTTON_BACKGROUND_PROPS,
-            copy: DEFAULT_ACCOUNT_BUTTON_BACKGROUND_PROPS,
-            explorer: DEFAULT_ACCOUNT_BUTTON_BACKGROUND_PROPS
+            main: {
+              ...DEFAULT_ACCOUNT_BUTTON_BACKGROUND_PROPS,
+              background: {
+                default: MAIN_COLOURS.main,
+                url: 'none'
+              }
+            }
           }
         }
       }

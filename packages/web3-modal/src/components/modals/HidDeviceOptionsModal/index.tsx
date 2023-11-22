@@ -1,4 +1,5 @@
 import { Column, InfoCircle, MouseoverTooltip, Row, SpinnerCircle, useSelect } from '@past3lle/components'
+import { useIsExtraSmallMediaWidth } from '@past3lle/hooks'
 import { BLACK_TRANSPARENT, OFF_WHITE, setBestTextColour, transparentize } from '@past3lle/theme'
 import { truncateAddress } from '@past3lle/utils'
 import type { LedgerHIDConnector } from '@past3lle/wagmi-connectors'
@@ -11,8 +12,9 @@ import { ModalPropsCtrlState } from '../../../controllers/types/controllerTypes'
 import { useGetChainLogoCallback, usePstlWeb3Modal, useUserConnectionInfo } from '../../../hooks'
 import { LoadingScreen } from '../../LoadingScreen'
 import { NoChainLogo } from '../../NoChainLogo'
-import { AccountModalButton, AccountText, FooterActionButtonsRow, ModalColumnContainer } from '../AccountModal/styled'
+import { AccountText, FooterActionButtonsRow, ModalColumnContainer } from '../AccountModal/styled'
 import { ConnectorOption } from '../ConnectionModal/ConnectorOption'
+import { ModalButton } from '../common/styled'
 import { BaseModalProps, ModalId } from '../common/types'
 import { useHidModalPath, useHidModalStore, useHidUpdater } from './hooks'
 import {
@@ -23,9 +25,11 @@ import {
   HidModalHeaderRow,
   HidModalTextInput,
   HidModalWalletsWrapper,
-  HighlightedAccountText,
+  HighlightedModalText,
+  ModalHeaderText,
+  ModalSubHeaderText,
   PathSelectAndInputContainer,
-  UnderlinedAccountCTA
+  UnderlinedModalTextCTA
 } from './styleds'
 
 const SUPPORTED_BIP_DERIVATION_PATHS = [
@@ -96,28 +100,28 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
   })
 
   const { modals: theme } = useTheme()
+  const isExtraSmallWidth = useIsExtraSmallMediaWidth()
 
   if (!loadedSavedConfig) return <LoadingScreen loadingText="Loading user HID device config..." />
 
   return (
-    <ModalColumnContainer width="100%" layout="Other">
-      {/* Address and Balance Row */}
-      <HidModalContainer padding="1em">
+    <ModalColumnContainer width="100%" layout="Other" overflowY={'auto'}>
+      <HidModalContainer modal="hidDevice" node="alternate" padding="1em">
         <Column flex="0 1 auto" width="100%">
           {hidConnector && (
             <Column maxHeight={115} height="auto">
-              <AccountText type="main">
+              <AccountText node="main">
                 Network:{' '}
-                <AccountText type="balance" display="inline-flex" justifyContent={'center'}>
+                <ModalSubHeaderText node="subHeader" display="inline-flex" justifyContent={'center'}>
                   {chain?.name || chain?.id || 'disconnected'}{' '}
                   {currChainLogo ? (
                     <img src={currChainLogo} style={CHAIN_IMAGE_STYLES} />
                   ) : (
                     <NoChainLogo style={CHAIN_IMAGE_STYLES} />
                   )}
-                </AccountText>
+                </ModalSubHeaderText>
               </AccountText>
-              <HidModalWalletsWrapper view="grid" width="auto">
+              <HidModalWalletsWrapper modal="connection" node="main" view="grid" width="auto">
                 {supportedChains.map((sChain) => {
                   if (!switchNetworkAsync || chain?.id === sChain.id) return null
                   const chainLogo = getChainLogo(sChain.id)
@@ -141,20 +145,20 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
             </Column>
           )}
           <Row justifyContent="flex-start" gap="10px" style={{ zIndex: 1 }} title="derivation-path">
-            <AccountText id="pstl-web3-modal-address-text" type="main">
+            <ModalHeaderText id={`${ModalId.HID_DEVICE_OPTIONS}__derivation-path-header`} node="header">
               Select a derivation path
-            </AccountText>
+            </ModalHeaderText>
           </Row>
           <Row id={`${ModalId.ACCOUNT}__balance-text`}>
-            <AccountText type="balance">Current Path:</AccountText>
-            <HighlightedAccountText
-              color={setBestTextColour(theme?.hidDevice?.container?.main?.background?.background || '#000')}
+            <ModalSubHeaderText node="subHeader">{!isExtraSmallWidth ? 'Current' : ''} Path:</ModalSubHeaderText>
+            <HighlightedModalText
+              color={setBestTextColour(theme?.hidDevice?.container?.alternate?.background || '#000')}
             >
               {selection}
-            </HighlightedAccountText>
-            <HighlightedAccountText backgroundColor={isCustomPath ? '#8ac8d4' : 'lightgray'} color="#000">
+            </HighlightedModalText>
+            <HighlightedModalText backgroundColor={isCustomPath ? '#8ac8d4' : 'lightgray'} color="#000">
               {isCustomPath ? 'CUSTOM' : 'PRESET'}
-            </HighlightedAccountText>
+            </HighlightedModalText>
           </Row>
         </Column>
         {/* PATH SELECTOR / INPUT */}
@@ -179,50 +183,52 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
             flex={`1 1 ${!isCustomPath ? 220 : 139}px`}
             padding="0.5rem"
             borderRadius={theme?.base?.input?.border?.radius}
-            backgroundColor={!isCustomPath ? theme?.account?.button?.switchNetwork?.background?.background : ''}
+            backgroundColor={!isCustomPath ? theme?.base?.background?.main : ''}
           >
-            <AccountText
+            <ModalSubHeaderText
               fontSize="0.8em"
               marginBottom="0.25rem"
-              type="balance"
+              node="subHeader"
               css={`
                 white-space: nowrap;
               `}
             >
               PRESET PATH (recommended)
-            </AccountText>
+            </ModalSubHeaderText>
             <Selector arrowStrokeColor={isCustomPath ? DISABLED_SELECTOR_COLOR : 'ghostwhite'} arrowSize={30} />
           </Column>
           {/* CUSTOM */}
           <Row
             flex={`1 1 ${isCustomPath ? 350 : 146}px`}
-            backgroundColor={isCustomPath ? theme?.account?.button?.switchNetwork?.background?.background : ''}
+            backgroundColor={isCustomPath ? theme?.base?.background?.main : ''}
             width="auto"
+            minWidth={!isCustomPath ? '186px' : 'unset'}
             padding="0.5rem"
             borderRadius={theme?.base?.input?.border?.radius}
           >
             <Column width="100%">
-              <AccountText fontSize="0.8em" marginBottom="0.25rem" type="balance">
+              <ModalSubHeaderText fontSize="0.8em" marginBottom="0.25rem" node="subHeader">
                 OR CUSTOM ETH PATH{' '}
                 <MouseoverTooltip
-                  text="Set your own ETH derivation path where * indicates the index of user accounts. e.g m/44'/60'/*'/0/0"
+                  text={
+                    "Set your own ETH derivation path starting with m/44'/60'/ and add * indicating the index of user accounts. e.g m/44'/60'/*'/0/0"
+                  }
                   placement="top"
                   styles={{
                     fontFamily: 'monospace, arial, system-ui',
                     fontSize: '0.75em',
                     color: theme?.base?.font?.color || OFF_WHITE,
                     border: 'none',
-                    backgroundColor: theme?.base?.background?.background || BLACK_TRANSPARENT
+                    backgroundColor: theme?.base?.background?.main || BLACK_TRANSPARENT
                   }}
                 >
                   <InfoCircle label="?" size={15} color="black" marginLeft="3px" />
                 </MouseoverTooltip>
-              </AccountText>
+              </ModalSubHeaderText>
               <HidModalTextInput
-                type="text"
                 value={isCustomPath ? path ?? '' : ''}
-                placeholder={'m/TYPE/PATH/HERE'}
-                minWidth={isCustomPath ? '300px' : 'unset'}
+                placeholder={"m / 44' 60' / *' / 0 / 0"}
+                minWidth={isCustomPath ? '300px' : 'min-content'}
                 fontWeight={isCustomPath ? 300 : 100}
                 onChange={(e) => {
                   pathCallbacks.setIsCustomPath(true)
@@ -233,39 +239,37 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
           </Row>
         </PathSelectAndInputContainer>
         {/* ADDRESSES TABLE / LIST */}
-        <Column margin="1rem 0 0">
+        <Column margin="1rem 0 0" width="100%">
           <Row justifyContent="flex-start" gap="10px" style={{ zIndex: 1 }} title="derivation-path">
-            <AccountText id="pstl-web3-modal-address-text" type="main">
+            <ModalHeaderText id={`${ModalId.HID_DEVICE_OPTIONS}__select-account-header`} node="header">
               Scan and select an account
-            </AccountText>
+            </ModalHeaderText>
           </Row>
           <Row id={`${ModalId.ACCOUNT}__balance-text`}>
-            <AccountText type="balance">Current Account:</AccountText>
-            {address ? (
-              <HighlightedAccountText
-                fontWeight={500}
-                color={setBestTextColour(theme?.hidDevice?.container?.main?.background?.background || '#000')}
-              >
-                {truncateAddress(address)}
-              </HighlightedAccountText>
-            ) : (
-              <strong style={{ color: 'indianred', fontVariationSettings: "'wght' 500", marginLeft: 5 }}>
-                DISCONNECTED
-              </strong>
-            )}
+            <ModalSubHeaderText node="subHeader">Current Account:</ModalSubHeaderText>
+            <HighlightedModalText
+              fontWeight={500}
+              backgroundColor={address ? undefined : theme?.base?.background?.error}
+              color={setBestTextColour(
+                (address ? theme?.hidDevice?.container?.main?.background : theme?.base?.background?.error) || '#000',
+                5
+              )}
+            >
+              {address ? truncateAddress(address) : 'DISCONNECTED'}
+            </HighlightedModalText>
           </Row>
         </Column>
         <HidModalAddressesList width="100%" gap="0" margin="1rem 0" zIndex={errorOptions?.show ? 0 : 1}>
           <HidModalHeaderRow padding="0rem 0.25rem" marginBottom="0.25rem">
-            <AccountText type="balance" as="strong">
+            <ModalSubHeaderText node="subHeader" as="strong">
               Address
-            </AccountText>
-            <AccountText type="balance" as="strong">
+            </ModalSubHeaderText>
+            <ModalSubHeaderText node="subHeader" as="strong">
               Path
-            </AccountText>
-            <AccountText type="balance" as="strong">
+            </ModalSubHeaderText>
+            <ModalSubHeaderText node="subHeader" as="strong">
               Balance
-            </AccountText>
+            </ModalSubHeaderText>
           </HidModalHeaderRow>
           {accountsAndBalances?.length ? (
             accountsAndBalances.map(({ address: acct, balance }, idx) => {
@@ -295,9 +299,12 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
           gap="2rem"
           style={{ zIndex: errorOptions?.show ? 0 : 1 }}
         >
-          <AccountModalButton
-            type="explorer"
-            id={`${ModalId.ACCOUNT}__explorer-button`}
+          <ModalButton
+            id={`${ModalId.HID_DEVICE_OPTIONS}__scan-button`}
+            modal="account"
+            node="main"
+            justifyContent="center"
+            height="auto"
             connected={false}
             padding="0.6rem"
             onClick={storeCallbacks.getAccounts}
@@ -313,12 +320,12 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
             ) : (
               'Load more'
             )}
-          </AccountModalButton>
+          </ModalButton>
           {address && (
-            <UnderlinedAccountCTA onClick={() => close()}>
+            <UnderlinedModalTextCTA onClick={close}>
               or skip and use current:&nbsp;
               <span style={{ fontVariationSettings: "'wght' 500" }}>{truncateAddress(address)}</span>
-            </UnderlinedAccountCTA>
+            </UnderlinedModalTextCTA>
           )}
         </FooterActionButtonsRow>
       </HidModalContainer>

@@ -42,7 +42,7 @@ function ConnectorOptionBase({
 }: ConnectorOptionProps) {
   return (
     <div option-type={optionType} option-value={optionValue} id={id}>
-      <ModalButton onClick={callback} connected={connected} {...buttonProps}>
+      <ModalButton modal="connection" node="main" onClick={callback} connected={connected} {...buttonProps}>
         {logo}
         {label}
         {isRecommended && <RecommendedLabel />}

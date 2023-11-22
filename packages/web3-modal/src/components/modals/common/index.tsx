@@ -52,7 +52,13 @@ export function BaseModal({
       }}
       {...restModalProps}
     >
-      <InnerContainer justifyContent="flex-start" gap="0.75rem" isError={!!state.connect?.error?.message}>
+      <InnerContainer
+        modal="base"
+        node="main"
+        justifyContent="flex-start"
+        gap="0.75rem"
+        isError={!!state.connect?.error?.message}
+      >
         <Row width="100%" marginBottom="0.5em">
           <ModalTitle>{title}</ModalTitle>
           <CloseIcon height={30} width={100} onClick={onDismiss} />

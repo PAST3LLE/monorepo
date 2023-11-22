@@ -1,9 +1,10 @@
 import { Column, Row } from '@past3lle/components'
 import { fromExtraSmall, upToExtraSmall, upToSmall } from '@past3lle/theme'
+import { DeepRequired } from '@past3lle/types'
 import styled from 'styled-components'
 
-import { PstlModalThemeExtension } from '../../../theme'
-import { ModalButton, ModalTitleText } from '../common/styled'
+import { PstlModalThemeExtension, PstlSubModalsTheme, RequiredPstlSubModalsTheme } from '../../../theme'
+import { ModalButton, ModalText } from '../common/styled'
 import { ModalId } from '../common/types'
 
 export const Icon = styled.img`
@@ -14,50 +15,30 @@ export const Icon = styled.img`
   opacity: 0.8;
 `
 
-export const AccountModalButton = styled(ModalButton).attrs((props) => ({
-  height: props.height || 'auto',
-  justifyContent: props.justifyContent || 'center',
-  padding: props.padding || '0.3rem 0.75rem',
-  ...props
-}))<{ type: keyof PstlModalThemeExtension['modals']['account']['button'] }>`
-  background: ${({ theme, type }) => theme?.modals?.account?.button?.[type]?.background?.background};
-  color: ${({ theme, type }) => theme?.modals?.account?.button?.[type]?.font?.color};
-  font-size: ${({ theme, type }) => theme?.modals?.account?.button?.[type]?.font?.size};
-  font-style: ${({ theme, type }) => theme?.modals?.account?.button?.[type]?.font?.style};
-  letter-spacing: ${({ theme, type }) => theme?.modals?.account?.button?.[type]?.font?.letterSpacing};
-  font-weight: ${({ theme, type }) => theme?.modals?.account?.button?.[type]?.font?.weight};
-  font-variation-settings: 'wght' ${({ theme, type }) => theme?.modals?.account?.button?.[type]?.font?.weight};
-
-  text-transform: ${({ theme, type }) => theme?.modals?.account?.button?.[type]?.font?.textTransform};
-  text-shadow: ${({ theme, type }) => theme?.modals?.account?.button?.[type]?.font?.textShadow};
-  text-align: ${({ theme, type }) => theme?.modals?.account?.button?.[type]?.font?.textAlign};
-
-  border: ${({ theme, type }) => theme?.modals?.account?.button?.[type]?.border?.border};
+export const AccountModalButton = styled(ModalButton)`
+  justify-content: center;
 `
 export const FooterActionButtonsRow = styled(Row)`
   flex: 1 1 max-content;
 `
-export const AccountText = styled(ModalTitleText)<{
-  type: keyof PstlModalThemeExtension['modals']['account']['text']
+export const AccountText = styled(ModalText).attrs((props) => ({
+  modal: 'account',
+  ...props
+}))``
+
+export const AccountStyledContainer = styled(Column)<{
+  cursor?: string
+  node: keyof DeepRequired<PstlModalThemeExtension>['modals']['account']['container']
 }>`
-  line-height: 1.2;
-
-  color: ${({ theme, type }) => theme?.modals?.account?.text?.[type]?.font?.color};
-  font-size: ${({ theme, type }) => theme?.modals?.account?.text?.[type]?.font?.size};
-  font-style: ${({ theme, type }) => theme?.modals?.account?.text?.[type]?.font?.style};
-  font-weight: ${({ theme, type }) => theme?.modals?.account?.text?.[type]?.font?.weight};
-  letter-spacing: ${({ theme, type }) => theme?.modals?.account?.text?.[type]?.font?.letterSpacing};
-  font-variation-settings: 'wght' ${({ theme, type }) => theme?.modals?.account?.text?.[type]?.font?.weight};
-
-  text-transform: ${({ theme, type }) => theme?.modals?.account?.text?.[type]?.font?.textTransform};
-  text-shadow: ${({ theme, type }) => theme?.modals?.account?.text?.[type]?.font?.textShadow};
-  text-align: ${({ theme, type }) => theme?.modals?.account?.text?.[type]?.font?.textAlign};
-
-  ${(props) => props?.css}
+  background-color: ${({ theme, node }) => theme?.modals?.account?.container?.[node]?.background};
 `
 
-export const AccountBottomColumnContainer = styled(Column)`
-  background-color: ${({ theme }) => theme?.modals?.account?.container?.addressAndBalance?.background?.background};
+export const AddressAndBalanceColumnContainer = styled(AccountStyledContainer).attrs((props) => ({
+  modal: 'account' as keyof PstlSubModalsTheme,
+  node: 'main',
+  ...props
+}))<{ backgroundColor?: string; cursor: string }>`
+  background: ${({ theme, modal, node }) => theme.modals?.[modal]?.container?.[node]?.background};
   > ${Column}:first-child {
     flex: 0 1 68%;
     min-width: max-content;
@@ -73,7 +54,7 @@ export const AccountLogosRow = styled(Row)<{ backgroundFrameColor?: string }>`
     height: 100%;
     max-width: ${({ theme }) => theme.modals?.account?.connectionImages?.size};
     padding: 1rem;
-    background-color: ${({ theme }) => theme.modals?.account?.connectionImages?.background?.background};
+    background-color: ${({ theme }) => theme.modals?.account?.connectionImages?.background};
   }
   > img:first-child,
   > svg:first-child {
@@ -85,7 +66,13 @@ export const AccountLogosRow = styled(Row)<{ backgroundFrameColor?: string }>`
   }
 `
 
-export const AccountWalletNetworkRow = styled(Row)<{ cursor: string }>`
+export const WalletAndNetworkRowContainer = styled(Row).attrs((props) => ({
+  modal: 'account' as keyof PstlSubModalsTheme,
+  node: 'main' as keyof RequiredPstlSubModalsTheme['account']['container'],
+  ...props
+}))<{ backgroundColor?: string; cursor: string }>`
+  background: ${({ theme, modal, backgroundColor = theme.modals?.[modal]?.container?.alternate?.background }) =>
+    backgroundColor};
   z-index: 1;
   ${Row}#${ModalId.ACCOUNT}__wallets-button {
     cursor: ${({ cursor }) => cursor};
@@ -180,11 +167,11 @@ export const ModalColumnContainer = styled(Column)<{ layout: 'Account' | 'Other'
   ${({ theme }) => upToExtraSmall`
     // Address text
     ${AccountText}#pstl-web3-modal-address-text, ${AccountText}#pstl-web3-modal-wallet-text, ${AccountText}#pstl-web3-modal-network-text {
-      font-size: calc(${theme.modals?.account?.text?.address?.font?.size} * 0.8);
+      font-size: calc(${theme.modals?.account?.text?.header?.size} * 0.8);
     }
   `}
   ${({ layout = 'Account' }) => fromExtraSmall`
-    ${AccountBottomColumnContainer} {
+    ${AccountStyledContainer} {
       flex-flow: row wrap;
 
       > #${ModalId.ACCOUNT}__balance-text {

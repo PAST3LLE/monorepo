@@ -3,7 +3,7 @@ import { DeepRequired } from '@past3lle/types'
 
 type DefaultCSSProps = string | 'initial' | 'none' | 'unset' | 'inherit'
 
-interface FontStyles {
+export interface FontStyles {
   color?: DefaultCSSProps
   family?: DefaultCSSProps
   style?: DefaultCSSProps
@@ -20,130 +20,115 @@ interface BorderStyles {
   color?: string
   radius?: string
 }
-interface BackgroundStyles {
-  background?: string
-  backgroundImg?: BackgroundPropertyFull
+export interface BackgroundStyles {
+  main?: string
+  secondary?: string
+  alternate?: string
+  success?: string
+  error?: string
+  warning?: string
+  url?: BackgroundPropertyFull
 }
 
-interface AccountModalButtons {
+export interface ButtonStyles {
   font?: FontStyles
-  background?: {
-    background?: string
-    backgroundImg?: BackgroundPropertyFull
+  border?: BorderStyles
+  height?: string
+  hoverAnimations?: boolean
+  background?: { default?: BackgroundStyles['main']; url?: BackgroundPropertyFull }
+  icons?: {
+    filter?: string
+    height?: string
   }
+}
+
+export interface ContainerStyles {
+  background?: BackgroundStyles['main']
   border?: BorderStyles
 }
 
-export type PstlModalThemeExtension = Partial<ThemeContentPartsRequired> & DeepRequired<PstlModalTheme>
-export interface PstlModalTheme {
-  modals?: {
-    base?: {
-      filter?: string
-      baseFontSize?: number
-      font?: FontStyles
-      title?: {
-        font?: FontStyles
-        margin?: string
-      }
-      input?: {
-        border?: BorderStyles
-        background?: BackgroundStyles
-        font?: FontStyles
-      }
-      error?: {
-        font?: Pick<FontStyles, 'color'>
-        background?: Pick<BackgroundStyles, 'background'>
-      }
-      helpers?: {
-        show?: boolean
-        font?: Pick<FontStyles, 'color' | 'size'>
-      }
-      closeIcon?: {
-        color?: string
-        /**
-         * Size of icon in pixels
-         * @type number
-         */
-        size?: number
-        background?: Omit<BackgroundStyles, 'backgroundImg'>
-      }
-      background?: BackgroundStyles
-      padding?: string
-    }
-    connection?: {
-      filter?: string
-      baseFontSize?: number
-      button?: {
-        font?: FontStyles
-        background?: BackgroundStyles & {
-          connected?: string
-        }
-        height?: string
-        icons?: {
-          filter?: string
-          height?: string
-        }
-        border?: BorderStyles
-        hoverAnimations?: boolean
-      }
-    }
-    hidDevice?: {
-      container?: {
-        main?: {
-          background?: BackgroundStyles
-          border?: BorderStyles
-        }
-        addressesList?: {
-          background?: BackgroundStyles
-          border?: BorderStyles
-        }
-      }
-    }
-    account?: {
-      filter?: string
-      baseFontSize?: number
-      container: {
-        addressAndBalance: {
-          background?: BackgroundStyles & { unsupported?: string }
-          border?: BorderStyles
-        }
-        walletAndNetwork: {
-          background?: BackgroundStyles
-          border?: BorderStyles
-        }
-      }
-      connectionImages?: {
-        size?: string
-        background?: {
-          background?: string
-        }
-      }
-      icons?: {
-        wallet?: { url: string; invert?: boolean }
-        network?: { url: string; invert?: boolean }
-        copy?: { url: string; invert?: boolean }
-      }
-      button?: {
-        disconnect?: AccountModalButtons
-        switchNetwork?: AccountModalButtons
-        explorer?: AccountModalButtons
-        copy?: AccountModalButtons
-      }
-      text?: {
-        main?: {
-          font?: FontStyles
-        }
-        balance?: {
-          font?: FontStyles
-        }
-        address?: {
-          font?: FontStyles
-        }
-      }
-    }
+export interface SharedModalTheme {
+  background?: BackgroundStyles
+  baseFontSize?: number
+  filter?: string
+  font?: FontStyles
+  button?: {
+    main?: ButtonStyles
+    secondary?: ButtonStyles
+    alternate?: ButtonStyles
+  }
+  container?: {
+    main?: ContainerStyles
+    secondary?: ContainerStyles
+    alternate?: ContainerStyles
+  }
+  text?: {
+    main?: FontStyles
+    header?: FontStyles
+    subHeader?: FontStyles
+    small?: FontStyles
+    error?: FontStyles
+    warning?: FontStyles
   }
 }
-
+export interface BaseModalTheme extends SharedModalTheme {
+  padding?: string
+  // Nested
+  title?: {
+    font?: FontStyles
+    margin?: string
+  }
+  input?: {
+    border?: BorderStyles
+    background?: BackgroundStyles['main']
+    font?: FontStyles
+  }
+  error?: {
+    font?: Pick<FontStyles, 'color'>
+    background?: Pick<BackgroundStyles, 'error'>['error']
+  }
+  helpers?: {
+    show?: boolean
+    font?: Pick<FontStyles, 'color' | 'size'>
+  }
+  closeIcon?: {
+    color?: string
+    /**
+     * Size of icon in pixels
+     * @type number
+     */
+    size?: number
+    background?: Omit<BackgroundStyles, 'backgroundImg'>['main']
+  }
+}
+interface AccountModalTheme extends SharedModalTheme {
+  connectionImages?: {
+    size?: string
+    background?: string
+  }
+  icons?: {
+    wallet?: { url: string; invert?: boolean }
+    network?: { url: string; invert?: boolean }
+    copy?: { url: string; invert?: boolean }
+  }
+}
+type ConnectionModal = SharedModalTheme
+type HidDeviceModal = SharedModalTheme
+export interface PstlSubModalsTheme {
+  base?: BaseModalTheme
+  account?: AccountModalTheme
+  connection?: ConnectionModal
+  hidDevice?: HidDeviceModal
+}
+export type RequiredPstlSubModalsTheme = DeepRequired<PstlSubModalsTheme>
+export type PstlModalKeys = keyof PstlSubModalsTheme
+export interface PstlModalTheme {
+  modals?: PstlSubModalsTheme
+}
+export type PstlModalThemeExtension = Partial<ThemeContentPartsRequired> & {
+  modals?: PstlSubModalsTheme & { base: DeepRequired<BaseModalTheme> }
+}
+export type RequiredPstlModalThemeExtension = DeepRequired<PstlModalThemeExtension>
 declare module 'styled-components' {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
   export interface DefaultTheme extends PstlModalTheme, ThemeBaseRequired {}

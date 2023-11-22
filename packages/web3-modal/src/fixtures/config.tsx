@@ -18,85 +18,16 @@ const WALLETCONNECT_LOGO =
 export const FORGE_LOGO =
   'https://raw.githubusercontent.com/PAST3LLE/monorepo/main/apps/skillforge-ui/public/512_logo.png'
 
-const BASE_BUTTON_BACKGROUND = {
-  background: '#301d4ea1',
-  connected: '#37b9927d'
-}
 const ACCOUNT_BUTTON = {
   font: {
     textTransform: 'inherit'
   },
   background: {
-    ...BASE_BUTTON_BACKGROUND,
-    background: '#5a3e85a1'
+    default: '#5a3e85a1',
+    url: 'none'
   }
 }
 export const pstlModalTheme = createTheme({
-  DARK: {
-    modals: {
-      base: {
-        title: {
-          font: {
-            color: 'black',
-            weight: 900
-          },
-          margin: '0px 60px 0px 10px'
-        },
-        background: {
-          backgroundImg: 'unset',
-          background: 'indianred'
-        },
-        input: {
-          border: {
-            color: 'rgba(255,255,255,0.45)',
-            border: '1px solid rgba(255,255,255,0.45)'
-          }
-        }
-      },
-      connection: {
-        filter: 'invert(1) brightness(0.65) contrast(1.8) hue-rotate(247deg) saturate(2)',
-        button: {
-          background: {
-            background: 'rgba(0,0,0,0.75)',
-            connected: 'green'
-          },
-          font: {
-            color: 'indianred',
-            weight: 500
-          }
-        }
-      }
-    }
-  },
-  LIGHT: {
-    modals: {
-      base: {
-        title: {
-          font: {
-            color: 'pink',
-            weight: 900
-          }
-        },
-        background: {
-          backgroundImg: 'unset',
-          background: '#818ccaf2'
-        }
-      },
-      connection: {
-        button: {
-          background: {
-            backgroundImg: 'unset',
-            background: '#fec0cb7d',
-            connected: 'green'
-          },
-          font: {
-            color: 'ghostwhite',
-            weight: 500
-          }
-        }
-      }
-    }
-  },
   DEFAULT: {
     modals: {
       base: {
@@ -107,9 +38,7 @@ export const pstlModalTheme = createTheme({
         closeIcon: {
           size: 45,
           color: 'ghostwhite',
-          background: {
-            background: 'rgba(255,255,255,0.1)'
-          }
+          background: 'rgba(255,255,255,0.1)'
         },
         title: {
           font: {
@@ -124,69 +53,58 @@ export const pstlModalTheme = createTheme({
           margin: '0px 20px'
         },
         background: {
-          backgroundImg: BG_LOGO
+          main: '#2d222cbd',
+          success: '#777b48',
+          url: BG_LOGO
         },
-        helpers: { show: true }
+        helpers: { show: true },
+        error: {
+          background: 'rgba(0,0,0, 0.85)'
+        }
       },
       connection: {
         baseFontSize: 16,
         button: {
-          background: BASE_BUTTON_BACKGROUND,
-          height: '80px',
-          icons: {
-            height: '80%'
-          },
-          border: { border: 'none', radius: '1em' },
-          font: {
-            color: 'ghostwhite',
-            size: '1em',
-            style: 'normal',
-            weight: 200,
-            letterSpacing: '-1px',
-            textShadow: '2px 2px 3px #0000005c',
-            textTransform: 'uppercase'
-          },
-          hoverAnimations: true
+          main: {
+            background: { default: '#2d222cbd', url: 'none' },
+            height: '80px',
+            icons: {
+              height: '80%'
+            },
+            border: { border: 'none', radius: '1em' },
+            font: {
+              color: 'ghostwhite',
+              size: '1em',
+              style: 'normal',
+              weight: 200,
+              letterSpacing: '-1px',
+              textShadow: '2px 2px 3px #0000005c',
+              textTransform: 'uppercase'
+            },
+            hoverAnimations: true
+          }
         }
       },
       account: {
-        container: {},
         icons: {
           copy: { url: 'https://img.icons8.com/?size=512&id=PoI08DwSsc7G&format=png', invert: false },
           network: { url: 'https://img.icons8.com/?size=512&id=PrryJ8KTxcOv&format=png', invert: false },
           wallet: { url: 'https://img.icons8.com/?size=512&id=O7exVeEFSVr3&format=png', invert: false }
         },
         text: {
-          address: {},
-          balance: {},
           main: {
-            font: {
-              weight: 500
-            }
+            weight: 500
           }
         },
         button: {
-          disconnect: {
+          alternate: {
             font: ACCOUNT_BUTTON.font,
-            background: {
-              ...BASE_BUTTON_BACKGROUND,
-              background: 'indianred'
-            }
+            background: { default: 'indianred', url: 'none' }
           },
-          switchNetwork: {
-            font: ACCOUNT_BUTTON.font,
-            background: ACCOUNT_BUTTON.background
-          },
-          explorer: {
-            font: ACCOUNT_BUTTON.font,
-            background: ACCOUNT_BUTTON.background
-          },
-          copy: {
-            font: ACCOUNT_BUTTON.font,
-            background: ACCOUNT_BUTTON.background
-          }
+          main: ACCOUNT_BUTTON
         }
-      }
+      },
+      hidDevice: {}
     }
   }
 })

@@ -1,6 +1,6 @@
 import React, { ReactNode, SyntheticEvent } from 'react'
 
-import { ErrorMessageContainer } from './styled'
+import { ErrorMessageContainer, ModalText } from './styled'
 
 interface ErrorProps {
   message: ReactNode | undefined
@@ -10,11 +10,15 @@ interface ErrorProps {
 export function ErrorMessage(props: ErrorProps) {
   return (
     <ErrorMessageContainer hide={props.hide}>
-      <p>ERROR!</p>
-      <p id="error-message">{props?.message}</p>
-      <span id="error-close-icon" onClick={props.onClick}>
+      <ModalText modal="base" node="header">
+        ERROR!
+      </ModalText>
+      <ModalText id="error-message" modal="base" node="main">
+        {props?.message}
+      </ModalText>
+      <ModalText id="error-close-icon" modal="base" node="header" onClick={props.onClick}>
         X
-      </span>
+      </ModalText>
     </ErrorMessageContainer>
   )
 }

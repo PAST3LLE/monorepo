@@ -2,51 +2,48 @@ import { Button, CloseIcon, ColumnCenter, Modal, Text } from '@past3lle/componen
 import { setBackgroundOrDefault, setBestTextColour, upToExtraSmall, upToSmall } from '@past3lle/theme'
 import styled from 'styled-components'
 
-import BaseTheme from '../../../theme/baseTheme'
+import { RequiredPstlSubModalsTheme } from '../../../theme'
 import { PstlWeb3ConnectionModalProps } from '../ConnectionModal'
 import { RecommendedLabelWrapper } from '../ConnectionModal/RecommendedLabel'
 
 const ERROR_CONTAINER_HEIGHT_PX = 120
 
-export const ModalButton = styled(Button)<{ connected: boolean }>`
+type ButtonThemeTypes<ST extends keyof RequiredPstlSubModalsTheme = keyof RequiredPstlSubModalsTheme> = {
+  modal: ST
+  node: keyof RequiredPstlSubModalsTheme[ST]['button']
+}
+export const ModalButton = styled(Button)<ButtonThemeTypes & { connected: boolean }>`
   position: relative;
   width: 100%;
   justify-content: flex-start;
   height: 82px;
-  ${({ theme }) =>
-    setBackgroundOrDefault(theme, {
-      bgValue: theme?.modals?.connection?.button?.background?.backgroundImg,
-      defaultValue: theme?.modals?.connection?.button?.background?.background as string
+  ${(props) =>
+    setBackgroundOrDefault(props.theme, {
+      bgValue: props.theme.modals?.[props.modal]?.button?.[props.node]?.background?.url,
+      defaultValue: props.theme.modals?.[props.modal]?.button?.[props.node]?.background?.default as string
     })};
 
-  border: ${({ theme }) => theme?.modals?.connection?.button?.border?.border};
-  border-color: ${({ theme }) => theme?.modals?.connection?.button?.border?.color};
+  border: ${(props) => props.theme.modals?.[props.modal]?.button?.[props.node]?.border?.border};
+  border-color: ${(props) => props.theme.modals?.[props.modal]?.button?.[props.node]?.border?.color};
 
-  font-style: ${({ theme }) => theme?.modals?.connection?.button?.font?.style};
-  font-variation-settings: ${({ theme }) => `'wght' ${theme?.modals?.connection?.button?.font?.weight}`};
-  color: ${({ theme }) =>
-    theme?.modals?.connection?.button?.font?.color ||
-    setBestTextColour(
-      theme?.modals?.connection?.button?.background?.background ||
-        BaseTheme.modes.DEFAULT.modals.connection.button.background.background
-    )};
+  font-size: ${(props) => props.theme.modals?.[props.modal]?.button?.[props.node]?.font?.size};
+  font-style: ${(props) => props.theme.modals?.[props.modal]?.button?.[props.node]?.font?.style};
+  font-variation-settings: ${(props) =>
+    `'wght' ${props.theme.modals?.[props.modal]?.button?.[props.node]?.font?.weight}`};
+  color: ${(props) =>
+    props.theme.modals?.[props.modal]?.button?.[props.node]?.font?.color ||
+    setBestTextColour(props.theme.modals?.[props.modal]?.button?.[props.node]?.background?.default as string)};
 
-  letter-spacing: ${({ theme }) => theme?.modals?.connection?.button?.font?.letterSpacing};
-  ${({ theme }) =>
-    theme?.modals?.connection?.button?.font?.textShadow &&
-    `text-shadow: ${theme?.modals?.connection?.button?.font.textShadow};`}
+  letter-spacing: ${(props) => props.theme.modals?.[props.modal]?.button?.[props.node]?.font?.letterSpacing};
+  text-shadow: ${(props) => props.theme.modals?.[props.modal]?.button?.[props.node]?.font?.textShadow};
+  text-transform: ${(props) => props.theme.modals?.[props.modal]?.button?.[props.node]?.font?.textTransform};
 
-  ${({ theme }) =>
-    theme?.modals?.connection?.button?.font?.size && `font-size: ${theme?.modals?.connection?.button?.font.size};`}
-    
-    ${({ theme }) => `text-transform: ${theme?.modals?.connection?.button?.font?.textTransform};`}
-    
-    gap: 10px;
+  gap: 10px;
 
   transition: transform 0.3s ease-in-out;
   &:hover {
     ${({ theme }) =>
-      !!theme?.modals?.connection?.button?.hoverAnimations &&
+      !!theme?.modals?.connection?.button?.main?.hoverAnimations &&
       `
     transform: scale(1.05);
     filter: saturate(1.2);
@@ -56,7 +53,7 @@ export const ModalButton = styled(Button)<{ connected: boolean }>`
   ${({ connected, theme }) =>
     connected &&
     `
-      background: ${theme?.modals?.connection?.button?.background?.connected};
+      background: ${theme.modals?.base?.background?.success};
       transform: scale(1.05);
       filter: saturate(1.2);
   `}
@@ -64,6 +61,23 @@ export const ModalButton = styled(Button)<{ connected: boolean }>`
   > img {
     border-radius: 50%;
   }
+`
+type TextThemeTypes<ST extends keyof RequiredPstlSubModalsTheme = keyof RequiredPstlSubModalsTheme> = {
+  modal: ST
+  node: keyof RequiredPstlSubModalsTheme[ST]['text']
+}
+export const ModalText = styled(Text.Main)<TextThemeTypes>`
+  color: ${(props) => props.theme?.modals?.[props.modal]?.text?.[props.node]?.color};
+  font-family: ${(props) => props.theme?.modals?.[props.modal]?.text?.[props.node]?.family};
+  font-size: ${(props) => props.theme?.modals?.[props.modal]?.text?.[props.node]?.size};
+  font-style: ${(props) => props.theme?.modals?.[props.modal]?.text?.[props.node]?.style};
+  font-weight: ${(props) => props.theme?.modals?.[props.modal]?.text?.[props.node]?.weight};
+  font-variation-settings: 'wght' ${(props) => props.theme?.modals?.[props.modal]?.text?.[props.node]?.weight};
+  letter-spacing: ${(props) => props.theme?.modals?.[props.modal]?.text?.[props.node]?.letterSpacing};
+  line-height: ${(props) => props.theme?.modals?.[props.modal]?.text?.[props.node]?.lineHeight};
+  text-align: ${(props) => props.theme?.modals?.[props.modal]?.text?.[props.node]?.textAlign};
+  text-shadow: ${(props) => props.theme?.modals?.[props.modal]?.text?.[props.node]?.textShadow};
+  text-transform: ${(props) => props.theme?.modals?.[props.modal]?.text?.[props.node]?.textTransform};
 `
 
 export const ModalTitleText = styled(Text.Main).attrs((props) => ({
@@ -89,48 +103,60 @@ export const ModalTitle = styled(ModalTitleText)`
     `}
   }
 `
+type ContainerThemeTypes = {
+  modal: keyof RequiredPstlSubModalsTheme
+  node: keyof RequiredPstlSubModalsTheme[keyof RequiredPstlSubModalsTheme]['container']
+}
+export const ModalContainer = styled(ColumnCenter)<ContainerThemeTypes>`
+  filter: ${({ theme, modal }) => theme.modals?.[modal]?.filter};
+  padding: ${({ theme }) => theme.modals?.base?.padding};
 
-export const InnerContainer = styled(ColumnCenter)<{ isError?: boolean }>`
-  filter: ${({ theme }) => theme?.modals?.base?.filter};
+  font-size: ${({ theme, modal }) => theme.modals?.[modal]?.font?.size};
+  font-style: ${({ theme, modal }) => theme.modals?.[modal]?.font?.style};
+  font-weight: ${({ theme, modal }) => theme.modals?.[modal]?.font?.weight};
+  font-family: ${({ theme, modal }) => theme.modals?.[modal]?.font?.family};
 
-  font-size: ${({ theme }) => theme?.modals?.connection?.baseFontSize}px;
-  font-style: ${({ theme }) => theme?.modals?.base?.font?.style};
-  font-weight: ${({ theme }) => theme?.modals?.base?.font?.weight};
-  font-family: ${({ theme }) => theme?.modals?.base?.font?.family};
+  background: ${({ theme, modal, node }) => theme.modals?.[modal]?.container?.[node]?.background};
+  border-radius: ${({ theme, modal, node }) => theme.modals?.[modal]?.container?.[node]?.border?.radius};
 
   &::-webkit-scrollbar {
     display: none;
   }
-
   -ms-overflow-style: none;
   scrollbar-width: none;
 
-  padding: ${({ theme: { modals } }) => modals?.base?.padding};
-
-  ${({ isError }) => isError && `padding-bottom: ${ERROR_CONTAINER_HEIGHT_PX}px;`}
-
   overflow-y: auto;
+`
+
+export const InnerContainer = styled(ModalContainer).attrs(
+  (props: ReturnType<typeof ModalContainer> & ContainerThemeTypes) => ({
+    ...props,
+    node: props.node || 'main'
+  })
+)<{ isError?: boolean }>`
+  ${({ isError }) => isError && `padding-bottom: ${ERROR_CONTAINER_HEIGHT_PX}px;`}
 
   ${CloseIcon} {
     padding: 5px;
     border-radius: 50%;
-    background-color: ${(props) => props.theme?.modals?.base?.closeIcon?.background?.background};
+    background-color: ${(props) => props.theme?.modals?.base?.closeIcon?.background};
 
-    color: ${({ theme }) => theme?.modals?.base?.closeIcon?.color};
+    color: ${({ theme }) => theme?.modals?.base?.title?.font?.color};
     flex: 0 1 ${({ theme }) => (theme?.modals?.base?.closeIcon?.size as number) - 5}px;
     height: ${({ theme }) => (theme?.modals?.base?.closeIcon?.size as number) - 5}px;
   }
 
-  border-radius: ${({ theme: { modals } }) => modals?.connection?.button?.border?.radius};
+  ${upToExtraSmall`
+    padding: 1rem 0.2rem 0.2rem;
+  `}
 
   ${({ theme }) =>
     setBackgroundOrDefault(theme, {
-      bgValue: theme?.modals?.base?.background?.backgroundImg,
-      defaultValue: theme?.modals?.base?.background?.background as string
+      bgValue: theme?.modals?.base?.background?.url,
+      defaultValue: theme?.modals?.base?.background?.main as string
     })};
 `
-
-export const ErrorMessageContainer = styled(InnerContainer)<{ hide: boolean }>`
+export const ErrorMessageContainer = styled(InnerContainer).attrs({ modal: 'base', node: 'main' })<{ hide: boolean }>`
   opacity: ${({ hide }) => (hide ? 0 : 1)};
 
   z-index: ${({ hide }) => (hide ? 0 : 9999)};
@@ -141,31 +167,26 @@ export const ErrorMessageContainer = styled(InnerContainer)<{ hide: boolean }>`
   padding: 1rem 2rem;
   border-radius: 0 0 0.4rem 0.4rem;
   border-left: 0.5rem solid indianred;
-  background: ${(props) => props.theme.modals?.base?.error?.background?.background};
+  background: ${(props) => props.theme.modals?.base?.error?.background};
   position: absolute;
   bottom: 0;
-  > p:first-child {
-    margin: 0;
-  }
-  > p {
+
+  > ${ModalText} {
     font-family: monospace;
-    color: indianred;
-    font-variation-settings: 'wght' 500;
-    font-size: 1em;
+    color: ghostwhite;
     font-style: normal;
+
+    &#error-message {
+      font-size: 1.1em;
+    }
   }
 
-  > p#error-message {
-    color: ${(props) => props.theme.modals?.base?.error?.font?.color};
-    font-size: 0.75em;
-  }
-
-  > span#error-close-icon {
+  > ${ModalText}#error-close-icon {
     position: absolute;
-    color: ${(props) => props.theme.modals?.base?.error?.font?.color};
+    color: ${(props) => setBestTextColour(props.theme.modals?.base?.error?.background || '#000', 5)};
     cursor: pointer;
-    top: 0.75em;
-    right: 0.75em;
+    top: 16px;
+    right: 18px;
   }
 
   transition: opacity 0.5s ease-in-out;
@@ -194,15 +215,31 @@ export const StyledConnectionModal = styled(Modal)`
   }
 `
 
-export const WalletsWrapper = styled.div<{
-  isError?: boolean
-  width?: string
-  view?: PstlWeb3ConnectionModalProps['walletsView']
-}>`
+export const WalletsWrapper = styled.div.attrs(
+  (
+    props: ContainerThemeTypes & {
+      isError?: boolean
+      width?: string
+      view?: PstlWeb3ConnectionModalProps['walletsView']
+    }
+  ) => ({
+    ...props,
+    node: props.node || 'main'
+  })
+)<
+  ContainerThemeTypes & {
+    isError?: boolean
+    width?: string
+    view?: PstlWeb3ConnectionModalProps['walletsView']
+  }
+>`
   display: grid;
   gap: 1rem;
+
   width: ${({ width = '100%' }) => width};
   padding: 0 1rem;
+  overflow-y: auto;
+
   z-index: 1;
 
   ${({ isError }) =>
@@ -220,10 +257,10 @@ export const WalletsWrapper = styled.div<{
   > div {
     height: auto;
     > ${ModalButton} {
-      height: ${(props) => props.theme?.modals?.connection?.button?.height};
+      height: ${({ theme: { modals }, modal, node }) => modals?.[modal]?.button?.[node]?.height};
       > img,
       > svg {
-        height: ${({ theme }) => theme.modals?.connection?.button?.icons?.height};
+        height: ${({ theme }) => theme.modals?.connection?.button?.main?.icons?.height};
         max-height: 62%;
 
         ${upToExtraSmall`

@@ -139,6 +139,8 @@ function ConnectionModalContent({
       ) : (
         <WalletsWrapper
           id={`${ModalId.WALLETS}__wallets-wrapper`}
+          modal="connection"
+          node="main"
           view={modalView}
           isError={!!modalState.state.connect.error?.message}
         >

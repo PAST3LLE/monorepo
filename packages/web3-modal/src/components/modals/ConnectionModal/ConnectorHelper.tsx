@@ -5,12 +5,13 @@ import styled from 'styled-components'
 import { Connector } from 'wagmi'
 
 import { ConnectorEnhanced } from '../../../types'
+import { ModalText } from '../common/styled'
 
 const ConnectorHelperContainer = styled(ColumnCenter)<{ open: boolean; contentHeight?: number }>`
   cursor: pointer;
   color: ${({ theme }) => theme?.modals?.base?.helpers?.font?.color};
   font-size: ${({ theme }) => theme?.modals?.base?.helpers?.font?.size};
-  > p {
+  > ${ModalText} {
     font-weight: 400;
 
     margin: 0 0 0 2em;
@@ -58,12 +59,12 @@ export function ConnectorHelper({
   const [height, setRef] = useStateRef<number | undefined>(undefined, (node: HTMLElement | null) => node?.offsetHeight)
   return (
     <ConnectorHelperContainer width="100%" textAlign="left" open={open} contentHeight={height}>
-      <p onClick={handleClick}>
+      <ModalText modal="base" node="main" onClick={handleClick}>
         {open ? <ChevronUp width={'1.2em'} /> : <ChevronDown width={'1.2em'} />} {title}
-      </p>
-      <p>
+      </ModalText>
+      <ModalText modal="base" node="main">
         <span ref={setRef}>{props.children || _getConnectorHelperText(props.connector)}</span>
-      </p>
+      </ModalText>
     </ConnectorHelperContainer>
   )
 }
