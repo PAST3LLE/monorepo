@@ -59,7 +59,7 @@ export function LightningCanvas() {
       <SmartImg
         path={{ defaultPath: BG_LOGO_DDPX_URL_MAP.defaultUrl }}
         pathSrcSet={BG_LOGO_DDPX_URL_MAP}
-        style={{ position: 'absolute', bottom: 0, right: '10%', zIndex: 500 }}
+        style={{ position: 'absolute', bottom: 0, right: '10%' }}
       />
     </CanvasContainer>
   )
