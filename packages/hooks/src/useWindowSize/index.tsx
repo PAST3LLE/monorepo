@@ -66,7 +66,7 @@ function useSetupCachedWindowResizeListeners(options?: UseWindowSizeOptions) {
         delete WIN?.__PSTL_HOOKS_CONTEXT_LISTENER
       }
     }
-  }, [])
+  }, [options?.throttleMs])
 
   return snapState
 }
