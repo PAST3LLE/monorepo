@@ -33,7 +33,8 @@
     "pre-commit": "pretty-quick --staged && yarn test:ci && yarn build",
     "lint": "prettier --write './src/**/*' --ignore-path '../../.prettierignore'",
     "depcheck": "npx npm-check",
-    "cosmos": "cosmos"
+    "cosmos": "cosmos",
+    "check-types": "tsc --noEmit"
   },
   "publishConfig": {
     "access": "public",

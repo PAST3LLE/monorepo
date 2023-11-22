@@ -34,7 +34,8 @@
     "lint": "prettier --write './src/**/*' --ignore-path '../../.prettierignore'",
     "cosmos": "cosmos",
     "cosmos:export": "cosmos-export",
-    "depcheck": "npx npm-check"
+    "depcheck": "npx npm-check",
+    "check-types": "tsc --noEmit"
   },
   "publishConfig": {
     "access": "public",

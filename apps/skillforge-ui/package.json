@@ -21,6 +21,7 @@
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "depcheck": "npx npm-check",
+    "check-types": "npx tsc --noEmit",
     "lint": "npx prettier --write src --ignore-path ./.prettierignore --config ./.prettierrc",
     "start:mock": "REACT_APP_IS_MOCK=true && yarn start",
     "start": "PORT=6969 HTTPS=true GENERATE_SOURCEMAP=false react-app-rewired start",
