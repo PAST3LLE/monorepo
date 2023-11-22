@@ -98,7 +98,7 @@ export interface BaseModalTheme extends SharedModalTheme {
      * @type number
      */
     size?: number
-    background?: Omit<BackgroundStyles, 'backgroundImg'>['main']
+    background?: BackgroundStyles['main']
   }
 }
 interface AccountModalTheme extends SharedModalTheme {

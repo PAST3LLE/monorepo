@@ -18,6 +18,7 @@ export function BaseModal({
   zIndex = Z_INDICES.PSTL,
   isOpen,
   onDismiss,
+  modal,
   children,
   ...restModalProps
 }: BaseModalProps) {
@@ -36,6 +37,7 @@ export function BaseModal({
   return (
     <StyledConnectionModal
       id={ModalId.BASE}
+      modal={modal}
       className={restModalProps.className}
       isOpen={isOpen}
       onDismiss={onDismiss}

@@ -3,6 +3,7 @@ import { BasicUserTheme, ThemeByModes, ThemeModesRequired } from '@past3lle/them
 import { ReactNode } from 'react'
 
 import { WithChainIdFromUrl, WithCloseModalOnKeys } from '../../../providers/types'
+import { PstlSubModalsTheme } from '../../../theme'
 import { LoadingScreenProps } from '../../LoadingScreen'
 
 export enum ModalId {
@@ -92,6 +93,7 @@ export type BaseModalProps = Omit<ModalProps, 'isLargeImageModal'> &
      * @default root
      */
     openType?: 'root' | 'walletconnect'
+    modal: keyof PstlSubModalsTheme
     children?: ReactNode
   }
 

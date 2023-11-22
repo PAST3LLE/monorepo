@@ -192,10 +192,11 @@ export const ErrorMessageContainer = styled(InnerContainer).attrs({ modal: 'base
   transition: opacity 0.5s ease-in-out;
 `
 
-export const StyledConnectionModal = styled(Modal)`
+export const StyledConnectionModal = styled(Modal)<{ modal: keyof RequiredPstlSubModalsTheme; baseFontSize?: string }>`
   div {
     &[data-reach-dialog-content] {
       position: relative;
+      font-size: ${(props) => props.theme.modals?.[props.modal]?.baseFontSize}px;
       ${upToSmall`
           max-height: 500px;
           max-width: unset;

@@ -19,7 +19,7 @@ const HidDeviceOptionsModal = lazy(
   () => import(/* webpackPrefetch: true,  webpackChunkName: "HidDeviceOptionsModal" */ './HidDeviceOptionsModal')
 )
 
-export function ModalWithoutThemeProvider(baseProps: StatelessBaseModalProps) {
+export function ModalWithoutThemeProvider(baseProps: Omit<StatelessBaseModalProps, 'modal'>) {
   const modalState = usePstlWeb3Modal()
   const { resetErrors } = usePstlWeb3ModalStore()
   const view = useSnapshot(RouterCtrl.state).view
@@ -44,7 +44,8 @@ export function ModalWithoutThemeProvider(baseProps: StatelessBaseModalProps) {
           minHeight: 'unset',
           maxHeight: 'unset',
           height: 'auto',
-          id: ModalId.ACCOUNT
+          id: ModalId.ACCOUNT,
+          modal: 'account'
         }
 
         return [() => <AccountModal {...props} />, augmentedBaseProps]
@@ -60,7 +61,8 @@ export function ModalWithoutThemeProvider(baseProps: StatelessBaseModalProps) {
           minHeight: '350px',
           maxHeight: '80vh',
           height: 'auto',
-          id: ModalId.NETWORK
+          id: ModalId.NETWORK,
+          modal: 'connection'
         }
 
         return [() => <NetworkModal />, augmentedBaseProps]
@@ -71,7 +73,7 @@ export function ModalWithoutThemeProvider(baseProps: StatelessBaseModalProps) {
           ...ModalPropsCtrl.state.root,
           ...ModalPropsCtrl.state.hidDeviceOptions
         }
-        const augmentedBaseProps = {
+        const augmentedBaseProps: StatelessBaseModalProps = {
           ...baseProps,
           title: 'HID DEVICE OPTIONS',
           width: '650px',
@@ -79,7 +81,8 @@ export function ModalWithoutThemeProvider(baseProps: StatelessBaseModalProps) {
           minHeight: '350px',
           maxHeight: '80vh',
           height: 'auto',
-          id: ModalId.HID_DEVICE_OPTIONS
+          id: ModalId.HID_DEVICE_OPTIONS,
+          modal: 'hidDevice'
         }
 
         return [() => <HidDeviceOptionsModal {...props} />, augmentedBaseProps]
@@ -92,13 +95,14 @@ export function ModalWithoutThemeProvider(baseProps: StatelessBaseModalProps) {
           ...ModalPropsCtrl.state.root,
           chainIdFromUrl: baseProps.chainIdFromUrl
         }
-        const augmentedBaseProps = {
+        const augmentedBaseProps: StatelessBaseModalProps = {
           ...baseProps,
           title: baseProps?.headers?.wallets || baseProps?.title || 'CONNECT',
           width: baseProps.width || props?.walletsView === 'grid' ? '650px' : '50vh',
           maxWidth: baseProps.maxWidth || props?.walletsView === 'grid' ? '100%' : '360px',
           maxHeight: baseProps.maxHeight || props?.walletsView === 'grid' ? '500px' : '600px',
-          id: ModalId.WALLETS
+          id: ModalId.WALLETS,
+          modal: 'connection'
         }
 
         return [() => <ConnectionModal {...props} />, augmentedBaseProps]
@@ -119,7 +123,7 @@ function renderFallback() {
   return <SpinnerCircle size={100} />
 }
 
-function ModalWithThemeProvider({ themeConfig, ...modalProps }: StatelessBaseModalProps) {
+function ModalWithThemeProvider({ themeConfig, ...modalProps }: Omit<StatelessBaseModalProps, 'modal'>) {
   const builtTheme = useMergeThemes(themeConfig?.theme)
 
   if (!builtTheme) {

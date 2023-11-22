@@ -18,7 +18,7 @@ import { ConnectorHelper } from './ConnectorHelper'
 import { RenderConnectorOptions } from './RenderConnectorOptions'
 import { cleanAndFormatConnectorOverrides, sortConnectorsByRank } from './utils'
 
-export type PstlWeb3ConnectionModalProps = BaseModalProps &
+export type PstlWeb3ConnectionModalProps = Omit<BaseModalProps, 'modal'> &
   Omit<ModalPropsCtrlState['root'], 'openType'> &
   Pick<ModalPropsCtrlState['connect'], 'walletsView' | 'hideInjectedFromRoot'>
 
