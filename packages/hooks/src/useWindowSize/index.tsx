@@ -51,7 +51,11 @@ function useSetupCachedWindowResizeListeners(options?: UseWindowSizeOptions) {
     // create init logic
     // IF no global listener OR no listener count, create
     // ELSE skip and log
-    _setupListenersOnWindowOrLog(handleResizeRequests, { windowOb: WIN, globalListener: GLOBAL_LISTENER, globalListenerCount: GLOBAL_LISTENER_COUNT })
+    _setupListenersOnWindowOrLog(handleResizeRequests, {
+      windowOb: WIN,
+      globalListener: GLOBAL_LISTENER,
+      globalListenerCount: GLOBAL_LISTENER_COUNT
+    })
     // iterate over listeners count and update
     _iterateListenerCount(WIN)
 

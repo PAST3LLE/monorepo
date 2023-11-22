@@ -1,4 +1,5 @@
 import { proxy } from 'valtio'
+
 import { WindowSizes } from '.'
 
 export const state = proxy({
@@ -12,5 +13,3 @@ export const setDimensions = ({ width, height, ar }: WindowSizes) => {
   state.height = height || 0
   state.ar = ar || 0
 }
-
-
