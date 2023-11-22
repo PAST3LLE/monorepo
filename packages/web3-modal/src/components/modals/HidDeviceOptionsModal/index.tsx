@@ -82,7 +82,7 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
     callback: (selection) => {
       pathCallbacks.setIsCustomPath(false)
       pathCallbacks.setPath(selection ?? null)
-      storeCallbacks.resetAndConnectProvider(selection?.replace('*', selectedAccountIdx.toString()))
+      storeCallbacks.resetAndConnectProvider(selection?.replace(/\*/g, selectedAccountIdx.toString()))
     }
   })
 
@@ -273,7 +273,7 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
           </HidModalHeaderRow>
           {accountsAndBalances?.length ? (
             accountsAndBalances.map(({ address: acct, balance }, idx) => {
-              const sPath = dbPath?.replace('*', idx.toString())
+              const sPath = dbPath?.replace(/\*/g, idx.toString())
               return (
                 <HidModalAddresseRow
                   key={idx + '_' + acct}

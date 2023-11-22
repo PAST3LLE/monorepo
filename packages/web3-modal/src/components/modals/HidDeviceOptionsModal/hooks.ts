@@ -85,7 +85,7 @@ export function useHidModalStore({ chainId, connector, path, paginationAmount }:
           _isValidPathOrThrow(path)
           _isConnectedOrThrow(hid)
           // Here we can assume there is both a valid path AND hid connector
-          const replacedPath = path?.replace('*', acctIdx.toString())
+          const replacedPath = path?.replace(/\*/g, acctIdx.toString())
           await hid?.getAccount(replacedPath)
           await hid?.setAccount(replacedPath)
         } catch (error) {
@@ -103,7 +103,7 @@ export function useHidModalStore({ chainId, connector, path, paginationAmount }:
           const accountsAndBalances: { address: Address; balance: string | undefined }[] = []
           for (let i = paginationIdx - paginationAmount; i < paginationIdx; i++) {
             // Replace the set path catch-all token with user's passed index
-            const replacedPath = path?.replace('*', i.toString())
+            const replacedPath = path?.replace(/\*/g, i.toString())
             const acct = await hid?.getAccount(replacedPath)
             // We throw if no path found at derived address
             if (!acct) throw new Error('No valid account found at path: ' + replacedPath)
@@ -222,7 +222,7 @@ export function useHidUpdater({
 
         const realAccountIndex = selectedAccountIdx.toString()
         // reset connection
-        await resetAndConnectProvider(dbPath?.replace('*', realAccountIndex))
+        await resetAndConnectProvider(dbPath?.replace(/\*/g, realAccountIndex))
         // Query the last address based on the path and index
         await getAccount(realAccountIndex)
       } catch (error) {
