@@ -10,6 +10,21 @@ export const pstlModalTheme = createTheme({
     modals: {
       base: {
         baseFontSize: 16,
+        button: {
+          main: {
+            font: {
+              color: 'ghostwhite',
+              size: '1em',
+              style: 'normal',
+              weight: 200,
+              letterSpacing: '-1px',
+              textShadow: '2px 2px 3px #0000005c',
+              textTransform: 'uppercase'
+            },
+            border: { border: 'none', radius: '1em' },
+            hoverAnimations: true
+          }
+        },
         title: {
           font: {
             color: '#cbb9ee',
@@ -21,7 +36,7 @@ export const pstlModalTheme = createTheme({
           }
         },
         background: {
-          backgroundImg: ASSETS_MAP.images.background.app
+          url: ASSETS_MAP.images.background.app
         },
         helpers: { show: true },
         closeIcon: {
@@ -30,21 +45,12 @@ export const pstlModalTheme = createTheme({
       },
       connection: {
         button: {
-          background: {
-            background: '#301d4ea1',
-            connected: '#37b9927d'
+          main: {
+            background: { default: '#301d4ea1' }
           },
-          font: {
-            color: 'ghostwhite',
-            size: '1em',
-            style: 'normal',
-            weight: 200,
-            letterSpacing: '-1px',
-            textShadow: '2px 2px 3px #0000005c',
-            textTransform: 'uppercase'
-          },
-          border: { border: 'none', radius: '1em' },
-          hoverAnimations: true
+          alternate: {
+            background: { default: '#37b9927d' }
+          }
         }
       },
       account: {
