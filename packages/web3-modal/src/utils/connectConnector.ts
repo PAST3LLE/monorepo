@@ -42,7 +42,13 @@ export function runConnectorConnectionLogic(
     setProviderModalMounted,
     setProviderModaLoading
   }: GetConnectorInfoCallbacks,
-  { chainId, address, isProviderModalMounted, closeOnConnect, connectorDisplayOverrides }: AuxConnectorInfoConstants
+  {
+    chainId,
+    address,
+    isProviderModalMounted,
+    closeOnConnect,
+    connectorDisplayOverrides
+  }: Omit<AuxConnectorInfoConstants, 'isConnected'>
 ): [
   ConnectorInfo,
   ReturnType<typeof useConnection>[1]['connect'] | ReturnType<typeof useConnection>[1]['openWalletConnectModal']
