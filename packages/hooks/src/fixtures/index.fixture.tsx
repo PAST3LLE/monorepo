@@ -33,15 +33,7 @@ function DefaultApp() {
 
       <p>
         Window size:{' '}
-        {isExtraSmall
-          ? 'X-SMALL'
-          : isSmall
-          ? 'SMALL'
-          : isMedium
-          ? 'MEDIUM'
-          : isLarge
-          ? 'LARGE'
-          : 'X-LARGE'}
+        {isExtraSmall ? 'X-SMALL' : isSmall ? 'SMALL' : isMedium ? 'MEDIUM' : isLarge ? 'LARGE' : 'X-LARGE'}
       </p>
       <button onClick={() => setShowInnerApp((state) => !state)}>Toggle inner app</button>
       {showInnerApp && <InnerApp />}

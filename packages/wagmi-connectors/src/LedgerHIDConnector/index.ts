@@ -9,7 +9,7 @@ import type { LedgerHQProvider } from './provider'
 import { ConnectorUpdate } from './types'
 
 export { isHIDSupported, checkError }
-type Options = { callback?: (...args: any[]) => void; path?: string, reset?: boolean }
+type Options = { callback?: (...args: any[]) => void; path?: string; reset?: boolean }
 export type LedgerHidOptions = { shimDisconnect?: boolean; onDeviceDisconnect?: () => Promise<void> }
 export class LedgerHIDConnector extends Connector<LedgerHQProvider, LedgerHidOptions> {
   // name & id
@@ -279,7 +279,7 @@ export class LedgerHIDConnector extends Connector<LedgerHQProvider, LedgerHidOpt
   }
 
   /**
-   * 
+   *
    * @param path - derivation path (default: m/44'/60')
    * @returns address/account as string
    */
@@ -293,7 +293,7 @@ export class LedgerHIDConnector extends Connector<LedgerHQProvider, LedgerHidOpt
   }
 
   /**
-   * 
+   *
    * @param path - derivation path (default: m/44'/60')
    * @returns void
    */
@@ -308,7 +308,7 @@ export class LedgerHIDConnector extends Connector<LedgerHQProvider, LedgerHidOpt
       throw new Error('Error setting address. Check that HID device is properly activated.')
     }
   }
- 
+
   public deactivate(): void {
     invariant(this.provider, '[Ledger HID] deactivate: Provider is not defined')
     // deactivate all providers in map

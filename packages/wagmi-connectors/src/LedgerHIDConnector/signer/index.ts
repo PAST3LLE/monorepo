@@ -22,7 +22,7 @@ export class LedgerHQSigner extends Signer implements TypedDataSigner {
 
   constructor(provider: LedgerHQProvider, path: string = defaultPath) {
     super()
-    
+
     this.path = path
     this.provider = provider
   }
@@ -32,7 +32,7 @@ export class LedgerHQSigner extends Signer implements TypedDataSigner {
 
     try {
       // Safe as we check status in this._checkHidStatus() above
-      const eth = new Eth!(transport)
+      const eth = new Eth(transport)
       await eth.getAppConfiguration()
 
       return await callback(eth)
@@ -50,6 +50,7 @@ export class LedgerHQSigner extends Signer implements TypedDataSigner {
       this._addressMap.set(path, address)
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return this._addressMap.get(path)!
   }
 
@@ -60,6 +61,7 @@ export class LedgerHQSigner extends Signer implements TypedDataSigner {
       this._addressMap.set(path, address)
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     this._address = this._addressMap.get(path)!
   }
 
