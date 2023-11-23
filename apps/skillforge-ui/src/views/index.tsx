@@ -35,8 +35,8 @@ const SKILLFORGE_CONFIG: SkillForgeProps = {
         gatewayApiUris: GATEWAY_API_URIS
       }
     },
-    hooksProviderOptions: {
-      windowSizes: {
+    options: {
+      windowSizeOptions: {
         throttleMs: 750
       }
     }
