@@ -1,5 +1,4 @@
 import { ButtonVariations, ColumnCenter, PstlButton } from '@past3lle/components'
-import { WindowSizeProvider } from '@past3lle/hooks'
 import { ThemeProvider, createCustomTheme } from '@past3lle/theme'
 import { devWarn, getExpirementalCookieStore as getCookieStore } from '@past3lle/utils'
 import React, { ReactNode, useEffect } from 'react'
@@ -18,9 +17,7 @@ import { COMMON_CONNECTOR_OVERRIDES, DEFAULT_PROPS, DEFAULT_PROPS_WEB3AUTH, pstl
 import { wagmiConnectors } from './connectorsAndPlugins'
 
 const PstlW3Providers = ({ children, config }: { children: ReactNode; config: PstlWeb3ModalProps }) => (
-  <WindowSizeProvider>
-    <WalletModal config={config}>{children}</WalletModal>
-  </WindowSizeProvider>
+  <WalletModal config={config}>{children}</WalletModal>
 )
 
 interface Web3ButtonProps {
