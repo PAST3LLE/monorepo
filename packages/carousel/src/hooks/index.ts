@@ -12,7 +12,10 @@ export interface CarouselSetup {
   setCarouselContainerRef: (newNode: HTMLElement | null) => void
 }
 
-export function useCarouselSetup(dimensions: BaseCarouselProps<any[]>['dimensions'], auxOptions?: WithWindowSizeOptions): CarouselSetup {
+export function useCarouselSetup(
+  dimensions: BaseCarouselProps<any[]>['dimensions'],
+  auxOptions?: WithWindowSizeOptions
+): CarouselSetup {
   const [parentSizes, setParentSizes] = useState<CarouselSetup['parentSizes']>()
 
   // ref to carousel container

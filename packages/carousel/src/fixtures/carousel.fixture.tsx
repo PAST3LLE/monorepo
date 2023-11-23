@@ -48,7 +48,10 @@ function Providers({ children }: { children: ReactNode }) {
   )
 }
 
-function VerticalCarousel({ indicatorOptions, windowSizeOptions }: Pick<OptionalCarouselProps, 'indicatorOptions'> & WithWindowSizeOptions) {
+function VerticalCarousel({
+  indicatorOptions,
+  windowSizeOptions
+}: Pick<OptionalCarouselProps, 'indicatorOptions'> & WithWindowSizeOptions) {
   return (
     <Providers>
       <div style={{ height: ITEM_HEIGHT, width: '100%' }}>
@@ -70,7 +73,10 @@ function VerticalCarousel({ indicatorOptions, windowSizeOptions }: Pick<Optional
   )
 }
 type WithWindowSizeOptions = { windowSizeOptions?: { throttleMs?: number } }
-function HorizontalCarousel({ indicatorOptions, windowSizeOptions }: Pick<OptionalCarouselProps, 'indicatorOptions'> & WithWindowSizeOptions) {
+function HorizontalCarousel({
+  indicatorOptions,
+  windowSizeOptions
+}: Pick<OptionalCarouselProps, 'indicatorOptions'> & WithWindowSizeOptions) {
   return (
     <Providers>
       <div style={{ height: ITEM_HEIGHT, width: '100%' }}>
