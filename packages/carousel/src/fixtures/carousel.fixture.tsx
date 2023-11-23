@@ -1,6 +1,5 @@
-import { WindowSizeProvider } from '@past3lle/hooks'
 import { ThemeProvider, createPast3lleTemplateTheme } from '@past3lle/theme'
-import React, { ReactNode, useState } from 'react'
+import React, { ReactNode } from 'react'
 
 import HorizontalSwipeCarousel from '../components/HorizontalSwipeCarousel'
 import VerticalSwipeCarousel from '../components/VerticalSwipeCarousel'
@@ -43,11 +42,9 @@ const DATA = [
 
 function Providers({ children }: { children: ReactNode }) {
   return (
-    <WindowSizeProvider>
-      <ThemeProvider theme={createPast3lleTemplateTheme('PASTELLE')}>
-        <div style={{ height: '100vh', width: '100%' }}>{children}</div>
-      </ThemeProvider>
-    </WindowSizeProvider>
+    <ThemeProvider theme={createPast3lleTemplateTheme('PASTELLE')}>
+      <div style={{ height: '100vh', width: '100%' }}>{children}</div>
+    </ThemeProvider>
   )
 }
 
