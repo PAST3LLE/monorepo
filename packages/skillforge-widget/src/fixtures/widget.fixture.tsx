@@ -119,8 +119,8 @@ function App() {
             ...commonProps.modals
           }
         },
-        hooksProviderOptions: {
-          windowSizes: {
+        options: {
+          windowSizeOptions: {
             throttleMs: 1500
           }
         }
