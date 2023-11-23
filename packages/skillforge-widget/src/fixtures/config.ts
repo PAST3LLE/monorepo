@@ -1,6 +1,6 @@
 import { ForgeW3CoreProvidersProps, addConnector, createWeb3ModalTheme } from '@past3lle/forge-web3'
 import { LedgerHIDConnector } from '@past3lle/wagmi-connectors'
-import { goerli } from 'wagmi/chains'
+import { goerli, polygon } from 'wagmi/chains'
 
 const MODAL_THEME = createWeb3ModalTheme({
   DEFAULT: {
@@ -36,8 +36,9 @@ const MODAL_THEME = createWeb3ModalTheme({
             color: 'black',
             weight: 500
           },
-          header: {
-            color: 'navajowhite'
+          header: { color: 'black' },
+          subHeader: {
+            color: 'black'
           }
         },
         container: {
@@ -51,10 +52,10 @@ const MODAL_THEME = createWeb3ModalTheme({
         button: {
           main: {
             font: {
-              color: 'black'
+              color: 'ghostwhite'
             },
             background: {
-              default: 'navajowhite'
+              default: 'rgba(0,0,0,0.5)'
             }
           },
           alternate: {
@@ -68,7 +69,7 @@ const MODAL_THEME = createWeb3ModalTheme({
   }
 })
 const DEFAULT_PROPS: ForgeW3CoreProvidersProps['config']['web3'] = {
-  chains: [goerli],
+  chains: [polygon, goerli],
   connectors: [addConnector(LedgerHIDConnector, {})],
   modals: {
     root: {

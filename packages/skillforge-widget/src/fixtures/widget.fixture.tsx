@@ -115,9 +115,7 @@ function App() {
               appType: 'DAPP'
             }
           },
-          modals: {
-            ...commonProps.modals
-          }
+          modals: commonProps.modals
         },
         options: {
           windowSizeOptions: {
