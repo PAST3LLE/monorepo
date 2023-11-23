@@ -24,7 +24,9 @@ export const FooterActionButtonsRow = styled(Row)`
 export const AccountText = styled(ModalText).attrs((props) => ({
   modal: 'account',
   ...props
-}))``
+}))<{ cursor?: 'nesw-resize' | 'not-allowed' | 'pointer' | 'wait' | 'none' }>`
+  ${({ cursor }) => cursor && `cursor: ${cursor};`}
+`
 
 export const AccountStyledContainer = styled(Column)<{
   cursor?: string

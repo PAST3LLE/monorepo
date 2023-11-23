@@ -19,7 +19,7 @@ import { RenderConnectorOptions } from './RenderConnectorOptions'
 import { cleanAndFormatConnectorOverrides, sortConnectorsByRank } from './utils'
 
 export type PstlWeb3ConnectionModalProps = Omit<BaseModalProps, 'modal'> &
-  Omit<ModalPropsCtrlState['root'], 'openType'> &
+  Omit<ModalPropsCtrlState['root'], 'openType' | 'appType'> &
   Pick<ModalPropsCtrlState['connect'], 'walletsView' | 'hideInjectedFromRoot'>
 
 export type ProviderMountedMap = {

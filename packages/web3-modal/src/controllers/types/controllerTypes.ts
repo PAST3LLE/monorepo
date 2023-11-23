@@ -1,5 +1,6 @@
 import { Chain } from 'viem'
 
+import { AppType } from '../../providers/utils/connectors'
 import { ChainImages } from '../../types'
 import { ConnectorOverrides } from '../../types/connectors'
 
@@ -41,6 +42,7 @@ interface RootModalState {
    */
   closeModalOnConnect?: boolean
   openType: 'root' | 'walletconnect'
+  appType: AppType | undefined
 }
 
 export interface WithError {

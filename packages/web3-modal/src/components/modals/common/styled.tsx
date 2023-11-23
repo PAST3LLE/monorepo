@@ -40,27 +40,29 @@ export const ModalButton = styled(Button)<ButtonThemeTypes & { connected: boolea
 
   gap: 10px;
 
-  transition: transform 0.3s ease-in-out;
   &:hover {
-    ${({ theme }) =>
+    ${({ theme, modal }) =>
       !!theme?.modals?.connection?.button?.main?.hoverAnimations &&
       `
-    transform: scale(1.05);
-    filter: saturate(1.2);
+    background: ${theme.modals?.[modal]?.button?.active?.background?.default};
+    filter: ${theme.modals?.[modal]?.button?.active?.filter};
+    transform: scale(0.95);
   `}
   }
 
-  ${({ connected, theme }) =>
+  ${({ connected, theme: { modals }, modal }) =>
     connected &&
     `
-      background: ${theme.modals?.base?.background?.success};
-      transform: scale(1.05);
-      filter: saturate(1.2);
+      background: ${modals?.[modal]?.button?.active?.background?.default};
+      filter: ${modals?.[modal]?.button?.active?.filter};
+      transform: scale(0.95);
   `}
 
   > img {
     border-radius: 50%;
   }
+
+  transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out, background 0.6s ease-in-out;
 `
 type TextThemeTypes<ST extends keyof RequiredPstlSubModalsTheme = keyof RequiredPstlSubModalsTheme> = {
   modal: ST
@@ -103,7 +105,7 @@ export const ModalTitle = styled(ModalTitleText)`
     `}
   }
 `
-type ContainerThemeTypes = {
+export type ContainerThemeTypes = {
   modal: keyof RequiredPstlSubModalsTheme
   node: keyof RequiredPstlSubModalsTheme[keyof RequiredPstlSubModalsTheme]['container']
 }
@@ -147,7 +149,7 @@ export const InnerContainer = styled(ModalContainer).attrs(
   }
 
   ${upToExtraSmall`
-    padding: 1rem 0.2rem 0.2rem;
+    padding: 1rem 0.5rem 0.2rem;
   `}
 
   ${({ theme }) =>

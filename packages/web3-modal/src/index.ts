@@ -22,7 +22,7 @@ import {
   usePstlEthereumClient,
   usePstlWagmiClient
 } from './providers'
-import { AppType, getAppType } from './providers/utils/connectors'
+import { AppType, getAppType, useDeriveAppType } from './providers/utils/connectors'
 import { type PstlModalTheme, type PstlModalThemeExtension, W3aStyleResetProvider, createTheme } from './theme'
 import {
   getAllChainsInfo,
@@ -60,6 +60,7 @@ export {
   addConnector,
   addFrameConnector,
   getAppType,
+  useDeriveAppType,
   // types
   type PstlWeb3ModalProps,
   type PstlWagmiClientOptions,

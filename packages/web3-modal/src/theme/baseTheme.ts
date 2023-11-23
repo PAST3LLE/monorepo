@@ -1,6 +1,7 @@
 import { ThemeByModes } from '@past3lle/theme'
+import { DeepRequired } from '@past3lle/types'
 
-import { PstlModalThemeExtension } from './types'
+import { PstlModalThemeExtension, SharedModalTheme } from './types'
 
 const DEFAULT_BASE_MODAL_PROPS = {
   filter: 'none',
@@ -19,7 +20,8 @@ const DEFAULT_FONT_PROPS = {
   family: 'inherit',
   textAlign: 'initial'
 } as const
-const DEFAULT_BUTTON_PROPS = {
+const DEFAULT_BUTTON_PROPS: DeepRequired<SharedModalTheme>['button']['main'] = {
+  filter: 'unset',
   height: 'auto',
   font: {
     ...DEFAULT_FONT_PROPS,
@@ -86,6 +88,16 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
             alternate: {
               ...DEFAULT_BUTTON_PROPS,
               background: { default: 'navajowhite', url: 'none' }
+            },
+            active: {
+              ...DEFAULT_BUTTON_PROPS,
+              filter: 'invert(1) saturate(1.2)',
+              background: { default: MAIN_COLOURS.success, url: 'none' }
+            },
+            disabled: {
+              ...DEFAULT_BUTTON_PROPS,
+              background: { default: 'darkgrey', url: 'none' },
+              font: { ...DEFAULT_BUTTON_PROPS.font, color: 'grey' }
             }
           },
           container: {

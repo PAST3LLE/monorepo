@@ -7,7 +7,7 @@ import { useTheme } from 'styled-components'
 import { ModalPropsCtrlState } from '../../../controllers/types/controllerTypes'
 import { useConnectDisconnect, usePstlWeb3Modal, useUserConnectionInfo } from '../../../hooks'
 import { useConnectedChainAndWalletLogo } from '../../../hooks/useLogos'
-import { getAppType } from '../../../providers/utils/connectors'
+import { useDeriveAppType } from '../../../providers/utils/connectors'
 import { PstlModalTheme } from '../../../theme'
 import { ConnectorEnhanced } from '../../../types'
 import { BaseModalProps, ModalId } from '../common/types'
@@ -44,19 +44,19 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
     }
   })
 
+  const appType = useDeriveAppType()
   const { isUnsupportedChain, showNetworkButton, isNonFrameWalletApp } = useMemo(() => {
     const isUnsupportedChain =
       userConnectionInfo.chain?.unsupported ||
       !userConnectionInfo.supportedChains.some((chain) => chain.id === userConnectionInfo.chain?.id)
     const supportsSeveralChains = (userConnectionInfo?.supportedChains?.length || 0) > 1
-    const appType = getAppType()
 
     return {
       isUnsupportedChain,
       showNetworkButton: supportsSeveralChains || isUnsupportedChain,
       isNonFrameWalletApp: appType === 'DAPP' || appType === 'TEST_FRAMEWORK_IFRAME'
     }
-  }, [userConnectionInfo.chain?.id, userConnectionInfo.chain?.unsupported, userConnectionInfo.supportedChains])
+  }, [appType, userConnectionInfo.chain?.id, userConnectionInfo.chain?.unsupported, userConnectionInfo.supportedChains])
 
   const isSmallerScreen = useIsSmallMediaWidth()
 
@@ -106,14 +106,7 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
             title={userConnectionInfo.address}
             onClick={() => onCopy(userConnectionInfo?.address || '')}
           >
-            <AccountText
-              id="pstl-web3-modal-address-text"
-              node="header"
-              type="header"
-              css={`
-                text-transform: initial;
-              `}
-            >
+            <AccountText id="pstl-web3-modal-address-text" node="header" css="text-transform: initial;">
               {userConnectionInfo.address
                 ? isCopied
                   ? 'Copied!'
@@ -172,7 +165,7 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
             marginRight="1rem"
             onClick={() => isNonFrameWalletApp && modalCallbacks.open({ route: 'ConnectWallet' })}
           >
-            <Column width={'100%'} gap="0.3rem">
+            <Column width="100%" gap="0.3rem">
               <AccountText
                 id="pstl-web3-modal-wallet-text"
                 node="main"
@@ -184,9 +177,10 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
                 Wallet:{' '}
                 <AccountText
                   node="main"
+                  cursor="pointer"
                   fontSize="inherit"
                   fontWeight={700}
-                  display={'inline-flex'}
+                  display="inline-flex"
                   alignItems="center"
                   padding={0}
                   marginLeft="0.5rem"
@@ -207,7 +201,7 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
                 <AccountText
                   node="main"
                   fontSize="inherit"
-                  display={'inline-flex'}
+                  display="inline-flex"
                   alignItems="center"
                   padding={0}
                   marginLeft="0.5rem"

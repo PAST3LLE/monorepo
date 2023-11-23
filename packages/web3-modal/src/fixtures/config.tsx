@@ -82,6 +82,10 @@ export const pstlModalTheme = createTheme({
               textTransform: 'uppercase'
             },
             hoverAnimations: true
+          },
+          active: {
+            filter: 'invert(1) saturate(1.2)',
+            background: { default: '#777b48' }
           }
         }
       },

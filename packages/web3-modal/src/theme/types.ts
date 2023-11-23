@@ -31,6 +31,7 @@ export interface BackgroundStyles {
 }
 
 export interface ButtonStyles {
+  filter?: string
   font?: FontStyles
   border?: BorderStyles
   height?: string
@@ -56,6 +57,8 @@ export interface SharedModalTheme {
     main?: ButtonStyles
     secondary?: ButtonStyles
     alternate?: ButtonStyles
+    active?: ButtonStyles
+    disabled?: ButtonStyles
   }
   container?: {
     main?: ContainerStyles

@@ -7,6 +7,7 @@ import { WithError } from '../../../controllers/types/controllerTypes'
 import { usePstlWeb3ModalStore } from '../../../hooks'
 import { useAutoClearingTimeout } from '../../../hooks/useTimeout'
 import { ErrorMessage } from './ErrorMessage'
+import { PoweredByLabel } from './PoweredByLabel'
 import { InnerContainer, ModalTitle, StyledConnectionModal } from './styled'
 import { BaseModalProps, ModalId } from './types'
 
@@ -67,6 +68,7 @@ export function BaseModal({
         </Row>
         {children}
         <ErrorMessage message={error?.message} hide={!showError || !error?.message} onClick={hideError} />
+        <PoweredByLabel />
       </InnerContainer>
     </StyledConnectionModal>
   )

@@ -1,6 +1,7 @@
 import { devDebug } from '@past3lle/utils'
 import { isIframe } from '@past3lle/wagmi-connectors/utils'
 
+import { usePstlWeb3ModalStore } from '../../hooks'
 import { Chain, ConnectorEnhanced } from '../../types'
 import { isLedgerDappBrowserProvider } from '../../utils/iframe'
 import { PstlWeb3ModalProps } from '../types'
@@ -18,6 +19,16 @@ export function getAppType(forcedAppType?: AppType) {
   } else {
     return 'DAPP'
   }
+}
+
+export function useDeriveAppType() {
+  const {
+    state: {
+      root: { appType }
+    }
+  } = usePstlWeb3ModalStore()
+
+  return getAppType(appType)
 }
 
 export function mapChainsToConnectors(
