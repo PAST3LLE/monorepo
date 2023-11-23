@@ -23,6 +23,7 @@ export * from './useOfflineOnlineDetection'
 export {
   WindowSizes,
   useWindowSize,
+  UseWindowSizeOptions,
   useWindowSmallerThan,
   useIsExtraSmallMediaWidth,
   useIsSmallMediaWidth,
