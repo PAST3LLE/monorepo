@@ -63,7 +63,7 @@ function ForgeW3Providers({ config, children }: ForgeW3CoreProvidersProps) {
 function ForgeW3BalancesAndWindowSizeProviders({ config, children }: ForgeW3CoreProvidersProps) {
   return (
     <StrictMode>
-      <ForgeWindowSizeUpdater />
+      <ForgeWindowSizeUpdater {...config.options?.windowSizeOptions} />
       <PstlW3Providers
         config={{
           ...config.web3,

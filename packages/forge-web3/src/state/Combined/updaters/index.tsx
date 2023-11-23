@@ -17,7 +17,7 @@ export function ForgeW3StateUpdaters(props: ForgeW3AppConfig & { children: React
       <ForgeUserConfigUpdater {...props} />
       <ForgeMetadataUpdater metadataFetchOptions={props.skillOptions?.metadataFetchOptions} />
       <ForgeBalancesUpdater />
-      <ForgeWindowSizeUpdater />
+      <ForgeWindowSizeUpdater {...props.options?.windowSizeOptions} />
       {props.children}
     </>
   )
