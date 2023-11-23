@@ -73,7 +73,7 @@ function useSetupCachedWindowResizeListeners(options?: UseWindowSizeOptions) {
 
 /**
  * @name useWindowSize
- * @description Listens to globalThis.window resize events and updates via CONTEXT. This requires you to FIRST place the WindowSizeProvider somewhere in your app ABOVE your intended use of this hook
+ * @description Listens to globalThis.window resize events and updates via proxy state.
  * @example
  // somewhere in app architecture - e.g render
  useWindowSize({ throttleMs: 300 })
