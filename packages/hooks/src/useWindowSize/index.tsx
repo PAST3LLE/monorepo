@@ -1,7 +1,7 @@
 import { MEDIA_WIDTHS, MediaWidths } from '@past3lle/theme'
 import { devDebug } from '@past3lle/utils'
 import throttle from 'lodash.throttle'
-import { ReactNode, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { snapshot, subscribe, useSnapshot } from 'valtio'
 
 import { setDimensions, state } from './state'
@@ -113,22 +113,6 @@ export const useIsSmallMediaWidth = () => useWindowSmallerThan(MEDIA_WIDTHS.upTo
 export const useIsMediumMediaWidth = () => useWindowSmallerThan(MEDIA_WIDTHS.upToMedium)
 export const useIsLargeMediaWidth = () => useWindowSmallerThan(MEDIA_WIDTHS.upToLarge)
 export const useIsExtraLargeMediaWidth = () => useWindowSmallerThan(MEDIA_WIDTHS.upToExtraLarge)
-
-export interface WindowSizeProviderOptions {
-  windowSizes?: {
-    throttleMs?: number
-  }
-}
-/**
- * @name WindowSizeProvider
- * @description required to place ABOVE intended use of useWindowSize hook
- * @param providerOptions
- * @deprecated Deprecated. Just use useWindowSize hook directly.
- * @returns children
- */
-export function WindowSizeProvider(props?: { children?: ReactNode } & WindowSizeProviderOptions) {
-  return props?.children
-}
 
 function _checkWindowExists() {
   return typeof globalThis?.window !== 'undefined'

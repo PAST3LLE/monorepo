@@ -28,7 +28,5 @@ export {
   useIsSmallMediaWidth,
   useIsMediumMediaWidth,
   useIsLargeMediaWidth,
-  useIsExtraLargeMediaWidth,
-  WindowSizeProvider,
-  WindowSizeProviderOptions
+  useIsExtraLargeMediaWidth
 } from './useWindowSize'
