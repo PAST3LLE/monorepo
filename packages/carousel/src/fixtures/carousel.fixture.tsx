@@ -48,12 +48,13 @@ function Providers({ children }: { children: ReactNode }) {
   )
 }
 
-function VerticalCarousel({ indicatorOptions }: Pick<OptionalCarouselProps, 'indicatorOptions'>) {
+function VerticalCarousel({ indicatorOptions, windowSizeOptions }: Pick<OptionalCarouselProps, 'indicatorOptions'> & WithWindowSizeOptions) {
   return (
     <Providers>
       <div style={{ height: ITEM_HEIGHT, width: '100%' }}>
         <VerticalSwipeCarousel
           data={DATA}
+          windowSizeOptions={windowSizeOptions}
           startIndex={0}
           touchAction="none"
           infiniteScrollOptions={{ visible: 1, scaleOptions: { initialScale: 1 } }}
@@ -68,8 +69,8 @@ function VerticalCarousel({ indicatorOptions }: Pick<OptionalCarouselProps, 'ind
     </Providers>
   )
 }
-
-function HorizontalCarousel({ indicatorOptions }: Pick<OptionalCarouselProps, 'indicatorOptions'>) {
+type WithWindowSizeOptions = { windowSizeOptions?: { throttleMs?: number } }
+function HorizontalCarousel({ indicatorOptions, windowSizeOptions }: Pick<OptionalCarouselProps, 'indicatorOptions'> & WithWindowSizeOptions) {
   return (
     <Providers>
       <div style={{ height: ITEM_HEIGHT, width: '100%' }}>
@@ -79,6 +80,7 @@ function HorizontalCarousel({ indicatorOptions }: Pick<OptionalCarouselProps, 'i
           startIndex={0}
           touchAction="none"
           indicatorOptions={indicatorOptions}
+          windowSizeOptions={windowSizeOptions}
         >
           {({ index }) => {
             const Comp = DATA[index]
@@ -91,9 +93,10 @@ function HorizontalCarousel({ indicatorOptions }: Pick<OptionalCarouselProps, 'i
 }
 
 export default {
-  vertical: <VerticalCarousel indicatorOptions={{ showIndicators: false }} />,
+  vertical: <VerticalCarousel indicatorOptions={{ showIndicators: false }} windowSizeOptions={{ throttleMs: 1000 }} />,
   verticalWithIndicators: (
     <VerticalCarousel
+      windowSizeOptions={{ throttleMs: 1000 }}
       indicatorOptions={{
         showIndicators: true,
         position: 'bottom',
@@ -110,9 +113,10 @@ export default {
       }}
     />
   ),
-  horizontal: <HorizontalCarousel />,
+  horizontal: <HorizontalCarousel windowSizeOptions={{ throttleMs: 1000 }} />,
   horizontalWithIndicators: (
     <HorizontalCarousel
+      windowSizeOptions={{ throttleMs: 1000 }}
       indicatorOptions={{
         showIndicators: true,
         position: 'bottom',

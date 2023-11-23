@@ -18,6 +18,7 @@ export default function ButtonCarousel<D extends any[]>({
   startIndex,
   dimensions,
   forwardedRef,
+  windowSizeOptions,
   onCarouselChange,
   children,
   ...rest
@@ -27,7 +28,7 @@ export default function ButtonCarousel<D extends any[]>({
     parentSizes,
     imageTransformations: defaultImageTransforms,
     setCarouselContainerRef
-  } = useCarouselSetup(dimensions)
+  } = useCarouselSetup(dimensions, { windowSizeOptions })
 
   const { isMultipleCarousel, lastStepIndex } = useMemo(
     () => ({
