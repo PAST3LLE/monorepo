@@ -1,4 +1,3 @@
-import { WindowSizeProvider } from '@past3lle/hooks'
 import {
   AppType,
   type ChainsPartialReadonly,
@@ -40,9 +39,7 @@ interface ForgeW3CoreProvidersProps {
 function ForgeStateProviders({ config, children }: ForgeW3CoreProvidersProps) {
   return (
     <StrictMode>
-      <WindowSizeProvider {...config.hooksProviderOptions}>
-        <ForgeW3StateUpdaters {...config}>{children}</ForgeW3StateUpdaters>
-      </WindowSizeProvider>
+      <ForgeW3StateUpdaters {...config}>{children}</ForgeW3StateUpdaters>
     </StrictMode>
   )
 }
@@ -50,17 +47,15 @@ function ForgeStateProviders({ config, children }: ForgeW3CoreProvidersProps) {
 function ForgeW3Providers({ config, children }: ForgeW3CoreProvidersProps) {
   return (
     <StrictMode>
-      <WindowSizeProvider {...config.hooksProviderOptions}>
-        <PstlW3Providers
-          config={{
-            ...config.web3,
-            appName: config.name
-          }}
-        >
-          <W3aStyleResetProvider />
-          <ForgeW3StateUpdaters {...config}>{children}</ForgeW3StateUpdaters>
-        </PstlW3Providers>
-      </WindowSizeProvider>
+      <PstlW3Providers
+        config={{
+          ...config.web3,
+          appName: config.name
+        }}
+      >
+        <W3aStyleResetProvider />
+        <ForgeW3StateUpdaters {...config}>{children}</ForgeW3StateUpdaters>
+      </PstlW3Providers>
     </StrictMode>
   )
 }
@@ -68,19 +63,17 @@ function ForgeW3Providers({ config, children }: ForgeW3CoreProvidersProps) {
 function ForgeW3BalancesAndWindowSizeProviders({ config, children }: ForgeW3CoreProvidersProps) {
   return (
     <StrictMode>
-      <WindowSizeProvider {...config.hooksProviderOptions}>
-        <ForgeWindowSizeUpdater />
-        <PstlW3Providers
-          config={{
-            ...config.web3,
-            appName: config.name
-          }}
-        >
-          <W3aStyleResetProvider />
-          <ForgeBalancesUpdater />
-          {children}
-        </PstlW3Providers>
-      </WindowSizeProvider>
+      <ForgeWindowSizeUpdater />
+      <PstlW3Providers
+        config={{
+          ...config.web3,
+          appName: config.name
+        }}
+      >
+        <W3aStyleResetProvider />
+        <ForgeBalancesUpdater />
+        {children}
+      </PstlW3Providers>
     </StrictMode>
   )
 }
