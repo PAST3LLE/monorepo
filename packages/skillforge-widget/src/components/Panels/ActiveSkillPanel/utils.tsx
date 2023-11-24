@@ -27,9 +27,9 @@ export function getSkillDescription(name: string | undefined, lockStatus: SkillL
 export function getLockStatusColour(lockStatus: SkillLockStatus, theme: DefaultTheme) {
   switch (lockStatus) {
     case SkillLockStatus.LOCKED:
-      return 'darkred'
+      return '#8b0000'
     case SkillLockStatus.UNLOCKABLE_IN_STORE:
-      return 'darkgreen'
+      return '#006400'
     case SkillLockStatus.UNLOCKABLE_IN_TRADE:
       return '#e46cff'
     case SkillLockStatus.OWNED:

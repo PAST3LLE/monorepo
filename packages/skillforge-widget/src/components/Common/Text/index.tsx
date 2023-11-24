@@ -18,7 +18,10 @@ export const AutoColorHeader = styled(BlackBoldItalic)<{
 }>`
   background-color: ${({ bgColour }) => bgColour};
   color: ${({ bgColour, fgColour, theme }) =>
-    setBestContrastingColour({ bgColour, fgColour, lightColour: theme.mainFg, darkColour: 'black' })};
+    setBestContrastingColour(
+      { bgColour, fgColour, lightColour: theme.mainFg, darkColour: 'black' },
+      { threshold: ['AA'] }
+    )};
 `
 
 export const BlackHeader = styled(BlackBoldItalic).attrs((props) => ({
