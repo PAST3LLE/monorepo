@@ -66,6 +66,7 @@ export const pstlModalTheme = createTheme({
         baseFontSize: 16,
         button: {
           main: {
+            filter: 'invert(1) hue-rotate(65deg)',
             background: { default: '#2d222cbd', url: 'none' },
             height: '80px',
             icons: {
@@ -101,11 +102,23 @@ export const pstlModalTheme = createTheme({
           }
         },
         button: {
+          main: {
+            ...ACCOUNT_BUTTON,
+            filter: 'invert(1) hue-rotate(65deg)'
+          },
           alternate: {
             font: ACCOUNT_BUTTON.font,
+            filter: 'hue-rotate(-5deg) contrast(1.3)',
             background: { default: 'indianred', url: 'none' }
+          }
+        },
+        container: {
+          main: {
+            background: '#1113107a'
           },
-          main: ACCOUNT_BUTTON
+          alternate: {
+            background: '#1113107a'
+          }
         }
       },
       hidDevice: {}

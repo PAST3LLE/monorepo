@@ -1,10 +1,9 @@
 import { Column, Row } from '@past3lle/components'
 import { fromExtraSmall, upToExtraSmall, upToSmall } from '@past3lle/theme'
-import { DeepRequired } from '@past3lle/types'
 import styled from 'styled-components'
 
-import { PstlModalThemeExtension, PstlSubModalsTheme, RequiredPstlSubModalsTheme } from '../../../theme'
-import { ModalButton, ModalText } from '../common/styled'
+import { PstlSubModalsTheme, RequiredPstlSubModalsTheme } from '../../../theme'
+import { ModalButton, ModalContainer, ModalText } from '../common/styled'
 import { ModalId } from '../common/types'
 
 export const Icon = styled.img`
@@ -15,7 +14,7 @@ export const Icon = styled.img`
   opacity: 0.8;
 `
 
-export const AccountModalButton = styled(ModalButton)`
+export const AccountModalButton = styled(ModalButton).attrs({ modal: 'account' })`
   justify-content: center;
 `
 export const FooterActionButtonsRow = styled(Row)`
@@ -28,19 +27,11 @@ export const AccountText = styled(ModalText).attrs((props) => ({
   ${({ cursor }) => cursor && `cursor: ${cursor};`}
 `
 
-export const AccountStyledContainer = styled(Column)<{
-  cursor?: string
-  node: keyof DeepRequired<PstlModalThemeExtension>['modals']['account']['container']
-}>`
-  background-color: ${({ theme, node }) => theme?.modals?.account?.container?.[node]?.background};
-`
-
-export const AddressAndBalanceColumnContainer = styled(AccountStyledContainer).attrs((props) => ({
-  modal: 'account' as keyof PstlSubModalsTheme,
+export const AddressAndBalanceColumnContainer = styled(ModalContainer).attrs((props) => ({
+  modal: 'account',
   node: 'main',
   ...props
 }))<{ backgroundColor?: string; cursor: string }>`
-  background: ${({ theme, modal, node }) => theme.modals?.[modal]?.container?.[node]?.background};
   > ${Column}:first-child {
     flex: 0 1 68%;
     min-width: max-content;
@@ -68,14 +59,16 @@ export const AccountLogosRow = styled(Row)<{ backgroundFrameColor?: string }>`
   }
 `
 
-export const WalletAndNetworkRowContainer = styled(Row).attrs((props) => ({
+export const WalletAndNetworkRowContainer = styled(ModalContainer).attrs((props) => ({
+  as: Row,
   modal: 'account' as keyof PstlSubModalsTheme,
   node: 'main' as keyof RequiredPstlSubModalsTheme['account']['container'],
   ...props
 }))<{ backgroundColor?: string; cursor: string }>`
-  background: ${({ theme, modal, backgroundColor = theme.modals?.[modal]?.container?.alternate?.background }) =>
+  background-color: ${({ theme, modal, backgroundColor = theme.modals?.[modal]?.container?.alternate?.background }) =>
     backgroundColor};
   z-index: 1;
+
   ${Row}#${ModalId.ACCOUNT}__wallets-button {
     cursor: ${({ cursor }) => cursor};
     > ${Column} {
@@ -85,12 +78,14 @@ export const WalletAndNetworkRowContainer = styled(Row).attrs((props) => ({
       }
     }
   }
+
   #${ModalId.ACCOUNT}__network-disconnect-buttons {
     gap: 10px;
     > ${AccountModalButton} {
       min-width: max-content;
     }
   }
+
   cursor: pointer;
   ${upToExtraSmall`
     > ${Column} > ${Row}#${ModalId.ACCOUNT}__network-disconnect-buttons {
@@ -173,7 +168,7 @@ export const ModalColumnContainer = styled(Column)<{ layout: 'Account' | 'Other'
     }
   `}
   ${({ layout = 'Account' }) => fromExtraSmall`
-    ${AccountStyledContainer} {
+    ${ModalContainer} {
       flex-flow: row wrap;
 
       > #${ModalId.ACCOUNT}__balance-text {

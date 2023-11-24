@@ -91,13 +91,7 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
         }}
       />
       {/* Address and Balance Row */}
-      <AddressAndBalanceColumnContainer
-        cursor="pointer"
-        borderRadius="1rem"
-        padding="1em"
-        backgroundColor={theme?.connection?.button?.main?.background?.default}
-        border={theme?.account?.container?.secondary?.border?.border}
-      >
+      <AddressAndBalanceColumnContainer cursor="pointer" borderRadius="1rem" padding="1em">
         <Column>
           <Row
             justifyContent="flex-start"
@@ -113,7 +107,7 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
                   : truncateAddress(userConnectionInfo.address, { type: 'long' })
                 : 'Disconnected'}
             </AccountText>
-            {theme?.account?.icons?.copy && <Icon src={theme?.account?.icons?.copy?.url} />}
+            {theme?.account?.icons?.copy?.url && <Icon src={theme?.account?.icons?.copy?.url} />}
           </Row>
           <Row id={`${ModalId.ACCOUNT}__balance-text`}>
             <AccountText node="subHeader">Balance:</AccountText>
@@ -133,7 +127,6 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
         >
           <AccountModalButton
             id={`${ModalId.ACCOUNT}__explorer-button`}
-            modal="account"
             node="main"
             connected={false}
             padding="0.6rem"
@@ -148,11 +141,7 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
         cursor={isNonFrameWalletApp ? 'pointer' : 'initial'}
         width="100%"
         padding="1em"
-        border={theme?.account?.container?.main?.border?.border}
-        borderRadius={theme?.account?.container?.main?.border?.radius}
-        backgroundColor={
-          isUnsupportedChain ? theme?.base?.background?.error : theme?.connection?.button?.main?.background?.default
-        }
+        backgroundColor={isUnsupportedChain ? theme?.base?.background?.error : undefined}
       >
         <Column width="100%" maxWidth={400}>
           {/* Wallet & Network Row */}
@@ -216,7 +205,6 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
           <Row id={`${ModalId.ACCOUNT}__network-disconnect-buttons`} width="100%" marginTop="1rem" gap="1rem">
             {showNetworkButton && (
               <AccountModalButton
-                modal="account"
                 node="main"
                 id={`${ModalId.ACCOUNT}__network-button`}
                 connected={false}
@@ -228,7 +216,6 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
             )}
             {isNonFrameWalletApp && (
               <AccountModalButton
-                modal="account"
                 node="alternate"
                 id={`${ModalId.ACCOUNT}__disconnect-button`}
                 connected={false}

@@ -41,20 +41,20 @@ export const ModalButton = styled(Button)<ButtonThemeTypes & { connected: boolea
   gap: 10px;
 
   &:hover {
-    ${({ theme, modal }) =>
-      !!theme?.modals?.connection?.button?.main?.hoverAnimations &&
+    ${({ theme, modal, node }) =>
+      !!theme?.modals?.[modal]?.button?.[node]?.hoverAnimations &&
       `
-    background: ${theme.modals?.[modal]?.button?.active?.background?.default};
-    filter: ${theme.modals?.[modal]?.button?.active?.filter};
+    background: ${theme.modals?.[modal]?.button?.[node]?.background?.default};
+    filter: ${theme.modals?.[modal]?.button?.[node]?.filter};
     transform: scale(0.95);
   `}
   }
 
-  ${({ connected, theme: { modals }, modal }) =>
+  ${({ connected, theme: { modals }, modal, node }) =>
     connected &&
     `
-      background: ${modals?.[modal]?.button?.active?.background?.default};
-      filter: ${modals?.[modal]?.button?.active?.filter};
+      background: ${modals?.[modal]?.button?.[node]?.background?.default};
+      filter: ${modals?.[modal]?.button?.[node]?.filter};
       transform: scale(0.95);
   `}
 

@@ -1,4 +1,4 @@
-import { ErrorBoundary, SpinnerCircle } from '@past3lle/components'
+import { ErrorBoundary, RowCenter, SpinnerCircle } from '@past3lle/components'
 import { ThemeProvider } from '@past3lle/theme'
 import { devWarn } from '@past3lle/utils'
 import React, { Suspense, lazy, memo, useEffect, useMemo } from 'react'
@@ -120,7 +120,11 @@ export function ModalWithoutThemeProvider(baseProps: Omit<StatelessBaseModalProp
 }
 
 function renderFallback() {
-  return <SpinnerCircle size={100} />
+  return (
+    <RowCenter margin="2rem auto">
+      <SpinnerCircle size={100} />
+    </RowCenter>
+  )
 }
 
 function ModalWithThemeProvider({ themeConfig, ...modalProps }: Omit<StatelessBaseModalProps, 'modal'>) {

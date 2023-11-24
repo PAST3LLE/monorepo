@@ -36,7 +36,10 @@ export interface ButtonStyles {
   border?: BorderStyles
   height?: string
   hoverAnimations?: boolean
-  background?: { default?: BackgroundStyles['main']; url?: BackgroundPropertyFull }
+  background?: {
+    default?: BackgroundStyles['main']
+    url?: BackgroundPropertyFull
+  }
   icons?: {
     filter?: string
     height?: string
