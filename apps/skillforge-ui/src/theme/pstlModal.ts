@@ -64,6 +64,9 @@ export const pstlModalTheme = createTheme({
         container: {
           main: {
             background: '#1113107a'
+          },
+          alternate: {
+            background: '#1113107a'
           }
         },
         button: {
