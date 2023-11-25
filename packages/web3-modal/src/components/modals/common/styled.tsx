@@ -30,9 +30,9 @@ export const ModalButton = styled(Button)<ButtonThemeTypes & { connected: boolea
   font-style: ${(props) => props.theme.modals?.[props.modal]?.button?.[props.node]?.font?.style};
   font-variation-settings: ${(props) =>
     `'wght' ${props.theme.modals?.[props.modal]?.button?.[props.node]?.font?.weight}`};
-  color: ${(props) =>
-    props.theme.modals?.[props.modal]?.button?.[props.node]?.font?.color ||
-    setBestTextColour(props.theme.modals?.[props.modal]?.button?.[props.node]?.background?.default as string)};
+  color: ${({ theme: { modals }, modal, node }) =>
+    modals?.[modal]?.button?.[node]?.font?.color ||
+    setBestTextColour(modals?.[modal]?.button?.[node]?.background?.default || '#000')};
 
   letter-spacing: ${(props) => props.theme.modals?.[props.modal]?.button?.[props.node]?.font?.letterSpacing};
   text-shadow: ${(props) => props.theme.modals?.[props.modal]?.button?.[props.node]?.font?.textShadow};
@@ -185,7 +185,7 @@ export const ErrorMessageContainer = styled(InnerContainer).attrs({ modal: 'base
 
   > ${ModalText}#error-close-icon {
     position: absolute;
-    color: ${(props) => setBestTextColour(props.theme.modals?.base?.error?.background || '#000', 5)};
+    color: ${(props) => setBestTextColour(props.theme.modals?.base?.error?.background || '#580101', ['AA'])};
     cursor: pointer;
     top: 16px;
     right: 18px;

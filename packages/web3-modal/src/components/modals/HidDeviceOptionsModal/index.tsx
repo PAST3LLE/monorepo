@@ -152,7 +152,7 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
           <Row id={`${ModalId.ACCOUNT}__balance-text`}>
             <ModalSubHeaderText node="subHeader">{!isExtraSmallWidth ? 'Current' : ''} Path:</ModalSubHeaderText>
             <HighlightedModalText
-              color={setBestTextColour(theme?.hidDevice?.container?.alternate?.background || '#000')}
+              color={setBestTextColour(theme?.hidDevice?.container?.alternate?.background || '#000', ['AA'])}
             >
               {selection}
             </HighlightedModalText>
@@ -252,7 +252,7 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
               backgroundColor={address ? undefined : theme?.base?.background?.error}
               color={setBestTextColour(
                 (address ? theme?.hidDevice?.container?.main?.background : theme?.base?.background?.error) || '#000',
-                5
+                ['AA']
               )}
             >
               {address ? truncateAddress(address) : 'DISCONNECTED'}

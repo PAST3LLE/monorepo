@@ -13,10 +13,10 @@ const PoweredByLabelContainer = styled(Row).attrs({
 })<ContainerThemeTypes>`
   z-index: 500;
   > ${ModalText} {
-    color: ${({ theme: { modals }, modal, node }) =>
-      !modals?.[modal]?.background?.url && !!modals?.[modal]?.container?.[node]?.background
-        ? setBestTextColour(modals?.[modal]?.container?.[node]?.background as string)
-        : modals?.[modal]?.button?.[node]?.font?.color};
+    color: ${({ theme: { modals }, modal }) =>
+      modals?.[modal]?.background?.main
+        ? setBestTextColour(modals?.[modal]?.background?.main as string)
+        : modals?.[modal]?.font?.color};
     display: flex;
     align-items: center;
     justify-content: center;

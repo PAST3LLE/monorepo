@@ -2,7 +2,6 @@ import { useIsExtraSmallMediaWidth } from '@past3lle/hooks'
 import React, { memo, useMemo, useState } from 'react'
 import { useTheme } from 'styled-components'
 
-import { DEFAULT_CONNECTOR_OVERRIDES } from '../../../constants/wallets'
 import { ModalPropsCtrlState } from '../../../controllers/types/controllerTypes'
 import {
   useCloseAndUpdateModals,
@@ -77,10 +76,7 @@ function ConnectionModalContent({
   })
 
   const connectorDisplayOverrides = useMemo(
-    () => ({
-      ...DEFAULT_CONNECTOR_OVERRIDES,
-      ...cleanAndFormatConnectorOverrides(connectorDisplayOverridesUnformatted)
-    }),
+    () => cleanAndFormatConnectorOverrides(connectorDisplayOverridesUnformatted),
     [connectorDisplayOverridesUnformatted]
   )
 

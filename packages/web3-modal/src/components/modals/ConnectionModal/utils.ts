@@ -25,7 +25,7 @@ export function cleanAndFormatConnectorOverrides(overrides: ConnectorOverrides |
     const formattedKey = trimAndLowerCase(key)
     if (formattedKey) {
       acc[formattedKey] = {
-        ...DEFAULT_CONNECTOR_OVERRIDES[key],
+        ...DEFAULT_CONNECTOR_OVERRIDES[formattedKey],
         ...value
       }
     }
