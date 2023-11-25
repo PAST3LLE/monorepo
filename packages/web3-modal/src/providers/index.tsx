@@ -53,10 +53,7 @@ const PstlW3ProvidersBase = <ID extends number>({
   )
 }
 
-const PstlW3Providers = memo(
-  PstlW3ProvidersBase,
-  (prev, next) => JSON.stringify(prev.config) === JSON.stringify(next.config)
-)
+const PstlW3Providers = memo(PstlW3ProvidersBase)
 
 export {
   PstlW3Providers,

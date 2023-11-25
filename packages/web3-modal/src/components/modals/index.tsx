@@ -112,14 +112,14 @@ export function ModalWithoutThemeProvider(baseProps: Omit<StatelessBaseModalProp
 
   return (
     <BaseModal {...baseProps} {...auxBaseProps} isOpen={modalState.isOpen} onDismiss={modalState.close}>
-      <Suspense fallback={renderFallback()}>
+      <Suspense fallback={<Fallback />}>
         <Modal />
       </Suspense>
     </BaseModal>
   )
 }
 
-function renderFallback() {
+function Fallback() {
   return (
     <RowCenter margin="2rem auto">
       <SpinnerCircle size={100} />

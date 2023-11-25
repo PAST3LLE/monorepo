@@ -75,7 +75,7 @@ export function useMergeThemes(customModalThemeByModes?: ThemeByModes<BasicUserT
 
     setTheme(modifiedModalTheme)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [serialisedCustomModalTheme, serialisedTheme])
+  }, [currentTheme?.mode, customModalThemeByModes?.modes, serialisedCustomModalTheme, serialisedTheme])
 
   return theme
 }

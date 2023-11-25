@@ -49,7 +49,8 @@ function DefaultApp() {
 function InnerApp() {
   const { setMode, mode } = useTheme()
   const derivedConfig = Object.assign({}, DEFAULT_PROPS_WEB3AUTH)
-
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  derivedConfig!.modals!.root!.themeConfig!.mode = mode
   return (
     <PstlW3Providers config={derivedConfig}>
       <AppWithWagmiAccess />

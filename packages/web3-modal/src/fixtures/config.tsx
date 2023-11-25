@@ -31,6 +31,11 @@ export const pstlModalTheme = createTheme({
   DEFAULT: {
     modals: {
       base: {
+        background: {
+          main: '#2d222cbd',
+          success: '#777b48',
+          url: BG_LOGO
+        },
         font: {
           family: "'Roboto Flex', 'Inter', sans-serif, system-ui",
           letterSpacing: '0px'
@@ -51,11 +56,6 @@ export const pstlModalTheme = createTheme({
             textAlign: 'center'
           },
           margin: '0px 20px'
-        },
-        background: {
-          main: '#2d222cbd',
-          success: '#777b48',
-          url: BG_LOGO
         },
         helpers: { show: true },
         error: {
@@ -122,6 +122,20 @@ export const pstlModalTheme = createTheme({
         }
       },
       hidDevice: {}
+    }
+  },
+  get DARK() {
+    return this.DEFAULT
+  },
+  LIGHT: {
+    modals: {
+      base: {
+        baseFontSize: 5,
+        background: {
+          main: 'navajowhite',
+          url: 'unset'
+        }
+      }
     }
   }
 })
