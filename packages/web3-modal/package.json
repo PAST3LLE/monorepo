@@ -1,6 +1,6 @@
 {
   "name": "@past3lle/web3-modal",
-  "version": "2.0.0-alpha.1",
+  "version": "2.0.0-alpha.2",
   "sideEffects": false,
   "description": "PAST3LLE's Web3 connection modal",
   "keywords": [
@@ -82,10 +82,10 @@
     "wagmi": "^1.x"
   },
   "dependencies": {
-    "@past3lle/components": "^1.0.0-alpha.1",
-    "@past3lle/hooks": "^1.0.0-alpha.1",
-    "@past3lle/theme": "^0.1.14",
-    "@past3lle/utils": "^0.1.12",
+    "@past3lle/components": "^1.0.0-alpha.2",
+    "@past3lle/hooks": "^1.0.0-alpha.2",
+    "@past3lle/theme": "^0.1.15",
+    "@past3lle/utils": "^0.1.13",
     "@past3lle/wagmi-connectors": "^0.1.15-alpha.0",
     "@web3modal/ethereum": "^2.7.1",
     "@web3modal/html": "^2.7.1",
