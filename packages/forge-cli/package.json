@@ -38,7 +38,8 @@
     "compile": "tsdx build && cp \"./package.json\" ./dist/",
     "build": "yarn clean && yarn compile",
     "prepack": "yarn build",
-    "lint": "prettier --write ./src/** --ignore-path '../../.prettierignore'"
+    "lint": "prettier --write ./src/** --ignore-path '../../.prettierignore'",
+    "check-types": "npx tsc --noEmit"
   },
   "bugs": {
     "url": "https://github.com/PAST3LLE/past3lle-monorepo/issues"

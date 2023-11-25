@@ -27,7 +27,8 @@
     "prepack": "yarn build",
     "start": "tsdx watch",
     "pre-commit": "pretty-quick --staged && yarn test:ci && yarn build",
-    "lint": "prettier --write ./src/** --ignore-path '../../.prettierignore'"
+    "lint": "prettier --write ./src/** --ignore-path '../../.prettierignore'",
+    "check-types": "npx tsc --noEmit"
   },
   "publishConfig": {
     "access": "public",
