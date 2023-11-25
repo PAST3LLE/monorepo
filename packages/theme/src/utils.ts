@@ -86,14 +86,13 @@ type BestContrastingColourParams = CheckHexColourContrastParams & {
   darkColour: Color
 }
 type PossiblePassingContrastRatingThresholds = 'AAA' | 'AA' | 'A'
-const CONTRAST_THRESHOLD = 10
 type ContrastCheckOptions = {
   threshold: number | PossiblePassingContrastRatingThresholds[]
 }
 
 export function setBestContrastingColour(
   { bgColour, fgColour, lightColour, darkColour }: BestContrastingColourParams,
-  options: ContrastCheckOptions = { threshold: CONTRAST_THRESHOLD }
+  options: ContrastCheckOptions = { threshold: ['AA'] }
 ): string {
   const [contrastScore, contrastRating] = checkHexColourContrast({
     bgColour,
@@ -214,7 +213,7 @@ type BackgroundWithDPIProps = Partial<Omit<SetCssBackgroundParams, 'isLogo' | 'i
   modeColours?: [string, string]
 }
 
-export function setBestTextColour(bgColor: Color, threshold = CONTRAST_THRESHOLD) {
+export function setBestTextColour(bgColor: Color, threshold: ContrastCheckOptions['threshold'] = ['AA']) {
   return setBestContrastingColour(
     {
       bgColour: bgColor,
