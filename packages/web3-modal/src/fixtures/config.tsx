@@ -33,7 +33,7 @@ export const pstlModalTheme = createTheme({
       base: {
         baseFontSize: 16,
         background: {
-          main: '#2d222cbd',
+          main: 'black',
           success: '#777b48',
           url: BG_LOGO
         },

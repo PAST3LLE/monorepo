@@ -15,7 +15,7 @@ const PoweredByLabelContainer = styled(Row).attrs({
   > ${ModalText} {
     color: ${({ theme: { modals }, modal }) =>
       modals?.[modal]?.background?.main
-        ? setBestTextColour(modals?.[modal]?.background?.main as string)
+        ? setBestTextColour(modals?.base?.background?.main as string, 7)
         : modals?.[modal]?.font?.color};
     display: flex;
     align-items: center;

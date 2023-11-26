@@ -32,7 +32,7 @@ export const ModalButton = styled(Button)<ButtonThemeTypes & { connected: boolea
     `'wght' ${props.theme.modals?.[props.modal]?.button?.[props.node]?.font?.weight}`};
   color: ${({ theme: { modals }, modal, node }) =>
     modals?.[modal]?.button?.[node]?.font?.color ||
-    setBestTextColour(modals?.[modal]?.button?.[node]?.background?.default || '#000')};
+    setBestTextColour(modals?.[modal]?.button?.[node]?.background?.default || '#000', 7)};
 
   letter-spacing: ${(props) => props.theme.modals?.[props.modal]?.button?.[props.node]?.font?.letterSpacing};
   text-shadow: ${(props) => props.theme.modals?.[props.modal]?.button?.[props.node]?.font?.textShadow};
@@ -195,7 +195,7 @@ export const ErrorMessageContainer = styled(InnerContainer).attrs({ modal: 'base
 
   > ${ModalText}#error-close-icon {
     position: absolute;
-    color: ${(props) => setBestTextColour(props.theme.modals?.base?.error?.background || '#580101', ['AA'])};
+    color: ${(props) => setBestTextColour(props.theme.modals?.base?.error?.background || '#580101', 7)};
     cursor: pointer;
     top: 16px;
     right: 18px;
