@@ -31,6 +31,7 @@ export const pstlModalTheme = createTheme({
   DEFAULT: {
     modals: {
       base: {
+        baseFontSize: 16,
         background: {
           main: '#2d222cbd',
           success: '#777b48',
@@ -63,7 +64,6 @@ export const pstlModalTheme = createTheme({
         }
       },
       connection: {
-        baseFontSize: 16,
         button: {
           main: {
             filter: 'invert(1) hue-rotate(65deg)',

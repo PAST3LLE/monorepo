@@ -1,5 +1,5 @@
 import { Column, Row } from '@past3lle/components'
-import { useCopyClipboard, useIsSmallMediaWidth } from '@past3lle/hooks'
+import { useCopyClipboard, useIsSmallMediaWidth, useWindowSize } from '@past3lle/hooks'
 import { truncateAddress } from '@past3lle/utils'
 import React, { memo, useCallback, useMemo } from 'react'
 import { useTheme } from 'styled-components'
@@ -17,6 +17,7 @@ import {
   AccountModalButton,
   AccountText,
   AddressAndBalanceColumnContainer,
+  AddressAndBalanceRow,
   FooterActionButtonsRow,
   Icon,
   WalletAndNetworkRowContainer
@@ -76,9 +77,10 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
   }, [userConnectionInfo?.chain?.blockExplorers?.default, userConnectionInfo?.address])
 
   const theme = useModalTheme()
+  const { width: winWidth = 0 } = useWindowSize() || {}
 
   return (
-    <AccountColumnContainer width="100%" gap="1rem">
+    <AccountColumnContainer width="100%" gap="1rem" overflowY="auto">
       {/* Logos Row */}
       <WalletChainLogos
         wallet={{
@@ -91,25 +93,25 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
         }}
       />
       {/* Address and Balance Row */}
-      <AddressAndBalanceColumnContainer cursor="pointer" borderRadius="1rem" padding="1em">
+      <AddressAndBalanceColumnContainer cursor="pointer" borderRadius="1rem" padding="1em" gap="1rem">
         <Column>
-          <Row
+          <AddressAndBalanceRow
             justifyContent="flex-start"
             gap="10px"
             style={{ cursor: 'pointer', zIndex: 1 }}
             title={userConnectionInfo.address}
             onClick={() => onCopy(userConnectionInfo?.address || '')}
           >
-            <AccountText id="pstl-web3-modal-address-text" node="header" css="text-transform: initial;">
+            <AccountText id={`${ModalId.ACCOUNT}__address-text`} node="header" css="text-transform: initial;">
               {userConnectionInfo.address
                 ? isCopied
                   ? 'Copied!'
-                  : truncateAddress(userConnectionInfo.address, { type: 'long' })
+                  : truncateAddress(userConnectionInfo.address, { type: winWidth < 360 ? 'short' : 'long' })
                 : 'Disconnected'}
             </AccountText>
             {theme?.account?.icons?.copy?.url && <Icon src={theme?.account?.icons?.copy?.url} />}
-          </Row>
-          <Row id={`${ModalId.ACCOUNT}__balance-text`}>
+          </AddressAndBalanceRow>
+          <AddressAndBalanceRow id={`${ModalId.ACCOUNT}__balance-text`}>
             <AccountText node="subHeader">Balance:</AccountText>
             <AccountText node="subHeader" title={userConnectionInfo.balance.data?.formatted || '0'} marginLeft={'5px'}>
               {Number(userConnectionInfo.balance.data?.formatted || 0).toLocaleString([], {
@@ -117,12 +119,12 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
               })}{' '}
               {userConnectionInfo.balance.data?.symbol || 'N/A'}
             </AccountText>
-          </Row>
+          </AddressAndBalanceRow>
         </Column>
         <FooterActionButtonsRow
-          marginTop={'1rem'}
           justifyContent={'space-evenly'}
           gap="2rem"
+          minWidth={150}
           style={{ zIndex: errorOptions?.show ? 0 : 1 }}
         >
           <AccountModalButton
@@ -143,7 +145,7 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
         padding="1em"
         backgroundColor={isUnsupportedChain ? theme?.base?.background?.error : undefined}
       >
-        <Column width="100%" maxWidth={400}>
+        <Column width="100%" maxWidth={400} gap="1rem">
           {/* Wallet & Network Row */}
           <Row
             id={`${ModalId.ACCOUNT}__wallets-button`}
@@ -151,19 +153,14 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
             height="auto"
             minHeight={82}
             width="100%"
-            marginRight="1rem"
             onClick={() => isNonFrameWalletApp && modalCallbacks.open({ route: 'ConnectWallet' })}
           >
             <Column width="100%" gap="0.3rem">
-              <AccountText
-                id="pstl-web3-modal-wallet-text"
-                node="main"
-                display="inline-flex"
-                alignItems="center"
-                width="auto"
-              >
-                {theme?.account?.icons?.wallet?.url && <Icon src={theme?.account?.icons?.wallet?.url} />}
-                Wallet:{' '}
+              <Row flexWrap="wrap" gap="0 0.5rem" id="pstl-web3-modal-wallet-text">
+                <AccountText node="subHeader" display="inline-flex" alignItems="center" width="auto">
+                  {theme?.account?.icons?.wallet?.url && <Icon src={theme?.account?.icons?.wallet?.url} />}
+                  Wallet:{' '}
+                </AccountText>
                 <AccountText
                   node="main"
                   cursor="pointer"
@@ -172,43 +169,37 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
                   display="inline-flex"
                   alignItems="center"
                   padding={0}
-                  marginLeft="0.5rem"
                 >
                   {(userConnectionInfo.connector as ConnectorEnhanced<any, any>)?.customName ||
                     userConnectionInfo.connector?.name}
                 </AccountText>
-              </AccountText>
-              <AccountText
-                id="pstl-web3-modal-wallet-text"
-                node="main"
-                display="inline-flex"
-                alignItems="center"
-                width="auto"
-              >
-                {theme?.account?.icons?.network?.url && <Icon src={theme?.account?.icons?.network?.url} />}
-                Network:{' '}
-                <AccountText
-                  node="main"
-                  fontSize="inherit"
-                  display="inline-flex"
-                  alignItems="center"
-                  padding={0}
-                  marginLeft="0.5rem"
-                >
+              </Row>
+              <Row flexWrap="wrap" gap="0 0.5rem" id="pstl-web3-modal-wallet-text">
+                <AccountText node="subHeader" display="inline-flex" alignItems="center" width="auto">
+                  {theme?.account?.icons?.network?.url && <Icon src={theme?.account?.icons?.network?.url} />}
+                  Network:{' '}
+                </AccountText>
+                <AccountText node="main" fontSize="inherit" display="inline-flex" alignItems="center" padding={0}>
                   {userConnectionInfo.chain?.name || userConnectionInfo.chain?.id || 'Unknown network'}
                   {isUnsupportedChain && <small className="unsupported-small-text">[unsupported]</small>}
                 </AccountText>
-              </AccountText>
+              </Row>
             </Column>
           </Row>
           {/* Switch Network & Disconnect Buttons */}
-          <Row id={`${ModalId.ACCOUNT}__network-disconnect-buttons`} width="100%" marginTop="1rem" gap="1rem">
+          <Row
+            id={`${ModalId.ACCOUNT}__network-disconnect-buttons`}
+            flex="1 1 auto"
+            width="auto"
+            minWidth={150}
+            gap="1rem"
+          >
             {showNetworkButton && (
               <AccountModalButton
                 node="main"
                 id={`${ModalId.ACCOUNT}__network-button`}
                 connected={false}
-                padding="0.6rem"
+                padding="0.6rem 1.2rem"
                 onClick={() => modalCallbacks.open({ route: 'SelectNetwork' })}
               >
                 Switch Network

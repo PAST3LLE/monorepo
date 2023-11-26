@@ -188,7 +188,6 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
           padding: '1em'
         },
         connection: {
-          ...DEFAULT_BASE_MODAL_PROPS,
           button: {
             main: {
               ...DEFAULT_BUTTON_PROPS,
@@ -213,7 +212,6 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
           }
         },
         account: {
-          ...DEFAULT_BASE_MODAL_PROPS,
           container: {
             main: {
               border: DEFAULT_BUTTON_PROPS.border,

@@ -12,12 +12,13 @@ import { ModalPropsCtrlState } from '../../../controllers/types/controllerTypes'
 import { useGetChainLogoCallback, usePstlWeb3Modal, useUserConnectionInfo } from '../../../hooks'
 import { LoadingScreen } from '../../LoadingScreen'
 import { NoChainLogo } from '../../NoChainLogo'
-import { AccountText, FooterActionButtonsRow, ModalColumnContainer } from '../AccountModal/styled'
+import { AccountText, FooterActionButtonsRow } from '../AccountModal/styled'
 import { ConnectorOption } from '../ConnectionModal/ConnectorOption'
 import { ModalButton } from '../common/styled'
 import { BaseModalProps, ModalId } from '../common/types'
 import { useHidModalPath, useHidModalStore, useHidUpdater } from './hooks'
 import {
+  HidDeviceContainer,
   HidModalAddressPlaceholder,
   HidModalAddresseRow,
   HidModalAddressesList,
@@ -105,8 +106,8 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
   if (!loadedSavedConfig) return <LoadingScreen loadingText="Loading user HID device config..." />
 
   return (
-    <ModalColumnContainer width="100%" layout="Other" overflowY={'auto'}>
-      <HidModalContainer modal="hidDevice" node="alternate" padding="1em">
+    <HidDeviceContainer width="100%" layout="Other" overflowY="auto">
+      <HidModalContainer>
         <Column flex="0 1 auto" width="100%">
           {hidConnector && (
             <Column maxHeight={115} height="auto">
@@ -242,10 +243,10 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
         <Column margin="1rem 0 0" width="100%">
           <Row justifyContent="flex-start" gap="10px" style={{ zIndex: 1 }} title="derivation-path">
             <ModalHeaderText id={`${ModalId.HID_DEVICE_OPTIONS}__select-account-header`} node="header">
-              Scan and select an account
+              {isExtraSmallWidth ? 'Scan accounts' : 'Scan and select an account'}
             </ModalHeaderText>
           </Row>
-          <Row id={`${ModalId.ACCOUNT}__balance-text`}>
+          <Row id={`${ModalId.ACCOUNT}__balance-text`} flexWrap="wrap" gap="0 5px">
             <ModalSubHeaderText node="subHeader">Current Account:</ModalSubHeaderText>
             <HighlightedModalText
               fontWeight={500}
@@ -329,7 +330,7 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
           )}
         </FooterActionButtonsRow>
       </HidModalContainer>
-    </ModalColumnContainer>
+    </HidDeviceContainer>
   )
 }
 

@@ -26,16 +26,22 @@ export const AccountText = styled(ModalText).attrs((props) => ({
 }))<{ cursor?: 'nesw-resize' | 'not-allowed' | 'pointer' | 'wait' | 'none' }>`
   ${({ cursor }) => cursor && `cursor: ${cursor};`}
 `
-
+export const AddressAndBalanceRow = styled(Row)``
 export const AddressAndBalanceColumnContainer = styled(ModalContainer).attrs((props) => ({
   modal: 'account',
   node: 'main',
+  overflowY: 'revert',
   ...props
 }))<{ backgroundColor?: string; cursor: string }>`
   > ${Column}:first-child {
-    flex: 0 1 68%;
+    flex: 0 1 65%;
     min-width: max-content;
   }
+  ${upToExtraSmall`
+    > ${Column}:first-child {
+      width: 100%;
+    }
+  `}
 `
 
 export const AccountLogosRow = styled(Row)<{ backgroundFrameColor?: string }>`
@@ -63,6 +69,7 @@ export const WalletAndNetworkRowContainer = styled(ModalContainer).attrs((props)
   as: Row,
   modal: 'account' as keyof PstlSubModalsTheme,
   node: 'main' as keyof RequiredPstlSubModalsTheme['account']['container'],
+  overflowY: 'revert',
   ...props
 }))<{ backgroundColor?: string; cursor: string }>`
   background-color: ${({ theme, modal, backgroundColor = theme.modals?.[modal]?.container?.alternate?.background }) =>
@@ -71,6 +78,14 @@ export const WalletAndNetworkRowContainer = styled(ModalContainer).attrs((props)
 
   ${Row}#${ModalId.ACCOUNT}__wallets-button {
     cursor: ${({ cursor }) => cursor};
+    flex: 0 1 65%;
+    min-width: max-content;
+    ${upToExtraSmall`
+      min-width: unset;
+      > ${AccountText}:first-child {
+        font-size: 12px;
+      }
+    `}
     > ${Column} {
       > ${AccountText} {
         font-weight: 300;
@@ -98,7 +113,7 @@ export const WalletAndNetworkRowContainer = styled(ModalContainer).attrs((props)
   `}
 `
 
-export const ModalColumnContainer = styled(Column)<{ layout: 'Account' | 'Other' }>`
+export const ModalColumnContainer = styled(ModalContainer)<{ layout: 'Account' | 'Other' }>`
   .unsupported-small-text {
     font-size: 0.6em;
     color: darkgrey;
@@ -112,15 +127,19 @@ export const ModalColumnContainer = styled(Column)<{ layout: 'Account' | 'Other'
   }
 
   > ${Row} {
-    // Details column
     > ${Column} {
       width: 100%;
       order: 0;
     }
-    // Logo row
     > ${Row} {
       width: auto;
       flex: 1;
+    }
+  }
+
+  ${Row}#pstl-web3-modal-wallet-text, ${Row}#pstl-web3-modal-network-text {
+    > ${AccountText} {
+      font-size: ${(props) => props.theme.modals?.account?.text?.subHeader?.size};
     }
   }
 
@@ -128,14 +147,12 @@ export const ModalColumnContainer = styled(Column)<{ layout: 'Account' | 'Other'
     > ${Row} {
       flex-flow: row wrap;
       
-      // Details column
       > ${Column} {
         order: ${layout === 'Account' ? 2 : 1};
         margin: auto;
         max-width: unset;
       }
 
-      // Logo row
       > ${Row} {
         order: ${layout === 'Account' ? 1 : 2};
         margin-bottom: 1rem;
@@ -161,12 +178,7 @@ export const ModalColumnContainer = styled(Column)<{ layout: 'Account' | 'Other'
       }
     }
   `}
-  ${({ theme }) => upToExtraSmall`
-    // Address text
-    ${AccountText}#pstl-web3-modal-address-text, ${AccountText}#pstl-web3-modal-wallet-text, ${AccountText}#pstl-web3-modal-network-text {
-      font-size: calc(${theme.modals?.account?.text?.header?.size} * 0.8);
-    }
-  `}
+
   ${({ layout = 'Account' }) => fromExtraSmall`
     ${ModalContainer} {
       flex-flow: row wrap;
@@ -186,9 +198,8 @@ export const ModalColumnContainer = styled(Column)<{ layout: 'Account' | 'Other'
     }
 
     > ${Row} {
-      // network/wallet wrapper
       > ${Column}:first-child {
-        flex-flow: row nowrap;
+        flex-flow: row wrap;
         max-width: unset;
 
         div#pstl-w3modal-account__wallets-button {
@@ -200,11 +211,9 @@ export const ModalColumnContainer = styled(Column)<{ layout: 'Account' | 'Other'
             justify-content: space-evenly;
           }
         }
-        // Switch/Disconnect buttons
         > ${Row}:last-child {
           flex-flow: column nowrap;
           height: 100%;
-          max-width: 32%;
           margin-top: 0;
         }
       }
@@ -212,4 +221,10 @@ export const ModalColumnContainer = styled(Column)<{ layout: 'Account' | 'Other'
   `}
 `
 
-export const AccountColumnContainer = styled(ModalColumnContainer).attrs({ layout: 'Account' })``
+export const AccountColumnContainer = styled(ModalColumnContainer).attrs({
+  modal: 'Account',
+  node: 'main',
+  layout: 'Account'
+})`
+  padding: 0;
+`

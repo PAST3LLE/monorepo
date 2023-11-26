@@ -2,18 +2,20 @@ import { Column, ColumnCenter, Row } from '@past3lle/components'
 import { upToExtraSmall } from '@past3lle/theme'
 import styled, { css } from 'styled-components'
 
-import { ModalButton, ModalContainer, ModalText, WalletsWrapper } from '../common/styled'
+import { ModalColumnContainer } from '../AccountModal/styled'
+import { ModalButton, ModalText, WalletsWrapper } from '../common/styled'
 
 export const ModalHeaderText = styled(ModalText).attrs({ modal: 'hidDevice', node: 'header' })``
 export const ModalSubHeaderText = styled(ModalText).attrs({ modal: 'hidDevice', node: 'subHeader' })``
 
-export const HidModalContainer = styled(ModalContainer)`
+export const HidModalContainer = styled(ColumnCenter)`
   > ${Column}:first-child {
     flex: 0 1 100%;
     min-width: unset;
   }
 
   ${(props) => upToExtraSmall`
+    padding: 0;
     ${ModalHeaderText} {
       font-size: calc(${props.theme.modals?.hidDevice?.text?.header?.size} * 0.8);
     }
@@ -151,7 +153,6 @@ export const HighlightedModalText = styled(ModalText).attrs((props) => ({
   modal: 'hidDevice',
   node: 'main',
   title: 'current-path',
-  marginLeft: '5px',
   padding: '0.1rem 0.25rem 0.1rem 0.2rem',
   ...props
 }))<{ backgroundColor?: string; color?: string }>`
@@ -171,4 +172,10 @@ export const UnderlinedModalTextCTA = styled(ModalText).attrs({
   cursor: pointer;
   text-decoration: underline;
   text-transform: initial;
+`
+
+export const HidDeviceContainer = styled(ModalColumnContainer).attrs({ modal: 'hidDevice', node: 'alternate' })`
+  ${(props) => upToExtraSmall`
+    padding: ${props.theme.modals?.base?.padding};
+  `}
 `

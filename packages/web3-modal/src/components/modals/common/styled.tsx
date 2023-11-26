@@ -100,8 +100,13 @@ export const ModalTitle = styled(ModalTitleText)`
 
     margin: ${({ theme }) => theme?.modals?.base?.title?.margin};
 
-    ${upToSmall`
+    ${({ theme }) => upToSmall`
       text-align: left;
+      font-size: calc(${theme?.modals?.base?.title?.font?.size} * 0.85);
+    `}
+
+    ${({ theme }) => upToExtraSmall`
+      font-size: calc(${theme?.modals?.base?.title?.font?.size} * 0.8);
     `}
   }
 `
@@ -128,6 +133,10 @@ export const ModalContainer = styled(ColumnCenter)<ContainerThemeTypes>`
   scrollbar-width: none;
 
   overflow-y: auto;
+
+  ${upToExtraSmall`
+    padding: 0;
+  `}
 `
 
 export const InnerContainer = styled(ModalContainer).attrs(
@@ -159,6 +168,7 @@ export const InnerContainer = styled(ModalContainer).attrs(
     })};
 `
 export const ErrorMessageContainer = styled(InnerContainer).attrs({ modal: 'base', node: 'main' })<{ hide: boolean }>`
+  font-size: ${(props) => Math.floor((props.theme?.modals?.[props.modal]?.baseFontSize || 18) * 0.75)}px;
   opacity: ${({ hide }) => (hide ? 0 : 1)};
 
   z-index: ${({ hide }) => (hide ? 0 : 9999)};
@@ -199,7 +209,7 @@ export const StyledConnectionModal = styled(Modal)<{ modal: keyof RequiredPstlSu
     &[data-reach-dialog-content] {
       position: relative;
       font-size: ${(props) => props.theme.modals?.[props.modal]?.baseFontSize}px;
-      ${upToSmall`
+      ${(_props) => upToSmall`
           max-height: 500px;
           max-width: unset;
           width: 100%;
@@ -217,6 +227,16 @@ export const StyledConnectionModal = styled(Modal)<{ modal: keyof RequiredPstlSu
     }
   }
 `
+
+/* 
+${(props) => upToSmall`
+  font-size: calc(${props.theme.modals?.[props.modal]?.baseFontSize || 0}px * 0.85);
+`}
+
+${(props) => upToExtraSmall`
+  font-size: calc(${props.theme.modals?.[props.modal]?.baseFontSize || 0}px * 0.75);
+`}
+*/
 
 export const WalletsWrapper = styled.div.attrs(
   (
