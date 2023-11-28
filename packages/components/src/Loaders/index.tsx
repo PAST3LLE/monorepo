@@ -1,21 +1,36 @@
-import { SVG_LoadingCircleLight } from '@past3lle/assets'
+import { CircleOutline, SVG_LoadingCircleLight } from '@past3lle/assets'
 import { rotateKeyframe } from '@past3lle/theme'
 import React from 'react'
 import styled from 'styled-components'
 
-export const Spinner = styled.img<{ size?: number; invertColor?: boolean }>`
+type SpinnerProps = {
+  src?: string
+  size?: number
+  filter?: string
+}
+
+export const Spinner = styled.img<Omit<SpinnerProps, 'src'>>`
   animation: 2s ${rotateKeyframe} linear infinite;
   width: ${({ size = 16 }) => size}px;
   height: ${({ size = 16 }) => size}px;
 
-  filter: inverse(${({ invertColor }) => (invertColor ? 1 : 0)});
+  filter: ${({ filter = 'unset' }) => filter};
 `
 
-export const SpinnerCircle = ({
-  size,
-  src = SVG_LoadingCircleLight
-}: {
-  src?: string
-  size?: number
-  invertColor?: boolean
-}) => <Spinner src={src} size={size} />
+export const StyledCircleOutline = styled(CircleOutline)<Omit<SpinnerProps, 'src'>>`
+  animation: 2s ${rotateKeyframe} linear infinite;
+  filter: ${({ filter = 'unset' }) => filter};
+`
+
+export const SpinnerWithSrc = ({ size, src = SVG_LoadingCircleLight, filter }: SpinnerProps) => (
+  <Spinner src={src} size={size} filter={filter} />
+)
+
+export const SpinnerCircle = (
+  props: Omit<SpinnerProps, 'src'> & { stroke?: string; strokeWidth?: number } = {
+    filter: 'none',
+    size: 22,
+    stroke: 'pink',
+    strokeWidth: 0.25
+  }
+) => <StyledCircleOutline {...props} />
