@@ -85,7 +85,7 @@ export const ModalText = styled(Text.Main)<TextThemeTypes>`
 export const ModalTitleText = styled(Text.Main).attrs((props) => ({
   fontWeight: props.theme.modals?.base?.title?.font?.weight
 }))`
-  font-size: ${({ theme }) => theme?.modals?.base?.title?.font?.size};
+  font-size: ${({ theme, fontSize = theme?.modals?.base?.title?.font?.size }) => fontSize as string};
   font-style: ${({ theme }) => theme?.modals?.base?.title?.font?.style};
   font-weight: ${({ theme }) => theme?.modals?.base?.title?.font?.weight};
   color: ${({ theme }) => theme?.modals?.base?.title?.font?.color};

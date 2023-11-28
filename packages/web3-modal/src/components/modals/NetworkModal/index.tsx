@@ -42,7 +42,7 @@ function NetworkModalContent() {
         modal="connection"
         node="main"
         view={modalView}
-        width="auto"
+        width="100%"
       >
         {supportedChains.map((chain) => {
           if (!switchNetworkAsync || currentChain?.id === chain.id) return null

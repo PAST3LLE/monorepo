@@ -1,24 +1,38 @@
 import React from 'react'
-import { useTheme } from 'styled-components'
 
-import { ModalTitleText } from '../common/styled'
+import { BaseModal } from '../common'
+import { ModalText, ModalTitleText } from '../common/styled'
 
 export default function ErrorModal() {
-  const theme = useTheme()
   return (
-    <ModalTitleText
-      fontSize={'1.2em'}
-      fvs={{
-        wght: theme?.modals?.base?.title?.font?.weight || 200
-      }}
+    <BaseModal
+      title="ERROR!"
+      onDismiss={refreshWindow}
+      isOpen
+      modal="base"
+      chainIdFromUrl={undefined}
+      width="500px"
+      maxWidth="500px"
     >
-      Please refresh the page.
-      <p style={{ lineHeight: 1.25 }}>
-        If this continues, please contact us{' '}
-        <a style={{ color: 'ghostwhite' }} href="mailto:pastelle.portugal@gmail.com">
+      <ModalText modal="base" node="subHeader" fontSize="1.8em">
+        Uh oh, something went wrong!
+      </ModalText>
+      <ModalTitleText margin="2rem auto" fontSize={'7em'} fontStyle={'revert'}>
+        :[
+      </ModalTitleText>
+      <ModalText modal="base" node="main" margin="2rem auto 0 0">
+        Please refresh the page. If this continues, please contact us:{' '}
+      </ModalText>
+      <ModalTitleText fontSize="1.5em" margin="0 auto 0 0">
+        <a style={{ color: 'inherit', outline: 'none' }} href="mailto:pastelle.portugal@gmail.com">
           pastelle.portugal [at] gmail.com
         </a>
-      </p>
-    </ModalTitleText>
+      </ModalTitleText>
+    </BaseModal>
   )
+}
+
+export function refreshWindow() {
+  if (typeof globalThis?.window === 'undefined') return
+  return globalThis.window.location.reload()
 }

@@ -1,4 +1,4 @@
-import { ErrorBoundary, RowCenter, SpinnerCircle } from '@past3lle/components'
+import { ErrorBoundary } from '@past3lle/components'
 import { ThemeProvider } from '@past3lle/theme'
 import { devWarn } from '@past3lle/utils'
 import React, { Suspense, lazy, memo, useEffect, useMemo } from 'react'
@@ -6,6 +6,7 @@ import { useSnapshot } from 'valtio'
 
 import { ModalPropsCtrl, RouterCtrl } from '../../controllers'
 import { useMergeThemes, usePstlWeb3Modal, usePstlWeb3ModalStore } from '../../hooks'
+import { LoadingScreen, LoadingScreenProps } from '../LoadingScreen'
 import { BaseModal } from './common'
 import { ModalId, StatelessBaseModalProps } from './common/types'
 
@@ -112,20 +113,18 @@ export function ModalWithoutThemeProvider(baseProps: Omit<StatelessBaseModalProp
 
   return (
     <BaseModal {...baseProps} {...auxBaseProps} isOpen={modalState.isOpen} onDismiss={modalState.close}>
-      <Suspense fallback={<Fallback />}>
-        <Modal />
+      <Suspense fallback={<Fallback {...baseProps.loaderProps} />}>
+        <ErrorBoundary fallback={<ErrorModal />}>
+          <Modal />
+        </ErrorBoundary>
       </Suspense>
     </BaseModal>
   )
 }
 
-function Fallback() {
-  return (
-    <RowCenter margin="2rem auto">
-      <SpinnerCircle size={100} />
-    </RowCenter>
-  )
-}
+const Fallback = (props: Omit<LoadingScreenProps, 'loadingText'>) => (
+  <LoadingScreen {...props} loadingText="LOADING. . ." />
+)
 
 function ModalWithThemeProvider({ themeConfig, ...modalProps }: Omit<StatelessBaseModalProps, 'modal'>) {
   const builtTheme = useMergeThemes(themeConfig?.theme)
@@ -137,9 +136,7 @@ function ModalWithThemeProvider({ themeConfig, ...modalProps }: Omit<StatelessBa
 
   return (
     <ThemeProvider theme={builtTheme} mode={themeConfig?.mode}>
-      <ErrorBoundary fallback={<ErrorModal />}>
-        <ModalWithoutThemeProvider {...modalProps} />
-      </ErrorBoundary>
+      <ModalWithoutThemeProvider {...modalProps} />
     </ThemeProvider>
   )
 }

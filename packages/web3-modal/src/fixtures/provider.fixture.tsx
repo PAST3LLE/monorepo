@@ -264,12 +264,11 @@ export default {
             connectorDisplayOverrides: COMMON_CONNECTOR_OVERRIDES,
             loaderProps: {
               containerProps: {
-                backgroundColor: 'rgba(0,0,0,0.42)',
                 borderRadius: '10px'
               },
               spinnerProps: {
                 size: 80,
-                invertColor: true
+                filter: 'saturate(15) hue-rotate(100deg)'
               },
               loadingText: 'FETCHING INFO...'
             }
@@ -309,12 +308,11 @@ export default {
             },
             loaderProps: {
               containerProps: {
-                backgroundColor: 'rgba(0,0,0,0.42)',
                 borderRadius: '10px'
               },
               spinnerProps: {
                 size: 80,
-                invertColor: true
+                filter: 'saturate(15) hue-rotate(100deg)'
               },
               loadingText: 'FETCHING INFO...'
             }
@@ -341,13 +339,13 @@ export default {
               hideInjectedFromRoot: false,
               connectorDisplayOverrides: COMMON_CONNECTOR_OVERRIDES,
               loaderProps: {
+                fontSize: '3.2em',
                 containerProps: {
-                  backgroundColor: 'rgba(0,0,0,0.42)',
                   borderRadius: '10px'
                 },
                 spinnerProps: {
                   size: 80,
-                  invertColor: true
+                  filter: 'saturate(15) hue-rotate(100deg)'
                 },
                 loadingText: 'FETCHING INFO...'
               }
@@ -420,13 +418,13 @@ export default {
               hideInjectedFromRoot: false,
               connectorDisplayOverrides: COMMON_CONNECTOR_OVERRIDES,
               loaderProps: {
+                fontSize: '3.2em',
                 containerProps: {
-                  backgroundColor: 'rgba(0,0,0,0.42)',
                   borderRadius: '10px'
                 },
                 spinnerProps: {
                   size: 80,
-                  invertColor: true
+                  filter: 'saturate(15) hue-rotate(100deg)'
                 },
                 loadingText: 'FETCHING INFO...'
               }
@@ -521,13 +519,15 @@ export default {
                 }
               },
               loaderProps: {
+                fontSize: '3em',
                 containerProps: {
-                  backgroundColor: 'rgba(0,0,0,0.42)',
                   borderRadius: '10px'
                 },
                 spinnerProps: {
-                  size: 80,
-                  invertColor: true
+                  filter: 'invert(1) saturate(0.8) hue-rotate(207deg) brightness(10)',
+                  size: 90,
+                  src: 'https://e7.pngegg.com/pngimages/599/45/png-clipart-computer-icons-loading-chart-hand-circle.png',
+                  strokeWidth: 0.55
                 },
                 loadingText: 'FETCHING INFO...'
               }
@@ -619,13 +619,13 @@ export default {
                 }
               },
               loaderProps: {
+                fontSize: '3.2em',
                 containerProps: {
-                  backgroundColor: 'rgba(0,0,0,0.42)',
                   borderRadius: '10px'
                 },
                 spinnerProps: {
                   size: 80,
-                  invertColor: true
+                  filter: 'saturate(15) hue-rotate(100deg)'
                 },
                 loadingText: 'FETCHING INFO...'
               }
@@ -711,13 +711,13 @@ export default {
               connectorDisplayOverrides: COMMON_CONNECTOR_OVERRIDES,
 
               loaderProps: {
+                fontSize: '3.2em',
                 containerProps: {
-                  backgroundColor: 'rgba(0,0,0,0.42)',
                   borderRadius: '10px'
                 },
                 spinnerProps: {
                   size: 80,
-                  invertColor: true
+                  filter: 'saturate(15) hue-rotate(100deg)'
                 },
                 loadingText: 'FETCHING INFO...'
               }
@@ -817,13 +817,13 @@ export default {
               connectorDisplayOverrides: COMMON_CONNECTOR_OVERRIDES,
 
               loaderProps: {
+                fontSize: '3.2em',
                 containerProps: {
-                  backgroundColor: 'rgba(0,0,0,0.42)',
                   borderRadius: '10px'
                 },
                 spinnerProps: {
                   size: 80,
-                  invertColor: true
+                  filter: 'saturate(15) hue-rotate(100deg)'
                 },
                 loadingText: 'FETCHING INFO...'
               }
@@ -925,13 +925,13 @@ export default {
               connectorDisplayOverrides: COMMON_CONNECTOR_OVERRIDES,
 
               loaderProps: {
+                fontSize: '3.2em',
                 containerProps: {
-                  backgroundColor: 'rgba(0,0,0,0.42)',
                   borderRadius: '10px'
                 },
                 spinnerProps: {
                   size: 80,
-                  invertColor: true
+                  filter: 'saturate(15) hue-rotate(100deg)'
                 },
                 loadingText: 'FETCHING INFO...'
               }
@@ -1032,13 +1032,13 @@ export default {
               hideInjectedFromRoot: false,
               connectorDisplayOverrides: COMMON_CONNECTOR_OVERRIDES,
               loaderProps: {
+                fontSize: '3.2em',
                 containerProps: {
-                  backgroundColor: 'rgba(0,0,0,0.42)',
                   borderRadius: '10px'
                 },
                 spinnerProps: {
                   size: 80,
-                  invertColor: true
+                  filter: 'saturate(15) hue-rotate(100deg)'
                 },
                 loadingText: 'FETCHING INFO...'
               }
@@ -1133,13 +1133,13 @@ export default {
                 }
               },
               loaderProps: {
+                fontSize: '3.2em',
                 containerProps: {
-                  backgroundColor: 'rgba(0,0,0,0.42)',
                   borderRadius: '10px'
                 },
                 spinnerProps: {
                   size: 80,
-                  invertColor: true
+                  filter: 'saturate(15) hue-rotate(100deg)'
                 },
                 loadingText: 'FETCHING INFO...'
               }

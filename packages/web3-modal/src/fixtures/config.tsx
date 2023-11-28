@@ -246,7 +246,8 @@ const DEFAULT_PROPS: PstlWeb3ModalProps = {
       loaderProps: {
         spinnerProps: {
           size: 80
-        }
+        },
+        fontSize: '3.2em'
       }
     },
     walletConnect: {
