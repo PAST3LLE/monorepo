@@ -39,6 +39,7 @@ export const pstlModalTheme = createTheme({
           }
         },
         background: {
+          main: 'black',
           url: ASSETS_MAP.images.background.app
         },
         helpers: { show: true },
