@@ -2,15 +2,17 @@ import { MEDIA_WIDTHS, MediaWidths } from '@past3lle/theme'
 import { devDebug } from '@past3lle/utils'
 import throttle from 'lodash.throttle'
 import { useEffect, useState } from 'react'
-import { snapshot, subscribe, useSnapshot } from 'valtio'
+import { snapshot, subscribe } from 'valtio'
 
 import { setDimensions, state } from './state'
 
+const WIN = _checkWindowExists() ? globalThis.window : ({} as Window)
+
 // Use global window proxies
 if (_checkWindowExists()) {
-  !window.__PSTL_HOOKS_WINDOW_SIZE_PROXY_STATE && (window.__PSTL_HOOKS_WINDOW_SIZE_PROXY_STATE = state)
-  !window.__PSTL_HOOKS_WINDOW_SIZE_PROXY_STATE_SET_DIMENSIONS &&
-    (window.__PSTL_HOOKS_WINDOW_SIZE_PROXY_STATE_SET_DIMENSIONS = setDimensions)
+  // No global proxy state? or callback? Set it.
+  if (!WIN.__PSTL_HOOKS_WINDOW_SIZE_PROXY_STATE) WIN.__PSTL_HOOKS_WINDOW_SIZE_PROXY_STATE = state
+  if (!WIN.__PSTL_HOOKS_WINDOW_SIZE_CALLBACK) WIN.__PSTL_HOOKS_WINDOW_SIZE_CALLBACK = setDimensions
 }
 
 export interface WindowSizes {
@@ -24,40 +26,30 @@ export interface UseWindowSizeOptions {
 }
 
 function useSetupCachedWindowResizeListeners(options?: UseWindowSizeOptions) {
-  const snapState = useSnapshot(_checkWindowExists() ? globalThis.window.__PSTL_HOOKS_WINDOW_SIZE_PROXY_STATE : state)
-
   useEffect(() => {
     if (!_checkWindowExists()) return
 
     // cache global constants
-    const WIN = globalThis.window
     const GLOBAL_LISTENER = WIN?.__PSTL_HOOKS_CONTEXT_LISTENER
     const GLOBAL_LISTENER_COUNT = WIN?.__PSTL_HOOKS_CONTEXT_LISTENER_COUNT || 0
 
-    // bail out if we already have listeners active
-    if (GLOBAL_LISTENER_COUNT >= 1) {
-      devDebug(
-        '[@past3lle/hooks:useSetupCachedWindowResizeListeners] Listener already active. Not pushing new handler to existing listener list'
-      )
-    }
+    // signal if we already have listeners active
+    if (GLOBAL_LISTENER_COUNT >= 1)
+      devDebug('[@past3lle/hooks:useSetupCachedWindowResizeListeners] Listener already active. Skipping setup.')
 
     // Create resize handler
     const handleResizeRequests = (_e?: Event) =>
       throttle(function handleCheckWindowSize() {
         const sizes = _getSize()
-        window.__PSTL_HOOKS_WINDOW_SIZE_PROXY_STATE_SET_DIMENSIONS(sizes)
+        globalThis.window.__PSTL_HOOKS_WINDOW_SIZE_CALLBACK(sizes)
       }, options?.throttleMs || 150)()
 
     // create init logic
     // IF no global listener OR no listener count, create
     // ELSE skip and log
-    _setupListenersOnWindowOrLog(handleResizeRequests, {
-      windowOb: WIN,
-      globalListener: GLOBAL_LISTENER,
-      globalListenerCount: GLOBAL_LISTENER_COUNT
-    })
+    _setupListenersOnWindowOrLog(handleResizeRequests, !!GLOBAL_LISTENER, GLOBAL_LISTENER_COUNT)
     // iterate over listeners count and update
-    _iterateListenerCount(WIN)
+    _iterateListenerCount()
 
     return () => {
       // Remove listener completely only if the listener list is on it's last listener (else others are still active)
@@ -67,8 +59,6 @@ function useSetupCachedWindowResizeListeners(options?: UseWindowSizeOptions) {
       }
     }
   }, [options?.throttleMs])
-
-  return snapState
 }
 
 /**
@@ -85,18 +75,16 @@ export function useWindowSize(options?: UseWindowSizeOptions): WindowSizes | und
   useSetupCachedWindowResizeListeners(options)
 
   const [localState, setState] = useState<WindowSizes | undefined>(
-    _checkWindowExists() ? globalThis.window.__PSTL_HOOKS_WINDOW_SIZE_PROXY_STATE : undefined
+    _checkWindowExists() ? WIN.__PSTL_HOOKS_WINDOW_SIZE_PROXY_STATE : undefined
   )
 
   // Subscribe to changes in proxy state
   useEffect(() => {
     if (!_checkWindowExists()) return
-    const state = globalThis.window.__PSTL_HOOKS_WINDOW_SIZE_PROXY_STATE
-    const unsub = subscribe(state, () => setState(snapshot(state)))
+    const proxyState = WIN.__PSTL_HOOKS_WINDOW_SIZE_PROXY_STATE
+    const unsub = subscribe(proxyState, () => setState(snapshot(proxyState)))
 
-    return () => {
-      unsub()
-    }
+    return unsub
   }, [])
 
   return localState
@@ -120,14 +108,8 @@ function _checkWindowExists() {
 
 function _getSize(): WindowSizes {
   return {
-    width:
-      globalThis?.window?.innerWidth ||
-      globalThis?.window?.document?.documentElement?.clientWidth ||
-      globalThis?.window?.document?.body?.clientWidth,
-    height:
-      globalThis?.window?.innerHeight ||
-      globalThis?.window?.document?.documentElement?.clientHeight ||
-      globalThis?.window?.document?.body?.clientHeight,
+    width: WIN?.innerWidth || WIN?.document?.documentElement?.clientWidth || WIN?.document?.body?.clientWidth,
+    height: WIN?.innerHeight || WIN?.document?.documentElement?.clientHeight || WIN?.document?.body?.clientHeight,
     get ar() {
       if (!_checkWindowExists() || !this.width || !this.height) return undefined
       // round the number to 2 decimal places
@@ -138,31 +120,26 @@ function _getSize(): WindowSizes {
 
 function _setupListenersOnWindowOrLog(
   handleResize: (_e?: Event) => void,
-  globalStore: {
-    windowOb: Window
-    globalListener: typeof window.__PSTL_HOOKS_CONTEXT_LISTENER
-    globalListenerCount: typeof window.__PSTL_HOOKS_CONTEXT_LISTENER_COUNT
-  }
+  hasGlobalListener?: boolean,
+  globalListenerCount = 0
 ) {
-  const { globalListener, globalListenerCount, windowOb } = globalStore
-  if (!globalListener || !globalListenerCount) {
+  if (!hasGlobalListener || !globalListenerCount) {
     // Cache event listeners
-    windowOb.__PSTL_HOOKS_CONTEXT_LISTENER = handleResize
+    WIN.__PSTL_HOOKS_CONTEXT_LISTENER = handleResize
     devDebug(
-      '[@past3lle/hooks:useSetupCachedWindowResizeListeners] Listener not already active. Setting listener and handler'
+      '[@past3lle/hooks:useSetupCachedWindowResizeListeners] No listener detected! Setting up window size listener.'
     )
     // Call once
     handleResize()
-    // Set the listener (hasn't been set yet)
-    windowOb.addEventListener('resize', windowOb.__PSTL_HOOKS_CONTEXT_LISTENER)
+    WIN.addEventListener('resize', WIN.__PSTL_HOOKS_CONTEXT_LISTENER)
   }
 }
 
-function _iterateListenerCount(windowOb: Window) {
+function _iterateListenerCount() {
   // Iterate listener count
-  if (!windowOb?.__PSTL_HOOKS_CONTEXT_LISTENER_COUNT) {
-    windowOb.__PSTL_HOOKS_CONTEXT_LISTENER_COUNT = 1
+  if (!WIN?.__PSTL_HOOKS_CONTEXT_LISTENER_COUNT) {
+    WIN.__PSTL_HOOKS_CONTEXT_LISTENER_COUNT = 1
   } else {
-    windowOb.__PSTL_HOOKS_CONTEXT_LISTENER_COUNT += 1
+    WIN.__PSTL_HOOKS_CONTEXT_LISTENER_COUNT += 1
   }
 }
