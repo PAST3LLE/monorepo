@@ -2,9 +2,10 @@ import { VerticalSwipeCarousel } from '@past3lle/carousel'
 import { ThemeProvider, createPast3lleTemplateTheme } from '@past3lle/theme'
 import { PstlW3Providers } from '@past3lle/web3-modal'
 import type { AppProps } from 'next/app'
-
-import AppWithWeb3Access from '../components/AppWithWeb3Access'
 import { pstlModalConfig } from '../web3/connection'
+import dynamic from 'next/dynamic'
+
+const AppWithWeb3Access = dynamic(() => import('../components/AppWithWeb3Access'), { ssr: false })
 
 const DATA = [
   () => (
