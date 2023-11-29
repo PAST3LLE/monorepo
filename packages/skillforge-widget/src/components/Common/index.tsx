@@ -1,28 +1,41 @@
 import { ColumnCenter, Row, Text } from '@past3lle/components'
 import { SkillRarity, getRarityColours } from '@past3lle/forge-web3'
-import styled from 'styled-components'
+import styled, { DefaultTheme } from 'styled-components'
 
 import { Vector } from '../../api/vector'
 import { SKILLPOINT_SIZES } from '../../constants/skills'
 
-const StyledGridItem = styled(ColumnCenter)<{
+type StyledGridItemProps = {
   vector?: Vector
-}>`
-  width: ${SKILLPOINT_SIZES.width};
-  min-width: ${SKILLPOINT_SIZES.width};
-  height: ${SKILLPOINT_SIZES.height};
+  position: string
+  transform: string
+  background: string
+  boxShadow: string
+  filter: string
+}
+
+const StyledBaseGridItem = styled(ColumnCenter).attrs((props) => ({
+  ...props,
+  width: props.width || SKILLPOINT_SIZES.width,
+  minWidth: props.minWidth || SKILLPOINT_SIZES.width,
+  height: props.height || SKILLPOINT_SIZES.height
+}))<StyledGridItemProps>`
   padding: 2px;
-
   border-radius: 3px;
+  position: ${(props) => props.position};
+  transform: ${(props) => props.transform};
 
-  position: ${({ vector }) => (!!vector ? 'absolute' : 'relative')};
-  ${({ vector }) => vector && `transform: translate(${vector.X1}px,${vector.Y1}px);`}
+  background: ${(props) => props.background};
+  box-shadow: ${(props) => props.boxShadow};
+  filter: ${(props) => props.filter};
 `
 
-export const StyledSkillpoint = styled(StyledGridItem).attrs({
-  minWidth: SKILLPOINT_SIZES.width,
-  justifyContent: 'center'
-})<{
+const StyledGridItem = styled(StyledBaseGridItem).attrs((props: StyledGridItemProps) => ({
+  position: !!props.vector ? 'absolute' : 'relative',
+  transform: props.vector ? `translate(${props.vector.X1}px,${props.vector.Y1}px)` : 'unset'
+}))``
+
+type StyledSkillpointProps = {
   dimSkill: boolean
   active: boolean
   isDependency: boolean
@@ -31,46 +44,51 @@ export const StyledSkillpoint = styled(StyledGridItem).attrs({
   rarity: SkillRarity | undefined
   metadataCss?: string
   css?: string
-}>`
+}
+export const StyledSkillpoint = styled(StyledGridItem).attrs(
+  ({
+    theme,
+    rarity,
+    isDependency,
+    dimSkill,
+    isEmptySkill,
+    yOffset
+  }: StyledSkillpointProps & { theme: DefaultTheme }) => ({
+    justifyContent: 'center',
+    backgroundColor: rarity ? getRarityColours(theme, rarity).backgroundColor : 'none',
+    boxShadow: rarity
+      ? `0px 0px ${getRarityColours(theme, rarity).boxShadowColor}`
+      : isDependency
+      ? '5px 5px 10px 0px #d5fb73b8, -5px -5px 10px 0px #00ff7fa8'
+      : isEmptySkill
+      ? '4px 4px 1px #00000075'
+      : 'unset',
+    filter: dimSkill ? 'brightness(0.25) grayscale(1)' : 'unset',
+    background:
+      isEmptySkill && theme.assetsMap.images.skills?.skillpoint?.empty
+        ? `url(${theme.assetsMap.images.skills.skillpoint.empty}) 0px ${yOffset}px/cover`
+        : 'none',
+    padding: isEmptySkill ? '0' : 'initial',
+    opacity: isEmptySkill ? 0.76 : 1,
+    overflow: isEmptySkill ? 'hidden' : 'initial'
+  })
+)<StyledSkillpointProps>`
   z-index: 1;
   cursor: pointer;
   border-radius: 6px;
-
-  background-color: ${({ theme, rarity }) => rarity && getRarityColours(theme, rarity).backgroundColor};
-  box-shadow: ${({ theme, rarity }) => rarity && `0px 0px ${getRarityColours(theme, rarity).boxShadowColor}`};
-  ${({ isDependency }) => isDependency && `box-shadow: 5px 5px 10px 0px #d5fb73b8, -5px -5px 10px 0px #00ff7fa8;`}
-  ${({ dimSkill }) => dimSkill && `filter: brightness(0.25) grayscale(1);`}
-  
-  ${({ isEmptySkill, yOffset = 0, theme }) =>
-    isEmptySkill &&
-    `
-    overflow: hidden;
-    opacity: 0.76;
-    padding: 0;
-    box-shadow: 4px 4px 1px #00000075;
-    ${
-      theme.assetsMap.images.skills?.skillpoint?.empty &&
-      `background: url(${theme.assetsMap.images.skills.skillpoint.empty}) 0px ${yOffset}px/cover;`
-    }
-  `}
 
   transition: filter 0.4s ease-in-out;
 
   &::hover {
     cursor: not-allowed;
   }
-
-  ${({ metadataCss }) =>
-    metadataCss &&
-    `
-    img {
-      ${metadataCss}
-    }
-  `}
-  ${({ css }) => css && css}
 `
 
-export const SkillpointHeader = styled(StyledGridItem)`
+export const SkillpointHeader = styled(StyledGridItem).attrs({
+  filter: 'none',
+  boxShadow: 'none',
+  background: 'transparent'
+})`
   text-align: center;
 
   color: ${({ theme }) => theme.canvas?.header?.collectionNumber?.color || theme.mainBg};

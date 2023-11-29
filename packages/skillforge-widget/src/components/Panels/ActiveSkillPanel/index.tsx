@@ -10,7 +10,7 @@ import {
 import { BLACK, OFF_WHITE } from '@past3lle/theme'
 import { darken } from 'polished'
 import React, { useMemo, useRef } from 'react'
-import { DefaultTheme, useTheme } from 'styled-components'
+import styled, { DefaultTheme, useTheme } from 'styled-components'
 
 import { SKILLPOINTS_CONTAINER_ID } from '../../../constants/skills'
 import { useGetActiveSkill } from '../../../hooks/skills'
@@ -24,6 +24,16 @@ import { SkillsRow } from '../common'
 import { SkillActionButton } from './SkillActionButton'
 import { ActiveSkillPanelContainer, RequiredDepsContainer, SkillRarityLabel, SkillStatusLabel } from './styleds'
 import { getLockStatusColour, getSkillDescription } from './utils'
+
+const SkillPanelSkillpoint = styled(Skillpoint)<{ disabled?: boolean }>`
+  > ${RowCenter} {
+    min-height: 200px;
+    height: 20vh;
+    > img {
+      border-radius: 10px;
+    }
+  }
+`
 
 export function ActiveSkillPanel() {
   const chainId = useSupportedOrDefaultChainId()
@@ -92,7 +102,7 @@ export function ActiveSkillPanel() {
           flexWrap={'wrap'}
           gap="1rem 4rem"
         >
-          <Skillpoint
+          <SkillPanelSkillpoint
             className={isLocked ? 'disabled' : ''}
             forceRarity="empty"
             metadata={activeSkill}
@@ -103,16 +113,7 @@ export function ActiveSkillPanel() {
               padding: '0',
               backgroundColor: 'transparent',
               justifyContent: 'center',
-              disabled: isLocked,
-              css: `
-                > ${RowCenter} {
-                  min-height: 200px;
-                  height: 20vh;
-                  > img {
-                    border-radius: 10px;
-                  }
-                }
-              `
+              disabled: !!isLocked
             }}
           />
           <SkillActionButton skill={activeSkill} lockStatus={lockStatus} metadataExplorerUri={metadataExplorerUri} />
