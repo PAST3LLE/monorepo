@@ -123,6 +123,28 @@ export function getLqIkUrl(
 
   return process.env.REACT_APP_IMAGEKIT_URL_ENDPOINT + urlObj?.pathname + '?tr=' + transform
 }
+export type BackgroundBlendMode =
+  | 'color'
+  | 'color-burn'
+  | 'color-dodge'
+  | 'darken'
+  | 'difference'
+  | 'exclusion'
+  | 'hard-light'
+  | 'hue'
+  | 'lighten'
+  | 'luminosity'
+  | 'multiply'
+  | 'normal'
+  | 'overlay'
+  | 'saturation'
+  | 'screen'
+  | 'soft-light'
+  | 'inherit'
+  | 'initial'
+  | 'revert'
+  | 'revert-layer'
+  | 'unset'
 /**
  *
  * @param theme
@@ -139,28 +161,7 @@ export function getLqIkUrl(
 type SetCssBackgroundParams = {
   imageUrls?: GenericImageSrcSet<MediaWidths>[]
   backgroundAttributes?: string[]
-  backgroundBlendMode?:
-    | 'color'
-    | 'color-burn'
-    | 'color-dodge'
-    | 'darken'
-    | 'difference'
-    | 'exclusion'
-    | 'hard-light'
-    | 'hue'
-    | 'lighten'
-    | 'luminosity'
-    | 'multiply'
-    | 'normal'
-    | 'overlay'
-    | 'saturation'
-    | 'screen'
-    | 'soft-light'
-    | 'inherit'
-    | 'initial'
-    | 'revert'
-    | 'revert-layer'
-    | 'unset'
+  backgroundBlendMode?: BackgroundBlendMode
   backgroundColor?: string
   ignoreQueriesWithFixedWidth?: MediaWidths
   dpiLevel?: '3x' | '2x' | '1x'
