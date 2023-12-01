@@ -139,7 +139,28 @@ export function getLqIkUrl(
 type SetCssBackgroundParams = {
   imageUrls?: GenericImageSrcSet<MediaWidths>[]
   backgroundAttributes?: string[]
-  backgroundBlendMode?: string
+  backgroundBlendMode?:
+    | 'color'
+    | 'color-burn'
+    | 'color-dodge'
+    | 'darken'
+    | 'difference'
+    | 'exclusion'
+    | 'hard-light'
+    | 'hue'
+    | 'lighten'
+    | 'luminosity'
+    | 'multiply'
+    | 'normal'
+    | 'overlay'
+    | 'saturation'
+    | 'screen'
+    | 'soft-light'
+    | 'inherit'
+    | 'initial'
+    | 'revert'
+    | 'revert-layer'
+    | 'unset'
   backgroundColor?: string
   ignoreQueriesWithFixedWidth?: MediaWidths
   dpiLevel?: '3x' | '2x' | '1x'
