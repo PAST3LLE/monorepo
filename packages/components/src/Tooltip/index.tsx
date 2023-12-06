@@ -35,10 +35,12 @@ export function MouseoverTooltip({ children, ...rest }: Omit<TooltipProps, 'show
 const InfoCircleContainer = styled(RowCenter)<{ size?: number }>`
   width: ${({ size = 20 }) => size}px;
   height: ${({ size = 20 }) => size}px;
+
   > span {
-    font-size: ${({ size = 20 }) => Math.floor(size * 0.85)};
+    font-size: ${({ size = 20 }) => Math.floor(size * 0.85)}px;
     font-family: monospace;
     margin: 1px 1px 0 0;
+    text-transform: lowercase;
   }
 `
 export function InfoCircle({ label, size = 20, ...boxProps }: { label: string; size?: number } & RowProps) {
@@ -50,6 +52,7 @@ export function InfoCircle({ label, size = 20, ...boxProps }: { label: string; s
       overflow="hidden"
       width={size}
       height={size}
+      size={size}
       {...boxProps}
     >
       <span>{label}</span>
