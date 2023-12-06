@@ -19,6 +19,9 @@ const NetworkModal = lazy(() => import(/* webpackPrefetch: true,  webpackChunkNa
 const HidDeviceOptionsModal = lazy(
   () => import(/* webpackPrefetch: true,  webpackChunkName: "HidDeviceOptionsModal" */ './HidDeviceOptionsModal')
 )
+const ConfigTypeModal = lazy(
+  () => import(/* webpackPrefetch: true,  webpackChunkName: "ConfigTypeModal" */ './ConfigTypeModal')
+)
 
 export function ModalWithoutThemeProvider(baseProps: Omit<StatelessBaseModalProps, 'modal'>) {
   const modalState = usePstlWeb3Modal()
@@ -87,6 +90,22 @@ export function ModalWithoutThemeProvider(baseProps: Omit<StatelessBaseModalProp
         }
 
         return [() => <HidDeviceOptionsModal {...props} />, augmentedBaseProps]
+      }
+
+      case 'ConnectorConfigType': {
+        const augmentedBaseProps: StatelessBaseModalProps = {
+          ...baseProps,
+          title: 'Select configuration type',
+          width: '650px',
+          maxWidth: '80vw',
+          minHeight: '350px',
+          maxHeight: '80vh',
+          height: 'auto',
+          id: ModalId.NETWORK,
+          modal: 'connection'
+        }
+
+        return [() => <ConfigTypeModal />, augmentedBaseProps]
       }
 
       case 'ConnectWallet':

@@ -100,6 +100,7 @@ export type RouterView =
   | 'InjectedConnector'
   | 'InstallConnector'
   | 'HidDeviceOptions'
+  | 'ConnectorConfigType'
   | 'Qrcode'
   | 'SelectNetwork'
   | 'SwitchNetwork'

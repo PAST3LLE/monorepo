@@ -7,7 +7,7 @@ import type { ModalCtrlState } from './types/controllerTypes'
 export interface OpenOptions {
   uri?: string
   standaloneChains?: string[]
-  route?: 'Account' | 'ConnectWallet' | 'Help' | 'SelectNetwork' | 'HidDeviceOptions'
+  route?: 'Account' | 'ConnectWallet' | 'Help' | 'SelectNetwork' | 'HidDeviceOptions' | 'ConnectorConfigType'
 }
 
 // -- initial state ------------------------------------------------ //

@@ -156,14 +156,11 @@ export const COMMON_CONNECTOR_OVERRIDES: ConnectorOverrides = {
   walletconnect: {
     logo: WALLETCONNECT_LOGO,
     infoText: {
-      title: 'What is WalletConnect? Why WalletConnect?',
-      content: (
-        <strong>
-          Web3Modal/WalletConnect is a simple blockchain wallet aggregator modal that facilitates the choice of
+      type: 'TOOLTIP',
+      title: 'What is WalletConnect?',
+      content: `Web3Modal/WalletConnect is a simple blockchain wallet aggregator modal that facilitates the choice of
           selecting preferred blockchain wallet(s) for connecting to dApps (decentralised apps). This generally requires
-          more blockchain knowledge.
-        </strong>
-      )
+          more blockchain knowledge.`
     }
   },
   web3auth: {

@@ -1,16 +1,22 @@
-import { ButtonProps } from '@past3lle/components'
+import { ButtonProps, RowCenter } from '@past3lle/components'
 import { ConnectArgs, ConnectResult, PublicClient } from '@wagmi/core'
 import React, { ReactNode, memo } from 'react'
 import { Chain } from 'viem'
 
 import { ConnectorEnhanced } from '../../../types'
 import { ConnectorInfo } from '../../../utils/connectConnector'
+import { Tooltip } from '../common/Tooltip'
 import { ModalButton } from '../common/styled'
 import { ConnectorHelper } from './ConnectorHelper'
 import { RecommendedLabel } from './RecommendedLabel'
 
+export type Callback =
+  | (() => Promise<Chain>)
+  | ((options?: any) => Promise<void>)
+  | ((args?: Partial<ConnectArgs> | undefined) => Promise<ConnectResult<PublicClient>>)
 export type ConnectorOptionProps = Omit<ConnectorInfo, 'logo'> & {
   id?: string
+  className?: string
   optionType?: string
   optionValue?: string | number
   connector: ConnectorEnhanced<any, any>
@@ -20,13 +26,11 @@ export type ConnectorOptionProps = Omit<ConnectorInfo, 'logo'> & {
   helperContent?: ConnectorEnhanced<any, any>['infoText']
   showHelperText?: boolean
   logo: ReactNode
-  callback?:
-    | (() => Promise<Chain>)
-    | ((options?: any) => Promise<void>)
-    | ((args?: Partial<ConnectArgs> | undefined) => Promise<ConnectResult<PublicClient>>)
+  callback?: Callback
 }
 function ConnectorOptionBase({
   id,
+  className,
   optionType,
   optionValue,
   connector,
@@ -34,22 +38,26 @@ function ConnectorOptionBase({
   isRecommended,
   logo,
   connected,
-  modalView,
   helperContent,
   showHelperText,
   buttonProps = {},
   callback
 }: ConnectorOptionProps) {
+  const showTooltip = showHelperText && typeof helperContent?.content === 'string' && helperContent?.type === 'TOOLTIP'
+  const showDropdown = showHelperText && !showTooltip && !!helperContent?.content
   return (
-    <div option-type={optionType} option-value={optionValue} id={id}>
+    <div className={className} option-type={optionType} option-value={optionValue} id={id}>
       <ModalButton modal="connection" node="main" onClick={callback} connected={connected} {...buttonProps}>
         {logo}
-        {label}
+        <RowCenter>
+          {label}
+          {showTooltip && <Tooltip size={10} tooltip={helperContent.content as string} />}
+        </RowCenter>
         {isRecommended && <RecommendedLabel />}
       </ModalButton>
-      {modalView !== 'grid' && showHelperText && !!helperContent?.content && (
-        <ConnectorHelper title={helperContent.title} connector={connector}>
-          {helperContent.content}
+      {showDropdown && (
+        <ConnectorHelper title={helperContent?.title as string} connector={connector}>
+          {helperContent?.content as ReactNode}
         </ConnectorHelper>
       )}
     </div>

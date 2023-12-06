@@ -153,7 +153,7 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
           <Row id={`${ModalId.ACCOUNT}__balance-text`}>
             <ModalSubHeaderText node="subHeader">{!isExtraSmallWidth ? 'Current' : ''} Path:</ModalSubHeaderText>
             <HighlightedModalText
-              color={setBestTextColour(theme?.hidDevice?.container?.alternate?.background || '#000', 7)}
+              color={setBestTextColour(theme?.hidDevice?.container?.alternate?.background || '#000', 4)}
             >
               {selection}
             </HighlightedModalText>
@@ -253,7 +253,7 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
               backgroundColor={address ? undefined : theme?.base?.background?.error}
               color={setBestTextColour(
                 (address ? theme?.hidDevice?.container?.main?.background : theme?.base?.background?.error) || '#000',
-                7
+                4
               )}
             >
               {address ? truncateAddress(address) : 'DISCONNECTED'}
@@ -314,7 +314,7 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
           >
             {loading ? (
               <>
-                Fetching... <SpinnerCircle />
+                Scanning... <SpinnerCircle />
               </>
             ) : paginationIdx === PAGINATION_AMT ? (
               'Scan Accounts'

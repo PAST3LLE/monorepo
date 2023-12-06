@@ -9,6 +9,7 @@ import { InjectedConnector } from 'wagmi/connectors/injected'
 import { infuraProvider } from 'wagmi/providers/infura'
 
 import { RouterCtrl } from '../controllers'
+import { RouterView } from '../controllers/types/controllerTypes'
 import { useAccountNetworkActions, usePstlWeb3Modal, useUserConnectionInfo } from '../hooks'
 import { useLimitChainsAndSwitchCallback } from '../hooks/useLimitChainsAndSwitchCallback'
 import { PstlWeb3ModalProps, PstlW3Providers as WalletModal } from '../providers'
@@ -438,9 +439,6 @@ export default {
     )
   }),
   Grid__ManyInjectedAndLedger: withThemeProvider(() => {
-    useEffect(() => {
-      RouterCtrl.replace('HidDeviceOptions')
-    }, [])
     return (
       <PstlW3Providers
         config={{
@@ -598,8 +596,6 @@ export default {
               ...DEFAULT_PROPS.modals.root,
               closeModalOnConnect: true,
               walletsView: 'list',
-              // maxWidth: '650px',
-              // minHeight: '600px',
               hideInjectedFromRoot: false,
               connectorDisplayOverrides: {
                 ...COMMON_CONNECTOR_OVERRIDES,
@@ -1054,6 +1050,58 @@ export default {
       </PstlW3Providers>
     )
   }),
+  Grid__LedgerDeviceConfigChoice: withThemeProvider(() => {
+    return (
+      <PstlW3Providers
+        config={{
+          ...DEFAULT_PROPS_WEB3AUTH,
+          connectors: [wagmiConnectors.ledgerHID, wagmiConnectors.ledgerLiveModal],
+          modals: {
+            ...DEFAULT_PROPS_WEB3AUTH.modals,
+            root: {
+              ...DEFAULT_PROPS.modals.root,
+              closeModalOnConnect: true,
+              walletsView: 'grid',
+              hideInjectedFromRoot: false,
+              connectorDisplayOverrides: {
+                ...COMMON_CONNECTOR_OVERRIDES,
+                'ledger-hid': {
+                  ...COMMON_CONNECTOR_OVERRIDES['ledger-hid'],
+                  async customConnect({ store, connector, wagmiConnect }) {
+                    console.debug('🚀 ~ file: provider.fixture.tsx:1071 ~ customConnect ~ connector:', connector)
+                    console.debug('🚀 ~ file: provider.fixture.tsx:1071 ~ customConnect ~ store:', store)
+                    await wagmiConnect({ connector })
+                    const id = connector?.id || connector?.name
+                    id &&
+                      store.updateModalConfig({
+                        hidDeviceOptions: {
+                          hidDeviceId: id
+                        }
+                      })
+                    return store.ui.root.open({ route: 'ConnectorConfigType' })
+                  }
+                }
+              },
+              loaderProps: {
+                fontSize: '3.2em',
+                containerProps: {
+                  borderRadius: '10px'
+                },
+                spinnerProps: {
+                  size: 80,
+                  filter: 'saturate(15) hue-rotate(100deg)'
+                },
+                loadingText: 'FETCHING INFO...'
+              }
+            }
+          }
+        }}
+      >
+        <AppWithWagmiAccess />
+        <Web3Button />
+      </PstlW3Providers>
+    )
+  }),
   HIDDeviceModal: withThemeProvider(() => {
     return (
       <PstlW3Providers
@@ -1148,13 +1196,111 @@ export default {
         }}
       >
         <AppWithWagmiAccess />
-        <HidDeviceButton />
+        <ModalOpenButton />
+      </PstlW3Providers>
+    )
+  }),
+  HIDConfigChoiceModal: withThemeProvider(() => {
+    return (
+      <PstlW3Providers
+        config={{
+          ...DEFAULT_PROPS_WEB3AUTH,
+          connectors: [
+            wagmiConnectors.ledgerHID,
+            wagmiConnectors.ledgerLiveModal,
+            addConnector(InjectedConnector, {
+              name: 'MetaMask',
+              shimDisconnect: true,
+              getProvider() {
+                if (typeof globalThis?.window === 'undefined') return undefined
+                try {
+                  const provider = window?.ethereum?.providers?.find((provider) => provider?.isMetaMask)
+                  if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
+                  return provider
+                } catch (error) {
+                  return undefined
+                }
+              }
+            }),
+            addConnector(InjectedConnector, {
+              name: 'Taho',
+              shimDisconnect: true,
+              getProvider() {
+                if (typeof globalThis?.window === 'undefined') return undefined
+                try {
+                  const provider = window?.tally
+                  if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
+                  return provider
+                } catch (error) {
+                  return undefined
+                }
+              }
+            }),
+            addConnector(InjectedConnector, {
+              name: 'Coinbase Wallet',
+              shimDisconnect: true,
+              getProvider() {
+                if (typeof globalThis?.window === 'undefined') return undefined
+                try {
+                  const provider =
+                    (window?.ethereum?.isCoinbaseWallet && window.ethereum) || window?.coinbaseWalletExtension
+                  if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
+                  return provider
+                } catch (error) {
+                  return undefined
+                }
+              }
+            })
+          ],
+          modals: {
+            ...DEFAULT_PROPS_WEB3AUTH.modals,
+            root: {
+              ...DEFAULT_PROPS.modals.root,
+              closeModalOnConnect: true,
+              walletsView: 'grid',
+              maxWidth: '650px',
+              minHeight: '600px',
+              hideInjectedFromRoot: false,
+              connectorDisplayOverrides: {
+                ...COMMON_CONNECTOR_OVERRIDES,
+                'ledger-hid': {
+                  ...COMMON_CONNECTOR_OVERRIDES['ledger-hid'],
+                  async customConnect({ store, connector, wagmiConnect }) {
+                    await wagmiConnect({ connector })
+                    const id = connector?.id || connector?.name
+                    id &&
+                      store.updateModalConfig({
+                        hidDeviceOptions: {
+                          hidDeviceId: id
+                        }
+                      })
+                    return store.ui.root.open({ route: 'HidDeviceOptions' })
+                  }
+                }
+              },
+              loaderProps: {
+                fontSize: '3.2em',
+                containerProps: {
+                  borderRadius: '10px'
+                },
+                spinnerProps: {
+                  size: 80,
+                  filter: 'saturate(15) hue-rotate(100deg)'
+                },
+                loadingText: 'FETCHING INFO...'
+              }
+            }
+          }
+        }}
+      >
+        <AppWithWagmiAccess />
+        <ModalOpenButton view="ConnectorConfigType" />
       </PstlW3Providers>
     )
   })
 }
 
-function HidDeviceButton() {
+function ModalOpenButton({ view = 'HidDeviceOptions' }: { view?: RouterView }) {
   const { open } = usePstlWeb3Modal()
   const { address, connector } = useUserConnectionInfo()
   return (
@@ -1163,7 +1309,7 @@ function HidDeviceButton() {
         buttonVariant={ButtonVariations.PRIMARY}
         onClick={() => {
           open()
-          RouterCtrl.push('HidDeviceOptions')
+          RouterCtrl.push(view)
         }}
       >
         Open HID Device modal

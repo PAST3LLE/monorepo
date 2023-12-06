@@ -41,7 +41,11 @@ export const HidModalWalletsWrapper = styled(WalletsWrapper)`
   }
 `
 
-const HidBaseRow = styled(Row).attrs({ minWidth: 550 })``
+const HidBaseRow = styled(Row).attrs({ minWidth: 550 })`
+  display: grid;
+  grid-template-columns: minmax(365px, 3fr) 1fr 50px;
+  grid-gap: 10px;
+`
 
 export const HidModalHeaderRow = styled(HidBaseRow)`
   border-bottom: 1px solid #f8f8ff42;
@@ -57,7 +61,7 @@ export const HidModalAddresseRow = styled(HidBaseRow)`
   padding: 0.25rem 0;
 
   &:hover {
-    background-color: ${(props) => props.theme.modals?.base?.background?.main};
+    background-color: ${(props) => props.theme.modals?.account?.button?.main?.background?.default};
   }
   transition: background-color 0.3s ease-in-out;
 `
@@ -77,9 +81,9 @@ export const HidModalAddressesList = styled(ColumnCenter)<{ zIndex?: number }>`
   background-color: ${({ theme }) => theme.modals?.base?.background?.main};
   border-radius: ${({ theme }) => theme.modals?.hidDevice?.container?.main?.border?.radius};
   align-items: start;
-  overflow: hidden;
-  overflow-x: auto;
-  min-height: 90px;
+  overflow: auto;
+  min-height: 110px;
+  height: 100%;
   padding: 1rem;
 
   ${upToExtraSmall`
@@ -90,16 +94,6 @@ export const HidModalAddressesList = styled(ColumnCenter)<{ zIndex?: number }>`
     > strong {
       font-weight: 100;
       font-size: 0.85em;
-
-      &:first-child {
-        width: 65%;
-      }
-      &:nth-child(2) {
-        width: 25%;
-      }
-      &:last-child {
-        width: 10%;
-      }
     }
   }
 `

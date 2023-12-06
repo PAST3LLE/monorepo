@@ -13,7 +13,6 @@ import {
 import { LoadingScreen } from '../../LoadingScreen'
 import { WalletsWrapper } from '../common/styled'
 import { BaseModalProps, ModalId } from '../common/types'
-import { ConnectorHelper } from './ConnectorHelper'
 import { RenderConnectorOptions } from './RenderConnectorOptions'
 import { cleanAndFormatConnectorOverrides, sortConnectorsByRank } from './utils'
 
@@ -125,11 +124,6 @@ function ConnectionModalContent({
 
   return (
     <>
-      {connectorDisplayOverrides?.general?.infoText?.content && !providerLoadingState[0] && (
-        <ConnectorHelper title={connectorDisplayOverrides.general.infoText?.title || 'What is this?'}>
-          {connectorDisplayOverrides?.general.infoText.content}
-        </ConnectorHelper>
-      )}
       {providerLoadingState[0] ? (
         <LoadingScreen {...loaderProps} />
       ) : (

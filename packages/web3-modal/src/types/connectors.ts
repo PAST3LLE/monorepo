@@ -7,7 +7,7 @@ import { AllWeb3ModalStore } from '../hooks'
 
 export type FullWeb3ModalStore = { ui: AllWeb3ModalStore; updateModalConfig: (typeof ModalPropsCtrl)['update'] }
 
-type InfoTextMap = { title: ReactNode; content: ReactNode }
+type InfoTextMap = { title: ReactNode; content: ReactNode; type?: 'TOOLTIP' | 'DROPDOWN' }
 export type ConnectorEnhancedExtras = {
   /**
    * @name customName Optional. Custom display name.

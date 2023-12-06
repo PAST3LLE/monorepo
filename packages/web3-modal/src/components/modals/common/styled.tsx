@@ -145,6 +145,7 @@ export const InnerContainer = styled(ModalContainer).attrs(
     node: props.node || 'main'
   })
 )<{ isError?: boolean }>`
+  overflow-x: hidden;
   ${({ isError }) => isError && `padding-bottom: ${ERROR_CONTAINER_HEIGHT_PX}px;`}
 
   ${CloseIcon} {
