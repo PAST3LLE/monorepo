@@ -3481,6 +3481,14 @@
     chai "^4.2.0"
     ethers "^6.4.0"
 
+"@past3lle/skilltree-contracts@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@past3lle/skilltree-contracts/-/skilltree-contracts-0.1.2.tgz#e34ee3dcd26d96e9f23e688484788932c5b4781d"
+  integrity sha512-nFkg23hKcYwi71Sk1luL56Vk0y4VxygRn3V3UBJWV6koqpNE3bo0FCYagY2NcDBhcvkFF/Pnvloipqtd7sRygw==
+  dependencies:
+    chai "^4.2.0"
+    ethers "^6.4.0"
+
 "@pkgjs/parseargs@^0.11.0":
   version "0.11.0"
   resolved "https://registry.yarnpkg.com/@pkgjs/parseargs/-/parseargs-0.11.0.tgz#a77ea742fab25775145434eb1d2328cf5013ac33"
