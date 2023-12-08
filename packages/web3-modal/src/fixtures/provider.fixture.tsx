@@ -6,13 +6,13 @@ import React, { ReactNode, useCallback, useEffect, useState } from 'react'
 import { useTheme } from 'styled-components'
 import { parseEther } from 'viem'
 import { goerli, polygon, polygonMumbai } from 'viem/chains'
-import { mainnet, useBalance, useSendTransaction, useWaitForTransaction, useWatchPendingTransactions } from 'wagmi'
+import { mainnet, useBalance, useSendTransaction } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { infuraProvider } from 'wagmi/providers/infura'
 
 import { RouterCtrl } from '../controllers'
 import { RouterView } from '../controllers/types/controllerTypes'
-import { useAccountNetworkActions, usePstlWeb3Modal, useUserConnectionInfo } from '../hooks'
+import { useAccountNetworkActions, usePstlWeb3Modal, useUserConnectionInfo, useWaitForTransaction } from '../hooks'
 import { useLimitChainsAndSwitchCallback } from '../hooks/api/useLimitChainsAndSwitchCallback'
 import { useIsSafeApp, useIsSafeViaWc } from '../hooks/wallet/useWalletMetadata'
 import { PstlWeb3ModalProps, PstlW3Providers as WalletModal } from '../providers'
@@ -82,22 +82,12 @@ function AppWithWagmiAccess() {
   const sendApi = useSendTransaction()
 
   const [txHash, setTxHash] = useState<Address | undefined>()
-  const [txInProgress, setTxInProgress] = useState(false)
+  const [txStarted, setTxStarted] = useState(false)
 
   const resetTxState = () => {
-    setTxInProgress(false)
+    setTxStarted(false)
     setTxHash(undefined)
   }
-
-  useWatchPendingTransactions({
-    listener: (hashes) => {
-      const hasHash = !!txHash && hashes.some((hash) => hash === txHash)
-      if (hasHash) {
-        resetTxState()
-      }
-    },
-    enabled: !!txHash
-  })
 
   const {
     isLoading: waitingForTx,
@@ -125,10 +115,13 @@ function AppWithWagmiAccess() {
 
   const handleSendTransaction = useCallback(
     async (args: { value: bigint; to: string }) => {
-      setTxInProgress(true)
+      setTxStarted(true)
       sendApi
         .sendTransactionAsync(args)
-        .then((tx) => setTxHash(tx.hash))
+        .then((tx) => {
+          setTxHash(tx.hash)
+          setTxStarted(false)
+        })
         .catch((error) => {
           resetTxState()
           throw error
@@ -137,7 +130,7 @@ function AppWithWagmiAccess() {
     [sendApi]
   )
 
-  const txLoading = txInProgress || waitingForTx
+  const txLoading = txStarted || waitingForTx
 
   return (
     <>
