@@ -6,9 +6,9 @@ import { useMemo } from 'react'
 import { Chain } from 'viem'
 import { SafeConnector } from 'wagmi/connectors/safe'
 
-import { PstlWeb3ModalProps, addConnector } from '../providers'
-import { getAppType, hardFilterChains, mapChainsToConnectors } from '../providers/utils/connectors'
-import { ConnectorEnhanced } from '../types'
+import { PstlWeb3ModalProps, addConnector } from '../../providers'
+import { getAppType, hardFilterChains, mapChainsToConnectors } from '../../providers/utils/connectors'
+import { ConnectorEnhanced } from '../../types'
 
 export function useConnectorAndChainConfig(
   configProps: PstlWeb3ModalProps<number>

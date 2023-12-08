@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 
-import { ModalPropsCtrl } from '../controllers'
-import { ModalPropsCtrlState } from '../controllers/types/controllerTypes'
+import { ModalPropsCtrl } from '../../controllers'
+import { ModalPropsCtrlState } from '../../controllers/types/controllerTypes'
 
 interface PstlWeb3ModalStateHook {
   state: ModalPropsCtrlState

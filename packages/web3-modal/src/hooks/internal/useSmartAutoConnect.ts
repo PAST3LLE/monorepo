@@ -3,7 +3,7 @@ import { isIframe } from '@past3lle/wagmi-connectors/utils'
 import { useEffect } from 'react'
 import { Chain, useAccount, useConnect } from 'wagmi'
 
-import { ConnectorEnhanced } from '../types'
+import { ConnectorEnhanced } from '../../types'
 
 export interface SmartAutoConnectProps {
   chainFromUrl: Chain | undefined

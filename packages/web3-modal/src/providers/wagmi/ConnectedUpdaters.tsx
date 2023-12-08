@@ -5,7 +5,7 @@ import { useSwitchNetwork } from 'wagmi'
 
 import { ModalPropsCtrl } from '../../controllers'
 import { useUserConnectionInfo } from '../../hooks'
-import { SmartAutoConnectProps, useSmartAutoConnect } from '../../hooks/useSmartAutoConnect'
+import { SmartAutoConnectProps, useSmartAutoConnect } from '../../hooks/internal/useSmartAutoConnect'
 
 function useSwitchChainOnLimitedChainsChange() {
   const rootSnap = useSnapshot(ModalPropsCtrl.state.root)

@@ -1,8 +1,8 @@
 import { useCallback, useMemo } from 'react'
 
-import { trimAndLowerCase } from '../utils/misc'
-import { useUserConnectionInfo } from './useConnection'
-import { usePstlWeb3ModalStore } from './usePstlWeb3ModalStore'
+import { trimAndLowerCase } from '../../utils/misc'
+import { useUserConnectionInfo } from '../api/useConnection'
+import { usePstlWeb3ModalStore } from '../api/usePstlWeb3ModalStore'
 
 export function useConnectedChainAndWalletLogo() {
   const userConnectionInfo = useUserConnectionInfo()

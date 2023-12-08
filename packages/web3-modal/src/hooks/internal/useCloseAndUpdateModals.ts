@@ -1,8 +1,8 @@
 import { useWeb3ModalEvents } from '@web3modal/react'
 
-import { useConnectDisconnect } from './useConnection'
-import { usePstlWeb3Modal } from './usePstlWeb3Modal'
-import { usePstlWeb3ModalStore } from './usePstlWeb3ModalStore'
+import { useConnectDisconnect } from '../api/useConnection'
+import { usePstlWeb3Modal } from '../api/usePstlWeb3Modal'
+import { usePstlWeb3ModalStore } from '../api/usePstlWeb3ModalStore'
 
 type Callbacks = {
   closeModal: ReturnType<typeof usePstlWeb3Modal>['close']

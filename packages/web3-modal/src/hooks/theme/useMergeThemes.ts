@@ -4,7 +4,7 @@ import merge from 'lodash.merge'
 import { useEffect, useState } from 'react'
 import { DefaultTheme, useTheme } from 'styled-components'
 
-import { PstlSubModalsTheme } from '../theme'
+import { PstlSubModalsTheme } from '../../theme'
 
 type ModalTheme =
   | CustomThemeOrTemplate<

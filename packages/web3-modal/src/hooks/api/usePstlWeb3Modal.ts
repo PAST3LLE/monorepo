@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { ModalCtrl } from '../controllers'
+import { ModalCtrl } from '../../controllers'
 
 interface PstlWeb3ModalHook {
   isOpen: boolean

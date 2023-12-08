@@ -1,9 +1,9 @@
 import { devError } from '@past3lle/utils'
 import { useEffect, useState } from 'react'
 
-import { PstlWeb3ModalProps } from '../providers/types'
-import { getAppType } from '../providers/utils/connectors'
-import { Chain } from '../types'
+import { PstlWeb3ModalProps } from '../../providers/types'
+import { getAppType } from '../../providers/utils/connectors'
+import { Chain } from '../../types'
 
 export function useAutoSwitchToChain(chains: PstlWeb3ModalProps['chains'], config?: PstlWeb3ModalProps) {
   const [derivedChainId, setDerivedChainId] = useState<Chain<number> | undefined>(undefined)

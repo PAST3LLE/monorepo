@@ -6,7 +6,7 @@ import { useTheme } from 'styled-components'
 
 import { ModalPropsCtrlState } from '../../../controllers/types/controllerTypes'
 import { useConnectDisconnect, usePstlWeb3Modal, useUserConnectionInfo } from '../../../hooks'
-import { useConnectedChainAndWalletLogo } from '../../../hooks/useLogos'
+import { useConnectedChainAndWalletLogo } from '../../../hooks/misc/useLogos'
 import { useDeriveAppType } from '../../../providers/utils/connectors'
 import { PstlModalTheme } from '../../../theme'
 import { ConnectorEnhanced } from '../../../types'

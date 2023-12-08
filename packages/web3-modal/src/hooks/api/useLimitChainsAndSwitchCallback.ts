@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { Chain } from 'viem'
 
-import { ModalPropsCtrl } from '../controllers'
+import { ModalPropsCtrl } from '../../controllers'
 
 /**
  * @name useLimitChainsAndSwitchCallback
