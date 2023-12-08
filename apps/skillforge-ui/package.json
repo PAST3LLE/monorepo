@@ -32,7 +32,7 @@
     "test:debug": "react-app-rewired --inspect-brk test --runInBand --no-cache",
     "dedup": "npx yarn-deduplicate",
     "copy:metadata": "cp ../skills-nft/src/skills/metadata.js ./src/mock/metadata/fullMetadata.js",
-    "cli": "npx @past3lle/forge-cli@latest"
+    "forge-cli": "npx @past3lle/forge-cli@latest"
   },
   "resolutions": {
     "@web3modal/ethereum": "^2.x",
