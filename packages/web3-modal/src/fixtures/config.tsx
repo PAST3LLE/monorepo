@@ -1,4 +1,5 @@
 import React from 'react'
+import { alchemyProvider } from 'wagmi/providers/alchemy'
 
 import { PstlWeb3ModalProps } from '../providers'
 import { createTheme } from '../theme'
@@ -222,6 +223,13 @@ const CHAIN_IMAGES: ChainImages = {
 const DEFAULT_PROPS: PstlWeb3ModalProps = {
   appName: 'COSMOS APP',
   chains,
+  clients: {
+    wagmi: {
+      options: {
+        publicClients: [alchemyProvider({ apiKey: 'SYRE9jZCPEk3b7SlmVRKRQzOrmb6kVAd' })]
+      }
+    }
+  },
   options: {
     pollingInterval: 10_000,
     escapeHatches: {

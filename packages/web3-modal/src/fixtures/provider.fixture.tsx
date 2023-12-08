@@ -1,10 +1,12 @@
-import { ButtonVariations, ColumnCenter, PstlButton } from '@past3lle/components'
+import { ButtonVariations, ColumnCenter, PstlButton, RowCenter, SpinnerCircle } from '@past3lle/components'
 import { ThemeProvider, createCustomTheme } from '@past3lle/theme'
+import { Address } from '@past3lle/types'
 import { devWarn, getExpirementalCookieStore as getCookieStore } from '@past3lle/utils'
-import React, { ReactNode, useEffect } from 'react'
+import React, { ReactNode, useCallback, useEffect, useState } from 'react'
 import { useTheme } from 'styled-components'
+import { parseEther } from 'viem'
 import { goerli, polygon, polygonMumbai } from 'viem/chains'
-import { mainnet, useBalance } from 'wagmi'
+import { mainnet, useBalance, useSendTransaction, useWaitForTransaction, useWatchPendingTransactions } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { infuraProvider } from 'wagmi/providers/infura'
 
@@ -12,6 +14,7 @@ import { RouterCtrl } from '../controllers'
 import { RouterView } from '../controllers/types/controllerTypes'
 import { useAccountNetworkActions, usePstlWeb3Modal, useUserConnectionInfo } from '../hooks'
 import { useLimitChainsAndSwitchCallback } from '../hooks/useLimitChainsAndSwitchCallback'
+import { useIsSafeApp, useIsSafeViaWc } from '../hooks/useWalletMetadata'
 import { PstlWeb3ModalProps, PstlW3Providers as WalletModal } from '../providers'
 import { addConnector } from '../providers/utils'
 import { COMMON_CONNECTOR_OVERRIDES, DEFAULT_PROPS, DEFAULT_PROPS_WEB3AUTH, pstlModalTheme } from './config'
@@ -27,6 +30,10 @@ interface Web3ButtonProps {
 const Web3Button = ({ children = <div>Show PSTL Wallet Modal</div> }: Web3ButtonProps) => {
   const { onAccountClick } = useAccountNetworkActions()
   const { address, connector } = useUserConnectionInfo()
+
+  if (typeof globalThis?.window !== 'undefined' && !!connector && !(window as any)?.__PSTL_CONNECTOR) {
+    ;(window as any).__PSTL_CONNECTOR = connector
+  }
 
   return (
     <ColumnCenter>
@@ -64,8 +71,73 @@ function InnerApp() {
 }
 
 function AppWithWagmiAccess() {
+  const isSafeWcConnector = useIsSafeViaWc()
+  const isSafeApp = useIsSafeApp()
+
   const { address } = useUserConnectionInfo()
   const { data, refetch } = useBalance({ address })
+  const [sendEthVal, setSendEthVal] = useState('0')
+  const [addressToSendTo, setAddress] = useState('')
+
+  const sendApi = useSendTransaction()
+
+  const [txHash, setTxHash] = useState<Address | undefined>()
+  const [txInProgress, setTxInProgress] = useState(false)
+
+  const resetTxState = () => {
+    setTxInProgress(false)
+    setTxHash(undefined)
+  }
+
+  useWatchPendingTransactions({
+    listener: (hashes) => {
+      const hasHash = !!txHash && hashes.some((hash) => hash === txHash)
+      if (hasHash) {
+        resetTxState()
+      }
+    },
+    enabled: !!txHash
+  })
+
+  const {
+    isLoading: waitingForTx,
+    isSuccess,
+    isFetching,
+    isRefetching
+  } = useWaitForTransaction({
+    hash: txHash,
+    onReplaced(response) {
+      console.debug('TX REPLACED! ==> ', response.reason, 'NEW HASH:', response.transaction.hash)
+      setTxHash(response.transaction.hash)
+    }
+  })
+
+  console.debug(`
+    Wait for Tx ==>
+
+    Is Safe WC?     ${isSafeWcConnector}
+    Is Safe App?    ${isSafeApp}
+    Waiting For Tx: ${waitingForTx}
+    Is success:     ${isSuccess}
+    Is Fetching:    ${isFetching}
+    Is Refetching:  ${isRefetching}
+  `)
+
+  const handleSendTransaction = useCallback(
+    async (args: { value: bigint; to: string }) => {
+      setTxInProgress(true)
+      sendApi
+        .sendTransactionAsync(args)
+        .then((tx) => setTxHash(tx.hash))
+        .catch((error) => {
+          resetTxState()
+          throw error
+        })
+    },
+    [sendApi]
+  )
+
+  const txLoading = txInProgress || waitingForTx
 
   return (
     <>
@@ -73,6 +145,32 @@ function AppWithWagmiAccess() {
       <p>Address: {address}</p>
       <button onClick={() => refetch()}>Get balance</button>
       <p>Balance: {data?.formatted}</p>
+      <br />
+
+      <p>Send ETH</p>
+      {txLoading ? (
+        <>
+          <h2>WAITING TRANSACTION...</h2>
+          <h4>Hash: {txHash}</h4>
+          <RowCenter width="300px">
+            <SpinnerCircle filter="invert(1)" size={100} />
+          </RowCenter>
+        </>
+      ) : (
+        <>
+          <p>
+            Amount
+            <input type="text" value={sendEthVal} onChange={(e: any) => setSendEthVal(e.target.value)} />
+          </p>
+          <p>
+            To
+            <input type="text" value={addressToSendTo} onChange={(e: any) => setAddress(e.target.value)} />
+          </p>
+          <button onClick={() => handleSendTransaction({ value: parseEther(sendEthVal), to: addressToSendTo })}>
+            Send to {addressToSendTo || 'N/A'}
+          </button>
+        </>
+      )}
     </>
   )
 }
@@ -1068,8 +1166,6 @@ export default {
                 'ledger-hid': {
                   ...COMMON_CONNECTOR_OVERRIDES['ledger-hid'],
                   async customConnect({ store, connector, wagmiConnect }) {
-                    console.debug('🚀 ~ file: provider.fixture.tsx:1071 ~ customConnect ~ connector:', connector)
-                    console.debug('🚀 ~ file: provider.fixture.tsx:1071 ~ customConnect ~ store:', store)
                     await wagmiConnect({ connector })
                     const id = connector?.id || connector?.name
                     id &&
@@ -1303,6 +1399,7 @@ export default {
 function ModalOpenButton({ view = 'HidDeviceOptions' }: { view?: RouterView }) {
   const { open } = usePstlWeb3Modal()
   const { address, connector } = useUserConnectionInfo()
+
   return (
     <ColumnCenter>
       <PstlButton
