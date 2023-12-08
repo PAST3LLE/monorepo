@@ -82,6 +82,7 @@
     "wagmi": "^1.x"
   },
   "dependencies": {
+    "@safe-global/api-kit": "^2.0.0",
     "@past3lle/components": "^1.0.0-alpha.6",
     "@past3lle/hooks": "^1.0.0-alpha.6",
     "@past3lle/theme": "^0.1.18",
