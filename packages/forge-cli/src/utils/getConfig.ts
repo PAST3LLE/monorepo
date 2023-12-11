@@ -49,7 +49,7 @@ export async function getConfig() {
     WARNING!
     No "forge.config.js" file found in the current directory root: ${process.cwd()}. 
     We created a default config file for you, which you can edit to fit your needs by exiting the CLI. 
-    The CLI will continue using the default forge.confif.js file which reads from the following environment variables:
+    The CLI will continue using the default forge.config.js file which reads from the following environment variables:
     
     1. MNEMONIC: your mnemonic phrase for signing deployment transactions
     2. <NETWORK>_RPC_URL: <network> RPC urls for each network
