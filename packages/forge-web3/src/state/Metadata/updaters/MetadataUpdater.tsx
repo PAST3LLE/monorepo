@@ -35,10 +35,12 @@ export function ForgeMetadataUpdater(props: ForgeMetadataUpdaterProps) {
   const [, setMetadataState] = useForgeMetadataAtom()
 
   useEffect(() => {
-    async function resolveMetadata() {
-      try {
-        if (!chainId || !promisedMetadata) return
+    if (!chainId || !promisedMetadata) return
 
+    async function resolveMetadata() {
+      if (!chainId || !promisedMetadata) return
+
+      try {
         const metadataTuple = await Promise.all(promisedMetadata)
         // Post new metadata if it exists
         if (metadataTuple?.length) {

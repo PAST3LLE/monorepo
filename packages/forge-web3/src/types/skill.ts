@@ -31,6 +31,8 @@ export interface SkillProperties extends BaseProperties {
   id: SkillId
   shopifyId: string
   dependencies: SkillDependencyObject[]
+  unlockInstructions?: string
+  isCollection?: boolean
 }
 
 export interface SkillAttributes {

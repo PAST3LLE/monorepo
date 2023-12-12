@@ -1,4 +1,5 @@
 import { devWarn } from '@past3lle/utils'
+import { DefaultTheme } from 'styled-components'
 import { Address } from 'wagmi'
 
 import { ForgeBalances } from '../state/Balances'
@@ -52,8 +53,10 @@ export async function getTokenUri(imageUri: SkillMetadata['image'], ...gatewayUr
 }
 
 // TODO: fix this with base "forge" type e.g extends ThemeWithRarity
-export function getRarityColours<T extends { rarity: { [key in SkillRarity]: any } }>(theme: T, rarity?: SkillRarity) {
+export function getRarityColours<T extends DefaultTheme & { rarity: { [key in SkillRarity]: any } }>(
+  theme: T,
+  rarity?: SkillRarity
+) {
   if (!rarity) return theme.rarity.common
-
   return theme.rarity[rarity]
 }
