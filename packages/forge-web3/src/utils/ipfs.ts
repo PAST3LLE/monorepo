@@ -90,11 +90,15 @@ export async function chainFetchIpfsLsUri(uriHash: string, ...customGateways: Cu
   return success
 }
 
+export async function responseToBlob(response: Response | undefined) {
+  return response && URL.createObjectURL(await response.blob())
+}
+
 export async function chainFetchIpfsUriBlob(uriHash: string, ...customGateways: CustomIpfsGatewayConfig[]) {
   const gateways = customGateways?.length ? customGateways : [{ gateway: DEFAULT_GATEWAY_URI }]
   const response = await chainFetchIpfsUri(uriHash, ...gateways)
 
-  return response && URL.createObjectURL(await response.blob())
+  return responseToBlob(response)
 }
 
 type IpfsApiObject = {
