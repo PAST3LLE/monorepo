@@ -89,7 +89,7 @@ export function ActiveSkillPanel() {
         padding: '2.5rem 0 4rem 0',
         bgWithDpiOptions: {
           bgSet: urlToSimpleGenericImageSrcSet(skillImageUri),
-          attributes: ['center -8px / 160% no-repeat', '-184px -3px / 160% no-repeat'],
+          attributes: ['center -8px / cover no-repeat', '-184px -3px / cover no-repeat'],
           modeColors: ['#433054', '#433054']
         }
       }}

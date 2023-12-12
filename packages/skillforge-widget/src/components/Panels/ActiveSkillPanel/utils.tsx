@@ -3,15 +3,14 @@ import { SkillLockStatus, SkillMetadata } from '@past3lle/forge-web3'
 import React from 'react'
 import styled, { DefaultTheme } from 'styled-components'
 
-// #e8d2d2
 const LockedSkillInstructionsWrapper = styled(Column)`
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   color: black;
   font-size: 1.7rem;
 
   overflow-y: auto;
-  max-height: 200px;
+  max-height: 300px;
 
   background: #cbe094db;
   border-radius: 10px;
