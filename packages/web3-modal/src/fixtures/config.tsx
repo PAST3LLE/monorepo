@@ -1,4 +1,3 @@
-import React from 'react'
 import { alchemyProvider } from 'wagmi/providers/alchemy'
 
 import { PstlWeb3ModalProps } from '../providers'
@@ -61,7 +60,7 @@ export const pstlModalTheme = createTheme({
         },
         helpers: { show: true },
         error: {
-          background: 'rgba(0,0,0, 0.85)'
+          background: 'rgba(0,0,0, 0.65)'
         }
       },
       connection: {
@@ -141,52 +140,20 @@ export const pstlModalTheme = createTheme({
   }
 })
 
-export const COMMON_CONNECTOR_OVERRIDES: ConnectorOverrides = {
-  general: {
-    infoText: {
-      title: 'What is this?',
-      content: (
-        <strong>
-          This is some helper filler text to describe wtf is going on in this connection modal. It is useful to learn
-          these things while browsing apps as users can get confused when having to exit apps to read info somewhere
-          else that isn't the current screent they are on.
-        </strong>
-      )
-    }
-  },
+export const COMMON_CONNECTOR_OVERRIDES = {
   walletconnect: {
-    logo: WALLETCONNECT_LOGO,
-    infoText: {
-      type: 'TOOLTIP',
-      title: 'What is WalletConnect?',
-      content: `Web3Modal/WalletConnect is a simple blockchain wallet aggregator modal that facilitates the choice of
-          selecting preferred blockchain wallet(s) for connecting to dApps (decentralised apps). This generally requires
-          more blockchain knowledge.`
-    }
+    logo: WALLETCONNECT_LOGO
   },
   web3auth: {
     isRecommended: true,
-    logo: WEB3AUTH_LOGO,
-    infoText: {
-      title: 'How does this login work?',
-      content: (
-        <strong>
-          Social login is done via Web3Auth - a non-custodial social login protocol (i.e they never actually know, or
-          hold your data) - which facilitates logging into dApps (decentralised apps) via familiar social login choices
-        </strong>
-      )
-    }
+    logo: WEB3AUTH_LOGO
   },
   ledger: {
     customName: 'LEDGER LIVE',
     logo: 'https://crypto-central.io/library/uploads/Ledger-Logo-3.png',
     modalNodeId: 'ModalWrapper',
     rank: 0,
-    isRecommended: true,
-    infoText: {
-      title: 'What is Ledger?',
-      content: <strong>Ledger wallet is a cold storage hardware wallet.</strong>
-    }
+    isRecommended: true
   },
   'ledger-hid': {
     customName: 'LEDGER HID',
@@ -213,7 +180,7 @@ export const COMMON_CONNECTOR_OVERRIDES: ConnectorOverrides = {
     downloadUrl: 'https://metamask.io/downloads',
     isRecommended: true
   }
-}
+} as const
 
 const CHAIN_IMAGES: ChainImages = {
   // unknown: 'https://img.freepik.com/premium-vector/unknown-mysterious-logo-sports_67734-82.jpg',
@@ -223,6 +190,9 @@ const CHAIN_IMAGES: ChainImages = {
 const DEFAULT_PROPS: PstlWeb3ModalProps = {
   appName: 'COSMOS APP',
   chains,
+  connectors: {
+    overrides: COMMON_CONNECTOR_OVERRIDES
+  },
   clients: {
     wagmi: {
       options: {
@@ -247,7 +217,6 @@ const DEFAULT_PROPS: PstlWeb3ModalProps = {
       chainImages: CHAIN_IMAGES,
       closeModalOnConnect: false,
       hideInjectedFromRoot: true,
-      connectorDisplayOverrides: COMMON_CONNECTOR_OVERRIDES,
       loaderProps: {
         spinnerProps: {
           size: 80
@@ -267,29 +236,22 @@ const DEFAULT_PROPS: PstlWeb3ModalProps = {
 
 const DEFAULT_PROPS_WEB3AUTH: PstlWeb3ModalProps = {
   ...DEFAULT_PROPS,
+  connectors: {
+    ...DEFAULT_PROPS.connectors,
+    overrides: {
+      ...((DEFAULT_PROPS.connectors as any)?.overrides as ConnectorOverrides),
+      web3auth: {
+        isRecommended: true,
+        logo: WEB3AUTH_LOGO
+      }
+    }
+  },
   modals: {
     ...DEFAULT_PROPS.modals,
     root: {
-      ...DEFAULT_PROPS.modals.root,
-      connectorDisplayOverrides: {
-        ...DEFAULT_PROPS.modals.root?.connectorDisplayOverrides,
-        web3auth: {
-          isRecommended: true,
-          logo: WEB3AUTH_LOGO,
-          infoText: {
-            title: 'How does this login work?',
-            content: (
-              <strong>
-                Social login is done via Web3Auth - a non-custodial social login protocol (i.e they never actually know,
-                or hold your data) - which facilitates logging into dApps (decentralised apps) via familiar social login
-                choices
-              </strong>
-            )
-          }
-        }
-      }
+      ...DEFAULT_PROPS.modals.root
     }
   }
-} as const
+}
 
 export { WALLETCONNECT_TEST_ID as WALLETCONNECT_ID, DEFAULT_PROPS, DEFAULT_PROPS_WEB3AUTH }

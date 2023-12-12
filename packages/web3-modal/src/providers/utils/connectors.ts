@@ -24,7 +24,9 @@ export function getAppType(forcedAppType?: AppType) {
 export function useDeriveAppType() {
   const {
     state: {
-      root: { appType }
+      userOptions: {
+        ux: { appType }
+      }
     }
   } = usePstlWeb3ModalStore()
 

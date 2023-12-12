@@ -7,23 +7,29 @@ import type { ModalCtrlState } from './types/controllerTypes'
 export interface OpenOptions {
   uri?: string
   standaloneChains?: string[]
-  route?: 'Account' | 'ConnectWallet' | 'Help' | 'SelectNetwork' | 'HidDeviceOptions' | 'ConnectorConfigType'
+  route?:
+    | 'Account'
+    | 'ConnectWallet'
+    | 'Help'
+    | 'SelectNetwork'
+    | 'HidDeviceOptions'
+    | 'ConnectorConfigType'
+    | 'ConnectionApproval'
 }
 
 // -- initial state ------------------------------------------------ //
 const state = proxy<ModalCtrlState>({
-  open: false
+  open: false,
+  error: undefined
 })
 
 // -- controller --------------------------------------------------- //
 export const ModalCtrl = {
   state,
-
   subscribe(callback: (newState: ModalCtrlState) => void) {
     return valtioSub(state, () => callback(state))
   },
-
-  async open(options?: OpenOptions) {
+  async open(options?: OpenOptions): Promise<void> {
     return new Promise<void>((resolve) => {
       state.open = false
 
@@ -37,8 +43,13 @@ export const ModalCtrl = {
       resolve()
     })
   },
-
   close() {
     state.open = false
+  },
+  setError(error: Error) {
+    state.error = error
+  },
+  resetError() {
+    state.error = undefined
   }
 }

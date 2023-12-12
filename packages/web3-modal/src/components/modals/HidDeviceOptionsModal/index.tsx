@@ -8,7 +8,6 @@ import { useTheme } from 'styled-components'
 import { useSwitchNetwork } from 'wagmi'
 
 import { KEYS } from '../../../constants/localstorage'
-import { ModalPropsCtrlState } from '../../../controllers/types/controllerTypes'
 import { useGetChainLogoCallback, usePstlWeb3Modal, useUserConnectionInfo } from '../../../hooks'
 import { LoadingScreen } from '../../LoadingScreen'
 import { NoChainLogo } from '../../NoChainLogo'
@@ -42,9 +41,7 @@ const SUPPORTED_BIP_DERIVATION_PATHS = [
   "m/44'/60'/0'/0/*"
 ]
 
-type PstlHidDeviceModalProps = ModalPropsCtrlState['root'] &
-  ModalPropsCtrlState['hidDeviceOptions'] &
-  Pick<BaseModalProps, 'errorOptions'>
+type PstlHidDeviceModalProps = Pick<BaseModalProps, 'errorOptions'>
 
 const PAGINATION_AMT = 5
 const CHAIN_IMAGE_STYLES = { width: 20, marginLeft: '0.2rem', borderRadius: '30%' }
@@ -136,7 +133,6 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
                       callback={async () => switchNetworkAsync(sChain.id)}
                       modalView={'grid'}
                       connected={false}
-                      connector={hidConnector as LedgerHIDConnector}
                       label={sChain.name}
                       logo={chainLogo ? <img src={chainLogo} /> : <NoChainLogo />}
                     />

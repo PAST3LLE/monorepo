@@ -4,7 +4,7 @@ import isEqual from 'lodash.isequal'
 import { RenderConnectorOptionsProps } from '../components/modals/ConnectionModal/RenderConnectorOptions'
 import { useConnection, usePstlWeb3Modal } from '../hooks'
 import { ConnectorEnhanced, ConnectorEnhancedExtras, FullWeb3ModalStore } from '../types'
-import { trimAndLowerCase } from './misc'
+import { connectorOverridePropSelector, trimAndLowerCase } from './misc'
 
 type GetConnectorInfoCallbacks = {
   connect: RenderConnectorOptionsProps['connect']
@@ -33,7 +33,7 @@ export type ConnectorInfo = { label: string; logo?: string; connected: boolean; 
 export function runConnectorConnectionLogic(
   connector: ConnectorEnhanced<any, any>,
   currentConnector: ConnectorEnhanced<any, any> | undefined,
-  modalsStore: FullWeb3ModalStore,
+  modalsStore: FullWeb3ModalStore['ui'],
   {
     connect,
     disconnect,
@@ -53,10 +53,7 @@ export function runConnectorConnectionLogic(
   ConnectorInfo,
   ReturnType<typeof useConnection>[1]['connect'] | ReturnType<typeof useConnection>[1]['openWalletConnectModal']
 ] {
-  const modalType: ProviderModalType = (
-    connectorDisplayOverrides?.[trimAndLowerCase(connector?.name)] ||
-    connectorDisplayOverrides?.[trimAndLowerCase(connector?.id)]
-  )?.modalNodeId
+  const modalType: ProviderModalType = connectorOverridePropSelector(connectorDisplayOverrides, connector)?.modalNodeId
   const isModalMounted = !modalType || !!isProviderModalMounted
   const providerInfo = _getProviderInfo(connector, currentConnector, connectorDisplayOverrides)
   return [
@@ -91,7 +88,7 @@ async function _connectProvider(
   modalId: ProviderModalType,
   connector: ConnectorEnhanced<any, any>,
   currentConnector: ConnectorEnhanced<any, any> | undefined,
-  modalsStore: FullWeb3ModalStore,
+  modalsStore: FullWeb3ModalStore['ui'],
   constants: AuxConnectorInfoConstants & {
     isModalMounted?: boolean
   },
@@ -116,7 +113,7 @@ async function _connectProvider(
   const connectCallbackParams: [
     ConnectorEnhanced<any, any>,
     ConnectorEnhanced<any, any> | undefined,
-    FullWeb3ModalStore,
+    FullWeb3ModalStore['ui'],
     BaseConnectorInfoConstants,
     Pick<GetConnectorInfoCallbacks, 'open' | 'connect' | 'disconnect'>
   ] = [
@@ -182,7 +179,7 @@ function _getProviderInfo(
 async function _handleConnectorClick(
   connector: ConnectorEnhanced<any, any>,
   currentConnector: ConnectorEnhanced<any, any> | undefined,
-  modalsStore: FullWeb3ModalStore,
+  modalsStore: FullWeb3ModalStore['ui'],
   { address, chainId, connectorDisplayOverrides, isConnected }: BaseConnectorInfoConstants,
   { connect, disconnect, open }: Pick<GetConnectorInfoCallbacks, 'open' | 'connect' | 'disconnect'>
 ) {
@@ -217,7 +214,7 @@ async function _connectToProvider({
   connectorOverride,
   chainId
 }: Pick<GetConnectorInfoCallbacks, 'connect'> & {
-  modalsStore: FullWeb3ModalStore
+  modalsStore: FullWeb3ModalStore['ui']
   connector: ConnectorEnhanced<any, any>
   connectorOverride: ConnectorEnhancedExtras | undefined
   chainId?: number

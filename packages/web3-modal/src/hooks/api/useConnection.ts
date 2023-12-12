@@ -2,7 +2,6 @@ import { useIsSmallMediaWidth } from '@past3lle/hooks'
 import { ConnectArgs, ConnectResult } from '@wagmi/core'
 import { useWeb3Modal as useWeb3ModalBase } from '@web3modal/react'
 import { useCallback, useMemo } from 'react'
-import { useSnapshot } from 'valtio'
 import {
   Address,
   Chain,
@@ -14,7 +13,7 @@ import {
   useNetwork
 } from 'wagmi'
 
-import { ModalPropsCtrl, OpenOptions } from '../../controllers'
+import { OpenOptions } from '../../controllers'
 import { useAllWeb3Modals } from './useAllWeb3Modals'
 import { usePstlWeb3Modal } from './usePstlWeb3Modal'
 import { usePstlWeb3ModalStore } from './usePstlWeb3ModalStore'
@@ -65,7 +64,9 @@ export function useUserConnectionInfo() {
   const { address, connector, isConnected, isConnecting, isDisconnected, isReconnecting } = useAccount()
   const { chain, chains } = useNetwork()
   const {
-    state: { root }
+    state: {
+      userOptions: { ui }
+    }
   } = usePstlWeb3ModalStore()
   const balance = useBalance({
     address,
@@ -83,7 +84,7 @@ export function useUserConnectionInfo() {
     isDisconnected,
     isReconnecting,
     chain,
-    supportedChains: root?.softLimitedChains || chains,
+    supportedChains: ui.softLimitedChains || chains,
     balance
   }
 }
@@ -98,9 +99,8 @@ export function useWeb3Modal(): ReturnType<typeof useWeb3ModalBase> {
       setDefaultChain: baseApi.setDefaultChain,
       close: () => {
         // Re-enable root modal's trap scroll locking
-        modalStore.updateModalProps({
-          root: {
-            ...modalStore.state.root,
+        modalStore.callbacks.userOptions.set({
+          ux: {
             bypassScrollLock: false
           }
         })
@@ -109,9 +109,8 @@ export function useWeb3Modal(): ReturnType<typeof useWeb3ModalBase> {
       open: (options?: OpenOptions) => {
         // Disable root modal's scroll lock
         // And allow walletconnect to scroll internally
-        modalStore.updateModalProps({
-          root: {
-            ...modalStore.state.root,
+        modalStore.callbacks.userOptions.set({
+          ux: {
             bypassScrollLock: true
           }
         })
@@ -123,24 +122,21 @@ export function useWeb3Modal(): ReturnType<typeof useWeb3ModalBase> {
 
 export function useAccountNetworkActions() {
   const { chain } = useUserConnectionInfo()
-  const { root, walletConnect } = useAllWeb3Modals()
-  const { openType } = useSnapshot(ModalPropsCtrl.state.root)
+  const { root } = useAllWeb3Modals()
 
   const isMobileWidth = useIsSmallMediaWidth()
 
   const onNetworkClick = useCallback(async () => {
     return chain?.id
-      ? (openType === 'walletconnect' ? walletConnect : root).open({
+      ? root.open({
           route: !isMobileWidth ? 'SelectNetwork' : 'Account'
         })
       : root.open({ route: 'ConnectWallet' })
-  }, [chain?.id, openType, walletConnect, root, isMobileWidth])
+  }, [chain?.id, root, isMobileWidth])
 
   const onAccountClick = useCallback(async () => {
-    return chain?.id
-      ? (openType === 'walletconnect' ? walletConnect : root).open({ route: 'Account' })
-      : root.open({ route: 'ConnectWallet' })
-  }, [chain?.id, openType, root, walletConnect])
+    return chain?.id ? root.open({ route: 'Account' }) : root.open({ route: 'ConnectWallet' })
+  }, [chain?.id, root])
 
   return {
     onAccountClick,

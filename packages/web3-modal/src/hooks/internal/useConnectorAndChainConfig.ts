@@ -46,7 +46,10 @@ export function useConnectorAndChainConfig(
         devDebug('[@past3lle/web3-modal] App type detected: IFRAME APP')
 
         const connectors = mapChainsToConnectors(
-          [addConnector(IFrameEthereumConnector, {}), ...(configProps?.frameConnectors || [])],
+          [
+            addConnector(IFrameEthereumConnector, {}),
+            ...(_getConnectorsFromConfig(configProps?.frameConnectors) || [])
+          ],
           chains
         )
         return { ...configProps, connectors }
@@ -56,7 +59,7 @@ export function useConnectorAndChainConfig(
         devDebug('[@past3lle/web3-modal] App type detected: NORMAL DAPP', configProps?.connectors)
 
         // Map connectors and pass configProps chains
-        const userConnectors = mapChainsToConnectors(configProps?.connectors || [], chains)
+        const userConnectors = mapChainsToConnectors(_getConnectorsFromConfig(configProps?.connectors) || [], chains)
         const walletConnectProviders = w3mConnectors({
           projectId: wcProjectId,
           chains: configProps.chains as Chain[]
@@ -92,4 +95,11 @@ export function useConnectorAndChainConfig(
     options?.escapeHatches?.appType,
     wcProjectId
   ])
+}
+
+function _getConnectorsFromConfig(connectorsConfig: PstlWeb3ModalProps['connectors']) {
+  if (!connectorsConfig || Array.isArray(connectorsConfig)) return connectorsConfig
+  else {
+    return connectorsConfig.connectors
+  }
 }

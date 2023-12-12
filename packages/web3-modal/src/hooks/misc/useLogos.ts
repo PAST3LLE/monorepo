@@ -1,30 +1,23 @@
 import { useCallback, useMemo } from 'react'
 
-import { trimAndLowerCase } from '../../utils/misc'
+import { connectorOverridePropSelector } from '../../utils/misc'
 import { useUserConnectionInfo } from '../api/useConnection'
 import { usePstlWeb3ModalStore } from '../api/usePstlWeb3ModalStore'
 
 export function useConnectedChainAndWalletLogo() {
   const userConnectionInfo = useUserConnectionInfo()
   const {
-    state: { root }
+    state: {
+      userOptions: { connectors, ui }
+    }
   } = usePstlWeb3ModalStore()
 
   return useMemo(
     () => ({
-      wallet: (
-        root?.connectorDisplayOverrides?.[trimAndLowerCase(userConnectionInfo.connector?.id)] ||
-        root?.connectorDisplayOverrides?.[trimAndLowerCase(userConnectionInfo.connector?.name)]
-      )?.logo,
-      chain: userConnectionInfo?.chain?.id ? root.chainImages?.[userConnectionInfo.chain.id] : undefined
+      wallet: connectorOverridePropSelector(connectors?.overrides, userConnectionInfo.connector)?.logo,
+      chain: userConnectionInfo?.chain?.id ? ui?.chainImages?.[userConnectionInfo.chain.id] : undefined
     }),
-    [
-      root?.connectorDisplayOverrides,
-      root?.chainImages,
-      userConnectionInfo.chain?.id,
-      userConnectionInfo.connector?.id,
-      userConnectionInfo.connector?.name
-    ]
+    [connectors?.overrides, ui?.chainImages, userConnectionInfo.chain?.id, userConnectionInfo.connector]
   )
 }
 
@@ -33,10 +26,12 @@ export const useConnectedWalletLogo = () => useConnectedChainAndWalletLogo().wal
 
 export const useGetChainLogoCallback = () => {
   const {
-    state: { root }
+    state: {
+      userOptions: { ui }
+    }
   } = usePstlWeb3ModalStore()
   return useCallback(
-    (chainId?: number) => (chainId ? root.chainImages?.[chainId] ?? root.chainImages?.unknown : undefined),
-    [root?.chainImages]
+    (chainId?: number) => (chainId ? ui?.chainImages?.[chainId] ?? ui?.chainImages?.unknown : undefined),
+    [ui?.chainImages]
   )
 }

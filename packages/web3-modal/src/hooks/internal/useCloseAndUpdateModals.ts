@@ -2,34 +2,33 @@ import { useWeb3ModalEvents } from '@web3modal/react'
 
 import { useConnectDisconnect } from '../api/useConnection'
 import { usePstlWeb3Modal } from '../api/usePstlWeb3Modal'
-import { usePstlWeb3ModalStore } from '../api/usePstlWeb3ModalStore'
 
 type Callbacks = {
-  closeModal: ReturnType<typeof usePstlWeb3Modal>['close']
-  updateState: ReturnType<typeof usePstlWeb3ModalStore>['updateModalProps']
+  onSuccess?: (context: unknown) => void
+  onError?: (error: Error) => void
 }
 
-export function useCloseAndUpdateModals(shouldClose: boolean, { closeModal, updateState }: Callbacks) {
+export function useConnectDisconnectAndCloseModals(
+  shouldClose: boolean,
+  connect: Callbacks,
+  disconnect: Callbacks
+): ReturnType<typeof useConnectDisconnect> {
+  const { close } = usePstlWeb3Modal()
   // Close walletconnect modal on detected account/connection changes
   useWeb3ModalEvents((event) => {
     if (event.name === 'ACCOUNT_CONNECTED') {
-      shouldClose && closeModal()
+      shouldClose && close()
     }
   })
 
   // Update global modal state on any errors
-  useConnectDisconnect({
+  return useConnectDisconnect({
     connect: {
-      onSuccess() {
-        shouldClose && closeModal()
-      },
-      onError(error) {
-        updateState({
-          connect: {
-            error
-          }
-        })
-      }
+      onSuccess: connect.onSuccess,
+      onError: connect.onError
+    },
+    disconnect: {
+      onError: disconnect.onError
     }
   })
 }

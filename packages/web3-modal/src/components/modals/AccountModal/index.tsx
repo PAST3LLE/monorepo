@@ -4,7 +4,7 @@ import { truncateAddress } from '@past3lle/utils'
 import React, { memo, useCallback, useMemo } from 'react'
 import { useTheme } from 'styled-components'
 
-import { ModalPropsCtrlState } from '../../../controllers/types/controllerTypes'
+import { UserOptionsCtrlState } from '../../../controllers/types/controllerTypes'
 import { useConnectDisconnect, usePstlWeb3Modal, useUserConnectionInfo } from '../../../hooks'
 import { useConnectedChainAndWalletLogo } from '../../../hooks/misc/useLogos'
 import { useDeriveAppType } from '../../../providers/utils/connectors'
@@ -23,9 +23,7 @@ import {
   WalletAndNetworkRowContainer
 } from './styled'
 
-type PstlAccountModalProps = ModalPropsCtrlState['root'] &
-  ModalPropsCtrlState['account'] &
-  Pick<BaseModalProps, 'errorOptions'>
+type PstlAccountModalProps = UserOptionsCtrlState['ux'] & Pick<BaseModalProps, 'errorOptions'>
 
 function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountModalProps) {
   const modalCallbacks = usePstlWeb3Modal()
@@ -34,14 +32,10 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
     disconnect: { disconnectAsync }
   } = useConnectDisconnect({
     connect: {
-      onSuccess() {
-        closeModalOnConnect && modalCallbacks.close()
-      }
+      onSuccess: closeModalOnConnect ? modalCallbacks.close : undefined
     },
     disconnect: {
-      onSuccess() {
-        modalCallbacks.close()
-      }
+      onSuccess: modalCallbacks.close
     }
   })
 

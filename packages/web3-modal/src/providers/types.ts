@@ -5,7 +5,7 @@ import { Web3ModalProps as Web3ModalConfigOriginal } from '@web3modal/react'
 import { Chain as ChainWagmi } from 'wagmi'
 
 import { PstlWeb3ConnectionModalProps } from '../components/modals/ConnectionModal'
-import { ConnectorEnhanced } from '../types'
+import { ConnectorEnhanced, ConnectorOverrides } from '../types'
 import { Chain } from '../types/chains'
 import { PstlWagmiClientOptions } from './utils'
 import { AppType } from './utils/connectors'
@@ -108,7 +108,16 @@ export type PstlWeb3ModalOptions = Omit<
   },
   'publicClient' | 'publicClients' | 'connectors'
 >
-export type RootModalProps = Omit<PstlWeb3ConnectionModalProps, 'isOpen' | 'onDismiss' | 'chainIdFromUrl' | 'error'>
+export type RootModalProps = Omit<
+  PstlWeb3ConnectionModalProps,
+  'overrides' | 'isOpen' | 'onDismiss' | 'chainIdFromUrl' | 'error'
+>
+type GenericModalConnectorOptions<C extends ConnectorEnhanced<any, any>> =
+  | {
+      connectors?: ((chains: ChainWagmi[]) => C)[]
+      overrides?: ConnectorOverrides
+    }
+  | ((chains: ChainWagmi[]) => C)[]
 export interface Web3ModalProps<ID extends number> {
   appName: string
   /**
@@ -151,12 +160,12 @@ export interface Web3ModalProps<ID extends number> {
         }
       })
    */
-  connectors?: ((chains: ChainWagmi[]) => ConnectorEnhanced<any, any>)[]
+  connectors?: GenericModalConnectorOptions<ConnectorEnhanced<any, any>>
   /**
    * @name frameConnectors
    * @description iFrame connectors. ONLY loaded in iFrame Dapp browsers (e.g LedgerLive Discovery)
    */
-  frameConnectors?: ((chains: ChainWagmi[]) => IFrameEthereumConnector)[]
+  frameConnectors?: GenericModalConnectorOptions<IFrameEthereumConnector>
   /**
    * @name PstlW3Provider.modals
    * @description Modal props: root, walletConnect, web3auth. See each for more info.

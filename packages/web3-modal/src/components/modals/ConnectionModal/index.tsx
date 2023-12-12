@@ -1,11 +1,9 @@
 import { useIsExtraSmallMediaWidth } from '@past3lle/hooks'
-import React, { memo, useMemo, useState } from 'react'
-import { useTheme } from 'styled-components'
+import React, { memo, useCallback, useMemo, useState } from 'react'
 
-import { ModalPropsCtrlState } from '../../../controllers/types/controllerTypes'
+import { UserOptionsCtrlState } from '../../../controllers/types/controllerTypes'
 import {
-  useCloseAndUpdateModals,
-  useConnectDisconnect,
+  useConnectDisconnectAndCloseModals, // useConnectDisconnect,
   usePstlWeb3ModalStore,
   useUserConnectionInfo,
   useAllWeb3Modals as useWeb3Modals
@@ -17,62 +15,75 @@ import { RenderConnectorOptions } from './RenderConnectorOptions'
 import { cleanAndFormatConnectorOverrides, sortConnectorsByRank } from './utils'
 
 export type PstlWeb3ConnectionModalProps = Omit<BaseModalProps, 'modal'> &
-  Omit<ModalPropsCtrlState['root'], 'openType' | 'appType'> &
-  Pick<ModalPropsCtrlState['connect'], 'walletsView' | 'hideInjectedFromRoot'>
+  Pick<UserOptionsCtrlState['ux'], 'closeModalOnConnect'> &
+  Pick<UserOptionsCtrlState['ui'], 'chainImages' | 'walletsView'> &
+  Pick<UserOptionsCtrlState['connectors'], 'overrides' | 'hideInjectedFromRoot'>
 
 export type ProviderMountedMap = {
   [id: string]: {
     mounted: boolean
   }
 }
-
 function ConnectionModalContent({
-  openType = 'root',
   hideInjectedFromRoot,
   closeModalOnConnect,
-  connectorDisplayOverrides: connectorDisplayOverridesUnformatted,
+  overrides: connectorDisplayOverridesUnformatted,
   walletsView = 'list',
   loaderProps,
   chainIdFromUrl
 }: Omit<PstlWeb3ConnectionModalProps, 'theme' | 'type' | 'isOpen' | 'onDismiss'>) {
-  const theme = useTheme()
   const isExtraSmallScreen = useIsExtraSmallMediaWidth()
   // We always show list view in tiny screens
   const modalView = isExtraSmallScreen ? 'list' : walletsView
 
   const uiModalStore = useWeb3Modals()
-  const modalState = usePstlWeb3ModalStore()
+  const store = usePstlWeb3ModalStore()
   const userConnectionInfo = useUserConnectionInfo()
 
   const {
-    connect: { connectAsync: connect },
+    connect: { connectAsync },
     disconnect: { disconnectAsync: disconnect }
-  } = useConnectDisconnect({
-    connect: {
-      onError(error) {
-        modalState.updateModalProps({
-          network: {
-            error
-          }
-        })
+  } = useConnectDisconnectAndCloseModals(
+    !!closeModalOnConnect,
+    // Connect
+    {
+      onSuccess() {
+        store.callbacks.connectionStatus.set({ status: 'success' })
+        if (closeModalOnConnect) uiModalStore.root.close()
+        else uiModalStore.root.open({ route: 'Account' })
+      },
+      onError: async (error) => {
+        store.callbacks.connectionStatus.set({ status: 'error' })
+        store.callbacks.error.set(error)
       }
     },
-    disconnect: {
+    // Disconnect
+    {
       onError(error) {
-        modalState.updateModalProps({
-          network: {
-            error
-          }
-        })
+        store.callbacks.error.set(error)
       }
     }
-  })
+  )
+  const connect = useCallback(
+    async (args: Parameters<typeof connectAsync>[0]) => {
+      // open connection status modal
+      uiModalStore.root.open({
+        route: 'ConnectionApproval'
+      })
 
-  // Close modal(s) on successful connection & report any errors
-  useCloseAndUpdateModals(!!closeModalOnConnect, {
-    closeModal: uiModalStore.root.close,
-    updateState: modalState.updateModalProps
-  })
+      // Set connection status state
+      store.callbacks.connectionStatus.set({
+        ids: [args?.connector?.name || 'unknown', args?.connector?.id || 'unknown'],
+        status: 'loading',
+        retry: async () => connect(args)
+      })
+
+      const connectionInfo = await connectAsync(args)
+
+      return connectionInfo
+    },
+    [connectAsync, store.callbacks.connectionStatus, uiModalStore.root]
+  )
 
   const connectorDisplayOverrides = useMemo(
     () => cleanAndFormatConnectorOverrides(connectorDisplayOverridesUnformatted),
@@ -90,29 +101,21 @@ function ConnectionModalContent({
         RenderConnectorOptions({
           chainIdFromUrl,
           hideInjectedFromRoot,
-          openType,
-          connectorDisplayOverrides,
+          overrides: connectorDisplayOverrides,
           modalView,
           userConnectionInfo,
           connect,
           disconnect,
-          modalsStore: {
-            ui: uiModalStore,
-            updateModalConfig: modalState.updateModalProps
-          },
+          modalsStore: uiModalStore,
           providerMountedState,
-          providerLoadingState,
-          theme
+          providerLoadingState
         })
       ),
     [
       connect,
       disconnect,
-      theme,
-      openType,
       modalView,
       uiModalStore,
-      modalState.updateModalProps,
       chainIdFromUrl,
       userConnectionInfo,
       providerLoadingState,
@@ -132,7 +135,7 @@ function ConnectionModalContent({
           modal="connection"
           node="main"
           view={modalView}
-          isError={!!modalState.state.connect.error?.message}
+          isError={!!store.state.modal.error?.message}
         >
           {data}
         </WalletsWrapper>

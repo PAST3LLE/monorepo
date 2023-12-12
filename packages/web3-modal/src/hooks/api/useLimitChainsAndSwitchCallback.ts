@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { Chain } from 'viem'
 
-import { ModalPropsCtrl } from '../../controllers'
+import { UserOptionsCtrl } from '../../controllers'
 
 /**
  * @name useLimitChainsAndSwitchCallback
@@ -10,9 +10,9 @@ import { ModalPropsCtrl } from '../../controllers'
  */
 export function useLimitChainsAndSwitchCallback() {
   return useCallback((chains: Chain[]) => {
-    if (!ModalPropsCtrl.state.root?.softLimitedChains?.length) {
-      ModalPropsCtrl.state.root.softLimitedChains = []
+    if (!UserOptionsCtrl.state.ui?.softLimitedChains?.length) {
+      UserOptionsCtrl.state.ui.softLimitedChains = []
     }
-    ModalPropsCtrl.state.root.softLimitedChains = chains
+    UserOptionsCtrl.state.ui.softLimitedChains = chains
   }, [])
 }

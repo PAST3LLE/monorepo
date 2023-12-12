@@ -1,13 +1,10 @@
-import { ReactNode } from 'react'
 import { useConnect } from 'wagmi'
 import { Connector } from 'wagmi/connectors'
 
-import { ModalPropsCtrl } from '../controllers/ModalPropsCtrl'
 import { AllWeb3ModalStore } from '../hooks'
 
-export type FullWeb3ModalStore = { ui: AllWeb3ModalStore; updateModalConfig: (typeof ModalPropsCtrl)['update'] }
+export type FullWeb3ModalStore = { ui: AllWeb3ModalStore }
 
-type InfoTextMap = { title: ReactNode; content: ReactNode; type?: 'TOOLTIP' | 'DROPDOWN' }
 export type ConnectorEnhancedExtras = {
   /**
    * @name customName Optional. Custom display name.
@@ -23,7 +20,7 @@ export type ConnectorEnhancedExtras = {
    * @returns whatever it needs to return but should connect to the connector!
    */
   customConnect?: <C extends ConnectorEnhanced<any, any>>(params: {
-    store: FullWeb3ModalStore
+    store: FullWeb3ModalStore['ui']
     connector?: C
     wagmiConnect: ReturnType<typeof useConnect>['connectAsync']
   }) => unknown
@@ -31,10 +28,6 @@ export type ConnectorEnhancedExtras = {
    * @name modalNodeId Optional. String ID name of modal node. Used to show async loader on mount
    */
   modalNodeId?: string
-  /**
-   * @name infoText Optional. Helper text to show under connector
-   */
-  infoText?: InfoTextMap
   /**
    * @name isRecommended Optional. Boolean flag to show recommended label
    */

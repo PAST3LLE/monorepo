@@ -1,3 +1,4 @@
 export { ModalCtrl, type OpenOptions } from './ModalCtrl'
 export { RouterCtrl } from './RouterCtrl'
-export { ModalPropsCtrl } from './ModalPropsCtrl'
+export { UserOptionsCtrl } from './UserOptionsCtrl'
+export { ConnectionStatusCtrl } from './ConnectionStatusCtrl'

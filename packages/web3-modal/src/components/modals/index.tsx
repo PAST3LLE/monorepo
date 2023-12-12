@@ -4,11 +4,13 @@ import { devWarn } from '@past3lle/utils'
 import React, { Suspense, lazy, memo, useEffect, useMemo } from 'react'
 import { useSnapshot } from 'valtio'
 
-import { ModalPropsCtrl, RouterCtrl } from '../../controllers'
+import { RouterCtrl } from '../../controllers'
+import { FlattenedUserConfigCtrlState } from '../../controllers/types/controllerTypes'
 import { useMergeThemes, usePstlWeb3Modal, usePstlWeb3ModalStore } from '../../hooks'
 import { LoadingScreen, LoadingScreenProps } from '../LoadingScreen'
+import { ConnectionApproval } from './ConnectionApproval'
 import { BaseModal } from './common'
-import { ModalId, StatelessBaseModalProps } from './common/types'
+import { BaseModalProps, ModalId, StatelessBaseModalProps } from './common/types'
 
 const AccountModal = lazy(() => import(/* webpackPrefetch: true,  webpackChunkName: "AccountModal" */ './AccountModal'))
 const ConnectionModal = lazy(
@@ -23,24 +25,41 @@ const ConfigTypeModal = lazy(
   () => import(/* webpackPrefetch: true,  webpackChunkName: "ConfigTypeModal" */ './ConfigTypeModal')
 )
 
+type Modals = {
+  Modal: ((props: FlattenedUserConfigCtrlState & Pick<BaseModalProps, 'errorOptions'>) => React.ReactNode) | null
+  modalProps: StatelessBaseModalProps | undefined
+  userConfigProps: FlattenedUserConfigCtrlState | undefined
+}
+
 export function ModalWithoutThemeProvider(baseProps: Omit<StatelessBaseModalProps, 'modal'>) {
   const modalState = usePstlWeb3Modal()
-  const { resetErrors } = usePstlWeb3ModalStore()
+  const {
+    callbacks: {
+      error: { reset: resetError }
+    },
+    state: {
+      modal: { error },
+      userOptions
+    }
+  } = usePstlWeb3ModalStore()
   const view = useSnapshot(RouterCtrl.state).view
 
   // Reset all error state on view change
-  useEffect(() => {
-    resetErrors()
-  }, [resetErrors, view])
+  useEffect(resetError, [resetError, view])
 
-  const [Modal, auxBaseProps] = useMemo(() => {
+  const flattenedUserConfigState = useMemo(
+    () => ({
+      ...userOptions.connectors,
+      ...userOptions.ui,
+      ...userOptions.ux
+    }),
+    [userOptions.connectors, userOptions.ui, userOptions.ux]
+  )
+
+  const { Modal, modalProps } = useMemo((): Omit<Modals, 'userConfigProps'> => {
     switch (view) {
       case 'Account': {
-        const props = {
-          ...ModalPropsCtrl.state.root,
-          error: ModalPropsCtrl.state.account.error
-        }
-        const augmentedBaseProps: StatelessBaseModalProps = {
+        const modalProps: StatelessBaseModalProps = {
           ...baseProps,
           title: baseProps?.headers?.account || 'ACCOUNT',
           width: '650px',
@@ -52,12 +71,12 @@ export function ModalWithoutThemeProvider(baseProps: Omit<StatelessBaseModalProp
           modal: 'account'
         }
 
-        return [() => <AccountModal {...props} />, augmentedBaseProps]
+        return { Modal: AccountModal, modalProps }
       }
 
       case 'SwitchNetwork':
       case 'SelectNetwork': {
-        const augmentedBaseProps: StatelessBaseModalProps = {
+        const modalProps: StatelessBaseModalProps = {
           ...baseProps,
           title: baseProps?.headers?.networks || 'NETWORK',
           width: '650px',
@@ -69,15 +88,11 @@ export function ModalWithoutThemeProvider(baseProps: Omit<StatelessBaseModalProp
           modal: 'connection'
         }
 
-        return [() => <NetworkModal />, augmentedBaseProps]
+        return { Modal: NetworkModal, modalProps }
       }
 
       case 'HidDeviceOptions': {
-        const props = {
-          ...ModalPropsCtrl.state.root,
-          ...ModalPropsCtrl.state.hidDeviceOptions
-        }
-        const augmentedBaseProps: StatelessBaseModalProps = {
+        const modalProps: StatelessBaseModalProps = {
           ...baseProps,
           title: 'HID DEVICE OPTIONS',
           width: '650px',
@@ -89,11 +104,11 @@ export function ModalWithoutThemeProvider(baseProps: Omit<StatelessBaseModalProp
           modal: 'hidDevice'
         }
 
-        return [() => <HidDeviceOptionsModal {...props} />, augmentedBaseProps]
+        return { Modal: HidDeviceOptionsModal, modalProps }
       }
 
       case 'ConnectorConfigType': {
-        const augmentedBaseProps: StatelessBaseModalProps = {
+        const modalProps: StatelessBaseModalProps = {
           ...baseProps,
           title: 'Select configuration type',
           width: '650px',
@@ -105,36 +120,51 @@ export function ModalWithoutThemeProvider(baseProps: Omit<StatelessBaseModalProp
           modal: 'connection'
         }
 
-        return [() => <ConfigTypeModal />, augmentedBaseProps]
+        return { Modal: ConfigTypeModal, modalProps }
+      }
+
+      case 'ConnectionApproval': {
+        return {
+          Modal: ConnectionApproval,
+          modalProps: {
+            ...baseProps,
+            title: 'APPROVE CONNECTION',
+            width: baseProps.width || flattenedUserConfigState?.walletsView === 'grid' ? '650px' : '50vh',
+            maxWidth: baseProps.maxWidth || flattenedUserConfigState?.walletsView === 'grid' ? '100%' : '360px',
+            maxHeight: baseProps.maxHeight || flattenedUserConfigState?.walletsView === 'grid' ? '500px' : '600px',
+            id: ModalId.NETWORK,
+            modal: 'connection'
+          }
+        }
       }
 
       case 'ConnectWallet':
       default: {
-        const props = {
-          ...ModalPropsCtrl.state.connect,
-          ...ModalPropsCtrl.state.root,
-          chainIdFromUrl: baseProps.chainIdFromUrl
-        }
-        const augmentedBaseProps: StatelessBaseModalProps = {
+        const modalProps: StatelessBaseModalProps = {
           ...baseProps,
           title: baseProps?.headers?.wallets || baseProps?.title || 'CONNECT',
-          width: baseProps.width || props?.walletsView === 'grid' ? '650px' : '50vh',
-          maxWidth: baseProps.maxWidth || props?.walletsView === 'grid' ? '100%' : '360px',
-          maxHeight: baseProps.maxHeight || props?.walletsView === 'grid' ? '500px' : '600px',
+          width: baseProps.width || flattenedUserConfigState?.walletsView === 'grid' ? '650px' : '50vh',
+          maxWidth: baseProps.maxWidth || flattenedUserConfigState?.walletsView === 'grid' ? '100%' : '360px',
+          maxHeight: baseProps.maxHeight || flattenedUserConfigState?.walletsView === 'grid' ? '500px' : '600px',
           id: ModalId.WALLETS,
           modal: 'connection'
         }
 
-        return [() => <ConnectionModal {...props} />, augmentedBaseProps]
+        return {
+          Modal: (props) => <ConnectionModal {...props} chainIdFromUrl={baseProps.chainIdFromUrl} />,
+          modalProps
+        }
       }
     }
-  }, [baseProps, view])
+  }, [baseProps, flattenedUserConfigState?.walletsView, view])
+
+  if (!modalProps || !Modal) return null
 
   return (
-    <BaseModal {...baseProps} {...auxBaseProps} isOpen={modalState.isOpen} onDismiss={modalState.close}>
+    <BaseModal {...baseProps} {...modalProps} isOpen={modalState.isOpen} onDismiss={modalState.close}>
       <Suspense fallback={<Fallback {...baseProps.loaderProps} />}>
         <ErrorBoundary fallback={<ErrorModal />}>
-          <Modal />
+          {<Modal {...flattenedUserConfigState} errorOptions={{ error: error ?? null }} />}
         </ErrorBoundary>
       </Suspense>
     </BaseModal>

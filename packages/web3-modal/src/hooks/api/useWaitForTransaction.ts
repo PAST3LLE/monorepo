@@ -9,9 +9,12 @@ import { useUserConnectionInfo } from './useConnection'
 
 const SAFE_TRANSACTION_SERVICE_CACHE: Partial<Record<number, SafeApiKit | null>> = {}
 // Check every 7.5s
-const CONFIRMATION_BUFFER_TIME_MS = 7500
+const DEFAULT_CONFIRMATION_POLL_TIME = 7500
 
-export function useWaitForSafeTransaction({
+/**
+ * @name useWaitForSafeTransaction
+ */
+function useWaitForSafeTransaction({
   chainId,
   hash,
   ...queryOptions
@@ -36,10 +39,10 @@ export function useWaitForSafeTransaction({
 
       while (!executed && !txHash) {
         // Call every X seconds
-        await wait(CONFIRMATION_BUFFER_TIME_MS)
+        await wait(DEFAULT_CONFIRMATION_POLL_TIME)
         devDebug(
           '[@past3lle/web3-modal]::useWaitForSafeTransaction --> Awaiting full confirmations. Checking every',
-          CONFIRMATION_BUFFER_TIME_MS / 1000,
+          DEFAULT_CONFIRMATION_POLL_TIME / 1000,
           'seconds.'
         )
         const [isConfirmed, transactionHash] = await _checkSafeTxHasConfirmations(safeKit, hash)
@@ -49,7 +52,10 @@ export function useWaitForSafeTransaction({
 
       return txHash
     },
-    { queryHash: hash }
+    {
+      enabled: !!hash,
+      queryHash: hash
+    }
   )
 
   devDebug('Safe Tx Hash from useWaitForSafeTransaction --->', safeTxHash)

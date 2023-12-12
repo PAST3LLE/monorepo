@@ -146,7 +146,6 @@ export const InnerContainer = styled(ModalContainer).attrs(
   })
 )<{ isError?: boolean }>`
   overflow-x: hidden;
-  ${({ isError }) => isError && `padding-bottom: ${ERROR_CONTAINER_HEIGHT_PX}px;`}
 
   ${CloseIcon} {
     padding: 5px;
@@ -210,7 +209,7 @@ export const StyledConnectionModal = styled(Modal)<{ modal: keyof RequiredPstlSu
     &[data-reach-dialog-content] {
       position: relative;
       font-size: ${(props) => props.theme.modals?.[props.modal]?.baseFontSize}px;
-      ${(_props) => upToSmall`
+      ${upToSmall`
           max-height: 500px;
           max-width: unset;
           width: 100%;

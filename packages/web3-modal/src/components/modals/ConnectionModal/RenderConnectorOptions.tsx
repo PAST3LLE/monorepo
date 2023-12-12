@@ -1,37 +1,31 @@
 import React, { Dispatch, SetStateAction } from 'react'
-import { DefaultTheme } from 'styled-components'
 
 import { ProviderMountedMap, PstlWeb3ConnectionModalProps } from '.'
-import { ModalPropsCtrlState } from '../../../controllers/types/controllerTypes'
+import { UserOptionsCtrlState } from '../../../controllers/types/controllerTypes'
 import { useConnectDisconnect, useUserConnectionInfo } from '../../../hooks'
 import { ConnectorEnhanced, FullWeb3ModalStore } from '../../../types'
 import { runConnectorConnectionLogic } from '../../../utils/connectConnector'
-import { trimAndLowerCase } from '../../../utils/misc'
 import { ConnectorOption } from './ConnectorOption'
 
 export type RenderConnectorOptionsProps = Pick<
   PstlWeb3ConnectionModalProps,
-  'connectorDisplayOverrides' | 'hideInjectedFromRoot' | 'chainIdFromUrl' | 'buttonProps'
+  'overrides' | 'hideInjectedFromRoot' | 'chainIdFromUrl' | 'buttonProps'
 > & {
-  openType: ModalPropsCtrlState['root']['openType']
-  modalView: 'list' | 'grid'
-  theme: DefaultTheme
+  modalView: UserOptionsCtrlState['ui']['walletsView']
   userConnectionInfo: ReturnType<typeof useUserConnectionInfo>
   connect: ReturnType<typeof useConnectDisconnect>['connect']['connectAsync']
   disconnect: ReturnType<typeof useConnectDisconnect>['disconnect']['disconnectAsync']
-  modalsStore: FullWeb3ModalStore
+  modalsStore: FullWeb3ModalStore['ui']
   providerMountedState: [ProviderMountedMap, Dispatch<SetStateAction<ProviderMountedMap>>]
   providerLoadingState: [boolean, (loading: boolean) => void]
 }
 const RenderConnectorOptionsBase =
   ({
-    openType,
-    connectorDisplayOverrides,
+    overrides: connectorDisplayOverrides,
     hideInjectedFromRoot,
     chainIdFromUrl,
     buttonProps,
     modalView,
-    theme,
     modalsStore,
     connect,
     disconnect,
@@ -51,8 +45,8 @@ const RenderConnectorOptionsBase =
       {
         connect,
         disconnect,
-        open: openType === 'walletconnect' ? modalsStore.ui.walletConnect.open : modalsStore.ui.root.open,
-        closeRootModal: modalsStore.ui.root.close,
+        open: modalsStore.root.open,
+        closeRootModal: modalsStore.root.close,
         setProviderModalMounted: (mounted: boolean) =>
           setProviderMountedMap((currState) => ({
             ...currState,
@@ -68,12 +62,6 @@ const RenderConnectorOptionsBase =
       }
     )
 
-    const showHelperText = theme?.modals?.base?.helpers?.show
-    const helperContent = (
-      connectorDisplayOverrides?.[trimAndLowerCase(connector?.id)] ||
-      connectorDisplayOverrides?.[trimAndLowerCase(connector?.name)]
-    )?.infoText
-
     return (
       <ConnectorOption
         // keys and ids
@@ -81,15 +69,12 @@ const RenderConnectorOptionsBase =
         optionType={'wallet'}
         optionValue={connector.name}
         // data props
-        connector={connector}
         callback={callback}
         connected={connected}
-        showHelperText={showHelperText}
         buttonProps={buttonProps}
         label={label}
         isRecommended={isRecommended}
         modalView={modalView}
-        helperContent={helperContent}
         logo={<img src={logo} />}
       />
     )

@@ -3,7 +3,6 @@ import React, { memo } from 'react'
 import { useSwitchNetwork } from 'wagmi'
 
 import { useGetChainLogoCallback, usePstlWeb3Modal, usePstlWeb3ModalStore, useUserConnectionInfo } from '../../../hooks'
-import { ConnectorEnhanced } from '../../../types'
 import { NoChainLogo } from '../../NoChainLogo'
 import { AccountColumnContainer } from '../AccountModal/styled'
 import { ConnectorOption } from '../ConnectionModal/ConnectorOption'
@@ -14,19 +13,13 @@ function NetworkModalContent() {
   const modalCallbacks = usePstlWeb3Modal()
   const modalStore = usePstlWeb3ModalStore()
 
-  const { connector, chain: currentChain, supportedChains } = useUserConnectionInfo()
+  const { chain: currentChain, supportedChains } = useUserConnectionInfo()
 
   const { switchNetworkAsync } = useSwitchNetwork({
     onSuccess() {
       modalCallbacks.close()
     },
-    onError(error) {
-      modalStore.updateModalProps({
-        network: {
-          error
-        }
-      })
-    }
+    onError: modalStore.callbacks.error.set
   })
 
   const getChainLogo = useGetChainLogoCallback()
@@ -57,7 +50,6 @@ function NetworkModalContent() {
               callback={async () => switchNetworkAsync(chain.id)}
               modalView={modalView}
               connected={false}
-              connector={connector as ConnectorEnhanced<any, any>}
               label={chain.name}
               logo={chainLogo ? <img src={chainLogo} /> : <NoChainLogo />}
             />

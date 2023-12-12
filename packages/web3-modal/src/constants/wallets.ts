@@ -7,6 +7,6 @@ export const WALLET_IMAGES = {
 
 export const DEFAULT_CONNECTOR_OVERRIDES: ConnectorOverrides = {
   walletconnect: {
-    customConnect: async ({ store }) => store.ui.walletConnect.open()
+    customConnect: async ({ store }) => store.walletConnect.open()
   }
 }

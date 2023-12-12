@@ -1,11 +1,10 @@
 import { CloseIcon, Row } from '@past3lle/components'
 import { useOnKeyPress } from '@past3lle/hooks'
-import React, { useMemo } from 'react'
+import React from 'react'
 
 import { Z_INDICES } from '../../../constants'
-import { WithError } from '../../../controllers/types/controllerTypes'
 import { usePstlWeb3ModalStore } from '../../../hooks'
-import { useAutoClearingTimeout } from '../../../hooks/misc/useTimeout'
+import { useTimeoutClearingError } from '../../../hooks/misc/useTimeout'
 import { ErrorMessage } from './ErrorMessage'
 import { PoweredByLabel } from './PoweredByLabel'
 import { InnerContainer, ModalTitle, StyledConnectionModal } from './styled'
@@ -23,14 +22,8 @@ export function BaseModal({
   children,
   ...restModalProps
 }: BaseModalProps) {
-  const { state, resetErrors } = usePstlWeb3ModalStore()
-  const error = useMemo(
-    // We can safely typecase here as we are conditinoally checking the error prop
-    // that doesn't exist on the 'root' state slice but does exist on the others
-    () => (Object.values(state).filter((value) => !!(value as WithError)?.error)?.[0] as WithError)?.error,
-    [state]
-  )
-  const [showError, hideError] = useAutoClearingTimeout(!!error?.message, 7000, resetErrors)
+  const { state } = usePstlWeb3ModalStore()
+  const [showError, hideError] = useTimeoutClearingError(state.modal?.error?.message, 7000)
 
   // Close modal on key press
   useOnKeyPress(restModalProps.closeModalOnKeys || [], onDismiss)
@@ -47,7 +40,7 @@ export function BaseModal({
       maxHeight={maxHeight}
       // to prevent locking of focus on modal (with web3auth this blocks using their modal e.g)
       tabIndex={undefined}
-      bypassConfig={{ scroll: !!state.root?.bypassScrollLock }}
+      bypassConfig={{ scroll: !!state.userOptions.ux?.bypassScrollLock }}
       styleProps={{
         // w3modal has 89 zindex
         zIndex,
@@ -60,14 +53,14 @@ export function BaseModal({
         node="main"
         justifyContent="flex-start"
         gap="0.75rem"
-        isError={!!state.connect?.error?.message}
+        isError={!!state?.modal.error?.message}
       >
         <Row width="100%" marginBottom="0.5em">
           <ModalTitle>{title}</ModalTitle>
           <CloseIcon height={30} width={100} onClick={onDismiss} />
         </Row>
         {children}
-        <ErrorMessage message={error?.message} hide={!showError || !error?.message} onClick={hideError} />
+        <ErrorMessage message={state?.modal.error?.message} hide={!showError} onClick={hideError} />
         <PoweredByLabel />
       </InnerContainer>
     </StyledConnectionModal>

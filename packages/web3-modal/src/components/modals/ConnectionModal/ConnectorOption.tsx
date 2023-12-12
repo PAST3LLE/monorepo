@@ -1,13 +1,12 @@
-import { ButtonProps, RowCenter } from '@past3lle/components'
+import { ButtonProps, ColumnCenter, RowCenter } from '@past3lle/components'
 import { ConnectArgs, ConnectResult, PublicClient } from '@wagmi/core'
 import React, { ReactNode, memo } from 'react'
+import styled from 'styled-components'
 import { Chain } from 'viem'
 
-import { ConnectorEnhanced } from '../../../types'
+import { UserOptionsCtrlState } from '../../../controllers/types/controllerTypes'
 import { ConnectorInfo } from '../../../utils/connectConnector'
-import { Tooltip } from '../common/Tooltip'
 import { ModalButton } from '../common/styled'
-import { ConnectorHelper } from './ConnectorHelper'
 import { RecommendedLabel } from './RecommendedLabel'
 
 export type Callback =
@@ -19,12 +18,9 @@ export type ConnectorOptionProps = Omit<ConnectorInfo, 'logo'> & {
   className?: string
   optionType?: string
   optionValue?: string | number
-  connector: ConnectorEnhanced<any, any>
-  modalView: 'list' | 'grid'
+  modalView: UserOptionsCtrlState['ui']['walletsView']
   logoStyleProps?: React.CSSProperties
   buttonProps?: ButtonProps
-  helperContent?: ConnectorEnhanced<any, any>['infoText']
-  showHelperText?: boolean
   logo: ReactNode
   callback?: Callback
 }
@@ -33,35 +29,29 @@ function ConnectorOptionBase({
   className,
   optionType,
   optionValue,
-  connector,
   label,
   isRecommended,
   logo,
   connected,
-  helperContent,
-  showHelperText,
   buttonProps = {},
   callback
 }: ConnectorOptionProps) {
-  const showTooltip = showHelperText && typeof helperContent?.content === 'string' && helperContent?.type === 'TOOLTIP'
-  const showDropdown = showHelperText && !showTooltip && !!helperContent?.content
   return (
-    <div className={className} option-type={optionType} option-value={optionValue} id={id}>
+    <ConnectorOptionWrapper className={className} option-type={optionType} option-value={optionValue} id={id}>
       <ModalButton modal="connection" node="main" onClick={callback} connected={connected} {...buttonProps}>
         {logo}
-        <RowCenter>
-          {label}
-          {showTooltip && <Tooltip size={10} tooltip={helperContent.content as string} />}
-        </RowCenter>
+        <RowCenter>{label}</RowCenter>
         {isRecommended && <RecommendedLabel />}
       </ModalButton>
-      {showDropdown && (
-        <ConnectorHelper title={helperContent?.title as string} connector={connector}>
-          {helperContent?.content as ReactNode}
-        </ConnectorHelper>
-      )}
-    </div>
+    </ConnectorOptionWrapper>
   )
 }
+
+const ConnectorOptionWrapper = styled(ColumnCenter)`
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+`
 
 export const ConnectorOption = memo(ConnectorOptionBase)

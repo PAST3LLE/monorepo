@@ -19,7 +19,11 @@ const DEFAULT_ACCOUNT_INDEX = parseFloat(localStorage.getItem(KEYS.HID_ACCOUNT_I
 
 export function useHidModalStore({ chainId, connector, path, paginationAmount }: Params) {
   const { close } = usePstlWeb3Modal()
-  const { updateModalProps } = usePstlWeb3ModalStore()
+  const {
+    callbacks: {
+      error: { set: setError }
+    }
+  } = usePstlWeb3ModalStore()
   const [selectedAccountIdx, setSelectedAccountIdx] = useState<number>(() => DEFAULT_ACCOUNT_INDEX)
   const [accountsAndBalances, setAccountsAndBalances] = useState<{ address: string; balance: string | undefined }[]>([])
 
@@ -30,16 +34,13 @@ export function useHidModalStore({ chainId, connector, path, paginationAmount }:
   return useMemo(() => {
     const setHidError = (error: unknown) => {
       devError(error)
-      updateModalProps({
-        hidDeviceOptions: {
-          error:
-            error instanceof Error
-              ? error
-              : typeof error === 'string'
-              ? new Error(error)
-              : new Error('Unknown error occured!')
-        }
-      })
+      setError(
+        error instanceof Error
+          ? error
+          : typeof error === 'string'
+          ? new Error(error)
+          : new Error('Unknown error occured!')
+      )
     }
 
     return {
@@ -133,7 +134,7 @@ export function useHidModalStore({ chainId, connector, path, paginationAmount }:
     paginationIdx,
     path,
     selectedAccountIdx,
-    updateModalProps,
+    setError,
     close
   ])
 }

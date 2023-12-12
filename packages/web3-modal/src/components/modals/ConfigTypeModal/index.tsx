@@ -2,8 +2,7 @@ import { useIsExtraSmallMediaWidth } from '@past3lle/hooks'
 import { getIsMobile } from '@past3lle/utils'
 import React, { memo, useCallback, useState } from 'react'
 
-import { usePstlWeb3Modal, useUserConnectionInfo } from '../../../hooks'
-import { ConnectorEnhanced } from '../../../types'
+import { usePstlWeb3Modal } from '../../../hooks'
 import { NoChainLogo } from '../../NoChainLogo'
 import { Callback } from '../ConnectionModal/ConnectorOption'
 import { ModalText } from '../common/styled'
@@ -42,8 +41,6 @@ function NetworkModalContent() {
   const modalCallbacks = usePstlWeb3Modal()
 
   const [, setSelectCount] = useState(0)
-
-  const { connector } = useUserConnectionInfo()
 
   const modalCallback = useCallback(
     async (key: (typeof CHOICES)[number]['key']) =>
@@ -93,12 +90,10 @@ function NetworkModalContent() {
                 // keys & ids
                 optionType="configType"
                 optionValue={label}
-                showHelperText
                 // data props
                 callback={(() => handleDeviceAwareSelection(key)) as Callback}
                 modalView={modalView}
                 connected={false}
-                connector={connector as ConnectorEnhanced<any, any>}
                 label={label}
                 logo={logo ? <img src={logo} /> : <NoChainLogo />}
               />
