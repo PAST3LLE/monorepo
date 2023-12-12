@@ -102,24 +102,14 @@ async function deployCollectionAndAddToManager(props?: { tryHigherValues: boolea
   It MUST also end with a trailing slash, like in the examples above.
 
 Metadata URI:`,
-      async validate(input) {
+      validate(input) {
         const hasLength = input.length > 0
         const isString = typeof input === 'string'
         const endsWithSlash = input.endsWith('/')
-        const isIPFS = input.startsWith('ipfs://')
+
         const isValid = hasLength && isString && endsWithSlash
 
-        if (isValid && !isIPFS) {
-          const confirmation = await inquirer.prompt([
-            {
-              type: 'confirm',
-              name: 'centralised',
-              message: 'Do you wish to add a non-IPFS uri?'
-            }
-          ])
-          if (confirmation.centralised) return true
-          else throw Error('Please provide a valid metadata uri.')
-        } else if (isValid && isIPFS) {
+        if (isValid) {
           return true
         }
 
