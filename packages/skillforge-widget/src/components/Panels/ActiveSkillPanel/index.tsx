@@ -7,13 +7,14 @@ import {
   useForgeUserConfigAtom,
   useSupportedOrDefaultChainId
 } from '@past3lle/forge-web3'
-import { BLACK, OFF_WHITE } from '@past3lle/theme'
+import { BLACK, OFF_WHITE, urlToSimpleGenericImageSrcSet } from '@past3lle/theme'
 import { darken } from 'polished'
 import React, { useMemo, useRef } from 'react'
 import styled, { DefaultTheme, useTheme } from 'styled-components'
 
 import { SKILLPOINTS_CONTAINER_ID } from '../../../constants/skills'
 import { useGetActiveSkill } from '../../../hooks/skills'
+import { useBuildMetadataImageUri } from '../../../hooks/useBuildMetadataImageUri'
 import { baseTheme } from '../../../theme/base'
 import { buildSkillMetadataExplorerUri } from '../../../utils/skills'
 import { BlackHeader, MonospaceText } from '../../Common/Text'
@@ -26,6 +27,7 @@ import { ActiveSkillPanelContainer, RequiredDepsContainer, SkillRarityLabel, Ski
 import { getLockStatusColour, getSkillDescription } from './utils'
 
 const SkillPanelSkillpoint = styled(Skillpoint)<{ disabled?: boolean }>`
+  box-shadow: unset;
   > ${RowCenter} {
     min-height: 200px;
     height: 20vh;
@@ -50,18 +52,18 @@ export function ActiveSkillPanel() {
   const isLocked = lockStatus === SkillLockStatus.LOCKED || lockStatus === SkillLockStatus.UNLOCKABLE_IN_TRADE
   const isOwned = lockStatus === SkillLockStatus.OWNED
 
-  const description = useMemo(() => getSkillDescription(activeSkill?.name, lockStatus), [activeSkill?.name, lockStatus])
+  const description = useMemo(() => getSkillDescription(activeSkill, lockStatus), [activeSkill, lockStatus])
 
   const { assetsMap, ...customTheme } = useTheme()
 
   const { rarity, deps, cardColour, metadataExplorerUri } = useMemo(
     () => ({
       metadataExplorerUri: buildSkillMetadataExplorerUri('opensea', activeSkill, chainId),
-      rarity: activeSkill?.properties.rarity,
-      deps: activeSkill?.properties.dependencies,
+      rarity: activeSkill?.properties?.rarity || 'common',
+      deps: activeSkill?.properties?.dependencies || [],
       get cardColour() {
         return isLocked
-          ? baseTheme.gradients.lockedSkill
+          ? 'black' || baseTheme.gradients.lockedSkill
           : this.rarity
           ? baseTheme.gradients.unlockedSkill + `${customTheme.rarity[this.rarity].backgroundColor})`
           : null
@@ -74,14 +76,22 @@ export function ActiveSkillPanel() {
     typeof globalThis?.window?.document !== 'undefined' ? document.getElementById(SKILLPOINTS_CONTAINER_ID) : null
   )
 
-  if (!metadataExplorerUri || !activeSkill || !rarity || !deps || !cardColour || !setSkillState) return null
+  const skillImageUri = useBuildMetadataImageUri(activeSkill)
+
+  if (!skillImageUri || !metadataExplorerUri || !activeSkill || !rarity || !deps || !cardColour || !setSkillState)
+    return null
 
   return (
     <SidePanel
       header={activeSkill?.name || 'Unknown'}
       styledProps={{
-        background: cardColour,
-        padding: '2.5rem 0 4rem 0'
+        background: 'black',
+        padding: '2.5rem 0 4rem 0',
+        bgWithDpiOptions: {
+          bgSet: urlToSimpleGenericImageSrcSet(skillImageUri),
+          attributes: ['center -8px / 160% no-repeat', '-184px -3px / 160% no-repeat'],
+          modeColors: ['#433054', '#433054']
+        }
       }}
       options={{
         onClickOutsideConditionalCb: (targetNode: Node) => !!skillContainerRef?.current?.contains(targetNode)
@@ -91,7 +101,7 @@ export function ActiveSkillPanel() {
     >
       <ActiveSkillPanelContainer gap="1rem">
         <Row justifyContent={'center'} margin="0">
-          <Text.SubHeader fontSize={'2.5rem'} fontWeight={200}>
+          <Text.SubHeader fontSize={'2.5rem'} fontWeight={200} color="#ebd7d7">
             {description}
           </Text.SubHeader>
         </Row>
@@ -167,7 +177,7 @@ export function ActiveSkillPanel() {
         )}
         {((!isLocked && !deps.length) || isOwned) && chainId && (
           <AutoRow>
-            <MonospaceText>
+            <MonospaceText color="#ebd7d7">
               View on{' '}
               <ExternalLink href={metadataExplorerUri}>
                 {' '}

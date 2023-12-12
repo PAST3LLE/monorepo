@@ -1,5 +1,6 @@
 import { ArticleFadeIn, RowProps } from '@past3lle/components'
 import {
+  BackgroundBlendMode,
   MediaWidths,
   setBackgroundOrDefault,
   setBackgroundWithDPI,
@@ -30,7 +31,10 @@ const DEFAULT_SIDE_PANEL_PROPS = {
 export type SidePanelCssProps = Partial<typeof DEFAULT_SIDE_PANEL_PROPS> & {
   bgWithDpiOptions?: {
     bgSet: GenericImageSrcSet<MediaWidths>
-    color?: string
+    modeColors?: [string, string]
+    blendMode?: BackgroundBlendMode
+    attributes?: [string, string]
+    preset?: 'header' | 'navbar' | 'logo'
   }
   showFlickerAnimation?: boolean
 }
@@ -72,10 +76,13 @@ export const StyledSidePanel = styled(ArticleFadeIn)<SidePanelCssProps>`
     ${({ theme, bgWithDpiOptions }) =>
       bgWithDpiOptions
         ? setBackgroundWithDPI(theme, bgWithDpiOptions.bgSet, {
-            preset: 'header',
-            modeColours: [bgWithDpiOptions?.color || '#fff', '#fff'],
-            backgroundAttributes: ['center / cover no-repeat', 'center 5px / cover no-repeat'],
-            backgroundBlendMode: 'difference',
+            preset: bgWithDpiOptions?.preset || 'header',
+            modeColours: bgWithDpiOptions?.modeColors || ['#fff', '#fff'],
+            backgroundAttributes: bgWithDpiOptions?.attributes || [
+              'center / cover no-repeat',
+              'center 5px / cover no-repeat'
+            ],
+            backgroundBlendMode: bgWithDpiOptions?.blendMode || 'difference',
             lqIkUrlOptions: { dpi: '1x', transforms: [null, 'pr-true,q-2,w-50,h-700'] }
           })
         : setBackgroundOrDefault(

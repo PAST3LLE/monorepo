@@ -38,6 +38,7 @@ const StyledGridItem = styled(StyledBaseGridItem).attrs((props: StyledGridItemPr
 type StyledSkillpointProps = {
   dimSkill: boolean
   active: boolean
+  isCollectionSkill?: boolean
   isDependency: boolean
   isEmptySkill: boolean
   yOffset?: number
@@ -51,19 +52,20 @@ export const StyledSkillpoint = styled(StyledGridItem).attrs(
     rarity,
     isDependency,
     dimSkill,
+    isCollectionSkill = false,
     isEmptySkill,
     yOffset
   }: StyledSkillpointProps & { theme: DefaultTheme }) => ({
     justifyContent: 'center',
     backgroundColor: rarity ? getRarityColours(theme, rarity).backgroundColor : 'none',
     boxShadow: rarity
-      ? `0px 0px ${getRarityColours(theme, rarity).boxShadowColor}`
+      ? `0px 0px ${isCollectionSkill ? `12px 2px ${theme.mainBg}` : getRarityColours(theme, rarity).boxShadowColor}`
       : isDependency
       ? '5px 5px 10px 0px #d5fb73b8, -5px -5px 10px 0px #00ff7fa8'
       : isEmptySkill
       ? '4px 4px 1px #00000075'
       : 'unset',
-    filter: dimSkill ? 'brightness(0.25) grayscale(1)' : 'unset',
+    filter: !isCollectionSkill && dimSkill ? 'brightness(0.25) grayscale(1)' : 'unset',
     background:
       isEmptySkill && theme.assetsMap.images.skills?.skillpoint?.empty
         ? `url(${theme.assetsMap.images.skills.skillpoint.empty}) 0px ${yOffset}px/cover`

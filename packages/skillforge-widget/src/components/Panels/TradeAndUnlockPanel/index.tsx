@@ -99,7 +99,7 @@ export function TradeAndUnlockPanel() {
         bgWithDpiOptions: isPending
           ? {
               bgSet: bgImageSet,
-              color: '#fff'
+              modeColors: ['#fff', '#fff']
             }
           : undefined,
         padding: '2.5rem 0 4rem 0',

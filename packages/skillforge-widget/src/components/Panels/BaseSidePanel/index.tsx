@@ -52,14 +52,15 @@ export function SidePanel({ header, children, onBack, onDismiss, options, styled
             top: '0.5rem',
             fontWeight: 300,
             fontSize: '3rem',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            color: '#ebd7d7'
           }}
         >
           <span>x</span>
         </div>
       )}
       <Row>
-        <CursiveHeader marginBottom="2rem" justifyContent={'center'}>
+        <CursiveHeader marginBottom="2rem" justifyContent={'center'} color="#ebd7d7">
           {header}
         </CursiveHeader>
       </Row>

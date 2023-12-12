@@ -19,11 +19,10 @@ export function ActiveSkillUpdater() {
   useEffect(() => {
     const activeSkill = skillsState.active[0]
     if (activeSkill && metadataMap?.[activeSkill]) {
+      const deps = metadataMap[activeSkill]?.properties?.dependencies || []
       updateSkillsState((state) => ({
         ...state,
-        activeDependencies: metadataMap[activeSkill].properties.dependencies.map(
-          ({ token, id }) => `${token}-${id}` as SkillId
-        )
+        activeDependencies: deps.map(({ token, id }) => `${token}-${id}` as SkillId)
       }))
     } else {
       updateSkillsState((state) => ({
