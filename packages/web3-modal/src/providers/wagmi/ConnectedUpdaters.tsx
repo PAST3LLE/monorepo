@@ -15,7 +15,7 @@ function useSwitchChainOnLimitedChainsChange() {
   const { switchNetwork } = useSwitchNetwork()
 
   useEffect(() => {
-    const disconnectedOrChainMismatch = !chainId || chainId !== uiSnap.softLimitedChains?.[0]?.id
+    const disconnectedOrChainMismatch = !chainId || !uiSnap.softLimitedChains?.some((c) => c.id === chainId)
     if (uiSnap.softLimitedChains?.length && !!switchNetwork && disconnectedOrChainMismatch) {
       devDebug('[useSwitchChainOnLimitedChainsChange] --> Detected change, switching!')
       switchNetwork(uiSnap.softLimitedChains[0].id)
