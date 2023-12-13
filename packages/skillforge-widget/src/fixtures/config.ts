@@ -79,6 +79,11 @@ const DEFAULT_PROPS: ForgeW3CoreProvidersProps['config']['web3'] = {
           await wagmiConnect({ connector })
           store.root.open({ route: 'HidDeviceOptions' })
         }
+      },
+      walletconnect: {
+        async customConnect(params) {
+          params.store.walletConnect.open()
+        }
       }
     }
   },
