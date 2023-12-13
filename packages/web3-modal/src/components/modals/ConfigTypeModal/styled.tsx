@@ -140,12 +140,17 @@ export const DiagonalWrapper = styled(Column)`
 
   ${upToExtraSmall`
   > ${Row} {
+    > ${StyledConnectorOption} > div > div {
+      font-size: 0.75em;
+    }
+
     &:first-child {
       > ${StyledConnectorOption} {
         > div {
           margin-left: 0;
+          width: min-content;
           > img {
-            max-height: 10vw;
+            max-height: 9vw;
           }
         }
       }
@@ -154,9 +159,9 @@ export const DiagonalWrapper = styled(Column)`
     &:last-child {
         > ${StyledConnectorOption} {
           > div {
-            margin-left: 0;
+            margin-left: -1rem;
             > img {
-              max-height: 8vw;
+              max-height: 7.5vw;
             }
           }
         }
@@ -167,7 +172,7 @@ export const DiagonalWrapper = styled(Column)`
 `
 export const ConfigModalContainer = styled(AccountColumnContainer)`
   border-radius: ${(props) => props.theme.modals?.base?.container?.main?.border?.radius};
-  height: 400px;
+  height: 350px;
   overflow: hidden;
   position: relative;
 

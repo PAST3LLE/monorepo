@@ -21,7 +21,7 @@ export type RenderConnectorOptionsProps = Pick<
 }
 const RenderConnectorOptionsBase =
   ({
-    overrides: connectorDisplayOverrides,
+    overrides: connectorOverrides,
     hideInjectedFromRoot,
     chainIdFromUrl,
     buttonProps,
@@ -58,7 +58,7 @@ const RenderConnectorOptionsBase =
         chainId: chainIdFromUrl || chain?.id,
         address,
         isProviderModalMounted: !!providerMountedMap?.[connector.id]?.mounted,
-        connectorDisplayOverrides
+        connectorOverrides
       }
     )
 

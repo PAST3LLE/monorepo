@@ -68,13 +68,14 @@ type TextThemeTypes<ST extends keyof RequiredPstlSubModalsTheme = keyof Required
   modal: ST
   node: keyof RequiredPstlSubModalsTheme[ST]['text']
 }
-export const ModalText = styled(Text.Main)<TextThemeTypes>`
+export const ModalText = styled(Text.Main)<{ fontWeight?: number } & TextThemeTypes>`
   color: ${(props) => props.theme?.modals?.[props.modal]?.text?.[props.node]?.color};
   font-family: ${(props) => props.theme?.modals?.[props.modal]?.text?.[props.node]?.family};
   font-size: ${(props) => props.theme?.modals?.[props.modal]?.text?.[props.node]?.size};
   font-style: ${(props) => props.theme?.modals?.[props.modal]?.text?.[props.node]?.style};
-  font-weight: ${(props) => props.theme?.modals?.[props.modal]?.text?.[props.node]?.weight};
-  font-variation-settings: 'wght' ${(props) => props.theme?.modals?.[props.modal]?.text?.[props.node]?.weight};
+  font-weight: ${({ theme, modal, node, fontWeight }) => fontWeight || theme?.modals?.[modal]?.text?.[node]?.weight};
+  font-variation-settings: 'wght'
+    ${({ theme, modal, node, fontWeight }) => fontWeight || theme?.modals?.[modal]?.text?.[node]?.weight};
   letter-spacing: ${(props) => props.theme?.modals?.[props.modal]?.text?.[props.node]?.letterSpacing};
   line-height: ${(props) => props.theme?.modals?.[props.modal]?.text?.[props.node]?.lineHeight};
   text-align: ${(props) => props.theme?.modals?.[props.modal]?.text?.[props.node]?.textAlign};
@@ -209,7 +210,8 @@ export const StyledConnectionModal = styled(Modal)<{ modal: keyof RequiredPstlSu
     &[data-reach-dialog-content] {
       position: relative;
       font-size: ${(props) => props.theme.modals?.[props.modal]?.baseFontSize}px;
-      ${upToSmall`
+      ${(props) => upToSmall`
+          min-height: ${props?.minHeight || '75%'};
           max-height: 500px;
           max-width: unset;
           width: 100%;
@@ -257,7 +259,7 @@ export const WalletsWrapper = styled.div.attrs(
   }
 >`
   display: grid;
-  gap: 1rem;
+  gap: 10px;
 
   width: ${({ width = '100%' }) => width};
   padding: 0 1rem;

@@ -36,7 +36,7 @@ const LoadingContainerFadeIn = styled(ArticleFadeIn)<LoadingContainerProps>`
   > ${ModalTitleText} {
     font-weight: 300;
     font-variation-settings: 'wght' 400;
-    letter-spacing: -4px;
+    letter-spacing: -1.6px;
   }
 
   background-color: ${({ backgroundColor = 'transparent' }) => backgroundColor};

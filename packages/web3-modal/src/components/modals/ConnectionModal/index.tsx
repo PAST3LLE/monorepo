@@ -27,7 +27,7 @@ export type ProviderMountedMap = {
 function ConnectionModalContent({
   hideInjectedFromRoot,
   closeModalOnConnect,
-  overrides: connectorDisplayOverridesUnformatted,
+  overrides: overridesUnformatted,
   walletsView = 'list',
   loaderProps,
   chainIdFromUrl
@@ -85,10 +85,7 @@ function ConnectionModalContent({
     [connectAsync, store.callbacks.connectionStatus, uiModalStore.root]
   )
 
-  const connectorDisplayOverrides = useMemo(
-    () => cleanAndFormatConnectorOverrides(connectorDisplayOverridesUnformatted),
-    [connectorDisplayOverridesUnformatted]
-  )
+  const overrides = useMemo(() => cleanAndFormatConnectorOverrides(overridesUnformatted), [overridesUnformatted])
 
   // flag for setting whether or not web3auth modal has mounted as it takes a few seconds first time around
   // and we want to close the pstlModal only after the web3auth modal has mounted
@@ -97,11 +94,11 @@ function ConnectionModalContent({
 
   const data = useMemo(
     () =>
-      userConnectionInfo.connectors.sort(sortConnectorsByRank(connectorDisplayOverrides)).map(
+      userConnectionInfo.connectors.sort(sortConnectorsByRank(overrides)).map(
         RenderConnectorOptions({
           chainIdFromUrl,
           hideInjectedFromRoot,
-          overrides: connectorDisplayOverrides,
+          overrides,
           modalView,
           userConnectionInfo,
           connect,
@@ -121,7 +118,7 @@ function ConnectionModalContent({
       providerLoadingState,
       providerMountedState,
       hideInjectedFromRoot,
-      connectorDisplayOverrides
+      overrides
     ]
   )
 

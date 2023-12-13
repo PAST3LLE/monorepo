@@ -39,10 +39,16 @@ export function ConnectionApproval() {
           </ModalText>
         </ColumnCenter>
         <ColumnCenter gap="0.7rem" flex="1 1 330px">
-          <ModalText modal="connection" node="header" fontSize={'1.75em'}>
+          <ModalText
+            modal="connection"
+            node="header"
+            fontSize={'1.75em'}
+            lineHeight={'1'}
+            color={status === 'error' ? '#f39c9c' : undefined}
+          >
             {_getDerivedLabel(status, error).title}
           </ModalText>
-          <ModalText modal="connection" node="subHeader" fontSize={'1.25em'}>
+          <ModalText modal="connection" node="subHeader" fontSize={'1.1em'} lineHeight={'1.2'} fontWeight={300}>
             {_getDerivedLabel(status, error)?.description}
           </ModalText>
           {status === 'loading' && <SpinnerCircle size={100} strokeWidth={0.7} />}
@@ -162,10 +168,15 @@ function _getErrorMessage(error?: ConnectionError) {
   switch (error?.code) {
     case -32002:
       return {
-        title: 'Error: Connection already pending!',
-        description: 'Wallet connection already pending. Please check your wallet for a connection notification.'
+        title: 'Error! Connection already pending',
+        description: 'Previous wallet connection pending. Check your wallet for a connection prompt.'
+      }
+    case 4001:
+      return {
+        title: 'Error! User rejected connection',
+        description: 'User rejection detected. Either retry below or head back to wallets.'
       }
     default:
-      return { title: error?.message || 'Error connecting. Try again.' }
+      return { title: 'Error!', description: error?.message }
   }
 }

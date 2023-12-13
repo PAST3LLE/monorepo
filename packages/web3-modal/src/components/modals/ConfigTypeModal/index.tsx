@@ -74,7 +74,7 @@ function NetworkModalContent() {
   const modalView = isExtraSmallScreen ? 'list' : 'grid'
 
   return (
-    <ConfigModalContainer>
+    <ConfigModalContainer margin="auto">
       {CHOICES.map(({ key, longDescription }) => (
         <ExplainerWrapper key={key}>
           <ModalText modal="base" node="main">

@@ -19,7 +19,7 @@ interface BaseConnectorInfoConstants {
   chainId?: number
   address?: string
   isConnected: boolean
-  connectorDisplayOverrides?: { [id: string]: ConnectorEnhancedExtras | undefined }
+  connectorOverrides?: { [id: string]: ConnectorEnhancedExtras | undefined }
 }
 
 interface AuxConnectorInfoConstants extends BaseConnectorInfoConstants {
@@ -47,15 +47,15 @@ export function runConnectorConnectionLogic(
     address,
     isProviderModalMounted,
     closeOnConnect,
-    connectorDisplayOverrides
+    connectorOverrides
   }: Omit<AuxConnectorInfoConstants, 'isConnected'>
 ): [
   ConnectorInfo,
   ReturnType<typeof useConnection>[1]['connect'] | ReturnType<typeof useConnection>[1]['openWalletConnectModal']
 ] {
-  const modalType: ProviderModalType = connectorOverridePropSelector(connectorDisplayOverrides, connector)?.modalNodeId
+  const modalType: ProviderModalType = connectorOverridePropSelector(connectorOverrides, connector)?.modalNodeId
   const isModalMounted = !modalType || !!isProviderModalMounted
-  const providerInfo = _getProviderInfo(connector, currentConnector, connectorDisplayOverrides)
+  const providerInfo = _getProviderInfo(connector, currentConnector, connectorOverrides)
   return [
     providerInfo,
     async () =>
@@ -70,7 +70,7 @@ export function runConnectorConnectionLogic(
           closeOnConnect,
           isModalMounted,
           isConnected: providerInfo.connected,
-          connectorDisplayOverrides
+          connectorOverrides
         },
         {
           connect,
@@ -104,7 +104,7 @@ async function _connectProvider(
     setModalMounted?: (status: boolean) => void
   }
 ) {
-  const { address, chainId, isModalMounted, isConnected, connectorDisplayOverrides } = constants
+  const { address, chainId, isModalMounted, isConnected, connectorOverrides } = constants
   const { connect, disconnect, setModalLoading, setModalMounted, open } = callbacks
 
   const modalNodeSyncCheck =
@@ -120,7 +120,7 @@ async function _connectProvider(
     connector,
     currentConnector,
     modalsStore,
-    { chainId, address, connectorDisplayOverrides, isConnected },
+    { chainId, address, connectorOverrides, isConnected },
     { connect, disconnect, open }
   ]
 
@@ -154,25 +154,25 @@ async function _connectProvider(
 function _getProviderInfo(
   connector: ConnectorEnhanced<any, any>,
   currentConnector: ConnectorEnhanced<any, any> | undefined,
-  connectorDisplayOverrides: BaseConnectorInfoConstants['connectorDisplayOverrides']
+  connectorOverrides: BaseConnectorInfoConstants['connectorOverrides']
 ) {
-  const { baseConnectorKey, baseCurrentConnectorKey } = _getConnectorOverrideInfo(
+  const { pendingConnectorOverride, connectedConnectorOverride } = _getConnectorOverrideInfo(
     connector,
     currentConnector,
-    connectorDisplayOverrides
+    connectorOverrides
   )
   let connected = false
-  if (baseCurrentConnectorKey) {
-    connected = isEqual(baseCurrentConnectorKey, baseConnectorKey)
+  if (connectedConnectorOverride) {
+    connected = isEqual(connectedConnectorOverride, pendingConnectorOverride)
   } else {
     connected = connector.id === currentConnector?.id
   }
 
   return {
-    label: baseConnectorKey?.customName || connector.name,
-    logo: baseConnectorKey?.logo || connector?.logo,
+    label: pendingConnectorOverride?.customName || connector.name,
+    logo: pendingConnectorOverride?.logo || connector?.logo,
     connected,
-    isRecommended: baseConnectorKey?.isRecommended
+    isRecommended: pendingConnectorOverride?.isRecommended
   }
 }
 
@@ -180,12 +180,17 @@ async function _handleConnectorClick(
   connector: ConnectorEnhanced<any, any>,
   currentConnector: ConnectorEnhanced<any, any> | undefined,
   modalsStore: FullWeb3ModalStore['ui'],
-  { address, chainId, connectorDisplayOverrides, isConnected }: BaseConnectorInfoConstants,
+  { address, chainId, connectorOverrides, isConnected }: BaseConnectorInfoConstants,
   { connect, disconnect, open }: Pick<GetConnectorInfoCallbacks, 'open' | 'connect' | 'disconnect'>
 ) {
-  const { baseConnectorKey } = _getConnectorOverrideInfo(connector, currentConnector, connectorDisplayOverrides)
-
-  const connectToProviderParams = { connector, connect, modalsStore, connectorOverride: baseConnectorKey, chainId }
+  const { pendingConnectorOverride } = _getConnectorOverrideInfo(connector, currentConnector, connectorOverrides)
+  const connectToProviderParams = {
+    connector,
+    connect,
+    modalsStore,
+    connectorOverride: pendingConnectorOverride,
+    chainId
+  }
 
   try {
     if (address && isConnected) {
@@ -237,18 +242,17 @@ async function _connectToProvider({
 function _getConnectorOverrideInfo(
   connector: ConnectorEnhanced<any, any>,
   currentConnector: ConnectorEnhanced<any, any> | undefined,
-  connectorDisplayOverrides: BaseConnectorInfoConstants['connectorDisplayOverrides']
+  connectorOverrides: BaseConnectorInfoConstants['connectorOverrides']
 ) {
   const trimmedId = trimAndLowerCase(connector?.id)
   const trimmedName = trimAndLowerCase(connector?.name)
   const trimmedCurrentId = trimAndLowerCase(currentConnector?.id)
   const trimmedCurrentName = trimAndLowerCase(currentConnector?.name)
 
-  const baseConnectorKey = connectorDisplayOverrides?.[trimmedId] || connectorDisplayOverrides?.[trimmedName]
-  const baseCurrentConnectorKey =
-    connectorDisplayOverrides?.[trimmedCurrentId] || connectorDisplayOverrides?.[trimmedCurrentName]
+  const pendingConnectorOverride = connectorOverrides?.[trimmedId] || connectorOverrides?.[trimmedName]
+  const connectedConnectorOverride = connectorOverrides?.[trimmedCurrentId] || connectorOverrides?.[trimmedCurrentName]
 
-  return { baseConnectorKey, baseCurrentConnectorKey }
+  return { pendingConnectorOverride, connectedConnectorOverride }
 }
 
 async function _delayFindDomById({

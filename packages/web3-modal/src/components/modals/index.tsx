@@ -64,7 +64,6 @@ export function ModalWithoutThemeProvider(baseProps: Omit<StatelessBaseModalProp
           title: baseProps?.headers?.account || 'ACCOUNT',
           width: '650px',
           maxWidth: 'unset',
-          minHeight: '75%',
           maxHeight: 'unset',
           height: 'auto',
           id: ModalId.ACCOUNT,
@@ -97,7 +96,6 @@ export function ModalWithoutThemeProvider(baseProps: Omit<StatelessBaseModalProp
           title: 'HID DEVICE OPTIONS',
           width: '650px',
           maxWidth: '80vw',
-          minHeight: '75%',
           maxHeight: '80vh',
           height: 'auto',
           id: ModalId.HID_DEVICE_OPTIONS,
@@ -113,7 +111,7 @@ export function ModalWithoutThemeProvider(baseProps: Omit<StatelessBaseModalProp
           title: 'Select configuration type',
           width: '650px',
           maxWidth: '80vw',
-          minHeight: '350px',
+          // minHeight: '350px',
           maxHeight: '80vh',
           height: 'auto',
           id: ModalId.NETWORK,
@@ -146,6 +144,7 @@ export function ModalWithoutThemeProvider(baseProps: Omit<StatelessBaseModalProp
           width: baseProps.width || flattenedUserConfigState?.walletsView === 'grid' ? '650px' : '50vh',
           maxWidth: baseProps.maxWidth || flattenedUserConfigState?.walletsView === 'grid' ? '100%' : '360px',
           maxHeight: baseProps.maxHeight || flattenedUserConfigState?.walletsView === 'grid' ? '500px' : '600px',
+          minHeight: 'unset',
           id: ModalId.WALLETS,
           modal: 'connection'
         }

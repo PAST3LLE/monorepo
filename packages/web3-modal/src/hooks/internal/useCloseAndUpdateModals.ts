@@ -16,8 +16,9 @@ export function useConnectDisconnectAndCloseModals(
   const { close } = usePstlWeb3Modal()
   // Close walletconnect modal on detected account/connection changes
   useWeb3ModalEvents((event) => {
-    if (event.name === 'ACCOUNT_CONNECTED') {
-      shouldClose && close()
+    switch (event.name) {
+      case 'ACCOUNT_CONNECTED':
+        return shouldClose && close()
     }
   })
 
