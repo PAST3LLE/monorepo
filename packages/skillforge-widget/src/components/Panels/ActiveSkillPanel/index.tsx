@@ -29,10 +29,12 @@ import { getLockStatusColour, getSkillDescription } from './utils'
 const SkillPanelSkillpoint = styled(Skillpoint)<{ disabled?: boolean }>`
   box-shadow: unset;
   > ${RowCenter} {
-    min-height: 200px;
-    height: 20vh;
+    width: 100%;
+    height: 100%;
     > img {
       border-radius: 10px;
+      max-height: 100%;
+      max-width: none;
     }
   }
 `
@@ -118,8 +120,9 @@ export function ActiveSkillPanel() {
             metadata={activeSkill}
             hasSkill={!isLocked}
             skillpointStyles={{
-              height: '80%',
-              flex: 1.4,
+              height: '250px',
+              width: '250px',
+              flex: '0 1 250px',
               padding: '0',
               backgroundColor: 'transparent',
               justifyContent: 'center',

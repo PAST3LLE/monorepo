@@ -49,7 +49,7 @@ export const BackgroundSmartImg = styled(SmartImg)`
   filter: hue-rotate(98deg) saturate(3.5) invert(1) blur(4px);
 
   > img {
-    min-height: 100%;
+    height: 100%;
     max-width: unset;
   }
 `

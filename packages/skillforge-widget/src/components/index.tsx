@@ -24,12 +24,12 @@ const CssProviders = () => {
   return (
     <>
       <StaticGlobalCssProvider />
-      <CustomStaticGlobalCss
+      <CustomStaticGlobalCss />
+      <ThemedGlobalCssProvider />
+      <CustomThemeGlobalCss
         backgroundImage={assetsMap.images.background.app}
         lockedSkillIcon={assetsMap.icons.locked}
       />
-      <ThemedGlobalCssProvider />
-      <CustomThemeGlobalCss />
     </>
   )
 }

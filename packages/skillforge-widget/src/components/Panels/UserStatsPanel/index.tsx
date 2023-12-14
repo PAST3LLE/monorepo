@@ -69,7 +69,13 @@ export function UserStatsPanel() {
           </Text.SubHeader>
           <img className="icon8-icon" src={assetsMap.icons.inventory} />
         </Row>
-        <UserSkillpointsContainer backgroundColor="#00000099" borderRadius="5px" minHeight="300px">
+        <UserSkillpointsContainer
+          backgroundColor="#00000099"
+          borderRadius="5px"
+          minHeight="300px"
+          textAlign={'center'}
+          padding="1.5rem"
+        >
           {!ownedSkillsList?.length ? (
             <Text.LargeHeader color={MAIN_COLOR} fontSize={'35px'} fontWeight={100}>
               :[ it's dangerous out there alone!

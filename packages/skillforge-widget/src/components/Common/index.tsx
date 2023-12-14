@@ -50,6 +50,7 @@ export const StyledSkillpoint = styled(StyledGridItem).attrs(
   ({
     theme,
     rarity,
+    dimSkill,
     isDependency,
     isCollectionSkill = false,
     isEmptySkill
@@ -64,6 +65,7 @@ export const StyledSkillpoint = styled(StyledGridItem).attrs(
       : isEmptySkill
       ? '4px 4px 1px #00000075'
       : 'unset',
+    filter: dimSkill ? 'brightness(0.85)' : 'unset',
     padding: isEmptySkill ? '0' : 'initial',
     opacity: isEmptySkill ? 0.76 : 1,
     overflow: isEmptySkill ? 'hidden' : 'initial'
