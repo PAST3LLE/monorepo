@@ -1,4 +1,4 @@
-import { ArticleFadeIn, RowProps } from '@past3lle/components'
+import { ArticleFadeIn, RowProps, SmartImg } from '@past3lle/components'
 import {
   BackgroundBlendMode,
   MediaWidths,
@@ -14,6 +14,7 @@ import styled from 'styled-components'
 
 import { CursiveHeader, MonospaceText } from '../../Common/Text'
 
+export const MAIN_COLOR = '#ebd7d7'
 const DEFAULT_SIDE_PANEL_PROPS = {
   background: 'lightgrey',
   paddingMobile: '4rem 0',
@@ -28,19 +29,36 @@ const DEFAULT_SIDE_PANEL_PROPS = {
   zIndex: 88
 }
 
+export type BgCssDpiProps = {
+  bgSet: GenericImageSrcSet<MediaWidths>
+  modeColors?: [string, string]
+  blendMode?: BackgroundBlendMode
+  attributes?: [string, string]
+  preset?: 'header' | 'navbar' | 'logo'
+}
 export type SidePanelCssProps = Partial<typeof DEFAULT_SIDE_PANEL_PROPS> & {
-  bgWithDpiOptions?: {
-    bgSet: GenericImageSrcSet<MediaWidths>
-    modeColors?: [string, string]
-    blendMode?: BackgroundBlendMode
-    attributes?: [string, string]
-    preset?: 'header' | 'navbar' | 'logo'
-  }
   showFlickerAnimation?: boolean
 }
 
-export const StyledSidePanel = styled(ArticleFadeIn)<SidePanelCssProps>`
+export const BackgroundSmartImg = styled(SmartImg)`
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0.25;
+  z-index: 0;
+  filter: hue-rotate(98deg) saturate(3.5) invert(1) blur(4px);
+
+  > img {
+    min-height: 100%;
+    max-width: unset;
+  }
+`
+
+export const StyledSidePanel = styled(ArticleFadeIn)<SidePanelCssProps & { dpiOptions?: BgCssDpiProps }>`
   position: fixed;
+  > * {
+    z-index: 1;
+  }
 
   display: flex;
   flex-flow: ${({ flexWrap = DEFAULT_SIDE_PANEL_PROPS.flexWrap, flexDir = DEFAULT_SIDE_PANEL_PROPS.flexDir }) =>
@@ -73,16 +91,16 @@ export const StyledSidePanel = styled(ArticleFadeIn)<SidePanelCssProps>`
 
     ${({ showFlickerAnimation }) => showFlickerAnimation && setFlickerAnimation({ state: true, duration: 4, count: 2 })}
 
-    ${({ theme, bgWithDpiOptions }) =>
-      bgWithDpiOptions
-        ? setBackgroundWithDPI(theme, bgWithDpiOptions.bgSet, {
-            preset: bgWithDpiOptions?.preset || 'header',
-            modeColours: bgWithDpiOptions?.modeColors || ['#fff', '#fff'],
-            backgroundAttributes: bgWithDpiOptions?.attributes || [
+    ${({ theme, dpiOptions }) =>
+      dpiOptions
+        ? setBackgroundWithDPI(theme, dpiOptions.bgSet, {
+            preset: dpiOptions?.preset || 'header',
+            modeColours: dpiOptions?.modeColors || ['#fff', '#fff'],
+            backgroundAttributes: dpiOptions?.attributes || [
               'center / cover no-repeat',
               'center 5px / cover no-repeat'
             ],
-            backgroundBlendMode: bgWithDpiOptions?.blendMode || 'difference',
+            backgroundBlendMode: dpiOptions?.blendMode || 'difference',
             lqIkUrlOptions: { dpi: '1x', transforms: [null, 'pr-true,q-2,w-50,h-700'] }
           })
         : setBackgroundOrDefault(
@@ -138,4 +156,15 @@ export const StyledSidePanel = styled(ArticleFadeIn)<SidePanelCssProps>`
     font-style: italic;
     text-align: left;
   }
+`
+
+export const ModalXButton = styled.div`
+  position: absolute;
+  right: 15px;
+  top: 0.5rem;
+  font-weight: 300;
+  font-size: 3rem;
+  cursor: pointer;
+  color: ${MAIN_COLOR};
+  z-index: 99;
 `

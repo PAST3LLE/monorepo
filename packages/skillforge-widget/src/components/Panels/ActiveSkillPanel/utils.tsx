@@ -3,20 +3,32 @@ import { SkillLockStatus, SkillMetadata } from '@past3lle/forge-web3'
 import React from 'react'
 import styled, { DefaultTheme } from 'styled-components'
 
+import { MAIN_COLOR } from '../BaseSidePanel/styleds'
+
 const LockedSkillInstructionsWrapper = styled(Column)`
   justify-content: flex-start;
   align-items: center;
-  color: black;
+  color: ${MAIN_COLOR};
   font-size: 1.7rem;
+  font-variation-settings: 'wght' 1000;
+  letter-spacing: -1px;
+
+  text-shadow: -1px 3px 0px #db9bfa66;
+  box-shadow: 0px 0px 15px 2px #c0e36e59;
 
   overflow-y: auto;
   max-height: 300px;
 
-  background: #cbe094db;
+  background: #00000099;
   border-radius: 10px;
 
   padding: 1rem;
   text-transform: uppercase;
+
+  a {
+    text-shadow: none;
+  }
+
   > ol {
     margin-block-start: 0.5em;
     margin-block-end: 0.5em;
@@ -47,7 +59,7 @@ export function getSkillDescription(skill: SkillMetadata | undefined, lockStatus
         (unlockInstructions && (
           <LockedSkillInstructions title={`${name || 'Skill'} LOCKED!`} content={unlockInstructions} />
         )) ||
-        (isCollection ? `Unlock ${name || 'this collection'}` : `Buy ${name || 'this skill'}`) +
+        (isCollection ? `Unlock ${name || 'this collection'}` : `Get ${name || 'this skill'}`) +
           ' from the shop and earn a new skill giving you access to exclusive perks.'
       )
     }

@@ -39,7 +39,7 @@ export function InventoryButton(props: InventoryButtonProps) {
     >
       {width > MEDIA_WIDTHS.upToSmall ? (
         <CursiveMonoHeader
-          text={showShortLogo ? 'Items' : 'Inventory'}
+          text={showShortLogo ? 'Stash' : 'View Stash'}
           capitalLetterProps={{
             display: 'inline-flex',
             alignItems: 'center',

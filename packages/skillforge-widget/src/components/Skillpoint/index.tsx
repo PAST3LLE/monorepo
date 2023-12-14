@@ -1,16 +1,18 @@
 import { SVG_LoadingCircleLight } from '@past3lle/assets'
 import { RowCenter, RowProps, SmartImg } from '@past3lle/components'
 import { SkillMetadata, SkillRarity } from '@past3lle/forge-web3'
-import { isImageKitUrl, isImageSrcSet } from '@past3lle/theme'
+import { BackgroundPropertyFull, MediaWidths, isImageKitUrl, isImageSrcSet } from '@past3lle/theme'
+import { GenericImageSrcSet } from '@past3lle/types'
 import React, { memo, useMemo } from 'react'
-import styled from 'styled-components'
+import styled, { useTheme } from 'styled-components'
 
 import { Vector } from '../../api/vector'
-import { useBuildMetadataImageUri } from '../../hooks/useBuildMetadataImageUri'
+import { useBuildMetadataImageUriQuery } from '../../hooks/useBuildMetadataImageUri'
 import { SkillsState, useForgesAtom } from '../../state/Skills'
 import { useAssetsMap } from '../../theme/utils'
 import { StyledSkillpoint } from '../Common'
 
+const DIM_FILTER = 'brightness(0.25) grayscale(1)'
 interface Props {
   className?: string
   metadata: SkillMetadata
@@ -33,11 +35,11 @@ function SkillpointUnmemoed({
 }: Props) {
   const [state, setSkillState] = useForgesAtom()
   const {
-    active: [currentlyActive],
-    sizes: { height }
+    active: [currentlyActive]
   } = state
 
-  const formattedUri = useBuildMetadataImageUri(metadata)
+  const theme = useTheme()
+  const { data: formattedUri } = useBuildMetadataImageUriQuery(metadata)
 
   const { isEmptySkill, isCurrentSkillActive, isDependency, isDimSkill } = useMemo(
     () => ({
@@ -52,9 +54,20 @@ function SkillpointUnmemoed({
     [hasSkill, currentlyActive, metadata.properties.id, state.activeDependencies, disabledHighlight]
   )
 
+  const skillpointUri = useMemo((): string => {
+    let uri: string | undefined
+    if (!isEmptySkill) {
+      uri = formattedUri
+    } else {
+      uri = _getValueFromDDPXImageMap(theme.assetsMap?.images?.skills?.skillpoint?.empty, 500, '1x')
+    }
+
+    return uri || SVG_LoadingCircleLight
+  }, [formattedUri, isEmptySkill, theme.assetsMap?.images?.skills?.skillpoint?.empty])
+
   const emptySkillYOffset = useMemo(
-    () => (isEmptySkill ? getSkillPlaceholderYOffset(height) : undefined),
-    [height, isEmptySkill]
+    () => (isEmptySkill ? getSkillPlaceholderYOffsetPercentage() : undefined),
+    [isEmptySkill]
   )
 
   const handleClick = () => {
@@ -94,12 +107,13 @@ function SkillpointUnmemoed({
         borderRadius="5px"
         overflow={'hidden'}
         css={`
-          filter: ${isCollectionSkill && isDimSkill ? 'grayscale(1)' : 'unset'};
+          filter: ${isDimSkill ? DIM_FILTER : 'unset'};
         `}
       >
-        {!isEmptySkill && (
-          <img src={formattedUri ? formattedUri : SVG_LoadingCircleLight} style={{ maxWidth: '100%' }} />
-        )}
+        <img
+          src={skillpointUri}
+          style={{ maxWidth: '100%', transform: isEmptySkill ? `scale(6) translateY(${emptySkillYOffset}%)` : 'unset' }}
+        />
       </RowCenter>
       {isCurrentSkillActive && <SkillpointHighlight />}
     </StyledSkillpoint>
@@ -165,10 +179,16 @@ const SkillpointHighlight = memo(() => {
   )
 })
 
-// TODO: fix this, 6 is magic, doesn't really make sense
 // when using the assetMap in theme...
-export function getSkillPlaceholderYOffset(skillYSize: number) {
-  const length = 6
-  const idx = Math.ceil(Math.random() * length)
-  return skillYSize * idx
+export function getSkillPlaceholderYOffsetPercentage(parts = 4) {
+  const idx = 17 * Math.floor(Math.random() * parts)
+  return Math.floor(-42 + idx)
+}
+
+function _getValueFromDDPXImageMap(
+  val: BackgroundPropertyFull | undefined,
+  size: MediaWidths,
+  ddpx: '1x' | '2x' | '3x' = '1x'
+): string | undefined {
+  return (val as GenericImageSrcSet<MediaWidths>)?.[size]?.[ddpx] || (val as string)
 }

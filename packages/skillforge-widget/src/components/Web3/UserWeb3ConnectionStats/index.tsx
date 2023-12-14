@@ -78,7 +78,7 @@ function UnstyledUserConnectionStats({
 }
 
 export const UserConnectionStats = styled(UnstyledUserConnectionStats)`
-  filter: invert(1);
+  filter: invert(0) hue-rotate(250deg);
 `
 
 export const ConnectionColorWrapper = styled.div<{ isConnected: boolean }>`

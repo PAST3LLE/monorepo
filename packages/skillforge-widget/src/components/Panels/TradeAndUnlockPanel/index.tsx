@@ -96,18 +96,23 @@ export function TradeAndUnlockPanel() {
       header={activeSkill?.name || 'Unknown'}
       styledProps={{
         background: isPending ? '#fff' : cardColour,
-        bgWithDpiOptions: isPending
-          ? {
-              bgSet: bgImageSet,
-              modeColors: ['#fff', '#fff']
-            }
-          : undefined,
         padding: '2.5rem 0 4rem 0',
         filter: isPending ? 'invert(1) hue-rotate(180deg)' : 'none',
         transition: 'filter 1s ease-out'
       }}
       options={{
-        onClickOutsideConditionalCb: (targetNode: Node) => !!skillContainerRef?.current?.contains(targetNode)
+        onClickOutsideConditionalCb: (targetNode: Node) => !!skillContainerRef?.current?.contains(targetNode),
+        backgroundImageOptions: {
+          backgroundCss: {
+            uri: '',
+            options: isPending
+              ? {
+                  bgSet: bgImageSet,
+                  modeColors: ['#fff', '#fff']
+                }
+              : undefined
+          }
+        }
       }}
       onDismiss={isPending ? undefined : setPanelState}
       onBack={isPending ? undefined : setPanelState}

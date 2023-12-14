@@ -7,20 +7,20 @@ import {
   useForgeUserConfigAtom,
   useSupportedOrDefaultChainId
 } from '@past3lle/forge-web3'
-import { BLACK, OFF_WHITE, urlToSimpleGenericImageSrcSet } from '@past3lle/theme'
+import { BLACK, OFF_WHITE } from '@past3lle/theme'
 import { darken } from 'polished'
 import React, { useMemo, useRef } from 'react'
 import styled, { DefaultTheme, useTheme } from 'styled-components'
 
 import { SKILLPOINTS_CONTAINER_ID } from '../../../constants/skills'
 import { useGetActiveSkill } from '../../../hooks/skills'
-import { useBuildMetadataImageUri } from '../../../hooks/useBuildMetadataImageUri'
+import { useBuildMetadataImageUriQuery } from '../../../hooks/useBuildMetadataImageUri'
 import { baseTheme } from '../../../theme/base'
 import { buildSkillMetadataExplorerUri } from '../../../utils/skills'
 import { BlackHeader, MonospaceText } from '../../Common/Text'
 import { Skillpoint } from '../../Skillpoint'
-// import { SkillpointPoint } from '../../Skillpoint/SkillpointPoint'
 import { SidePanel } from '../BaseSidePanel'
+import { MAIN_COLOR } from '../BaseSidePanel/styleds'
 import { SkillsRow } from '../common'
 import { SkillActionButton } from './SkillActionButton'
 import { ActiveSkillPanelContainer, RequiredDepsContainer, SkillRarityLabel, SkillStatusLabel } from './styleds'
@@ -76,7 +76,7 @@ export function ActiveSkillPanel() {
     typeof globalThis?.window?.document !== 'undefined' ? document.getElementById(SKILLPOINTS_CONTAINER_ID) : null
   )
 
-  const skillImageUri = useBuildMetadataImageUri(activeSkill)
+  const { data: skillImageUri } = useBuildMetadataImageUriQuery(activeSkill)
 
   if (!skillImageUri || !metadataExplorerUri || !activeSkill || !rarity || !deps || !cardColour || !setSkillState)
     return null
@@ -86,14 +86,14 @@ export function ActiveSkillPanel() {
       header={activeSkill?.name || 'Unknown'}
       styledProps={{
         background: 'black',
-        padding: '2.5rem 0 4rem 0',
-        bgWithDpiOptions: {
-          bgSet: urlToSimpleGenericImageSrcSet(skillImageUri),
-          attributes: ['center -8px / cover no-repeat', '-184px -3px / cover no-repeat'],
-          modeColors: ['#433054', '#433054']
-        }
+        padding: '2.5rem 0 4rem 0'
       }}
       options={{
+        backgroundImageOptions: {
+          smartImg: {
+            uri: skillImageUri
+          }
+        },
         onClickOutsideConditionalCb: (targetNode: Node) => !!skillContainerRef?.current?.contains(targetNode)
       }}
       onDismiss={() => setSkillState((state) => ({ ...state, active: [] }))}
@@ -101,7 +101,7 @@ export function ActiveSkillPanel() {
     >
       <ActiveSkillPanelContainer gap="1rem">
         <Row justifyContent={'center'} margin="0">
-          <Text.SubHeader fontSize={'2.5rem'} fontWeight={200} color="#ebd7d7">
+          <Text.SubHeader fontSize={'2.5rem'} fontWeight={200} color={MAIN_COLOR}>
             {description}
           </Text.SubHeader>
         </Row>
@@ -177,7 +177,7 @@ export function ActiveSkillPanel() {
         )}
         {((!isLocked && !deps.length) || isOwned) && chainId && (
           <AutoRow>
-            <MonospaceText color="#ebd7d7">
+            <MonospaceText color={MAIN_COLOR}>
               View on{' '}
               <ExternalLink href={metadataExplorerUri}>
                 {' '}

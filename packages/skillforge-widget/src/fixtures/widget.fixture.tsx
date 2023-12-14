@@ -45,8 +45,7 @@ const skillforgeTheme = createTheme({
         },
         skills: {
           skillpoint: {
-            highlight:
-              'https://www.transparentpng.com/download/red-circle/rotation-effect-red-circle-logo-transparent-free-5mbxgt.png',
+            highlight: 'HIGHLIGHT',
             empty:
               'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Blank_square.svg/1200px-Blank_square.svg.png'
           }
@@ -85,10 +84,10 @@ function App() {
         },
         desktop: {
           width: {
-            max: '80%'
+            max: '100%'
           },
           height: {
-            max: '80%'
+            max: '100%'
           }
         }
       }}
