@@ -49,6 +49,15 @@ function App() {
         },
         name: commonProps.appName,
         web3: {
+          connectors: {
+            overrides: { 
+              walletconnect: {
+                async customConnect({store}) {
+                  return store.walletConnect.open()
+                }
+              }
+            }
+          },
           chains: commonProps.chains,
           modals: {
             root: {

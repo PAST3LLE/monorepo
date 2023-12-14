@@ -79,6 +79,7 @@
     "@past3lle/skilltree-contracts": "^0.1.1",
     "@past3lle/utils": "^0.1.13",
     "@past3lle/web3-modal": "^2.0.0-alpha.8",
+    "alchemy-sdk": "^3.1.0",
     "jotai": "^1.13.0"
   },
   "devDependencies": {
