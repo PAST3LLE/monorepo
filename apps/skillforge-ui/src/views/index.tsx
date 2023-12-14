@@ -74,7 +74,7 @@ export function App() {
   return (
     <FontsAndCssProviders>
       <Column width="100%">
-        <Row height={'100vh'}>
+        <Row height="100vh">
           <SkillForge {...SKILLFORGE_CONFIG} render={() => <SkillForgeConnectedHeader />} />
         </Row>
         <AppVersion />
