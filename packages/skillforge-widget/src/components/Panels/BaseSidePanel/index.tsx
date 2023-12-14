@@ -25,6 +25,9 @@ export interface SidePanelProps {
     backgroundImageOptions?: {
       smartImg?: {
         uri: string
+        options?: {
+          filter?: string
+        }
       }
       backgroundCss?: {
         uri: string
@@ -75,6 +78,7 @@ export function SidePanel({ header, children, onBack, onDismiss, options, styled
             height: ref.current?.clientHeight || 0,
             width: ref.current?.clientWidth || 0
           }}
+          filter={options?.backgroundImageOptions?.smartImg?.options?.filter}
         />
       )}
       <DynamicBackArrow show={Boolean(panels?.length && onBack)} callback={onBackCallback} />

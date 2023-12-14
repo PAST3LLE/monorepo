@@ -47,20 +47,21 @@ function LockedSkillInstructions({ title, content }: { title: string; content: s
 }
 
 export function getSkillDescription(skill: SkillMetadata | undefined, lockStatus: SkillLockStatus) {
-  const { name, properties } = skill || {}
+  const { name, properties, attributes } = skill || {}
   switch (lockStatus) {
     case SkillLockStatus.LOCKED:
       return "You can't get this skill yet. Click/view required skill(s) below."
     case SkillLockStatus.UNLOCKABLE_IN_STORE: {
-      const unlockInstructions = properties?.unlockInstructions
+      const content = attributes?.forge?.mainContent
+      const unlockInstructions = attributes?.forge?.unlockInstructions
       const isCollection = properties?.isCollection
 
-      return (
-        (unlockInstructions && (
-          <LockedSkillInstructions title={`${name || 'Skill'} LOCKED!`} content={unlockInstructions} />
-        )) ||
-        (isCollection ? `Unlock ${name || 'this collection'}` : `Get ${name || 'this skill'}`) +
-          ' from the shop and earn a new skill giving you access to exclusive perks.'
+      return unlockInstructions ? (
+        <LockedSkillInstructions title={`${name || 'Skill'} LOCKED!`} content={unlockInstructions} />
+      ) : (
+        content ||
+          (isCollection ? `Unlock ${name || 'this collection'}` : `Get ${name || 'this skill'}`) +
+            ' from the shop and earn a new skill giving you access to exclusive perks.'
       )
     }
     case SkillLockStatus.UNLOCKABLE_IN_TRADE:

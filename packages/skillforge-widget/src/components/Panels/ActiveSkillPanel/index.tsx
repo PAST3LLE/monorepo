@@ -7,14 +7,15 @@ import {
   useForgeUserConfigAtom,
   useSupportedOrDefaultChainId
 } from '@past3lle/forge-web3'
+import { useIsSmallMediaWidth } from '@past3lle/hooks'
 import { BLACK, OFF_WHITE } from '@past3lle/theme'
 import { darken } from 'polished'
 import React, { useMemo, useRef } from 'react'
 import styled, { DefaultTheme, useTheme } from 'styled-components'
 
+import { useQueryImageBlob } from '../../.../../../hooks/useQueryImageBlob'
 import { SKILLPOINTS_CONTAINER_ID } from '../../../constants/skills'
 import { useGetActiveSkill } from '../../../hooks/skills'
-import { useBuildMetadataImageUriQuery } from '../../../hooks/useBuildMetadataImageUri'
 import { baseTheme } from '../../../theme/base'
 import { buildSkillMetadataExplorerUri } from '../../../utils/skills'
 import { BlackHeader, MonospaceText } from '../../Common/Text'
@@ -78,10 +79,28 @@ export function ActiveSkillPanel() {
     typeof globalThis?.window?.document !== 'undefined' ? document.getElementById(SKILLPOINTS_CONTAINER_ID) : null
   )
 
-  const { data: skillImageUri } = useBuildMetadataImageUriQuery(activeSkill)
+  const isSmallMediaWidth = useIsSmallMediaWidth()
+  const { data: bgImageUri } = useQueryImageBlob(
+    isSmallMediaWidth
+      ? activeSkill?.attributes?.forge?.activePanelBgUriMobile
+      : activeSkill?.attributes?.forge?.activePanelBgUriWeb
+  )
+  const sidePanelOptions = useMemo(
+    () => ({
+      onClickOutsideConditionalCb: (targetNode: Node) => !!skillContainerRef?.current?.contains(targetNode),
+      backgroundImageOptions: {
+        smartImg: bgImageUri
+          ? {
+              uri: bgImageUri,
+              options: { filter: activeSkill?.attributes?.forge?.activePanelBgFilter }
+            }
+          : undefined
+      }
+    }),
+    [activeSkill?.attributes?.forge?.activePanelBgFilter, bgImageUri]
+  )
 
-  if (!skillImageUri || !metadataExplorerUri || !activeSkill || !rarity || !deps || !cardColour || !setSkillState)
-    return null
+  if (!metadataExplorerUri || !activeSkill || !rarity || !deps || !cardColour || !setSkillState) return null
 
   return (
     <SidePanel
@@ -90,14 +109,7 @@ export function ActiveSkillPanel() {
         background: 'black',
         padding: '2.5rem 0 4rem 0'
       }}
-      options={{
-        backgroundImageOptions: {
-          smartImg: {
-            uri: skillImageUri
-          }
-        },
-        onClickOutsideConditionalCb: (targetNode: Node) => !!skillContainerRef?.current?.contains(targetNode)
-      }}
+      options={sidePanelOptions}
       onDismiss={() => setSkillState((state) => ({ ...state, active: [] }))}
       onBack={() => setSkillState((state) => ({ ...state, active: state.active.slice(1) }))}
     >

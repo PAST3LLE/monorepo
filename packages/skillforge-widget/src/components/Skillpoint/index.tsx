@@ -7,7 +7,7 @@ import React, { memo, useMemo } from 'react'
 import styled, { useTheme } from 'styled-components'
 
 import { Vector } from '../../api/vector'
-import { useBuildMetadataImageUriQuery } from '../../hooks/useBuildMetadataImageUri'
+import { useQueryImageBlob } from '../../hooks/useQueryImageBlob'
 import { SkillsState, useForgesAtom } from '../../state/Skills'
 import { useAssetsMap } from '../../theme/utils'
 import { StyledSkillpoint } from '../Common'
@@ -39,7 +39,7 @@ function SkillpointUnmemoed({
   } = state
 
   const theme = useTheme()
-  const { data: formattedUri } = useBuildMetadataImageUriQuery(metadata)
+  const { data: imageUri250 } = useQueryImageBlob(metadata?.image250 || metadata?.image)
 
   const { isEmptySkill, isCurrentSkillActive, isDependency, isDimSkill } = useMemo(
     () => ({
@@ -57,16 +57,17 @@ function SkillpointUnmemoed({
   const skillpointUri = useMemo((): string => {
     let uri: string | undefined
     if (!isEmptySkill) {
-      uri = formattedUri
+      uri = imageUri250
     } else {
       uri = _getValueFromDDPXImageMap(theme.assetsMap?.images?.skills?.skillpoint?.empty, 500, '1x')
     }
 
     return uri || SVG_LoadingCircleLight
-  }, [formattedUri, isEmptySkill, theme.assetsMap?.images?.skills?.skillpoint?.empty])
+  }, [imageUri250, isEmptySkill, theme.assetsMap?.images?.skills?.skillpoint?.empty])
 
   const emptySkillYOffset = useMemo(
-    () => (isEmptySkill ? getSkillPlaceholderYOffsetPercentage() : undefined),
+    // TODO: fix this it's duumb
+    () => (isEmptySkill ? getSkillPlaceholderYOffsetPercentage(6) : undefined),
     [isEmptySkill]
   )
 
@@ -112,7 +113,7 @@ function SkillpointUnmemoed({
       >
         <img
           src={skillpointUri}
-          style={{ maxWidth: '100%', transform: isEmptySkill ? `scale(6) translateY(${emptySkillYOffset}%)` : 'unset' }}
+          style={{ maxWidth: '100%', transform: isEmptySkill ? `translateY(${emptySkillYOffset}%)` : 'unset' }}
         />
       </RowCenter>
       {isCurrentSkillActive && <SkillpointHighlight />}
@@ -180,7 +181,7 @@ const SkillpointHighlight = memo(() => {
 })
 
 // when using the assetMap in theme...
-export function getSkillPlaceholderYOffsetPercentage(parts = 4) {
+export function getSkillPlaceholderYOffsetPercentage(parts = 6) {
   const idx = 17 * Math.floor(Math.random() * parts)
   return Math.floor(-42 + idx)
 }

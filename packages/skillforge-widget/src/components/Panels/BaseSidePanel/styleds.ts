@@ -40,13 +40,13 @@ export type SidePanelCssProps = Partial<typeof DEFAULT_SIDE_PANEL_PROPS> & {
   showFlickerAnimation?: boolean
 }
 
-export const BackgroundSmartImg = styled(SmartImg)`
+export const BackgroundSmartImg = styled(SmartImg)<{ filter?: string }>`
   position: absolute;
   top: 0;
   left: 0;
   opacity: 0.25;
   z-index: 0;
-  filter: hue-rotate(98deg) saturate(3.5) invert(1) blur(4px);
+  filter: ${({ filter = 'unset' }) => filter};
 
   > img {
     height: 100%;
