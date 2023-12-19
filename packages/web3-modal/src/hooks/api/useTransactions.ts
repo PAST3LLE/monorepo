@@ -112,7 +112,7 @@ export const useAddPendingTransaction = () => {
       if (!chainId) return
       const pendingTransaction: TransactionReceiptPending = {
         chainId,
-        transactionHash: hash,
+        transactionHash: isSafeWallet ? undefined : hash,
         safeTxHash: isSafeWallet ? hash : undefined,
         status: 'pending',
         nonce: 0,

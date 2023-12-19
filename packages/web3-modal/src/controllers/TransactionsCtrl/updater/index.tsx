@@ -33,13 +33,17 @@ export function TransactionsUpdater() {
     (txPool: Address[], transactions: SafeTransactionListenerInfo) => {
       if (!!pendingSafeHashList.length && !!transactions.length) {
         updateTransactionsViaCallback((state = []) =>
-          state.map((tx, idx) => {
+          state.map((tx) => {
             const ctx = transactions.find((actx) => actx.safeTxHash === tx.safeTxHash)
-            const ctxAhead = state[idx + 1]
+            const nonceLookAhead = ctx?.nonce ? state.find((stateTx) => stateTx.nonce === ctx.nonce + 1) : undefined
             return !!ctx
               ? {
                   ...tx,
-                  status: !!ctx.transactionHash ? 'success' : !!ctxAhead?.transactionHash ? 'reverted' : 'pending',
+                  status: !!ctx.transactionHash
+                    ? 'success'
+                    : !!nonceLookAhead?.transactionHash
+                    ? 'reverted'
+                    : 'pending',
                   nonce: ctx.nonce,
                   transactionHash: ctx.transactionHash
                 }
