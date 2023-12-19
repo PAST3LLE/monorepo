@@ -136,6 +136,26 @@ export interface Web3ModalProps<ID extends number> {
       />
     )
    */
+  /**
+   * @name blockExplorerUris
+   * @description Optional. Explorer uri map by chain. Keys must match {@link chains}
+   * @example
+   * blockExplorerUris: {
+   *     [ChainId.mainnet]: "https://etherscan.io",
+   *     [ChainId.goerli]: "https://goerli.etherscan.io",
+   *     [ChainId.matic]: "https://polygonscan.com",
+   *     [ChainId.mumbai]: "https://mumbai.polygonscan.com"
+   * }
+   */
+  blockExplorerUris?: Chain<ID>['blockExplorers']
+  /**
+   * @name chains
+   * @descriptions Required. Chains to support.
+   * @example
+   * import { mainnet, goerli, matic, polygon } from 'wagmi/chains'
+   * ...
+   * chains: [mainnet, goerli, matic, polygon]
+   */
   chains: Chain<ID>[]
   /**
    * @name connectors
@@ -168,7 +188,7 @@ export interface Web3ModalProps<ID extends number> {
   frameConnectors?: GenericModalConnectorOptions<IFrameEthereumConnector>
   /**
    * @name PstlW3Provider.modals
-   * @description Modal props: root, walletConnect, web3auth. See each for more info.
+   * @description Modal props: root [{@link RootModalProps}], walletConnect [{@link Web3ModalConfig<ID>}]. See each for more info.
    */
   modals: {
     /**
@@ -205,8 +225,18 @@ export interface Web3ModalProps<ID extends number> {
      */
     walletConnect: Omit<Web3ModalConfig<ID>, 'chains'>
   }
+  /**
+   * @name clients
+   * @description Optional. Manage wagmi [{@link PstlWagmiClientOptions}] & ethereum [{@link EthereumClient}] clients.
+   */
   clients?: {
+    /**
+     * @description Optional. Wagmi client configuration. See {@link PstlWagmiClientOptions}
+     */
     wagmi?: PstlWagmiClientOptions<ID>
+    /**
+     * @description Optional. Ethereum client configuration. See {@link EthereumClient}
+     */
     ethereum?: EthereumClient
   }
   /**
@@ -215,6 +245,7 @@ export interface Web3ModalProps<ID extends number> {
   options?: PstlWeb3ModalOptions
   /**
    * Various modal logic callbacks
+   * @description Optional. See {@link PstlWeb3ModalCallbacks}
    */
   callbacks?: PstlWeb3ModalCallbacks
 }

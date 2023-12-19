@@ -5,7 +5,7 @@ import React, { Suspense, lazy, memo, useEffect, useMemo } from 'react'
 import { useSnapshot } from 'valtio'
 
 import { RouterCtrl } from '../../controllers'
-import { FlattenedUserConfigCtrlState } from '../../controllers/types/controllerTypes'
+import { FlattenedUserConfigCtrlState } from '../../controllers/types'
 import { useMergeThemes, usePstlWeb3Modal, usePstlWeb3ModalStore } from '../../hooks'
 import { LoadingScreen, LoadingScreenProps } from '../LoadingScreen'
 import { ConnectionApproval } from './ConnectionApproval'
@@ -23,6 +23,9 @@ const HidDeviceOptionsModal = lazy(
 )
 const ConfigTypeModal = lazy(
   () => import(/* webpackPrefetch: true,  webpackChunkName: "ConfigTypeModal" */ './ConfigTypeModal')
+)
+const TransactionsModal = lazy(
+  () => import(/* webpackPrefetch: true,  webpackChunkName: "TransactionsModal" */ './TransactionsModal')
 )
 
 type Modals = {
@@ -133,6 +136,23 @@ export function ModalWithoutThemeProvider(baseProps: Omit<StatelessBaseModalProp
             id: ModalId.NETWORK,
             modal: 'connection'
           }
+        }
+      }
+
+      case 'Transactions': {
+        const modalProps: StatelessBaseModalProps = {
+          ...baseProps,
+          title: 'TRANSACTIONS',
+          width: '650px',
+          maxWidth: '95vw',
+          minHeight: '70%',
+          id: ModalId.TRANSACTIONS,
+          modal: 'transactions'
+        }
+
+        return {
+          modalProps,
+          Modal: TransactionsModal
         }
       }
 

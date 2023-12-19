@@ -79,7 +79,10 @@ export interface SharedModalTheme {
 }
 export interface BaseModalTheme extends SharedModalTheme {
   padding?: string
-  // Nested
+  tooltip?: {
+    background?: BackgroundStyles['main']
+    font?: FontStyles
+  }
   title?: {
     font?: FontStyles
     margin?: string
@@ -120,11 +123,13 @@ interface AccountModalTheme extends SharedModalTheme {
 }
 type ConnectionModal = SharedModalTheme
 type HidDeviceModal = SharedModalTheme
+type TransactionsModalTheme = SharedModalTheme
 export interface PstlSubModalsTheme {
   base?: BaseModalTheme
   account?: AccountModalTheme
   connection?: ConnectionModal
   hidDevice?: HidDeviceModal
+  transactions?: TransactionsModalTheme
 }
 export type RequiredPstlSubModalsTheme = DeepRequired<PstlSubModalsTheme>
 export type PstlModalKeys = keyof PstlSubModalsTheme

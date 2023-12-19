@@ -1,6 +1,7 @@
 import React, { ReactNode, memo } from 'react'
 
 import { PstlWeb3Modal } from '../components'
+import { TransactionsUpdater } from '../controllers/TransactionsCtrl/updater'
 import { useAutoSwitchToChain } from '../hooks/internal/useAutoSwitchToChain'
 import { useConnectorAndChainConfig } from '../hooks/internal/useConnectorAndChainConfig'
 import { useUpdateUserConfigState } from '../hooks/state/useUpdateUserConfigState'
@@ -47,6 +48,7 @@ const PstlW3ProvidersBase = <ID extends number>({
           chainIdFromUrl={chainFromUrl?.id}
           closeModalOnKeys={config.options?.closeModalOnKeys}
         />
+        <TransactionsUpdater />
         {children}
       </PstlWagmiProvider>
     </>

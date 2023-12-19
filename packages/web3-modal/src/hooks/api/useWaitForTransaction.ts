@@ -1,13 +1,12 @@
 import { Address } from '@past3lle/types'
 import { devDebug, wait } from '@past3lle/utils'
-import SafeApiKit from '@safe-global/api-kit'
 import { useQuery, useWaitForTransaction as useWagmiWaitForTransaction } from 'wagmi'
 
 import { QUERY_KEYS } from '../../constants/queryKeys'
+import { getSafeKitAndTx } from '../../utils/safe'
 import { useIsSafeViaWc } from '../wallet/useWalletMetadata'
 import { useUserConnectionInfo } from './useConnection'
 
-const SAFE_TRANSACTION_SERVICE_CACHE: Partial<Record<number, SafeApiKit | null>> = {}
 // Check every 7.5s
 const DEFAULT_CONFIRMATION_POLL_TIME = 7500
 
@@ -34,10 +33,9 @@ function useWaitForSafeTransaction({
         )
       }
 
-      const safeKit = _getSafeKitOrThrow(queryChainId)
-      let [executed, txHash] = await _checkSafeTxHasConfirmations(safeKit, hash)
+      let [confirmed] = await getSafeKitAndTx(queryChainId, [hash], address)
 
-      while (!executed && !txHash) {
+      while (!confirmed.transactionHash) {
         // Call every X seconds
         await wait(DEFAULT_CONFIRMATION_POLL_TIME)
         devDebug(
@@ -45,12 +43,11 @@ function useWaitForSafeTransaction({
           DEFAULT_CONFIRMATION_POLL_TIME / 1000,
           'seconds.'
         )
-        const [isConfirmed, transactionHash] = await _checkSafeTxHasConfirmations(safeKit, hash)
-        executed = isConfirmed
-        txHash = transactionHash
+        const [confirmedInner] = await getSafeKitAndTx(queryChainId, [hash], address)
+        confirmed = confirmedInner
       }
 
-      return txHash
+      return confirmed.transactionHash
     },
     {
       enabled: !!hash,
@@ -67,12 +64,6 @@ function useWaitForSafeTransaction({
     ...wagmiWaitResults,
     isLoading: isSafeLoading || wagmiWaitResults.isLoading
   }
-}
-
-async function _checkSafeTxHasConfirmations(safeKit: SafeApiKit, hash: Address): Promise<[boolean, Address]> {
-  const { isSuccessful, isExecuted, transactionHash } = await safeKit.getTransaction(hash)
-
-  return [Boolean(isSuccessful && isExecuted), transactionHash as Address]
 }
 
 /**
@@ -93,30 +84,4 @@ export function useWaitForTransaction(props: Parameters<typeof useWagmiWaitForTr
   const safeResults = useWaitForSafeTransaction({ ...props, enabled: isWCSafeWallet })
 
   return isWCSafeWallet ? safeResults : normalResults
-}
-
-function _getClient(chainId: number): SafeApiKit | null {
-  const cachedClient = SAFE_TRANSACTION_SERVICE_CACHE[chainId]
-
-  if (cachedClient !== undefined) {
-    return cachedClient
-  }
-
-  const client = new SafeApiKit({
-    chainId: BigInt(chainId)
-  })
-
-  // Add client to cache (or null if unknown network)
-  SAFE_TRANSACTION_SERVICE_CACHE[chainId] = client
-
-  return client
-}
-
-function _getSafeKitOrThrow(chainId: number): SafeApiKit {
-  const client = _getClient(chainId)
-  if (!client) {
-    throw new Error('[@past3lle/web30modal ]Unsupported network for Safe Transaction Service: ' + chainId)
-  }
-
-  return client
 }

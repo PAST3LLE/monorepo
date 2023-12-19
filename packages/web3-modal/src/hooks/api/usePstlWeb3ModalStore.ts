@@ -1,11 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 
 import { ConnectionStatusCtrl, ModalCtrl, UserOptionsCtrl } from '../../controllers'
-import {
-  ConnectionStatusCtrlState,
-  ModalCtrlState,
-  UserOptionsCtrlState
-} from '../../controllers/types/controllerTypes'
+import { ConnectionStatusCtrlState, ModalCtrlState, UserOptionsCtrlState } from '../../controllers/types'
 
 interface PstlWeb3ModalStateHook {
   state: {

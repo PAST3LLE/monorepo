@@ -1,4 +1,4 @@
-import { ThemeByModes } from '@past3lle/theme'
+import { BLACK, ThemeByModes } from '@past3lle/theme'
 import { DeepRequired } from '@past3lle/types'
 
 import { PstlModalThemeExtension, SharedModalTheme } from './types'
@@ -75,6 +75,10 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
       modals: {
         base: {
           ...DEFAULT_BASE_MODAL_PROPS,
+          tooltip: {
+            background: BLACK,
+            font: DEFAULT_FONT_PROPS
+          },
           font: DEFAULT_FONT_PROPS,
           button: {
             main: DEFAULT_BUTTON_PROPS,

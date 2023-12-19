@@ -7,3 +7,13 @@ export * from './api/usePstlWeb3ModalStore'
 export * from './api/useLimitChainsAndSwitchCallback'
 export * from './api/useAllWeb3Modals'
 export * from './api/useWaitForTransaction'
+export * from './api/useWatchPendingTransactions'
+export * from './wallet/useWalletMetadata'
+export {
+    useAddPendingTransaction,
+    useAddPendingTransactionsBatch,
+    usePendingEoaTransactions,
+    usePendingSafeTransactions,
+    usePendingTransactions,
+    useHasPendingTransactions
+} from './api/useTransactions'

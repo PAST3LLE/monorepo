@@ -4,7 +4,7 @@ import React, { ReactNode, memo } from 'react'
 import styled from 'styled-components'
 import { Chain } from 'viem'
 
-import { UserOptionsCtrlState } from '../../../controllers/types/controllerTypes'
+import { UserOptionsCtrlState } from '../../../controllers/types'
 import { ConnectorInfo } from '../../../utils/connectConnector'
 import { ModalButton } from '../common/styled'
 import { RecommendedLabel } from './RecommendedLabel'

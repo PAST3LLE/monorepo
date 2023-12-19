@@ -1,6 +1,5 @@
 import { ButtonVariations, ColumnCenter, PstlButton, RowCenter, SpinnerCircle } from '@past3lle/components'
 import { ThemeProvider, createCustomTheme } from '@past3lle/theme'
-import { Address } from '@past3lle/types'
 import { devWarn, getExpirementalCookieStore as getCookieStore } from '@past3lle/utils'
 import React, { ReactNode, useCallback, useEffect, useState } from 'react'
 import { useTheme } from 'styled-components'
@@ -10,10 +9,12 @@ import { mainnet, useBalance, useSendTransaction } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { infuraProvider } from 'wagmi/providers/infura'
 
+import { TransactionsButton } from '../components/buttons/Transactions'
 import { RouterCtrl } from '../controllers'
-import { RouterView } from '../controllers/types/controllerTypes'
-import { useAccountNetworkActions, usePstlWeb3Modal, useUserConnectionInfo, useWaitForTransaction } from '../hooks'
+import { RouterView } from '../controllers/types'
+import { useModalActions, usePstlWeb3Modal, useUserConnectionInfo } from '../hooks'
 import { useLimitChainsAndSwitchCallback } from '../hooks/api/useLimitChainsAndSwitchCallback'
+import { useAddPendingTransaction, useTransactions } from '../hooks/api/useTransactions'
 import { PstlWeb3ModalProps, PstlW3Providers as WalletModal } from '../providers'
 import { addConnector } from '../providers/utils'
 import { COMMON_CONNECTOR_OVERRIDES, DEFAULT_PROPS, DEFAULT_PROPS_WEB3AUTH, pstlModalTheme } from './config'
@@ -27,7 +28,7 @@ interface Web3ButtonProps {
   children?: ReactNode
 }
 const Web3Button = ({ children = <div>Show PSTL Wallet Modal</div> }: Web3ButtonProps) => {
-  const { onAccountClick } = useAccountNetworkActions()
+  const { onAccountClick } = useModalActions()
   const { address, connector } = useUserConnectionInfo()
 
   if (typeof globalThis?.window !== 'undefined' && !!connector && !(window as any)?.__PSTL_CONNECTOR) {
@@ -39,6 +40,10 @@ const Web3Button = ({ children = <div>Show PSTL Wallet Modal</div> }: Web3Button
       <PstlButton buttonVariant={ButtonVariations.PRIMARY} onClick={onAccountClick}>
         {children}
       </PstlButton>
+      <br />
+      <br />
+      <TransactionsButton />
+
       <h3>Connected to {address || 'DISCONNECTED!'}</h3>
       <h3>Connector: {connector?.id}</h3>
     </ColumnCenter>
@@ -77,40 +82,31 @@ function AppWithWagmiAccess() {
 
   const sendApi = useSendTransaction()
 
-  const [txHash, setTxHash] = useState<Address | undefined>()
-  const [txStarted, setTxStarted] = useState(false)
+  const addPendingTransaction = useAddPendingTransaction()
+  const { transactions: allTransactions } = useTransactions()
 
-  const resetTxState = () => {
-    setTxStarted(false)
-    setTxHash(undefined)
-  }
-
-  const { isLoading: waitingForTx } = useWaitForTransaction({
-    hash: txHash,
-    onReplaced(response) {
-      console.debug('TX REPLACED! ==> ', response.reason, 'NEW HASH:', response.transaction.hash)
-      setTxHash(response.transaction.hash)
-    }
-  })
-
+  const [currentTx, setTx] = useState('')
   const handleSendTransaction = useCallback(
     async (args: { value: bigint; to: string }) => {
-      setTxStarted(true)
+      setTx('pending')
       sendApi
         .sendTransactionAsync(args)
         .then((tx) => {
-          setTxHash(tx.hash)
-          setTxStarted(false)
+          setTx(tx.hash)
+          addPendingTransaction(tx.hash)
         })
         .catch((error) => {
-          resetTxState()
           throw error
         })
+        .finally(() => {
+          setTx('')
+        })
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [sendApi]
   )
 
-  const txLoading = txStarted || waitingForTx
+  const status = allTransactions?.find((pTx) => pTx.transactionHash === currentTx)?.status
 
   return (
     <>
@@ -121,29 +117,28 @@ function AppWithWagmiAccess() {
       <br />
 
       <p>Send ETH</p>
-      {txLoading ? (
-        <>
-          <h2>WAITING TRANSACTION...</h2>
-          <h4>Hash: {txHash}</h4>
-          <RowCenter width="300px">
+      <>
+        {!!currentTx && status !== 'success' && (
+          <RowCenter width="300px" gap="1rem">
+            <h4>TX {currentTx} in progress...</h4>
             <SpinnerCircle filter="invert(1)" size={100} />
           </RowCenter>
-        </>
-      ) : (
-        <>
-          <p>
-            Amount
-            <input type="text" value={sendEthVal} onChange={(e: any) => setSendEthVal(e.target.value)} />
-          </p>
-          <p>
-            To
-            <input type="text" value={addressToSendTo} onChange={(e: any) => setAddress(e.target.value)} />
-          </p>
-          <button onClick={() => handleSendTransaction({ value: parseEther(sendEthVal), to: addressToSendTo })}>
-            Send to {addressToSendTo || 'N/A'}
-          </button>
-        </>
-      )}
+        )}
+      </>
+
+      <>
+        <p>
+          Amount
+          <input type="text" value={sendEthVal} onChange={(e: any) => setSendEthVal(e.target.value)} />
+        </p>
+        <p>
+          To
+          <input type="text" value={addressToSendTo} onChange={(e: any) => setAddress(e.target.value)} />
+        </p>
+        <button onClick={() => handleSendTransaction({ value: parseEther(sendEthVal), to: addressToSendTo })}>
+          Send to {addressToSendTo || 'N/A'}
+        </button>
+      </>
     </>
   )
 }

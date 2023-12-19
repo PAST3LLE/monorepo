@@ -1,6 +1,6 @@
 import { proxy, subscribe as valtioSub } from 'valtio/vanilla'
 
-import type { UserOptionsCtrlState } from './types/controllerTypes'
+import type { UserOptionsCtrlState } from './types'
 
 // -- initial state ------------------------------------------------ //
 const state = proxy<UserOptionsCtrlState>({
@@ -13,6 +13,9 @@ const state = proxy<UserOptionsCtrlState>({
     chainImages: undefined,
     softLimitedChains: undefined,
     walletsView: 'list'
+  },
+  chains: {
+    blockExplorerUris: undefined
   },
   connectors: {
     hideInjectedFromRoot: false,
@@ -35,6 +38,10 @@ export const UserOptionsCtrl = {
     state.ui = {
       ...state.ui,
       ...props.ui
+    }
+    state.chains = {
+      ...state.chains,
+      ...props.chains
     }
     state.connectors = {
       ...state.connectors,

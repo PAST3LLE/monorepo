@@ -91,6 +91,7 @@
     "@web3modal/ethereum": "^2.7.1",
     "@web3modal/html": "^2.7.1",
     "@web3modal/react": "^2.7.1",
+    "date-fns": "^3.0.0",
     "lodash.isequal": "^4.5.0",
     "valtio": "^1.10.3"
   },

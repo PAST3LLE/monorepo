@@ -144,6 +144,22 @@ export function useAccountNetworkActions() {
   }
 }
 
+export function useModalActions() {
+  const { root } = useAllWeb3Modals()
+
+  const onTransactionsClick = useCallback(async () => {
+    return root.open({ route: 'Transactions' })
+  }, [root])
+
+  const { onAccountClick, onNetworkClick } = useAccountNetworkActions()
+
+  return {
+    onAccountClick,
+    onNetworkClick,
+    onTransactionsClick
+  }
+}
+
 export type PstlW3mConnectionHook = [
   Connector<any, any>[],
   Callbacks,

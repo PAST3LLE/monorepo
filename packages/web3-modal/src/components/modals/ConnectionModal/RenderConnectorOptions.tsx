@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction } from 'react'
 
 import { ProviderMountedMap, PstlWeb3ConnectionModalProps } from '.'
-import { UserOptionsCtrlState } from '../../../controllers/types/controllerTypes'
+import { UserOptionsCtrlState } from '../../../controllers/types'
 import { useConnectDisconnect, useUserConnectionInfo } from '../../../hooks'
 import { ConnectorEnhanced, FullWeb3ModalStore } from '../../../types'
 import { runConnectorConnectionLogic } from '../../../utils/connectConnector'

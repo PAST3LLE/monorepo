@@ -3,7 +3,7 @@ import { upToExtraSmall } from '@past3lle/theme'
 import React from 'react'
 import styled from 'styled-components'
 
-import { ConnectionStatusCtrlState } from '../../../controllers/types/controllerTypes'
+import { ConnectionStatusCtrlState } from '../../../controllers/types'
 import { usePstlWeb3ModalStore } from '../../../hooks'
 import { connectorOverridePropSelector } from '../../../utils/misc'
 import { ModalText } from '../common/styled'
@@ -87,6 +87,7 @@ const ConnectorLabelAndLogoWrapper = styled(RowCenter)`
   > ${ColumnCenter}:last-child {
     > ${ModalText} {
       text-wrap: balance;
+      text-align: center;
     }
   }
 

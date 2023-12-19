@@ -1,7 +1,7 @@
 import { proxy, subscribe as valtioSub } from 'valtio/vanilla'
 
 import { RouterCtrl } from './RouterCtrl'
-import type { ModalCtrlState } from './types/controllerTypes'
+import type { ModalCtrlState } from './types'
 
 // -- types -------------------------------------------------------- //
 export interface OpenOptions {
@@ -15,6 +15,7 @@ export interface OpenOptions {
     | 'HidDeviceOptions'
     | 'ConnectorConfigType'
     | 'ConnectionApproval'
+    | 'Transactions'
 }
 
 // -- initial state ------------------------------------------------ //

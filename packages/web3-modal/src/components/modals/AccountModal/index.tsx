@@ -4,12 +4,13 @@ import { truncateAddress } from '@past3lle/utils'
 import React, { memo, useCallback, useMemo } from 'react'
 import { useTheme } from 'styled-components'
 
-import { UserOptionsCtrlState } from '../../../controllers/types/controllerTypes'
+import { UserOptionsCtrlState } from '../../../controllers/types'
 import { useConnectDisconnect, usePstlWeb3Modal, useUserConnectionInfo } from '../../../hooks'
 import { useConnectedChainAndWalletLogo } from '../../../hooks/misc/useLogos'
 import { useDeriveAppType } from '../../../providers/utils/connectors'
 import { PstlModalTheme } from '../../../theme'
 import { ConnectorEnhanced } from '../../../types'
+import { TransactionsButton } from '../../buttons/Transactions'
 import { BaseModalProps, ModalId } from '../common/types'
 import { WalletChainLogos } from './WalletChainLogos'
 import {
@@ -130,6 +131,8 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
           >
             {`${isSmallerScreen ? '' : 'View on '}Explorer`}
           </AccountModalButton>
+          {/* TODO: remove? */}
+          <TransactionsButton />
         </FooterActionButtonsRow>
       </AddressAndBalanceColumnContainer>
       {/* Wallet & Network Row */}

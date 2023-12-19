@@ -1,7 +1,7 @@
 import { useIsExtraSmallMediaWidth } from '@past3lle/hooks'
 import React, { memo, useCallback, useMemo, useState } from 'react'
 
-import { UserOptionsCtrlState } from '../../../controllers/types/controllerTypes'
+import { UserOptionsCtrlState } from '../../../controllers/types'
 import {
   useConnectDisconnectAndCloseModals, // useConnectDisconnect,
   usePstlWeb3ModalStore,

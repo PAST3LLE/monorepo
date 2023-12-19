@@ -4,7 +4,7 @@ import { useSnapshot } from 'valtio'
 import { useSwitchNetwork } from 'wagmi'
 
 import { UserOptionsCtrl } from '../../controllers'
-import { UserOptionsCtrlState } from '../../controllers/types/controllerTypes'
+import { UserOptionsCtrlState } from '../../controllers/types'
 import { useUserConnectionInfo } from '../../hooks'
 import { SmartAutoConnectProps, useSmartAutoConnect } from '../../hooks/internal/useSmartAutoConnect'
 

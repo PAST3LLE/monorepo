@@ -37,6 +37,13 @@ export const pstlModalTheme = createTheme({
           success: '#777b48',
           url: BG_LOGO
         },
+        tooltip: {
+          background: '#685985',
+          font: {
+            color: 'ghostwhite',
+            family: 'monospace'
+          }
+        },
         font: {
           family: "'Roboto Flex', 'Inter', sans-serif, system-ui",
           letterSpacing: '0px'
@@ -121,7 +128,26 @@ export const pstlModalTheme = createTheme({
           }
         }
       },
-      hidDevice: {}
+      transactions: {
+        button: {
+          main: {
+            background: {
+              default: '#6c5990'
+            },
+            font: {
+              weight: 100
+            }
+          }
+        },
+        text: {
+          main: {
+            weight: 600
+          },
+          small: {
+            weight: 100
+          }
+        }
+      }
     }
   },
   get DARK() {

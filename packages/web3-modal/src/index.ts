@@ -1,13 +1,23 @@
 import { PstlWeb3Modal } from './components/modals'
 import {
   useAllWeb3Modals,
+  useIsSafeViaWc,
+  useIsSafeWallet,
   useLimitChainsAndSwitchCallback,
   useAccountNetworkActions as usePstlAccountNetworkActions,
   useConnectDisconnect as usePstlConnectDisconnect,
   useConnection as usePstlConnection,
   useUserConnectionInfo as usePstlUserConnectionInfo,
+  useWaitForTransaction as usePstlWaitForTransaction,
+  useWatchPendingTransactions as usePstlWatchPendingTransactions,
   usePstlWeb3Modal,
-  useAllWeb3Modals as usePstlWeb3Modals
+  useAllWeb3Modals as usePstlWeb3Modals,
+  useAddPendingTransaction,
+  useAddPendingTransactionsBatch,
+  useHasPendingTransactions,
+  usePendingTransactions,
+  usePendingEoaTransactions,
+  usePendingSafeTransactions
 } from './hooks'
 import {
   type Chain,
@@ -35,6 +45,7 @@ export * from './types'
 
 export {
   PstlWeb3Modal,
+  // hooks
   usePstlAccountNetworkActions,
   usePstlConnectDisconnect,
   usePstlConnection,
@@ -42,7 +53,18 @@ export {
   usePstlWeb3Modal,
   usePstlWeb3Modals,
   useAllWeb3Modals,
+  usePstlWaitForTransaction,
   useLimitChainsAndSwitchCallback,
+  usePstlWatchPendingTransactions,
+  useIsSafeWallet,
+  useIsSafeViaWc,
+  // txs
+  useAddPendingTransaction,
+  useAddPendingTransactionsBatch,
+  useHasPendingTransactions,
+  usePendingTransactions,
+  usePendingEoaTransactions,
+  usePendingSafeTransactions,
   // theme
   createTheme,
   W3aStyleResetProvider,

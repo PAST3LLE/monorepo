@@ -1,7 +1,7 @@
 import { ConnectArgs } from '@wagmi/core'
 import { proxy, subscribe as valtioSub } from 'valtio/vanilla'
 
-import type { ConnectionStatusCtrlState } from './types/controllerTypes'
+import type { ConnectionStatusCtrlState } from './types'
 
 // -- initial state ------------------------------------------------ //
 const state = proxy<ConnectionStatusCtrlState>({
