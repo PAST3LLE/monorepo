@@ -80,12 +80,15 @@
     "@past3lle/utils": "^0.1.13",
     "@past3lle/web3-modal": "^2.0.0-alpha.8",
     "alchemy-sdk": "^3.1.0",
-    "jotai": "^1.13.0"
+    "jotai": "^2.6.0",
+    "jotai-optics": "^0.3.1",
+    "optics-ts": "^2.4.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
-    "jotai-devtools": "0.1.0",
+    "@emotion/react": "11.11.1",
+    "jotai-devtools": "^0.7.1",
     "react": "^18.2.0",
     "react-cosmos": "^5.7.2",
     "react-dom": "^18.2.0",
