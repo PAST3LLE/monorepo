@@ -27,7 +27,7 @@ metadataAtom.debugLabel = 'METADATA ATOM'
 const skillMetadataReadAtom = (chainId?: number) =>
   atom((get) => (chainId ? get(metadataAtom).metadata[chainId] || [] : []))
 const skillMetadataWriteAtom = (chainId?: number) =>
-  atom<null, ForgeMetadataState['metadata'][number]>(null, (get, set, update) => {
+  atom(null, (get, set, update: SkillMetadata[][]) => {
     if (!chainId) return
     const state = get(metadataAtom)
     return set(metadataAtom, {
@@ -43,7 +43,7 @@ const skillMetadataMapReadAtom = (chainId?: number) =>
   atom((get) => (chainId ? get(metadataAtom).metadataMap[chainId] : {}))
 
 const skillMetadataMapWriteAtom = (chainId?: number) =>
-  atom<null, ForgeMetadataState['metadataMap'][number]>(null, (get, set, update) => {
+  atom(null, (get, set, update: MetadataMapByChain[number]) => {
     if (!chainId) return
     const state = get(metadataAtom)
     return set(metadataAtom, {
@@ -59,9 +59,9 @@ const skillMetadataMapWriteAtom = (chainId?: number) =>
   })
 
 const metadataReadWriteAtom = (chainId?: number) =>
-  atom<ForgeMetadataState['metadata'][number], ForgeMetadataState['metadata'][number]>(
+  atom(
     (get) => (chainId ? get(metadataAtom).metadata[chainId] : []),
-    (get, set, update) => {
+    (get, set, update: SkillMetadata[][]) => {
       if (!chainId) return
       const state = get(metadataAtom)
       return set(metadataAtom, {

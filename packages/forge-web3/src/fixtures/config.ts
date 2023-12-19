@@ -15,7 +15,7 @@ const THEME = createTheme({
       },
       connection: {
         button: {
-          main:{
+          main: {
             font: {
               color: 'ghostwhite'
             }

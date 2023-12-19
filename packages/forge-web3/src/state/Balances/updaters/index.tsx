@@ -43,7 +43,7 @@ export function ForgeBalancesUpdater({ loadAmount = BigInt(DEFAULT_COLLECTION_LO
     if (metadataLoaded && dataHasLength) {
       if (!address) {
         // if address is undefined, reset balances
-        resetUserBalances({})
+        resetUserBalances()
       } else {
         const balances = _reduceBalanceDataToMap(derivedData, skills as { result: Address }[], metadata, chainId)
 

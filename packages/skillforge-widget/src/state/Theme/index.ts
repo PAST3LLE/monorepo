@@ -8,7 +8,7 @@ const themeModeStorageAtom = atomWithStorage<AppThemeMode>('SKILLFORGE_THEME_MOD
 themeModeStorageAtom.debugLabel = 'THEME ATOM'
 
 const themeModeReadAtom = atom((get) => get(themeModeStorageAtom))
-const themeModeWriteAtom = atom<null, AppThemeMode>(null, (_, set, update) => {
+const themeModeWriteAtom = atom(null, (_, set, update: AppThemeMode) => {
   return set(themeModeStorageAtom, update)
 })
 

@@ -4,7 +4,6 @@ import { AtomsDevtoolsUpdater } from '../../../dev/devTools'
 import { ForgeW3AppConfig } from '../../../types'
 import { ForgeBalancesUpdater } from '../../Balances/updaters'
 import { ForgeMetadataUpdater } from '../../Metadata/updaters/MetadataUpdater'
-import { ForgeTransactionStatusUpdater } from '../../Transactions/updater'
 import { ForgeUserConfigUpdater } from '../../UserConfig/updaters'
 import { ForgeVersionAndCacheBustUpdater } from '../../Version/updaters'
 import { ForgeWindowSizeUpdater } from '../../WindowSize/updaters'
@@ -14,7 +13,6 @@ export function ForgeW3StateUpdaters(props: ForgeW3AppConfig & { children: React
     <>
       <AtomsDevtoolsUpdater appName={props.name} />
       {/* UPDATERS */}
-      <ForgeTransactionStatusUpdater />
       <ForgeVersionAndCacheBustUpdater />
       <ForgeUserConfigUpdater {...props} />
       <ForgeMetadataUpdater metadataFetchOptions={props.skillOptions?.metadataFetchOptions} />

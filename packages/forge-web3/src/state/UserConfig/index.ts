@@ -87,9 +87,9 @@ export const userConfigAtom = atomWithStorage<UserConfigState>(STATE_STORAGE_KEY
 })
 userConfigAtom.debugLabel = 'USER CONFIG ATOM'
 
-const readonlyChainAtom = atom<UserConfigState['readonlyChain'], UserConfigState['readonlyChain']>(
+const readonlyChainAtom = atom(
   (get) => get(userConfigAtom).readonlyChain,
-  (get, set, update) => {
+  (get, set, update: UserConfigState['readonlyChain']) => {
     const state = get(userConfigAtom)
     return set(userConfigAtom, {
       ...state,
@@ -97,14 +97,11 @@ const readonlyChainAtom = atom<UserConfigState['readonlyChain'], UserConfigState
     })
   }
 )
-export const supportedChainsSetter = atom<null, ChainsPartialReadonly<SupportedForgeChains>>(
-  null,
-  (get, set, update) => {
-    const state = get(userConfigAtom)
-    return set(userConfigAtom, { ...state, chains: update })
-  }
-)
-export const ipfsGatewaysSetter = atom<null, UserConfigState['ipfs']>(null, (get, set, update) => {
+export const supportedChainsSetter = atom(null, (get, set, update: UserConfigState['chains']) => {
+  const state = get(userConfigAtom)
+  return set(userConfigAtom, { ...state, chains: update })
+})
+export const ipfsGatewaysSetter = atom(null, (get, set, update: UserConfigState['ipfs']) => {
   const state = get(userConfigAtom)
   return set(userConfigAtom, {
     ...state,
@@ -115,9 +112,9 @@ export const ipfsGatewaysSetter = atom<null, UserConfigState['ipfs']>(null, (get
 export const mmetadataUrisReadAtom = atom<UserConfigState['metadataUriMap']>(
   (get) => get(userConfigAtom).metadataUriMap
 )
-export const metadataUriMapAtom = atom<UserConfigState['metadataUriMap'], UserConfigState['metadataUriMap']>(
+export const metadataUriMapAtom = atom(
   (get) => get(userConfigAtom).metadataUriMap,
-  (get, set, update) => {
+  (get, set, update: UserConfigState['metadataUriMap']) => {
     const state = get(userConfigAtom)
     return set(userConfigAtom, {
       ...state,
@@ -129,12 +126,9 @@ export const metadataUriMapAtom = atom<UserConfigState['metadataUriMap'], UserCo
 export const contractAddressesReadAtom = atom<UserConfigState['contractAddressMap']>(
   (get) => get(userConfigAtom).contractAddressMap
 )
-export const contractAddressMapAtom = atom<
-  UserConfigState['contractAddressMap'],
-  UserConfigState['contractAddressMap']
->(
+export const contractAddressMapAtom = atom(
   (get) => get(userConfigAtom).contractAddressMap,
-  (get, set, update) => {
+  (get, set, update: UserConfigState['contractAddressMap']) => {
     const state = get(userConfigAtom)
     return set(userConfigAtom, {
       ...state,

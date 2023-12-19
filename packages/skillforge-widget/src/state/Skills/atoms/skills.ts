@@ -15,23 +15,23 @@ skillsAtom.debugLabel = 'SKILLS ATOM'
 
 const activeSkillRead = atom((get) => get(skillsAtom).active)
 
-const skillSizeWriteAtom = atom<null, SkillsState['sizes']>(null, (get, set, update) => {
+const skillSizeWriteAtom = atom(null, (get, set, update: SkillsState['sizes']) => {
   const state = get(skillsAtom)
   return set(skillsAtom, { ...state, sizes: update })
 })
 const skillSizeReadAtom = atom<SkillsState['sizes']>((get) => get(skillsAtom).sizes)
 
-const activeSkillAtom = atom<SkillsState['active'], SkillsState['active'][0]>(
+const activeSkillAtom = atom(
   (get) => get(skillsAtom).active,
-  (get, set, update) => {
+  (get, set, update: SkillsState['active'][number]) => {
     const state = get(skillsAtom)
     return set(skillsAtom, { ...state, active: [update, ...state.active] })
   }
 )
 
-const activeDependenciesSkillAtom = atom<SkillsState['activeDependencies'], SkillsState['activeDependencies'][0]>(
+const activeDependenciesSkillAtom = atom(
   (get) => get(skillsAtom).activeDependencies,
-  (get, set, update) => {
+  (get, set, update: SkillsState['activeDependencies'][number]) => {
     const state = get(skillsAtom)
     return set(skillsAtom, { ...state, activeDependencies: [update, ...state.activeDependencies] })
   }
