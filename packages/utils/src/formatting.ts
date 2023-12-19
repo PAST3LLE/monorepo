@@ -279,3 +279,11 @@ export function truncateHash(hash: Address, opt?: { type: 'long' | 'short' }) {
 
   return fp + '...' + lp
 }
+
+export function truncateLongString(string: string, opt?: { type: 'long' | 'short' }) {
+  const options = opt || { type: 'short' }
+  const sigLength = string.length - 6
+  const [fp, lp] = _getWordParts(string, { short: [6, sigLength - 6], long: [10, sigLength - 12] }, options)
+
+  return fp + '...' + lp
+}
