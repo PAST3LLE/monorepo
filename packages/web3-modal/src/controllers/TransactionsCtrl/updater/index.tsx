@@ -17,6 +17,7 @@ export function TransactionsUpdater() {
     ;(window as any).addPendingTransactions = TransactionCtrl.addBatchPendingTransactions
     ;(window as any).confirmTransactionsByProp = TransactionCtrl.confirmTransactionsByValue
     ;(window as any).updateTransactionNoncesBatch = TransactionCtrl.updateTransactionsBatchByValue
+    ;(window as any).updateTransactionsViaCallback = TransactionCtrl.updateTransactionsViaCallback
   }, [])
 
   /* 
@@ -45,7 +46,8 @@ export function TransactionsUpdater() {
                     ? 'reverted'
                     : 'pending',
                   nonce: ctx.nonce,
-                  transactionHash: ctx.transactionHash
+                  transactionHash: ctx.transactionHash,
+                  safeTxInfo: ctx.safeTxInfo
                 }
               : tx
           })

@@ -1,4 +1,5 @@
 import { devError } from '@past3lle/utils'
+import { SafeMultisigTransactionListResponse } from '@safe-global/api-kit'
 import isEqual from 'lodash.isequal'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
@@ -23,7 +24,9 @@ interface WatchPendingTransactionReturn {
   isLoading: boolean
 }
 
-export type SimpleTxInfo = Pick<TransactionReceiptPending, 'transactionHash' | 'safeTxHash' | 'nonce'>
+export type SimpleTxInfo = Pick<TransactionReceiptPending, 'transactionHash' | 'safeTxHash' | 'nonce'> & {
+  safeTxInfo?: Pick<SafeMultisigTransactionListResponse['results'][number], 'confirmations' | 'confirmationsRequired'>
+}
 export type SafeTransactionListenerInfo = SimpleTxInfo[]
 
 export type WatchPendingTransactionsListener = (txs: Address[], safeTxInfo: SafeTransactionListenerInfo) => void

@@ -1,15 +1,24 @@
-import { Column, type ArrowLeft as Icon, RowBetween, RowCenter } from '@past3lle/components'
+import { Column, ColumnCenter, type ArrowLeft as Icon, Row, RowBetween, RowCenter } from '@past3lle/components'
 import styled from 'styled-components'
 
 import { HidModalTextInput } from '../HidDeviceOptionsModal/styleds'
-import { ModalText } from '../common/styled'
+import { ModalText, WalletsWrapper } from '../common/styled'
 
-export const TransactionRow = styled(RowBetween)`
+export const SafeConfirmationSquare = styled(Row)<{ disabled?: boolean }>`
+  filter: ${(props) => (props.disabled ? 'grayscale(1) brightness(0.5)' : 'unset')};
+`
+export const SafeConfirmationCardWrapper = styled(ColumnCenter)``
+export const SafeConfirmationsGridWrapper = styled(WalletsWrapper)`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+`
+
+export const TransactionRow = styled(RowBetween)<{ fontSize?: string; borderBottom?: string }>`
   gap: 1rem;
-  border-bottom: 1px solid #ffffff21;
+  border-bottom: ${({ borderBottom = '1px solid #ffffff21' }) => borderBottom};
 
   > * {
-    font-size: 1.2em;
+    font-size: ${(props) => props.fontSize || '1.2em'};
     letter-spacing: -1.6px;
     line-height: 1.4;
   }

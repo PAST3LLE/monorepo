@@ -56,6 +56,10 @@ function _getTxInfoFromSafeTx(safeTx: SafeMultisigTransactionListResponse['resul
   return {
     transactionHash: safeTx?.transactionHash as Hash | undefined,
     safeTxHash: safeTx.safeTxHash as Hash,
-    nonce: safeTx.nonce
+    nonce: safeTx.nonce,
+    safeTxInfo: {
+      confirmationsRequired: safeTx.confirmationsRequired,
+      confirmations: safeTx.confirmations
+    }
   }
 }

@@ -1,19 +1,38 @@
-import { ColumnCenter, RowCenter, Search, Slash, SpinnerCircle, ThumbsUp } from '@past3lle/components'
+import {
+  Column,
+  ColumnCenter,
+  Row,
+  RowCenter,
+  RowStart,
+  Search,
+  Slash,
+  SpinnerCircle,
+  ThumbsUp
+} from '@past3lle/components'
 import { useDebouncedChangeHandler } from '@past3lle/hooks'
 import { Address } from '@past3lle/types'
-import { truncateHash } from '@past3lle/utils'
+import { truncateAddress, truncateHash, truncateLongString } from '@past3lle/utils'
 import { formatDistanceToNow } from 'date-fns'
 import React, { memo, useMemo, useState } from 'react'
 import { Hash } from 'viem'
 
 import { AnyTransactionReceipt } from '../../../controllers/TransactionsCtrl/types'
-import { useAccountNetworkActions, usePstlWeb3ModalStore, useUserConnectionInfo } from '../../../hooks'
+import {
+  WalletMetaData,
+  useAccountNetworkActions,
+  usePstlWeb3ModalStore,
+  useUserConnectionInfo,
+  useWalletMetadata
+} from '../../../hooks'
 import { useTransactions } from '../../../hooks/api/useTransactions'
 import { PstlWeb3ModalProps } from '../../../providers'
 import { MouseoverCircle } from '../../tooltips/MouseoverCircle'
 import { ModalButton, ModalText } from '../common/styled'
 import {
   PillProps,
+  SafeConfirmationCardWrapper,
+  SafeConfirmationSquare,
+  SafeConfirmationsGridWrapper,
   StatusPill,
   TransactionInput,
   TransactionRow,
@@ -31,6 +50,7 @@ function TransactionModalContent() {
       userOptions: { chains }
     }
   } = usePstlWeb3ModalStore()
+  const connectorMetadata = useWalletMetadata()
 
   const [search, setSearch] = useState<string>('')
   const [dbSearch, handleSearch] = useDebouncedChangeHandler(search, setSearch, 450)
@@ -42,14 +62,15 @@ function TransactionModalContent() {
       // 0 nonce shows top (new tx)
       .sort(_sortBy('dateAdded', 'descending'))
       .map((transaction, idx) => (
-        <Transaction
+        <TransactionCard
           key={`${transaction?.transactionHash || transaction?.safeTxHash || idx}_${transaction.nonce}`}
+          connectorMetadata={connectorMetadata}
           blockExplorerUris={{
             default: { name: 'void', url: '#' },
             ...chain?.blockExplorers,
             ...chains?.blockExplorerUris
           }}
-          {...transaction}
+          transaction={transaction}
         />
       ))
 
@@ -65,7 +86,15 @@ function TransactionModalContent() {
         {!address && <ConnectButton callback={onAccountClick} />}
       </ColumnCenter>
     )
-  }, [address, chain?.blockExplorers, chains?.blockExplorerUris, dbSearch, onAccountClick, transactions])
+  }, [
+    address,
+    chain?.blockExplorers,
+    chains?.blockExplorerUris,
+    connectorMetadata,
+    dbSearch,
+    onAccountClick,
+    transactions
+  ])
 
   return (
     <>
@@ -84,11 +113,17 @@ function TransactionModalContent() {
   )
 }
 
-const Transaction = memo(function TransactionComponent(
-  transaction: AnyTransactionReceipt & { blockExplorerUris?: PstlWeb3ModalProps['blockExplorerUris'] }
-) {
+export const TransactionCard = memo(function TransactionComponent({
+  transaction,
+  blockExplorerUris,
+  connectorMetadata
+}: {
+  transaction: AnyTransactionReceipt
+  blockExplorerUris?: PstlWeb3ModalProps['blockExplorerUris']
+  connectorMetadata?: WalletMetaData
+}) {
   const { Icon, tooltip, ...statusStyleProps } = _statusToPillProps(transaction.status)
-  const explorerUri = transaction?.blockExplorerUris?.default.url
+  const explorerUri = blockExplorerUris?.default.url
   const formattedHash = transaction.transactionHash ? truncateHash(transaction.transactionHash, { type: 'short' }) : '-'
 
   return (
@@ -179,9 +214,73 @@ const Transaction = memo(function TransactionComponent(
           {formatDistanceToNow(transaction.dateAdded)} ago
         </ModalText>
       </TransactionRow>
+      {/* CONFIRMATIONS */}
+      {!!transaction.safeTxInfo && (
+        <SafeConfirmationsCard safeTxInfo={transaction.safeTxInfo} connectorMetadata={connectorMetadata} />
+      )}
     </TransactionWrapper>
   )
 })
+
+const SafeConfirmationsCard = memo(
+  ({
+    safeTxInfo,
+    connectorMetadata
+  }: Pick<Required<AnyTransactionReceipt>, 'safeTxInfo'> & { connectorMetadata?: WalletMetaData }) => (
+    <SafeConfirmationCardWrapper marginTop="2rem" gap="0">
+      <RowStart gap="0.2rem">
+        <img
+          src={connectorMetadata?.icon || 'https://avatars.githubusercontent.com/u/102983781?s=200&v=4'}
+          style={{ maxWidth: 25 }}
+        />
+        <ModalText modal="transactions" node="subHeader" marginRight="auto">
+          SAFE SIGNATURES REQUIRED: {safeTxInfo.confirmationsRequired}
+        </ModalText>
+      </RowStart>
+      <SafeConfirmationsGridWrapper view="grid">
+        {Array.from({ length: safeTxInfo.confirmationsRequired }).map((_, i) => {
+          const confirmation = { signature: '', owner: '', ...safeTxInfo.confirmations?.[i] }
+          return (
+            <SafeConfirmationSquare key={confirmation.signature} disabled={!confirmation?.signature}>
+              <Column
+                gap="0.1rem"
+                flex="1"
+                padding="0.5rem"
+                borderRadius="8px"
+                backgroundColor={_statusToPillProps('pending').backgroundColor}
+              >
+                <ModalText modal="transactions" node="main" display="flex">
+                  CONFIRMATION{' '}
+                  <ModalText modal="transactions" node="small" display="inline-flex" marginLeft="auto">
+                    {i + 1}/{safeTxInfo.confirmationsRequired}
+                  </ModalText>
+                </ModalText>
+                <Row gap="0.5rem">
+                  <img src="https://avatars.githubusercontent.com/u/102983781?s=200&v=4" style={{ maxWidth: '21%' }} />
+                  <Column flex="1">
+                    <TransactionRow fontSize="1em" borderBottom="none">
+                      <TransactionTitle>SIGNATURE</TransactionTitle>
+                      <ModalText modal="transactions" node="main">
+                        {truncateLongString(confirmation.signature as Address)}
+                      </ModalText>
+                    </TransactionRow>
+
+                    <TransactionRow fontSize="1em" borderBottom="none">
+                      <TransactionTitle>OWNER</TransactionTitle>
+                      <ModalText modal="transactions" node="main">
+                        {truncateAddress(confirmation.owner as Address)}
+                      </ModalText>
+                    </TransactionRow>
+                  </Column>
+                </Row>
+              </Column>
+            </SafeConfirmationSquare>
+          )
+        })}
+      </SafeConfirmationsGridWrapper>
+    </SafeConfirmationCardWrapper>
+  )
+)
 
 const TransactionSearchBar = ({
   address,
@@ -242,7 +341,7 @@ function _statusToPillProps(status: AnyTransactionReceipt['status']): PillProps 
     case 'pending':
     case 'replaced-pending':
       return {
-        backgroundColor: '#425fb2',
+        backgroundColor: '#657bb9a8',
         color: 'ghostwhite',
         Icon: (() => <SpinnerCircle stroke="white" />) as any
       }

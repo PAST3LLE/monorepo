@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { SafeConnector } from 'wagmi/connectors/safe'
 
 import { useUserConnectionInfo } from '../api/useConnection'
+import { usePstlWeb3ModalStore } from '../api/usePstlWeb3ModalStore'
 
 const WC_DESKTOP_GNOSIS_SAFE_APP_NAME = 'WalletConnect Safe App'
 const WC_MOBILE_GNOSIS_SAFE_APP_NAME = 'Safe'
@@ -51,6 +52,13 @@ function getWcPeerMetadata(provider: any | undefined): WalletMetaData {
 }
 
 export function useWalletMetadata(): WalletMetaData {
+  const {
+    state: {
+      userOptions: {
+        connectors: { overrides }
+      }
+    }
+  } = usePstlWeb3ModalStore()
   const { connector, address: account } = useUserConnectionInfo()
   const [metadata, setMetadata] = useState<WalletMetaData>(METADATA_DISCONNECTED)
 
@@ -62,11 +70,11 @@ export function useWalletMetadata(): WalletMetaData {
       const isWalletConnect = provider?.isWalletConnect
 
       if (isWalletConnect) setMetadata(getWcPeerMetadata(provider))
-      else setMetadata({ walletName: connector?.name || connector?.id, icon: undefined })
+      else setMetadata({ walletName: connector?.name || connector?.id, icon: overrides?.[connector?.name]?.logo })
     }
 
     getMetadata()
-  }, [connector, account])
+  }, [connector, account, overrides])
 
   return metadata
 }

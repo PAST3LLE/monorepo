@@ -1,7 +1,7 @@
 import { ButtonVariations, ColumnCenter, PstlButton, RowCenter, SpinnerCircle } from '@past3lle/components'
 import { ThemeProvider, createCustomTheme } from '@past3lle/theme'
-import { devWarn, getExpirementalCookieStore as getCookieStore } from '@past3lle/utils'
-import React, { ReactNode, useCallback, useEffect, useState } from 'react'
+import { devWarn, getExpirementalCookieStore as getCookieStore, truncateLongString } from '@past3lle/utils'
+import React, { ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTheme } from 'styled-components'
 import { parseEther } from 'viem'
 import { goerli, polygon, polygonMumbai } from 'viem/chains'
@@ -11,10 +11,15 @@ import { infuraProvider } from 'wagmi/providers/infura'
 
 import { TransactionsButton } from '../components/buttons/Transactions'
 import { RouterCtrl } from '../controllers'
+import { DEFAULT_TX } from '../controllers/TransactionsCtrl'
 import { RouterView } from '../controllers/types'
 import { useModalActions, usePstlWeb3Modal, useUserConnectionInfo } from '../hooks'
 import { useLimitChainsAndSwitchCallback } from '../hooks/api/useLimitChainsAndSwitchCallback'
-import { useAddPendingTransaction, useTransactions } from '../hooks/api/useTransactions'
+import {
+  useAddPendingTransaction,
+  useTransactions,
+  useUpdateTransactionsViaCallback
+} from '../hooks/api/useTransactions'
 import { PstlWeb3ModalProps, PstlW3Providers as WalletModal } from '../providers'
 import { addConnector } from '../providers/utils'
 import { COMMON_CONNECTOR_OVERRIDES, DEFAULT_PROPS, DEFAULT_PROPS_WEB3AUTH, pstlModalTheme } from './config'
@@ -1343,10 +1348,57 @@ export default {
         <ModalOpenButton view="ConnectorConfigType" />
       </PstlW3Providers>
     )
-  })
+  }),
+  TransactionCard: <BaseModal />
 }
 
-function ModalOpenButton({ view = 'HidDeviceOptions' }: { view?: RouterView }) {
+function BaseModal(): React.ReactElement<any, any> {
+  const addPending = useUpdateTransactionsViaCallback()
+  const callback = useCallback(
+    () =>
+      addPending(() => [
+        {
+          ...DEFAULT_TX,
+          safeTxInfo: {
+            confirmationsRequired: 5,
+            confirmations: [
+              {
+                signature: truncateLongString(
+                  '0xf5b96bc93db9edf9bd9e87b110267aa9464a2a6cb33ca5f1b09198a286837c83683b879db166519dc0f8546ea7579edad2b813258e2a93656f2c24f90bc824641c'
+                ),
+                owner: '0x4cdbf9243393342A988D2C41Fe8bF7DcdFe82A3b',
+                submissionDate: new Date().toISOString()
+              }
+            ]
+          },
+          chainId: 5,
+          dateAdded: Date.now() - 1_000_000,
+          walletType: 'SAFE',
+          safeTxHash: '0x123',
+          transactionHash: undefined,
+          nonce: 100,
+          status: 'pending'
+        }
+      ]),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  )
+
+  const modal = useMemo(
+    (): React.ReactElement<any, any> =>
+      withThemeProvider(() => (
+        <PstlW3Providers config={DEFAULT_PROPS_WEB3AUTH}>
+          <ModalOpenButton view="Transactions" callback={callback} />
+        </PstlW3Providers>
+      )),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  )
+
+  return <>{modal}</>
+}
+
+function ModalOpenButton({ view = 'HidDeviceOptions', callback }: { view?: RouterView; callback?: () => void }) {
   const { open } = usePstlWeb3Modal()
   const { address, connector } = useUserConnectionInfo()
 
@@ -1356,6 +1408,7 @@ function ModalOpenButton({ view = 'HidDeviceOptions' }: { view?: RouterView }) {
         buttonVariant={ButtonVariations.PRIMARY}
         onClick={() => {
           open()
+          callback?.()
           RouterCtrl.push(view)
         }}
       >
