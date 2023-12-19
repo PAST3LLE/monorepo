@@ -1,11 +1,11 @@
 import { RowCenter, SpinnerCircle } from '@past3lle/components'
 import { useAddPendingTransaction } from '@past3lle/web3-modal'
 import { Web3Button } from '@web3modal/react'
-import React, { Fragment, useCallback, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { parseEther } from 'viem'
-import { Address, useBalance, useSendTransaction } from 'wagmi'
+import { useBalance, useSendTransaction } from 'wagmi'
 
-import { ForgeW3Providers, useForgeUnpreparedClaimLockedSkill, useW3Modal, useW3UserConnectionInfo } from '..'
+import { ForgeW3Providers, useW3Modal, useW3UserConnectionInfo } from '..'
 import { THEME, commonProps, contractProps } from './config'
 
 /* 
