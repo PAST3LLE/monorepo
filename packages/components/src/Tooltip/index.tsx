@@ -43,7 +43,8 @@ const InfoCircleContainer = styled(RowCenter)<{ size?: number }>`
     text-transform: lowercase;
   }
 `
-export function InfoCircle({ label, size = 20, ...boxProps }: { label: string; size?: number } & RowProps) {
+export type InfoCircleProps = { label: string; size?: number } & RowProps
+export function InfoCircle({ label, size = 20, ...boxProps }: InfoCircleProps) {
   return (
     <InfoCircleContainer
       backgroundColor="ghostwhite"
