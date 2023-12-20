@@ -5,7 +5,7 @@ import React from 'react'
 import styled, { useTheme } from 'styled-components'
 
 import { useSidePanelWriteAtom } from '../../../state/SidePanel'
-import { ThemedButtonActions } from '../../Common/Button'
+import { ThemedButtonActions } from '../../Common/Button/common'
 import { CursiveMonoHeader, MonospaceText } from '../../Common/Text'
 import { SidePanel } from '../BaseSidePanel'
 

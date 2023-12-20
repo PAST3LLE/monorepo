@@ -2,7 +2,7 @@ import { Column, RowCenter, Text } from '@past3lle/components'
 import { upToExtraSmall } from '@past3lle/theme'
 import styled from 'styled-components'
 
-import { ThemedButtonActions } from '../../Common/Button'
+import { ThemedButtonActions } from '../../Common/Button/common'
 import { ActiveSkillPanelContainer, SkillRarityLabel, SkillsRowContainer } from '../ActiveSkillPanel/styleds'
 
 export const TradeAndUnlockPanelContainer = styled(ActiveSkillPanelContainer)`

@@ -4,7 +4,7 @@ import React, { useMemo } from 'react'
 
 import { useSidePanelWriteAtom } from '../../../state/SidePanel'
 import { getSkillShopUri } from '../../../utils/skills'
-import { ThemedButtonActions, ThemedButtonExternalLink } from '../../Common/Button'
+import { ThemedButtonActions, ThemedButtonExternalLink } from '../../Common/Button/common'
 
 export function SkillActionButton({
   skill,
