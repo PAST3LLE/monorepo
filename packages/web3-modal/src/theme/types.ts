@@ -71,6 +71,7 @@ export interface SharedModalTheme {
   text?: {
     main?: FontStyles
     header?: FontStyles
+    strong?: FontStyles
     subHeader?: FontStyles
     small?: FontStyles
     error?: FontStyles
@@ -142,5 +143,5 @@ export type PstlModalThemeExtension = Partial<ThemeContentPartsRequired> & {
 export type RequiredPstlModalThemeExtension = DeepRequired<PstlModalThemeExtension>
 declare module 'styled-components' {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  export interface DefaultTheme extends PstlModalTheme, ThemeBaseRequired {}
+  export interface DefaultTheme extends PstlModalTheme, ThemeBaseRequired { }
 }

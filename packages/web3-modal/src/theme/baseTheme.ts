@@ -135,6 +135,7 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
               weight: 100,
               letterSpacing: '-1px'
             },
+            strong: { ...DEFAULT_FONT_PROPS, weight: 600 },
             small: {
               ...DEFAULT_FONT_PROPS,
               weight: 500,

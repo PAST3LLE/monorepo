@@ -68,7 +68,7 @@ type TextThemeTypes<ST extends keyof RequiredPstlSubModalsTheme = keyof Required
   modal: ST
   node: keyof RequiredPstlSubModalsTheme[ST]['text']
 }
-export const ModalText = styled(Text.Main)<{ fontWeight?: number } & TextThemeTypes>`
+export const ModalText = styled(Text.Main)<{ fontWeight?: number; gap?: string } & TextThemeTypes>`
   color: ${(props) => props.theme?.modals?.[props.modal]?.text?.[props.node]?.color};
   font-family: ${(props) => props.theme?.modals?.[props.modal]?.text?.[props.node]?.family};
   font-size: ${(props) => props.theme?.modals?.[props.modal]?.text?.[props.node]?.size};
@@ -81,6 +81,8 @@ export const ModalText = styled(Text.Main)<{ fontWeight?: number } & TextThemeTy
   text-align: ${(props) => props.theme?.modals?.[props.modal]?.text?.[props.node]?.textAlign};
   text-shadow: ${(props) => props.theme?.modals?.[props.modal]?.text?.[props.node]?.textShadow};
   text-transform: ${(props) => props.theme?.modals?.[props.modal]?.text?.[props.node]?.textTransform};
+
+  gap: ${({ gap = '0' }) => gap};
 `
 
 export const ModalTitleText = styled(Text.Main).attrs((props) => ({
@@ -127,7 +129,8 @@ export const ModalContainer = styled(ColumnCenter)<ContainerThemeTypes>`
   background: ${({ theme, modal, node }) => theme.modals?.[modal]?.container?.[node]?.background};
   border-radius: ${({ theme, modal, node }) => theme.modals?.[modal]?.container?.[node]?.border?.radius};
 
-  &::-webkit-scrollbar {
+  &::-webkit-scrollbar,
+  *::-webkit-scrollbar {
     display: none;
   }
   -ms-overflow-style: none;

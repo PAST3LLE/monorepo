@@ -1,11 +1,30 @@
-import { Column, ColumnCenter, type ArrowLeft as Icon, Row, RowBetween, RowCenter } from '@past3lle/components'
+import {
+  Column,
+  ColumnCenter,
+  type ArrowLeft as Icon,
+  Row,
+  RowBetween,
+  RowCenter,
+  Slash,
+  SpinnerCircle,
+  ThumbsUp
+} from '@past3lle/components'
+import React from 'react'
+import { AnyTransactionReceipt } from 'src/controllers/TransactionsCtrl/types'
 import styled from 'styled-components'
 
 import { HidModalTextInput } from '../HidDeviceOptionsModal/styleds'
 import { ModalText, WalletsWrapper } from '../common/styled'
 
+export const SafeConfirmationSquareGradient = styled(Column)<{ borderColor?: string; gradientColor?: string }>`
+  background: linear-gradient(250deg, black 60%, ${(props) => props.gradientColor});
+  border: 3px solid ${(props) => props.borderColor};
+
+  transition: background 300ms ease-in-out, border 300ms ease-in-out;
+`
 export const SafeConfirmationSquare = styled(Row)<{ disabled?: boolean }>`
-  filter: ${(props) => (props.disabled ? 'grayscale(1) brightness(0.5)' : 'unset')};
+  filter: ${(props) => (props.disabled ? 'grayscale(1) brightness(0.5)' : 'grayscale(0) brightness(1)')};
+  transition: filter 750ms ease-out;
 `
 export const SafeConfirmationCardWrapper = styled(ColumnCenter)``
 export const SafeConfirmationsGridWrapper = styled(WalletsWrapper)`
@@ -80,3 +99,61 @@ export const TransactionInput = styled(HidModalTextInput)`
   width: 80%;
   margin: 0;
 `
+
+// const SAFE_GREEN = '#12ff80'
+// const SAFE_GREEN_LIGHTER = '#76f3b0b0'
+const SAFE_GREEN_MINTIER = '#4def98'
+
+export function statusToCardBgColor(status: AnyTransactionReceipt['status']) {
+  switch (status) {
+    case 'success':
+      return 'linear-gradient(45deg,#000000ba 60%,#062e1dd4)'
+    case 'reverted':
+      return 'linear-gradient(45deg,#000000ba 40%,#2c0e0ebd)'
+    default:
+      return '#00000091'
+  }
+}
+
+export function statusToConfirmationSpecialColors(status: AnyTransactionReceipt['status']) {
+  switch (status) {
+    case 'success':
+      return { gradientColor: SAFE_GREEN_MINTIER, borderColor: SAFE_GREEN_MINTIER }
+    default:
+      return { gradientColor: 'gray', borderColor: 'gray' }
+  }
+}
+
+export function statusToPillProps(status: AnyTransactionReceipt['status']): PillProps {
+  switch (status) {
+    case 'success':
+    case 'replaced-success':
+      return {
+        backgroundColor: '#708c7e',
+        color: 'ghostwhite',
+        Icon: ThumbsUp
+      }
+    case 'reverted':
+      return {
+        backgroundColor: '#994e4e',
+        color: 'ghostwhite',
+        tooltip: {
+          text: 'Transaction was not confirmed. This may mean the transaction reverted, cancelled, or overwritten by another transaction e.g speed-up',
+          backgroundColor: '#c03838'
+        },
+        Icon: Slash
+      }
+    case 'pending':
+    case 'replaced-pending':
+      return {
+        backgroundColor: '#657bb9a8',
+        color: 'ghostwhite',
+        Icon: (() => <SpinnerCircle stroke="white" />) as any
+      }
+  }
+}
+
+export const SubheaderText = styled(ModalText).attrs({ modal: 'transactions', node: 'subHeader' })``
+export const MainText = styled(ModalText).attrs({ modal: 'transactions', node: 'main' })``
+export const SmallText = styled(ModalText).attrs({ modal: 'transactions', node: 'small' })``
+export const StrongText = styled(ModalText).attrs({ modal: 'transactions', node: 'strong' })``

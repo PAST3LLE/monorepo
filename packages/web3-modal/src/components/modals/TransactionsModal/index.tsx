@@ -1,14 +1,4 @@
-import {
-  Column,
-  ColumnCenter,
-  Row,
-  RowCenter,
-  RowStart,
-  Search,
-  Slash,
-  SpinnerCircle,
-  ThumbsUp
-} from '@past3lle/components'
+import { CheckCircle, Column, ColumnCenter, Row, RowCenter, RowStart, Search } from '@past3lle/components'
 import { useDebouncedChangeHandler } from '@past3lle/hooks'
 import { Address } from '@past3lle/types'
 import { truncateAddress, truncateHash, truncateLongString } from '@past3lle/utils'
@@ -27,19 +17,28 @@ import {
 import { useTransactions } from '../../../hooks/api/useTransactions'
 import { PstlWeb3ModalProps } from '../../../providers'
 import { MouseoverCircle } from '../../tooltips/MouseoverCircle'
-import { ModalButton, ModalText } from '../common/styled'
+import { ModalButton } from '../common/styled'
 import {
-  PillProps,
+  MainText,
   SafeConfirmationCardWrapper,
   SafeConfirmationSquare,
+  SafeConfirmationSquareGradient,
   SafeConfirmationsGridWrapper,
+  SmallText,
   StatusPill,
+  StrongText,
+  SubheaderText,
   TransactionInput,
   TransactionRow,
   TransactionTitle,
   TransactionWrapper,
-  TransactionsModalWrapper
+  TransactionsModalWrapper,
+  statusToCardBgColor,
+  statusToConfirmationSpecialColors,
+  statusToPillProps
 } from './styled'
+
+const SAFE_LOGO_URL = 'https://app.safe.global/images/logo-round.svg'
 
 function TransactionModalContent() {
   const { transactions } = useTransactions()
@@ -122,25 +121,23 @@ export const TransactionCard = memo(function TransactionComponent({
   blockExplorerUris?: PstlWeb3ModalProps['blockExplorerUris']
   connectorMetadata?: WalletMetaData
 }) {
-  const { Icon, tooltip, ...statusStyleProps } = _statusToPillProps(transaction.status)
+  const { Icon, tooltip, ...statusStyleProps } = statusToPillProps(transaction.status)
   const explorerUri = blockExplorerUris?.default.url
   const formattedHash = transaction.transactionHash ? truncateHash(transaction.transactionHash, { type: 'short' }) : '-'
 
   return (
-    <TransactionWrapper background={_statusToCardBgColor(transaction.status)}>
+    <TransactionWrapper background={statusToCardBgColor(transaction.status)}>
       {/* NONCE */}
       {!!transaction?.nonce && (
         <TransactionRow>
           <TransactionTitle>NONCE</TransactionTitle>
-          <ModalText modal="transactions" node="main">
-            {transaction.nonce || 'n/a'}
-          </ModalText>
+          <MainText>{transaction.nonce || 'n/a'}</MainText>
         </TransactionRow>
       )}
       {/* TX HASH */}
       <TransactionRow>
         <TransactionTitle>TX HASH</TransactionTitle>
-        <ModalText modal="transactions" node="main">
+        <MainText>
           {transaction.transactionHash ? (
             explorerUri ? (
               <a href={`${explorerUri}/tx/${transaction.transactionHash}`} target="_blank" referrerPolicy="no-referrer">
@@ -154,36 +151,32 @@ export const TransactionCard = memo(function TransactionComponent({
           ) : (
             '-'
           )}
-        </ModalText>
+        </MainText>
       </TransactionRow>
       {/* SAFE HASH */}
       {!!transaction?.safeTxHash && (
         <TransactionRow>
           <TransactionTitle>SAFE TX HASH</TransactionTitle>
-          <ModalText modal="transactions" node="main">
+          <MainText>
             {transaction.walletType === 'SAFE'
               ? transaction.safeTxHash
                 ? truncateHash(transaction.safeTxHash, { type: 'short' })
                 : 'error getting hash!'
               : 'n/a'}
-          </ModalText>
+          </MainText>
         </TransactionRow>
       )}
       {/* WALLET TYPE */}
       <TransactionRow>
         <TransactionTitle>WALLET TYPE</TransactionTitle>
-        <ModalText modal="transactions" node="main">
-          {transaction.walletType === 'SAFE' ? 'MULTISIG' : transaction.walletType}
-        </ModalText>
+        <MainText>{transaction.walletType === 'SAFE' ? 'MULTISIG' : transaction.walletType}</MainText>
       </TransactionRow>
       {/* STATUS */}
       <TransactionRow>
         <TransactionTitle>STATUS</TransactionTitle>
         <StatusPill gap="3" {...statusStyleProps}>
           {Icon && <Icon />}
-          <ModalText modal="transactions" node="small">
-            {transaction.status}
-          </ModalText>
+          <SmallText>{transaction.status}</SmallText>
           {tooltip && (
             <MouseoverCircle
               text={tooltip.text}
@@ -200,9 +193,7 @@ export const TransactionCard = memo(function TransactionComponent({
         <TransactionRow>
           <TransactionTitle>REASON</TransactionTitle>
           <StatusPill gap="3" {...statusStyleProps}>
-            <ModalText modal="transactions" node="small">
-              {transaction.replaceReason}
-            </ModalText>
+            <SmallText>{transaction.replaceReason}</SmallText>
             <MouseoverCircle text={transaction.replaceReason} label="?" size={14} margin="0" />
           </StatusPill>
         </TransactionRow>
@@ -210,9 +201,7 @@ export const TransactionCard = memo(function TransactionComponent({
       {/* CREATION DATE */}
       <TransactionRow>
         <TransactionTitle>CREATION DATE</TransactionTitle>
-        <ModalText modal="transactions" node="small" fontSize="1em">
-          {formatDistanceToNow(transaction.dateAdded)} ago
-        </ModalText>
+        <SmallText fontSize="1em">{formatDistanceToNow(transaction.dateAdded)} ago</SmallText>
       </TransactionRow>
       {/* CONFIRMATIONS */}
       {!!transaction.safeTxInfo && (
@@ -226,60 +215,69 @@ const SafeConfirmationsCard = memo(
   ({
     safeTxInfo,
     connectorMetadata
-  }: Pick<Required<AnyTransactionReceipt>, 'safeTxInfo'> & { connectorMetadata?: WalletMetaData }) => (
-    <SafeConfirmationCardWrapper marginTop="2rem" gap="0">
-      <RowStart gap="0.2rem">
-        <img
-          src={connectorMetadata?.icon || 'https://avatars.githubusercontent.com/u/102983781?s=200&v=4'}
-          style={{ maxWidth: 25 }}
-        />
-        <ModalText modal="transactions" node="subHeader" marginRight="auto">
-          SAFE SIGNATURES REQUIRED: {safeTxInfo.confirmationsRequired}
-        </ModalText>
-      </RowStart>
-      <SafeConfirmationsGridWrapper view="grid">
-        {Array.from({ length: safeTxInfo.confirmationsRequired }).map((_, i) => {
-          const confirmation = { signature: '', owner: '', ...safeTxInfo.confirmations?.[i] }
-          return (
-            <SafeConfirmationSquare key={confirmation.signature} disabled={!confirmation?.signature}>
-              <Column
-                gap="0.1rem"
-                flex="1"
-                padding="0.5rem"
-                borderRadius="8px"
-                backgroundColor={_statusToPillProps('pending').backgroundColor}
-              >
-                <ModalText modal="transactions" node="main" display="flex">
-                  CONFIRMATION{' '}
-                  <ModalText modal="transactions" node="small" display="inline-flex" marginLeft="auto">
-                    {i + 1}/{safeTxInfo.confirmationsRequired}
-                  </ModalText>
-                </ModalText>
-                <Row gap="0.5rem">
-                  <img src="https://avatars.githubusercontent.com/u/102983781?s=200&v=4" style={{ maxWidth: '21%' }} />
-                  <Column flex="1">
-                    <TransactionRow fontSize="1em" borderBottom="none">
-                      <TransactionTitle>SIGNATURE</TransactionTitle>
-                      <ModalText modal="transactions" node="main">
-                        {truncateLongString(confirmation.signature as Address)}
-                      </ModalText>
-                    </TransactionRow>
+  }: Pick<Required<AnyTransactionReceipt>, 'safeTxInfo'> & { connectorMetadata?: WalletMetaData }) => {
+    const { confirmationsRequired, confirmations = [] } = safeTxInfo
+    const confirmationsLeft = Math.max(0, confirmationsRequired - confirmations.length)
+    return (
+      <SafeConfirmationCardWrapper marginTop="2rem" gap="0">
+        <RowStart gap="0.2rem">
+          <img src={connectorMetadata?.icon || SAFE_LOGO_URL} style={{ maxWidth: 25 }} />
+          <SubheaderText marginRight="auto" display="flex" alignItems="center" gap="0.3rem">
+            {!!confirmationsLeft ? (
+              <>
+                SAFE SIGNATURES REQUIRED!
+                <StrongText display="inline">
+                  {confirmationsLeft} of {confirmationsRequired} REMAINING
+                </StrongText>
+              </>
+            ) : (
+              <>
+                SAFE SIGNATURES <StrongText display="inline">COMPLETED</StrongText>
+                <CheckCircle size={22} style={{ marginBottom: 2 }} />
+              </>
+            )}
+          </SubheaderText>
+        </RowStart>
+        <SafeConfirmationsGridWrapper view="grid">
+          {Array.from({ length: confirmationsRequired }).map((_, i) => {
+            const confirmation = { signature: '', owner: '', ...(confirmations as any)?.[i] }
+            return (
+              <SafeConfirmationSquare key={confirmation.signature} disabled={!confirmation?.signature}>
+                <SafeConfirmationSquareGradient
+                  gap="0.1rem"
+                  flex="1"
+                  padding="0.5rem"
+                  borderRadius="8px"
+                  {...statusToConfirmationSpecialColors(!!confirmation?.signature ? 'success' : 'pending')}
+                >
+                  <MainText display="flex">
+                    CONFIRMATION{' '}
+                    <SmallText display="inline-flex" marginLeft="auto">
+                      {i + 1}/{confirmationsRequired}
+                    </SmallText>
+                  </MainText>
+                  <Row gap="0.5rem">
+                    <img src={SAFE_LOGO_URL} style={{ maxWidth: '19%' }} />
+                    <Column flex="1">
+                      <TransactionRow fontSize="1em" borderBottom="none" title={confirmation.signature}>
+                        <TransactionTitle>SIGNATURE</TransactionTitle>
+                        <MainText>{truncateLongString(confirmation.signature as Address)}</MainText>
+                      </TransactionRow>
 
-                    <TransactionRow fontSize="1em" borderBottom="none">
-                      <TransactionTitle>OWNER</TransactionTitle>
-                      <ModalText modal="transactions" node="main">
-                        {truncateAddress(confirmation.owner as Address)}
-                      </ModalText>
-                    </TransactionRow>
-                  </Column>
-                </Row>
-              </Column>
-            </SafeConfirmationSquare>
-          )
-        })}
-      </SafeConfirmationsGridWrapper>
-    </SafeConfirmationCardWrapper>
-  )
+                      <TransactionRow fontSize="1em" borderBottom="none" title={confirmation.owner}>
+                        <TransactionTitle>OWNER</TransactionTitle>
+                        <MainText>{truncateAddress(confirmation.owner as Address)}</MainText>
+                      </TransactionRow>
+                    </Column>
+                  </Row>
+                </SafeConfirmationSquareGradient>
+              </SafeConfirmationSquare>
+            )
+          })}
+        </SafeConfirmationsGridWrapper>
+      </SafeConfirmationCardWrapper>
+    )
+  }
 )
 
 const TransactionSearchBar = ({
@@ -293,9 +291,9 @@ const TransactionSearchBar = ({
 )
 
 const NoTxFoundMessage = () => (
-  <ModalText modal="base" node="subHeader" fontSize="2em" textAlign="center">
+  <SubheaderText fontSize="2em" textAlign="center">
     :[ no transactions found!
-  </ModalText>
+  </SubheaderText>
 )
 
 const ConnectButton = ({ callback }: { callback: () => Promise<void> }) => (
@@ -306,46 +304,6 @@ const ConnectButton = ({ callback }: { callback: () => Promise<void> }) => (
 
 function _formatDateISO(datems: number) {
   return new Date(datems).toISOString()
-}
-
-function _statusToCardBgColor(status: AnyTransactionReceipt['status']) {
-  switch (status) {
-    case 'success':
-      return 'linear-gradient(45deg,#000000ba 60%,#062e1dd4)'
-    case 'reverted':
-      return 'linear-gradient(45deg,#000000ba 40%,#2c0e0ebd)'
-    default:
-      return '#00000091'
-  }
-}
-
-function _statusToPillProps(status: AnyTransactionReceipt['status']): PillProps {
-  switch (status) {
-    case 'success':
-    case 'replaced-success':
-      return {
-        backgroundColor: '#708c7e',
-        color: 'ghostwhite',
-        Icon: ThumbsUp
-      }
-    case 'reverted':
-      return {
-        backgroundColor: '#994e4e',
-        color: 'ghostwhite',
-        tooltip: {
-          text: 'Transaction was not confirmed. This may mean the transaction reverted, cancelled, or overwritten by another transaction e.g speed-up',
-          backgroundColor: '#c03838'
-        },
-        Icon: Slash
-      }
-    case 'pending':
-    case 'replaced-pending':
-      return {
-        backgroundColor: '#657bb9a8',
-        color: 'ghostwhite',
-        Icon: (() => <SpinnerCircle stroke="white" />) as any
-      }
-  }
 }
 
 const _handleTxFilter = (search: string) => (tx: AnyTransactionReceipt) => {
