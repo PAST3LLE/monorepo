@@ -36,7 +36,7 @@ export function TxHistoryButton(props: InventoryButtonProps) {
 
 const Wrapper = styled.div`
   position: relative;
-  height: 100%;
+  height: 80%;
 `
 const NotificationDot = styled(InfoCircle)`
   &&&&& {
