@@ -1,9 +1,16 @@
+import { TransactionsButton as PstlTransactionsButton } from './components/buttons/Transactions'
 import { PstlWeb3Modal } from './components/modals'
 import {
+  useAddPendingTransaction,
+  useAddPendingTransactionsBatch,
   useAllWeb3Modals,
+  useHasPendingTransactions,
   useIsSafeViaWc,
   useIsSafeWallet,
   useLimitChainsAndSwitchCallback,
+  usePendingEoaTransactions,
+  usePendingSafeTransactions,
+  usePendingTransactions,
   useAccountNetworkActions as usePstlAccountNetworkActions,
   useConnectDisconnect as usePstlConnectDisconnect,
   useConnection as usePstlConnection,
@@ -11,13 +18,7 @@ import {
   useWaitForTransaction as usePstlWaitForTransaction,
   useWatchPendingTransactions as usePstlWatchPendingTransactions,
   usePstlWeb3Modal,
-  useAllWeb3Modals as usePstlWeb3Modals,
-  useAddPendingTransaction,
-  useAddPendingTransactionsBatch,
-  useHasPendingTransactions,
-  usePendingTransactions,
-  usePendingEoaTransactions,
-  usePendingSafeTransactions
+  useAllWeb3Modals as usePstlWeb3Modals
 } from './hooks'
 import {
   type Chain,
@@ -45,6 +46,7 @@ export * from './types'
 
 export {
   PstlWeb3Modal,
+  PstlTransactionsButton,
   // hooks
   usePstlAccountNetworkActions,
   usePstlConnectDisconnect,
