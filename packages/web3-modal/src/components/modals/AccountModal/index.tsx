@@ -131,8 +131,6 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
           >
             {`${isSmallerScreen ? '' : 'View on '}Explorer`}
           </AccountModalButton>
-          {/* TODO: remove? */}
-          <TransactionsButton />
         </FooterActionButtonsRow>
       </AddressAndBalanceColumnContainer>
       {/* Wallet & Network Row */}
