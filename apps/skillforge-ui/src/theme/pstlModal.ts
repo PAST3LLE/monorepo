@@ -83,6 +83,14 @@ export const pstlModalTheme = createTheme({
         connectionImages: {
           size: '5.5em'
         }
+      },
+      transactions: {
+        baseFontSize: 16,
+        text: {
+          subHeader: {
+            color: 'ghostwhite'
+          }
+        }
       }
     }
   }
