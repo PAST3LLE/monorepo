@@ -19,7 +19,7 @@ export function TxHistoryButton(props: InventoryButtonProps) {
 
   const { length } = usePendingTransactions()
   return (
-    <div style={{ position: 'relative', height: '100%' }} onClick={() => open({ route: 'Transactions' })}>
+    <Wrapper onClick={() => open({ route: 'Transactions' })}>
       {!!length && <NotificationDot backgroundColor="#4def98" label={length.toString() + ' pending'} />}
       <HeaderButton
         iconKey="transactions"
@@ -30,10 +30,14 @@ export function TxHistoryButton(props: InventoryButtonProps) {
         height="100%"
         {...props}
       />
-    </div>
+    </Wrapper>
   )
 }
 
+const Wrapper = styled.div`
+  position: relative;
+  height: 100%;
+`
 const NotificationDot = styled(InfoCircle)`
   &&&&& {
     position: absolute;
