@@ -38,7 +38,9 @@ import {
   statusToPillProps
 } from './styled'
 
-const SAFE_LOGO_URL = 'https://app.safe.global/images/logo-round.svg'
+const FALLBACK_SAFE_LOGO = 'https://app.safe.global/images/logo-round.svg'
+const DEFAULT_DATA_SORT_KEY = 'dateAdded'
+const DEFAULT_DATA_SORT_ORDER = 'descending'
 
 function TransactionModalContent() {
   const { transactions } = useTransactions()
@@ -59,7 +61,7 @@ function TransactionModalContent() {
       .filter(_handleTxFilter(dbSearch))
       // Sort descending nonce.
       // 0 nonce shows top (new tx)
-      .sort(_sortBy('dateAdded', 'descending'))
+      .sort(_sortBy(DEFAULT_DATA_SORT_KEY, DEFAULT_DATA_SORT_ORDER))
       .map((transaction, idx) => (
         <TransactionCard
           key={`${transaction?.transactionHash || transaction?.safeTxHash || idx}_${transaction.nonce}`}
@@ -221,7 +223,7 @@ const SafeConfirmationsCard = memo(
     return (
       <SafeConfirmationCardWrapper marginTop="2rem" gap="0">
         <RowStart gap="0.2rem">
-          <img src={connectorMetadata?.icon || SAFE_LOGO_URL} style={{ maxWidth: 25 }} />
+          <img src={connectorMetadata?.icon || FALLBACK_SAFE_LOGO} style={{ maxWidth: 25 }} />
           <SubheaderText marginRight="auto" display="flex" alignItems="center" gap="0.3rem">
             {!!confirmationsLeft ? (
               <>
@@ -257,7 +259,7 @@ const SafeConfirmationsCard = memo(
                     </SmallText>
                   </MainText>
                   <Row gap="0.5rem">
-                    <img src={SAFE_LOGO_URL} style={{ maxWidth: '19%' }} />
+                    <img src={FALLBACK_SAFE_LOGO} style={{ maxWidth: '19%' }} />
                     <Column flex="1">
                       <TransactionRow fontSize="1em" borderBottom="none" title={confirmation.signature}>
                         <TransactionTitle>SIGNATURE</TransactionTitle>
