@@ -18,7 +18,7 @@ export const ThemedButton = styled(Button).attrs(() => ({}))<{
 }>`
   background-color: ${({ theme, bgColor = theme.mainBg }) => bgColor};
   box-shadow: 4px 4px 1px 0px #000000bd;
-  padding: 0rem 2rem;
+  padding: 0rem 1rem;
   ${({ invert, theme, bgImage }) =>
     invert &&
     !bgImage &&
@@ -84,6 +84,20 @@ export const ThemedButtonActions = styled(ThemedButton)`
     `}
 `
 
+const strobeAnimation = css`
+  @keyframes strobeInvert {
+    0% {
+      filter: invert(0) hue-rotate(0deg);
+    }
+    50% {
+      filter: invert(1) hue-rotate(225deg);
+    }
+    100% {
+      filter: invert(0) hue-rotate(0deg);
+    }
+  }
+`
+
 export const StyledHeaderButton = styled(ThemedButton).attrs(
   ({
     bgImage,
@@ -101,7 +115,14 @@ export const StyledHeaderButton = styled(ThemedButton).attrs(
     gap: '0 0.5rem',
     height: height || '80%'
   })
-)``
+)<{ animate?: boolean }>`
+  ${strobeAnimation}
+
+  animation-name: ${({ animate }) => (animate ? 'strobeInvert' : '')};
+  animation-duration: 5s;
+  animation-iteration-count: ${({ animate }) => (animate ? 'Infinite' : 0)};
+  filter: invert(0);
+`
 
 interface HeaderButtonProps {
   bgImage: GenericImageSrcSet<MediaWidths> | null
@@ -112,6 +133,7 @@ interface HeaderButtonProps {
   iconKey: keyof Omit<ReturnType<typeof useAssetsMap>['icons'], 'chains' | 'rarity'>
   title?: string
   className?: string
+  animate?: boolean
   onClick?: () => void
 }
 export function HeaderButton({
@@ -123,9 +145,10 @@ export function HeaderButton({
   className,
   title,
   iconKey,
+  animate,
   onClick,
   ...buttonProps
-}: HeaderButtonProps & ButtonProps) {
+}: HeaderButtonProps & Omit<ButtonProps, 'bgImage'>) {
   const assetsMap = useAssetsMap()
 
   const [{ width = 0 }] = useForgeWindowSizeAtom()
@@ -136,6 +159,7 @@ export function HeaderButton({
       bgImage={bgImage}
       showFlexRow={width > MEDIA_WIDTHS.upToSmall}
       title={title}
+      animate={animate}
       {...buttonProps}
       onClick={onClick}
     >

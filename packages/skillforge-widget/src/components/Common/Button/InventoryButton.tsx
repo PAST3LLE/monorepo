@@ -18,6 +18,7 @@ export function InventoryButton(props: InventoryButtonProps) {
 
   return (
     <HeaderButton
+      iconKey="inventory"
       bgImage={srcSet.EMPTY_SKILL_DDPX_URL_MAP}
       fullHeader="View Stash"
       shortHeader="Stash"

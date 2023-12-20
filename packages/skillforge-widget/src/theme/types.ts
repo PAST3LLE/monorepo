@@ -51,6 +51,7 @@ export interface SkillForgeAssetsMap<
       connection: string
       inventory: string
       shop: string
+      transactions: string
       chains: ChainsIcons<SC>
       rarity: RarityIcons
     }
@@ -132,5 +133,5 @@ declare module 'styled-components' {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
   export interface DefaultTheme
     extends SkillForgeTheme<ChainsPartialReadonly<SupportedForgeChains>>,
-      ThemeBaseRequired {}
+    ThemeBaseRequired { }
 }
