@@ -40,6 +40,7 @@ export const ASSETS_MAP = {
     connection: CONNECTION_ICON,
     inventory: INVENTORY_ICON,
     shop: SHOP_ICON,
+    transactions: CONNECTION_ICON,
     chains: {
       disconnected: LOCK_ICON,
       [5]: ETHEREUM_LOGO,
