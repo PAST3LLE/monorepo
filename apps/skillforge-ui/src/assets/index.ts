@@ -10,6 +10,7 @@ import LEGENDARY_RARITY_ICON from 'assets/png/icons/icons8-diamonds-legendary-64
 import RARE_RARITY_ICON from 'assets/png/icons/icons8-diamonds-rare-64.png'
 import CONNECTION_ICON from 'assets/png/icons/icons8-internet-50.png'
 import LOCK_ICON from 'assets/png/icons/icons8-lock-64.png'
+import TRANSACTION_ICON from 'assets/png/icons/icons8-transaction-90-green.png'
 import INVENTORY_ICON from 'assets/png/icons/icons8-treasure-chest-90-green.png'
 import SHOP_ICON from 'assets/png/icons/pixelated-shirt.png'
 import ACCOUNT_BACKGROUND from 'assets/png/spray-account.png'
@@ -40,7 +41,7 @@ export const ASSETS_MAP = {
     connection: CONNECTION_ICON,
     inventory: INVENTORY_ICON,
     shop: SHOP_ICON,
-    transactions: CONNECTION_ICON,
+    transactions: TRANSACTION_ICON,
     chains: {
       disconnected: LOCK_ICON,
       [5]: ETHEREUM_LOGO,
