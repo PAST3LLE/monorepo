@@ -10,7 +10,6 @@ import { useConnectedChainAndWalletLogo } from '../../../hooks/misc/useLogos'
 import { useDeriveAppType } from '../../../providers/utils/connectors'
 import { PstlModalTheme } from '../../../theme'
 import { ConnectorEnhanced } from '../../../types'
-import { TransactionsButton } from '../../buttons/Transactions'
 import { BaseModalProps, ModalId } from '../common/types'
 import { WalletChainLogos } from './WalletChainLogos'
 import {

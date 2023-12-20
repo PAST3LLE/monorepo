@@ -1,11 +1,15 @@
-import { ButtonVariations, PstlButton, RowCenter, SpinnerCircle } from '@past3lle/components'
-import { memo, useMemo } from 'react'
+import { ButtonProps, ButtonVariations, PstlButton, RowCenter, SpinnerCircle } from '@past3lle/components'
+import { ReactNode, memo, useMemo } from 'react'
 import React from 'react'
 
 import { useModalActions } from '../../hooks'
 import { usePendingTransactions } from '../../hooks/api/useTransactions'
 
-function TransactionsButtonContent({ className }: { className?: string }) {
+interface Props {
+  className?: string
+  children?: ReactNode
+}
+function TransactionsButtonContent({ className, children, ...buttonProps }: Props & ButtonProps) {
   const { onTransactionsClick } = useModalActions()
   const pendingTranscations = usePendingTransactions()
   const pendingLength = pendingTranscations?.length
@@ -15,24 +19,30 @@ function TransactionsButtonContent({ className }: { className?: string }) {
       return (
         <RowCenter gap="0.5rem">
           <SpinnerCircle size={20} />
-          {pendingLength} PENDING TRANSACTIONS
+          {pendingLength} {children}
         </RowCenter>
       )
     } else {
-      return 'NO PENDING TRANSACTIONS'
+      return <RowCenter gap="0.5rem">{children}</RowCenter>
     }
-  }, [pendingLength])
+  }, [pendingLength, children])
 
   return (
     <PstlButton
       className={className}
-      buttonVariant={ButtonVariations.SUCCESS}
+      buttonVariant={ButtonVariations.DEFAULT}
       onClick={onTransactionsClick}
       justifyContent="center"
+      {...buttonProps}
     >
       {content}
     </PstlButton>
   )
 }
 
+/**
+ * @name TransactionsButton
+ * @description Syntactic sugar UI button for accessing transactions modal
+ * @note As this is potentially renderable OUTSIDE the modal (before it's mounted) it does not use the web3-modal theme. Use props instead.
+ */
 export const TransactionsButton = memo(TransactionsButtonContent)

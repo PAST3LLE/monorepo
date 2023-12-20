@@ -47,7 +47,17 @@ const Web3Button = ({ children = <div>Show PSTL Wallet Modal</div> }: Web3Button
       </PstlButton>
       <br />
       <br />
-      <TransactionsButton />
+      <TransactionsButton
+        background="linear-gradient(300deg, rgba(0 0 0 / 0.97) 70%, pink)"
+        color="ghostwhite"
+        fontFamily="Roboto Flex,monospace,arial"
+        fontSize="1.5em"
+        fontWeight={100}
+        letterSpacing="-1.5px"
+        transitionTime={500}
+      >
+        View Transactions
+      </TransactionsButton>
 
       <h3>Connected to {address || 'DISCONNECTED!'}</h3>
       <h3>Connector: {connector?.id}</h3>
