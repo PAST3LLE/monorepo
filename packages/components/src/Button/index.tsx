@@ -262,6 +262,8 @@ const ButtonSizes = {
 }
 
 type CustomButtonStyleProps = {
+  transitionTime?: number
+  background?: string
   borderRadius?: string
   gradientColours?: string[]
   bgBlendMode?:
@@ -312,7 +314,9 @@ export const Button = styled(ButtonBase)<ButtonProps>`
   /* Fold in theme css above */
   ${({ buttonSize }) => buttonSize && ButtonSizes[buttonSize]};
 
-  ${({ backgroundColor, bgImage }) => !bgImage && backgroundColor && `background-color: ${backgroundColor};`}
+  ${({ background, bgImage }) => !bgImage && background && `background: ${background};`}
+  ${({ background, backgroundColor, bgImage }) =>
+    !background && !bgImage && backgroundColor && `background-color: ${backgroundColor};`}
   ${({
     theme,
     bgImage,
@@ -330,6 +334,9 @@ export const Button = styled(ButtonBase)<ButtonProps>`
     })}
 
   filter: ${({ filter = 'unset' }) => `filter: ${filter}`};
+
+  transition: ${({ transitionTime = 0 }) =>
+    `filter ${transitionTime}ms ease-in-out,background ${transitionTime}ms ease-in-out,background-color ${transitionTime}ms ease-in-out,color ${transitionTime}ms ease-in-out`};
 `
 
 export const PstlButton = styled(({ children, ...buttonProps }: ButtonProps) => {
