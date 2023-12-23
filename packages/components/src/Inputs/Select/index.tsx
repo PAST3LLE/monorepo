@@ -1,33 +1,22 @@
-import { CSSProperties, useCallback, useState } from 'react'
+import { CSSProperties, useCallback } from 'react'
 import React from 'react'
 
+import { useInputStore } from '../baseHook'
+import { InputProps } from '../types'
 import { Select, SelectProps } from './styleds'
 
 type ComponentProps = SelectProps & { style?: CSSProperties }
-interface SelectorProps<V extends number | string | undefined> {
-  defaultValue: V
-  options: { value: V; label: string }[]
-  name: string
-  callback?: (value: V) => void
-}
+
 export function useSelect<V extends number | string | undefined>({
   name,
   options,
   defaultValue,
   callback
-}: SelectorProps<V>): {
+}: InputProps<V>): {
   Component: (props: ComponentProps) => React.JSX.Element
   store: [V, React.Dispatch<React.SetStateAction<V>>]
 } {
-  const [selection, setSelection] = useState<V>(defaultValue)
-
-  const handleChange = useCallback(
-    (e: React.ChangeEvent<HTMLSelectElement>) => {
-      setSelection(e.target.value as V)
-      callback?.(e.target.value as V)
-    },
-    [callback]
-  )
+  const [selection, { setState: setSelection, handleChange }] = useInputStore({ callback, defaultValue })
 
   const Component = useCallback(
     ({ style, ...selectProps }: ComponentProps) => (
@@ -43,10 +32,5 @@ export function useSelect<V extends number | string | undefined>({
     [name, options, selection]
   )
 
-  const memoisedSetSelection: React.Dispatch<React.SetStateAction<V>> = useCallback(
-    (value) => setSelection(value as V),
-    []
-  )
-
-  return { Component, store: [selection, memoisedSetSelection] }
+  return { Component, store: [selection, setSelection] }
 }
