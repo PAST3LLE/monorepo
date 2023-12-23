@@ -1,19 +1,19 @@
 {
   "5": {
     "CollectionsManager": {
-      "timestamp": "2023-06-14T13:59:26.512Z",
-      "address": "0x9f4d9aC52C7356E00A4e9b732Dbd6377EcE19EE4",
-      "transactionHash": "0x0b9996e40dc89315f1f113a67b6e890c46445f062f368aedee4222b6c30fc5e7"
+      "timestamp": "2023-12-20T17:41:03.636Z",
+      "address": "0x00ad95f9D3E5Af8707700520FF3c45964Ef20423",
+      "transactionHash": "0x1b679b9436a333a2ef3829de231bda224e9f7c0d82f5c87b14ea0e9c2759cbfe"
     },
     "Collection-1": {
-      "timestamp": "2023-06-14T14:00:43.011Z",
-      "address": "0xFc422B1Cd9812415f9C9Ba8740f9E24132FDe1F1",
-      "transactionHash": "0x192f918fbb98daa3c778ce9394e3293e1fd19ff302339ee31ac740392ed60690"
+      "timestamp": "2023-12-20T17:43:29.833Z",
+      "address": "0xeC7c69f8CBB0b9f5e7ce904C01eD57329dC78b21",
+      "transactionHash": "0xdcb717fae404a1ed8a8a06a2a2422cf5a1296503edc64a2014b206a84aa62948"
     },
     "Collection-2": {
-      "timestamp": "2023-06-14T14:15:30.333Z",
-      "address": "0x1b18aC6D5371FeD52521964145E2c8aAF7571a88",
-      "transactionHash": "0xf14eb827f7c97b495d6a2e57233256b1b7b7fe7e4e80a451d4bbc86e279298f7"
+      "timestamp": "2023-12-20T17:44:29.131Z",
+      "address": "0x40430F926F26105758715676cae59A62689fb490",
+      "transactionHash": "0x72b6a2e1932164b32e0d013c4c0c71b6c96691fba7fc9dbc3952eb3fd2d292b2"
     }
   },
   "137": {

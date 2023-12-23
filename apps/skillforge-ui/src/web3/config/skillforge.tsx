@@ -28,7 +28,8 @@ export const WEB3_PROPS: Web3ModalConfigWeb3Props = {
       walletconnect: {
         logo: 'https://raw.githubusercontent.com/WalletConnect/walletconnect-assets/master/Logo/Gradient/Logo.png',
         customName: 'Web3',
-        rank: 100
+        rank: 100,
+        modalNodeId: 'w3m-modal'
       },
       'ledger-hid': {
         logo: 'https://crypto-central.io/library/uploads/Ledger-Logo-3.png',
