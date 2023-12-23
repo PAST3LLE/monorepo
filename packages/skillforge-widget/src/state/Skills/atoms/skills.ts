@@ -44,4 +44,4 @@ export const useForgeSizeWriteAtom = () => useAtom(skillSizeWriteAtom)
 export const useForgeSizeReadAtom = () => useAtom(skillSizeReadAtom)
 
 export const useActiveSkillReadAtom = () => useAtom(activeSkillRead)
-export const useForgesAtom = () => useAtom(skillsAtom)
+export const useForgeSkillAtom = () => useAtom(skillsAtom)

@@ -8,7 +8,7 @@ import { InventoryButton } from '../Common/Button'
 import { ConnectionInfoButton } from '../Common/Button/ConnectionInfoButton'
 import { NetworkInfoButton } from '../Common/Button/NetworkInfoButton'
 import { ShopExternalLinkButton } from '../Common/Button/ShopExternalLinkButton'
-import { TxHistoryButton } from '../Common/Button/TxHistory'
+import { SkillFlowsButton } from '../Common/Button/SkillFlowsButton'
 import { HeaderContainer, Web3InfoContainer } from './styleds'
 
 export const SkillForgeHeader = () => {
@@ -23,7 +23,7 @@ export const SkillForgeHeader = () => {
             <Row flexDirection={isMobileWidth ? 'row-reverse' : 'row'}>
               {!isMobileWidth && <ShopExternalLinkButton />}
               <InventoryButton />
-              <TxHistoryButton />
+              <SkillFlowsButton />
               {showNetworkButton && <NetworkInfoButton />}
               {!isMobileWidth && <ConnectionInfoButton />}
             </Row>

@@ -1,8 +1,9 @@
 import { ButtonProps, InfoCircle } from '@past3lle/components'
-import { usePendingTransactions, usePstlWeb3Modal } from '@past3lle/web3-modal'
 import React from 'react'
 import styled from 'styled-components'
 
+import { usePendingFlowsCount } from '../../../state/Flows'
+import { useSidePanelWriteAtom } from '../../../state/SidePanel'
 import { useGenericImageSrcSet } from '../../../theme/global'
 import { CursiveMonoHeaderProps } from '../Text'
 import { HeaderButton } from './common'
@@ -13,20 +14,20 @@ interface InventoryButtonProps {
   restWordProps?: CursiveMonoHeaderProps['restWordProps']
 }
 
-export function TxHistoryButton(props: InventoryButtonProps) {
+export function SkillFlowsButton(props: InventoryButtonProps) {
   const srcSet = useGenericImageSrcSet()
-  const { open } = usePstlWeb3Modal()
+  const [, setPanel] = useSidePanelWriteAtom()
 
-  const { length } = usePendingTransactions()
+  const pendingFlows = usePendingFlowsCount()
   return (
-    <Wrapper onClick={() => open({ route: 'Transactions' })}>
-      {!!length && <NotificationDot backgroundColor="#4def98" label={length.toString() + ' pending'} />}
+    <Wrapper onClick={() => setPanel('FLOWS') /* open({ route: 'Transactions' }) */}>
+      {!!pendingFlows && <NotificationDot backgroundColor="#4def98" label={pendingFlows + ' pending'} />}
       <HeaderButton
         iconKey="transactions"
         bgImage={srcSet.EMPTY_SKILL_DDPX_URL_MAP}
-        fullHeader={'Transactions'}
-        shortHeader="TXs"
-        animate={!!length}
+        fullHeader="UPGRADES"
+        shortHeader="UPGRADES"
+        animate={!!pendingFlows}
         height="100%"
         {...props}
       />

@@ -8,7 +8,7 @@ import styled, { useTheme } from 'styled-components'
 
 import { Vector } from '../../api/vector'
 import { useQueryImageBlob } from '../../hooks/useQueryImageBlob'
-import { SkillsState, useForgesAtom } from '../../state/Skills'
+import { SkillsState, useForgeSkillAtom } from '../../state/Skills'
 import { useAssetsMap } from '../../theme/utils'
 import { StyledSkillpoint } from '../Common'
 
@@ -33,7 +33,7 @@ function SkillpointUnmemoed({
   skillpointStyles,
   lightupDependencies
 }: Props) {
-  const [state, setSkillState] = useForgesAtom()
+  const [state, setSkillState] = useForgeSkillAtom()
   const {
     active: [currentlyActive]
   } = state

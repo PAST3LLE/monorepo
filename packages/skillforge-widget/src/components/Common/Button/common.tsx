@@ -100,12 +100,13 @@ const strobeAnimation = css`
 
 export const StyledHeaderButton = styled(ThemedButton).attrs(
   ({
+    bgColor = 'black',
     bgImage,
     height,
     showFlexRow,
     title
-  }: Pick<HeaderButtonProps, 'title' | 'bgImage'> & { height?: string; showFlexRow: boolean }) => ({
-    bgColor: 'black',
+  }: Pick<HeaderButtonProps, 'title' | 'bgImage'> & { bgColor?: string; height?: string; showFlexRow: boolean }) => ({
+    bgColor,
     bgImage: bgImage ?? undefined,
     bgBlendMode: 'hard-light',
     title,
@@ -124,7 +125,8 @@ export const StyledHeaderButton = styled(ThemedButton).attrs(
   filter: invert(0);
 `
 
-interface HeaderButtonProps {
+export interface HeaderButtonProps {
+  bgColor?: string
   bgImage: GenericImageSrcSet<MediaWidths> | null
   capitalLetterProps?: CursiveMonoHeaderProps['capitalLetterProps']
   restWordProps?: CursiveMonoHeaderProps['restWordProps']
@@ -137,6 +139,7 @@ interface HeaderButtonProps {
   onClick?: () => void
 }
 export function HeaderButton({
+  bgColor,
   bgImage,
   fullHeader,
   shortHeader,
@@ -156,6 +159,7 @@ export function HeaderButton({
   return (
     <StyledHeaderButton
       className={className}
+      bgColor={bgColor}
       bgImage={bgImage}
       showFlexRow={width > MEDIA_WIDTHS.upToSmall}
       title={title}
@@ -189,7 +193,7 @@ export function HeaderButton({
         />
       ) : (
         <MonospaceText color={MAIN_FG} fontSize="1.05rem" marginLeft="-0.2rem">
-          {shortHeader}
+          {shortHeader || fullHeader}
         </MonospaceText>
       )}
       {assetsMap.icons?.[iconKey] && (

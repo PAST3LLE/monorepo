@@ -5,8 +5,8 @@ import {
   SkillId,
   SkillRarity,
   ipfsToImageUri,
+  useForgeApproveAndClaimLockedSkillCallback,
   useForgeBalancesReadAtom,
-  useForgeClaimLockedSkill,
   useForgeIpfsGatewayUrisAtom,
   useForgeMetadataMapReadAtom,
   useSupportedChainId
@@ -15,10 +15,11 @@ import { OFF_WHITE, urlToSimpleGenericImageSrcSet } from '@past3lle/theme'
 import { darken } from 'polished'
 import React, { useMemo, useRef } from 'react'
 import { useTheme } from 'styled-components'
-import { Address, useWaitForTransaction } from 'wagmi'
+import { useWaitForTransaction } from 'wagmi'
 
 import { SKILLPOINTS_CONTAINER_ID } from '../../../constants/skills'
 import { useGetActiveSkillFromActiveSkillId } from '../../../hooks/useGetActiveSkillFromActiveSkillId'
+import { useForgeFlowReadWriteAtom } from '../../../state/Flows'
 import { useSidePanelAtom } from '../../../state/SidePanel'
 import { baseTheme } from '../../../theme/base'
 import { buildSkillMetadataExplorerUri } from '../../../utils/skills'
@@ -45,12 +46,12 @@ export function TradeAndUnlockPanel() {
 
   const theme = useTheme()
 
-  const rarity = activeSkill.properties.rarity
+  const rarity = activeSkill?.properties?.rarity
   const cardColour = 'linear-gradient(195deg,#996ef4,#ffb900)'
 
   const { metadataExplorerUri, requiresSeveralDepsOfDifferentRarities, depsMap } = useMemo(() => {
     const metadataExplorerUri = buildSkillMetadataExplorerUri('opensea', activeSkill, chainId)
-    const depsMap = gatherDepsInfo(activeSkill.properties.dependencies, metadataMap)
+    const depsMap = gatherDepsInfo(activeSkill?.properties?.dependencies, metadataMap)
     const hasMultiDeps = [...depsMap.entries()].filter(([, list]) => !!list.length).length > 1
 
     return {
@@ -60,17 +61,46 @@ export function TradeAndUnlockPanel() {
     }
   }, [activeSkill, chainId, metadataMap])
 
-  const [token, id] = activeSkill.properties.id.split('-')
-  const {
-    data,
-    writeAsync,
-    isLoading,
-    isError: isErrorContract,
-    error
-  } = useForgeClaimLockedSkill({
-    token: token as Address,
-    id: BigInt(id)
-  })
+  const [, updateFlow] = useForgeFlowReadWriteAtom(chainId)
+
+  const [{ data, isLoading, isError: isErrorContract, error }, approveBurnAndClaimLockedSkill] =
+    useForgeApproveAndClaimLockedSkillCallback(activeSkill, {
+      onApproveSend(hash) {
+        updateFlow({
+          skillId: activeSkill.properties.id,
+          approvingSkillId: hash,
+          status: 'needs-approvals'
+        })
+      },
+      onClaimSend() {
+        updateFlow({
+          skillId: activeSkill.properties.id,
+          status: 'claiming'
+        })
+      }
+    })
+
+  // const approveBurnAndClaimLockedSkill = useCallback(async () => {
+  //   // Step 1: approve tokens, if necessary
+  //   if (!!approveDepsCallbacks) {
+  //     approveDepsCallbacks.forEach((cb) => {
+  //       cb().then((hash) =>
+  //         updateFlow({
+  //           skillId: activeSkill.properties.id,
+  //           approvingSkillId: hash,
+  //           status: 'waiting-on-approval'
+  //         })
+  //       )
+  //     })
+  //     // Step 2: claim skill
+  //     claimLockedSkill?.().then(() =>
+  //       updateFlow({
+  //         skillId: activeSkill.properties.id,
+  //         status: 'claiming'
+  //       })
+  //     )
+  //   }
+  // }, [activeSkill?.properties?.id, approveDepsCallbacks, claimLockedSkill, updateFlow])
 
   const [, setPanelState] = useSidePanelAtom()
 
@@ -87,7 +117,9 @@ export function TradeAndUnlockPanel() {
   const isError = isErrorContract && !!error
 
   const [gatewayUris] = useForgeIpfsGatewayUrisAtom()
-  const bgImageSet = urlToSimpleGenericImageSrcSet(ipfsToImageUri(activeSkill.image, ...gatewayUris.slice(1)))
+  const bgImageSet = activeSkill?.image
+    ? urlToSimpleGenericImageSrcSet(ipfsToImageUri(activeSkill.image, ...gatewayUris.slice(1)))
+    : undefined
 
   return isError ? (
     <ErrorPanel title="UPGRADE ERROR!" reason={error} />
@@ -105,12 +137,13 @@ export function TradeAndUnlockPanel() {
         backgroundImageOptions: {
           backgroundCss: {
             uri: '',
-            options: isPending
-              ? {
-                  bgSet: bgImageSet,
-                  modeColors: ['#fff', '#fff']
-                }
-              : undefined
+            options:
+              isPending && bgImageSet
+                ? {
+                    bgSet: bgImageSet,
+                    modeColors: ['#fff', '#fff']
+                  }
+                : undefined
           }
         }
       }}
@@ -268,7 +301,9 @@ export function TradeAndUnlockPanel() {
               `
                 }}
               />
-              {!isPending && <TradeAndUnlockActionButton skill={activeSkill} handleClaim={writeAsync} />}
+              {!isPending && (
+                <TradeAndUnlockActionButton skill={activeSkill} handleClaim={approveBurnAndClaimLockedSkill} />
+              )}
             </Row>
 
             {chainId && (
@@ -361,7 +396,12 @@ export function SkillsCardDeck({
   )
 }
 
-function gatherDepsInfo(deps: SkillDependencyObject[], metadataMap: ForgeMetadataState['metadataMap'][number]) {
+const EMPTY_MAP = new Map()
+function gatherDepsInfo(
+  deps: SkillDependencyObject[] | undefined,
+  metadataMap: ForgeMetadataState['metadataMap'][number]
+) {
+  if (!deps) return EMPTY_MAP
   return deps.reduce((acc, dep) => {
     const skillId = `${dep.token}-${dep.id}` as SkillId
     const rarity = metadataMap[skillId].properties.rarity

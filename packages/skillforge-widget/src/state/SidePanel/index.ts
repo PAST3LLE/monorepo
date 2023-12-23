@@ -2,7 +2,7 @@ import { SkillId } from '@past3lle/forge-web3'
 import { atom, useAtom } from 'jotai'
 
 // @ts-ignore
-export type ActiveSidePanel = `ACTIVE_SKILL::${SkillId}` | 'USER_STATS' | `UNLOCK_SKILL::${SkillId}`
+export type ActiveSidePanel = `ACTIVE_SKILL::${SkillId}` | 'USER_STATS' | `UNLOCK_SKILL::${SkillId}` | 'FLOWS'
 export interface SidePanelState {
   type: (ActiveSidePanel | undefined)[]
 }

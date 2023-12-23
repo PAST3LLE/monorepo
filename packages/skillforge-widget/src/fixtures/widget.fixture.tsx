@@ -56,6 +56,7 @@ const skillforgeTheme = createTheme({
         connection: 'CONNECTION_ICON',
         inventory: 'INVENTORY_ICON',
         shop: 'SHOP_ICON',
+        transactions: 'TRANSACTIONS_ICON',
         chains: {
           disconnected: 'CONNECTION_ICON',
           5: 'ETHEREUM_LOGO',
@@ -73,6 +74,7 @@ const skillforgeTheme = createTheme({
     }
   }
 })
+
 function App() {
   return (
     <SkillForge

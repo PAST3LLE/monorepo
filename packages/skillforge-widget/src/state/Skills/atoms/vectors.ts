@@ -9,7 +9,7 @@ export type SkillGridPositionList = {
   skillId: SkillId | undefined
 }[]
 export type SkillVectorsMap = {
-  [key: SkillId]: SkillGridPositionList[0]
+  [key: SkillId]: SkillGridPositionList[number]
 }
 export interface VectorsState {
   dimensions: {
