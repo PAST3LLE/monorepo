@@ -1,11 +1,17 @@
 import { RowCenter, SpinnerCircle } from '@past3lle/components'
-import { useAddPendingTransaction } from '@past3lle/web3-modal'
+import { useAddPendingTransaction, usePendingTransactions } from '@past3lle/web3-modal'
 import { Web3Button } from '@web3modal/react'
 import React, { useCallback, useState } from 'react'
 import { parseEther } from 'viem'
 import { useBalance, useSendTransaction } from 'wagmi'
 
-import { ForgeW3Providers, useW3Modal, useW3UserConnectionInfo } from '..'
+import {
+  ForgeW3Providers,
+  useForgeMetadataAtom,
+  useSupportedChainId,
+  useW3Modal,
+  useW3UserConnectionInfo
+} from '..'
 import { THEME, commonProps, contractProps } from './config'
 
 /* 
@@ -20,17 +26,17 @@ import { THEME, commonProps, contractProps } from './config'
 function InnerApp() {
   const { open } = useW3Modal()
   const { address } = useW3UserConnectionInfo()
+  const chainId = useSupportedChainId()
+  const [state] = useForgeMetadataAtom()
+  const skill = chainId ? state.metadata[chainId][1][1] : null
 
-  // const lockedSkillData = useForgeUnpreparedClaimLockedSkill({
-  //   token: '0x1b18aC6D5371FeD52521964145E2c8aAF7571a88',
-  //   id: BigInt(3000)
-  // })
   const { data, refetch } = useBalance({ address })
   const [sendEthVal, setSendEthVal] = useState('0')
   const [addressToSendTo, setAddress] = useState('')
 
   const sendApi = useSendTransaction()
 
+  const pendingTransactions = usePendingTransactions()
   const addPendingTransaction = useAddPendingTransaction()
 
   const [currentTx, setTx] = useState('')
@@ -86,6 +92,11 @@ function InnerApp() {
         <button onClick={() => handleSendTransaction({ value: parseEther(sendEthVal), to: addressToSendTo })}>
           Send to {addressToSendTo || 'N/A'}
         </button>
+        <br />
+        <br />
+        {pendingTransactions.map((tx) => (
+          <p>{tx.safeTxHash || tx.transactionHash}</p>
+        ))}
       </>
     </>
   )

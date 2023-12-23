@@ -3,7 +3,7 @@ import { DefaultTheme } from 'styled-components'
 import { Address } from 'wagmi'
 
 import { ForgeBalances } from '../state/Balances'
-import { SkillId, SkillMetadata, SkillRarity } from '../types'
+import { SkillDependencyObject, SkillId, SkillMetadata, SkillRarity } from '../types'
 import { ipfsToImageUri } from './ipfs'
 
 export enum SkillLockStatus {
@@ -59,4 +59,20 @@ export function getRarityColours<T extends DefaultTheme & { rarity: { [key in Sk
 ) {
   if (!rarity) return theme.rarity.common
   return theme.rarity[rarity]
+}
+
+export function splitSkillAddressId(skill?: SkillMetadata | null): [Address, string] | undefined {
+  return skill?.properties?.id?.split('-') as [Address, string] | undefined
+}
+
+export function formatSkillMetadataToArgs(skill?: SkillMetadata | null): SkillDependencyObject | undefined {
+  const splitInfo = splitSkillAddressId(skill)
+
+  if (!splitInfo) return undefined
+  return { token: splitInfo[0], id: BigInt(splitInfo[1]) }
+}
+
+export function skillToDependencySet(skill?: SkillMetadata | null): Set<Address> | undefined {
+  if (!skill?.properties?.dependencies || !Array.isArray(skill?.properties?.dependencies)) return undefined
+  return new Set(skill.properties.dependencies.map((d) => d.token))
 }
