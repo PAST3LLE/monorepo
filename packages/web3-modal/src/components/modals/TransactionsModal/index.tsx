@@ -142,7 +142,7 @@ export const TransactionCard = memo(function TransactionComponent({
         <MainText>
           {transaction.transactionHash ? (
             explorerUri ? (
-              <a href={`${explorerUri}/tx/${transaction.transactionHash}`} target="_blank" referrerPolicy="no-referrer">
+              <a href={`${explorerUri}/tx/${transaction.transactionHash}`} target="_blank">
                 {formattedHash}
               </a>
             ) : (

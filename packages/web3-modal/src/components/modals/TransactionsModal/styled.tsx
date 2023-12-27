@@ -92,6 +92,7 @@ export const StatusPill = styled(RowCenter)<PillProps>`
   }
   > ${ModalText} {
     font-family: monospace;
+    color: ${({ color }) => color};
   }
 `
 
@@ -149,6 +150,15 @@ export function statusToPillProps(status: AnyTransactionReceipt['status']): Pill
         backgroundColor: '#657bb9a8',
         color: 'ghostwhite',
         Icon: (() => <SpinnerCircle stroke="white" />) as any
+      }
+    case 'unknown':
+      return {
+        backgroundColor: 'navajowhite',
+        color: 'black',
+        tooltip: {
+          text: "Transaction was not found or errored during it's search. This may mean the transaction reverted, cancelled, or overwritten by another transaction e.g speed-up",
+          backgroundColor: '#ffa92a'
+        }
       }
   }
 }

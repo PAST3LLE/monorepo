@@ -1,3 +1,4 @@
+import { devDebug } from '@past3lle/utils'
 import { alchemyProvider } from 'wagmi/providers/alchemy'
 
 import { PstlWeb3ModalProps } from '../providers'
@@ -230,6 +231,18 @@ const DEFAULT_PROPS: PstlWeb3ModalProps = {
     pollingInterval: 10_000,
     escapeHatches: {
       appType: 'DAPP'
+    }
+  },
+  callbacks: {
+    transactions: {
+      onEoaTransactionConfirmed(tx) {
+        devDebug('[@past3lle/web3-modal --> onEoaConfirmed] EOA transaction confirmed! Transaction:', tx)
+        return tx
+      },
+      onEoaTransactionUnknown(tx) {
+        devDebug('[@past3lle/web3-modal --> onEoaUnknown] EOA transaction status unknown!', tx)
+        return tx
+      }
     }
   },
   modals: {

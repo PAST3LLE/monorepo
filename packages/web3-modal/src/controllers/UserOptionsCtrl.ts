@@ -20,7 +20,8 @@ const state = proxy<UserOptionsCtrlState>({
   connectors: {
     hideInjectedFromRoot: false,
     overrides: {}
-  }
+  },
+  transactions: undefined
 })
 
 // -- controller --------------------------------------------------- //
@@ -46,6 +47,10 @@ export const UserOptionsCtrl = {
     state.connectors = {
       ...state.connectors,
       ...props.connectors
+    }
+    state.transactions = {
+      ...state.transactions,
+      ...props.transactions
     }
   }
 }

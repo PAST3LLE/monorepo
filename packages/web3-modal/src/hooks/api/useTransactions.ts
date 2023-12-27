@@ -3,7 +3,11 @@ import { Hash } from 'viem'
 import { useChainId } from 'wagmi'
 
 import { TransactionCtrl } from '../../controllers'
-import { AnyTransactionReceipt, TransactionReceiptPending } from '../../controllers/TransactionsCtrl/types'
+import {
+  AnyTransactionReceipt,
+  TransactionOptions,
+  TransactionReceiptPending
+} from '../../controllers/TransactionsCtrl/types'
 import { TransactionsCtrlState } from '../../controllers/types'
 import { useIsSafeWallet } from '../wallet/useWalletMetadata'
 
@@ -41,6 +45,7 @@ export function useTransactions(): UseTransactions {
   }
 }
 
+export const useTransactionsRead = () => useTransactions().transactions
 export const usePendingTransactions = () => {
   const { transactions } = useTransactions()
 
@@ -87,8 +92,11 @@ export const useAddPendingTransactionsBatch = () => {
   const isSafeWallet = useIsSafeWallet()
 
   return useCallback(
-    (batch: Hash[], nonce = 0) => {
+    (batch: Hash[], nonce = 0, opts?: TransactionOptions) => {
       if (!chainId) return
+      else if (opts?.metadataBatch && opts?.metadataBatch?.length !== batch.length) {
+        throw new Error('[useAddPendingTransactionsBatch] Metadata batch and hash list length mismatch. Check params.')
+      }
 
       addBatchPendingTransactions({
         chainId,
@@ -108,15 +116,17 @@ export const useAddPendingTransaction = () => {
   const isSafeWallet = useIsSafeWallet()
 
   return useCallback(
-    (hash: Hash) => {
+    (hash: Hash, opts?: TransactionOptions) => {
       if (!chainId) return
       const pendingTransaction: TransactionReceiptPending = {
+        dateAdded: Date.now(),
         chainId,
         transactionHash: isSafeWallet ? undefined : hash,
         safeTxHash: isSafeWallet ? hash : undefined,
         status: 'pending',
         nonce: 0,
-        walletType: isSafeWallet ? 'SAFE' : 'EOA'
+        walletType: isSafeWallet ? 'SAFE' : 'EOA',
+        metadata: opts?.metadata
       }
 
       addTransaction({ chainId, transaction: pendingTransaction })
@@ -220,7 +230,37 @@ export const useUpdateTransactionsViaCallback = () => {
   )
 }
 
-// --------- FNS --------------------------------------------- //
+export const useTransactionsByMetadataKey = (metaKey: string) => {
+  const { transactions } = useTransactions()
+
+  return useMemo(() => transactions.filter((tx) => !!tx?.metadata?.[metaKey]), [metaKey, transactions])
+}
+
+export const useTransactionsByMetadataKeyCallback = () => {
+  const { transactions } = useTransactions()
+
+  return useCallback((metaKey: string) => transactions.filter((tx) => !!tx?.metadata?.[metaKey]), [transactions])
+}
+
+export const useFindTransactionByMetadataKeyValue = (metaKey: string, metaValue: unknown) => {
+  const { transactions } = useTransactions()
+
+  return useMemo(
+    () => transactions.filter((tx) => !!tx?.metadata?.[metaKey] === metaValue),
+    [metaKey, metaValue, transactions]
+  )
+}
+
+export const useFindTransactionByMetadataKeyValueCallback = () => {
+  const { transactions } = useTransactions()
+
+  return useCallback(
+    (metaKey: string, metaValue: unknown) => transactions.filter((tx) => !!tx?.metadata?.[metaKey] === metaValue),
+    [transactions]
+  )
+}
+
+// --------- PRIVATE FNS --------------------------------------------- //
 
 function getTxStatus(tx: AnyTransactionReceipt) {
   return tx.status

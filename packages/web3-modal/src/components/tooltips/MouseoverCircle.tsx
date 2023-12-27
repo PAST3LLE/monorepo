@@ -12,7 +12,7 @@ export function MouseoverCircle({ size, label, color, backgroundColor, margin, .
       {...mouseoverProps}
       styles={{
         fontFamily: theme?.base?.tooltip?.font?.family + ', arial, system-ui',
-        fontSize: '0.75em',
+        fontSize: '12px',
         color: theme?.base?.tooltip?.font?.color || OFF_WHITE,
         border: 'none',
         backgroundColor: theme?.base?.tooltip?.background || BLACK_TRANSPARENT

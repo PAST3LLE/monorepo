@@ -1,7 +1,7 @@
-import { devError } from '@past3lle/utils'
+import { devDebug, devError } from '@past3lle/utils'
 import { SafeMultisigTransactionListResponse } from '@safe-global/api-kit'
 import isEqual from 'lodash.isequal'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   Address,
   Chain,
@@ -30,45 +30,19 @@ export type SimpleTxInfo = Pick<TransactionReceiptPending, 'transactionHash' | '
 export type SafeTransactionListenerInfo = SimpleTxInfo[]
 
 export type WatchPendingTransactionsListener = (txs: Address[], safeTxInfo: SafeTransactionListenerInfo) => void
+export type WatchPendingTransactionsErrorListener = (error?: Error) => void
 
 export function useWatchPendingTransactions(
   params: Omit<Parameters<typeof useWagmiWatchPendingTransactions>[0], 'listener'> & {
     safeTxHashes?: Address[]
     listener: WatchPendingTransactionsListener
+    errorListener?: WatchPendingTransactionsErrorListener
   }
-): WatchPendingTransactionReturn {
-  const [data, setData] = useState<WatchPendingTransactionReturn['data'] | undefined>()
-  const [error, setError] = useState<Error | undefined>()
-  const [status, setStatus] = useState<WatchPendingTransactionReturn['status']>('idle')
-
-  useEffect(() => {
-    setData(params?.safeTxHashes)
-  }, [params?.safeTxHashes])
-
+): void {
   useEnhancedWatchPendingTransactions({
     ...params,
-    safeTxHashes: data,
-    store: {
-      status,
-      setError,
-      setData,
-      setStatus
-    }
+    safeTxHashes: params.safeTxHashes
   })
-
-  return useMemo(
-    () => ({
-      data,
-      error,
-      status,
-      isError: !!error,
-      isLoading: status === 'loading' || status === 'replaced',
-      get isIdle() {
-        return !this.isLoading && !error
-      }
-    }),
-    [data, error, status]
-  )
 }
 
 /**
@@ -79,17 +53,20 @@ function useEnhancedWatchPendingTransactions({
   safeTxHashes,
   enabled,
   listener,
-  store
+  errorListener
 }: Omit<Parameters<typeof useWagmiWatchPendingTransactions>[0], 'listener'> & {
   listener: WatchPendingTransactionsListener
+  errorListener?: WatchPendingTransactionsErrorListener
   safeTxHashes?: Address[]
-  store: {
-    status: Status
-    setData: (data: WatchPendingTransactionReturn['data']) => void
-    setError: (e: Error | undefined) => void
-    setStatus: React.Dispatch<React.SetStateAction<Status>>
-  }
 }) {
+  const [, setData] = useState<WatchPendingTransactionReturn['data'] | undefined>()
+  const [, setError] = useState<Error | undefined>()
+  const [, setStatus] = useState<WatchPendingTransactionReturn['status']>('idle')
+
+  useEffect(() => {
+    setData(safeTxHashes)
+  }, [safeTxHashes])
+
   const { address, chain } = useUserConnectionInfo()
   const queryChainId = chainId || chain?.id
 
@@ -98,42 +75,33 @@ function useEnhancedWatchPendingTransactions({
 
   const handleTxConfirmed = useCallback(
     (status: Status) => {
-      store.setStatus(status === 'replaced' ? 'replace-confirmed' : 'confirmed')
-      store.setData(undefined)
-      store.setError(undefined)
+      setStatus(status === 'replaced' ? 'replace-confirmed' : 'confirmed')
+      setData(undefined)
+      setError(undefined)
     },
-    [store]
-  )
-  const handleTxReplaced = useCallback(
-    (_hashes: SimpleTxInfo[]) => {
-      store.setStatus('replaced')
-      // TODO: fix by nonce
-      // hashes.forEach((hashList, nonce) => store.setData(hashList))
-    },
-    [store]
+    [setStatus, setData, setError]
   )
   const handleError = useCallback(
     (e: any) => {
       const error = new Error(e)
       devError('[@past3lle/web3-modal] Error in useWatchPendingTransactions: ', error)
-      store.setStatus('error')
-      store.setData(undefined)
-      store.setError(error)
+      setStatus('error')
+      setData(undefined)
+      setError(error)
 
       throw error
     },
-    [store]
+    [setStatus, setData, setError]
   )
   const transactionsRef = useRef<SimpleTxInfo[] | null>(null)
   useEffect(() => {
     if (!address || !enabled || !chain?.id) return
-    // We're calling this first time, set loading
 
     const callbacks = {
       handleTxConfirmed,
-      handleTxReplaced,
       handleError
     }
+
     const state = {
       chain,
       address
@@ -149,12 +117,25 @@ function useEnhancedWatchPendingTransactions({
     }
 
     const publicClient_ = webSocketPublicClient ?? publicClient
-
-    return publicClient_.watchPendingTransactions({
-      onTransactions: auxListener
+    const unsub = publicClient_.watchPendingTransactions({
+      onTransactions: auxListener,
+      async onError(error) {
+        devError(
+          '[@past3lle/web3-modal -- useWatchPendingTransactions] Error watching transactions:',
+          error?.message || error,
+          'Checking transaction status...'
+        )
+        errorListener?.(error)
+      }
     })
+    devDebug('[@past3lle/web3-modal -- useWatchPendingTransactions] Subbing!')
+
+    return () => {
+      devDebug('[@past3lle/web3-modal -- useWatchPendingTransactions] Unsubbing!')
+      unsub()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [enabled, listener, publicClient, webSocketPublicClient, store.status, chain?.id, safeTxHashes])
+  }, [enabled])
 }
 
 async function _handleSafeTransactions(
@@ -166,20 +147,14 @@ async function _handleSafeTransactions(
   },
   listenerCallbacks: {
     handleTxConfirmed: (status: Status) => void
-    handleTxReplaced: (txs: SimpleTxInfo[]) => void
     handleError: (e: any) => void
   }
 ): Promise<SimpleTxInfo[]> {
   try {
     const transactions = await getSafeKitAndTx(state.chain.id, safeTxHashes, state.address)
-
     const dataChanged = !isEqual(transactions, transactionsRef.current)
 
-    if (dataChanged) {
-      // TODO: fix by nonce
-      transactions.length && listenerCallbacks.handleTxReplaced(transactions)
-      transactionsRef.current = transactions
-    }
+    if (dataChanged) transactionsRef.current = transactions
 
     return transactions
   } catch (e: any) {

@@ -31,7 +31,8 @@ export function useUpdateUserConfigState<ID extends number>(config: PstlWeb3Moda
       connectors: {
         hideInjectedFromRoot: rootConfig?.hideInjectedFromRoot,
         overrides: _getConnectorOverrides(config?.connectors)
-      }
+      },
+      transactions: config.callbacks?.transactions
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [config])

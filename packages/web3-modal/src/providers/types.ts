@@ -5,6 +5,7 @@ import { Web3ModalProps as Web3ModalConfigOriginal } from '@web3modal/react'
 import { Chain as ChainWagmi } from 'wagmi'
 
 import { PstlWeb3ConnectionModalProps } from '../components/modals/ConnectionModal'
+import { UserOptionsTransactionsCallbacks } from '../controllers/types'
 import { ConnectorEnhanced, ConnectorOverrides } from '../types'
 import { Chain } from '../types/chains'
 import { PstlWagmiClientOptions } from './utils'
@@ -62,6 +63,12 @@ export type PstlWeb3ModalCallbacks = {
    * @returns Cosmetically filtered list of available chains
    */
   softLimitChains?: (chains: Chain<number>[], ...params: any[]) => Chain<number>[]
+  /**
+   * @name transactions
+   * @description Optional. Transaction related options. E.g callbacks on certain states
+   * @tip Useful when you want finer control over what happens on transaction approvals/reversions etc.
+   */
+  transactions?: UserOptionsTransactionsCallbacks
 }
 
 export type PstlWeb3ModalOptions = Omit<

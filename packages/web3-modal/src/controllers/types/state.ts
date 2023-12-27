@@ -26,6 +26,43 @@ export type ConnectionStatusCtrlState = {
   retry?: ReturnType<typeof useConnect>['connectAsync']
 }
 
+export interface UserOptionsTransactionsCallbacks {
+  /**
+   * @name onEoaTransactionConfirmed
+   * @description Optional. Callback fired on confirmation of EOA transaction
+   * @param tx {@link AnyTransactionReceipt} - transaction receipt
+   * @returns Augmented transaction receipt. see {@link AnyTransactionReceipt}
+   */
+  onEoaTransactionConfirmed?: (tx: AnyTransactionReceipt) => AnyTransactionReceipt
+  /**
+   * @name onEoaTransactionReverted
+   * @description Optional. Callback fired on reverted status of EOA transaction
+   * @param tx {@link AnyTransactionReceipt} - transaction receipt
+   * @returns Augmented transaction receipt. see {@link AnyTransactionReceipt}
+   */
+  onEoaTransactionReverted?: (tx: AnyTransactionReceipt) => AnyTransactionReceipt
+  /**
+   * @name onEoaTransactionUnknown
+   * @description Optional. Callback fired on unknown status of EOA transaction
+   * @param tx {@link AnyTransactionReceipt} - transaction receipt
+   * @returns Augmented transaction receipt. see {@link AnyTransactionReceipt}
+   */
+  onEoaTransactionUnknown?: (tx: AnyTransactionReceipt) => AnyTransactionReceipt
+  /**
+   * @name onSafeTransactionConfirmed
+   * @description Optional. Callback fired on confirmation of Safe transaction
+   * @param tx {@link AnyTransactionReceipt} - transaction receipt
+   * @returns Augmented transaction receipt. see {@link AnyTransactionReceipt}
+   */
+  onSafeTransactionConfirmed?: (tx: AnyTransactionReceipt) => AnyTransactionReceipt
+  /**
+   * @name onSafeTransactionReverted
+   * @description Optional. Callback fired on reverted status of Safe transaction
+   * @param tx {@link AnyTransactionReceipt} - transaction receipt
+   * @returns Augmented transaction receipt. see {@link AnyTransactionReceipt}
+   */
+  onSafeTransactionReverted?: (tx: AnyTransactionReceipt) => AnyTransactionReceipt
+}
 // -- UserOptionsCtrlState ------------------------------------ //
 export interface UserOptionsCtrlState {
   ux: {
@@ -64,6 +101,12 @@ export interface UserOptionsCtrlState {
      */
     overrides?: ConnectorOverrides
   }
+  /**
+   * @name transactions
+   * @description Optional. Transaction related options. E.g callbacks on certain states
+   * @tip Useful when you want finer control over what happens on transaction approvals/reversions etc.
+   */
+  transactions?: UserOptionsTransactionsCallbacks
   ui: {
     /**
      * @name softLimitedChains

@@ -88,16 +88,16 @@ export const TransactionCtrl = {
       .concat(
         batch.map(
           (hash) =>
-          ({
-            ...DEFAULT_TX,
-            chainId,
-            walletType,
-            transactionHash: walletType === 'EOA' ? hash : undefined,
-            safeTxHash: walletType === 'EOA' ? undefined : hash,
-            status: 'pending',
-            nonce,
-            dateAdded
-          } as AnyTransactionReceipt)
+            ({
+              ...DEFAULT_TX,
+              chainId,
+              walletType,
+              transactionHash: walletType === 'EOA' ? hash : undefined,
+              safeTxHash: walletType === 'EOA' ? undefined : hash,
+              status: 'pending',
+              nonce,
+              dateAdded
+            } as AnyTransactionReceipt)
         )
       )
   },
@@ -150,9 +150,9 @@ function _updateItemByKeyValue<S extends keyof AnyTransactionReceipt, U extends 
   const isTx = tx[searchKey] === searchValue
   return isTx
     ? {
-      ...tx,
-      [updateKey]: updateValue
-    }
+        ...tx,
+        [updateKey]: updateValue
+      }
     : tx
 }
 

@@ -4,6 +4,8 @@ import {
   useAddPendingTransaction,
   useAddPendingTransactionsBatch,
   useAllWeb3Modals,
+  useFindTransactionByMetadataKeyValue,
+  useFindTransactionByMetadataKeyValueCallback,
   useHasPendingTransactions,
   useIsSafeViaWc,
   useIsSafeWallet,
@@ -18,7 +20,10 @@ import {
   useWaitForTransaction as usePstlWaitForTransaction,
   useWatchPendingTransactions as usePstlWatchPendingTransactions,
   usePstlWeb3Modal,
-  useAllWeb3Modals as usePstlWeb3Modals
+  useAllWeb3Modals as usePstlWeb3Modals,
+  useTransactionsByMetadataKey,
+  useTransactionsByMetadataKeyCallback,
+  useTransactionsRead
 } from './hooks'
 import {
   type Chain,
@@ -67,6 +72,11 @@ export {
   usePendingTransactions,
   usePendingEoaTransactions,
   usePendingSafeTransactions,
+  useTransactionsRead,
+  useTransactionsByMetadataKey,
+  useTransactionsByMetadataKeyCallback,
+  useFindTransactionByMetadataKeyValue,
+  useFindTransactionByMetadataKeyValueCallback,
   // theme
   createTheme,
   W3aStyleResetProvider,

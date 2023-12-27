@@ -10,10 +10,15 @@ export * from './api/useWaitForTransaction'
 export * from './api/useWatchPendingTransactions'
 export * from './wallet/useWalletMetadata'
 export {
-    useAddPendingTransaction,
-    useAddPendingTransactionsBatch,
-    usePendingEoaTransactions,
-    usePendingSafeTransactions,
-    usePendingTransactions,
-    useHasPendingTransactions
+  useAddPendingTransaction,
+  useAddPendingTransactionsBatch,
+  usePendingEoaTransactions,
+  usePendingSafeTransactions,
+  usePendingTransactions,
+  useHasPendingTransactions,
+  useTransactionsRead,
+  useTransactionsByMetadataKey,
+  useTransactionsByMetadataKeyCallback,
+  useFindTransactionByMetadataKeyValue,
+  useFindTransactionByMetadataKeyValueCallback
 } from './api/useTransactions'
