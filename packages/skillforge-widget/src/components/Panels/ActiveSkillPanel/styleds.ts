@@ -6,7 +6,7 @@ import { ThemedButtonActions, ThemedButtonExternalLink } from '../../Common/Butt
 import { AutoColorHeader, BlackHeader } from '../../Common/Text'
 
 export const SkillStatusLabel = styled(AutoColorHeader)``
-export const SkillRarityLabel = styled(BlackHeader) <{ border?: string }>`
+export const SkillRarityLabel = styled(BlackHeader)<{ border?: string }>`
   display: flex;
   justify-content: space-evenly;
   align-items: center;
@@ -63,4 +63,4 @@ export const ActiveSkillPanelContainer = styled(Column)`
   }
 `
 
-export const RequiredDepsContainer = styled(Column) <{ borderRadius?: string; background?: string }>``
+export const RequiredDepsContainer = styled(Column)<{ borderRadius?: string; background?: string }>``

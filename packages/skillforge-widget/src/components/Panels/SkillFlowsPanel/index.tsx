@@ -4,16 +4,19 @@ import {
   SkillMetadata,
   useForgeApproveAllBatchCallback,
   useForgeClaimLockedSkillCallback,
-  useSupportedChainId
+  useForgeGetAllUnapprovedTokensForClaimableCallback,
+  useSupportedChainId,
+  useW3Modals
 } from '@past3lle/forge-web3'
 import { urlToSimpleGenericImageSrcSet } from '@past3lle/theme'
-import { devError } from '@past3lle/utils'
+import { devError, truncateHash } from '@past3lle/utils'
 import React, { useMemo, useState } from 'react'
 import { Hash } from 'viem'
 import { Address } from 'wagmi'
 
 import { useGetSkillFromIdCallback } from '../../../hooks/skills'
 import { ForgeFlowState, useForgeFlowReadAtom } from '../../../state/Flows'
+import { FlowTransactionObject, useForgeFlowTransactionsReadWriteAtom } from '../../../state/Flows/state/transactions'
 import { useSidePanelWriteAtom } from '../../../state/SidePanel'
 import { useActiveSkillAtom } from '../../../state/Skills'
 import { useGenericImageSrcSet } from '../../../theme/global'
@@ -33,28 +36,17 @@ import {
   UserSkillpointsContainer
 } from './styleds'
 
-// import { BgCssDpiProps } from '../BaseSidePanel/styleds'
-
 const BG_SETTINGS: Required<SidePanelProps>['options']['backgroundImageOptions'] = {
   smartImg: {
     uri: 'https://ik.imagekit.io/pastelle/aws-forge/collections/2/0.png?tr=q-100,w-750,h-750,f-auto,pr-true',
     options: { filter: 'hue-rotate(98deg) saturate(3.5) invert(0)' }
   }
-  // backgroundCss: {
-  //   uri: '',
-  //   options: {
-  //     bgSet: urlToSimpleGenericImageSrcSet(
-  //       'https://ik.imagekit.io/pastelle/aws-forge/collections/2/0.png?tr=q-100,w-750,h-750,f-auto,pr-true'
-  //     ),
-  //     modeColors: ['#5c6a96cc', '#5c6a96cc'],
-  //     blendMode: 'difference'
-  //   } as BgCssDpiProps
-  // }
 }
 
 export function SkillFlowsPanel() {
   const chainId = useSupportedChainId()
   const [flows = {}] = useForgeFlowReadAtom(chainId)
+  const [flowTransactions = {}] = useForgeFlowTransactionsReadWriteAtom(chainId)
 
   const [, setPanelState] = useSidePanelWriteAtom()
   const [, setSkill] = useActiveSkillAtom()
@@ -62,94 +54,125 @@ export function SkillFlowsPanel() {
   const getSkill = useGetSkillFromIdCallback(chainId)
   const claimLockedSkill = useForgeClaimLockedSkillCallback()
   const approveAllBatchCallback = useForgeApproveAllBatchCallback()
+  const { mutateAsync: getCollectionApprovedCallback } = useForgeGetAllUnapprovedTokensForClaimableCallback()
 
   const { Component: Checkboxes, store } = useCheckboxes({
     name: 'Hide Claimed',
     options: [{ value: 'show', label: 'show' }],
-    defaultValue: 'show'
+    defaultValue: undefined
   })
 
   const hideClaimed = !!store[0]
 
-  const skillFlows = useMemo(() => {
-    return Object.entries(flows)
-      .filter((f) => (hideClaimed ? f[1].status !== 'claimed' : f))
-      .map(([id, flow]) => {
-        const upgradingSkill = getSkill(id as SkillId)
-        const upgradeStatus = flow.status
-        const definedImgUri = upgradingSkill?.image250 || upgradingSkill?.image500 || upgradingSkill?.image
-        return (
-          <FlowCard key={id} as={Column} gap="2rem" status={flow.status}>
-            <Row width="100%" gap="4rem" justifyContent="space-between" alignItems="flex-start">
-              <Column alignItems="flex-start" marginTop="1rem" gap="1rem">
-                <UpgradingSkillColumn>
-                  <UpgradingSkillHeader>NEW SKILL!</UpgradingSkillHeader>
-                  <UpgradingSkillHeaderResponse>{upgradingSkill.name}</UpgradingSkillHeaderResponse>
-                </UpgradingSkillColumn>
-                <UpgradingSkillColumn>
-                  <UpgradingSkillHeader>STATUS</UpgradingSkillHeader>
-                  <UpgradingSkillHeaderResponse>{_formatFlowStatus(flow.status)}</UpgradingSkillHeaderResponse>
-                </UpgradingSkillColumn>
-              </Column>
-              <FlowSkillImageCircle src={definedImgUri} maxWidth="100px" />
-            </Row>
-            {upgradeStatus !== 'claimed' && (
-              <ColumnCenter
-                width="95%"
-                gap="1rem"
-                css={`
-                  border-top: 1px solid #f8f8ff1c;
-                `}
-              >
-                <SubSkillHeader marginTop="1rem" alignSelf="flex-start" color="ghostwhite">
-                  ACTION(S) REQUIRED:
-                </SubSkillHeader>
-                {(flow.transactions || []).map(({ collectionAddress, hash, type }) => {
-                  const skillId = `${collectionAddress}-0000` as SkillId
-                  const skill = getSkill(skillId)
-                  const image = skill?.image250 || skill?.image500 || skill?.image
-                  return (
-                    <FlowRow
-                      key={collectionAddress}
-                      backgroundColor="navajowhite"
-                      justifyContent="space-between"
-                      gap="2rem"
-                    >
-                      <Column gap="0" flex={1}>
-                        <SubSkillRow>
-                          <SubSkillHeader>SKILL</SubSkillHeader>
-                          <SubSkillHeaderResponse>{skill.name}</SubSkillHeaderResponse>
-                        </SubSkillRow>
-                        <SubSkillRow>
-                          <SubSkillHeader>OPERATION</SubSkillHeader>
-                          <SubSkillHeaderResponse>{type.toUpperCase()}</SubSkillHeaderResponse>
-                        </SubSkillRow>
-                        <SubSkillRow>
-                          <SubSkillHeader>STATUS</SubSkillHeader>
-                          <SubSkillHeaderResponse>{hash ? 'PENDING' : 'APPROVED'}</SubSkillHeaderResponse>
-                        </SubSkillRow>
-                      </Column>
-                      <FlowSkillImageCircle src={image} maxWidth="70px" />
-                    </FlowRow>
-                  )
-                })}
-              </ColumnCenter>
-            )}
+  const srcSet = useGenericImageSrcSet()
+  const { root: w3Modal } = useW3Modals()
 
-            <ActionButton
-              skill={upgradingSkill}
-              flow={flow}
-              statusToCallbackMap={{
-                claimed: () => setSkill(id as SkillId),
-                claimable: async () => claimLockedSkill(upgradingSkill),
-                'needs-approvals': async () =>
-                  approveAllBatchCallback((flow.transactions || [])?.map((t) => t.collectionAddress))
-              }}
-            />
-          </FlowCard>
-        )
-      })
-  }, [approveAllBatchCallback, claimLockedSkill, flows, getSkill, setSkill, hideClaimed])
+  const skillFlows = useMemo(() => {
+    return _getListFromMapByKeyValue(flows, 'status', 'claimed', {
+      conditionalCheck: !!hideClaimed,
+      conditional: 'doesNotEqual'
+    }).map(([oId, flow]) => {
+      const id = oId as SkillId
+      const upgradingSkill = getSkill(id)
+
+      if (!upgradingSkill) return null
+
+      const upgradeStatus = flow.status
+      const hidePrerequisites = upgradeStatus !== 'claimed' || upgradeStatus !== 'claimable'
+      const definedImgUri = upgradingSkill?.image250 || upgradingSkill?.image500 || upgradingSkill?.image
+      return (
+        <FlowCard key={id} as={Column} gap="2rem" status={flow.status}>
+          <Row width="100%" gap="4rem" justifyContent="space-between" alignItems="flex-start">
+            <Column alignItems="flex-start" marginTop="1rem" gap="1rem">
+              <UpgradingSkillColumn>
+                <UpgradingSkillHeader>NEW SKILL!</UpgradingSkillHeader>
+                <UpgradingSkillHeaderResponse>{upgradingSkill.name}</UpgradingSkillHeaderResponse>
+              </UpgradingSkillColumn>
+              <UpgradingSkillColumn>
+                <UpgradingSkillHeader>STATUS</UpgradingSkillHeader>
+                <UpgradingSkillHeaderResponse>{_formatFlowStatus(flow.status)}</UpgradingSkillHeaderResponse>
+              </UpgradingSkillColumn>
+            </Column>
+            <FlowSkillImageCircle src={definedImgUri} maxWidth="100px" />
+          </Row>
+          {hidePrerequisites && (
+            <ColumnCenter
+              width="95%"
+              gap="1rem"
+              css={`
+                border-top: 1px solid #f8f8ff1c;
+              `}
+            >
+              <SubSkillHeader marginTop="1rem" alignSelf="flex-start" color="ghostwhite" letterSpacing={-1}>
+                PREREQUISITE ACTION(S):
+              </SubSkillHeader>
+              {_getListFromMapByKeyValue(flowTransactions, 'skillId', id).map(([rSkillId, flow], i) => {
+                const { hash, status } = flow
+                const skillId = rSkillId.replace(/[^-]*$/, '0000') as SkillId
+                const skill = getSkill(skillId)
+
+                if (!skill) return null
+
+                const image = skill?.image250 || skill?.image500 || skill?.image
+                return (
+                  <FlowRow key={i} backgroundColor="navajowhite" justifyContent="space-between" gap="2rem">
+                    <Column gap="0" flex={1}>
+                      <SubSkillRow>
+                        <SubSkillHeader>SKILL</SubSkillHeader>
+                        <SubSkillHeaderResponse>{skill.name}</SubSkillHeaderResponse>
+                      </SubSkillRow>
+                      <SubSkillRow>
+                        <SubSkillHeader>OPERATION</SubSkillHeader>
+                        <SubSkillHeaderResponse>{_operationTypeToLabel(flow, i)}</SubSkillHeaderResponse>
+                      </SubSkillRow>
+                      <SubSkillRow>
+                        <SubSkillHeader>HASH</SubSkillHeader>
+                        <SubSkillHeaderResponse>
+                          {hash ? truncateHash(hash) : 'AWAITING TRANSACTION'}
+                        </SubSkillHeaderResponse>
+                      </SubSkillRow>
+                      <SubSkillRow>
+                        <SubSkillHeader>STATUS</SubSkillHeader>
+                        <SubSkillHeaderResponse>{(status || 'unsubmitted').toUpperCase()}</SubSkillHeaderResponse>
+                      </SubSkillRow>
+                    </Column>
+                    <FlowSkillImageCircle src={image} maxWidth="70px" />
+                  </FlowRow>
+                )
+              })}
+            </ColumnCenter>
+          )}
+
+          <ActionButton
+            skill={upgradingSkill}
+            flow={flow}
+            assetsSrcSet={srcSet}
+            statusToCallbackMap={{
+              claimed: () => setSkill(id),
+              claimable: async () => claimLockedSkill(upgradingSkill),
+              'needs-approvals': async () => {
+                const unapprovedList = await getCollectionApprovedCallback(upgradingSkill)
+                return approveAllBatchCallback(
+                  unapprovedList.map((dep) => dep.dependencyId.split('-')[0] as Address),
+                  id
+                )
+              }
+            }}
+          />
+        </FlowCard>
+      )
+    })
+  }, [
+    flows,
+    hideClaimed,
+    getSkill,
+    flowTransactions,
+    srcSet,
+    setSkill,
+    claimLockedSkill,
+    getCollectionApprovedCallback,
+    approveAllBatchCallback
+  ])
 
   return (
     <SidePanel
@@ -162,23 +185,40 @@ export function SkillFlowsPanel() {
       }}
       onDismiss={() => setPanelState()}
     >
+      <HeaderButton
+        height={50}
+        fullHeader="WEB3 TRANSACTIONS"
+        iconKey="transactions"
+        bgImage={srcSet.EMPTY_SKILL_DDPX_URL_MAP}
+        onClick={() => w3Modal.open({ route: 'Transactions' })}
+      />
       <SkillFlowsContainer gap="1rem 0">
-        <Row gap="2rem">
-          <SubSkillHeader color="ghostwhite" letterSpacing="-1.4px">
-            HIDE CLAIMED
-          </SubSkillHeader>
-          <Checkboxes
-            checkedColor="#bfef1b"
-            checkedScale={0.8}
-            borderColor="ghostwhite"
-            backgroundColor="transparent"
-          />
-        </Row>
+        {!!skillFlows?.length && (
+          <HideClaimedCheckbox>
+            <Checkboxes
+              checkedColor="#bfef1b"
+              checkedScale={0.8}
+              borderColor="ghostwhite"
+              backgroundColor="transparent"
+            />
+          </HideClaimedCheckbox>
+        )}
         <UserSkillpointsContainer borderRadius="5px" minHeight="300px" textAlign={'center'}>
           {skillFlows}
         </UserSkillpointsContainer>
       </SkillFlowsContainer>
     </SidePanel>
+  )
+}
+
+function HideClaimedCheckbox({ children }: { children: React.ReactNode }) {
+  return (
+    <Row gap="2rem">
+      <SubSkillHeader color="ghostwhite" letterSpacing="-1.4px">
+        HIDE CLAIMED
+      </SubSkillHeader>
+      {children}
+    </Row>
   )
 }
 
@@ -189,10 +229,12 @@ function _formatFlowStatus(status: ForgeFlowState[number][SkillId]['status']) {
 function ActionButton({
   skill,
   flow,
+  assetsSrcSet: srcSet,
   statusToCallbackMap
 }: {
   skill: SkillMetadata
   flow: ForgeFlowState[number][SkillId]
+  assetsSrcSet: ReturnType<typeof useGenericImageSrcSet>
   statusToCallbackMap: {
     claimed: () => void
     claimable: () => Promise<Hash>
@@ -200,9 +242,8 @@ function ActionButton({
   }
 }) {
   const [clicked, setClicked] = useState(false)
-  const srcSet = useGenericImageSrcSet()
   const content = useMemo(() => {
-    let fullHeader = 'N/A'
+    let fullHeader = 'Pending...'
     let iconKey: HeaderButtonProps['iconKey'] = 'inventory'
     let bgImage: ReturnType<typeof useGenericImageSrcSet>['EMPTY_SKILL_DDPX_URL_MAP'] = null
     let bgColor: string | undefined
@@ -213,6 +254,7 @@ function ActionButton({
         bgImage = urlToSimpleGenericImageSrcSet(skill?.image250 || skill?.image500 || skill?.image)
         break
       case 'claimable':
+      case 'approved':
         fullHeader = 'UPGRADE SKILL!'
         iconKey = 'transactions'
         bgImage = srcSet.EMPTY_SKILL_DDPX_URL_MAP
@@ -256,4 +298,32 @@ function ActionButton({
   ])
 
   return content
+}
+
+function _getListFromMapByKeyValue<M extends Record<SkillId, any>, K extends keyof FlowTransactionObject>(
+  transactions: M,
+  key: K,
+  value: M[SkillId][keyof M[SkillId]],
+  opts: {
+    conditionalCheck?: boolean
+    conditional?: 'equals' | 'doesNotEqual'
+  } = {
+    conditionalCheck: true,
+    conditional: 'equals'
+  }
+) {
+  return Object.entries(transactions).filter(([, val]) =>
+    opts.conditionalCheck ? (opts.conditional === 'equals' ? val[key] === value : val[key] !== value) : val
+  )
+}
+
+/* 
+Object.entries(flows)
+.filter((entry: [SkillId, FlowState]) => hideClaimed && entry[1].status !== 'claimed')
+*/
+
+function _operationTypeToLabel(flow: FlowTransactionObject, i: number) {
+  const label =
+    flow.type === 'approve' && flow?.approvalsRequired ? `${flow.type}: ${i}/${flow.approvalsRequired}` : flow.type
+  return label.toUpperCase()
 }

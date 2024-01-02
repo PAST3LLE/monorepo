@@ -3,15 +3,17 @@ import { useCallback } from 'react'
 
 import { useForgeSkillAtom } from '../state/Skills'
 
-export function useGetSkillFromIdCallback(chainId: SupportedForgeChains | undefined) {
+export function useGetSkillFromIdCallback(
+  chainId: SupportedForgeChains | undefined
+): (id: SkillId) => SkillMetadata | undefined {
   const [metadataMap] = useForgeMetadataMapReadAtom(chainId)
 
-  return useCallback((id: SkillId) => metadataMap[id], [metadataMap])
+  return useCallback((id: SkillId) => metadataMap?.[id], [metadataMap])
 }
 
 export function useGetActiveSkill(
   chainId: SupportedForgeChains | undefined
-): null | [SkillMetadata, ReturnType<typeof useForgeSkillAtom>[1]] {
+): null | [SkillMetadata | undefined, ReturnType<typeof useForgeSkillAtom>[1]] {
   const getActiveSkill = useGetSkillFromIdCallback(chainId)
   const [skillState, setSkillState] = useForgeSkillAtom()
   const {

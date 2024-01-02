@@ -3,5 +3,6 @@ export const enum ForgeQueries {
 }
 
 export const enum StorageKeys {
-  FLOWS = 'FLOWS'
+  FLOWS = 'FLOWS',
+  FLOWS_TRANSACTIONS = 'FLOWS_TRANSACTIONS'
 }

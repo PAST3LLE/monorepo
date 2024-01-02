@@ -184,7 +184,13 @@ export function ActiveSkillPanel() {
             marginBottom={'2rem'}
             background="linear-gradient(90deg, black, transparent 80%)"
           >
-            <BlackHeader fontSize={'2.5rem'} fontWeight={300} margin="0" padding="1rem 1rem 0.25rem 1rem">
+            <BlackHeader
+              color={MAIN_COLOR}
+              fontSize={'2.5rem'}
+              fontWeight={300}
+              margin="0"
+              padding="1rem 1rem 0.25rem 1rem"
+            >
               REQUIRED TO UNLOCK
             </BlackHeader>
             <SkillsRow balances={balances} deps={deps} metadataMap={metadataMap} />

@@ -1,4 +1,5 @@
 import { ForgeW3CoreProvidersProps, addConnector, createWeb3ModalTheme } from '@past3lle/forge-web3'
+import { devDebug } from '@past3lle/utils'
 import { LedgerHIDConnector } from '@past3lle/wagmi-connectors'
 import { goerli, polygon } from 'wagmi/chains'
 
@@ -30,6 +31,9 @@ const MODAL_THEME = createWeb3ModalTheme({
           }
         }
       },
+      transactions: {
+        baseFontSize: 20
+      },
       account: {
         text: {
           main: {
@@ -43,7 +47,7 @@ const MODAL_THEME = createWeb3ModalTheme({
         },
         container: {
           main: {
-            background: '#202020'
+            background: 'navajowhite'
           },
           alternate: {
             background: 'navajowhite'
@@ -87,6 +91,18 @@ const DEFAULT_PROPS: ForgeW3CoreProvidersProps['config']['web3'] = {
       }
     }
   },
+  callbacks: {
+    transactions: {
+      onEoaTransactionConfirmed(tx) {
+        devDebug('[@past3lle/skillforge-widget] EOA transaction confirmed!', tx)
+        return tx
+      },
+      onEoaTransactionUnknown(tx) {
+        devDebug('[@past3lle/skillforge-widget] EOA transaction Unknown!', tx)
+        return tx
+      }
+    }
+  },
   modals: {
     root: {
       themeConfig: {
@@ -94,7 +110,7 @@ const DEFAULT_PROPS: ForgeW3CoreProvidersProps['config']['web3'] = {
       }
     },
     walletConnect: {
-      projectId: process.env.REACT_APP_WEB3MODAL_ID || '',
+      projectId: process.env.REACT_APP_WEB3MODAL_ID || 'c7b40d62371c6dbc9e69a9ca1279d0a0',
       walletImages: {
         web3auth: 'https://web3auth.io/images/w3a-L-Favicon-1.svg',
         safe: 'https://user-images.githubusercontent.com/3975770/212338977-5968eae5-bb1b-4e71-8f82-af5282564c66.png'

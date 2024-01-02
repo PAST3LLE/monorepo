@@ -67,40 +67,19 @@ export function TradeAndUnlockPanel() {
     useForgeApproveAndClaimLockedSkillCallback(activeSkill, {
       onApproveSend(hash) {
         updateFlow({
-          skillId: activeSkill.properties.id,
-          approvingSkillId: hash,
-          status: 'needs-approvals'
+          id: activeSkill.properties.id,
+          status: 'needs-approvals',
+          hash
         })
       },
-      onClaimSend() {
+      onClaimSend(hash) {
         updateFlow({
-          skillId: activeSkill.properties.id,
-          status: 'claiming'
+          id: activeSkill.properties.id,
+          status: 'claiming',
+          hash
         })
       }
     })
-
-  // const approveBurnAndClaimLockedSkill = useCallback(async () => {
-  //   // Step 1: approve tokens, if necessary
-  //   if (!!approveDepsCallbacks) {
-  //     approveDepsCallbacks.forEach((cb) => {
-  //       cb().then((hash) =>
-  //         updateFlow({
-  //           skillId: activeSkill.properties.id,
-  //           approvingSkillId: hash,
-  //           status: 'waiting-on-approval'
-  //         })
-  //       )
-  //     })
-  //     // Step 2: claim skill
-  //     claimLockedSkill?.().then(() =>
-  //       updateFlow({
-  //         skillId: activeSkill.properties.id,
-  //         status: 'claiming'
-  //       })
-  //     )
-  //   }
-  // }, [activeSkill?.properties?.id, approveDepsCallbacks, claimLockedSkill, updateFlow])
 
   const [, setPanelState] = useSidePanelAtom()
 

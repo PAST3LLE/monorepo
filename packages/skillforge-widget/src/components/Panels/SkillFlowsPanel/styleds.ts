@@ -59,7 +59,7 @@ export const UpgradingSkillHeaderResponse = styled(BlackHeader).attrs({
   fontWeight: 100,
   letterSpacing: '-1.2px'
 })`
-  font-size: 2.5rem;
+  font-size: 2.4rem;
 
   ${fromLarge`
     font-size: 2.1vw;
@@ -80,7 +80,8 @@ export const SubSkillHeader = styled(BlackHeader).attrs({
 export const SubSkillHeaderResponse = styled(BlackHeader).attrs({
   fontWeight: 100,
   padding: 0,
-  fontFamily: 'monospace'
+  fontFamily: 'monospace',
+  letterSpacing: '-1.6px'
 })`
   font-size: 1.55rem;
 
@@ -127,7 +128,7 @@ export const UserSkillpointsContainer = styled(Column)`
   padding: 0rem;
 
   > ${Row} {
-    flex: 1;
+    flex: 0 1 auto;
     justify-content: center;
     align-items: center;
   }
@@ -142,6 +143,8 @@ function _statusToColour(status: ForgeFlowState[number][SkillId]['status']) {
     case 'approved':
       return '#8275c4'
     case 'claimable':
+    case 'claiming':
+    case 'approving':
       return '#195ac1'
     default:
       return 'black'
