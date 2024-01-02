@@ -43,7 +43,7 @@ const DEFAULT_PROPS: ForgeWeb3ModalProps = {
     }
   }
 }
-const DEFAULT_CONFIG_PROPS: { metadataUris: ForgeMetadataUriMap, contractAddresses: ForgeContractAddressMap } = {
+const DEFAULT_CONFIG_PROPS: { metadataUris: ForgeMetadataUriMap; contractAddresses: ForgeContractAddressMap } = {
   metadataUris: {
     [5]: { collectionsManager: 'https://pstlcollections.s3.eu-south-2.amazonaws.com/collections/' },
     [137]: { collectionsManager: 'https://pstlcollections.s3.eu-south-2.amazonaws.com/collections/' }

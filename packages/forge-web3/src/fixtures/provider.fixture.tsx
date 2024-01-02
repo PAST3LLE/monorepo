@@ -5,13 +5,7 @@ import React, { useCallback, useState } from 'react'
 import { parseEther } from 'viem'
 import { useBalance, useSendTransaction } from 'wagmi'
 
-import {
-  ForgeW3Providers,
-  useForgeMetadataAtom,
-  useSupportedChainId,
-  useW3Modal,
-  useW3UserConnectionInfo
-} from '..'
+import { ForgeW3Providers, useForgeMetadataAtom, useSupportedChainId, useW3Modal, useW3UserConnectionInfo } from '..'
 import { THEME, commonProps, contractProps } from './config'
 
 /* 
