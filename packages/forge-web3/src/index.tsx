@@ -1,8 +1,11 @@
 import {
+  type AnyTransactionReceipt,
   AppType,
   type ChainsPartialReadonly,
   PstlModalTheme as ForgeModalTheme,
   PstlW3Providers,
+  type TransactionOptions,
+  type TransactionStatus,
   W3aStyleResetProvider,
   addConnector,
   addFrameConnector,
@@ -13,8 +16,13 @@ import {
   usePstlAccountNetworkActions as useW3AccountNetworkActions,
   usePstlConnectDisconnect as useW3ConnectDisconnect,
   usePstlConnection as useW3Connection,
+  useFindTransactionByMetadataKeyValue as useW3FindTransactionByMetadataKeyValue,
+  useFindTransactionByMetadataKeyValueCallback as useW3FindTransactionByMetadataKeyValueCallback,
   usePstlWeb3Modal as useW3Modal,
   usePstlWeb3Modals as useW3Modals,
+  useTransactionsByMetadataKey as useW3TransactionsByMetadataKey,
+  useTransactionsByMetadataKeyCallback as useW3TransactionsByMetadataKeyCallback,
+  useTransactionsRead as useW3TransactionsRead,
   usePstlUserConnectionInfo as useW3UserConnectionInfo,
   usePstlWagmiClient as useWagmiClient
 } from '@past3lle/web3-modal'
@@ -89,6 +97,11 @@ export {
   useW3Modals,
   useW3UserConnectionInfo,
   useW3AccountNetworkActions,
+  useW3TransactionsRead,
+  useW3FindTransactionByMetadataKeyValue,
+  useW3FindTransactionByMetadataKeyValueCallback,
+  useW3TransactionsByMetadataKey,
+  useW3TransactionsByMetadataKeyCallback,
   useEthereumClient,
   useWagmiClient,
   addConnector,
@@ -96,8 +109,11 @@ export {
   getAppType,
   useDeriveAppType,
   createTheme as createWeb3ModalTheme,
+  type AnyTransactionReceipt,
   type AppType,
   type ForgeModalTheme,
   type ForgeW3CoreProvidersProps,
-  type ChainsPartialReadonly
+  type ChainsPartialReadonly,
+  type TransactionStatus,
+  type TransactionOptions
 }

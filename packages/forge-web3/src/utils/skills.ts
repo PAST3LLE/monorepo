@@ -13,6 +13,11 @@ export enum SkillLockStatus {
   OWNED = 'OWNED'
 }
 
+export function getBigIntBalanceFromSkill(skill: SkillMetadata | null, balances?: ForgeBalances[number]) {
+  if (!skill?.properties?.id || !balances?.[skill?.properties?.id]) return BigInt(0)
+  return BigInt(balances[skill.properties.id] || 0)
+}
+
 export function getLockStatus(
   skill: SkillMetadata | undefined,
   balances?: ForgeBalances[number],
@@ -22,7 +27,7 @@ export function getLockStatus(
   const hasDeps = deps.length > 0
 
   if (!skill || (hasDeps && !address) || (hasDeps && !balances)) return SkillLockStatus.LOCKED
-  if (BigInt(balances?.[skill.properties.id] || 0) > 0) return SkillLockStatus.OWNED
+  if (getBigIntBalanceFromSkill(skill, balances) > 0) return SkillLockStatus.OWNED
 
   devWarn(skill.name, ' requires skills', deps.join(' '), 'to unlock. Checking...')
   const missingDeps = deps.some((dep) => {
@@ -65,7 +70,20 @@ export function splitSkillAddressId(skill?: SkillMetadata | null): [Address, str
   return skill?.properties?.id?.split('-') as [Address, string] | undefined
 }
 
-export function formatSkillMetadataToArgs(skill?: SkillMetadata | null): SkillDependencyObject | undefined {
+export function skillToSkillId(skill?: SkillMetadata | null): SkillId | undefined {
+  const splitId = splitSkillAddressId(skill)
+  if (!splitId) return undefined
+
+  return `${splitId[0]}-${splitId[1]}`
+}
+
+export function skillDepToSkillId(skill?: SkillDependencyObject): SkillId | undefined {
+  if (!skill) return undefined
+
+  return `${skill.token}-${skill.id}`
+}
+
+export function formatSkillMetadataToArgs(skill: SkillMetadata | null): SkillDependencyObject | undefined {
   const splitInfo = splitSkillAddressId(skill)
 
   if (!splitInfo) return undefined
@@ -75,4 +93,9 @@ export function formatSkillMetadataToArgs(skill?: SkillMetadata | null): SkillDe
 export function skillToDependencySet(skill?: SkillMetadata | null): Set<Address> | undefined {
   if (!skill?.properties?.dependencies || !Array.isArray(skill?.properties?.dependencies)) return undefined
   return new Set(skill.properties.dependencies.map((d) => d.token))
+}
+
+export function dedupeList<A extends any[]>(list: A): A {
+  const listAsSet = new Set(list)
+  return [...listAsSet] as A
 }
