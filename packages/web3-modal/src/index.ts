@@ -1,5 +1,6 @@
 import { TransactionsButton as PstlTransactionsButton } from './components/buttons/Transactions'
 import { PstlWeb3Modal } from './components/modals'
+import { AnyTransactionReceipt, TransactionOptions, TransactionStatus } from './controllers/TransactionsCtrl/types'
 import {
   useAddPendingTransaction,
   useAddPendingTransactionsBatch,
@@ -103,5 +104,8 @@ export {
   type Chain,
   type PstlModalThemeExtension,
   type PstlModalTheme,
-  type AppType
+  type AppType,
+  type AnyTransactionReceipt,
+  type TransactionStatus,
+  type TransactionOptions
 }

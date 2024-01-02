@@ -123,7 +123,7 @@ export const TransactionCard = memo(function TransactionComponent({
   blockExplorerUris?: PstlWeb3ModalProps['blockExplorerUris']
   connectorMetadata?: WalletMetaData
 }) {
-  const { Icon, tooltip, ...statusStyleProps } = statusToPillProps(transaction.status)
+  const { Icon, tooltip, reasonTooltip, ...statusStyleProps } = statusToPillProps(transaction)
   const explorerUri = blockExplorerUris?.default.url
   const formattedHash = transaction.transactionHash ? truncateHash(transaction.transactionHash, { type: 'short' }) : '-'
 
@@ -178,7 +178,7 @@ export const TransactionCard = memo(function TransactionComponent({
         <TransactionTitle>STATUS</TransactionTitle>
         <StatusPill gap="3" {...statusStyleProps}>
           {Icon && <Icon />}
-          <SmallText>{transaction.status}</SmallText>
+          <SmallText margin="auto">{transaction.status}</SmallText>
           {tooltip && (
             <MouseoverCircle
               text={tooltip.text}
@@ -193,10 +193,18 @@ export const TransactionCard = memo(function TransactionComponent({
       {/* REPLACE REASON */}
       {transaction?.replaceReason && (
         <TransactionRow>
-          <TransactionTitle>REASON</TransactionTitle>
-          <StatusPill gap="3" {...statusStyleProps}>
-            <SmallText>{transaction.replaceReason}</SmallText>
-            <MouseoverCircle text={transaction.replaceReason} label="?" size={14} margin="0" />
+          <TransactionTitle>STATUS REASON</TransactionTitle>
+          <StatusPill gap="3" {...statusStyleProps} backgroundColor="#4f5d92">
+            <SmallText margin="auto">{transaction.replaceReason}</SmallText>
+            {reasonTooltip && (
+              <MouseoverCircle
+                text={reasonTooltip.text}
+                backgroundColor={reasonTooltip?.backgroundColor}
+                label="?"
+                size={14}
+                margin="0"
+              />
+            )}
           </StatusPill>
         </TransactionRow>
       )}
@@ -218,65 +226,69 @@ const SafeConfirmationsCard = memo(
     safeTxInfo,
     connectorMetadata
   }: Pick<Required<AnyTransactionReceipt>, 'safeTxInfo'> & { connectorMetadata?: WalletMetaData }) => {
-    const { confirmationsRequired, confirmations = [] } = safeTxInfo
+    const { confirmationsRequired, confirmations = [], replacedReason } = safeTxInfo
     const confirmationsLeft = Math.max(0, confirmationsRequired - confirmations.length)
     return (
       <SafeConfirmationCardWrapper marginTop="2rem" gap="0">
-        <RowStart gap="0.2rem">
-          <img src={connectorMetadata?.icon || FALLBACK_SAFE_LOGO} style={{ maxWidth: 25 }} />
-          <SubheaderText marginRight="auto" display="flex" alignItems="center" gap="0.3rem">
-            {!!confirmationsLeft ? (
-              <>
-                SAFE SIGNATURES REQUIRED!
-                <StrongText display="inline">
-                  {confirmationsLeft} of {confirmationsRequired} REMAINING
-                </StrongText>
-              </>
-            ) : (
-              <>
-                SAFE SIGNATURES <StrongText display="inline">COMPLETED</StrongText>
-                <CheckCircle size={22} style={{ marginBottom: 2 }} />
-              </>
-            )}
-          </SubheaderText>
-        </RowStart>
-        <SafeConfirmationsGridWrapper view="grid">
-          {Array.from({ length: confirmationsRequired }).map((_, i) => {
-            const confirmation = { signature: '', owner: '', ...(confirmations as any)?.[i] }
-            return (
-              <SafeConfirmationSquare key={confirmation.signature} disabled={!confirmation?.signature}>
-                <SafeConfirmationSquareGradient
-                  gap="0.1rem"
-                  flex="1"
-                  padding="0.5rem"
-                  borderRadius="8px"
-                  {...statusToConfirmationSpecialColors(!!confirmation?.signature ? 'success' : 'pending')}
-                >
-                  <MainText display="flex">
-                    CONFIRMATION{' '}
-                    <SmallText display="inline-flex" marginLeft="auto">
-                      {i + 1}/{confirmationsRequired}
-                    </SmallText>
-                  </MainText>
-                  <Row gap="0.5rem">
-                    <img src={FALLBACK_SAFE_LOGO} style={{ maxWidth: '19%' }} />
-                    <Column flex="1">
-                      <TransactionRow fontSize="1em" borderBottom="none" title={confirmation.signature}>
-                        <TransactionTitle>SIGNATURE</TransactionTitle>
-                        <MainText>{truncateLongString(confirmation.signature as Address)}</MainText>
-                      </TransactionRow>
+        {!replacedReason && (
+          <>
+            <RowStart gap="0.2rem">
+              <img src={connectorMetadata?.icon || FALLBACK_SAFE_LOGO} style={{ maxWidth: 25 }} />
+              <SubheaderText marginRight="auto" display="flex" alignItems="center" gap="0.3rem">
+                {!!confirmationsLeft ? (
+                  <>
+                    SAFE SIGNATURES REQUIRED!
+                    <StrongText display="inline">
+                      {confirmationsLeft} of {confirmationsRequired} REMAINING
+                    </StrongText>
+                  </>
+                ) : (
+                  <>
+                    SAFE SIGNATURES <StrongText display="inline">COMPLETED</StrongText>
+                    <CheckCircle size={22} style={{ marginBottom: 2 }} />
+                  </>
+                )}
+              </SubheaderText>
+            </RowStart>
+            <SafeConfirmationsGridWrapper view="grid">
+              {Array.from({ length: confirmationsRequired }).map((_, i) => {
+                const confirmation = { signature: '', owner: '', ...(confirmations as any)?.[i] }
+                return (
+                  <SafeConfirmationSquare key={confirmation.signature} disabled={!confirmation?.signature}>
+                    <SafeConfirmationSquareGradient
+                      gap="0.1rem"
+                      flex="1"
+                      padding="0.5rem"
+                      borderRadius="8px"
+                      {...statusToConfirmationSpecialColors(!!confirmation?.signature ? 'success' : 'pending')}
+                    >
+                      <MainText display="flex">
+                        CONFIRMATION{' '}
+                        <SmallText display="inline-flex" marginLeft="auto">
+                          {i + 1}/{confirmationsRequired}
+                        </SmallText>
+                      </MainText>
+                      <Row gap="0.5rem">
+                        <img src={FALLBACK_SAFE_LOGO} style={{ maxWidth: '19%' }} />
+                        <Column flex="1">
+                          <TransactionRow fontSize="1em" borderBottom="none" title={confirmation.signature}>
+                            <TransactionTitle>SIGNATURE</TransactionTitle>
+                            <MainText>{truncateLongString(confirmation.signature as Address)}</MainText>
+                          </TransactionRow>
 
-                      <TransactionRow fontSize="1em" borderBottom="none" title={confirmation.owner}>
-                        <TransactionTitle>OWNER</TransactionTitle>
-                        <MainText>{truncateAddress(confirmation.owner as Address)}</MainText>
-                      </TransactionRow>
-                    </Column>
-                  </Row>
-                </SafeConfirmationSquareGradient>
-              </SafeConfirmationSquare>
-            )
-          })}
-        </SafeConfirmationsGridWrapper>
+                          <TransactionRow fontSize="1em" borderBottom="none" title={confirmation.owner}>
+                            <TransactionTitle>OWNER</TransactionTitle>
+                            <MainText>{truncateAddress(confirmation.owner as Address)}</MainText>
+                          </TransactionRow>
+                        </Column>
+                      </Row>
+                    </SafeConfirmationSquareGradient>
+                  </SafeConfirmationSquare>
+                )
+              })}
+            </SafeConfirmationsGridWrapper>
+          </>
+        )}
       </SafeConfirmationCardWrapper>
     )
   }

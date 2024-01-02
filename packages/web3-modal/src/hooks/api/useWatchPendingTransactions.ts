@@ -1,5 +1,4 @@
 import { devDebug, devError } from '@past3lle/utils'
-import { SafeMultisigTransactionListResponse } from '@safe-global/api-kit'
 import isEqual from 'lodash.isequal'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import {
@@ -10,7 +9,7 @@ import {
   useWebSocketPublicClient
 } from 'wagmi'
 
-import { TransactionReceiptPending } from '../../controllers/TransactionsCtrl/types'
+import { AuxSafeTransaction, TransactionReceiptPending } from '../../controllers/TransactionsCtrl/types'
 import { getSafeKitAndTx } from '../../utils/safe'
 import { useUserConnectionInfo } from './useConnection'
 
@@ -25,7 +24,7 @@ interface WatchPendingTransactionReturn {
 }
 
 export type SimpleTxInfo = Pick<TransactionReceiptPending, 'transactionHash' | 'safeTxHash' | 'nonce'> & {
-  safeTxInfo?: Pick<SafeMultisigTransactionListResponse['results'][number], 'confirmations' | 'confirmationsRequired'>
+  safeTxInfo?: Pick<AuxSafeTransaction, 'confirmations' | 'confirmationsRequired' | 'replacedReason'>
 }
 export type SafeTransactionListenerInfo = SimpleTxInfo[]
 
@@ -95,7 +94,11 @@ function useEnhancedWatchPendingTransactions({
   )
   const transactionsRef = useRef<SimpleTxInfo[] | null>(null)
   useEffect(() => {
-    if (!address || !enabled || !chain?.id) return
+    if (!address || !enabled || !chain?.id) {
+      return devDebug(
+        '[@past3lle/web3-modal -- useWatchPendingTransactions] No address // chain id // pending transactions detected. Bailing.'
+      )
+    }
 
     const callbacks = {
       handleTxConfirmed,
@@ -135,7 +138,7 @@ function useEnhancedWatchPendingTransactions({
       unsub()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [enabled])
+  }, [address, chain?.id, enabled])
 }
 
 async function _handleSafeTransactions(

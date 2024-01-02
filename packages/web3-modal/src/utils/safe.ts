@@ -1,6 +1,7 @@
-import SafeApiKit, { SafeMultisigTransactionListResponse } from '@safe-global/api-kit'
-import { Address, Hash } from 'viem'
+import SafeApiKit from '@safe-global/api-kit'
+import { Address, Hash, ReplacementReason } from 'viem'
 
+import { AuxSafeTransaction } from '../controllers/TransactionsCtrl/types'
 import { SimpleTxInfo } from '../hooks'
 
 const SAFE_TRANSACTION_SERVICE_CACHE: Partial<Record<number, SafeApiKit | null>> = {}
@@ -34,11 +35,26 @@ export function getSafeKitOrThrow(chainId: number): SafeApiKit {
 export async function checkSafeTxConfirmedOrReplaced(
   safeKit: SafeApiKit,
   hashes: Hash[],
-  _address: Address
+  address: Address
 ): Promise<SimpleTxInfo[]> {
-  const results = await Promise.all(hashes.map((hash) => safeKit.getTransaction(hash)))
+  const txInfoAtHash = await Promise.all(hashes.map((hash) => safeKit.getTransaction(hash)))
+  const allTxs = (await safeKit.getMultisigTransactions(address))?.results
 
-  return results.map(_getTxInfoFromSafeTx)
+  const auxTransactions: AuxSafeTransaction[] = txInfoAtHash.map((res) => {
+    const transactionsAtNonce = allTxs.filter((tx) => tx.nonce === res.nonce)
+    let status: ReplacementReason | undefined
+    transactionsAtNonce.forEach((tx) => {
+      if (!!tx.isSuccessful && res.transactionHash !== tx.transactionHash) {
+        if (tx.value === '0') status = 'cancelled'
+        else if (tx.value === res.value) status = 'repriced'
+        else status = 'replaced'
+      }
+    })
+
+    return { ...res, replacedReason: status }
+  })
+
+  return auxTransactions.map(_getTxInfoFromSafeTx)
 }
 
 /**
@@ -52,14 +68,15 @@ export async function getSafeKitAndTx(chainId: number, hashes: Hash[], safeAddre
   return checkSafeTxConfirmedOrReplaced(safeKit, hashes, safeAddress)
 }
 
-function _getTxInfoFromSafeTx(safeTx: SafeMultisigTransactionListResponse['results'][number]): SimpleTxInfo {
+function _getTxInfoFromSafeTx(safeTx: AuxSafeTransaction): SimpleTxInfo {
   return {
     transactionHash: safeTx?.transactionHash as Hash | undefined,
     safeTxHash: safeTx.safeTxHash as Hash,
     nonce: safeTx.nonce,
     safeTxInfo: {
-      confirmationsRequired: safeTx.confirmationsRequired,
-      confirmations: safeTx.confirmations
+      replacedReason: safeTx?.replacedReason,
+      confirmationsRequired: safeTx?.replacedReason ? 0 : safeTx.confirmationsRequired,
+      confirmations: safeTx?.replacedReason ? undefined : safeTx.confirmations
     }
   }
 }

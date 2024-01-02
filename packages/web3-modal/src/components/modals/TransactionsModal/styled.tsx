@@ -12,6 +12,7 @@ import {
 import React from 'react'
 import { AnyTransactionReceipt } from 'src/controllers/TransactionsCtrl/types'
 import styled from 'styled-components'
+import { ReplacementReason } from 'viem'
 
 import { HidModalTextInput } from '../HidDeviceOptionsModal/styleds'
 import { ModalText, WalletsWrapper } from '../common/styled'
@@ -77,16 +78,18 @@ export interface PillProps {
   backgroundColor: string
   color: string
   tooltip?: { text: string; backgroundColor: string }
+  reasonTooltip?: { text: string; backgroundColor?: string }
   Icon?: typeof Icon
 }
 export const StatusPill = styled(RowCenter)<PillProps>`
-  padding: 0;
+  padding: 0 0.4rem;
   margin: 2px 0;
   border-radius: 2px;
   width: 110px;
   gap: 3px;
 
   > svg {
+    margin-left: auto;
     width: 14px;
     height: 14px;
   }
@@ -125,13 +128,17 @@ export function statusToConfirmationSpecialColors(status: AnyTransactionReceipt[
   }
 }
 
-export function statusToPillProps(status: AnyTransactionReceipt['status']): PillProps {
-  switch (status) {
+export function statusToPillProps(tx: AnyTransactionReceipt): PillProps {
+  switch (tx.status) {
     case 'success':
     case 'replaced-success':
       return {
         backgroundColor: '#708c7e',
         color: 'ghostwhite',
+        reasonTooltip: {
+          text: _getReplacedReason(tx.replaceReason),
+          backgroundColor: 'slategray'
+        },
         Icon: ThumbsUp
       }
     case 'reverted':
@@ -139,8 +146,12 @@ export function statusToPillProps(status: AnyTransactionReceipt['status']): Pill
         backgroundColor: '#994e4e',
         color: 'ghostwhite',
         tooltip: {
-          text: 'Transaction was not confirmed. This may mean the transaction reverted, cancelled, or overwritten by another transaction e.g speed-up',
+          text: 'Transaction was not confirmed (reverted). See the STATUS row for more detailed information pertaining to the transaction reversion.',
           backgroundColor: '#c03838'
+        },
+        reasonTooltip: {
+          text: _getReplacedReason(tx.replaceReason),
+          backgroundColor: 'slategray'
         },
         Icon: Slash
       }
@@ -149,6 +160,10 @@ export function statusToPillProps(status: AnyTransactionReceipt['status']): Pill
       return {
         backgroundColor: '#657bb9a8',
         color: 'ghostwhite',
+        reasonTooltip: {
+          text: _getReplacedReason(tx.replaceReason),
+          backgroundColor: 'slategray'
+        },
         Icon: (() => <SpinnerCircle stroke="white" />) as any
       }
     case 'unknown':
@@ -161,6 +176,16 @@ export function statusToPillProps(status: AnyTransactionReceipt['status']): Pill
         }
       }
   }
+}
+
+function _getReplacedReason(replaceReason?: ReplacementReason) {
+  return replaceReason === 'cancelled'
+    ? 'Transaction was cancelled! User manually cancelled this transaction by explicitly overriding the nonce.'
+    : replaceReason === 'replaced'
+    ? 'Transaction was replaced! A different transaction with the same nonce number but a different hash and value replaced this one.'
+    : replaceReason === 'repriced'
+    ? 'Transaction was repriced (aka sped-up)! Another transaction with the same nonce number and value but a different hash was successful.'
+    : ''
 }
 
 export const SubheaderText = styled(ModalText).attrs({ modal: 'transactions', node: 'subHeader' })``
