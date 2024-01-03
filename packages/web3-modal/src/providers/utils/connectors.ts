@@ -1,5 +1,6 @@
 import { devDebug } from '@past3lle/utils'
 import { isIframe } from '@past3lle/wagmi-connectors/utils'
+import { ChainProviderFn } from 'wagmi'
 
 import { usePstlWeb3ModalStore } from '../../hooks'
 import { Chain, ConnectorEnhanced } from '../../types'
@@ -56,4 +57,19 @@ export function softFilterChains(config: PstlWeb3ModalProps): PstlWeb3ModalProps
     ...config,
     chains: filteredChains
   }
+}
+
+export type PublicClientFn<TChain extends Chain<number> = Chain<number>> = ({
+  apiKey
+}: {
+  apiKey: string
+}) => ChainProviderFn<TChain>
+export type ApiKeyMap<P extends PublicClientFn> = {
+  client: P
+  [key: number]: string
+}
+export function addPublicClients<P extends PublicClientFn>(clientsAndKeys: ApiKeyMap<P>[], chains: Chain<number>[]) {
+  return clientsAndKeys.flatMap((clientInfo, i) => [
+    ...chains.map((chain) => clientInfo.client({ apiKey: clientsAndKeys[i]?.[chain.id] }))
+  ])
 }

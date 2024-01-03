@@ -193,6 +193,21 @@ export default {
     <PstlW3Providers
       config={{
         ...DEFAULT_PROPS,
+        clients: {
+          wagmi: {
+            options: {
+              publicClients: [
+                {
+                  client: infuraProvider,
+                  1: '5f5d6fa3fcd249f288a5aa36d2337914',
+                  5: '5f5d6fa3fcd249f288a5aa36d2337914',
+                  137: '5f5d6fa3fcd249f288a5aa36d2337914',
+                  80001: '5f5d6fa3fcd249f288a5aa36d2337914'
+                }
+              ]
+            }
+          }
+        },
         modals: {
           ...DEFAULT_PROPS.modals,
           root: {
@@ -1015,9 +1030,12 @@ export default {
             wagmi: {
               options: {
                 ...DEFAULT_PROPS_WEB3AUTH.clients?.wagmi?.options,
-                publicClients: process.env.REACT_APP_INFURA_ID
-                  ? [infuraProvider({ apiKey: process.env.REACT_APP_INFURA_ID })]
-                  : []
+                publicClients: [
+                  {
+                    client: infuraProvider,
+                    5: process.env.REACT_APP_INFURA_ID as string
+                  }
+                ]
               }
             }
           }

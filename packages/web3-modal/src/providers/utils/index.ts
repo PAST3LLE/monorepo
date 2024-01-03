@@ -3,18 +3,13 @@ import { IFrameEthereumConnector } from '@past3lle/wagmi-connectors/IFrameConnec
 import { EthereumClient, w3mProvider } from '@web3modal/ethereum'
 import { useMemo } from 'react'
 import { Chain } from 'viem'
-import {
-  ChainProviderFn,
-  Config as ClientConfig,
-  WagmiConfigProps,
-  configureChains,
-  createConfig as createClient
-} from 'wagmi'
+import { Config as ClientConfig, WagmiConfigProps, configureChains, createConfig as createClient } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { publicProvider } from 'wagmi/providers/public'
 
 import { ChainsPartialReadonly, ConnectorEnhanced } from '../../types'
 import { PstlWeb3ModalProps } from '../types'
+import { ApiKeyMap, PublicClientFn, addPublicClients } from './connectors'
 
 interface ClientConfigEnhanced extends Omit<ClientConfig, 'connectors'> {
   connectors?: (() => ConnectorEnhanced<any, any>[]) | ConnectorEnhanced<any, any>[]
@@ -25,7 +20,7 @@ interface CreateWagmiClientProps<ID extends number> {
   connectors: ConnectorEnhanced<any, any>[]
   w3mConnectorProps: PstlWeb3ModalProps<ID>['modals']['walletConnect']
   options?: Partial<Pick<ClientConfigEnhanced, 'publicClient'>> & {
-    publicClients?: ChainProviderFn[]
+    publicClients?: ApiKeyMap<PublicClientFn>[]
     pollingInterval?: number
     autoConnect?: boolean
     connectors?: ((chains: Chain[]) => ConnectorEnhanced<any, any>)[]
@@ -39,7 +34,7 @@ function createWagmiClient<ID extends number>({
   const { publicClient } = configureChains(
     props.chains as Chain[],
     [
-      ...(options?.publicClients || []),
+      ...addPublicClients(options?.publicClients || [], props.chains as Chain[]),
       w3mProvider({ projectId: props.w3mConnectorProps.projectId }),
       publicProvider()
     ],
@@ -144,3 +139,5 @@ export const addFrameConnector =
     new Connector({ chains, options })
 
 type Instance<T> = new (...args: any[]) => T
+
+export { addPublicClients } from './connectors'

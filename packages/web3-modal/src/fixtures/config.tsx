@@ -223,7 +223,7 @@ const DEFAULT_PROPS: PstlWeb3ModalProps = {
   clients: {
     wagmi: {
       options: {
-        publicClients: [alchemyProvider({ apiKey: 'SYRE9jZCPEk3b7SlmVRKRQzOrmb6kVAd' })]
+        publicClients: [{ client: alchemyProvider, 5: 'SYRE9jZCPEk3b7SlmVRKRQzOrmb6kVAd' }]
       }
     }
   },

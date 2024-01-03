@@ -11,6 +11,7 @@ import {
   PstlWagmiClientOptions,
   addConnector,
   addFrameConnector,
+  addPublicClients,
   usePstlEthereumClient,
   usePstlWagmiClient
 } from './utils'
@@ -67,6 +68,7 @@ export {
   // utils
   addConnector,
   addFrameConnector,
+  addPublicClients,
   // types
   type PstlWeb3ModalProps,
   type PstlWagmiClientOptions,
