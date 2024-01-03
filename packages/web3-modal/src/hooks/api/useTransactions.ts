@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Hash } from 'viem'
-import { useChainId } from 'wagmi'
+import { Address, Hash } from 'viem'
+import { useAccount, useChainId } from 'wagmi'
 
 import { TransactionCtrl } from '../../controllers'
 import {
@@ -21,6 +21,7 @@ interface UseTransactions {
   updateTransactionsViaCallback: typeof TransactionCtrl.updateTransactionsViaCallback
 }
 export function useTransactions(): UseTransactions {
+  const { address } = useAccount()
   const chainId = useChainId()
   const [transactionsByChain, setState] = useState(TransactionCtrl.state)
 
@@ -35,7 +36,10 @@ export function useTransactions(): UseTransactions {
   }, [])
 
   return {
-    transactions: useMemo(() => transactionsByChain[chainId] || [], [chainId, transactionsByChain]),
+    transactions: useMemo(
+      () => (address ? transactionsByChain?.[chainId]?.[address] || [] : []),
+      [address, chainId, transactionsByChain]
+    ),
     addTransaction: TransactionCtrl.addTransaction,
     addBatchPendingTransactions: TransactionCtrl.addBatchPendingTransactions,
     confirmTransactionsByValue: TransactionCtrl.confirmTransactionsByValue,
@@ -89,23 +93,25 @@ export const useAddPendingTransactionsBatch = () => {
   const { addBatchPendingTransactions } = useTransactions()
 
   const chainId = useChainId()
+  const { address: account } = useAccount()
   const isSafeWallet = useIsSafeWallet()
 
   return useCallback(
     (batch: Hash[], nonce = 0, opts?: TransactionOptions) => {
-      if (!chainId) return
+      if (!account || !chainId) return
       else if (opts?.metadataBatch && opts?.metadataBatch?.length !== batch.length) {
         throw new Error('[useAddPendingTransactionsBatch] Metadata batch and hash list length mismatch. Check params.')
       }
 
       addBatchPendingTransactions({
+        account,
         chainId,
         batch,
         nonce,
         walletType: isSafeWallet ? 'SAFE' : 'EOA'
       })
     },
-    [isSafeWallet, chainId, addBatchPendingTransactions]
+    [isSafeWallet, account, chainId, addBatchPendingTransactions]
   )
 }
 
@@ -113,11 +119,12 @@ export const useAddPendingTransaction = () => {
   const { addTransaction } = useTransactions()
 
   const chainId = useChainId()
+  const { address: account } = useAccount()
   const isSafeWallet = useIsSafeWallet()
 
   return useCallback(
     (hash: Hash, opts?: TransactionOptions) => {
-      if (!chainId) return
+      if (!account || !chainId) return
       const pendingTransaction: TransactionReceiptPending = {
         dateAdded: Date.now(),
         chainId,
@@ -129,15 +136,16 @@ export const useAddPendingTransaction = () => {
         metadata: opts?.metadata
       }
 
-      addTransaction({ chainId, transaction: pendingTransaction })
+      addTransaction({ account, chainId, transaction: pendingTransaction })
     },
-    [isSafeWallet, chainId, addTransaction]
+    [account, isSafeWallet, chainId, addTransaction]
   )
 }
 
 export const useConfirmTransactionsByPropCallback = () => {
   const { confirmTransactionsByValue } = useTransactions()
 
+  const { address: account } = useAccount()
   const chainId = useChainId()
 
   return useCallback(
@@ -149,22 +157,24 @@ export const useConfirmTransactionsByPropCallback = () => {
       searchValue: AnyTransactionReceipt[S],
       updateKey: U
     ) => {
-      if (!chainId) return
+      if (!account || !chainId) return
 
       confirmTransactionsByValue({
+        account,
         chainId,
         searchKey,
         searchValue,
         updateKey
       })
     },
-    [chainId, confirmTransactionsByValue]
+    [account, chainId, confirmTransactionsByValue]
   )
 }
 
 export const useUpdateTransactionNonces = () => {
   const { updateTransactionsByValue } = useTransactions()
 
+  const { address: account } = useAccount()
   const chainId = useChainId()
 
   return useCallback(
@@ -174,9 +184,10 @@ export const useUpdateTransactionNonces = () => {
       updateKey: U,
       updateValue: AnyTransactionReceipt[U]
     ) => {
-      if (!chainId) return
+      if (!account || !chainId) return
 
       updateTransactionsByValue({
+        account,
         chainId,
         searchKey,
         searchValue,
@@ -184,12 +195,13 @@ export const useUpdateTransactionNonces = () => {
         updateValue
       })
     },
-    [chainId, updateTransactionsByValue]
+    [account, chainId, updateTransactionsByValue]
   )
 }
 
 export const useUpdateBatchTransactionByValue = () => {
   const { updateTransactionsBatchByValue } = useTransactions()
+  const { address: account } = useAccount()
   const chainId = useChainId()
 
   return useCallback(
@@ -199,9 +211,10 @@ export const useUpdateBatchTransactionByValue = () => {
       updateKey: U,
       updateValue: AnyTransactionReceipt[U]
     ) => {
-      if (!chainId) return
+      if (!account || !chainId) return
 
       updateTransactionsBatchByValue({
+        account,
         chainId,
         searchKey,
         searchValueBatch,
@@ -209,24 +222,26 @@ export const useUpdateBatchTransactionByValue = () => {
         updateValue
       })
     },
-    [chainId, updateTransactionsBatchByValue]
+    [account, chainId, updateTransactionsBatchByValue]
   )
 }
 
 export const useUpdateTransactionsViaCallback = () => {
   const { updateTransactionsViaCallback } = useTransactions()
+  const { address: account } = useAccount()
   const chainId = useChainId()
 
   return useCallback(
-    (updateFn: (state: TransactionsCtrlState[number]) => TransactionsCtrlState[number]) => {
-      if (!chainId) return
+    (updateFn: (state: TransactionsCtrlState[number][Address]) => TransactionsCtrlState[number][Address]) => {
+      if (!account || !chainId) return
 
       updateTransactionsViaCallback({
+        account,
         chainId,
         updateFn
       })
     },
-    [chainId, updateTransactionsViaCallback]
+    [account, chainId, updateTransactionsViaCallback]
   )
 }
 

@@ -36,19 +36,28 @@ export function TransactionsUpdater() {
   */
   const listener = useCallback(
     (_: Address[], transactions: SafeTransactionListenerInfo) => {
-      if (!!pendingSafeHashList.length && !!transactions.length) {
+      if (!!pendingSafeHashList.length) {
+        _handleSafeTransactions(transactions, updateTransactionsViaCallback, userTransactionCallbacks)
+      }
+    },
+    [pendingSafeHashList.length, updateTransactionsViaCallback, userTransactionCallbacks]
+  )
+  const errorListener = useCallback(
+    (_: Error | undefined, transactions: SafeTransactionListenerInfo) => {
+      if (!!pendingSafeHashList.length) {
         _handleSafeTransactions(transactions, updateTransactionsViaCallback, userTransactionCallbacks)
       }
     },
     [pendingSafeHashList.length, updateTransactionsViaCallback, userTransactionCallbacks]
   )
 
+  const memoedSafeHashes = useMemo(() => pendingSafeHashList.map((tx) => tx.safeTxHash), [pendingSafeHashList])
   // Watch SAFE transactions
   useWatchPendingTransactions({
     enabled: !!pendingSafeHashList.length,
-    safeTxHashes: useMemo(() => pendingSafeHashList.map((tx) => tx.safeTxHash), [pendingSafeHashList]),
+    safeTxHashes: memoedSafeHashes,
     listener,
-    errorListener: devError
+    errorListener
   })
 
   // Watch EOA transactions
@@ -70,7 +79,7 @@ export function TransactionsUpdater() {
           })
         )
       } else {
-        devDebug('No transaction hash in success callback!')
+        devDebug('[TransactionsCtrl::Updater] No transaction hash in onSettled callback!')
       }
     },
     async onReplaced(response) {
@@ -81,6 +90,11 @@ export function TransactionsUpdater() {
         response.transaction,
         ' // Reason:',
         response.reason
+      )
+      updateTransactionsViaCallback(
+        _setTxState(pendingEoaHashList?.[0]?.transactionHash, userTransactionCallbacks?.onEoaTransactionUnknown, {
+          status: 'replaced-pending'
+        })
       )
     }
   })

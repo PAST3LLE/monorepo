@@ -1,4 +1,4 @@
-import { Chain, type useConnect } from 'wagmi'
+import { Address, Chain, type useConnect } from 'wagmi'
 
 import { PstlWeb3ModalProps } from '../../providers'
 import { AppType } from '../../providers/utils/connectors'
@@ -16,7 +16,9 @@ export interface ModalCtrlState {
 
 // -- TransactionsCtrl ------------------------------------------- //
 export type TransactionsCtrlState = {
-  [chainId: number]: AnyTransactionReceipt[] | undefined
+  [chainId: number]: {
+    [account: Address]: AnyTransactionReceipt[] | undefined
+  }
 }
 
 // -- ConnectionStatusCtrl --------------------------------------- //

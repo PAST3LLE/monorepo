@@ -1,5 +1,5 @@
 import { proxy, subscribe as valtioSub } from 'valtio'
-import { Hash } from 'viem'
+import { Address, Hash } from 'viem'
 
 import { TransactionsCtrlState } from '../types'
 import { CoreUtil } from '../utils/CoreUtil'
@@ -7,10 +7,11 @@ import { AnyTransactionReceipt, AnyTransactionReceiptPayload } from './types'
 
 interface BaseParams {
   chainId: number
+  account: Address
 }
 
 interface UpdateTransactionsViaCallback extends BaseParams {
-  updateFn: (state: AnyTransactionReceipt[]) => TransactionsCtrlState[number]
+  updateFn: (state: AnyTransactionReceipt[]) => TransactionsCtrlState[number][Address]
 }
 
 interface BatchTransactionParams extends BaseParams, Pick<AnyTransactionReceipt, 'nonce' | 'walletType'> {
@@ -60,19 +61,24 @@ export const TransactionCtrl = {
       callback(state)
     })
   },
-  addTransaction({ chainId, transaction }: BaseParams & { transaction: AnyTransactionReceiptPayload }) {
-    if (!Array.isArray(state?.[chainId])) state[chainId] = []
+  addTransaction({ account, chainId, transaction }: BaseParams & { transaction: AnyTransactionReceiptPayload }) {
+    if (!state?.[chainId]) state[chainId] = {}
+    if (!Array.isArray(state[chainId]?.[account])) state[chainId][account] = []
+
     const txWithDate = {
       ...transaction,
       chainId,
       dateAdded: Date.now()
     }
-    state[chainId] = [...(state?.[chainId] || []), txWithDate]
+    state[chainId][account] = [...(state?.[chainId]?.[account] || []), txWithDate]
   },
-  addBatchPendingTransactions({ chainId, batch, nonce, walletType }: BatchTransactionParams) {
-    const currState = state[chainId]
+  addBatchPendingTransactions({ account, chainId, batch, nonce, walletType }: BatchTransactionParams) {
+    if (!state?.[chainId]) state[chainId] = {}
+    if (!Array.isArray(state[chainId]?.[account])) state[chainId][account] = []
+
+    const currState = state?.[chainId]?.[account] || []
     const dateAdded = Date.now()
-    state[chainId] = (currState || [])
+    state[chainId][account] = currState
       .map((cTx, idx) => {
         const iTx = batch[idx]
         if (!!nonce && cTx.nonce === nonce) {
@@ -104,39 +110,45 @@ export const TransactionCtrl = {
   confirmTransactionsByValue<
     S extends keyof AnyTransactionReceiptPayload,
     T extends keyof AnyTransactionReceiptPayload
-  >({ chainId, searchKey, searchValue }: ConfirmTransactionsParams<S, T>) {
-    const stateAtChain = state[chainId]
-    state[chainId] = _setPendingTxStatusByKeyValue(stateAtChain || [], searchKey, searchValue)
+  >({ account, chainId, searchKey, searchValue }: ConfirmTransactionsParams<S, T>) {
+    const stateAtChain = state?.[chainId]?.[account]
+    if (!stateAtChain) return
+    state[chainId][account] = _setPendingTxStatusByKeyValue(stateAtChain || [], searchKey, searchValue)
   },
   updateTransactionsByValue<S extends keyof AnyTransactionReceipt, T extends keyof AnyTransactionReceipt>({
+    account,
     chainId,
     searchKey,
     searchValue,
     updateKey,
     updateValue
   }: ConfirmTransactionsParams<S, T>) {
-    const stateAtChain = state[chainId]
-    state[chainId] = _updateTransactionsByKeyValue(stateAtChain || [], (tx) => {
+    const stateAtChain = state?.[chainId]?.[account]
+    if (!stateAtChain) return
+    state[chainId][account] = _updateTransactionsByKeyValue(stateAtChain || [], (tx) => {
       const isTx = tx[searchKey] === searchValue
       return isTx ? { ...tx, [updateKey]: updateValue } : tx
     })
   },
   updateTransactionsBatchByValue<S extends keyof AnyTransactionReceipt, T extends keyof AnyTransactionReceipt>({
+    account,
     chainId,
     searchKey,
     searchValueBatch,
     updateKey,
     updateValue
   }: ConfirmTransactionsBatchParams<S, T>) {
-    const stateAtChain = state[chainId]
-    state[chainId] = stateAtChain?.map((tx) => {
+    const stateAtChain = state?.[chainId]?.[account]
+    if (!stateAtChain) return
+    state[chainId][account] = stateAtChain?.map((tx) => {
       const isTx = searchValueBatch.includes(tx[searchKey])
       return isTx ? _updateItemByKeyValue(tx, searchKey, tx[searchKey], updateKey, updateValue) : tx
     })
   },
-  updateTransactionsViaCallback({ chainId, updateFn }: UpdateTransactionsViaCallback) {
-    const stateAtChain = state[chainId] || []
-    state[chainId] = updateFn(stateAtChain)
+  updateTransactionsViaCallback({ account, chainId, updateFn }: UpdateTransactionsViaCallback) {
+    const stateAtChain = state?.[chainId]?.[account]
+    if (!stateAtChain) return
+    state[chainId][account] = updateFn(stateAtChain)
   }
 }
 

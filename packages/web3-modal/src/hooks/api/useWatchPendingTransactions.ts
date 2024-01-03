@@ -29,7 +29,10 @@ export type SimpleTxInfo = Pick<TransactionReceiptPending, 'transactionHash' | '
 export type SafeTransactionListenerInfo = SimpleTxInfo[]
 
 export type WatchPendingTransactionsListener = (txs: Address[], safeTxInfo: SafeTransactionListenerInfo) => void
-export type WatchPendingTransactionsErrorListener = (error?: Error) => void
+export type WatchPendingTransactionsErrorListener = (
+  error: Error | undefined,
+  safeTxInfo: SafeTransactionListenerInfo
+) => void
 
 export function useWatchPendingTransactions(
   params: Omit<Parameters<typeof useWagmiWatchPendingTransactions>[0], 'listener'> & {
@@ -128,7 +131,11 @@ function useEnhancedWatchPendingTransactions({
           error?.message || error,
           'Checking transaction status...'
         )
-        errorListener?.(error)
+        let results: SafeTransactionListenerInfo = []
+        if (safeTxHashes?.length) {
+          results = await _handleSafeTransactions(safeTxHashes, transactionsRef, state, callbacks)
+        }
+        errorListener?.(error, results)
       }
     })
     devDebug('[@past3lle/web3-modal -- useWatchPendingTransactions] Subbing!')
