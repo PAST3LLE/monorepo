@@ -26,7 +26,7 @@ import {
   usePstlUserConnectionInfo as useW3UserConnectionInfo,
   usePstlWagmiClient as useWagmiClient
 } from '@past3lle/web3-modal'
-import React, { ReactNode, StrictMode } from 'react'
+import React, { ReactNode } from 'react'
 
 import { ForgeBalancesUpdater, ForgeW3StateUpdaters, ForgeWindowSizeUpdater } from './state'
 import { ForgeW3AppConfig } from './types'
@@ -46,32 +46,26 @@ interface ForgeW3CoreProvidersProps {
 }
 
 function ForgeStateProviders({ config, children }: ForgeW3CoreProvidersProps) {
-  return (
-    <StrictMode>
-      <ForgeW3StateUpdaters {...config}>{children}</ForgeW3StateUpdaters>
-    </StrictMode>
-  )
+  return <ForgeW3StateUpdaters {...config}>{children}</ForgeW3StateUpdaters>
 }
 
 function ForgeW3Providers({ config, children }: ForgeW3CoreProvidersProps) {
   return (
-    <StrictMode>
-      <PstlW3Providers
-        config={{
-          ...config.web3,
-          appName: config.name
-        }}
-      >
-        <W3aStyleResetProvider />
-        <ForgeW3StateUpdaters {...config}>{children}</ForgeW3StateUpdaters>
-      </PstlW3Providers>
-    </StrictMode>
+    <PstlW3Providers
+      config={{
+        ...config.web3,
+        appName: config.name
+      }}
+    >
+      <W3aStyleResetProvider />
+      <ForgeW3StateUpdaters {...config}>{children}</ForgeW3StateUpdaters>
+    </PstlW3Providers>
   )
 }
 
 function ForgeW3BalancesAndWindowSizeProviders({ config, children }: ForgeW3CoreProvidersProps) {
   return (
-    <StrictMode>
+    <>
       <ForgeWindowSizeUpdater {...config.options?.windowSizeOptions} />
       <PstlW3Providers
         config={{
@@ -83,7 +77,7 @@ function ForgeW3BalancesAndWindowSizeProviders({ config, children }: ForgeW3Core
         <ForgeBalancesUpdater />
         {children}
       </PstlW3Providers>
-    </StrictMode>
+    </>
   )
 }
 
