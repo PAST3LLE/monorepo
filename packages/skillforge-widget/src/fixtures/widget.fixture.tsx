@@ -1,5 +1,6 @@
 import { RobotoVariableFontProvider } from '@past3lle/theme'
 import React from 'react'
+import { alchemyProvider } from 'wagmi/providers/alchemy'
 
 import { SkillForge, SkillForgeConnectedHeader } from '../components'
 import { createTheme } from '../theme/utils'
@@ -113,6 +114,13 @@ function App() {
         web3: {
           ...commonProps,
           chains: commonProps.chains,
+          clients: {
+            wagmi: {
+              options: {
+                publicClients: [alchemyProvider({ apiKey: 'SYRE9jZCPEk3b7SlmVRKRQzOrmb6kVAd' })]
+              }
+            }
+          },
           callbacks: {
             transactions: {
               onEoaTransactionConfirmed(tx) {

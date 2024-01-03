@@ -72,6 +72,8 @@ const MODAL_THEME = createWeb3ModalTheme({
     }
   }
 })
+// TESTING ID - DONT USE IN PROD
+const WALLETCONNECT_TEST_ID = 'a01e2f3b7c64ff495f9cb28e4e2d4b49'
 const DEFAULT_PROPS: ForgeW3CoreProvidersProps['config']['web3'] = {
   chains: [goerli, polygon],
   connectors: {
@@ -110,7 +112,7 @@ const DEFAULT_PROPS: ForgeW3CoreProvidersProps['config']['web3'] = {
       }
     },
     walletConnect: {
-      projectId: process.env.REACT_APP_WEB3MODAL_ID || 'c7b40d62371c6dbc9e69a9ca1279d0a0',
+      projectId: WALLETCONNECT_TEST_ID,
       walletImages: {
         web3auth: 'https://web3auth.io/images/w3a-L-Favicon-1.svg',
         safe: 'https://user-images.githubusercontent.com/3975770/212338977-5968eae5-bb1b-4e71-8f82-af5282564c66.png'

@@ -16,7 +16,6 @@ export function useUpdateFlowsOnBlock() {
   const [balancesMap] = useForgeBalancesReadAtom()
 
   useForgeGetLockedSkillsApprovalStatuses({
-    enabled: false,
     async onIterationSuccess(data) {
       const [cFlow, hasSkill] = [flows?.[data.parentSkillId], BigInt(balancesMap?.[data.parentSkillId]) > 0]
       const flowStatus = !data.approved ? 'needs-approvals' : hasSkill ? 'claimed' : 'claimable'

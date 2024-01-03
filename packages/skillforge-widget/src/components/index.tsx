@@ -2,7 +2,7 @@ import { ColumnCenter, RowProps } from '@past3lle/components'
 import { SupportedForgeChains, useSupportedChainId } from '@past3lle/forge-web3'
 import { useIsMobile } from '@past3lle/hooks'
 import { StaticGlobalCssProvider, ThemedGlobalCssProvider } from '@past3lle/theme'
-import React, { StrictMode, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { useTheme } from 'styled-components'
 
 import { useConfigMiddleware } from '../hooks/useConfigMiddleware'
@@ -123,12 +123,10 @@ function SkillForge({ config, render, ...boxProps }: SkillForgeProps) {
   const [Provider, modifiedConfig] = useConfigMiddleware(config)
 
   return (
-    <StrictMode>
-      <Provider {...modifiedConfig}>
-        <CssProviders />
-        <SkillforgeInnerComponent {...boxProps} render={render} />
-      </Provider>
-    </StrictMode>
+    <Provider {...modifiedConfig}>
+      <CssProviders />
+      <SkillforgeInnerComponent {...boxProps} render={render} />
+    </Provider>
   )
 }
 

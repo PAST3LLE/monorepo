@@ -37,7 +37,7 @@ const write = (chainId: number | undefined, get: Getter, set: Setter, update: Pa
     [chainId]: {
       ...state[chainId],
       [update.id]: {
-        ...state[chainId][update.id],
+        ...state[chainId]?.[update.id],
         ...update
       }
     }
@@ -64,40 +64,6 @@ const flowReadWriteAtom = (chainId?: number) =>
     (get, set, update: Payload) => write(chainId, get, set, update)
   )
 
-// const flowTransactionsMapWriteAtom = (chainId?: number) =>
-//   atom(
-//     null,
-//     (
-//       get,
-//       set,
-//       update: {
-//         hash: Hash
-//         skillId: SkillId
-//         key: keyof FlowTransactionObject
-//         value: FlowTransactionObject[keyof FlowTransactionObject]
-//       }
-//     ) => {
-//       if (!chainId) return
-//       const state = get(flowAtom)
-//       return set(flowAtom, {
-//         ...state,
-//         [chainId]: {
-//           ...state[chainId],
-//           [update.id]: {
-//             ...state[chainId][update.id],
-//             transactionsMap: {
-//               ...state[chainId][update.id].transactionsMap,
-//               [update.hash]: {
-//                 ...state[chainId][update.id].transactionsMap?.[update.hash],
-//                 [update.key]: update.value
-//               }
-//             }
-//           }
-//         }
-//       })
-//     }
-//   )
-
 export const useForgeFlowReadAtom = (chainId: SupportedForgeChains | undefined): [FlowStateMap, never] => {
   const state = useMemo(() => flowReadAtom(chainId), [chainId])
   return useAtom(state)
@@ -111,11 +77,6 @@ export const useForgeFlowBatchWriteAtom = (chainId: SupportedForgeChains | undef
   const state = useMemo(() => flowBatchWriteAtom(chainId), [chainId])
   return useAtom(state)
 }
-
-// export const useForgeForgeTransactionsMapKeyValueAtom = (chainId: SupportedForgeChains | undefined) => {
-//   const state = useMemo(() => flowTransactionsMapWriteAtom(chainId), [chainId])
-//   return useAtom(state)
-// }
 
 export const useForgeFlowReadWriteAtom = (chainId: SupportedForgeChains | undefined) => {
   const state = useMemo(() => flowReadWriteAtom(chainId), [chainId])
