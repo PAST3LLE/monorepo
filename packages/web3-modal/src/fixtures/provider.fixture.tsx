@@ -1,6 +1,7 @@
 import { ButtonVariations, ColumnCenter, PstlButton, RowCenter, SpinnerCircle } from '@past3lle/components'
 import { ThemeProvider, createCustomTheme } from '@past3lle/theme'
 import { devWarn, getExpirementalCookieStore as getCookieStore, truncateLongString } from '@past3lle/utils'
+import { config } from 'dotenv'
 import React, { ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTheme } from 'styled-components'
 import { parseEther } from 'viem'
@@ -24,6 +25,8 @@ import { PstlWeb3ModalProps, PstlW3Providers as WalletModal } from '../providers
 import { addConnector } from '../providers/utils'
 import { COMMON_CONNECTOR_OVERRIDES, DEFAULT_PROPS, DEFAULT_PROPS_WEB3AUTH, pstlModalTheme } from './config'
 import { wagmiConnectors } from './connectorsAndPlugins'
+
+config()
 
 const PstlW3Providers = ({ children, config }: { children: ReactNode; config: PstlWeb3ModalProps }) => (
   <WalletModal config={config}>{children}</WalletModal>
