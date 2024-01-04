@@ -4,6 +4,7 @@ import { Web3ModalConfigWeb3Props } from '@past3lle/forge-web3'
 import GOOGLE_APPLE_LOGO from 'assets/png/google-apple.png'
 import { pstlModalTheme as PSTL_MODAL_THEME } from 'theme/pstlModal'
 import { skillforgeTheme as SKILLFORGE_THEME } from 'theme/skillforge'
+import { alchemyProvider } from 'wagmi/providers/alchemy'
 
 if (
   !process.env.REACT_APP_WEB3MODAL_ID ||
@@ -16,6 +17,21 @@ if (
 export const SKILLFORGE_APP_NAME = 'SKILLFORGE'
 export const WEB3_PROPS: Web3ModalConfigWeb3Props = {
   chains: SUPPORTED_CHAINS,
+  clients: {
+    wagmi: {
+      options: {
+        // GOERLI KEY - steal it idgaf
+        publicClients: [
+          {
+            client: alchemyProvider,
+            5: process.env.REACT_APP_ALCHEMY_GOERLI_API_KEY as string,
+            137: process.env.REACT_APP_ALCHEMY_MATIC_API_KEY as string,
+            80001: process.env.REACT_APP_ALCHEMY_MATIC_API_KEY as string
+          }
+        ]
+      }
+    }
+  },
   connectors: {
     connectors,
     overrides: {
