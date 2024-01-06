@@ -229,7 +229,7 @@ export function useForgeGetLockedSkillsApprovalStatuses(params?: {
   const { enabled = true, onIterationError, onIterationSuccess } = params || {}
   const { address } = useAccount()
   const mergeManager = useForgeContractAddressesByChain(undefined, false)?.mergeManager
-  const flattenedDepsList = useForgeFlattenedSkillDependencies()
+  const flattenedDepsList = useForgeFlattenedSkillDependencies({ hideNoBalance: true })
 
   const dedupedList = useDedupeList(flattenedDepsList)
 

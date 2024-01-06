@@ -147,17 +147,27 @@ export const useForgeUnclaimedSkillsWithDependenciesMap = (): {
   )
 }
 
-export const useForgeFlattenedSkillDependencies = () => {
+export const useForgeFlattenedSkillDependencies = (params?: { hideNoBalance?: boolean }) => {
   const skillsWithDeps = useForgeSkillsWithDependencies()
+  const [balanceMap] = useForgeBalancesReadAtom()
 
   return useMemo(() => {
-    return skillsWithDeps.flatMap((skill) => [
-      ...(skill?.properties?.dependencies.map((dep) => ({
-        ...dep,
-        parentSkillId: skill.properties.id
-      })) || [])
-    ])
-  }, [skillsWithDeps])
+    return skillsWithDeps.flatMap((skill) => {
+      let include = true
+      if (params?.hideNoBalance) {
+        const balBigInt = BigInt(balanceMap?.[skill.properties.id] || '0')
+        include = balBigInt > 0
+      }
+      return include
+        ? [
+            ...(skill?.properties?.dependencies.map((dep) => ({
+              ...dep,
+              parentSkillId: skill.properties.id
+            })) || [])
+          ]
+        : []
+    })
+  }, [balanceMap, params?.hideNoBalance, skillsWithDeps])
 }
 
 export const useForgeCollectionAddressToFlowsList = () => {
