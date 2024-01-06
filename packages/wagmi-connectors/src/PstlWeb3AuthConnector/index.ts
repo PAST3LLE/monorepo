@@ -1,15 +1,17 @@
 // Web3Auth Libraries
 import { CHAIN_NAMESPACES, WALLET_ADAPTERS } from '@web3auth/base'
-import { IPlugin } from '@web3auth/base-plugin'
+import { EthereumPrivateKeyProvider } from '@web3auth/ethereum-provider'
 import { Web3Auth, Web3AuthOptions } from '@web3auth/modal'
-import { OpenloginAdapter, OpenloginLoginParams } from '@web3auth/openlogin-adapter'
+import { OpenloginAdapter, OpenloginLoginParams, WhiteLabelData } from '@web3auth/openlogin-adapter'
 import { Web3AuthConnector } from '@web3auth/web3auth-wagmi-connector'
 import { Chain } from 'viem'
 
+import { AuxWeb3AuthConnector } from './class'
+
 export interface PstlWeb3AuthConnectorProps {
   themeInfo?: {
-    mode?: 'light' | 'dark'
-    primary?: string
+    mode?: WhiteLabelData['mode']
+    customTheme?: WhiteLabelData['theme']
   }
   zIndex?: number
   network: Web3AuthOptions['web3AuthNetwork']
@@ -26,7 +28,7 @@ export interface PstlWeb3AuthConnectorProps {
   loginMethodsOrder?: string[]
   mfaLevel?: OpenloginLoginParams['mfaLevel']
   uxMode?: 'popup' | 'redirect'
-  configureAdditionalConnectors?: () => IPlugin[] | undefined
+  plugins?: Parameters<Web3Auth['addPlugin']>[0][]
 }
 
 /**
@@ -35,8 +37,8 @@ export interface PstlWeb3AuthConnectorProps {
      * @example 
      interface Options {
         themeInfo?: {
-          mode?: 'light' | 'dark'
-          primary?: string
+          mode?: WhiteLabelData['mode']
+          customTheme?: WhiteLabelData['theme']
         }
         chains: ChainsPartialReadonly<ID>
         zIndex?: number
@@ -54,12 +56,12 @@ export interface PstlWeb3AuthConnectorProps {
         loginMethodsOrder?: string[]
         mfaLevel?: OpenloginLoginParams['mfaLevel']
         uxMode?: 'popup' | 'redirect'
-        configureAdditionalConnectors?: () => IPlugin[] | undefined
+        plugins?: IPlugin[] | undefined
      }
     */
 export function PstlWeb3AuthConnector(chains: Chain[], options: PstlWeb3AuthConnectorProps): Web3AuthConnector {
   const {
-    network = 'testnet',
+    network = 'sapphire_devnet',
     appName,
     projectId,
     themeInfo = {
@@ -74,7 +76,7 @@ export function PstlWeb3AuthConnector(chains: Chain[], options: PstlWeb3AuthConn
     uxMode,
     zIndex = 1000,
     preset = 'ALLOW_EXTERNAL_WALLETS',
-    configureAdditionalConnectors
+    plugins
   } = options
   if (!projectId) throw new Error('Missing REACT_APP_WEB3AUTH_ID! Check env.')
 
@@ -82,10 +84,11 @@ export function PstlWeb3AuthConnector(chains: Chain[], options: PstlWeb3AuthConn
     chainNamespace: CHAIN_NAMESPACES.EIP155,
     chainId: '0x' + (chains[0].id as number).toString(16),
     rpcTarget: chains[0].rpcUrls.default.http[0], // This is the public RPC we have added, please pass on your own endpoint while creating an app
+    blockExplorer: chains[0].blockExplorers?.default?.url || '',
     displayName: chains[0].name,
     tickerName: chains[0].nativeCurrency?.name,
     ticker: chains[0].nativeCurrency?.symbol
-  }
+  } as const
 
   // Create Web3Auth Instance
   const web3AuthInstance = new Web3Auth({
@@ -95,29 +98,33 @@ export function PstlWeb3AuthConnector(chains: Chain[], options: PstlWeb3AuthConn
     authMode: 'DAPP',
     uiConfig: {
       appName,
-      theme: themeInfo.mode,
+      theme: themeInfo?.customTheme,
       loginMethodsOrder,
       defaultLanguage: 'en',
-      appLogo: themeInfo.mode === 'light' ? appLogoLight : appLogoDark,
+      logoLight: appLogoLight,
+      logoDark: appLogoDark,
       modalZIndex: zIndex.toString()
     }
   })
   // Add openlogin adapter for customisations
+  const privateKeyProvider = new EthereumPrivateKeyProvider({
+    config: {
+      chainConfig
+    }
+  })
   const openloginAdapterInstance = new OpenloginAdapter({
+    privateKeyProvider: !plugins?.length ? privateKeyProvider : undefined,
     adapterSettings: {
       network,
       uxMode,
       storageKey,
       whiteLabel: {
-        name: appName,
-        url,
+        appName,
+        appUrl: url,
         logoLight: appLogoLight,
         logoDark: appLogoDark,
         defaultLanguage: 'en',
-        theme: {
-          primary: themeInfo.primary
-        },
-        dark: themeInfo.mode === 'dark' // whether to enable dark mode. defaultValue: false
+        theme: themeInfo.customTheme
       }
     },
     loginSettings: {
@@ -126,17 +133,17 @@ export function PstlWeb3AuthConnector(chains: Chain[], options: PstlWeb3AuthConn
   })
   web3AuthInstance.configureAdapter(openloginAdapterInstance)
 
-  // custom connector callback
-  const pluginsList = configureAdditionalConnectors?.()
-  if (!!pluginsList?.length) {
-    pluginsList?.forEach((plugin) => {
+  // If user has added custom plugins
+  if (!!plugins?.length) {
+    plugins?.forEach((plugin) => {
       web3AuthInstance.addPlugin(plugin)
     })
   }
 
-  return new Web3AuthConnector({
+  return new AuxWeb3AuthConnector({
     chains,
     options: {
+      adapter: openloginAdapterInstance,
       web3AuthInstance,
       modalConfig:
         preset === 'DISALLOW_EXTERNAL_WALLETS'
@@ -153,14 +160,14 @@ export function PstlWeb3AuthConnector(chains: Chain[], options: PstlWeb3AuthConn
                 showOnModal: false,
                 showOnMobile: false
               },
-              [WALLET_ADAPTERS.WALLET_CONNECT_V1]: {
-                label: 'WalletConnect [v1]',
+              [WALLET_ADAPTERS.WALLET_CONNECT_V2]: {
+                label: 'WalletConnect [v2]',
                 showOnDesktop: false,
                 showOnModal: false,
                 showOnMobile: false
               },
-              [WALLET_ADAPTERS.WALLET_CONNECT_V2]: {
-                label: 'WalletConnect [v2]',
+              [WALLET_ADAPTERS.COINBASE]: {
+                label: 'Coinbase Wallet',
                 showOnDesktop: false,
                 showOnModal: false,
                 showOnMobile: false
