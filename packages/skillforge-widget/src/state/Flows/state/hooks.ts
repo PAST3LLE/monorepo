@@ -17,7 +17,10 @@ export function useUpdateFlowsOnBlock() {
 
   useForgeGetLockedSkillsApprovalStatuses({
     async onIterationSuccess(data) {
-      const [cFlow, hasSkill] = [flows?.[data.parentSkillId], BigInt(balancesMap?.[data.parentSkillId]) > 0]
+      const [cFlow, hasSkill] = [
+        flows?.[data.parentSkillId],
+        balancesMap?.[data.parentSkillId] && BigInt(balancesMap[data.parentSkillId]) > 0
+      ]
       const flowStatus = !data.approved ? 'needs-approvals' : hasSkill ? 'claimed' : 'claimable'
       const depId = `${data.token}-${data.id}`
       const isDep = data.parentSkillId !== depId
