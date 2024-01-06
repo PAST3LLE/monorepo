@@ -4,7 +4,7 @@ import { skillforgeTheme as SKILLFORGE_THEME } from 'theme/skillforge'
 
 export const TorusPlugin = new TorusWalletConnectorPlugin({
   torusWalletOpts: {
-    buttonPosition: 'bottom-right',
+    buttonPosition: 'bottom-left',
     modalZIndex: 999
   },
   walletInitOptions: {
@@ -20,6 +20,6 @@ export const TorusPlugin = new TorusWalletConnectorPlugin({
       logoLight: FORGE_LOGO_URL_MAP[500]['1x']
     },
     showTorusButton: true,
-    useWalletConnect: true
+    useWalletConnect: false
   }
 })

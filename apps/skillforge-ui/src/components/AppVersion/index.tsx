@@ -50,15 +50,13 @@ const AppVersionContainer = styled(Column)`
 export function AppVersion() {
   const [
     {
-      chains,
       user: { chainId }
     }
   ] = useForgeUserConfigAtom()
-  const chain = chainId && chains?.find((chain) => chain.id === chainId)
 
   const getExplorerUrl = useCallback((address: Address) => getBlockExplorerURL(chainId, address, 'address'), [chainId])
 
-  if (!chainId || !chain) return null
+  if (!chainId) return null
 
   return (
     <Row marginBottom={-100} height={100} style={{ position: 'relative' }}>
