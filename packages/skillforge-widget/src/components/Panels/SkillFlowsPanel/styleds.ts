@@ -1,9 +1,8 @@
 import { Column, Row, RowCenter } from '@past3lle/components'
-import { SkillId } from '@past3lle/forge-web3'
 import { fromLarge, upToSmall } from '@past3lle/theme'
 import styled from 'styled-components'
 
-import { ForgeFlowState } from '../../../state/Flows'
+import { FlowState } from '../../../state/Flows'
 import { BlackHeader, CursiveMonoHeader, MonospaceText } from '../../Common/Text'
 import { UserConnectionStats } from '../../Web3/UserWeb3ConnectionStats'
 
@@ -21,7 +20,7 @@ export const FlowRow = styled(RowCenter).attrs({
   padding: '1.2rem 1.4rem'
 })<{ background?: string }>``
 
-export const FlowCard = styled(FlowRow)<{ status: ForgeFlowState[number][SkillId]['status'] }>`
+export const FlowCard = styled(FlowRow)<{ status: FlowState['status'] }>`
   background: ${(props) => `linear-gradient(45deg, ${_statusToColour(props.status)}, transparent)`};
   padding: 1.5rem 2rem;
 `
@@ -134,7 +133,7 @@ export const UserSkillpointsContainer = styled(Column)`
   }
 `
 
-function _statusToColour(status: ForgeFlowState[number][SkillId]['status']) {
+function _statusToColour(status: FlowState['status']) {
   switch (status) {
     case 'claimed':
       return '#2eb97b'

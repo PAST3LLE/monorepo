@@ -6,6 +6,7 @@ import { JsonRpcSigner, TransactionRequest } from '@ethersproject/providers'
 import { toUtf8Bytes } from '@ethersproject/strings'
 import { UnsignedTransaction, serialize } from '@ethersproject/transactions'
 import Eth, { ledgerService } from '@ledgerhq/hw-app-eth'
+import { EIP712Message } from '@ledgerhq/hw-app-eth/lib-es/modules/EIP712/EIP712.types'
 
 import { checkError, convertToUnsigned, toNumber } from '../helpers'
 import { LedgerHQProvider } from '../provider'
@@ -27,7 +28,7 @@ export class LedgerHQSigner extends Signer implements TypedDataSigner {
     this.provider = provider
   }
 
-  async withEthApp<T>(callback: (eth: import('@ledgerhq/hw-app-eth').default) => T): Promise<T> {
+  async withEthApp<T>(callback: (eth: Eth) => T): Promise<T> {
     const transport = await this.provider.getTransport()
 
     try {
@@ -142,13 +143,11 @@ export class LedgerHQSigner extends Signer implements TypedDataSigner {
   // _signTypedData as per ethers Signer, cleans up types, replaces domain, calculates primaryType
   async _signTypedData(
     domain: TypedDataDomain,
-    _types: Record<string, Array<TypedDataField>>,
+    { EIP712Domain: _, ...types }: Record<string, Array<TypedDataField>>,
     value: Record<string, any>
   ): Promise<string> {
-    const types = { ..._types }
-    delete types['EIP712Domain']
     const encoder = new _TypedDataEncoder(types)
-    const data: import('@ledgerhq/hw-app-eth/lib-es/modules/EIP712/EIP712.types').EIP712Message = {
+    const data = {
       domain: {
         name: domain.name,
         verifyingContract: domain.verifyingContract,
@@ -163,7 +162,7 @@ export class LedgerHQSigner extends Signer implements TypedDataSigner {
           { name: 'chainId', type: 'uint256' },
           { name: 'verifyingContract', type: 'address' }
         ]
-      } as import('@ledgerhq/hw-app-eth/lib-es/modules/EIP712/EIP712.types').EIP712MessageTypes,
+      },
       primaryType: encoder.primaryType,
       message: value
     }
@@ -172,9 +171,7 @@ export class LedgerHQSigner extends Signer implements TypedDataSigner {
   }
 
   // custom method, also called directly on eth_signTypedData_v4 RPC request
-  async __signEIP712Message(
-    data: import('@ledgerhq/hw-app-eth/lib-es/modules/EIP712/EIP712.types').EIP712Message
-  ): Promise<string> {
+  async __signEIP712Message(data: EIP712Message): Promise<string> {
     const { r, s, v } = await this.withEthApp((eth) => eth.signEIP712Message(this.path, data))
 
     return joinSignature({ r: '0x' + r, s: '0x' + s, v })

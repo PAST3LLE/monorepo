@@ -15,7 +15,7 @@ import { OFF_WHITE, urlToSimpleGenericImageSrcSet } from '@past3lle/theme'
 import { darken } from 'polished'
 import React, { useMemo, useRef } from 'react'
 import { useTheme } from 'styled-components'
-import { useWaitForTransaction } from 'wagmi'
+import { useAccount, useWaitForTransaction } from 'wagmi'
 
 import { SKILLPOINTS_CONTAINER_ID } from '../../../constants/skills'
 import { useGetActiveSkillFromActiveSkillId } from '../../../hooks/useGetActiveSkillFromActiveSkillId'
@@ -33,6 +33,7 @@ import { TradeAndUnlockActionButton } from './ActionButton'
 import { SkillTradeExpandingContainer, TradeAndUnlockPanelContainer } from './styleds'
 
 export function TradeAndUnlockPanel() {
+  const { address } = useAccount()
   const chainId = useSupportedChainId()
 
   const activeSkill = useGetActiveSkillFromActiveSkillId(chainId)
@@ -61,7 +62,7 @@ export function TradeAndUnlockPanel() {
     }
   }, [activeSkill, chainId, metadataMap])
 
-  const [, updateFlow] = useForgeFlowReadWriteAtom(chainId)
+  const [, updateFlow] = useForgeFlowReadWriteAtom(chainId, address)
 
   const [{ data, isLoading, isError: isErrorContract, error }, approveBurnAndClaimLockedSkill] =
     useForgeApproveAndClaimLockedSkillCallback(activeSkill, {
