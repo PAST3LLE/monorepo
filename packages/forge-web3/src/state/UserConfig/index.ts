@@ -2,7 +2,7 @@ import { Address } from '@past3lle/types'
 import { ChainsPartialReadonly } from '@past3lle/web3-modal'
 import { atom, useAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 
 import { STATE_STORAGE_KEYS } from '../../constants/state-storage-keys'
 import { ForgeContractAddressMap, ForgeMetadataUriMap, SupportedForgeChains } from '../../types'
@@ -152,6 +152,15 @@ export const useForgeGetUserConfigChainsAtom = () => useAtom(userChainsGetter)
 export const useForgeSetUserConfigChainsAtom = () => useAtom(supportedChainsSetter)
 
 export const useForgeUserConfigAtom = () => useAtom(userConfigAtom)
+export const useForgeCurrentChain = () => {
+  const [
+    {
+      chains,
+      user: { chainId }
+    }
+  ] = useForgeUserConfigAtom()
+  return useMemo(() => !!chainId && chains?.find((chain) => chain.id === chainId), [chainId, chains])
+}
 
 export const useForgeMetadataUriMapReadAtom = () => useAtom(mmetadataUrisReadAtom)
 export const useForgeMetadataUriMapAtom = () => useAtom(metadataUriMapAtom)
