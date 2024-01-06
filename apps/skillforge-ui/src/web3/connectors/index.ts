@@ -6,6 +6,22 @@ import { ASSETS_MAP } from 'assets'
 import { skillforgeTheme } from 'theme/skillforge'
 import { SKILLFORGE_APP_NAME } from 'web3/config/skillforge'
 
+function _getWhitelistTheme() {
+  if (!process.env.REACT_APP_WEB3AUTH_WHITELIST_ENABLED) return
+  
+  return {
+    themeInfo: {
+      mode: 'dark',
+      customTheme: {
+        primary: skillforgeTheme.modes.DEFAULT.mainBgDarker
+      }
+    },
+    appLogoDark: ASSETS_MAP.logos.forge[512],
+    appLogoLight: ASSETS_MAP.logos.forge[512],
+    url: 'https://skills.pastelle.shop'
+  }
+}
+
 const connectors = [
   (chains: Chain[]) =>
     PstlWeb3AuthConnector(chains, {
@@ -16,15 +32,7 @@ const connectors = [
       preset: 'DISALLOW_EXTERNAL_WALLETS',
       mfaLevel: 'none',
       uxMode: 'popup',
-      themeInfo: {
-        mode: 'dark',
-        customTheme: {
-          primary: skillforgeTheme.modes.DEFAULT.mainBgDarker
-        }
-      },
-      appLogoDark: ASSETS_MAP.logos.forge[512],
-      appLogoLight: ASSETS_MAP.logos.forge[512],
-      url: 'https://skills.pastelle.shop'
+      ..._getWhitelistTheme()
     })
 ]
 const frameConnectors = [addFrameConnector(LedgerIFrameConnector, {})]
