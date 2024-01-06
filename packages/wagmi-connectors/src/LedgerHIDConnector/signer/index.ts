@@ -6,7 +6,7 @@ import { JsonRpcSigner, TransactionRequest } from '@ethersproject/providers'
 import { toUtf8Bytes } from '@ethersproject/strings'
 import { UnsignedTransaction, serialize } from '@ethersproject/transactions'
 import Eth, { ledgerService } from '@ledgerhq/hw-app-eth'
-import { EIP712Message } from '@ledgerhq/hw-app-eth/lib-es/modules/EIP712/EIP712.types'
+import { EIP712Message } from "@ledgerhq/types-live"
 
 import { checkError, convertToUnsigned, toNumber } from '../helpers'
 import { LedgerHQProvider } from '../provider'
@@ -147,7 +147,7 @@ export class LedgerHQSigner extends Signer implements TypedDataSigner {
     value: Record<string, any>
   ): Promise<string> {
     const encoder = new _TypedDataEncoder(types)
-    const data = {
+    const data: EIP712Message = {
       domain: {
         name: domain.name,
         verifyingContract: domain.verifyingContract,
