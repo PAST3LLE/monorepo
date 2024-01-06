@@ -1,4 +1,5 @@
 import { useIsExtraSmallMediaWidth } from '@past3lle/hooks'
+import { devDebug, devError } from '@past3lle/utils'
 import React, { memo } from 'react'
 import { useSwitchNetwork } from 'wagmi'
 
@@ -16,10 +17,19 @@ function NetworkModalContent() {
   const { chain: currentChain, supportedChains } = useUserConnectionInfo()
 
   const { switchNetworkAsync } = useSwitchNetwork({
-    onSuccess() {
-      modalCallbacks.close()
+    async onSuccess(data) {
+      devDebug(
+        '[@past3lle/web3-modals::NetworkModal] Success switching networks!',
+        !!modalCallbacks,
+        data?.id,
+        data?.name
+      )
+      return modalCallbacks.close()
     },
-    onError: modalStore.callbacks.error.set
+    async onError(error) {
+      devError('[@past3lle/web3-modals::NetworkModal] Error switching networks!', error?.message || error)
+      return modalStore.callbacks.error.set(error)
+    }
   })
 
   const getChainLogo = useGetChainLogoCallback()

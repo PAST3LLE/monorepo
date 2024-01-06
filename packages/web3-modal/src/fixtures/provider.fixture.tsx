@@ -126,6 +126,11 @@ function AppWithWagmiAccess() {
 
   const status = allTransactions?.find((pTx) => pTx.transactionHash === currentTx)?.status
 
+  useEffect(() => {
+    // @ts-ignore
+    document.body.style = 'background: #050b2e; color: ghostwhite;'
+  }, [])
+
   return (
     <>
       <h1>Here has wagmi access</h1>

@@ -11,7 +11,7 @@ import { FORGE_LOGO, WALLETCONNECT_ID, WEB3AUTH_TEST_ID } from './config'
 const TORUS_LOGO = 'https://web3auth.io/docs/contents/logo-ethereum.png'
 const torusPlugin = new TorusWalletConnectorPlugin({
   torusWalletOpts: {
-    buttonPosition: 'bottom-right',
+    buttonPosition: 'bottom-left',
     apiKey: WEB3AUTH_TEST_ID
   },
   walletInitOptions: {
@@ -41,16 +41,21 @@ export const wagmiConnectors = {
   // Can also instantiate like this.
   // addConnector is just syntactic sugar
   // PstlWeb3AuthConnector requires this instantiation
-  web3auth: (chains: ReadonlyChain<number>[]) =>
-    PstlWeb3AuthConnector(chains, {
+  web3auth: (chains: ReadonlyChain<number>[]) => {
+    if (typeof process.env.REACT_APP_WEB3AUTH_DEVNET_CLIENT_ID !== 'string') {
+      throw new Error('Missing REACT_APP_WEB3AUTH_DEVNET_CLIENT_ID!')
+    }
+    return PstlWeb3AuthConnector(chains, {
       appName: 'SKILLFORGE TEST',
-      projectId: WEB3AUTH_TEST_ID,
-      network: 'cyan',
+      projectId: process.env.REACT_APP_WEB3AUTH_DEVNET_CLIENT_ID,
+      network: 'sapphire_devnet',
       listingName: 'GOOGLE & MORE',
       appLogoLight: FORGE_LOGO,
       appLogoDark: FORGE_LOGO,
-      uxMode: 'redirect',
+      uxMode: 'popup',
       preset: 'DISALLOW_EXTERNAL_WALLETS'
+      // plugins: [w3aPlugins.torusPlugin]
       // zIndex: 901
     })
+  }
 }
