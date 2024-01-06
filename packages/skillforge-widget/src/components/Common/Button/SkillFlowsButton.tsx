@@ -20,7 +20,7 @@ export function SkillFlowsButton(props: InventoryButtonProps) {
 
   const pendingFlows = usePendingFlowsCount()
   return (
-    <Wrapper onClick={() => setPanel('FLOWS') /* open({ route: 'Transactions' }) */}>
+    <Wrapper onClick={() => setPanel('FLOWS')}>
       {!!pendingFlows && <NotificationDot backgroundColor="#4def98" label={pendingFlows + ' pending'} />}
       <HeaderButton
         iconKey="transactions"

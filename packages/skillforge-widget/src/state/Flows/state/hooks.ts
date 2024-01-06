@@ -3,19 +3,22 @@ import {
   useForgeGetLockedSkillsApprovalStatuses,
   useSupportedChainId
 } from '@past3lle/forge-web3'
+import { useAccount } from 'wagmi'
 
 import { useForgeFlowReadWriteAtom } from './flows'
 import { useFlowTransactionUpdateCallback } from './transactions'
 
 export function useUpdateFlowsOnBlock() {
   const chainId = useSupportedChainId()
+  const { address } = useAccount()
 
-  const [flows, updateFlows] = useForgeFlowReadWriteAtom(chainId)
+  const [flows, updateFlows] = useForgeFlowReadWriteAtom(chainId, address)
   const [transactions, updateTransaction] = useFlowTransactionUpdateCallback()
 
   const [balancesMap] = useForgeBalancesReadAtom()
 
   useForgeGetLockedSkillsApprovalStatuses({
+    enabled: !!address,
     async onIterationSuccess(data) {
       const [cFlow, hasSkill] = [
         flows?.[data.parentSkillId],
@@ -31,7 +34,8 @@ export function useUpdateFlowsOnBlock() {
         id: data.parentSkillId,
         status: flowStatus
       })
-      flowStatus !== 'claimed' &&
+      !!address &&
+        flowStatus !== 'claimed' &&
         !transactionsList?.[data.token] &&
         updateTransaction({
           type: 'approve',

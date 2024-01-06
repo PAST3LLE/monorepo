@@ -4,6 +4,7 @@ import { Getter, Setter, atom, useAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 import { useMemo } from 'react'
 import { Hash } from 'viem'
+import { Address, useAccount } from 'wagmi'
 
 import { StorageKeys } from '../../../constants/keys'
 
@@ -19,7 +20,7 @@ export interface FlowStateMap {
 }
 
 export interface ForgeFlowState {
-  [chainId: number]: FlowStateMap
+  [chainId: number]: { [account: Address]: FlowStateMap }
 }
 
 const INITIAL_STATE: ForgeFlowState = {}
@@ -29,57 +30,85 @@ flowAtom.debugLabel = 'FLOW ATOM'
 
 type Payload = MakeOptional<FlowState, 'hash' | 'status'>
 
-const write = (chainId: number | undefined, get: Getter, set: Setter, update: Payload) => {
-  if (!chainId) return
+const write = (
+  chainId: number | undefined,
+  address: Address | undefined,
+  get: Getter,
+  set: Setter,
+  update: Payload
+) => {
+  if (!chainId || !address) return
+  const state = get(flowAtom)
+  const stateAtChain = state?.[chainId]
+  const stateAtAddress = stateAtChain?.[address]
+  return set(flowAtom, {
+    ...state,
+    [chainId]: {
+      ...stateAtChain,
+      [address]: {
+        ...stateAtAddress,
+        [update.id]: {
+          ...stateAtAddress?.[update.id],
+          ...update
+        }
+      }
+    }
+  })
+}
+
+const writeBatch = (
+  chainId: number | undefined,
+  address: Address | undefined,
+  get: Getter,
+  set: Setter,
+  update: Payload
+) => {
+  if (!chainId || !address) return
   const state = get(flowAtom)
   return set(flowAtom, {
     ...state,
     [chainId]: {
-      ...state[chainId],
-      [update.id]: {
-        ...state[chainId]?.[update.id],
+      ...state?.[chainId],
+      [address]: {
+        ...state?.[chainId]?.[address],
         ...update
       }
     }
   })
 }
 
-const writeBatch = (chainId: number | undefined, get: Getter, set: Setter, update: Payload) => {
-  if (!chainId) return
-  const state = get(flowAtom)
-  return set(flowAtom, {
-    ...state,
-    [chainId]: update
-  })
-}
+const flowReadAtom = (chainId: number | undefined, address: Address | undefined) =>
+  atom((get) => (chainId && address ? get(flowAtom)[chainId]?.[address] : {}))
+const flowWriteAtom = (chainId: number | undefined, address: Address | undefined) =>
+  atom(null, (get, set, update: Payload) => write(chainId, address, get, set, update))
+const flowBatchWriteAtom = (chainId: number | undefined, address: Address | undefined) =>
+  atom(null, (get, set, update: Payload) => writeBatch(chainId, address, get, set, update))
 
-const flowReadAtom = (chainId?: number) => atom((get) => (chainId ? get(flowAtom)[chainId] : {}))
-const flowWriteAtom = (chainId?: number) => atom(null, (get, set, update: Payload) => write(chainId, get, set, update))
-const flowBatchWriteAtom = (chainId?: number) =>
-  atom(null, (get, set, update: Payload) => writeBatch(chainId, get, set, update))
-
-const flowReadWriteAtom = (chainId?: number) =>
+const flowReadWriteAtom = (chainId: number | undefined, address: Address | undefined) =>
   atom(
-    (get) => (chainId ? get(flowAtom)[chainId] : {}),
-    (get, set, update: Payload) => write(chainId, get, set, update)
+    (get) => (chainId && address ? get(flowAtom)[chainId]?.[address] : {}),
+    (get, set, update: Payload) => write(chainId, address, get, set, update)
   )
 
-export const useForgeFlowReadAtom = (chainId: SupportedForgeChains | undefined): [FlowStateMap, never] => {
-  const state = useMemo(() => flowReadAtom(chainId), [chainId])
+export const useForgeFlowReadAtom = (
+  chainId: SupportedForgeChains | undefined,
+  address: Address | undefined
+): [FlowStateMap, never] => {
+  const state = useMemo(() => flowReadAtom(chainId, address), [chainId, address])
   return useAtom(state)
 }
-export const useForgeFlowWriteAtom = (chainId: SupportedForgeChains | undefined) => {
-  const state = useMemo(() => flowWriteAtom(chainId), [chainId])
+export const useForgeFlowWriteAtom = (chainId: SupportedForgeChains | undefined, address: Address | undefined) => {
+  const state = useMemo(() => flowWriteAtom(chainId, address), [chainId, address])
   return useAtom(state)
 }
 
-export const useForgeFlowBatchWriteAtom = (chainId: SupportedForgeChains | undefined) => {
-  const state = useMemo(() => flowBatchWriteAtom(chainId), [chainId])
+export const useForgeFlowBatchWriteAtom = (chainId: SupportedForgeChains | undefined, address: Address | undefined) => {
+  const state = useMemo(() => flowBatchWriteAtom(chainId, address), [chainId, address])
   return useAtom(state)
 }
 
-export const useForgeFlowReadWriteAtom = (chainId: SupportedForgeChains | undefined) => {
-  const state = useMemo(() => flowReadWriteAtom(chainId), [chainId])
+export const useForgeFlowReadWriteAtom = (chainId: SupportedForgeChains | undefined, address: Address | undefined) => {
+  const state = useMemo(() => flowReadWriteAtom(chainId, address), [chainId, address])
   return useAtom(state)
 }
 
@@ -89,19 +118,22 @@ export const useForgeFlowAtom = () => {
 
 export function useFlowsMap() {
   const chainId = useSupportedChainId()
-  const [flows = {}] = useForgeFlowReadAtom(chainId)
-  return useMemo(() => flows, [flows])
+  const { address } = useAccount()
+  const [flows = {}] = useForgeFlowReadAtom(chainId, address)
+  return flows
 }
 
 export function usePendingFlowsRead(): FlowState[] {
   const chainId = useSupportedChainId()
-  const [flows = {}] = useForgeFlowReadAtom(chainId)
+  const { address } = useAccount()
+  const [flows = {}] = useForgeFlowReadAtom(chainId, address)
   return useMemo(() => Object.values(flows).filter((f) => f.status !== 'claimed'), [flows])
 }
 
 export function usePendingFlows(): [FlowState[], (up: Payload) => void] {
   const chainId = useSupportedChainId()
-  const [flows = {}, update] = useForgeFlowReadWriteAtom(chainId)
+  const { address } = useAccount()
+  const [flows = {}, update] = useForgeFlowReadWriteAtom(chainId, address)
   return useMemo(() => [Object.values(flows).filter((f) => f.status !== 'claimed'), update], [flows, update])
 }
 

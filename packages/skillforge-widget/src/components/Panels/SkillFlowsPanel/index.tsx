@@ -12,10 +12,10 @@ import { urlToSimpleGenericImageSrcSet } from '@past3lle/theme'
 import { devError, truncateHash } from '@past3lle/utils'
 import React, { useMemo, useState } from 'react'
 import { Hash } from 'viem'
-import { Address } from 'wagmi'
+import { Address, useAccount } from 'wagmi'
 
 import { useGetSkillFromIdCallback } from '../../../hooks/skills'
-import { ForgeFlowState, useForgeFlowReadAtom } from '../../../state/Flows'
+import { FlowState, useForgeFlowReadAtom } from '../../../state/Flows'
 import { FlowTransactionObject, useForgeFlowTransactionsReadWriteAtom } from '../../../state/Flows/state/transactions'
 import { useSidePanelWriteAtom } from '../../../state/SidePanel'
 import { useActiveSkillAtom } from '../../../state/Skills'
@@ -44,9 +44,10 @@ const BG_SETTINGS: Required<SidePanelProps>['options']['backgroundImageOptions']
 }
 
 export function SkillFlowsPanel() {
+  const { address } = useAccount()
   const chainId = useSupportedChainId()
-  const [flows = {}] = useForgeFlowReadAtom(chainId)
-  const [flowTransactions = {}] = useForgeFlowTransactionsReadWriteAtom(chainId)
+  const [flows = {}] = useForgeFlowReadAtom(chainId, address)
+  const [flowTransactions = {}] = useForgeFlowTransactionsReadWriteAtom(chainId, address)
 
   const [, setPanelState] = useSidePanelWriteAtom()
   const [, setSkill] = useActiveSkillAtom()
@@ -75,7 +76,7 @@ export function SkillFlowsPanel() {
       const id = oId as SkillId
       const upgradingSkill = getSkill(id)
 
-      if (!upgradingSkill) return null
+      if (!address || !upgradingSkill) return null
 
       const upgradeStatus = flow.status
       const hidePrerequisites = upgradeStatus !== 'claimed' || upgradeStatus !== 'claimable'
@@ -123,7 +124,7 @@ export function SkillFlowsPanel() {
                       </SubSkillRow>
                       <SubSkillRow>
                         <SubSkillHeader>OPERATION</SubSkillHeader>
-                        <SubSkillHeaderResponse>{_operationTypeToLabel(flow, i)}</SubSkillHeaderResponse>
+                        <SubSkillHeaderResponse>{_operationTypeToLabel(flow)}</SubSkillHeaderResponse>
                       </SubSkillRow>
                       <SubSkillRow>
                         <SubSkillHeader>HASH</SubSkillHeader>
@@ -163,6 +164,7 @@ export function SkillFlowsPanel() {
       )
     })
   }, [
+    address,
     flows,
     hideClaimed,
     getSkill,
@@ -222,7 +224,7 @@ function HideClaimedCheckbox({ children }: { children: React.ReactNode }) {
   )
 }
 
-function _formatFlowStatus(status: ForgeFlowState[number][SkillId]['status']) {
+function _formatFlowStatus(status: FlowState['status']) {
   return status.replace(/-/g, ' ').toUpperCase()
 }
 
@@ -233,7 +235,7 @@ function ActionButton({
   statusToCallbackMap
 }: {
   skill: SkillMetadata
-  flow: ForgeFlowState[number][SkillId]
+  flow: FlowState
   assetsSrcSet: ReturnType<typeof useGenericImageSrcSet>
   statusToCallbackMap: {
     claimed: () => void
@@ -322,8 +324,7 @@ Object.entries(flows)
 .filter((entry: [SkillId, FlowState]) => hideClaimed && entry[1].status !== 'claimed')
 */
 
-function _operationTypeToLabel(flow: FlowTransactionObject, i: number) {
-  const label =
-    flow.type === 'approve' && flow?.approvalsRequired ? `${flow.type}: ${i}/${flow.approvalsRequired}` : flow.type
+function _operationTypeToLabel(flow: FlowTransactionObject) {
+  const label = flow.type
   return label.toUpperCase()
 }
