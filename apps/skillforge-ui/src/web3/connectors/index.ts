@@ -4,7 +4,6 @@ import { PstlWeb3AuthConnector, PstlWeb3AuthConnectorProps } from '@past3lle/wag
 import { Chain } from '@wagmi/chains'
 import { ASSETS_MAP } from 'assets'
 import { skillforgeTheme } from 'theme/skillforge'
-import { SKILLFORGE_APP_NAME } from 'web3/config/skillforge'
 
 function _getWhitelistTheme() {
   if (!JSON.parse(process.env.REACT_APP_WEB3AUTH_WHITELIST_ENABLED || 'false')) return
@@ -25,7 +24,6 @@ function _getWhitelistTheme() {
 const connectors = [
   (chains: Chain[]) =>
     PstlWeb3AuthConnector(chains, {
-      appName: SKILLFORGE_APP_NAME,
       network: process.env.REACT_APP_WEB3_AUTH_NETWORK as PstlWeb3AuthConnectorProps['network'],
       projectId: process.env.REACT_APP_WEB3AUTH_ID as string,
       storageKey: 'session',

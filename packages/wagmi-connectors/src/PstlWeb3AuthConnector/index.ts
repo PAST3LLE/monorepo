@@ -2,30 +2,18 @@
 import { CHAIN_NAMESPACES, WALLET_ADAPTERS } from '@web3auth/base'
 import { EthereumPrivateKeyProvider } from '@web3auth/ethereum-provider'
 import { Web3Auth, Web3AuthOptions } from '@web3auth/modal'
-import { OpenloginAdapter, OpenloginLoginParams, WhiteLabelData } from '@web3auth/openlogin-adapter'
+import { OpenloginAdapter, OpenloginLoginParams } from '@web3auth/openlogin-adapter'
 import { Web3AuthConnector } from '@web3auth/web3auth-wagmi-connector'
 import { Chain } from 'viem'
 
 import { AuxWeb3AuthConnector } from './class'
 
 export interface PstlWeb3AuthConnectorProps {
-  themeInfo?: {
-    mode?: WhiteLabelData['mode']
-    customTheme?: WhiteLabelData['theme']
-  }
-  zIndex?: number
   network: Web3AuthOptions['web3AuthNetwork']
   storageKey?: Web3AuthOptions['storageKey']
   preset?: 'DISALLOW_EXTERNAL_WALLETS' | 'ALLOW_EXTERNAL_WALLETS'
   projectId: string
-  appName: string
-  url?: string
-  appLogoLight?: string
-  appLogoDark?: string
-  listingName?: string
-  listingLogo?: string
-  listingDetails?: string
-  loginMethodsOrder?: string[]
+  uiConfig?: Web3AuthOptions['uiConfig']
   mfaLevel?: OpenloginLoginParams['mfaLevel']
   uxMode?: 'popup' | 'redirect'
   plugins?: Parameters<Web3Auth['addPlugin']>[0][]
@@ -62,19 +50,11 @@ export interface PstlWeb3AuthConnectorProps {
 export function PstlWeb3AuthConnector(chains: Chain[], options: PstlWeb3AuthConnectorProps): Web3AuthConnector {
   const {
     network = 'sapphire_devnet',
-    appName,
     projectId,
-    themeInfo = {
-      mode: 'dark'
-    },
+    uiConfig,
     storageKey,
-    appLogoDark,
-    appLogoLight,
-    url,
-    loginMethodsOrder,
     mfaLevel,
     uxMode,
-    zIndex = 1000,
     preset = 'ALLOW_EXTERNAL_WALLETS',
     plugins
   } = options
@@ -96,15 +76,7 @@ export function PstlWeb3AuthConnector(chains: Chain[], options: PstlWeb3AuthConn
     chainConfig,
     web3AuthNetwork: network,
     authMode: 'DAPP',
-    uiConfig: {
-      appName,
-      theme: themeInfo?.customTheme,
-      loginMethodsOrder,
-      defaultLanguage: 'en',
-      logoLight: appLogoLight,
-      logoDark: appLogoDark,
-      modalZIndex: zIndex.toString()
-    }
+    uiConfig
   })
   // Add openlogin adapter for customisations
   const privateKeyProvider = new EthereumPrivateKeyProvider({
@@ -118,14 +90,7 @@ export function PstlWeb3AuthConnector(chains: Chain[], options: PstlWeb3AuthConn
       network,
       uxMode,
       storageKey,
-      whiteLabel: {
-        appName,
-        appUrl: url,
-        logoLight: appLogoLight,
-        logoDark: appLogoDark,
-        defaultLanguage: 'en',
-        theme: themeInfo.customTheme
-      }
+      whiteLabel: uiConfig
     },
     loginSettings: {
       mfaLevel

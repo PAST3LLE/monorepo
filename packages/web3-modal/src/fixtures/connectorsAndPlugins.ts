@@ -46,12 +46,13 @@ export const wagmiConnectors = {
       throw new Error('Missing REACT_APP_WEB3AUTH_DEVNET_CLIENT_ID!')
     }
     return PstlWeb3AuthConnector(chains, {
-      appName: 'SKILLFORGE TEST',
       projectId: process.env.REACT_APP_WEB3AUTH_DEVNET_CLIENT_ID,
       network: 'sapphire_devnet',
-      listingName: 'GOOGLE & MORE',
-      appLogoLight: FORGE_LOGO,
-      appLogoDark: FORGE_LOGO,
+      uiConfig: {
+        appName: 'SKILLFORGE TEST',
+        logoLight: FORGE_LOGO,
+        logoDark: FORGE_LOGO,
+      },
       uxMode: 'popup',
       preset: 'DISALLOW_EXTERNAL_WALLETS'
       // plugins: [w3aPlugins.torusPlugin]
