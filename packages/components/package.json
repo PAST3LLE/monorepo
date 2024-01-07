@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/components",
   "sideEffects": false,
-  "version": "2.0.0-alpha.0",
+  "version": "2.0.0-alpha.1",
   "description": "common components",
   "main": "dist/components.esm.js",
   "module": "dist/components.esm.js",
@@ -82,12 +82,12 @@
     "tslib": "^2.4.1"
   },
   "dependencies": {
-    "@past3lle/assets": "^0.1.1-alpha.0",
-    "@past3lle/constants": "^2.0.0-alpha.0",
-    "@past3lle/hooks": "^2.0.0-alpha.0",
-    "@past3lle/theme": "^2.0.0-alpha.0",
-    "@past3lle/types": "^2.0.0-alpha.0",
-    "@past3lle/utils": "^2.0.0-alpha.0",
+    "@past3lle/assets": "^2.0.0-alpha.1",
+    "@past3lle/constants": "^2.0.0-alpha.1",
+    "@past3lle/hooks": "^2.0.0-alpha.1",
+    "@past3lle/theme": "^2.0.0-alpha.1",
+    "@past3lle/types": "^2.0.0-alpha.1",
+    "@past3lle/utils": "^2.0.0-alpha.1",
     "@popperjs/core": "^2.11.6",
     "@react-spring/web": "^9.7.3",
     "imagekitio-react": "^2.0.0",
@@ -101,5 +101,5 @@
     "react-router-hash-link": "^2.4.3",
     "rebass": "^4.0.7"
   },
-  "gitHead": "f852fe196f05c3b9111c9642af6df32c8bff7a6e"
+  "gitHead": "b23cde88c48c16054d914ca52c1949a3dca1c282"
 }

@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/wagmi-connectors",
   "sideEffects": false,
-  "version": "2.0.0-alpha.0",
+  "version": "2.0.0-alpha.1",
   "description": "Past3lle enhanced v1 wagmi connectors",
   "keywords": [
     "web3",
@@ -151,5 +151,5 @@
       "last 1 safari version"
     ]
   },
-  "gitHead": "7247102142f068cff68e8bdba4b3482cce72ab6f"
+  "gitHead": "b23cde88c48c16054d914ca52c1949a3dca1c282"
 }

@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/types",
   "sideEffects": false,
-  "version": "2.0.0-alpha.0",
+  "version": "2.0.0-alpha.1",
   "description": "common types",
   "main": "dist/types.esm.js",
   "module": "dist/types.esm.js",
@@ -37,5 +37,5 @@
   "devDependencies": {
     "abitype": "^0.4.0"
   },
-  "gitHead": "5e49f48f540a2eb11b63050c2685accd8e77f41f"
+  "gitHead": "b23cde88c48c16054d914ca52c1949a3dca1c282"
 }
