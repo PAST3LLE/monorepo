@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/wagmi-connectors",
   "sideEffects": false,
-  "version": "0.1.15-alpha.0",
+  "version": "2.0.0-alpha.0",
   "description": "Past3lle enhanced v1 wagmi connectors",
   "keywords": [
     "web3",
@@ -118,7 +118,7 @@
     "@ethersproject/providers": "^5.7.2",
     "@ledgerhq/hw-app-eth": "6.35.1",
     "@ledgerhq/hw-transport-webhid": "6.28.1",
-    "@ledgerhq/iframe-provider": "0.4.3",    
+    "@ledgerhq/iframe-provider": "0.4.3",
     "@web3auth/base": "7.2.1",
     "@web3auth/modal": "7.3.0",
     "@web3auth/openlogin-adapter": "7.2.1",
