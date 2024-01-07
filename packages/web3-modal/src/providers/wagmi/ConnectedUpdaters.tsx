@@ -3,22 +3,24 @@ import { useEffect } from 'react'
 import { useSnapshot } from 'valtio'
 import { useSwitchNetwork } from 'wagmi'
 
-import { ModalPropsCtrl } from '../../controllers'
+import { UserOptionsCtrl } from '../../controllers'
+import { UserOptionsCtrlState } from '../../controllers/types'
 import { useUserConnectionInfo } from '../../hooks'
-import { SmartAutoConnectProps, useSmartAutoConnect } from '../../hooks/useSmartAutoConnect'
+import { SmartAutoConnectProps, useSmartAutoConnect } from '../../hooks/internal/useSmartAutoConnect'
 
 function useSwitchChainOnLimitedChainsChange() {
-  const rootSnap = useSnapshot(ModalPropsCtrl.state.root)
+  const uiSnap = useSnapshot<UserOptionsCtrlState['ui']>(UserOptionsCtrl.state.ui)
   const { chain } = useUserConnectionInfo()
+  const chainId = chain?.id
   const { switchNetwork } = useSwitchNetwork()
 
   useEffect(() => {
-    const disconnectedOrChainMismatch = !chain?.id || chain.id !== rootSnap.softLimitedChains?.[0]?.id
-    if (rootSnap.softLimitedChains?.length && !!switchNetwork && disconnectedOrChainMismatch) {
+    const disconnectedOrChainMismatch = !chainId || !uiSnap.softLimitedChains?.some((c) => c.id === chainId)
+    if (uiSnap.softLimitedChains?.length && !!switchNetwork && disconnectedOrChainMismatch) {
       devDebug('[useSwitchChainOnLimitedChainsChange] --> Detected change, switching!')
-      switchNetwork(rootSnap.softLimitedChains[0].id)
+      switchNetwork(uiSnap.softLimitedChains[0].id)
     }
-  }, [rootSnap.softLimitedChains, switchNetwork])
+  }, [uiSnap.softLimitedChains, switchNetwork, chainId])
 }
 
 export function ConnectedUpdaters(props: SmartAutoConnectProps) {

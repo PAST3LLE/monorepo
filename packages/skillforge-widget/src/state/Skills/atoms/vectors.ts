@@ -9,7 +9,7 @@ export type SkillGridPositionList = {
   skillId: SkillId | undefined
 }[]
 export type SkillVectorsMap = {
-  [key: SkillId]: SkillGridPositionList[0]
+  [key: SkillId]: SkillGridPositionList[number]
 }
 export interface VectorsState {
   dimensions: {
@@ -31,13 +31,13 @@ const vectorsAtom = atomWithStorage<VectorsState>('SKILLFORGE_VECTORS_STATE', {
 vectorsAtom.debugLabel = 'VECTORS ATOM'
 
 const vectorsReadAtom = atom((get) => get(vectorsAtom).vectors)
-const vectorsWriteAtom = atom<null, VectorsState['vectors']>(null, (get, set, update) => {
+const vectorsWriteAtom = atom(null, (get, set, update: VectorsState['vectors']) => {
   const state = get(vectorsAtom)
   return set(vectorsAtom, { ...state, vectors: update })
 })
 
 const vectorsMapReadAtom = atom((get) => get(vectorsAtom).vectorsMap)
-const vectorsMapWriteAtom = atom<null, VectorsState['vectorsMap']>(null, (get, set, update) => {
+const vectorsMapWriteAtom = atom(null, (get, set, update: VectorsState['vectorsMap']) => {
   const state = get(vectorsAtom)
   return set(vectorsAtom, { ...state, vectorsMap: update })
 })

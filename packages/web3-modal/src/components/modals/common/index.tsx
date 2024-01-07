@@ -1,11 +1,13 @@
-import { CloseIcon, Row } from '@past3lle/components'
+import { ArrowLeft, CloseIcon, Row } from '@past3lle/components'
 import { useOnKeyPress } from '@past3lle/hooks'
-import React, { useMemo } from 'react'
+import React from 'react'
 
 import { Z_INDICES } from '../../../constants'
+import { RouterCtrl } from '../../../controllers'
 import { usePstlWeb3ModalStore } from '../../../hooks'
-import { useAutoClearingTimeout } from '../../../hooks/useTimeout'
+import { useTimeoutClearingError } from '../../../hooks/misc/useTimeout'
 import { ErrorMessage } from './ErrorMessage'
+import { PoweredByLabel } from './PoweredByLabel'
 import { InnerContainer, ModalTitle, StyledConnectionModal } from './styled'
 import { BaseModalProps, ModalId } from './types'
 
@@ -17,12 +19,12 @@ export function BaseModal({
   zIndex = Z_INDICES.PSTL,
   isOpen,
   onDismiss,
+  modal,
   children,
   ...restModalProps
 }: BaseModalProps) {
-  const { state, resetErrors } = usePstlWeb3ModalStore()
-  const error = useMemo(() => state.account?.error || state.connect?.error || state.network?.error, [state])
-  const [showError, hideError] = useAutoClearingTimeout(!!error?.message, 7000, resetErrors)
+  const { state } = usePstlWeb3ModalStore()
+  const [showError, hideError] = useTimeoutClearingError(state.modal?.error?.message, 7000)
 
   // Close modal on key press
   useOnKeyPress(restModalProps.closeModalOnKeys || [], onDismiss)
@@ -30,6 +32,7 @@ export function BaseModal({
   return (
     <StyledConnectionModal
       id={ModalId.BASE}
+      modal={modal}
       className={restModalProps.className}
       isOpen={isOpen}
       onDismiss={onDismiss}
@@ -38,7 +41,7 @@ export function BaseModal({
       maxHeight={maxHeight}
       // to prevent locking of focus on modal (with web3auth this blocks using their modal e.g)
       tabIndex={undefined}
-      bypassConfig={{ scroll: !!state.root?.bypassScrollLock }}
+      bypassConfig={{ scroll: !!state.userOptions.ux?.bypassScrollLock }}
       styleProps={{
         // w3modal has 89 zindex
         zIndex,
@@ -46,13 +49,21 @@ export function BaseModal({
       }}
       {...restModalProps}
     >
-      <InnerContainer justifyContent="flex-start" gap="0.75rem" isError={!!state.connect?.error?.message}>
+      <InnerContainer
+        modal="base"
+        node="main"
+        justifyContent="flex-start"
+        gap="0.75rem"
+        isError={!!state?.modal.error?.message}
+      >
         <Row width="100%" marginBottom="0.5em">
+          {RouterCtrl.state.history.length > 1 && <ArrowLeft id="back-arrow" size={25} onClick={RouterCtrl.goBack} />}
           <ModalTitle>{title}</ModalTitle>
           <CloseIcon height={30} width={100} onClick={onDismiss} />
         </Row>
         {children}
-        <ErrorMessage message={error?.message} hide={!showError || !error?.message} onClick={hideError} />
+        <ErrorMessage message={state?.modal.error?.message} hide={!showError} onClick={hideError} />
+        <PoweredByLabel />
       </InnerContainer>
     </StyledConnectionModal>
   )

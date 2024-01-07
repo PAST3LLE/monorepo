@@ -5,7 +5,7 @@ import { darken } from 'polished'
 import React from 'react'
 import { useTheme } from 'styled-components'
 
-import { ThemedButtonActions } from '../../Common/Button'
+import { ThemedButtonActions } from '../../Common/Button/common'
 import { SkillRarityLabel } from '../ActiveSkillPanel/styleds'
 
 export function TradeAndUnlockActionButton({ skill, handleClaim }: { skill: SkillMetadata; handleClaim?: () => void }) {

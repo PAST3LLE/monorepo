@@ -51,6 +51,7 @@ export interface SkillForgeAssetsMap<
       connection: string
       inventory: string
       shop: string
+      transactions: string
       chains: ChainsIcons<SC>
       rarity: RarityIcons
     }

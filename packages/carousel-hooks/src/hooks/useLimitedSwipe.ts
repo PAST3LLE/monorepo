@@ -2,19 +2,20 @@ import { useSprings } from '@react-spring/web'
 import { useDrag } from '@use-gesture/react'
 import { useRef, useState } from 'react'
 
-import { AxisDirection, OverwritingOptions, SpringAnimationHookReturn } from '../types'
+import { AxisDirection, OverwritingOptions, SpringAnimationHookReturn, WithWindowSizeOptions } from '../types'
 import utils from '../utils'
 import useScrollZoneRefs from '../utils/useScrollZoneRef'
 
-export function useLimitedSwipe(
+export function useLimitedSwipe<A extends any[]>(
   axis: AxisDirection,
-  data: any[],
-  options?: OverwritingOptions
+  data: A,
+  options?: OverwritingOptions,
+  auxOptions?: WithWindowSizeOptions
 ): SpringAnimationHookReturn {
   const {
     refs: { itemSize },
     refCallbacks
-  } = useScrollZoneRefs(axis, options?.sizeOptions)
+  } = useScrollZoneRefs(axis, options?.sizeOptions, auxOptions)
 
   const indexRef = useRef(0)
   const [indexState, setIndexState] = useState(indexRef.current)
@@ -46,10 +47,18 @@ export function useLimitedSwipe(
   }
 }
 
-export function useLimitedHorizontalSwipe(data: any[], options?: OverwritingOptions): SpringAnimationHookReturn {
-  return useLimitedSwipe('x', data, options)
+export function useLimitedHorizontalSwipe<A extends any[]>(
+  data: A,
+  options?: OverwritingOptions,
+  auxOptions?: WithWindowSizeOptions
+): SpringAnimationHookReturn {
+  return useLimitedSwipe('x', data, options, auxOptions)
 }
 
-export function useLimitedVerticalSwipe(data: any[], options?: OverwritingOptions): SpringAnimationHookReturn {
-  return useLimitedSwipe('y', data, options)
+export function useLimitedVerticalSwipe<A extends any[]>(
+  data: A,
+  options?: OverwritingOptions,
+  auxOptions?: WithWindowSizeOptions
+): SpringAnimationHookReturn {
+  return useLimitedSwipe('y', data, options, auxOptions)
 }

@@ -1,5 +1,4 @@
-import { SpringAnimationHookReturn } from '@past3lle/carousel-hooks'
-import { AxisDirection } from '@past3lle/carousel-hooks'
+import { AxisDirection, SpringAnimationHookReturn, WithWindowSizeOptions } from '@past3lle/carousel-hooks'
 import { SmartImageProps } from '@past3lle/components'
 import { ForwardedRef } from 'react'
 
@@ -40,7 +39,7 @@ export interface OptionalCarouselProps {
   }
   indicatorOptions?: Pick<CarouselIndicatorProps, 'position' | 'barStyles'> & { showIndicators?: boolean }
 }
-export interface BaseCarouselProps<T extends any[]> extends OptionalCarouselProps {
+export interface BaseCarouselProps<T extends any[]> extends OptionalCarouselProps, WithWindowSizeOptions {
   data: T
   axis: AxisDirection
   startIndex: number

@@ -35,8 +35,8 @@ const SKILLFORGE_CONFIG: SkillForgeProps = {
         gatewayApiUris: GATEWAY_API_URIS
       }
     },
-    hooksProviderOptions: {
-      windowSizes: {
+    options: {
+      windowSizeOptions: {
         throttleMs: 750
       }
     }
@@ -74,7 +74,7 @@ export function App() {
   return (
     <FontsAndCssProviders>
       <Column width="100%">
-        <Row height={'100vh'}>
+        <Row height="100vh">
           <SkillForge {...SKILLFORGE_CONFIG} render={() => <SkillForgeConnectedHeader />} />
         </Row>
         <AppVersion />

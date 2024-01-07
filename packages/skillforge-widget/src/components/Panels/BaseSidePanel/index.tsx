@@ -1,18 +1,39 @@
-import { ArrowLeft, Row } from '@past3lle/components'
+import { Row } from '@past3lle/components'
 import { useOnClickOutside, useOnKeyPress } from '@past3lle/hooks'
-import React, { ReactNode, useCallback, useRef } from 'react'
+import { urlToSimpleGenericImageSrcSet } from '@past3lle/theme'
+import React, { ReactNode, useCallback, useMemo, useRef } from 'react'
 
 import { useSidePanelAtomBase } from '../../../state/SidePanel'
 import { CursiveHeader } from '../../Common/Text'
-import { SidePanelCssProps, StyledSidePanel } from './styleds'
+import { DynamicBackArrow } from './common'
+import {
+  BackgroundSmartImg,
+  BgCssDpiProps,
+  MAIN_COLOR,
+  ModalXButton,
+  SidePanelCssProps,
+  StyledSidePanel
+} from './styleds'
 
 export interface SidePanelProps {
-  header: string
   children: ReactNode
+  header: string
+  styledProps?: SidePanelCssProps
   onDismiss?: (...args: any[]) => void
   onBack?: (...args: any[]) => void
-  styledProps?: SidePanelCssProps
   options?: {
+    backgroundImageOptions?: {
+      smartImg?: {
+        uri: string
+        options?: {
+          filter?: string
+        }
+      }
+      backgroundCss?: {
+        uri: string
+        options?: BgCssDpiProps
+      }
+    }
     onClickOutsideConditionalCb?: (node: Node) => boolean
   }
 }
@@ -30,36 +51,44 @@ export function SidePanel({ header, children, onBack, onDismiss, options, styled
     onDismiss?.()
   }, [onDismiss, setPanelState])
 
-  const ref = useRef(null)
+  const ref = useRef<HTMLDivElement | null>(null)
   useOnClickOutside(ref, onDismissCallback, options?.onClickOutsideConditionalCb)
 
   useOnKeyPress(['Escape', 'Esc'], onDismissCallback)
 
+  const bgImageSrcSet = useMemo(() => {
+    if (options?.backgroundImageOptions?.smartImg?.uri) {
+      return urlToSimpleGenericImageSrcSet(options?.backgroundImageOptions?.smartImg?.uri)
+    }
+    return null
+  }, [options?.backgroundImageOptions?.smartImg?.uri])
+
   return (
-    <StyledSidePanel {...styledProps} ref={ref}>
-      <div id="bg-tag" />
-      <div style={{ position: 'absolute', left: 15, top: '6.25rem' }}>
-        <Row justifyContent={'space-evenly'} alignItems="center" gap="1rem">
-          {panels.length > 1 && onBack && <ArrowLeft size={20} onClick={onBackCallback} cursor="pointer" />}
-        </Row>
-      </div>
-      {onDismiss && (
-        <div
-          onClick={onDismissCallback}
-          style={{
-            position: 'absolute',
-            right: 15,
-            top: '0.5rem',
-            fontWeight: 300,
-            fontSize: '3rem',
-            cursor: 'pointer'
+    <StyledSidePanel {...styledProps} dpiOptions={options?.backgroundImageOptions?.backgroundCss?.options} ref={ref}>
+      {!bgImageSrcSet ? (
+        <div id="bg-tag" />
+      ) : (
+        <BackgroundSmartImg
+          id="bg-tag"
+          path={{ defaultPath: bgImageSrcSet.defaultUrl }}
+          pathSrcSet={bgImageSrcSet}
+          loadInViewOptions={{ container: document, conditionalCheck: !!bgImageSrcSet }}
+          lqImageOptions={{
+            showLoadingIndicator: true,
+            height: ref.current?.clientHeight || 0,
+            width: ref.current?.clientWidth || 0
           }}
-        >
+          filter={options?.backgroundImageOptions?.smartImg?.options?.filter}
+        />
+      )}
+      <DynamicBackArrow show={Boolean(panels?.length && onBack)} callback={onBackCallback} />
+      {onDismiss && (
+        <ModalXButton onClick={onDismissCallback}>
           <span>x</span>
-        </div>
+        </ModalXButton>
       )}
       <Row>
-        <CursiveHeader marginBottom="2rem" justifyContent={'center'}>
+        <CursiveHeader marginBottom="2rem" justifyContent={'center'} color={MAIN_COLOR}>
           {header}
         </CursiveHeader>
       </Row>

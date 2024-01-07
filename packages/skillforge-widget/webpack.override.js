@@ -14,7 +14,10 @@ module.exports = (webpackConfig) => (
             new webpack.DefinePlugin({
                 'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
                 'process.env.REACT_APP_WEB3MODAL_ID': JSON.stringify(process.env.REACT_APP_WEB3MODAL_ID || ''),
-                'process.env.REACT_APP_WEB3_AUTH_ID': JSON.stringify(process.env.REACT_APP_WEB3_AUTH_ID || '')
+                'process.env.REACT_APP_WEB3_AUTH_ID': JSON.stringify(process.env.REACT_APP_WEB3_AUTH_ID || ''),
+                'process.env.REACT_APP_ALCHEMY_GOERLI_API_KEY': JSON.stringify(process.env.REACT_APP_ALCHEMY_GOERLI_API_KEY || ''),
+                'process.env.REACT_APP_ALCHEMY_MATIC_API_KEY': JSON.stringify(process.env.REACT_APP_ALCHEMY_MATIC_API_KEY || ''),
+                'process.env.REACT_APP_ALCHEMY_MUMBAI_API_KEY': JSON.stringify(process.env.REACT_APP_ALCHEMY_MUMBAI_API_KEY || '')
             }),
         ],
         module: {

@@ -1,24 +1,33 @@
-import { WindowSizeProvider } from '@past3lle/hooks'
 import {
+  type AnyTransactionReceipt,
   AppType,
   type ChainsPartialReadonly,
   PstlModalTheme as ForgeModalTheme,
   PstlW3Providers,
+  type TransactionOptions,
+  type TransactionStatus,
   W3aStyleResetProvider,
   addConnector,
   addFrameConnector,
+  addPublicClients,
   createTheme,
   getAppType,
+  useDeriveAppType,
   usePstlEthereumClient as useEthereumClient,
   usePstlAccountNetworkActions as useW3AccountNetworkActions,
   usePstlConnectDisconnect as useW3ConnectDisconnect,
   usePstlConnection as useW3Connection,
+  useFindTransactionByMetadataKeyValue as useW3FindTransactionByMetadataKeyValue,
+  useFindTransactionByMetadataKeyValueCallback as useW3FindTransactionByMetadataKeyValueCallback,
   usePstlWeb3Modal as useW3Modal,
   usePstlWeb3Modals as useW3Modals,
+  useTransactionsByMetadataKey as useW3TransactionsByMetadataKey,
+  useTransactionsByMetadataKeyCallback as useW3TransactionsByMetadataKeyCallback,
+  useTransactionsRead as useW3TransactionsRead,
   usePstlUserConnectionInfo as useW3UserConnectionInfo,
   usePstlWagmiClient as useWagmiClient
 } from '@past3lle/web3-modal'
-import React, { ReactNode, StrictMode } from 'react'
+import React, { ReactNode } from 'react'
 
 import { ForgeBalancesUpdater, ForgeW3StateUpdaters, ForgeWindowSizeUpdater } from './state'
 import { ForgeW3AppConfig } from './types'
@@ -38,50 +47,38 @@ interface ForgeW3CoreProvidersProps {
 }
 
 function ForgeStateProviders({ config, children }: ForgeW3CoreProvidersProps) {
-  return (
-    <StrictMode>
-      <WindowSizeProvider {...config.hooksProviderOptions}>
-        <ForgeW3StateUpdaters {...config}>{children}</ForgeW3StateUpdaters>
-      </WindowSizeProvider>
-    </StrictMode>
-  )
+  return <ForgeW3StateUpdaters {...config}>{children}</ForgeW3StateUpdaters>
 }
 
 function ForgeW3Providers({ config, children }: ForgeW3CoreProvidersProps) {
   return (
-    <StrictMode>
-      <WindowSizeProvider {...config.hooksProviderOptions}>
-        <PstlW3Providers
-          config={{
-            ...config.web3,
-            appName: config.name
-          }}
-        >
-          <W3aStyleResetProvider />
-          <ForgeW3StateUpdaters {...config}>{children}</ForgeW3StateUpdaters>
-        </PstlW3Providers>
-      </WindowSizeProvider>
-    </StrictMode>
+    <PstlW3Providers
+      config={{
+        ...config.web3,
+        appName: config.name
+      }}
+    >
+      <W3aStyleResetProvider />
+      <ForgeW3StateUpdaters {...config}>{children}</ForgeW3StateUpdaters>
+    </PstlW3Providers>
   )
 }
 
 function ForgeW3BalancesAndWindowSizeProviders({ config, children }: ForgeW3CoreProvidersProps) {
   return (
-    <StrictMode>
-      <WindowSizeProvider {...config.hooksProviderOptions}>
-        <ForgeWindowSizeUpdater />
-        <PstlW3Providers
-          config={{
-            ...config.web3,
-            appName: config.name
-          }}
-        >
-          <W3aStyleResetProvider />
-          <ForgeBalancesUpdater />
-          {children}
-        </PstlW3Providers>
-      </WindowSizeProvider>
-    </StrictMode>
+    <>
+      <ForgeWindowSizeUpdater {...config.options?.windowSizeOptions} />
+      <PstlW3Providers
+        config={{
+          ...config.web3,
+          appName: config.name
+        }}
+      >
+        <W3aStyleResetProvider />
+        <ForgeBalancesUpdater />
+        {children}
+      </PstlW3Providers>
+    </>
   )
 }
 
@@ -95,14 +92,24 @@ export {
   useW3Modals,
   useW3UserConnectionInfo,
   useW3AccountNetworkActions,
+  useW3TransactionsRead,
+  useW3FindTransactionByMetadataKeyValue,
+  useW3FindTransactionByMetadataKeyValueCallback,
+  useW3TransactionsByMetadataKey,
+  useW3TransactionsByMetadataKeyCallback,
   useEthereumClient,
   useWagmiClient,
   addConnector,
   addFrameConnector,
+  addPublicClients,
   getAppType,
+  useDeriveAppType,
   createTheme as createWeb3ModalTheme,
+  type AnyTransactionReceipt,
   type AppType,
   type ForgeModalTheme,
   type ForgeW3CoreProvidersProps,
-  type ChainsPartialReadonly
+  type ChainsPartialReadonly,
+  type TransactionStatus,
+  type TransactionOptions
 }

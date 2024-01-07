@@ -5,5 +5,10 @@
         "outDir": "./dist/cjs",
         "moduleResolution": "Node",
         "declarationDir": "./dist/types"
-    }
+    },
+    "exclude": [
+        "./src/**/*.fixture.tsx?",
+        "./src/**/*.decorator.tsx?",
+        "./src/fixtures"
+    ]
 }

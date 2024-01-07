@@ -2,7 +2,7 @@ import { ButtonProps, Row } from '@past3lle/components'
 import { useWeb3Modal } from '@web3modal/react'
 import React, { useCallback } from 'react'
 
-import { ThemedButton } from '.'
+import { ThemedButton } from './common'
 import { OpenOptions } from './types'
 
 interface Props {

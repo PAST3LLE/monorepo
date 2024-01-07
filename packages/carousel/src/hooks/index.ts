@@ -1,3 +1,4 @@
+import { WithWindowSizeOptions } from '@past3lle/carousel-hooks'
 import { LqImageOptions } from '@past3lle/components'
 import { useStateRef, useWindowSize } from '@past3lle/hooks'
 import { useEffect, useMemo, useState } from 'react'
@@ -10,7 +11,11 @@ export interface CarouselSetup {
   imageTransformations: Omit<LqImageOptions, 'showLoadingIndicator'> & { pr: boolean }
   setCarouselContainerRef: (newNode: HTMLElement | null) => void
 }
-export function useCarouselSetup(dimensions: BaseCarouselProps<any[]>['dimensions']): CarouselSetup {
+
+export function useCarouselSetup(
+  dimensions: BaseCarouselProps<any[]>['dimensions'],
+  auxOptions?: WithWindowSizeOptions
+): CarouselSetup {
   const [parentSizes, setParentSizes] = useState<CarouselSetup['parentSizes']>()
 
   // ref to carousel container
@@ -28,7 +33,7 @@ export function useCarouselSetup(dimensions: BaseCarouselProps<any[]>['dimension
     carouselContainer?.focus()
   }, [dimensions?.fixedSizes, carouselContainer])
 
-  const windowSizes = useWindowSize()
+  const windowSizes = useWindowSize(auxOptions?.windowSizeOptions)
   // adjust refs on window size changes
   useEffect(() => {
     if (dimensions?.fixedSizes?.height && dimensions?.fixedSizes?.width) return

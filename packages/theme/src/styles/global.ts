@@ -25,7 +25,7 @@ export const ThemedGlobalCssProvider = createGlobalStyle`
   body {
     background-image: radial-gradient(50% 50% at 50% 50%, rgb(49 5 33) 0%, rgb(2 2 2) 100%);
 
-    transition: background-color, background-image, color 0.3s ease-in-out;
+    transition: background-color 0.3s ease-in-out, background-image 0.3s ease-in-out, color 0.3s ease-in-out;
 
     ${({ theme }) => theme.mediaWidth.upToSmall`
       > div#root {

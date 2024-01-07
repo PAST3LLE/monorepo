@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/theme",
   "sideEffects": false,
-  "version": "0.1.13",
+  "version": "0.1.18",
   "description": "common theme parts",
   "main": "dist/esm/index.js",
   "module": "dist/esm/index.js",
@@ -22,7 +22,7 @@
   "author": "pastelle",
   "license": "MIT",
   "scripts": {
-    "types": "npx tsc --noEmit",
+    "check-types": "tsc --noEmit",
     "clean": "rm -rf dist && rm -rf tsconfig.tsbuildinfo",
     "compile:tsdx": "tsdx build && cp \"./package.json\" ./dist/",
     "compile": "tsc --emitDeclarationOnly --outDir './dist/types' & tsc --project tsconfig.esm.json & tsc --project tsconfig.cjs.json && cp \"./package.json\" ./dist/",
@@ -52,7 +52,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",
-    "@past3lle/types": "^0.0.25",
+    "@past3lle/types": "^0.0.26",
     "@rollup/plugin-image": "^3.0.1",
     "@types/jest": "^29.2.5",
     "@types/lodash.merge": "^4.6.7",
@@ -78,12 +78,12 @@
     "styled-components": ">=5"
   },
   "dependencies": {
-    "@past3lle/assets": "^0.0.24",
-    "@past3lle/constants": "^0.1.11",
+    "@past3lle/assets": "^0.1.0",
+    "@past3lle/constants": "^0.1.13",
+    "get-contrast": "3.0.0",
     "lodash.merge": "^4.6.2",
     "polished": "^4.2.2",
-    "react-helmet": "^6.1.0",
-    "wcag-contrast": "^3.0.0"
+    "react-helmet": "^6.1.0"
   },
   "gitHead": "9aa2cea4e1db3f2a1f8fce04ef83295c05a5d9e0"
 }

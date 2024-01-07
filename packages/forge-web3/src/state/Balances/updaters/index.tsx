@@ -37,14 +37,15 @@ export function ForgeBalancesUpdater({ loadAmount = BigInt(DEFAULT_COLLECTION_LO
     const metadataLoaded = !!metadata?.length
 
     const derivedData: bigint[][] = _getEnvBalances(balancesBatch as { result: bigint[] }[] | undefined)
-    const dataHasLength = derivedData?.[0]?.length && derivedData?.[1]?.length
+    // check that derivedData's first/last index relative to skills has data
+    const dataHasLength = derivedData?.[0]?.length && derivedData?.[skills.length - 1]?.length
 
     if (metadataLoaded && dataHasLength) {
       if (!address) {
         // if address is undefined, reset balances
-        resetUserBalances({})
+        resetUserBalances()
       } else {
-        const balances = reduceBalanceDataToMap(derivedData, skills as { result: Address }[], metadata, chainId)
+        const balances = _reduceBalanceDataToMap(derivedData, skills as { result: Address }[], metadata, chainId)
 
         updateForgeBalances(balances)
       }
@@ -55,7 +56,7 @@ export function ForgeBalancesUpdater({ loadAmount = BigInt(DEFAULT_COLLECTION_LO
   return null
 }
 
-function reduceBalanceDataToMap(
+function _reduceBalanceDataToMap(
   data: readonly bigint[][],
   collectionsAddresses: { result: Address }[],
   metadata: ForgeMetadataState['metadata'][number],

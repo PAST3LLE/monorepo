@@ -23,12 +23,11 @@ export * from './useOfflineOnlineDetection'
 export {
   WindowSizes,
   useWindowSize,
+  UseWindowSizeOptions,
   useWindowSmallerThan,
   useIsExtraSmallMediaWidth,
   useIsSmallMediaWidth,
   useIsMediumMediaWidth,
   useIsLargeMediaWidth,
-  useIsExtraLargeMediaWidth,
-  WindowSizeProvider,
-  WindowSizeProviderOptions
+  useIsExtraLargeMediaWidth
 } from './useWindowSize'

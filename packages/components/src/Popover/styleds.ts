@@ -11,7 +11,7 @@ export const PopoverContainer = styled.div<{ show: boolean }>`
 
   background: ${({ theme }) => theme.bg2};
   border: 1px solid ${({ theme }) => theme.bg3};
-  box-shadow: 0 4px 8px 0 ${({ theme }) => transparentize(0.9, theme.shadow1)};
+  box-shadow: 0 4px 8px 0 ${({ theme }) => (theme.shadow1 ? transparentize(0.9, theme.shadow1) : 'transparent')};
   color: ${({ theme }) => theme.text2};
   border-radius: ${({ theme }) => theme.button.border.radius};
 `

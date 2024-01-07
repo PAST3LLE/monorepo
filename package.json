@@ -23,6 +23,7 @@
     "examples:next": "cd examples/next-app && rm -rf yarn.lock node_modules && yarn install --force && yarn dev && cd ../..",
     "install:examples": "cd examples/generic && yarn && cd ../../",
     "nft:write": "lerna run metadata:write --scope @past3lle/skills-nft --",
+    "check-types": "lerna run check-types --stream",
     "types:scope": "lerna run check-types --scope",
     "serve:scope": "lerna run serve --scope",
     "start:scope": "lerna run start --scope",

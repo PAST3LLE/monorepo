@@ -22,7 +22,7 @@ userAtom.debugLabel = 'BALANCES ATOM'
 
 const userBalancesReadAtom = (chainId?: number) => atom((get) => (chainId ? get(userAtom).balances[chainId] : {}))
 
-const userBalancesWriteAtom = atom<null, ForgeBalancesState['balances']>(null, (get, set, update) => {
+const userBalancesWriteAtom = atom(null, (get, set, update: ForgeBalances) => {
   const state = get(userAtom)
   return set(userAtom, {
     balances: {
@@ -33,7 +33,7 @@ const userBalancesWriteAtom = atom<null, ForgeBalancesState['balances']>(null, (
 })
 
 const userBalancesResetAtom = (chainId?: number) =>
-  atom<null, ForgeBalancesState['balances']>(null, (get, set) => {
+  atom(null, (get, set) => {
     const state = get(userAtom)
     if (!chainId) return
     const resetBalancesByChain = Object.keys(state.balances[chainId]).reduce((acc, next) => {

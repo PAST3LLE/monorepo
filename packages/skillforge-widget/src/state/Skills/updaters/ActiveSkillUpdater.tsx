@@ -2,7 +2,7 @@ import { SkillId, useForgeMetadataMapReadAtom, useSupportedChainId } from '@past
 import { useIsMobile } from '@past3lle/hooks'
 import { useEffect } from 'react'
 
-import { useForgesAtom, useVectorsAtom } from '..'
+import { useForgeSkillAtom, useVectorsAtom } from '..'
 import { toggleSelectedSkill } from '../../../api/hooks'
 import { ActiveSidePanel, useSidePanelAtomBase } from '../../SidePanel'
 
@@ -11,7 +11,7 @@ export function ActiveSkillUpdater() {
 
   const [{ type }, openSidePanel] = useSidePanelAtomBase()
   const isMobileWidthOrDevice = useIsMobile()
-  const [skillsState, updateSkillsState] = useForgesAtom()
+  const [skillsState, updateSkillsState] = useForgeSkillAtom()
   const [metadataMap] = useForgeMetadataMapReadAtom(chainId)
   const [vectorsState] = useVectorsAtom()
 
@@ -19,11 +19,10 @@ export function ActiveSkillUpdater() {
   useEffect(() => {
     const activeSkill = skillsState.active[0]
     if (activeSkill && metadataMap?.[activeSkill]) {
+      const deps = metadataMap[activeSkill]?.properties?.dependencies || []
       updateSkillsState((state) => ({
         ...state,
-        activeDependencies: metadataMap[activeSkill].properties.dependencies.map(
-          ({ token, id }) => `${token}-${id}` as SkillId
-        )
+        activeDependencies: deps.map(({ token, id }) => `${token}-${id}` as SkillId)
       }))
     } else {
       updateSkillsState((state) => ({

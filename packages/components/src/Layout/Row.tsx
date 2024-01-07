@@ -19,14 +19,8 @@ export const Row = styled(Box)<RowProps>`
   ${({ gap }) => gap && `gap: ${gap};`}
 `
 
-export const RowCenter = styled(Row)`
-  justify-content: center;
-  align-items: center;
-`
-
-export const RowBetween = styled(Row)`
-  justify-content: space-between;
-`
+export const RowCenter = styled(Row).attrs((props) => ({ justifyContent: 'center', alignItems: 'center', ...props }))``
+export const RowBetween = styled(Row).attrs((props) => ({ justifyContent: 'space-between', ...props }))``
 
 export const RowFlat = styled.div`
   display: flex;

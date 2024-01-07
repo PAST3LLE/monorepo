@@ -1,9 +1,9 @@
 import { useIsExtraSmallMediaWidth } from '@past3lle/hooks'
+import { devDebug, devError } from '@past3lle/utils'
 import React, { memo } from 'react'
 import { useSwitchNetwork } from 'wagmi'
 
 import { useGetChainLogoCallback, usePstlWeb3Modal, usePstlWeb3ModalStore, useUserConnectionInfo } from '../../../hooks'
-import { ConnectorEnhanced } from '../../../types'
 import { NoChainLogo } from '../../NoChainLogo'
 import { AccountColumnContainer } from '../AccountModal/styled'
 import { ConnectorOption } from '../ConnectionModal/ConnectorOption'
@@ -14,18 +14,21 @@ function NetworkModalContent() {
   const modalCallbacks = usePstlWeb3Modal()
   const modalStore = usePstlWeb3ModalStore()
 
-  const { connector, chain: currentChain, supportedChains } = useUserConnectionInfo()
+  const { chain: currentChain, supportedChains } = useUserConnectionInfo()
 
   const { switchNetworkAsync } = useSwitchNetwork({
-    onSuccess() {
-      modalCallbacks.close()
+    async onSuccess(data) {
+      devDebug(
+        '[@past3lle/web3-modals::NetworkModal] Success switching networks!',
+        !!modalCallbacks,
+        data?.id,
+        data?.name
+      )
+      return modalCallbacks.close()
     },
-    onError(error) {
-      modalStore.updateModalProps({
-        network: {
-          error
-        }
-      })
+    async onError(error) {
+      devError('[@past3lle/web3-modals::NetworkModal] Error switching networks!', error?.message || error)
+      return modalStore.callbacks.error.set(error)
     }
   })
 
@@ -37,7 +40,13 @@ function NetworkModalContent() {
 
   return (
     <AccountColumnContainer width="100%">
-      <WalletsWrapper id={`${ModalId.WALLETS}__chains-wrapper`} view={modalView} width="auto">
+      <WalletsWrapper
+        id={`${ModalId.WALLETS}__chains-wrapper`}
+        modal="connection"
+        node="main"
+        view={modalView}
+        width="100%"
+      >
         {supportedChains.map((chain) => {
           if (!switchNetworkAsync || currentChain?.id === chain.id) return null
           const chainLogo = getChainLogo(chain.id)
@@ -51,7 +60,6 @@ function NetworkModalContent() {
               callback={async () => switchNetworkAsync(chain.id)}
               modalView={modalView}
               connected={false}
-              connector={connector as ConnectorEnhanced<any, any>}
               label={chain.name}
               logo={chainLogo ? <img src={chainLogo} /> : <NoChainLogo />}
             />
@@ -62,4 +70,4 @@ function NetworkModalContent() {
   )
 }
 
-export const NetworkModal = memo(NetworkModalContent)
+export default memo(NetworkModalContent)

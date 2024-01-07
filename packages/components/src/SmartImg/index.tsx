@@ -23,7 +23,7 @@ export interface LqImageOptions {
   showLoadingIndicator: boolean
 }
 
-interface BaseImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
+export interface BaseImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   pathSrcSet?: { [sizekey in MediaWidths]: DDPXImageUrlMap }
   lazy?: boolean
   forwardedRef?: React.ForwardedRef<HTMLImageElement>
@@ -111,6 +111,7 @@ export function ApiImage({
   placeholderProps,
   lazy = true,
   forwardedRef,
+  className,
   ...rest
 }: SmartImageProps): JSX.Element | null {
   // load if in view only!
@@ -171,7 +172,7 @@ export function ApiImage({
         <>
           {/* Observable span to detect if in view */}
           <span ref={refToSet} />
-          <StyledPicture>
+          <StyledPicture className={className}>
             {/* e.g [500, { 1x: 'cdn.shopify.com/123/image_500x@1x.webp', 2x: 'cdn.shopify.com/123/image_500x@2x.webp' }] */}
             {pathSrcSet &&
               isInView &&

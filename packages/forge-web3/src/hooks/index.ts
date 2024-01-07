@@ -10,6 +10,7 @@ export * from './contracts/useForgeBalanceOfBatchFromMetadata'
 export * from './contracts/useForgeGetSkillMetadataUri'
 export * from './contracts/useForgeGetBatchSkillMetadataUris'
 export * from './contracts/useForgeClaimLockedSkill'
+export * from './contracts/useForgeApprove'
 
 export * from './useForgeSupportedChainId'
 export * from './useForgeFetchMetadata'

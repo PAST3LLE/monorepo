@@ -2,9 +2,7 @@ import { SkillId } from '@past3lle/forge-web3'
 import React, { useEffect, useState } from 'react'
 
 import { useSidePanelAtomBase } from '..'
-import { ActiveSkillPanel } from '../../../components/Panels/ActiveSkillPanel'
-import { TradeAndUnlockPanel } from '../../../components/Panels/TradeAndUnlockPanel'
-import { UserStatsPanel } from '../../../components/Panels/UserStatsPanel'
+import { ActiveSkillPanel, SkillFlowsPanel, TradeAndUnlockPanel, UserStatsPanel } from '../../../components/Panels'
 import { removeSearchParams, updateSearchParams } from '../../../utils/url'
 import { useActiveSkillAtom } from '../../Skills'
 
@@ -12,12 +10,14 @@ export enum ForgeSearchParamKeys {
   FORGE_CHAIN = 'forge-network',
   FORGE_SKILL_ID = 'forge-skill',
   FORGE_USER_INVENTORY = 'forge-inventory',
-  FORGE_UPGRADE_SKILL = 'forge-upgrade-skill'
+  FORGE_UPGRADE_SKILL = 'forge-upgrade-skill',
+  FORGE_FLOWS = 'forge-flows'
 }
 const FORGE_SEARCH_PARAM_KEYS = [
   ForgeSearchParamKeys.FORGE_SKILL_ID,
   ForgeSearchParamKeys.FORGE_USER_INVENTORY,
-  ForgeSearchParamKeys.FORGE_UPGRADE_SKILL
+  ForgeSearchParamKeys.FORGE_UPGRADE_SKILL,
+  ForgeSearchParamKeys.FORGE_FLOWS
 ]
 
 export function SidePanelUpdater() {
@@ -29,7 +29,7 @@ export function SidePanelUpdater() {
   const [[id], setActiveSkill] = useActiveSkillAtom()
   const [panel, setPanel] = useState<JSX.Element | null>(null)
 
-  const type = panelType?.split('::')?.[0] as 'ACTIVE_SKILL' | 'USER_STATS' | 'UNLOCK_SKILL' | undefined
+  const type = panelType?.split('::')?.[0] as 'ACTIVE_SKILL' | 'USER_STATS' | 'UNLOCK_SKILL' | 'FLOWS' | undefined
 
   const [{ searchParams, searchParamKey }, setSearchProperties] = useState<{
     searchParams: URLSearchParams | undefined
@@ -77,6 +77,10 @@ export function SidePanelUpdater() {
           }
           break
         }
+        case ForgeSearchParamKeys.FORGE_FLOWS: {
+          setPanel(<SkillFlowsPanel />)
+          break
+        }
       }
     }
     // we don't want id to trigger this useEffect
@@ -103,12 +107,17 @@ export function SidePanelUpdater() {
         }
         setPanel(<TradeAndUnlockPanel />)
         break
+      case 'FLOWS':
+        updateSearchParams(ForgeSearchParamKeys.FORGE_FLOWS, 'open')
+        setPanel(<SkillFlowsPanel />)
+        break
       default:
         // Reset search param
         removeSearchParams(
           ForgeSearchParamKeys.FORGE_SKILL_ID,
           ForgeSearchParamKeys.FORGE_UPGRADE_SKILL,
-          ForgeSearchParamKeys.FORGE_USER_INVENTORY
+          ForgeSearchParamKeys.FORGE_USER_INVENTORY,
+          ForgeSearchParamKeys.FORGE_FLOWS
         )
         setPanel(null)
         break

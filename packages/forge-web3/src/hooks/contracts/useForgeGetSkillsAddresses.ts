@@ -10,11 +10,12 @@ import { useRefetchOnAddressAndChain } from '../useRefetchOnAddress'
 import { useForgeContractAddressesByChain } from './useForgeContractAddress'
 import { useForgeGetLatestCollectionId } from './useForgeGetLatestCollectionId'
 
+const DEFAULT_LATEST_COLLECTION = BigInt(2)
 export function useForgeGetSkillsAddresses({ loadAmount }: WithLoadAmount) {
   const chainId = useSupportedOrDefaultChainId()
   const [contractAddressMap] = useForgeContractAddressMapReadAtom()
   const contractAddressesByChain = useForgeContractAddressesByChain(contractAddressMap)
-  const { data: latestCollectionId = BigInt(2), refetch: refetchCollectionId } =
+  const { data: latestCollectionId = DEFAULT_LATEST_COLLECTION, refetch: refetchCollectionId } =
     useForgeGetLatestCollectionId(contractAddressMap)
 
   useRefetchOnAddressAndChain(refetchCollectionId)

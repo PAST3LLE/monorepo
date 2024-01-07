@@ -1,5 +1,6 @@
 import { Header as PstlHeader, Row } from '@past3lle/components'
 import { setBackgroundOrDefault, upToExtraSmall, upToSmall } from '@past3lle/theme'
+import { BackgroundBlendMode } from '@past3lle/theme'
 import styled, { DefaultTheme } from 'styled-components'
 
 import { ThemedButton } from '../Common/Button'
@@ -14,7 +15,7 @@ export const Web3InfoContainer = styled(Row)`
 const getBaseBgProps = (theme: DefaultTheme) => ({
   preset: 'header' as const,
   skipIk: true,
-  backgroundBlendMode: 'unset',
+  backgroundBlendMode: 'unset' as BackgroundBlendMode,
   backgroundAttributes: ['0px 0px/contain no-repeat'],
   backgroundColor: theme.mainBgAlt
 })

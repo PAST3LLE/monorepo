@@ -1,4 +1,4 @@
-import { WindowSizeProviderOptions } from '@past3lle/hooks'
+import { UseWindowSizeOptions } from '@past3lle/hooks'
 import { PstlWeb3ModalProps } from '@past3lle/web3-modal'
 
 import { UserConfigState } from '../state'
@@ -14,6 +14,9 @@ export interface ForgeW3AppConfigSkillOptions {
 
 export type Web3ModalConfigWeb3Props = Omit<PstlWeb3ModalProps<SupportedForgeChains>, 'appName'> & {
   standalone?: boolean
+}
+interface Options {
+  windowSizeOptions: UseWindowSizeOptions
 }
 export interface ForgeW3AppConfig {
   name: string
@@ -52,5 +55,5 @@ export interface ForgeW3AppConfig {
    */
   metadataUris: ForgeMetadataUriMap
   skillOptions?: ForgeW3AppConfigSkillOptions
-  hooksProviderOptions?: WindowSizeProviderOptions
+  options?: Options
 }

@@ -2,7 +2,7 @@ import { Column, Row } from '@past3lle/components'
 import { upToExtraSmall, upToSmall } from '@past3lle/theme'
 import styled from 'styled-components'
 
-import { ThemedButtonActions, ThemedButtonExternalLink } from '../../Common/Button'
+import { ThemedButtonActions, ThemedButtonExternalLink } from '../../Common/Button/common'
 import { AutoColorHeader, BlackHeader } from '../../Common/Text'
 
 export const SkillStatusLabel = styled(AutoColorHeader)``

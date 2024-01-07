@@ -1,6 +1,6 @@
 {
   "name": "@past3lle/carousel-hooks",
-  "version": "0.2.0",
+  "version": "1.0.0-alpha.5",
   "description": "PASTELLE carousel animation hooks built on top of @usegesture and react-springs",
   "sideEffects": false,
   "keywords": [
@@ -39,7 +39,8 @@
     "test:ci": "yarn alt-test --coverage --no-watch --watch=false --watchAll=false --no-watchman --forceExit --detectOpenHandles",
     "pre-commit": "pretty-quick --staged && yarn test:ci && yarn build",
     "lint": "prettier --write './src/**/*' --ignore-path '../../.prettierignore'",
-    "depcheck": "npx npm-check"
+    "depcheck": "npx npm-check",
+    "check-types": "tsc --noEmit"
   },
   "publishConfig": {
     "access": "public",
@@ -84,7 +85,7 @@
     "tslib": "^2.4.1"
   },
   "dependencies": {
-    "@past3lle/hooks": "^0.2.0",
+    "@past3lle/hooks": "^1.0.0-alpha.6",
     "lodash.clamp": "^4.0.3"
   },
   "gitHead": "f852fe196f05c3b9111c9642af6df32c8bff7a6e"

@@ -1,6 +1,8 @@
 import { devDebug } from '@past3lle/utils'
 import { isIframe } from '@past3lle/wagmi-connectors/utils'
+import { ChainProviderFn } from 'wagmi'
 
+import { usePstlWeb3ModalStore } from '../../hooks'
 import { Chain, ConnectorEnhanced } from '../../types'
 import { isLedgerDappBrowserProvider } from '../../utils/iframe'
 import { PstlWeb3ModalProps } from '../types'
@@ -20,22 +22,30 @@ export function getAppType(forcedAppType?: AppType) {
   }
 }
 
-export function mapChainsToConnectors(
-  connectors: ((chains: Chain<number>[]) => ConnectorEnhanced<any, any>)[],
-  config: PstlWeb3ModalProps
-) {
-  return connectors.map((conn) => conn?.(config.chains as Chain<number>[]))
+export function useDeriveAppType() {
+  const {
+    state: {
+      userOptions: {
+        ux: { appType }
+      }
+    }
+  } = usePstlWeb3ModalStore()
+
+  return getAppType(appType)
 }
 
-export function hardFilterChains(config: PstlWeb3ModalProps): PstlWeb3ModalProps {
-  const limitChainsFn = config.callbacks?.filterChains || config.callbacks?.hardLimitChains
-  if (!limitChainsFn) return config
+export function mapChainsToConnectors(
+  connectors: ((chains: Chain<number>[]) => ConnectorEnhanced<any, any>)[],
+  chains: PstlWeb3ModalProps['chains']
+) {
+  return connectors.map((conn) => conn?.(chains as Chain<number>[]))
+}
 
-  const filteredChains = limitChainsFn(config.chains)
-  return {
-    ...config,
-    chains: filteredChains
-  }
+export function hardFilterChains({ callbacks, chains }: Pick<PstlWeb3ModalProps, 'chains' | 'callbacks'>) {
+  const limitChainsFn = callbacks?.filterChains || callbacks?.hardLimitChains
+  if (!limitChainsFn) return chains
+
+  return limitChainsFn(chains)
 }
 
 export function softFilterChains(config: PstlWeb3ModalProps): PstlWeb3ModalProps {
@@ -47,4 +57,19 @@ export function softFilterChains(config: PstlWeb3ModalProps): PstlWeb3ModalProps
     ...config,
     chains: filteredChains
   }
+}
+
+export type PublicClientFn<TChain extends Chain<number> = Chain<number>> = ({
+  apiKey
+}: {
+  apiKey: string
+}) => ChainProviderFn<TChain>
+export type ApiKeyMap<P extends PublicClientFn> = {
+  client: P
+  [key: number]: string
+}
+export function addPublicClients<P extends PublicClientFn>(clientsAndKeys: ApiKeyMap<P>[], chains: Chain<number>[]) {
+  return clientsAndKeys.flatMap((clientInfo, i) => [
+    ...chains.map((chain) => clientInfo.client({ apiKey: clientsAndKeys[i]?.[chain.id] }))
+  ])
 }

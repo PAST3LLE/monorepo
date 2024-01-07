@@ -28,13 +28,27 @@ function chainIdToOpenseaNetworkName(chainId: SupportedForgeChains) {
       return 'matic'
     case 80001:
       return 'mumbai'
+    default:
+      return ''
   }
 }
 
 // TODO: this fn should be local to the project using SkillForge Widget
-const STORE_URL = process.env.NODE_ENV === 'production' ? SHOP_URL : 'http://localhost:8080'
-export function getSkillShopUri(activeSkill: SkillMetadata) {
-  return `${STORE_URL}/#/SKILLS/${(
-    activeSkill?.attributes?.handle || activeSkill.name
-  ).toLowerCase()}?referral=FORGE&id=${activeSkill.properties.shopifyId.replace('gid://shopify/Product/', '')}`
+const STORE_URL = process.env.NODE_ENV === 'production' ? SHOP_URL : SHOP_URL || 'http://localhost:8080'
+const REFERALL_PARAM = 'referral=FORGE'
+export function getSkillShopUri(activeSkill: SkillMetadata): { url: string; type: 'PRODUCT' | 'COLLECTION' } | null {
+  const isCollectionSkill =
+    !!activeSkill?.properties?.isCollection || activeSkill?.properties?.id?.split('-')[1] === '0000'
+  // skill has incorrect metadata, return null
+  if (!isCollectionSkill && !activeSkill?.properties?.shopifyId) return null
+  // skill is a collection, return collection view page
+  else if (isCollectionSkill)
+    return { url: `${STORE_URL}?${REFERALL_PARAM}&id=${activeSkill.properties.shopifyId}`, type: 'COLLECTION' }
+  // skill is a collection skillpoint, return skill product view page
+  return {
+    url: `${STORE_URL}/skills/${(
+      activeSkill?.attributes?.handle || activeSkill.name
+    ).toLowerCase()}?${REFERALL_PARAM}&id=${activeSkill.properties.shopifyId}`,
+    type: 'PRODUCT'
+  }
 }

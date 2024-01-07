@@ -1,20 +1,31 @@
 import { Column, Row, Text } from '@past3lle/components'
 import { useForgeBalancesReadAtom, useSupportedChainId } from '@past3lle/forge-web3'
-import { upToSmall } from '@past3lle/theme'
+import { upToSmall, urlToSimpleGenericImageSrcSet } from '@past3lle/theme'
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { useGetSkillFromIdCallback } from '../../../hooks/skills'
 import { useSidePanelWriteAtom } from '../../../state/SidePanel'
 import { SkillGridPositionList, useVectorsAtom } from '../../../state/Skills'
-import { baseTheme } from '../../../theme/base'
-import { MAIN_FG } from '../../../theme/constants'
 import { useAssetsMap } from '../../../theme/utils'
-import { CursiveMonoHeader, MonospaceText } from '../../Common/Text'
+import { CursiveHeader, CursiveMonoHeader, MonospaceText } from '../../Common/Text'
 import { Skillpoint } from '../../Skillpoint'
 import { UserConnectionStats } from '../../Web3/UserWeb3ConnectionStats'
 import { SidePanel } from '../BaseSidePanel'
+import { BgCssDpiProps, MAIN_COLOR } from '../BaseSidePanel/styleds'
 
+const INVENTORY_BG_SETTINGS = {
+  backgroundCss: {
+    uri: '',
+    options: {
+      bgSet: urlToSimpleGenericImageSrcSet(
+        'https://res.cloudinary.com/coin-nft/cache/1/76/ea/76eab8120b9caa03f5a9e602942742454367f087f206c1274623e7696753b151-MDY2MWVjM2EtYmNhMS00ZThjLThlOWEtZjJmY2RhYWJjZGMz'
+      ),
+      modeColors: ['magenta', 'magenta'],
+      blendMode: 'difference'
+    } as BgCssDpiProps
+  }
+}
 export function UserStatsPanel() {
   const chainId = useSupportedChainId()
   const [{ vectors }] = useVectorsAtom()
@@ -37,53 +48,50 @@ export function UserStatsPanel() {
   const [, setPanelState] = useSidePanelWriteAtom()
 
   return (
-    <SidePanel header="INVENTORY" onDismiss={() => setPanelState()}>
+    <SidePanel
+      header="INVENTORY"
+      options={{
+        backgroundImageOptions: INVENTORY_BG_SETTINGS
+      }}
+      styledProps={{
+        background: '#000000eb'
+      }}
+      onDismiss={() => setPanelState()}
+    >
       <UserStatsPanelContainer>
-        <Row padding="1rem 2rem" gap="0 1rem" backgroundColor={baseTheme.mainBg}>
-          <CursiveMonoHeader
-            text="ACCOUNT"
-            capitalLetterProps={{ width: 'auto', display: 'flex', alignItems: 'center' }}
-            restWordProps={{
-              fontSize: '2.6rem',
-              opacity: 0.85,
-              textShadow: '2px 2px 2px #000000b0',
-              fontFamily: 'aria',
-              fontStyle: 'normal'
-            }}
-          />
-          <img className="icon8-icon" src={assetsMap.icons.connection} />
-        </Row>
-
         <UserConnectionStats containerProps={{ margin: '2rem 0' }} />
-
-        <Row padding="1rem 2rem" gap="0 1rem" backgroundColor={baseTheme.mainBg}>
-          <CursiveMonoHeader
-            text="INVENTORY"
-            capitalLetterProps={{ width: 'auto', display: 'flex', alignItems: 'center' }}
-            restWordProps={{
-              fontSize: '2.6rem',
-              opacity: 0.85,
-              textShadow: '2px 2px 2px #000000b0',
-              fontFamily: 'aria',
-              fontStyle: 'normal'
-            }}
-          />
-          <Text.SubHeader fontSize="1.4rem" backgroundColor={MAIN_FG} fontWeight={300} margin={0}>
+        <Row padding="1rem 2rem" gap="0 1rem">
+          <CursiveHeader color={MAIN_COLOR} textAlign="center">
+            MY STASH
+          </CursiveHeader>
+          <Text.SubHeader fontSize="1.4rem" backgroundColor="#d93dceba" fontWeight={600} margin={0}>
             {ownedSkillsList.length}/{totalSkills} SKILLS
           </Text.SubHeader>
           <img className="icon8-icon" src={assetsMap.icons.inventory} />
         </Row>
-        <UserSkillpointsContainer>
-          {ownedSkillsList.map(({ skillId }) => {
-            const skill = skillId ? getSkill(skillId) : null
-            return (
-              skill && (
-                <Row key={skillId} justifyContent="center" alignItems="center">
-                  <Skillpoint metadata={skill} hasSkill />
-                </Row>
+        <UserSkillpointsContainer
+          backgroundColor="#00000099"
+          borderRadius="5px"
+          minHeight="300px"
+          textAlign={'center'}
+          padding="1.5rem"
+        >
+          {!ownedSkillsList?.length ? (
+            <Text.LargeHeader color={MAIN_COLOR} fontSize={'35px'} fontWeight={100}>
+              :[ it's dangerous out there alone!
+            </Text.LargeHeader>
+          ) : (
+            ownedSkillsList.map(({ skillId }) => {
+              const skill = skillId ? getSkill(skillId) : null
+              return (
+                skill && (
+                  <Row key={skillId} justifyContent="center" alignItems="center">
+                    <Skillpoint metadata={skill} hasSkill />
+                  </Row>
+                )
               )
-            )
-          })}
+            })
+          )}
         </UserSkillpointsContainer>
       </UserStatsPanelContainer>
     </SidePanel>
@@ -96,13 +104,13 @@ const UserStatsPanelContainer = styled(Column)`
   padding: 2rem 0 0;
 
   img.icon8-icon {
-    max-width: 3rem;
+    max-width: 6rem;
     margin-left: auto;
   }
 
   ${() => upToSmall`
    img.icon8-icon {
-    max-width: 3rem;
+    max-width: 6rem;
    }
 
     ${CursiveMonoHeader} > * {
@@ -126,7 +134,7 @@ const UserSkillpointsContainer = styled(Row)`
   overflow-y: auto;
   justify-content: space-evenly;
   align-items: center;
-  gap: 1rem;
+  gap: 0.25rem;
   padding: 1rem;
 
   > ${Row} {

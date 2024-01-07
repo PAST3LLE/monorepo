@@ -1,84 +1,91 @@
 import { useIsExtraSmallMediaWidth } from '@past3lle/hooks'
-import React, { memo, useMemo, useState } from 'react'
-import { useTheme } from 'styled-components'
+import React, { memo, useCallback, useMemo, useState } from 'react'
 
-import { ModalPropsCtrlState } from '../../../controllers/types/controllerTypes'
+import { UserOptionsCtrlState } from '../../../controllers/types'
 import {
-  useCloseAndUpdateModals,
-  useConnectDisconnect,
+  useConnectDisconnectAndCloseModals, // useConnectDisconnect,
   usePstlWeb3ModalStore,
   useUserConnectionInfo,
-  useWeb3Modals
+  useAllWeb3Modals as useWeb3Modals
 } from '../../../hooks'
 import { LoadingScreen } from '../../LoadingScreen'
 import { WalletsWrapper } from '../common/styled'
 import { BaseModalProps, ModalId } from '../common/types'
-import { ConnectorHelper } from './ConnectorHelper'
 import { RenderConnectorOptions } from './RenderConnectorOptions'
 import { cleanAndFormatConnectorOverrides, sortConnectorsByRank } from './utils'
 
-export type PstlWeb3ConnectionModalProps = BaseModalProps &
-  Omit<ModalPropsCtrlState['root'], 'openType'> &
-  Pick<ModalPropsCtrlState['connect'], 'walletsView' | 'hideInjectedFromRoot'>
+export type PstlWeb3ConnectionModalProps = Omit<BaseModalProps, 'modal'> &
+  Pick<UserOptionsCtrlState['ux'], 'closeModalOnConnect'> &
+  Pick<UserOptionsCtrlState['ui'], 'chainImages' | 'walletsView'> &
+  Pick<UserOptionsCtrlState['connectors'], 'overrides' | 'hideInjectedFromRoot'>
 
 export type ProviderMountedMap = {
   [id: string]: {
     mounted: boolean
   }
 }
-
 function ConnectionModalContent({
-  openType = 'root',
   hideInjectedFromRoot,
   closeModalOnConnect,
-  connectorDisplayOverrides: connectorDisplayOverridesUnformatted,
+  overrides: overridesUnformatted,
   walletsView = 'list',
   loaderProps,
   chainIdFromUrl
 }: Omit<PstlWeb3ConnectionModalProps, 'theme' | 'type' | 'isOpen' | 'onDismiss'>) {
-  const theme = useTheme()
   const isExtraSmallScreen = useIsExtraSmallMediaWidth()
   // We always show list view in tiny screens
   const modalView = isExtraSmallScreen ? 'list' : walletsView
 
-  const modalCallbacks = useWeb3Modals()
-  const modalState = usePstlWeb3ModalStore()
+  const uiModalStore = useWeb3Modals()
+  const store = usePstlWeb3ModalStore()
   const userConnectionInfo = useUserConnectionInfo()
 
   const {
-    connect: { connectAsync: connect },
+    connect: { connectAsync },
     disconnect: { disconnectAsync: disconnect }
-  } = useConnectDisconnect({
-    connect: {
-      onError(error) {
-        modalState.updateModalProps({
-          network: {
-            error
-          }
-        })
+  } = useConnectDisconnectAndCloseModals(
+    !!closeModalOnConnect,
+    // Connect
+    {
+      onSuccess() {
+        store.callbacks.connectionStatus.set({ status: 'success' })
+        if (closeModalOnConnect) uiModalStore.root.close()
+        else uiModalStore.root.open({ route: 'Account' })
+      },
+      onError: async (error) => {
+        store.callbacks.connectionStatus.set({ status: 'error' })
+        store.callbacks.error.set(error)
       }
     },
-    disconnect: {
+    // Disconnect
+    {
       onError(error) {
-        modalState.updateModalProps({
-          network: {
-            error
-          }
-        })
+        store.callbacks.error.set(error)
       }
     }
-  })
-
-  // Close modal(s) on successful connection & report any errors
-  useCloseAndUpdateModals(!!closeModalOnConnect, {
-    closeModal: modalCallbacks.root.close,
-    updateState: modalState.updateModalProps
-  })
-
-  const connectorDisplayOverrides = useMemo(
-    () => cleanAndFormatConnectorOverrides(connectorDisplayOverridesUnformatted),
-    [connectorDisplayOverridesUnformatted]
   )
+  const connect = useCallback(
+    async (args: Parameters<typeof connectAsync>[0]) => {
+      // open connection status modal
+      uiModalStore.root.open({
+        route: 'ConnectionApproval'
+      })
+
+      // Set connection status state
+      store.callbacks.connectionStatus.set({
+        ids: [args?.connector?.name || 'unknown', args?.connector?.id || 'unknown'],
+        status: 'loading',
+        retry: async () => connect(args)
+      })
+
+      const connectionInfo = await connectAsync(args)
+
+      return connectionInfo
+    },
+    [connectAsync, store.callbacks.connectionStatus, uiModalStore.root]
+  )
+
+  const overrides = useMemo(() => cleanAndFormatConnectorOverrides(overridesUnformatted), [overridesUnformatted])
 
   // flag for setting whether or not web3auth modal has mounted as it takes a few seconds first time around
   // and we want to close the pstlModal only after the web3auth modal has mounted
@@ -87,52 +94,45 @@ function ConnectionModalContent({
 
   const data = useMemo(
     () =>
-      userConnectionInfo.connectors.sort(sortConnectorsByRank(connectorDisplayOverrides)).map(
+      userConnectionInfo.connectors.sort(sortConnectorsByRank(overrides)).map(
         RenderConnectorOptions({
           chainIdFromUrl,
           hideInjectedFromRoot,
-          openType,
-          connectorDisplayOverrides,
+          overrides,
           modalView,
           userConnectionInfo,
           connect,
           disconnect,
-          modalCallbacks,
+          modalsStore: uiModalStore,
           providerMountedState,
-          providerLoadingState,
-          theme
+          providerLoadingState
         })
       ),
     [
       connect,
       disconnect,
-      theme,
-      openType,
       modalView,
-      modalCallbacks,
+      uiModalStore,
       chainIdFromUrl,
       userConnectionInfo,
       providerLoadingState,
       providerMountedState,
       hideInjectedFromRoot,
-      connectorDisplayOverrides
+      overrides
     ]
   )
 
   return (
     <>
-      {connectorDisplayOverrides?.general?.infoText?.content && !providerLoadingState[0] && (
-        <ConnectorHelper title={connectorDisplayOverrides.general.infoText?.title || 'What is this?'}>
-          {connectorDisplayOverrides?.general.infoText.content}
-        </ConnectorHelper>
-      )}
       {providerLoadingState[0] ? (
         <LoadingScreen {...loaderProps} />
       ) : (
         <WalletsWrapper
           id={`${ModalId.WALLETS}__wallets-wrapper`}
+          modal="connection"
+          node="main"
           view={modalView}
-          isError={!!modalState.state.connect.error?.message}
+          isError={!!store.state.modal.error?.message}
         >
           {data}
         </WalletsWrapper>
@@ -141,4 +141,4 @@ function ConnectionModalContent({
   )
 }
 
-export const ConnectionModal = memo(ConnectionModalContent)
+export default memo(ConnectionModalContent)

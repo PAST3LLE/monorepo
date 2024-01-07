@@ -109,7 +109,7 @@ const SUCCESS_BUTTON_STYLES = css`
     color: ${({ theme }): string => theme.offwhite};
   }
 
-  transition: background, color 0.3s ease-out;
+  transition: background 0.3s ease-out, color 0.3s ease-out;
 `
 
 const WARNING_BUTTON_STYLES = css`
@@ -168,6 +168,7 @@ export type SpecialThemedButtonProps = {
   innerOpacity?: number
   innerFilter?: string
   innerHoverFilter?: string
+  textShadow?: string
 }
 const THEME_BUTTON_STYLES = css<SpecialThemedButtonProps>`
   color: ${({ theme, color }): string =>
@@ -178,22 +179,20 @@ const THEME_BUTTON_STYLES = css<SpecialThemedButtonProps>`
       lightColour: theme.offwhite,
       darkColour: theme.black
     })};
-  border-color: ${({ theme }): string => theme.offwhite};
-
   filter: ${({ filter = 'contrast(1.5) saturate(10)' }) => filter};
 
   border-color: ${({ theme }): string => theme.text1};
-  text-shadow: 0px 0px 12px #fff;
+  text-shadow: ${({ textShadow = '0px 0px 12px #fff' }) => textShadow};
 
   > div {
-    filter: ${({ theme: { mode }, innerFilter = `invert(${mode === 'DARK' ? 1 : 1})` }) => innerFilter};
+    filter: ${({ innerFilter = `invert(1)` }) => innerFilter};
 
     border-radius: 0.1rem;
 
     background-color: ${({ theme, innerBgColor = theme.black }) => innerBgColor};
     opacity: ${({ innerOpacity = 0.8 }) => innerOpacity};
 
-    transition: background-color, filter, opacity 0.2s ease-out;
+    transition: background-color 0.2s ease-out, filter 0.2s ease-out, opacity 0.2s ease-out;
   }
 
   &:hover {
@@ -209,7 +208,7 @@ const THEME_BUTTON_STYLES = css<SpecialThemedButtonProps>`
     }
   }
 
-  transition: text-shadow, background-color, filter 0.2s ease-in-out;
+  transition: text-shadow 0.2s ease-in-out, background-color 0.2s ease-in-out, filter 0.2s ease-in-out;
 `
 
 const getButtonVariantStyles = (buttonVariant: ButtonVariations): FlattenInterpolation<ThemeProps<DefaultTheme>> => {
@@ -263,6 +262,8 @@ const ButtonSizes = {
 }
 
 type CustomButtonStyleProps = {
+  transitionTime?: number
+  background?: string
   borderRadius?: string
   gradientColours?: string[]
   bgBlendMode?:
@@ -313,7 +314,9 @@ export const Button = styled(ButtonBase)<ButtonProps>`
   /* Fold in theme css above */
   ${({ buttonSize }) => buttonSize && ButtonSizes[buttonSize]};
 
-  ${({ backgroundColor, bgImage }) => !bgImage && backgroundColor && `background-color: ${backgroundColor};`}
+  ${({ background, bgImage }) => !bgImage && background && `background: ${background};`}
+  ${({ background, backgroundColor, bgImage }) =>
+    !background && !bgImage && backgroundColor && `background-color: ${backgroundColor};`}
   ${({
     theme,
     bgImage,
@@ -331,6 +334,9 @@ export const Button = styled(ButtonBase)<ButtonProps>`
     })}
 
   filter: ${({ filter = 'unset' }) => `filter: ${filter}`};
+
+  transition: ${({ transitionTime = 0 }) =>
+    `filter ${transitionTime}ms ease-in-out,background ${transitionTime}ms ease-in-out,background-color ${transitionTime}ms ease-in-out,color ${transitionTime}ms ease-in-out`};
 `
 
 export const PstlButton = styled(({ children, ...buttonProps }: ButtonProps) => {

@@ -6,19 +6,20 @@ import { JsonRpcSigner, TransactionRequest } from '@ethersproject/providers'
 import { toUtf8Bytes } from '@ethersproject/strings'
 import { UnsignedTransaction, serialize } from '@ethersproject/transactions'
 import Eth, { ledgerService } from '@ledgerhq/hw-app-eth'
+import { EIP712Message } from '@ledgerhq/types-live'
 
 import { checkError, convertToUnsigned, toNumber } from '../helpers'
 import { LedgerHQProvider } from '../provider'
 import { LoadConfig, ResolutionConfig, UnsignedTransactionStrict } from '../types'
 
 const defaultPath = "m/44'/60'/0'/0/0"
-
 export class LedgerHQSigner extends Signer implements TypedDataSigner {
   readonly path: string
   readonly provider: LedgerHQProvider
 
   _index = 0
   _address = ''
+  _addressMap = new Map<string, string>()
 
   constructor(provider: LedgerHQProvider, path: string = defaultPath) {
     super()
@@ -27,12 +28,12 @@ export class LedgerHQSigner extends Signer implements TypedDataSigner {
     this.provider = provider
   }
 
-  async withEthApp<T>(callback: (eth: import('@ledgerhq/hw-app-eth').default) => T): Promise<T> {
+  async withEthApp<T>(callback: (eth: Eth) => T): Promise<T> {
     const transport = await this.provider.getTransport()
 
     try {
       // Safe as we check status in this._checkHidStatus() above
-      const eth = new Eth!(transport)
+      const eth = new Eth(transport)
       await eth.getAppConfiguration()
 
       return await callback(eth)
@@ -43,14 +44,29 @@ export class LedgerHQSigner extends Signer implements TypedDataSigner {
     }
   }
 
-  async getAddress(): Promise<string> {
-    if (!this._address) {
-      const account = await this.withEthApp((eth) => eth.getAddress(this.path))
-
-      const address = this.provider.formatter.address(account.address)
+  async getAddress(path = this.path): Promise<string> {
+    if (!this._addressMap.has(path)) {
+      const address = await this._queryAndFormatAddress(path)
       this._address = address
+      this._addressMap.set(path, address)
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return this._addressMap.get(path)!
+  }
+
+  async setAddress(path = this.path): Promise<void> {
+    if (!this._addressMap.has(path)) {
+      const address = await this._queryAndFormatAddress(path)
+      this._address = address
+      this._addressMap.set(path, address)
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    this._address = this._addressMap.get(path)!
+  }
+
+  public getConnectedAddress() {
     return this._address
   }
 
@@ -127,13 +143,11 @@ export class LedgerHQSigner extends Signer implements TypedDataSigner {
   // _signTypedData as per ethers Signer, cleans up types, replaces domain, calculates primaryType
   async _signTypedData(
     domain: TypedDataDomain,
-    _types: Record<string, Array<TypedDataField>>,
+    { EIP712Domain: _, ...types }: Record<string, Array<TypedDataField>>,
     value: Record<string, any>
   ): Promise<string> {
-    const types = { ..._types }
-    delete types['EIP712Domain']
     const encoder = new _TypedDataEncoder(types)
-    const data: import('@ledgerhq/hw-app-eth/lib-es/modules/EIP712/EIP712.types').EIP712Message = {
+    const data: EIP712Message = {
       domain: {
         name: domain.name,
         verifyingContract: domain.verifyingContract,
@@ -148,7 +162,7 @@ export class LedgerHQSigner extends Signer implements TypedDataSigner {
           { name: 'chainId', type: 'uint256' },
           { name: 'verifyingContract', type: 'address' }
         ]
-      } as import('@ledgerhq/hw-app-eth/lib-es/modules/EIP712/EIP712.types').EIP712MessageTypes,
+      },
       primaryType: encoder.primaryType,
       message: value
     }
@@ -157,11 +171,16 @@ export class LedgerHQSigner extends Signer implements TypedDataSigner {
   }
 
   // custom method, also called directly on eth_signTypedData_v4 RPC request
-  async __signEIP712Message(
-    data: import('@ledgerhq/hw-app-eth/lib-es/modules/EIP712/EIP712.types').EIP712Message
-  ): Promise<string> {
+  async __signEIP712Message(data: EIP712Message): Promise<string> {
     const { r, s, v } = await this.withEthApp((eth) => eth.signEIP712Message(this.path, data))
 
     return joinSignature({ r: '0x' + r, s: '0x' + s, v })
+  }
+
+  private async _queryAndFormatAddress(path: string) {
+    const account = await this.withEthApp((eth) => eth.getAddress(path))
+
+    const address = this.provider.formatter.address(account.address)
+    return address
   }
 }

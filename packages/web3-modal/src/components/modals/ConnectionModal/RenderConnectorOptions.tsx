@@ -1,37 +1,32 @@
 import React, { Dispatch, SetStateAction } from 'react'
-import { DefaultTheme } from 'styled-components'
 
 import { ProviderMountedMap, PstlWeb3ConnectionModalProps } from '.'
-import { ModalPropsCtrlState } from '../../../controllers/types/controllerTypes'
-import { useConnectDisconnect, useUserConnectionInfo, useWeb3Modals } from '../../../hooks'
-import { ConnectorEnhanced } from '../../../types'
-import { runConnectorConnectionLogic, trimAndLowerCase } from '../../../utils'
+import { UserOptionsCtrlState } from '../../../controllers/types'
+import { useConnectDisconnect, useUserConnectionInfo } from '../../../hooks'
+import { ConnectorEnhanced, FullWeb3ModalStore } from '../../../types'
+import { runConnectorConnectionLogic } from '../../../utils/connectConnector'
 import { ConnectorOption } from './ConnectorOption'
 
 export type RenderConnectorOptionsProps = Pick<
   PstlWeb3ConnectionModalProps,
-  'connectorDisplayOverrides' | 'hideInjectedFromRoot' | 'chainIdFromUrl' | 'buttonProps'
+  'overrides' | 'hideInjectedFromRoot' | 'chainIdFromUrl' | 'buttonProps'
 > & {
-  openType: ModalPropsCtrlState['root']['openType']
-  modalView: 'list' | 'grid'
-  theme: DefaultTheme
+  modalView: UserOptionsCtrlState['ui']['walletsView']
   userConnectionInfo: ReturnType<typeof useUserConnectionInfo>
   connect: ReturnType<typeof useConnectDisconnect>['connect']['connectAsync']
   disconnect: ReturnType<typeof useConnectDisconnect>['disconnect']['disconnectAsync']
-  modalCallbacks: ReturnType<typeof useWeb3Modals>
+  modalsStore: FullWeb3ModalStore['ui']
   providerMountedState: [ProviderMountedMap, Dispatch<SetStateAction<ProviderMountedMap>>]
   providerLoadingState: [boolean, (loading: boolean) => void]
 }
 const RenderConnectorOptionsBase =
   ({
-    openType,
-    connectorDisplayOverrides,
+    overrides: connectorOverrides,
     hideInjectedFromRoot,
     chainIdFromUrl,
     buttonProps,
     modalView,
-    theme,
-    modalCallbacks: { root, walletConnect },
+    modalsStore,
     connect,
     disconnect,
     userConnectionInfo: { connector: currentConnector, chain, address },
@@ -46,12 +41,12 @@ const RenderConnectorOptionsBase =
     const [{ label, logo, connected, isRecommended }, callback] = runConnectorConnectionLogic(
       connector,
       currentConnector,
+      modalsStore,
       {
         connect,
         disconnect,
-        open: openType === 'walletconnect' ? walletConnect.open : root.open,
-        openWalletConnectModal: walletConnect.open,
-        closeRootModal: root.close,
+        open: modalsStore.root.open,
+        closeRootModal: modalsStore.root.close,
         setProviderModalMounted: (mounted: boolean) =>
           setProviderMountedMap((currState) => ({
             ...currState,
@@ -63,15 +58,9 @@ const RenderConnectorOptionsBase =
         chainId: chainIdFromUrl || chain?.id,
         address,
         isProviderModalMounted: !!providerMountedMap?.[connector.id]?.mounted,
-        connectorDisplayOverrides
+        connectorOverrides
       }
     )
-
-    const showHelperText = theme?.modals?.base?.helpers?.show
-    const helperContent = (
-      connectorDisplayOverrides?.[trimAndLowerCase(connector?.id)] ||
-      connectorDisplayOverrides?.[trimAndLowerCase(connector?.name)]
-    )?.infoText
 
     return (
       <ConnectorOption
@@ -80,15 +69,12 @@ const RenderConnectorOptionsBase =
         optionType={'wallet'}
         optionValue={connector.name}
         // data props
-        connector={connector}
         callback={callback}
         connected={connected}
-        showHelperText={showHelperText}
         buttonProps={buttonProps}
         label={label}
         isRecommended={isRecommended}
         modalView={modalView}
-        helperContent={helperContent}
         logo={<img src={logo} />}
       />
     )

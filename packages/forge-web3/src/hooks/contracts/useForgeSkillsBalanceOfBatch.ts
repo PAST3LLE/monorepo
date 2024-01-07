@@ -13,7 +13,7 @@ export function useForgeSkillsBalanceOfBatch(
   chainId?: number
 ) {
   const contractReadsArgs = useMemo(
-    () => gatherSkillContractConfigParams(skills as { result?: Address }[], metadata, address),
+    () => _gatherSkillContractConfigParams(skills as { result?: Address }[], metadata, address),
     [skills, metadata, address]
   )
 
@@ -26,7 +26,7 @@ export function useForgeSkillsBalanceOfBatch(
   })
 }
 
-function gatherSkillContractConfigParams(
+function _gatherSkillContractConfigParams(
   skillsAddressList: { result?: Address }[] | undefined = [],
   metadata: ForgeMetadataState['metadata'][number],
   balanceOfAddress: Address | undefined
@@ -34,11 +34,11 @@ function gatherSkillContractConfigParams(
   const contractConfigList = skillsAddressList.map(({ result: address }, idx) => {
     if (!address) {
       devWarn(
-        '[SkillForgeBalancesUpdater::gatherSkillContractConfigParams]::Address undefined! Check contracts map in constants.'
+        '[SkillForgeBalancesUpdater::_gatherSkillContractConfigParams]::Address undefined! Check contracts map in constants.'
       )
     }
 
-    const args = getBalanceOfBatchArgs(metadata?.[idx] || [], balanceOfAddress)
+    const args = _getBalanceOfBatchArgs(metadata?.[idx] || [], balanceOfAddress)
     return {
       abi: Collection__factory.abi,
       address,
@@ -50,7 +50,7 @@ function gatherSkillContractConfigParams(
   return contractConfigList
 }
 
-function getBalanceOfBatchArgs(
+function _getBalanceOfBatchArgs(
   skills: ForgeMetadataState['metadata'][number][number],
   address: Address | undefined
 ): [Address[], bigint[]] {

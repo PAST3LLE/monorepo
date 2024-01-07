@@ -2,9 +2,9 @@ import { connectors, frameConnectors } from '../connectors'
 import { SUPPORTED_CHAINS } from './chains'
 import { Web3ModalConfigWeb3Props } from '@past3lle/forge-web3'
 import GOOGLE_APPLE_LOGO from 'assets/png/google-apple.png'
-import React from 'react'
 import { pstlModalTheme as PSTL_MODAL_THEME } from 'theme/pstlModal'
 import { skillforgeTheme as SKILLFORGE_THEME } from 'theme/skillforge'
+import { alchemyProvider } from 'wagmi/providers/alchemy'
 
 if (
   !process.env.REACT_APP_WEB3MODAL_ID ||
@@ -17,7 +17,42 @@ if (
 export const SKILLFORGE_APP_NAME = 'SKILLFORGE'
 export const WEB3_PROPS: Web3ModalConfigWeb3Props = {
   chains: SUPPORTED_CHAINS,
-  connectors,
+  clients: {
+    wagmi: {
+      options: {
+        // GOERLI KEY - steal it idgaf
+        publicClients: [
+          {
+            client: alchemyProvider,
+            5: process.env.REACT_APP_ALCHEMY_GOERLI_API_KEY as string,
+            137: process.env.REACT_APP_ALCHEMY_MATIC_API_KEY as string,
+            80001: process.env.REACT_APP_ALCHEMY_MATIC_API_KEY as string
+          }
+        ]
+      }
+    }
+  },
+  connectors: {
+    connectors,
+    overrides: {
+      web3auth: {
+        isRecommended: true,
+        logo: GOOGLE_APPLE_LOGO,
+        customName: 'Google & more',
+        rank: 1000
+      },
+      walletconnect: {
+        logo: 'https://raw.githubusercontent.com/WalletConnect/walletconnect-assets/master/Logo/Gradient/Logo.png',
+        customName: 'Web3',
+        rank: 100,
+        modalNodeId: 'w3m-modal'
+      },
+      'ledger-hid': {
+        logo: 'https://crypto-central.io/library/uploads/Ledger-Logo-3.png',
+        rank: 0
+      }
+    }
+  },
   frameConnectors,
   callbacks: {
     switchChain: async (chains) => {
@@ -64,46 +99,6 @@ export const WEB3_PROPS: Web3ModalConfigWeb3Props = {
       margin: 'auto',
       closeModalOnConnect: true,
       hideInjectedFromRoot: true,
-      connectorDisplayOverrides: {
-        general: {
-          infoText: {
-            title: <strong>What can I do on this screen?</strong>,
-            content: (
-              <strong>
-                {SKILLFORGE_APP_NAME} has an opt-in Web3 feature which allows you to collect SKILLS and SKILLPOINTS in
-                exchange for completely new, and unique drop items. Clicking on SKILLS (the squares on the board) shows
-                you the prerequisites for each new skill. To get started, please select a wallet choice below and
-                connect! If you are new to Web3/blockchain, please select the recommended option below.
-              </strong>
-            )
-          }
-        },
-        web3auth: {
-          isRecommended: true,
-          logo: GOOGLE_APPLE_LOGO,
-          customName: 'Google & more',
-          rank: 1000
-        },
-        walletconnect: {
-          logo: 'https://raw.githubusercontent.com/WalletConnect/walletconnect-assets/master/Logo/Gradient/Logo.png',
-          customName: 'Web3',
-          infoText: {
-            title: <strong>What is web3?</strong>,
-            content: (
-              <strong>
-                Web3 wallets are digital currency storage apps (or more simply called, wallets), used for storing
-                cryptocurrency as well as connecting to Dapps (decentralised apps). This generally requires more
-                blockchain knowledge.
-              </strong>
-            )
-          },
-          rank: 100
-        },
-        'ledger-hid': {
-          logo: 'https://crypto-central.io/library/uploads/Ledger-Logo-3.png',
-          rank: 0
-        }
-      },
       loaderProps: {
         spinnerProps: { size: 85 },
         loadingText: 'GETTING LOGIN...'

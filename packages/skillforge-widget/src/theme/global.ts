@@ -22,12 +22,10 @@ export function useGenericImageSrcSet() {
   )
 }
 
-export const CustomStaticGlobalCss = createGlobalStyle<{
-  backgroundImage?: BackgroundPropertyFull
-  lockedSkillIcon: string
-}>`
-  .disabled, :disabled {
-    cursor: ${({ lockedSkillIcon }) => `url(${lockedSkillIcon}), not-allowed`};
+export const CustomStaticGlobalCss = createGlobalStyle`
+  img, svg, video, picture {
+    max-inline-size: revert;
+    max-block-size: revert;
   }
   
   body > div#root {
@@ -39,14 +37,21 @@ export const CustomStaticGlobalCss = createGlobalStyle<{
       min-width: 12rem;
       width: auto;
     }
-    ${({ backgroundImage, theme }) =>
-      backgroundImage && setBackgroundOrDefault(theme, { bgValue: backgroundImage, defaultValue: 'transparent' })};
   }
 `
 
-export const CustomThemeGlobalCss = createGlobalStyle`
+export const CustomThemeGlobalCss = createGlobalStyle<{
+  backgroundImage?: BackgroundPropertyFull
+  lockedSkillIcon: string
+}>`
+  .disabled, :disabled {
+    cursor: ${({ lockedSkillIcon }) => `url(${lockedSkillIcon}), not-allowed`};
+  }
+  
   color: ${({ theme }) => theme.mainText};
   header, nav, footer {
     background-color: ${({ theme }) => theme.mainBg};
   }
+  ${({ backgroundImage, theme }) =>
+    backgroundImage && setBackgroundOrDefault(theme, { bgValue: backgroundImage, defaultValue: 'transparent' })};
 `

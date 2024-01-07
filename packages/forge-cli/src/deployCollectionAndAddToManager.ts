@@ -92,16 +92,24 @@ async function deployCollectionAndAddToManager(props?: { tryHigherValues: boolea
       name: 'metadataUri',
       message: `Enter your Collection metadata folder uri -
       
-  Example: ipfs://someHash/
+  Examples: 
+  1. ipfs://someHash/
+  2. https://some-collection-name.s3.eu-south-7.amazonaws.com/collections/99/
         
   NOTE: Using IPFS urls (ipfs://) are recommended as it provides an immutable url.
 
-  URL must point to an IPFS folder containing each collection's skills metadata information.
+  URL must point to a folder containing each collection's skills metadata information.
   It MUST also end with a trailing slash, like in the examples above.
 
 Metadata URI:`,
       validate(input) {
-        if (typeof input === 'string' && input.length > 0 && input.startsWith('ipfs://') && input.endsWith('/')) {
+        const hasLength = input.length > 0
+        const isString = typeof input === 'string'
+        const endsWithSlash = input.endsWith('/')
+
+        const isValid = hasLength && isString && endsWithSlash
+
+        if (isValid) {
           return true
         }
 

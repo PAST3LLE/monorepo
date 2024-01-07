@@ -7,7 +7,8 @@ import type {
   InfiniteScrollHookOptions,
   InfiniteScrollOptions,
   SizeOptions,
-  SpringAnimationHookReturn
+  SpringAnimationHookReturn,
+  WithWindowSizeOptions
 } from './types'
 import useScrollingAnimationSetup from './utils/useScrollSetup'
 import useScrollZoneRef from './utils/useScrollZoneRef'
@@ -24,5 +25,6 @@ export {
   InfiniteScrollHookOptions,
   InfiniteScrollOptions,
   SpringAnimationHookReturn,
-  SizeOptions
+  SizeOptions,
+  WithWindowSizeOptions
 }

@@ -5,7 +5,8 @@ import { Web3ModalProps as Web3ModalConfigOriginal } from '@web3modal/react'
 import { Chain as ChainWagmi } from 'wagmi'
 
 import { PstlWeb3ConnectionModalProps } from '../components/modals/ConnectionModal'
-import { ConnectorEnhanced } from '../types'
+import { UserOptionsTransactionsCallbacks } from '../controllers/types'
+import { ConnectorEnhanced, ConnectorOverrides } from '../types'
 import { Chain } from '../types/chains'
 import { PstlWagmiClientOptions } from './utils'
 import { AppType } from './utils/connectors'
@@ -62,6 +63,12 @@ export type PstlWeb3ModalCallbacks = {
    * @returns Cosmetically filtered list of available chains
    */
   softLimitChains?: (chains: Chain<number>[], ...params: any[]) => Chain<number>[]
+  /**
+   * @name transactions
+   * @description Optional. Transaction related options. E.g callbacks on certain states
+   * @tip Useful when you want finer control over what happens on transaction approvals/reversions etc.
+   */
+  transactions?: UserOptionsTransactionsCallbacks
 }
 
 export type PstlWeb3ModalOptions = Omit<
@@ -88,10 +95,36 @@ export type PstlWeb3ModalOptions = Omit<
      * @description List of string key names to listen for and close modal
      */
     closeModalOnKeys?: string[]
+    /**
+     * @name expiremental
+     * @description Map of experimental feature flags
+     */
+    experimental?: {
+      /**
+       * @name hidDeviceOptions
+       * @description HID-specific device options
+       */
+      hidDeviceOptions?: {
+        /**
+         * @name enableConfigurationModal
+         * @description enable the HID device configuration modal - i.e choose derivation path
+         */
+        enableConfigurationModal?: boolean
+      }
+    }
   },
   'publicClient' | 'publicClients' | 'connectors'
 >
-export type RootModalProps = Omit<PstlWeb3ConnectionModalProps, 'isOpen' | 'onDismiss' | 'chainIdFromUrl' | 'error'>
+export type RootModalProps = Omit<
+  PstlWeb3ConnectionModalProps,
+  'overrides' | 'isOpen' | 'onDismiss' | 'chainIdFromUrl' | 'error'
+>
+type GenericModalConnectorOptions<C extends ConnectorEnhanced<any, any>> =
+  | {
+      connectors?: ((chains: ChainWagmi[]) => C)[]
+      overrides?: ConnectorOverrides
+    }
+  | ((chains: ChainWagmi[]) => C)[]
 export interface Web3ModalProps<ID extends number> {
   appName: string
   /**
@@ -109,6 +142,26 @@ export interface Web3ModalProps<ID extends number> {
         ...
       />
     )
+   */
+  /**
+   * @name blockExplorerUris
+   * @description Optional. Explorer uri map by chain. Keys must match {@link chains}
+   * @example
+   * blockExplorerUris: {
+   *     [ChainId.mainnet]: "https://etherscan.io",
+   *     [ChainId.goerli]: "https://goerli.etherscan.io",
+   *     [ChainId.matic]: "https://polygonscan.com",
+   *     [ChainId.mumbai]: "https://mumbai.polygonscan.com"
+   * }
+   */
+  blockExplorerUris?: Chain<ID>['blockExplorers']
+  /**
+   * @name chains
+   * @descriptions Required. Chains to support.
+   * @example
+   * import { mainnet, goerli, matic, polygon } from 'wagmi/chains'
+   * ...
+   * chains: [mainnet, goerli, matic, polygon]
    */
   chains: Chain<ID>[]
   /**
@@ -134,15 +187,15 @@ export interface Web3ModalProps<ID extends number> {
         }
       })
    */
-  connectors?: ((chains: ChainWagmi[]) => ConnectorEnhanced<any, any>)[]
+  connectors?: GenericModalConnectorOptions<ConnectorEnhanced<any, any>>
   /**
    * @name frameConnectors
    * @description iFrame connectors. ONLY loaded in iFrame Dapp browsers (e.g LedgerLive Discovery)
    */
-  frameConnectors?: ((chains: ChainWagmi[]) => IFrameEthereumConnector)[]
+  frameConnectors?: GenericModalConnectorOptions<IFrameEthereumConnector>
   /**
    * @name PstlW3Provider.modals
-   * @description Modal props: root, walletConnect, web3auth. See each for more info.
+   * @description Modal props: root [{@link RootModalProps}], walletConnect [{@link Web3ModalConfig<ID>}]. See each for more info.
    */
   modals: {
     /**
@@ -179,8 +232,18 @@ export interface Web3ModalProps<ID extends number> {
      */
     walletConnect: Omit<Web3ModalConfig<ID>, 'chains'>
   }
+  /**
+   * @name clients
+   * @description Optional. Manage wagmi [{@link PstlWagmiClientOptions}] & ethereum [{@link EthereumClient}] clients.
+   */
   clients?: {
+    /**
+     * @description Optional. Wagmi client configuration. See {@link PstlWagmiClientOptions}
+     */
     wagmi?: PstlWagmiClientOptions<ID>
+    /**
+     * @description Optional. Ethereum client configuration. See {@link EthereumClient}
+     */
     ethereum?: EthereumClient
   }
   /**
@@ -189,6 +252,7 @@ export interface Web3ModalProps<ID extends number> {
   options?: PstlWeb3ModalOptions
   /**
    * Various modal logic callbacks
+   * @description Optional. See {@link PstlWeb3ModalCallbacks}
    */
   callbacks?: PstlWeb3ModalCallbacks
 }

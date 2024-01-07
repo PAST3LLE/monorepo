@@ -1,6 +1,6 @@
 import { createTheme } from '@past3lle/web3-modal'
 
-import { ForgeContractAddressMap } from '../types'
+import { ForgeContractAddressMap, ForgeMetadataUriMap } from '../types'
 import { ForgeWeb3ModalProps } from '../types/web3modal'
 import { chains } from './chains'
 
@@ -15,8 +15,10 @@ const THEME = createTheme({
       },
       connection: {
         button: {
-          font: {
-            color: 'black'
+          main: {
+            font: {
+              color: 'ghostwhite'
+            }
           }
         }
       }
@@ -41,22 +43,21 @@ const DEFAULT_PROPS: ForgeWeb3ModalProps = {
     }
   }
 }
-const DEFAULT_CONFIG_PROPS = {
+const DEFAULT_CONFIG_PROPS: { metadataUris: ForgeMetadataUriMap; contractAddresses: ForgeContractAddressMap } = {
   metadataUris: {
     [5]: { collectionsManager: 'https://pstlcollections.s3.eu-south-2.amazonaws.com/collections/' },
-    [80001]: { collectionsManager: 'https://pstlcollections.s3.eu-south-2.amazonaws.com/collections/' }
+    [137]: { collectionsManager: 'https://pstlcollections.s3.eu-south-2.amazonaws.com/collections/' }
   },
   contractAddresses: {
     [5]: {
-      collectionsManager: '0x9f4d9aC52C7356E00A4e9b732Dbd6377EcE19EE4',
-      mergeManager: '0x0B397B88C96E22E63D6D9b802df62fe40bB1B544'
+      collectionsManager: '0x00ad95f9D3E5Af8707700520FF3c45964Ef20423',
+      mergeManager: '0x03b5d78E489b2bdF57Be8b1e2c0A5fFF369b030F'
     },
-    // TODO: change to mumbai addresses
-    [80001]: {
-      collectionsManager: '0xbb76e8eeBe675787B1056A8418733F13967Be209',
+    [137]: {
+      collectionsManager: '0x237B80e076cDfa4Dc4cC324B1a2f04F8E0513336',
       mergeManager: '0x0B397B88C96E22E63D6D9b802df62fe40bB1B544'
     }
-  } as ForgeContractAddressMap
+  }
 }
 
 export { THEME, WALLETCONNECT_TEST_ID as wcId, DEFAULT_PROPS as commonProps, DEFAULT_CONFIG_PROPS as contractProps }

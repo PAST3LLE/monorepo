@@ -22,8 +22,10 @@ interface LoadingContainerProps {
 const LoadingContainerFadeIn = styled(ArticleFadeIn)<LoadingContainerProps>`
   display: flex;
   flex-flow: column nowrap;
-  justify-content: start;
+  justify-content: center;
   align-items: center;
+  gap: 1rem;
+
   height: 100%;
   width: 100%;
 
@@ -31,33 +33,51 @@ const LoadingContainerFadeIn = styled(ArticleFadeIn)<LoadingContainerProps>`
     margin-top: 1em;
   }
 
-  background-color: ${({ backgroundColor = 'transparent' }) => backgroundColor};
+  > ${ModalTitleText} {
+    font-weight: 300;
+    font-variation-settings: 'wght' 400;
+    letter-spacing: -1.6px;
+  }
 
+  background-color: ${({ backgroundColor = 'transparent' }) => backgroundColor};
   border-radius: ${({ borderRadius = '0px' }) => borderRadius};
 
   ${({ theme, backgroundColor, backgroundImg }) =>
     backgroundImg &&
+    (backgroundImg !== 'unset' || backgroundImg !== ('none' as string)) &&
     setCssBackground(theme, { imageUrls: [urlToSimpleGenericImageSrcSet(backgroundImg)], backgroundColor })}
 `
 
-interface SpinnerProps {
+export interface SpinnerProps {
   /**
    * @name src
    * @description source URL
    */
   src?: string | undefined
   /**
-   * @name suze
+   * @name size
    * @description Number size of spinner (in px)
    * @default 20
    */
   size?: number | undefined
   /**
-   * @name invertColor
-   * @description Boolean. Inverts color of spinner
-   * @default false
+   * @name stroke
+   * @description Stroke colour
+   * @default "#D9EAFF"
    */
-  invertColor?: boolean
+  stroke?: string | undefined
+  /**
+   * @name strokeWidth
+   * @description Number size of spinner svg stroke width (in px)
+   * @default 0.25
+   */
+  strokeWidth?: number | undefined
+  /**
+   * @name filter
+   * @description String. CSS filter.
+   * @default "unset"
+   */
+  filter?: string
 }
 
 export interface LoadingScreenProps {
@@ -72,6 +92,11 @@ export interface LoadingScreenProps {
    */
   spinnerProps?: SpinnerProps
   /**
+   * @name fontSize
+   * @description font size for (any) loading text. string e.g 20rem // 10px
+   */
+  fontSize?: string
+  /**
    * @name loadingText
    * @description Optional. String label to show on load.
    * @default "QUERYING INFO..."
@@ -79,16 +104,15 @@ export interface LoadingScreenProps {
   loadingText?: string
 }
 
-export function LoadingScreen({ containerProps, spinnerProps, loadingText = 'QUERYING INFO...' }: LoadingScreenProps) {
+export function LoadingScreen({
+  containerProps,
+  spinnerProps,
+  fontSize = '1.5em',
+  loadingText = 'QUERYING INFO...'
+}: LoadingScreenProps) {
   return (
     <LoadingContainerFadeIn {...containerProps}>
-      <ModalTitleText
-        fontSize="1.5em"
-        marginTop="2em"
-        fvs={{
-          wght: 100
-        }}
-      >
+      <ModalTitleText fontSize={fontSize} fvs={{ wght: 100 }}>
         {loadingText}
       </ModalTitleText>
       <SpinnerCircle {...spinnerProps} />

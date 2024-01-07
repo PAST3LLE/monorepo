@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { useForgeMetadataUriMapReadAtom } from '../state'
 import { ForgeMetadataUpdaterProps } from '../state/Metadata/updaters/MetadataUpdater'
 import { CollectionMetadata, SkillMetadata, SupportedForgeChains } from '../types'
-import { chainFetchIpfsUri } from '../utils'
+import { CustomIpfsGatewayConfig, chainFetchIpfsUri, isIpfsUri } from '../utils'
 import { useForgeGetBatchSkillMetadataUris } from './contracts/useForgeGetBatchSkillMetadataUris'
 import { useSupportedOrDefaultChainId } from './useForgeSupportedChainId'
 import { useRefetchOnAddressAndChain } from './useRefetchOnAddress'
@@ -37,10 +37,13 @@ export function useForgeFetchMetadata({ loadAmount = BigInt(3), metadataFetchOpt
     if (!skillErc1155MetadataUris.length || !metadataUris?.collectionsManager) return
 
     async function fetchMetadata() {
+      if (!skillErc1155MetadataUris.length || !metadataUris?.collectionsManager) return
+
       const promisedCollectionMetadata = []
       for (let i = 1; i < skillErc1155MetadataUris.length + 1; i++) {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        promisedCollectionMetadata.push(fetch(metadataUris!.collectionsManager + i + '.json').then((res) => res.json()))
+        promisedCollectionMetadata.push(
+          fetch(`${metadataUris.collectionsManager}${i}/0.json`).then((res) => res.json())
+        )
       }
       const collectionMetadata: CollectionMetadata[] = await Promise.all(promisedCollectionMetadata)
 
@@ -54,17 +57,13 @@ export function useForgeFetchMetadata({ loadAmount = BigInt(3), metadataFetchOpt
       for (let i = 0; i < collectionMetadata.length; i++) {
         promisedSkillsMetadata.push([])
         for (let j = 0; j < collectionMetadata[i].properties?.ids.length || 0; j++) {
-          promisedSkillsMetadata[i].push(
-            chainFetchIpfsUri(
-              (skillErc1155MetadataUris[i].result as string)?.replace(
-                '0.json',
-                collectionMetadata[i].properties.ids[j] + '.json'
-              ),
-              ...(metadataFetchOptions?.gatewayUris || [])
-            )
-              .then((res) => res?.json())
-              .then((res) => _overrideMetadataObject(res, skill1155Addresses[i]))
+          const promise = _returnMetadataImageFetchPromise(
+            skillErc1155MetadataUris[i].result as string,
+            collectionMetadata[i].properties.ids[j],
+            skill1155Addresses[i],
+            metadataFetchOptions?.gatewayUris
           )
+          promisedSkillsMetadata[i].push(promise)
         }
       }
       return promisedSkillsMetadata.map((collection) => Promise.all(collection))
@@ -82,7 +81,7 @@ export function useForgeFetchMetadata({ loadAmount = BigInt(3), metadataFetchOpt
 }
 
 export function deriveMetadataId(metadata: SkillMetadata, address: Address): `${Address}-${string}` {
-  const rawId = metadata.properties.id.toString()
+  const rawId = metadata.properties?.id?.toString() || '0000'
 
   let cleanedId
   if (rawId.match(/^(.*?)-/)) {
@@ -95,9 +94,41 @@ export function deriveMetadataId(metadata: SkillMetadata, address: Address): `${
 }
 
 function _overrideMetadataObject(metadata: SkillMetadata, address: Address) {
-  const newId = metadata?.properties?.id ? deriveMetadataId(metadata, address) : '0x-0000'
-  if (typeof metadata === 'object' && 'properties' in metadata) {
-    metadata.properties.id = newId
+  const newId = address ? deriveMetadataId(metadata, address) : '0x-0000'
+
+  // has properties
+  if (metadata?.properties) metadata.properties.id = newId
+  // doesn't already have properties (it should but users can forget)
+  else {
+    console.warn(
+      `
+[@past3lle/forge-web3 --> WARNING! 
+Some of your metadata objects are missing the "properties" object property. 
+Please check that you are following the correct metadata schema:
+@example:
+{ id: 1234, dependencies: [{token: 1234, id: 1}], shopifyId: '0000', rarity: 'epic' }
+
+For now a default is being used: { id: 0000, dependencies: [], shopifyId: '0000', rarity: 'common' }
+`
+    )
+    metadata.properties = { id: newId, dependencies: [], shopifyId: '0000', rarity: 'common' }
   }
+
   return metadata
+}
+
+// ----- LOCAL FUNCTIONS ------- //
+function _returnMetadataImageFetchPromise(
+  uri: string,
+  id: number,
+  address1155: Address,
+  gatewayUris?: CustomIpfsGatewayConfig[]
+) {
+  const metadataUri = uri?.replace('0.json', id + '.json')
+  const ipfsUri = isIpfsUri(metadataUri)
+  const fetchFn = async () => (ipfsUri ? chainFetchIpfsUri(metadataUri, ...(gatewayUris || [])) : fetch(metadataUri))
+
+  return fetchFn()
+    .then((res) => res?.json())
+    .then((res) => _overrideMetadataObject(res, address1155))
 }

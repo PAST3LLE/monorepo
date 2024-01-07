@@ -2,14 +2,18 @@ import { useStateRef, useWindowSize } from '@past3lle/hooks'
 import { devWarn } from '@past3lle/utils'
 import { useEffect } from 'react'
 
-import { SizeOptions } from '../types'
+import { SizeOptions, WithWindowSizeOptions } from '../types'
 
-export default function useScrollZoneRefs(axisDirection: 'x' | 'y', sizeOptions?: SizeOptions) {
+export default function useScrollZoneRefs(
+  axisDirection: 'x' | 'y',
+  sizeOptions?: SizeOptions,
+  auxOptions?: WithWindowSizeOptions
+) {
   if (sizeOptions?.minSize === 0)
     devWarn(
       '[ScrollRef] Setup warning! Size 0 (ZERO) minSize passed. This could cause layout issues! Check the options object passed to your useScroll animation hooks.'
     )
-  const windowSizes = useWindowSize()
+  const windowSizes = useWindowSize(auxOptions?.windowSizeOptions)
   const [scrollingZoneTarget, setScrollingZoneRef] = useStateRef<HTMLElement | null>(null, (node) => node)
   // width or height
   const isVertical = axisDirection === 'y'
