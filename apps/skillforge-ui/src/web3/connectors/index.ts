@@ -7,7 +7,7 @@ import { skillforgeTheme } from 'theme/skillforge'
 import { SKILLFORGE_APP_NAME } from 'web3/config/skillforge'
 
 function _getWhitelistTheme() {
-  if (!process.env.REACT_APP_WEB3AUTH_WHITELIST_ENABLED) return
+  if (!JSON.parse(process.env.REACT_APP_WEB3AUTH_WHITELIST_ENABLED || 'false')) return
   
   return {
     themeInfo: {
