@@ -1,6 +1,6 @@
 {
   "name": "@past3lle/forge-cli",
-  "version": "2.0.0-alpha.1",
+  "version": "2.0.0-alpha.2",
   "sideEffects": false,
   "description": "FORGE CLI tools",
   "keywords": [
@@ -68,5 +68,5 @@
     "prettier": "^2.8.4",
     "typescript": "^5.1.3"
   },
-  "gitHead": "b23cde88c48c16054d914ca52c1949a3dca1c282"
+  "gitHead": "a2b4f4f3c33ab7e1040da4cecdd300e715d5eeea"
 }

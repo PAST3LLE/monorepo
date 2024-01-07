@@ -1,6 +1,6 @@
 {
   "name": "@past3lle/web3-modal",
-  "version": "2.0.0-alpha.10",
+  "version": "2.0.0-alpha.11",
   "sideEffects": false,
   "description": "PAST3LLE's Web3 connection modal",
   "keywords": [
@@ -82,11 +82,11 @@
     "wagmi": "^1.x"
   },
   "dependencies": {
-    "@past3lle/components": "^2.0.0-alpha.1",
-    "@past3lle/hooks": "^2.0.0-alpha.1",
-    "@past3lle/theme": "^2.0.0-alpha.1",
-    "@past3lle/utils": "^2.0.0-alpha.1",
-    "@past3lle/wagmi-connectors": "^2.0.0-alpha.1",
+    "@past3lle/components": "^2.0.0-alpha.2",
+    "@past3lle/hooks": "^2.0.0-alpha.2",
+    "@past3lle/theme": "^2.0.0-alpha.2",
+    "@past3lle/utils": "^2.0.0-alpha.2",
+    "@past3lle/wagmi-connectors": "^2.0.0-alpha.2",
     "@safe-global/api-kit": "^2.0.0",
     "@web3modal/ethereum": "^2.7.1",
     "@web3modal/html": "^2.7.1",
@@ -125,5 +125,5 @@
       "last 1 safari version"
     ]
   },
-  "gitHead": "b23cde88c48c16054d914ca52c1949a3dca1c282"
+  "gitHead": "a2b4f4f3c33ab7e1040da4cecdd300e715d5eeea"
 }

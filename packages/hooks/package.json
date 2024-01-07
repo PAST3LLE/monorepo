@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/hooks",
   "sideEffects": false,
-  "version": "2.0.0-alpha.1",
+  "version": "2.0.0-alpha.2",
   "description": "PAST3LLE common hooks e.g useDetectIntoView, useDebounce, etc.",
   "main": "dist/hooks.esm.js",
   "module": "dist/hooks.esm.js",
@@ -69,11 +69,11 @@
     "tslib": "^2.4.1"
   },
   "dependencies": {
-    "@past3lle/theme": "^2.0.0-alpha.1",
-    "@past3lle/utils": "^2.0.0-alpha.1",
+    "@past3lle/theme": "^2.0.0-alpha.2",
+    "@past3lle/utils": "^2.0.0-alpha.2",
     "copy-to-clipboard": "^3.3.3",
     "lodash.throttle": "^4.1.1",
     "valtio": "^1.12.0"
   },
-  "gitHead": "b23cde88c48c16054d914ca52c1949a3dca1c282"
+  "gitHead": "a2b4f4f3c33ab7e1040da4cecdd300e715d5eeea"
 }
