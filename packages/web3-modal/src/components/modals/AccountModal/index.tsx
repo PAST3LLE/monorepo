@@ -116,8 +116,9 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
           </AddressAndBalanceRow>
         </Column>
         <FooterActionButtonsRow
-          justifyContent={'space-evenly'}
-          gap="2rem"
+          flexDirection="column"
+          justifyContent="center"
+          gap="10px"
           minWidth={150}
           style={{ zIndex: errorOptions?.show ? 0 : 1 }}
         >
@@ -129,6 +130,15 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
             onClick={() => onExplorer()}
           >
             {`${isSmallerScreen ? '' : 'View on '}Explorer`}
+          </AccountModalButton>
+          <AccountModalButton
+            id={`${ModalId.ACCOUNT}__transactions-button`}
+            node="main"
+            connected={false}
+            padding="0.6rem"
+            onClick={() => modalCallbacks.open({ route: 'Transactions' })}
+          >
+            {`${isSmallerScreen ? '' : 'View '}Transactions`}
           </AccountModalButton>
         </FooterActionButtonsRow>
       </AddressAndBalanceColumnContainer>
