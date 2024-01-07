@@ -183,7 +183,8 @@ export function SkillFlowsPanel() {
         backgroundImageOptions: BG_SETTINGS
       }}
       styledProps={{
-        background: 'black'
+        background: 'black',
+        paddingMobile: '4rem 2rem'
       }}
       onDismiss={() => setPanelState()}
     >
