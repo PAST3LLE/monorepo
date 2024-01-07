@@ -5,19 +5,16 @@ import { Chain } from '@wagmi/chains'
 import { ASSETS_MAP } from 'assets'
 import { skillforgeTheme } from 'theme/skillforge'
 
-function _getWhitelistTheme() {
+function _getWhitelistTheme(): PstlWeb3AuthConnectorProps['uiConfig'] {
   if (!JSON.parse(process.env.REACT_APP_WEB3AUTH_WHITELIST_ENABLED || 'false')) return
   
   return {
-    themeInfo: {
-      mode: 'dark',
-      customTheme: {
+    theme: {
         primary: skillforgeTheme.modes.DEFAULT.mainBgDarker
-      }
     },
-    appLogoDark: ASSETS_MAP.logos.forge[512],
-    appLogoLight: ASSETS_MAP.logos.forge[512],
-    url: 'https://skills.pastelle.shop'
+    mode: 'DARK',
+    logoDark: ASSETS_MAP.logos.forge[512],
+    logoLight: ASSETS_MAP.logos.forge[512],
   }
 }
 
