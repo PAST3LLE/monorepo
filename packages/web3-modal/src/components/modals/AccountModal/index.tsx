@@ -136,7 +136,7 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
             node="main"
             connected={false}
             padding="0.6rem"
-            onClick={() => modalCallbacks.open({ route: 'Transactions' })}
+            onClick={() => modalCallbacks.open({ route: 'Transactions', withHistory: true })}
           >
             {`${isSmallerScreen ? '' : 'View '}Transactions`}
           </AccountModalButton>
@@ -157,7 +157,7 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
             height="auto"
             minHeight={82}
             width="100%"
-            onClick={() => isNonFrameWalletApp && modalCallbacks.open({ route: 'ConnectWallet' })}
+            onClick={() => isNonFrameWalletApp && modalCallbacks.open({ route: 'ConnectWallet', withHistory: true })}
           >
             <Column width="100%" gap="0.3rem">
               <Row flexWrap="wrap" gap="0 0.5rem" id="pstl-web3-modal-wallet-text">
@@ -204,7 +204,7 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
                 id={`${ModalId.ACCOUNT}__network-button`}
                 connected={false}
                 padding="0.6rem 1.2rem"
-                onClick={() => modalCallbacks.open({ route: 'SelectNetwork' })}
+                onClick={() => modalCallbacks.open({ route: 'SelectNetwork', withHistory: true })}
               >
                 Switch Network
               </AccountModalButton>

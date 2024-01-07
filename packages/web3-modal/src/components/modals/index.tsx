@@ -34,6 +34,15 @@ type Modals = {
   userConfigProps: FlattenedUserConfigCtrlState | undefined
 }
 
+const MODAL_SIZES = {
+  LIST_WIDTH: '55vh',
+  LIST_MAX_WIDTH: '400px',
+  LIST_MAX_HEIGHT: '600px',
+  GRID_WIDTH: '650px',
+  GRID_MAX_WIDTH: '100%',
+  GRID_MAX_HEIGHT: '500px'
+}
+
 export function ModalWithoutThemeProvider(baseProps: Omit<StatelessBaseModalProps, 'modal'>) {
   const modalState = usePstlWeb3Modal()
   const {
@@ -130,9 +139,18 @@ export function ModalWithoutThemeProvider(baseProps: Omit<StatelessBaseModalProp
           modalProps: {
             ...baseProps,
             title: 'APPROVE CONNECTION',
-            width: baseProps.width || flattenedUserConfigState?.walletsView === 'grid' ? '650px' : '50vh',
-            maxWidth: baseProps.maxWidth || flattenedUserConfigState?.walletsView === 'grid' ? '100%' : '360px',
-            maxHeight: baseProps.maxHeight || flattenedUserConfigState?.walletsView === 'grid' ? '500px' : '600px',
+            width:
+              baseProps.width || flattenedUserConfigState?.walletsView === 'grid'
+                ? MODAL_SIZES.GRID_WIDTH
+                : MODAL_SIZES.LIST_WIDTH,
+            maxWidth:
+              baseProps.maxWidth || flattenedUserConfigState?.walletsView === 'grid'
+                ? MODAL_SIZES.GRID_MAX_WIDTH
+                : MODAL_SIZES.LIST_MAX_WIDTH,
+            maxHeight:
+              baseProps.maxHeight || flattenedUserConfigState?.walletsView === 'grid'
+                ? MODAL_SIZES.GRID_MAX_HEIGHT
+                : MODAL_SIZES.LIST_MAX_HEIGHT,
             id: ModalId.NETWORK,
             modal: 'connection'
           }
@@ -161,9 +179,18 @@ export function ModalWithoutThemeProvider(baseProps: Omit<StatelessBaseModalProp
         const modalProps: StatelessBaseModalProps = {
           ...baseProps,
           title: baseProps?.headers?.wallets || baseProps?.title || 'CONNECT',
-          width: baseProps.width || flattenedUserConfigState?.walletsView === 'grid' ? '650px' : '50vh',
-          maxWidth: baseProps.maxWidth || flattenedUserConfigState?.walletsView === 'grid' ? '100%' : '360px',
-          maxHeight: baseProps.maxHeight || flattenedUserConfigState?.walletsView === 'grid' ? '500px' : '600px',
+          width:
+            baseProps.width || flattenedUserConfigState?.walletsView === 'grid'
+              ? MODAL_SIZES.GRID_WIDTH
+              : MODAL_SIZES.LIST_WIDTH,
+          maxWidth:
+            baseProps.maxWidth || flattenedUserConfigState?.walletsView === 'grid'
+              ? MODAL_SIZES.GRID_MAX_WIDTH
+              : MODAL_SIZES.LIST_MAX_WIDTH,
+          maxHeight:
+            baseProps.maxHeight || flattenedUserConfigState?.walletsView === 'grid'
+              ? MODAL_SIZES.GRID_MAX_HEIGHT
+              : MODAL_SIZES.LIST_MAX_HEIGHT,
           minHeight: 'unset',
           id: ModalId.WALLETS,
           modal: 'connection'

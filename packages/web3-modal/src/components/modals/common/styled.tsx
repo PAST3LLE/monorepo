@@ -151,13 +151,17 @@ export const InnerContainer = styled(ModalContainer).attrs(
 )<{ isError?: boolean }>`
   overflow-x: hidden;
 
+  ${CloseIcon}, svg#back-arrow {
+    cursor: pointer;
+    color: ${({ theme }) => theme?.modals?.base?.title?.font?.color};
+    flex: 0 1 ${({ theme }) => (theme?.modals?.base?.closeIcon?.size as number) - 5}px;
+  }
+
   ${CloseIcon} {
     padding: 5px;
     border-radius: 50%;
     background-color: ${(props) => props.theme?.modals?.base?.closeIcon?.background};
 
-    color: ${({ theme }) => theme?.modals?.base?.title?.font?.color};
-    flex: 0 1 ${({ theme }) => (theme?.modals?.base?.closeIcon?.size as number) - 5}px;
     height: ${({ theme }) => (theme?.modals?.base?.closeIcon?.size as number) - 5}px;
   }
 

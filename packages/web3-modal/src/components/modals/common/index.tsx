@@ -1,8 +1,9 @@
-import { CloseIcon, Row } from '@past3lle/components'
+import { ArrowLeft, CloseIcon, Row } from '@past3lle/components'
 import { useOnKeyPress } from '@past3lle/hooks'
 import React from 'react'
 
 import { Z_INDICES } from '../../../constants'
+import { RouterCtrl } from '../../../controllers'
 import { usePstlWeb3ModalStore } from '../../../hooks'
 import { useTimeoutClearingError } from '../../../hooks/misc/useTimeout'
 import { ErrorMessage } from './ErrorMessage'
@@ -56,6 +57,7 @@ export function BaseModal({
         isError={!!state?.modal.error?.message}
       >
         <Row width="100%" marginBottom="0.5em">
+          {RouterCtrl.state.history.length > 1 && <ArrowLeft id="back-arrow" size={25} onClick={RouterCtrl.goBack} />}
           <ModalTitle>{title}</ModalTitle>
           <CloseIcon height={30} width={100} onClick={onDismiss} />
         </Row>

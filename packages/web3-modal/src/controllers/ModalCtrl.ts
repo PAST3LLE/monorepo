@@ -7,6 +7,11 @@ import type { ModalCtrlState } from './types'
 export interface OpenOptions {
   uri?: string
   standaloneChains?: string[]
+  /**
+   * Adds to the history stack and allows to go back/forward
+   * @default undefined - will replace stack. no history.
+   */
+  withHistory?: boolean
   route?:
     | 'Account'
     | 'ConnectWallet'
@@ -35,7 +40,11 @@ export const ModalCtrl = {
       state.open = false
 
       if (options?.route) {
-        RouterCtrl.replace(options.route)
+        if (!!options?.withHistory) {
+          RouterCtrl.push(options.route)
+        } else {
+          RouterCtrl.replace(options.route)
+        }
       } else {
         RouterCtrl.replace('ConnectWallet')
       }
