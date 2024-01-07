@@ -116,7 +116,8 @@ export function SidePanelUpdater() {
         removeSearchParams(
           ForgeSearchParamKeys.FORGE_SKILL_ID,
           ForgeSearchParamKeys.FORGE_UPGRADE_SKILL,
-          ForgeSearchParamKeys.FORGE_USER_INVENTORY
+          ForgeSearchParamKeys.FORGE_USER_INVENTORY,
+          ForgeSearchParamKeys.FORGE_FLOWS
         )
         setPanel(null)
         break
