@@ -7,14 +7,14 @@ import { skillforgeTheme } from 'theme/skillforge'
 
 function _getWhitelistTheme(): PstlWeb3AuthConnectorProps['uiConfig'] {
   if (!JSON.parse(process.env.REACT_APP_WEB3AUTH_WHITELIST_ENABLED || 'false')) return
-  
+
   return {
     theme: {
-        primary: skillforgeTheme.modes.DEFAULT.mainBgDarker
+      primary: skillforgeTheme.modes.DEFAULT.mainBgDarker
     },
     mode: 'DARK',
     logoDark: ASSETS_MAP.logos.forge[512],
-    logoLight: ASSETS_MAP.logos.forge[512],
+    logoLight: ASSETS_MAP.logos.forge[512]
   }
 }
 

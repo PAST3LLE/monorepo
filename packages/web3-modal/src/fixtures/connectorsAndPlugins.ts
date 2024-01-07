@@ -51,7 +51,7 @@ export const wagmiConnectors = {
       uiConfig: {
         appName: 'SKILLFORGE TEST',
         logoLight: FORGE_LOGO,
-        logoDark: FORGE_LOGO,
+        logoDark: FORGE_LOGO
       },
       uxMode: 'popup',
       preset: 'DISALLOW_EXTERNAL_WALLETS'

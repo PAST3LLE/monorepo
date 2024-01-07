@@ -6,7 +6,7 @@ import { JsonRpcSigner, TransactionRequest } from '@ethersproject/providers'
 import { toUtf8Bytes } from '@ethersproject/strings'
 import { UnsignedTransaction, serialize } from '@ethersproject/transactions'
 import Eth, { ledgerService } from '@ledgerhq/hw-app-eth'
-import { EIP712Message } from "@ledgerhq/types-live"
+import { EIP712Message } from '@ledgerhq/types-live'
 
 import { checkError, convertToUnsigned, toNumber } from '../helpers'
 import { LedgerHQProvider } from '../provider'
