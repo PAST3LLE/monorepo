@@ -8,6 +8,7 @@ import {
   Connector,
   useAccount,
   useBalance,
+  useChainId,
   useConnect as useConnectWagmi,
   useDisconnect as useDisconnectWagmi,
   useNetwork
@@ -135,7 +136,7 @@ export function useAccountNetworkActions() {
   }, [chain?.id, root, isMobileWidth])
 
   const onAccountClick = useCallback(async () => {
-    return chain?.id ? root.open({ route: 'Account' }) : root.open({ route: 'ConnectWallet' })
+    return root.open({ route: chain?.id ? 'Account' : 'ConnectWallet' })
   }, [chain?.id, root])
 
   return {
@@ -146,15 +147,26 @@ export function useAccountNetworkActions() {
 
 export function useModalActions() {
   const { root } = useAllWeb3Modals()
+  const chainId = useChainId()
 
   const onTransactionsClick = useCallback(async () => {
-    return root.open({ route: 'Transactions' })
+    return root.open({ route: chainId ? 'Transactions' : 'Account' })
+  }, [chainId, root])
+
+  const onConnectClick = useCallback(async () => {
+    return root.open({ route: 'ConnectWallet' })
+  }, [root])
+
+  const onHidConfigClick = useCallback(async () => {
+    return root.open({ route: 'HidDeviceOptions' })
   }, [root])
 
   const { onAccountClick, onNetworkClick } = useAccountNetworkActions()
 
   return {
     onAccountClick,
+    onConnectClick,
+    onHidConfigClick,
     onNetworkClick,
     onTransactionsClick
   }
