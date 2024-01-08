@@ -6,27 +6,30 @@ import { LedgerConnector } from 'wagmi/connectors/ledger'
 
 import { ReadonlyChain } from '../providers'
 import { addConnector } from '../providers/utils'
-import { FORGE_LOGO, WALLETCONNECT_ID, WEB3AUTH_TEST_ID } from './config'
+import { FORGE_LOGO, WALLETCONNECT_ID } from './config'
+
+if (!process.env.REACT_APP_WEB3AUTH_DEVNET_CLIENT_ID) {
+  throw new Error('Missing REACT_APP_WEB3AUTH_DEVNET_CLIENT_ID variable. Check .env')
+}
 
 const TORUS_LOGO = 'https://web3auth.io/docs/contents/logo-ethereum.png'
-const torusPlugin = new TorusWalletConnectorPlugin({
-  torusWalletOpts: {
-    buttonPosition: 'bottom-left',
-    apiKey: WEB3AUTH_TEST_ID
-  },
-  walletInitOptions: {
-    whiteLabel: {
-      theme: { isDark: true, colors: { primary: '#00a8ff' } },
-      logoDark: TORUS_LOGO,
-      logoLight: TORUS_LOGO
-    },
-    useWalletConnect: true,
-    enableLogging: true
-  }
-})
 
-export const w3aPlugins = {
-  torusPlugin
+export const web3authPlugins = {
+  TORUS: new TorusWalletConnectorPlugin({
+    torusWalletOpts: {
+      buttonPosition: 'bottom-left',
+      apiKey: process.env.REACT_APP_WEB3AUTH_DEVNET_CLIENT_ID
+    },
+    walletInitOptions: {
+      whiteLabel: {
+        theme: { isDark: true, colors: { primary: '#00a8ff' } },
+        logoDark: TORUS_LOGO,
+        logoLight: TORUS_LOGO
+      },
+      useWalletConnect: true,
+      enableLogging: true
+    }
+  })
 }
 
 export const wagmiConnectors = {
@@ -55,8 +58,6 @@ export const wagmiConnectors = {
       },
       uxMode: 'popup',
       preset: 'DISALLOW_EXTERNAL_WALLETS'
-      // plugins: [w3aPlugins.torusPlugin]
-      // zIndex: 901
     })
   }
 }
