@@ -8,7 +8,6 @@ import {
   Connector,
   useAccount,
   useBalance,
-  useChainId,
   useConnect as useConnectWagmi,
   useDisconnect as useDisconnectWagmi,
   useNetwork
@@ -147,11 +146,11 @@ export function useAccountNetworkActions() {
 
 export function useModalActions() {
   const { root } = useAllWeb3Modals()
-  const chainId = useChainId()
+  const { chain } = useUserConnectionInfo()
 
   const onTransactionsClick = useCallback(async () => {
-    return root.open({ route: chainId ? 'Transactions' : 'Account' })
-  }, [chainId, root])
+    return root.open({ route: chain?.id ? 'Transactions' : 'ConnectWallet' })
+  }, [chain?.id, root])
 
   const onConnectClick = useCallback(async () => {
     return root.open({ route: 'ConnectWallet' })

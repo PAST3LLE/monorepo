@@ -50,7 +50,7 @@ export function BaseModal({
       {...restModalProps}
     >
       <InnerContainer
-        modal="base"
+        modal={modal}
         node="main"
         justifyContent="flex-start"
         gap="0.75rem"

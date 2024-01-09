@@ -23,6 +23,7 @@ import {
 } from '../hooks/api/useTransactions'
 import { PstlWeb3ModalProps, PstlW3Providers as WalletModal } from '../providers'
 import { addConnector } from '../providers/utils'
+import { createTheme } from '../theme'
 import { COMMON_CONNECTOR_OVERRIDES, DEFAULT_PROPS, DEFAULT_PROPS_WEB3AUTH, pstlModalTheme } from './config'
 import { wagmiConnectors } from './connectorsAndPlugins'
 
@@ -251,7 +252,7 @@ export default {
       config={{
         ...DEFAULT_PROPS,
         connectors: {
-          connectors: [wagmiConnectors.ledgerLiveModal],
+          // connectors: [wagmiConnectors.ledgerLiveModal],
           overrides: {
             ...COMMON_CONNECTOR_OVERRIDES,
             ledger: {
@@ -281,7 +282,10 @@ export default {
       config={{
         ...DEFAULT_PROPS_WEB3AUTH,
         connectors: {
-          connectors: [wagmiConnectors.ledgerLiveModal, wagmiConnectors.web3auth],
+          connectors: [
+            // wagmiConnectors.ledgerLiveModal,
+            wagmiConnectors.web3auth
+          ],
           overrides: COMMON_CONNECTOR_OVERRIDES
         },
         modals: {
@@ -306,7 +310,10 @@ export default {
       config={{
         ...DEFAULT_PROPS,
         connectors: {
-          connectors: [wagmiConnectors.ledgerLiveModal, wagmiConnectors.ledgerHID],
+          connectors: [
+            // wagmiConnectors.ledgerLiveModal,
+            wagmiConnectors.ledgerHID
+          ],
           overrides: COMMON_CONNECTOR_OVERRIDES
         },
         modals: {
@@ -328,7 +335,7 @@ export default {
       config={{
         ...DEFAULT_PROPS,
         connectors: {
-          connectors: [wagmiConnectors.ledgerLiveModal, wagmiConnectors.ledgerHID],
+          // connectors: [wagmiConnectors.ledgerLiveModal, wagmiConnectors.ledgerHID],
           overrides: COMMON_CONNECTOR_OVERRIDES
         },
         modals: {
@@ -350,7 +357,7 @@ export default {
         ...DEFAULT_PROPS,
         connectors: {
           connectors: [
-            wagmiConnectors.ledgerLiveModal,
+            // wagmiConnectors.ledgerLiveModal,
             addConnector(InjectedConnector, {
               name: 'Coinbase Wallet',
               getProvider() {
@@ -392,7 +399,7 @@ export default {
       config={{
         ...DEFAULT_PROPS,
         connectors: {
-          connectors: [wagmiConnectors.ledgerLiveModal],
+          // connectors: [wagmiConnectors.ledgerLiveModal],
           overrides: {
             ...COMMON_CONNECTOR_OVERRIDES,
             ledger: {
@@ -435,7 +442,10 @@ export default {
         config={{
           ...DEFAULT_PROPS,
           connectors: {
-            connectors: [wagmiConnectors.ledgerHID, wagmiConnectors.ledgerLiveModal],
+            connectors: [
+              wagmiConnectors.ledgerHID
+              // wagmiConnectors.ledgerLiveModal
+            ],
             overrides: COMMON_CONNECTOR_OVERRIDES
           },
           modals: {
@@ -554,7 +564,7 @@ export default {
           connectors: {
             connectors: [
               wagmiConnectors.ledgerHID,
-              wagmiConnectors.ledgerLiveModal,
+              // wagmiConnectors.ledgerLiveModal,
               addConnector(InjectedConnector, {
                 name: 'MetaMask',
                 shimDisconnect: true,
@@ -650,7 +660,7 @@ export default {
           connectors: {
             connectors: [
               wagmiConnectors.ledgerHID,
-              wagmiConnectors.ledgerLiveModal,
+              // wagmiConnectors.ledgerLiveModal,
               addConnector(InjectedConnector, {
                 name: 'MetaMask',
                 shimDisconnect: true,
@@ -751,7 +761,7 @@ export default {
           connectors: {
             connectors: [
               wagmiConnectors.ledgerHID,
-              wagmiConnectors.ledgerLiveModal,
+              // wagmiConnectors.ledgerLiveModal,
               addConnector(InjectedConnector, {
                 name: 'MetaMask',
                 shimDisconnect: true,
@@ -858,7 +868,7 @@ export default {
           connectors: {
             connectors: [
               wagmiConnectors.ledgerHID,
-              wagmiConnectors.ledgerLiveModal,
+              // wagmiConnectors.ledgerLiveModal,
               addConnector(InjectedConnector, {
                 name: 'MetaMask',
                 shimDisconnect: true,
@@ -967,7 +977,7 @@ export default {
           connectors: {
             connectors: [
               wagmiConnectors.ledgerHID,
-              wagmiConnectors.ledgerLiveModal,
+              // wagmiConnectors.ledgerLiveModal,
               addConnector(InjectedConnector, {
                 name: 'MetaMask',
                 shimDisconnect: true,
@@ -1069,7 +1079,7 @@ export default {
           },
           connectors: [
             wagmiConnectors.ledgerHID,
-            wagmiConnectors.ledgerLiveModal,
+            // wagmiConnectors.ledgerLiveModal,
             addConnector(InjectedConnector, {
               name: 'MetaMask',
               shimDisconnect: true,
@@ -1159,7 +1169,7 @@ export default {
         config={{
           ...DEFAULT_PROPS_WEB3AUTH,
           connectors: {
-            connectors: [wagmiConnectors.ledgerHID, wagmiConnectors.ledgerLiveModal, wagmiConnectors.web3auth],
+            // connectors: [wagmiConnectors.ledgerHID, wagmiConnectors.ledgerLiveModal, wagmiConnectors.web3auth],
             overrides: {
               'ledger-hid': {
                 ...COMMON_CONNECTOR_OVERRIDES['ledger-hid'],
@@ -1206,7 +1216,7 @@ export default {
           connectors: {
             connectors: [
               wagmiConnectors.ledgerHID,
-              wagmiConnectors.ledgerLiveModal,
+              // wagmiConnectors.ledgerLiveModal,
               addConnector(InjectedConnector, {
                 name: 'MetaMask',
                 shimDisconnect: true,
@@ -1300,7 +1310,7 @@ export default {
           connectors: {
             connectors: [
               wagmiConnectors.ledgerHID,
-              wagmiConnectors.ledgerLiveModal,
+              // wagmiConnectors.ledgerLiveModal,
               addConnector(InjectedConnector, {
                 name: 'MetaMask',
                 shimDisconnect: true,
@@ -1385,7 +1395,45 @@ export default {
       </PstlW3Providers>
     )
   }),
-  TransactionCard: <BaseModal />
+  TransactionCard: <BaseModal />,
+  ModalNoTheme: withThemeProvider(() => (
+    <PstlW3Providers
+      config={{
+        appName: 'No theme',
+        chains: [goerli],
+        modals: {
+          root: {
+            themeConfig: {
+              theme: createTheme({
+                DEFAULT: {
+                  modals: {
+                    base: {
+                      title: {
+                        font: {
+                          color: 'pink'
+                        }
+                      }
+                    },
+                    connection: {
+                      background: {
+                        url: 'https://uploads-ssl.webflow.com/63fdf8c863bcf0c02efdffbc/64144c23e693f7d7f5cdb958_chorus_logo.svg'
+                      }
+                    }
+                  }
+                }
+              })
+            }
+          },
+          walletConnect: {
+            projectId: 'a01e2f3b7c64ff495f9cb28e4e2d4b49'
+          }
+        }
+      }}
+    >
+      <h1>Hello world!</h1>
+      <Web3Button />
+    </PstlW3Providers>
+  ))
 }
 
 function BaseModal(): React.ReactElement<any, any> {
