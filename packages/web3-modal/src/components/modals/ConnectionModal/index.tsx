@@ -1,6 +1,7 @@
 import { useIsExtraSmallMediaWidth } from '@past3lle/hooks'
 import React, { memo, useCallback, useMemo, useState } from 'react'
 
+import { ErrorCauses } from '../../../constants/errors'
 import { UserOptionsCtrlState } from '../../../controllers/types'
 import {
   useConnectDisconnectAndCloseModals, // useConnectDisconnect,
@@ -53,7 +54,12 @@ function ConnectionModalContent({
         else uiModalStore.root.open({ route: 'Account' })
       },
       onError: async (error) => {
-        store.callbacks.connectionStatus.set({ status: 'error' })
+        if (error?.name?.includes(ErrorCauses.ConnectorNotFoundError)) {
+          await store.callbacks.open({ route: 'ConnectWallet' })
+        } else {
+          store.callbacks.connectionStatus.set({ status: 'error' })
+        }
+
         store.callbacks.error.set(error)
       }
     },

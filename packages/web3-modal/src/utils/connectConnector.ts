@@ -2,6 +2,7 @@ import { devError } from '@past3lle/utils'
 import isEqual from 'lodash.isequal'
 
 import { RenderConnectorOptionsProps } from '../components/modals/ConnectionModal/RenderConnectorOptions'
+import { ErrorCauses } from '../constants/errors'
 import { useConnection, usePstlWeb3Modal } from '../hooks'
 import { ConnectorEnhanced, ConnectorEnhancedExtras, FullWeb3ModalStore } from '../types'
 import { connectorOverridePropSelector, trimAndLowerCase } from './misc'
@@ -228,8 +229,7 @@ async function _connectToProvider({
     await (connectorOverride?.customConnect?.({ store: modalsStore, connector, wagmiConnect: connect }) ||
       connect({ connector, chainId }))
   } catch (error: any) {
-    const errorMessage = new Error(error).message
-    const connectorNotFoundError = errorMessage?.includes('ConnectorNotFoundError')
+    const connectorNotFoundError: boolean = (error?.message || error)?.includes(ErrorCauses.ConnectorNotFoundError)
 
     if (connectorOverride?.downloadUrl && connectorNotFoundError && typeof globalThis?.window !== 'undefined') {
       window.open(connectorOverride.downloadUrl, '_newtab')
