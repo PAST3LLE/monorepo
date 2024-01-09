@@ -25,7 +25,8 @@
   "exports": {
     ".": {
       "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.js"
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/types/index.d.ts"
     },
     "./IFrameConnector": {
       "types": "./dist/types/IFrameConnector/index.d.ts",

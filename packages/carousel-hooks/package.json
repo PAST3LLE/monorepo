@@ -14,9 +14,11 @@
   "module": "dist/carousel-hooks.esm.js",
   "exports": {
     "import": "./dist/carousel-hooks.esm.js",
-    "require": "./dist/index.js"
+    "require": "./dist/index.js",
+    "types": "./dist/index.d.ts"
   },
   "typings": "dist/index.d.ts",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
