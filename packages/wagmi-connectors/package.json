@@ -73,6 +73,7 @@
     "url": "https://github.com/PAST3LLE/past3lle-monorepo/issues"
   },
   "scripts": {
+    "pack": "yarn pack",
     "analyze": "npx source-map-explorer dist/index.js{,.map}",
     "check-types": "npx tsc --noEmit",
     "build:old": "yarn clean && yarn compile",

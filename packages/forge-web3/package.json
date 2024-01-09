@@ -33,6 +33,7 @@
     "dist"
   ],
   "scripts": {
+    "pack": "yarn pack",
     "check-types": "npx tsc --noEmit",
     "clean": "rm -rf dist && rm -rf tsconfig.tsbuildinfo",
     "compile:tsdx": "tsdx build --transpileOnly && cp \"./package.json\" ./dist/",

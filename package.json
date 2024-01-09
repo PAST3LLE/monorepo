@@ -19,6 +19,7 @@
     "start:landing-ui": "lerna run start --scope @past3lle/pastellelabs-landing-ui",
     "test": "yarn jest --coverage",
     "test:watch": "yarn test --watch",
+    "pack:scope": "lerna run pack --scope",
     "examples:generic": "cd examples/generic && rm -rf node_modules .parcel-cache && yarn && yarn start && cd ../..",
     "examples:next": "cd examples/next-app && rm -rf yarn.lock node_modules && yarn install --force && yarn dev && cd ../..",
     "install:examples": "cd examples/generic && yarn && cd ../../",

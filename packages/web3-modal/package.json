@@ -37,6 +37,7 @@
     "url": "https://github.com/PAST3LLE/past3lle-monorepo/issues"
   },
   "scripts": {
+    "pack": "yarn pack",
     "check-types": "npx tsc --noEmit",
     "clean": "rm -rf dist && rm -rf tsconfig.tsbuildinfo",
     "copy-public": "cp -r \"./public\" \"./dist\"",
