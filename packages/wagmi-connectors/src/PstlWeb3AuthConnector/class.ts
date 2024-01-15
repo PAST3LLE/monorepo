@@ -1,7 +1,6 @@
 import { BaseAdapter } from '@web3auth/base'
 import { IPlugin } from '@web3auth/base-plugin'
 import { Web3AuthConnector } from '@web3auth/web3auth-wagmi-connector'
-import { ConnectorData } from 'wagmi'
 
 type AuxWeb3AuthConnectorParams<BA extends BaseAdapter<any>, PL extends IPlugin[]> = ConstructorParameters<
   typeof Web3AuthConnector
@@ -20,7 +19,7 @@ export class AuxWeb3AuthConnector<BA extends BaseAdapter<any>, PL extends IPlugi
   }
 
   // Enhance super connect and listen to changes on adapter
-  async connect({ chainId }: { chainId?: number } = {}): Promise<Required<ConnectorData>> {
+  async connect({ chainId }: { chainId?: number } = {}) {
     try {
       const data = await super.connect({ chainId })
       // Listen to emitted events FROM ADAPTER (current web3auth version ~7.x doesnt listen to this)
