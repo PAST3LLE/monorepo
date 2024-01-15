@@ -1,5 +1,5 @@
 import { devDebug } from '@past3lle/utils'
-import { alchemyProvider } from 'wagmi/providers/alchemy'
+import { http } from 'viem'
 
 import { PstlWeb3ModalProps } from '../providers'
 import { createTheme } from '../theme'
@@ -223,18 +223,21 @@ const DEFAULT_PROPS: PstlWeb3ModalProps = {
   clients: {
     wagmi: {
       options: {
-        publicClients: [
-          {
-            client: alchemyProvider,
-            5: process.env.REACT_APP_ALCHEMY_GOERLI_API_KEY as string,
-            137: process.env.REACT_APP_ALCHEMY_MATIC_API_KEY as string,
-            80001: process.env.REACT_APP_ALCHEMY_MUMBAI_API_KEY as string
-          }
-        ]
+        transports: {
+          1: http(`https://eth-mainnet.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_GOERLI_API_KEY as string}`),
+          5: http(`https://eth-goerli.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_GOERLI_API_KEY as string}`),
+          137: http(
+            `https://polygon-mainnet.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_MATIC_API_KEY as string}`
+          ),
+          80001: http(
+            `https://polygon-mumbai.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_MUMBAI_API_KEY as string}`
+          )
+        }
       }
     }
   },
   options: {
+    autoConnect: false,
     pollingInterval: 10_000,
     escapeHatches: {
       appType: 'DAPP'
@@ -272,6 +275,12 @@ const DEFAULT_PROPS: PstlWeb3ModalProps = {
     },
     walletConnect: {
       projectId: WALLETCONNECT_TEST_ID,
+      themeMode: 'dark',
+      themeVariables: {
+        '--wcm-background-color': 'slategrey',
+        '--wcm-z-index': '999'
+      },
+      zIndex: 9999,
       walletImages: {
         web3auth: 'https://web3auth.io/images/web3auth-L-Favicon-1.svg',
         safe: 'https://user-images.githubusercontent.com/3975770/212338977-5968eae5-bb1b-4e71-8f82-af5282564c66.png'

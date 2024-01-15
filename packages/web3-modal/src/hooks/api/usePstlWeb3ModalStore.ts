@@ -19,7 +19,7 @@ interface PstlWeb3ModalStateHook {
     connectionStatus: {
       set: (typeof ConnectionStatusCtrl)['update']
       reset: (typeof ConnectionStatusCtrl)['reset']
-      retryConnection: (typeof ConnectionStatusCtrl)['retryConnection']
+      retry: (typeof ConnectionStatusCtrl)['retryConnection']
     }
     userOptions: {
       set: (typeof UserOptionsCtrl)['update']
@@ -71,7 +71,7 @@ export function usePstlWeb3ModalStore(): PstlWeb3ModalStateHook {
       connectionStatus: {
         set: ConnectionStatusCtrl.update,
         reset: ConnectionStatusCtrl.reset,
-        retryConnection: ConnectionStatusCtrl.retryConnection
+        retry: ConnectionStatusCtrl.retryConnection
       }
     }
   }

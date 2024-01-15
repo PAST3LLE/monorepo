@@ -7,6 +7,8 @@ import { ConnectorEnhanced, FullWeb3ModalStore } from '../../../types'
 import { runConnectorConnectionLogic } from '../../../utils/connectConnector'
 import { ConnectorOption } from './ConnectorOption'
 
+const IS_SERVER = typeof globalThis.window === 'undefined'
+
 export type RenderConnectorOptionsProps = Pick<
   PstlWeb3ConnectionModalProps,
   'overrides' | 'hideInjectedFromRoot' | 'chainIdFromUrl' | 'buttonProps'
@@ -33,11 +35,11 @@ const RenderConnectorOptionsBase =
     providerMountedState: [providerMountedMap, setProviderMountedMap],
     providerLoadingState: [, setProviderLoading]
   }: RenderConnectorOptionsProps) =>
-  (connector: ConnectorEnhanced<any, any>, index: number) => {
+  (connector: ConnectorEnhanced, index: number) => {
     // Don't show "injected" provider if either
     // a. User explicitly states to ignore it
     // b. Window object does NOT contain the injected ethereum proxy object
-    if ((hideInjectedFromRoot || !(window as any)?.ethereum) && connector.id === 'injected') return null
+    if ((hideInjectedFromRoot || (!IS_SERVER && !(window as any)?.ethereum)) && connector.id === 'injected') return null
     const [{ label, logo, connected, isRecommended }, callback] = runConnectorConnectionLogic(
       connector,
       currentConnector,

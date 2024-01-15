@@ -1,12 +1,12 @@
 import { devError } from '@past3lle/utils'
 import { useEffect, useState } from 'react'
+import { Chain } from 'viem'
 
 import { PstlWeb3ModalProps } from '../../providers/types'
 import { getAppType } from '../../providers/utils/connectors'
-import { Chain } from '../../types'
 
 export function useAutoSwitchToChain(chains: PstlWeb3ModalProps['chains'], config?: PstlWeb3ModalProps) {
-  const [derivedChainId, setDerivedChainId] = useState<Chain<number> | undefined>(undefined)
+  const [derivedChainId, setDerivedChainId] = useState<Chain | undefined>(undefined)
 
   useEffect(() => {
     _getChainFromUrl(chains, config).then(setDerivedChainId).catch(devError)
@@ -18,7 +18,7 @@ export function useAutoSwitchToChain(chains: PstlWeb3ModalProps['chains'], confi
 async function _getChainFromUrl(
   chains: PstlWeb3ModalProps['chains'],
   config?: PstlWeb3ModalProps
-): Promise<Chain<number> | undefined> {
+): Promise<Chain | undefined> {
   const status = getAppType(config?.options?.escapeHatches?.appType)
 
   switch (status) {

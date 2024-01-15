@@ -1,13 +1,9 @@
 import { devDebug, devError } from '@past3lle/utils'
 import isEqual from 'lodash.isequal'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import {
-  Address,
-  Chain,
-  usePublicClient,
-  type useWatchPendingTransactions as useWagmiWatchPendingTransactions,
-  useWebSocketPublicClient
-} from 'wagmi'
+import { Address, Chain } from 'viem'
+import { watchPendingTransactions } from 'viem/actions'
+import { UseWatchPendingTransactionsParameters, useConfig } from 'wagmi'
 
 import { AuxSafeTransaction, TransactionReceiptPending } from '../../controllers/TransactionsCtrl/types'
 import { getSafeKitAndTx } from '../../utils/safe'
@@ -35,7 +31,8 @@ export type WatchPendingTransactionsErrorListener = (
 ) => void
 
 export function useWatchPendingTransactions(
-  params: Omit<Parameters<typeof useWagmiWatchPendingTransactions>[0], 'listener'> & {
+  params: Omit<UseWatchPendingTransactionsParameters, 'listener'> & {
+    enabled: boolean
     safeTxHashes?: Address[]
     listener: WatchPendingTransactionsListener
     errorListener?: WatchPendingTransactionsErrorListener
@@ -51,12 +48,11 @@ export function useWatchPendingTransactions(
  * @name useWatchPendingSafeTransactions
  */
 function useEnhancedWatchPendingTransactions({
-  chainId,
   safeTxHashes,
   enabled,
   listener,
   errorListener
-}: Omit<Parameters<typeof useWagmiWatchPendingTransactions>[0], 'listener'> & {
+}: Omit<UseWatchPendingTransactionsParameters, 'listener'> & {
   listener: WatchPendingTransactionsListener
   errorListener?: WatchPendingTransactionsErrorListener
   safeTxHashes?: Address[]
@@ -70,10 +66,8 @@ function useEnhancedWatchPendingTransactions({
   }, [safeTxHashes])
 
   const { address, chain } = useUserConnectionInfo()
-  const queryChainId = chainId || chain?.id
 
-  const publicClient = usePublicClient({ chainId: queryChainId })
-  const webSocketPublicClient = useWebSocketPublicClient({ chainId: queryChainId })
+  const { getClient } = useConfig()
 
   const handleTxConfirmed = useCallback(
     (status: Status) => {
@@ -122,8 +116,8 @@ function useEnhancedWatchPendingTransactions({
       listener(txs, results)
     }
 
-    const publicClient_ = webSocketPublicClient ?? publicClient
-    const unsub = publicClient_.watchPendingTransactions({
+    const unsub = watchPendingTransactions(getClient(), {
+      poll: true,
       onTransactions: auxListener,
       async onError(error) {
         devError(
@@ -145,7 +139,7 @@ function useEnhancedWatchPendingTransactions({
       unsub()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [address, chain?.id, enabled])
+  }, [address, chain?.id, enabled, getClient])
 }
 
 async function _handleSafeTransactions(

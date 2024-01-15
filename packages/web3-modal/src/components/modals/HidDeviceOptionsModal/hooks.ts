@@ -1,16 +1,18 @@
 import { useDebounce } from '@past3lle/hooks'
 import { devError } from '@past3lle/utils'
-import { LedgerHIDConnector } from '@past3lle/wagmi-connectors'
+import { ledgerHid } from '@past3lle/wagmi-connectors'
 import { useMemo, useState } from 'react'
 import { useEffect } from 'react'
 import { Address, formatEther } from 'viem'
+import { useChainId } from 'wagmi'
 
 import { KEYS } from '../../../constants/localstorage'
 import { usePstlWeb3Modal, usePstlWeb3ModalStore } from '../../../hooks'
 
+export type LedgerHidConnector = ReturnType<ReturnType<typeof ledgerHid>>
 type Params = {
   chainId: number | undefined
-  connector: LedgerHIDConnector | undefined
+  connector: LedgerHidConnector | undefined
   path: string | null | undefined
   paginationAmount: number
 }
@@ -21,7 +23,7 @@ export function useHidModalStore({ chainId, connector, path, paginationAmount }:
   const { close } = usePstlWeb3Modal()
   const {
     callbacks: {
-      error: { set: setError }
+      error: { set: setError, reset: resetError }
     }
   } = usePstlWeb3ModalStore()
   const [selectedAccountIdx, setSelectedAccountIdx] = useState<number>(() => DEFAULT_ACCOUNT_INDEX)
@@ -33,6 +35,8 @@ export function useHidModalStore({ chainId, connector, path, paginationAmount }:
 
   return useMemo(() => {
     const setHidError = (error: unknown) => {
+      if (!error) return resetError()
+
       devError(error)
       setError(
         error instanceof Error
@@ -57,9 +61,10 @@ export function useHidModalStore({ chainId, connector, path, paginationAmount }:
         try {
           _isValidPathOrThrow(sPath)
           _isConnectedOrThrow(hid)
+
           setSelectedAccountIdx(idx)
-          hid?.setAccount(sPath)
-          close()
+
+          await Promise.all([hid?.setAccount(sPath), close()])
         } catch (error) {
           setHidError(error)
         }
@@ -71,7 +76,9 @@ export function useHidModalStore({ chainId, connector, path, paginationAmount }:
           if (fullPath) {
             setPaginationIdx(paginationAmount)
             setAccountsAndBalances([])
-            // await disconnectAsync()
+
+            // Disconnect hid connector and reconnect via new path and reset flag
+            // reset flag sets a new signer at path address
             await hid?.disconnect()
             await hid?.connect({ chainId }, { path: fullPath, reset: true })
           }
@@ -87,8 +94,9 @@ export function useHidModalStore({ chainId, connector, path, paginationAmount }:
           _isConnectedOrThrow(hid)
           // Here we can assume there is both a valid path AND hid connector
           const replacedPath = path?.replace(/\*/g, acctIdx.toString())
-          await hid?.getAccount(replacedPath)
-          await hid?.setAccount(replacedPath)
+
+          // Set our device address to replaced path
+          return hid?.setAccount(replacedPath)
         } catch (error) {
           setHidError(error)
         }
@@ -105,7 +113,7 @@ export function useHidModalStore({ chainId, connector, path, paginationAmount }:
           for (let i = paginationIdx - paginationAmount; i < paginationIdx; i++) {
             // Replace the set path catch-all token with user's passed index
             const replacedPath = path?.replace(/\*/g, i.toString())
-            const acct = await hid?.getAccount(replacedPath)
+            const [acct] = (await hid?.getAccounts(replacedPath)) || []
             // We throw if no path found at derived address
             if (!acct) throw new Error('No valid account found at path: ' + replacedPath)
             const bal = await hid?.provider?.getBalance(acct)
@@ -139,7 +147,7 @@ export function useHidModalStore({ chainId, connector, path, paginationAmount }:
   ])
 }
 
-function _isConnectedOrThrow(hid: LedgerHIDConnector | undefined): void {
+function _isConnectedOrThrow(hid: Params['connector'] | undefined): void {
   if (!hid)
     throw new Error(
       'No HID connector detected. Please check that device is plugged in, unlocked, and that the Ethereum app is open.'
@@ -180,7 +188,7 @@ type HidUpdaterParams = Pick<
 > &
   Pick<ReturnType<typeof useHidModalPath>, 'setIsCustomPath' | 'isCustomPath' | 'dbPath' | 'setPath'> & {
     chainId: number | undefined
-    derivationPaths: string[]
+    derivationPaths: readonly string[]
     setSelection: React.Dispatch<React.SetStateAction<string | undefined>>
   }
 
@@ -190,11 +198,8 @@ type HidUpdaterParams = Pick<
  * @param store - variables/state and callbacks
  */
 export function useHidUpdater({
-  chainId,
-  //   loadedSavedConfig,
   derivationPaths,
   dbPath,
-  // isCustomPath,
   selectedAccountIdx,
   setIsCustomPath,
   setPath,
@@ -205,6 +210,7 @@ export function useHidUpdater({
   setLoadedSavedConfig,
   setHidError
 }: HidUpdaterParams) {
+  const chainId = useChainId()
   useEffect(() => {
     async function updateHidConfig() {
       try {
@@ -212,7 +218,6 @@ export function useHidUpdater({
           if (!chainId) throw new Error('No chain id detected. Verify that you are connected.')
           else return
         }
-
         if (!derivationPaths.some((path) => path === dbPath)) {
           setIsCustomPath(true)
         }
@@ -220,12 +225,13 @@ export function useHidUpdater({
         setPath(dbPath)
         setSelection(dbPath ?? undefined)
         setSelectedAccountIdx(selectedAccountIdx)
-
         const realAccountIndex = selectedAccountIdx.toString()
+
         // reset connection
         await resetAndConnectProvider(dbPath?.replace(/\*/g, realAccountIndex))
         // Query the last address based on the path and index
         await getAccount(realAccountIndex)
+        return
       } catch (error) {
         setHidError(error)
       } finally {

@@ -1,6 +1,7 @@
-import { useConnect } from 'wagmi'
-import { Connector } from 'wagmi/connectors'
+import { Config, Connector, CreateConnectorFn, UseConnectReturnType } from 'wagmi'
+import { ConnectData } from 'wagmi/query'
 
+import { UserOptionsCtrlState } from '../controllers/types'
 import { AllWeb3ModalStore } from '../hooks'
 
 export type FullWeb3ModalStore = { ui: AllWeb3ModalStore }
@@ -19,10 +20,15 @@ export type ConnectorEnhancedExtras = {
    * @see {AllWeb3ModalStore}
    * @returns whatever it needs to return but should connect to the connector!
    */
-  customConnect?: <C extends ConnectorEnhanced<any, any>>(params: {
+  customConnect?: <C extends CreateConnectorFn | ConnectorEnhanced>(params: {
     store: FullWeb3ModalStore['ui']
+    userOptionsStore: UserOptionsCtrlState
     connector?: C
-    wagmiConnect: ReturnType<typeof useConnect>['connectAsync']
+    wagmiConnect: (
+      params: Omit<Parameters<UseConnectReturnType['connectAsync']>[0], 'connector'> & {
+        connector: CreateConnectorFn | ConnectorEnhanced
+      }
+    ) => Promise<ConnectData<Config>>
   }) => unknown
   /**
    * @name modalNodeId Optional. String ID name of modal node. Used to show async loader on mount
@@ -41,7 +47,7 @@ export type ConnectorEnhancedExtras = {
    */
   downloadUrl?: string
 }
-export interface ConnectorEnhanced<P, O> extends Connector<P, O>, ConnectorEnhancedExtras {}
+export type ConnectorEnhanced = Connector & ConnectorEnhancedExtras
 /**
  * @name ConnectorOverrides
  * @description Key/Value pair overriding connector info. Displays in root modal. See {@link ConnectorEnhancedExtras}

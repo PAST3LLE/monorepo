@@ -1,13 +1,15 @@
 import { devDebug, devError } from '@past3lle/utils'
-import { useCallback, useEffect, useMemo } from 'react'
-import { Hash, Transaction } from 'viem'
-import { Address, useWaitForTransaction } from 'wagmi'
+import { useCallback, useMemo } from 'react'
+import { Address, Hash, Transaction } from 'viem'
 
 import { UserOptionsTransactionsCallbacks } from '../../../controllers/types'
-import { SafeTransactionListenerInfo, useWatchPendingTransactions } from '../../../hooks'
+import {
+  SafeTransactionListenerInfo,
+  useWaitForTransactionReceiptEffect,
+  useWatchPendingTransactions
+} from '../../../hooks'
 import { usePendingTxHashListByType, useUpdateTransactionsViaCallback } from '../../../hooks/api/useTransactions'
 import { useUserOptionsTransactionCallbacks } from '../../../hooks/internal/useUserOptionsTransactionCallbacks'
-import { TransactionCtrl } from '../state'
 import { AnyTransactionReceipt } from '../types'
 
 export function TransactionsUpdater() {
@@ -15,14 +17,12 @@ export function TransactionsUpdater() {
   const updateTransactionsViaCallback = useUpdateTransactionsViaCallback()
   const { eoa: pendingEoaHashList, safe: pendingSafeHashList } = usePendingTxHashListByType()
 
-  // TODO: remove
-  useEffect(() => {
-    ;(window as any).addTransaction = TransactionCtrl.addTransaction
-    ;(window as any).addPendingTransactions = TransactionCtrl.addBatchPendingTransactions
-    ;(window as any).confirmTransactionsByProp = TransactionCtrl.confirmTransactionsByValue
-    ;(window as any).updateTransactionNoncesBatch = TransactionCtrl.updateTransactionsBatchByValue
-    ;(window as any).updateTransactionsViaCallback = TransactionCtrl.updateTransactionsViaCallback
-  }, [])
+  const { eoaReversed, safeReversed } = useMemo(() => {
+    return {
+      eoaReversed: pendingEoaHashList?.slice()?.reverse(),
+      safeReversed: pendingSafeHashList?.slice()?.reverse()
+    }
+  }, [pendingEoaHashList, pendingSafeHashList])
 
   /* 
     SCENARIOS FOR TRANSACTIONS
@@ -51,19 +51,18 @@ export function TransactionsUpdater() {
     [pendingSafeHashList.length, updateTransactionsViaCallback, userTransactionCallbacks]
   )
 
-  const memoedSafeHashes = useMemo(() => pendingSafeHashList.map((tx) => tx.safeTxHash), [pendingSafeHashList])
+  const memoedSafeHashes = useMemo(() => safeReversed.map((tx) => tx.safeTxHash), [safeReversed])
   // Watch SAFE transactions
   useWatchPendingTransactions({
-    enabled: !!pendingSafeHashList.length,
+    enabled: !!memoedSafeHashes.length,
     safeTxHashes: memoedSafeHashes,
     listener,
     errorListener
   })
-
   // Watch EOA transactions
-  useWaitForTransaction({
-    enabled: !!pendingEoaHashList?.[0]?.transactionHash,
-    hash: pendingEoaHashList?.[0]?.transactionHash,
+  useWaitForTransactionReceiptEffect({
+    enabled: !!eoaReversed?.[0]?.transactionHash,
+    hash: eoaReversed?.[0]?.transactionHash,
     onSettled(data, error) {
       if (data?.transactionHash) {
         updateTransactionsViaCallback(
@@ -74,7 +73,7 @@ export function TransactionsUpdater() {
       } else if (error) {
         devError('[TransactionsCtrl::Updater] EOA transaction tracking error!', error?.message || error)
         updateTransactionsViaCallback(
-          _setTxState(pendingEoaHashList?.[0]?.transactionHash, userTransactionCallbacks?.onEoaTransactionUnknown, {
+          _setTxState(eoaReversed?.[0]?.transactionHash, userTransactionCallbacks?.onEoaTransactionUnknown, {
             status: 'unknown'
           })
         )
@@ -92,7 +91,7 @@ export function TransactionsUpdater() {
         response.reason
       )
       updateTransactionsViaCallback(
-        _setTxState(pendingEoaHashList?.[0]?.transactionHash, userTransactionCallbacks?.onEoaTransactionUnknown, {
+        _setTxState(eoaReversed?.[0]?.transactionHash, userTransactionCallbacks?.onEoaTransactionUnknown, {
           status: 'replaced-pending'
         })
       )

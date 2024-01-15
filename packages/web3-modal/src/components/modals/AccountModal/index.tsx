@@ -32,18 +32,22 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
     disconnect: { disconnectAsync }
   } = useConnectDisconnect({
     connect: {
-      onSuccess: closeModalOnConnect ? modalCallbacks.close : undefined
+      mutation: {
+        onSuccess: closeModalOnConnect ? modalCallbacks.close : undefined
+      }
     },
     disconnect: {
-      onSuccess: modalCallbacks.close
+      mutation: {
+        onSuccess: modalCallbacks.close
+      }
     }
   })
 
   const appType = useDeriveAppType()
   const { isUnsupportedChain, showNetworkButton, isNonFrameWalletApp } = useMemo(() => {
-    const isUnsupportedChain =
-      userConnectionInfo.chain?.unsupported ||
-      !userConnectionInfo.supportedChains.some((chain) => chain.id === userConnectionInfo.chain?.id)
+    const isUnsupportedChain = !userConnectionInfo.supportedChains.some(
+      (chain) => chain.id === userConnectionInfo.chain?.id
+    )
     const supportsSeveralChains = (userConnectionInfo?.supportedChains?.length || 0) > 1
 
     return {
@@ -51,7 +55,7 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
       showNetworkButton: supportsSeveralChains || isUnsupportedChain,
       isNonFrameWalletApp: appType === 'DAPP' || appType === 'TEST_FRAMEWORK_IFRAME'
     }
-  }, [appType, userConnectionInfo.chain?.id, userConnectionInfo.chain?.unsupported, userConnectionInfo.supportedChains])
+  }, [appType, userConnectionInfo.chain?.id, userConnectionInfo.supportedChains])
 
   const isSmallerScreen = useIsSmallMediaWidth()
 
@@ -174,7 +178,7 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
                   alignItems="center"
                   padding={0}
                 >
-                  {(userConnectionInfo.connector as ConnectorEnhanced<any, any>)?.customName ||
+                  {(userConnectionInfo.connector as ConnectorEnhanced)?.customName ||
                     userConnectionInfo.connector?.name}
                 </AccountText>
               </Row>
@@ -215,7 +219,9 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
                 id={`${ModalId.ACCOUNT}__disconnect-button`}
                 connected={false}
                 padding="0.6rem"
-                onClick={() => disconnectAsync()}
+                onClick={async () => {
+                  await disconnectAsync()
+                }}
               >
                 Disconnect
               </AccountModalButton>

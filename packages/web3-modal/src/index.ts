@@ -35,12 +35,10 @@ import {
   PstlWagmiProvider,
   type PstlWeb3ModalProps,
   type ReadonlyChain,
-  addConnector,
-  addFrameConnector,
-  usePstlEthereumClient,
+  addConnector, // usePstlEthereumClient,
   usePstlWagmiClient
 } from './providers'
-import { AppType, addPublicClients, getAppType, useDeriveAppType } from './providers/utils/connectors'
+import { AppType, getAppType, useDeriveAppType } from './providers/utils/connectors'
 import { type PstlModalTheme, type PstlModalThemeExtension, W3aStyleResetProvider, createTheme } from './theme'
 import {
   getAllChainsInfo,
@@ -87,7 +85,7 @@ export {
   PstlW3Providers,
   PstlWagmiProvider,
   // hooks
-  usePstlEthereumClient,
+  // usePstlEthereumClient,
   usePstlWagmiClient,
   // utils
   getAllChainsInfo,
@@ -95,8 +93,6 @@ export {
   getSafeAppChainInfo,
   getSafeAppChainShortName,
   addConnector,
-  addFrameConnector,
-  addPublicClients,
   getAppType,
   useDeriveAppType,
   // types

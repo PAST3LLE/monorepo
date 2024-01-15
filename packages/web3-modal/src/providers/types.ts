@@ -1,31 +1,51 @@
-import { IFrameEthereumConnector } from '@past3lle/wagmi-connectors/IFrameConnector'
-import { ConfigCtrlState } from '@web3modal/core'
-import { EthereumClient } from '@web3modal/ethereum'
-import { Web3ModalProps as Web3ModalConfigOriginal } from '@web3modal/react'
-import { Chain as ChainWagmi } from 'wagmi'
+// import { ConfigCtrlState } from '@web3modal/core'
+import { Chain } from 'viem'
+// import { EthereumClient } from '@web3modal/ethereum'
+// import { Web3ModalProps as Web3ModalConfigOriginal } from '@web3modal/react'
+import { CreateConnectorFn, WagmiProviderProps } from 'wagmi'
+import { walletConnect } from 'wagmi/connectors'
 
 import { PstlWeb3ConnectionModalProps } from '../components/modals/ConnectionModal'
 import { UserOptionsTransactionsCallbacks } from '../controllers/types'
-import { ConnectorEnhanced, ConnectorOverrides } from '../types'
-import { Chain } from '../types/chains'
+import { ConnectorOverrides } from '../types'
 import { PstlWagmiClientOptions } from './utils'
 import { AppType } from './utils/connectors'
+
+export interface ConfigCtrlState {
+  projectId: string
+  defaultChain?: Chain
+  mobileWallets?: string[]
+  desktopWallets?: string[]
+  walletImages?: Record<string, string>
+  chainImages?: Record<string, string>
+  tokenImages?: Record<string, string>
+  tokenContracts?: Record<number, string>
+  enableNetworkView?: boolean
+  enableAccountView?: boolean
+  enableExplorer?: boolean
+  explorerRecommendedWalletIds?: string[] | 'NONE'
+  explorerExcludedWalletIds?: string[] | 'ALL'
+  termsOfServiceUrl?: string
+  privacyPolicyUrl?: string
+}
 
 export type Web3ModalThemeVariables = {
   '--w3m-color-bg-1'?: string
   '--w3m-color-bg-2'?: string
   '--w3m-color-fg-1'?: string
-} & Web3ModalConfigOriginal['themeVariables']
+} & Record<string, string>
 
-type Web3ModalConfig<ID extends number> = Omit<
-  ConfigCtrlState,
+export type ReadonlyChains = WagmiProviderProps['config']['chains']
+
+type WalletConnectQrModalOptions = Required<Parameters<typeof walletConnect>[0]>['qrModalOptions']
+
+export type WalletConnectConfig<chains extends ReadonlyChains = ReadonlyChains> = Omit<
+  WalletConnectQrModalOptions,
   'projectId' | 'enableStandaloneMode' | 'walletConnectVersion'
 > & {
-  chains?: Chain<ID>[]
+  chains?: chains
   projectId: string
   zIndex?: number
-  themeMode?: Web3ModalConfigOriginal['themeMode']
-  themeVariables?: Web3ModalThemeVariables
 }
 
 export type PstlWeb3ModalCallbacks = {
@@ -33,7 +53,7 @@ export type PstlWeb3ModalCallbacks = {
    * @name switchChainCallback
    * @description Custom chain switching callback. E.g cookies or from URL -> changes network automatically
    */
-  switchChain?: (chains: Chain<number>[], ...params: any[]) => Promise<Chain<number> | undefined>
+  switchChain?: (chains: ReadonlyChains, ...params: any[]) => Promise<ReadonlyChains[number] | undefined>
   /**
    * @name filterChains
    * @description Custom callback for filtering available chains e.g production domain vs develop etc
@@ -43,7 +63,7 @@ export type PstlWeb3ModalCallbacks = {
    * @alias hardLimitChains
    * @returns Filtered list of available chains
    */
-  filterChains?: (chains: Chain<number>[], ...params: any[]) => Chain<number>[]
+  filterChains?: (chains: ReadonlyChains, ...params: any[]) => ReadonlyChains
   /**
    * @name hardLimitChains
    * @description Custom callback for filtering available chains e.g production domain vs develop etc
@@ -53,7 +73,7 @@ export type PstlWeb3ModalCallbacks = {
    * @alias filterChains
    * @returns Filtered list of available chains
    */
-  hardLimitChains?: (chains: Chain<number>[], ...params: any[]) => Chain<number>[]
+  hardLimitChains?: (chains: ReadonlyChains, ...params: any[]) => ReadonlyChains
   /**
    * @name softLimitChains
    * @description Custom callback for softly (cosmetically) filtering available chains e.g production domain vs develop etc
@@ -62,7 +82,7 @@ export type PstlWeb3ModalCallbacks = {
    * @note this will REMOVE compatibility for chains filtered out. If you just want COSMETIC filtering, see hardLimitChains
    * @returns Cosmetically filtered list of available chains
    */
-  softLimitChains?: (chains: Chain<number>[], ...params: any[]) => Chain<number>[]
+  softLimitChains?: (chains: ReadonlyChains, ...params: any[]) => ReadonlyChains
   /**
    * @name transactions
    * @description Optional. Transaction related options. E.g callbacks on certain states
@@ -71,8 +91,8 @@ export type PstlWeb3ModalCallbacks = {
   transactions?: UserOptionsTransactionsCallbacks
 }
 
-export type PstlWeb3ModalOptions = Omit<
-  PstlWagmiClientOptions<number>['options'] & {
+export type PstlWeb3ModalOptions<chains extends ReadonlyChains = ReadonlyChains> = Omit<
+  PstlWagmiClientOptions<chains>['options'] & {
     /**
      * @name autoConnect
      * @description Boolean. Whether or not to attempt re-connect to last connected connector.
@@ -119,13 +139,13 @@ export type RootModalProps = Omit<
   PstlWeb3ConnectionModalProps,
   'overrides' | 'isOpen' | 'onDismiss' | 'chainIdFromUrl' | 'error'
 >
-type GenericModalConnectorOptions<C extends ConnectorEnhanced<any, any>> =
+type GenericModalConnectorOptions =
   | {
-      connectors?: ((chains: ChainWagmi[]) => C)[]
+      connectors?: CreateConnectorFn[]
       overrides?: ConnectorOverrides
     }
-  | ((chains: ChainWagmi[]) => C)[]
-export interface Web3ModalProps<ID extends number> {
+  | CreateConnectorFn[]
+export interface Web3ModalProps<chains extends ReadonlyChains = ReadonlyChains> {
   appName: string
   /**
    * @name chains
@@ -154,7 +174,7 @@ export interface Web3ModalProps<ID extends number> {
    *     [ChainId.mumbai]: "https://mumbai.polygonscan.com"
    * }
    */
-  blockExplorerUris?: Chain<ID>['blockExplorers']
+  blockExplorerUris?: chains[number]['blockExplorers']
   /**
    * @name chains
    * @descriptions Required. Chains to support.
@@ -163,7 +183,7 @@ export interface Web3ModalProps<ID extends number> {
    * ...
    * chains: [mainnet, goerli, matic, polygon]
    */
-  chains: Chain<ID>[]
+  chains: chains
   /**
    * @name connectors
    * @description Optional. Custom wagmi connectors. Loaded in normal, non-iframe dapps (e.g skills.pastelle.shop). For iFrame connectors, see {@link frameConnectors}
@@ -187,12 +207,12 @@ export interface Web3ModalProps<ID extends number> {
         }
       })
    */
-  connectors?: GenericModalConnectorOptions<ConnectorEnhanced<any, any>>
+  connectors?: GenericModalConnectorOptions
   /**
    * @name frameConnectors
    * @description iFrame connectors. ONLY loaded in iFrame Dapp browsers (e.g LedgerLive Discovery)
    */
-  frameConnectors?: GenericModalConnectorOptions<IFrameEthereumConnector>
+  frameConnectors?: GenericModalConnectorOptions
   /**
    * @name PstlW3Provider.modals
    * @description Modal props: root [{@link RootModalProps}], walletConnect [{@link Web3ModalConfig<ID>}]. See each for more info.
@@ -230,7 +250,7 @@ export interface Web3ModalProps<ID extends number> {
      * @name walletConnect
      * @description WalletConnect (Web3Modal) props
      */
-    walletConnect: Omit<Web3ModalConfig<ID>, 'chains'>
+    walletConnect: Omit<WalletConnectConfig<any>, 'chains'>
   }
   /**
    * @name clients
@@ -240,16 +260,16 @@ export interface Web3ModalProps<ID extends number> {
     /**
      * @description Optional. Wagmi client configuration. See {@link PstlWagmiClientOptions}
      */
-    wagmi?: PstlWagmiClientOptions<ID>
+    wagmi?: PstlWagmiClientOptions<chains>
     /**
      * @description Optional. Ethereum client configuration. See {@link EthereumClient}
      */
-    ethereum?: EthereumClient
+    // ethereum?: EthereumClient
   }
   /**
    * Various modal options
    */
-  options?: PstlWeb3ModalOptions
+  options?: PstlWeb3ModalOptions<chains>
   /**
    * Various modal logic callbacks
    * @description Optional. See {@link PstlWeb3ModalCallbacks}
@@ -257,10 +277,10 @@ export interface Web3ModalProps<ID extends number> {
   callbacks?: PstlWeb3ModalCallbacks
 }
 
-export type PstlWeb3ModalProps<ID extends number = number> = Web3ModalProps<ID>
-export type PstlWeb3ProviderProps<ID extends number = number> = PstlWeb3ModalProps<ID>
+export type PstlWeb3ModalProps<chains extends ReadonlyChains = ReadonlyChains> = Web3ModalProps<chains>
+export type PstlWeb3ProviderProps<chains extends ReadonlyChains = ReadonlyChains> = PstlWeb3ModalProps<chains>
 
 export type WithChainIdFromUrl = {
   chainIdFromUrl: number | undefined
 }
-export type WithCloseModalOnKeys = Pick<PstlWeb3ModalOptions, 'closeModalOnKeys'>
+export type WithCloseModalOnKeys = Pick<PstlWeb3ModalOptions<any>, 'closeModalOnKeys'>

@@ -1,12 +1,15 @@
 import { useEffect } from 'react'
-import { Chain, mainnet } from 'wagmi'
+import { ReadonlyChains } from 'src/providers/types'
+import { mainnet } from 'viem/chains'
 
 import { CHAIN_IMAGES } from '../../constants'
 import { PstlWeb3ModalProps } from '../../providers'
-import { ConnectorEnhanced, ConnectorOverrides } from '../../types'
+import { ConnectorOverrides } from '../../types'
 import { usePstlWeb3ModalStore } from '../api/usePstlWeb3ModalStore'
 
-export function useUpdateUserConfigState<ID extends number>(config: PstlWeb3ModalProps<ID>) {
+export function useUpdateUserConfigState<chains extends ReadonlyChains = ReadonlyChains>(
+  config: PstlWeb3ModalProps<chains>
+) {
   const {
     callbacks: {
       userOptions: { set }
@@ -17,7 +20,7 @@ export function useUpdateUserConfigState<ID extends number>(config: PstlWeb3Moda
     set({
       ux: {
         appType: config.options?.escapeHatches?.appType,
-        bypassScrollLock: false,
+        bypassScrollLock: true,
         closeModalOnConnect: rootConfig?.closeModalOnConnect
       },
       ui: {
@@ -25,12 +28,12 @@ export function useUpdateUserConfigState<ID extends number>(config: PstlWeb3Moda
           ...CHAIN_IMAGES,
           ...rootConfig?.chainImages
         },
-        softLimitedChains: config?.callbacks?.softLimitChains?.(config.chains) || config?.chains,
+        softLimitedChains: config?.callbacks?.softLimitChains?.(config.chains),
         walletsView: rootConfig?.walletsView
       },
       connectors: {
         hideInjectedFromRoot: rootConfig?.hideInjectedFromRoot,
-        overrides: _getConnectorOverrides(config?.connectors)
+        overrides: _getConnectorOverrides(config.connectors)
       },
       transactions: config.callbacks?.transactions
     })
@@ -38,15 +41,20 @@ export function useUpdateUserConfigState<ID extends number>(config: PstlWeb3Moda
   }, [config])
 }
 
-function _getConnectorOverrides(connectors: PstlWeb3ModalProps['connectors']) {
-  if (!connectors || Array.isArray(connectors)) return undefined
-  else if (Array.isArray(connectors?.overrides)) {
-    return connectors.overrides.reduce((acc, next, i) => {
-      const id = (connectors?.connectors as ((chains: Chain[]) => ConnectorEnhanced<any, any>)[])?.[i]?.([mainnet]).id
-      acc[id] = next
+// TODO: check this logic, should be aligned by index probably since they're 2 arrays
+function _getConnectorOverrides(uConnectors: PstlWeb3ModalProps['connectors']) {
+  if (!uConnectors || Array.isArray(uConnectors)) return undefined
+  else if (Array.isArray(uConnectors?.overrides)) {
+    const reducedConnectors = uConnectors.overrides?.reduce((acc, next, i) => {
+      const id = uConnectors?.connectors?.[i]?.({ chains: [mainnet], emitter: undefined as any })?.id
+      if (!!id && !!uConnectors.overrides?.[id]) {
+        acc[id] = next
+      }
       return acc
     }, {} as ConnectorOverrides)
+
+    return reducedConnectors
   }
 
-  return connectors?.overrides
+  return uConnectors?.overrides
 }

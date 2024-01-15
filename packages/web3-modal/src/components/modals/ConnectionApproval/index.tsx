@@ -24,7 +24,7 @@ export function ConnectionApproval() {
     callbacks: {
       open,
       error: { reset },
-      connectionStatus: { retryConnection }
+      connectionStatus: { retry }
     }
   } = usePstlWeb3ModalStore()
   const connectorOverride = connectorOverridePropSelector(overrides, possibleIds)
@@ -51,10 +51,10 @@ export function ConnectionApproval() {
           <ModalText modal="connection" node="subHeader" fontSize={'1.1em'} lineHeight={'1.2'} fontWeight={300}>
             {_getDerivedLabel(status, error)?.description}
           </ModalText>
-          {status === 'loading' && <SpinnerCircle size={100} strokeWidth={0.7} />}
+          {status === 'pending' && <SpinnerCircle size={100} strokeWidth={0.7} />}
         </ColumnCenter>
       </ConnectorLabelAndLogoWrapper>
-      {status !== 'loading' && (
+      {status !== 'pending' && (
         <FooterButtonsWrapper gap="0.25rem">
           <ModalText
             as={RowCenter}
@@ -68,13 +68,7 @@ export function ConnectionApproval() {
           >
             <ChevronLeft size={20} /> WALLETS
           </ModalText>
-          <ModalText
-            as={RowCenter}
-            modal="connection"
-            node="main"
-            onClick={() => retryConnection()}
-            justifyContent="flex-end"
-          >
+          <ModalText as={RowCenter} modal="connection" node="main" onClick={retry} justifyContent="flex-end">
             RETRY <ChevronRight size={20} />
           </ModalText>
         </FooterButtonsWrapper>
@@ -155,13 +149,13 @@ function _getDerivedLabel(
   switch (status) {
     case 'error':
       return _getErrorMessage(error)
-    case 'loading':
+    case 'pending':
       return { title: 'Approve connection' }
     case 'success':
       return { title: 'Connection successful!' }
     default:
     case 'idle':
-      return { title: 'Please try again or go back to wallet selection.' }
+      return { title: 'Please try again or go back to wallet selection' }
   }
 }
 

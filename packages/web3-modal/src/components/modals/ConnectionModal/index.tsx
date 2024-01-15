@@ -4,7 +4,7 @@ import React, { memo, useCallback, useMemo, useState } from 'react'
 import { ErrorCauses } from '../../../constants/errors'
 import { UserOptionsCtrlState } from '../../../controllers/types'
 import {
-  useConnectDisconnectAndCloseModals, // useConnectDisconnect,
+  useConnectDisconnect,
   usePstlWeb3ModalStore,
   useUserConnectionInfo,
   useAllWeb3Modals as useWeb3Modals
@@ -44,48 +44,50 @@ function ConnectionModalContent({
   const {
     connect: { connectAsync },
     disconnect: { disconnectAsync: disconnect }
-  } = useConnectDisconnectAndCloseModals(
-    !!closeModalOnConnect,
-    // Connect
-    {
-      onSuccess() {
-        store.callbacks.connectionStatus.set({ status: 'success' })
-        if (closeModalOnConnect) uiModalStore.root.close()
-        else uiModalStore.root.open({ route: 'Account' })
-      },
-      onError: async (error) => {
-        if (error?.name?.includes(ErrorCauses.ConnectorNotFoundError)) {
-          await store.callbacks.open({ route: 'ConnectWallet' })
-        } else {
-          store.callbacks.connectionStatus.set({ status: 'error' })
-        }
+  } = useConnectDisconnect({
+    connect: {
+      mutation: {
+        async onSuccess() {
+          store.callbacks.connectionStatus.set({ status: 'success' })
+          if (closeModalOnConnect) uiModalStore.root.close()
+          else return uiModalStore.root.open({ route: 'Account' })
+        },
+        async onError(error) {
+          if (error?.name?.includes(ErrorCauses.ConnectorNotFoundError)) {
+            await store.callbacks.open({ route: 'ConnectWallet' })
+          } else {
+            store.callbacks.connectionStatus.set({ status: 'error' })
+          }
 
-        store.callbacks.error.set(error)
+          store.callbacks.error.set(error)
+        }
       }
     },
-    // Disconnect
-    {
-      onError(error) {
-        store.callbacks.error.set(error)
+    disconnect: {
+      mutation: {
+        onError(error) {
+          store.callbacks.error.set(error)
+        }
       }
     }
-  )
+  })
+
   const connect = useCallback(
     async (args: Parameters<typeof connectAsync>[0]) => {
+      const promisedConnection = connectAsync(args)
       // open connection status modal
-      uiModalStore.root.open({
+      const promisedModalOpen = uiModalStore.root.open({
         route: 'ConnectionApproval'
       })
 
       // Set connection status state
       store.callbacks.connectionStatus.set({
-        ids: [args?.connector?.name || 'unknown', args?.connector?.id || 'unknown'],
-        status: 'loading',
+        ids: [args?.connector?.name || 'unknown'],
+        status: 'pending',
         retry: async () => connect(args)
       })
 
-      const connectionInfo = await connectAsync(args)
-
+      const [connectionInfo] = await Promise.all([promisedConnection, promisedModalOpen])
       return connectionInfo
     },
     [connectAsync, store.callbacks.connectionStatus, uiModalStore.root]
@@ -100,20 +102,23 @@ function ConnectionModalContent({
 
   const data = useMemo(
     () =>
-      userConnectionInfo.connectors.sort(sortConnectorsByRank(overrides)).map(
-        RenderConnectorOptions({
-          chainIdFromUrl,
-          hideInjectedFromRoot,
-          overrides,
-          modalView,
-          userConnectionInfo,
-          connect,
-          disconnect,
-          modalsStore: uiModalStore,
-          providerMountedState,
-          providerLoadingState
-        })
-      ),
+      userConnectionInfo.connectors
+        .slice()
+        .sort(sortConnectorsByRank(overrides))
+        .map(
+          RenderConnectorOptions({
+            chainIdFromUrl,
+            hideInjectedFromRoot,
+            overrides,
+            modalView,
+            userConnectionInfo,
+            connect,
+            disconnect,
+            modalsStore: uiModalStore,
+            providerMountedState,
+            providerLoadingState
+          })
+        ),
     [
       connect,
       disconnect,

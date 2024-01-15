@@ -1,8 +1,8 @@
 import { ButtonProps, ColumnCenter, RowCenter } from '@past3lle/components'
-import { ConnectArgs, ConnectResult, PublicClient } from '@wagmi/core'
 import React, { ReactNode, memo } from 'react'
 import styled from 'styled-components'
 import { Chain } from 'viem'
+import { UseConnectReturnType } from 'wagmi'
 
 import { UserOptionsCtrlState } from '../../../controllers/types'
 import { ConnectorInfo } from '../../../utils/connectConnector'
@@ -12,7 +12,8 @@ import { RecommendedLabel } from './RecommendedLabel'
 export type Callback =
   | (() => Promise<Chain>)
   | ((options?: any) => Promise<void>)
-  | ((args?: Partial<ConnectArgs> | undefined) => Promise<ConnectResult<PublicClient>>)
+  | UseConnectReturnType['connectAsync']
+  | UseConnectReturnType['connect']
 export type ConnectorOptionProps = Omit<ConnectorInfo, 'logo'> & {
   id?: string
   className?: string

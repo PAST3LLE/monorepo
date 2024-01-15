@@ -1,68 +1,79 @@
-import { MakeOptional } from '@past3lle/types'
-import { IFrameEthereumConnector } from '@past3lle/wagmi-connectors/IFrameConnector'
-import { EthereumClient, w3mProvider } from '@web3modal/ethereum'
+// import { EthereumClient, w3mProvider } from '@web3modal/ethereum'
 import { useMemo } from 'react'
-import { Chain } from 'viem'
-import { Config as ClientConfig, WagmiConfigProps, configureChains, createConfig as createClient } from 'wagmi'
-import { InjectedConnector } from 'wagmi/connectors/injected'
-import { publicProvider } from 'wagmi/providers/public'
+import { Chain, Transport, http } from 'viem'
+import { Config as ClientConfig, CreateConnectorFn, WagmiProviderProps, createConfig } from 'wagmi'
+import { walletConnect } from 'wagmi/connectors'
 
-import { ChainsPartialReadonly, ConnectorEnhanced } from '../../types'
-import { PstlWeb3ModalProps } from '../types'
-import { ApiKeyMap, PublicClientFn, addPublicClients } from './connectors'
+import { ConnectorEnhanced } from '../../types'
+import { PstlWeb3ModalProps, ReadonlyChains, WalletConnectConfig } from '../types'
 
 interface ClientConfigEnhanced extends Omit<ClientConfig, 'connectors'> {
-  connectors?: (() => ConnectorEnhanced<any, any>[]) | ConnectorEnhanced<any, any>[]
+  connectors?: (() => ConnectorEnhanced[]) | ConnectorEnhanced[]
 }
-interface CreateWagmiClientProps<ID extends number> {
+interface CreateWagmiClientProps<chains extends readonly [Chain, ...Chain[]]> {
   appName: string
-  chains: ChainsPartialReadonly<ID>
-  connectors: ConnectorEnhanced<any, any>[]
-  w3mConnectorProps: PstlWeb3ModalProps<ID>['modals']['walletConnect']
-  options?: Partial<Pick<ClientConfigEnhanced, 'publicClient'>> & {
-    publicClients?: ApiKeyMap<PublicClientFn>[]
+  chains: chains
+  connectors: CreateConnectorFn[]
+  w3mConnectorProps: WalletConnectConfig
+  options?: Partial<Pick<ClientConfigEnhanced, 'getClient'>> & {
+    transports?: Record<chains[number]['id'], Transport>
     pollingInterval?: number
-    autoConnect?: boolean
-    connectors?: ((chains: Chain[]) => ConnectorEnhanced<any, any>)[]
+    connectors?: CreateConnectorFn[]
   }
 }
-export type WagmiClient = ReturnType<typeof createClient>
-function createWagmiClient<ID extends number>({
+
+declare module 'wagmi' {
+  interface Register {
+    config: WagmiClient
+  }
+}
+
+export type WagmiClient = ReturnType<typeof createConfig>
+function createWagmiClient<chains extends readonly [Chain, ...Chain[]]>({
   options,
   ...props
-}: CreateWagmiClientProps<ID>): WagmiConfigProps['config'] {
-  const { publicClient } = configureChains(
-    props.chains as Chain[],
-    [
-      ...addPublicClients(options?.publicClients || [], props.chains as Chain[]),
-      w3mProvider({ projectId: props.w3mConnectorProps.projectId }),
-      publicProvider()
-    ],
-    {
-      pollingInterval: options?.pollingInterval || 4000
-    }
+}: CreateWagmiClientProps<chains>): WagmiProviderProps['config'] {
+  const transportsMap = props.chains.reduce(
+    (acc, chain) => ({
+      ...acc,
+      [chain.id]: http()
+    }),
+    {} as Record<chains[number]['id'], Transport>
   )
 
-  return createClient({
-    autoConnect: !!options?.autoConnect,
-    connectors: props?.connectors,
-    publicClient: options?.publicClient || publicClient
-  }) as WagmiConfigProps['config']
-}
-function createEthereumClient<ID extends number>(
-  wagmiClient: ReturnType<typeof createWagmiClient>,
-  chains: ChainsPartialReadonly<ID>
-) {
-  return new EthereumClient(wagmiClient, chains as Chain[])
+  const connectors = [
+    walletConnect({
+      ...props.w3mConnectorProps,
+      projectId: props.w3mConnectorProps.projectId,
+      showQrModal: true,
+      qrModalOptions: props.w3mConnectorProps
+    }),
+    ...props.connectors
+  ]
+
+  return createConfig({
+    chains: props.chains,
+    connectors,
+    transports: { ...transportsMap, ...options?.transports }
+  })
 }
 
-export type PstlWagmiClientOptions<ID extends number> = {
+// function createEthereumClient<chains extends ReadonlyChains = ReadonlyChains>(
+//   wagmiClient: ReturnType<typeof createWagmiClient>,
+//   chains: chains
+// ) {
+//   return new EthereumClient(wagmiClient, chains as any)
+// }
+
+export type PstlWagmiClientOptions<chains extends readonly [Chain, ...Chain[]]> = {
   client?: WagmiClient
-  options?: Partial<CreateWagmiClientProps<ID>['options']>
+  options?: Partial<CreateWagmiClientProps<chains>['options']>
 }
 
-export function usePstlWagmiClient<ID extends number>(
-  props: Omit<PstlWeb3ModalProps<ID>, 'connectors'> & { connectors: CreateWagmiClientProps<ID>['connectors'] }
+export function usePstlWagmiClient<chains extends ReadonlyChains>(
+  props: Omit<PstlWeb3ModalProps<chains>, 'connectors'> & {
+    connectors: CreateWagmiClientProps<chains>['connectors']
+  }
 ): ReturnType<typeof createWagmiClient> {
   return useMemo(
     () =>
@@ -79,23 +90,23 @@ export function usePstlWagmiClient<ID extends number>(
   )
 }
 
-export function usePstlEthereumClient<ID extends number>(
-  ethereumClient: EthereumClient | undefined,
-  wagmiClient: ReturnType<typeof createWagmiClient>,
-  chains: ChainsPartialReadonly<ID>
-) {
-  const client = useMemo(
-    () => (!ethereumClient ? createEthereumClient(wagmiClient, chains) : ethereumClient),
-    [chains, ethereumClient, wagmiClient]
-  )
+// export function usePstlEthereumClient<chains extends ReadonlyChains>(
+//   ethereumClient: EthereumClient | undefined,
+//   wagmiClient: ReturnType<typeof createWagmiClient>,
+//   chains: chains
+// ) {
+//   const client = useMemo(
+//     () => (!ethereumClient ? createEthereumClient(wagmiClient, chains) : ethereumClient),
+//     [chains, ethereumClient, wagmiClient]
+//   )
 
-  return client
-}
+//   return client
+// }
 
 /**
  * @name addConnector
  * @description Adds a new Wagmi connector to the modal. Takes 2 parameters:
- * @param Connector - Uninstantiated connector Class
+ * @param ConnectorFn - CreateConnectorFn
  * @param params - Class constructor "options" params passed inside an object
  * @returns Instantiated connector with set options and chains (passed from root inside API)
  * 
@@ -117,27 +128,7 @@ export function usePstlEthereumClient<ID extends number>(
     }
   })
  */
-
-type InjectedConnectorOptions = MakeOptional<
-  Required<Required<Required<ConstructorParameters<typeof InjectedConnector>>[0]>['options']>,
-  'shimDisconnect'
->
-type GetConnectorConstructorParams<C extends Instance<ConnectorEnhanced<any, any>>> =
-  C extends Instance<InjectedConnector>
-    ? InjectedConnectorOptions
-    : // @ts-expect-error - not inferring constructor args correctly
-      Omit<ConstructorParameters<C>[0], 'chains'>['options']
-
 export const addConnector =
-  <C extends Instance<ConnectorEnhanced<any, any>>>(Connector: C, options: GetConnectorConstructorParams<C>) =>
-  (chains: Chain[]) =>
-    new Connector({ chains, options })
-
-export const addFrameConnector =
-  <C extends Instance<IFrameEthereumConnector>>(Connector: C, options: GetConnectorConstructorParams<C>) =>
-  (chains: Chain[]) =>
-    new Connector({ chains, options })
-
-type Instance<T> = new (...args: any[]) => T
-
-export { addPublicClients } from './connectors'
+  <C extends CreateConnectorFn>(ConnectorFn: C, options: Omit<Parameters<C>[0], 'chains'>) =>
+  (chains: readonly [Chain, ...Chain[]]) =>
+    ConnectorFn({ chains, ...options })

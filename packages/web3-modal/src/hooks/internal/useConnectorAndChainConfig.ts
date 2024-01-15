@@ -1,18 +1,17 @@
 import { devDebug } from '@past3lle/utils'
-import { IFrameEthereumConnector } from '@past3lle/wagmi-connectors/IFrameConnector'
-import { LedgerIFrameConnector } from '@past3lle/wagmi-connectors/LedgerIFrameConnector'
-import { w3mConnectors } from '@web3modal/ethereum'
+// import { IFrameEthereumConnector } from '@past3lle/wagmi-connectors/IFrameConnector'
+// import { LedgerIFrameConnector } from '@past3lle/wagmi-connectors/LedgerIFrameConnector'
+// import { w3mConnectors } from '@web3modal/ethereum'
 import { useMemo } from 'react'
-import { Chain } from 'viem'
-import { SafeConnector } from 'wagmi/connectors/safe'
+import { CreateConnectorFn, WagmiProviderProps } from 'wagmi'
+import { safe } from 'wagmi/connectors'
 
-import { PstlWeb3ModalProps, addConnector } from '../../providers'
-import { getAppType, hardFilterChains, mapChainsToConnectors } from '../../providers/utils/connectors'
-import { ConnectorEnhanced } from '../../types'
+import { PstlWeb3ModalProps } from '../../providers'
+import { getAppType, hardFilterChains } from '../../providers/utils/connectors'
 
-export function useConnectorAndChainConfig(
-  configProps: PstlWeb3ModalProps<number>
-): Omit<PstlWeb3ModalProps<number>, 'connectors'> & { connectors: ConnectorEnhanced<any, any>[] } {
+export function useConnectorAndChainConfig<config extends PstlWeb3ModalProps<WagmiProviderProps['config']['chains']>>(
+  configProps: config
+): Omit<config, 'connectors'> & { connectors: CreateConnectorFn[] } {
   // Pick out the deps
   const {
     chains,
@@ -33,25 +32,24 @@ export function useConnectorAndChainConfig(
       case 'SAFE_APP': {
         devDebug('[@past3lle/web3-modal] App type detected: SAFE APP')
 
-        const connectors = mapChainsToConnectors([addConnector(SafeConnector, { debug: true })], chains)
+        const connectors = [safe()]
         return { ...configProps, chains, connectors }
       }
       case 'LEDGER_LIVE': {
         devDebug('[@past3lle/web3-modal] App type detected: LEDGER LIVE')
 
-        const connectors = mapChainsToConnectors([addConnector(LedgerIFrameConnector, {})], chains)
+        const connectors: CreateConnectorFn[] = [
+          /* () => new LedgerIFrameConnector({ options: {} }) */
+        ]
         return { ...configProps, chains, connectors }
       }
       case 'IFRAME': {
         devDebug('[@past3lle/web3-modal] App type detected: IFRAME APP')
 
-        const connectors = mapChainsToConnectors(
-          [
-            addConnector(IFrameEthereumConnector, {}),
-            ...(_getConnectorsFromConfig(configProps?.frameConnectors) || [])
-          ],
-          chains
-        )
+        const connectors = [
+          // () => new IFrameEthereumConnector({ options: {} }),
+          ...(_getConnectorsFromConfig(configProps?.frameConnectors) || [])
+        ]
         return { ...configProps, connectors }
       }
       case 'TEST_FRAMEWORK_IFRAME':
@@ -59,27 +57,7 @@ export function useConnectorAndChainConfig(
         devDebug('[@past3lle/web3-modal] App type detected: NORMAL DAPP', configProps?.connectors)
 
         // Map connectors and pass configProps chains
-        const userConnectors = mapChainsToConnectors(_getConnectorsFromConfig(configProps?.connectors) || [], chains)
-        const walletConnectProviders = w3mConnectors({
-          projectId: wcProjectId,
-          chains: configProps.chains as Chain[]
-        })
-
-        const connectors = userConnectors.slice()
-
-        // Check if we have multiple providers via window.ethereum.providersMap (coinbase wallet)
-        const userConnectorsContainInjected = userConnectors?.some(
-          (conn) => conn.id === 'injected' || conn.id === 'metaMask'
-        )
-        if (userConnectorsContainInjected) {
-          // filter injected providers passed by walletconnect to dedup
-          connectors.push(...walletConnectProviders.filter((connector) => connector.id !== 'injected'))
-        }
-        // otherwise push the walletConnect providers
-        // which includes any injected providers
-        else {
-          connectors.push(...walletConnectProviders)
-        }
+        const connectors = _getConnectorsFromConfig(configProps?.connectors) || []
 
         return { ...configProps, connectors }
       }

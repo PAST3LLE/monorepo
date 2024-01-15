@@ -1,5 +1,6 @@
-import { ConnectArgs } from '@wagmi/core'
 import { proxy, subscribe as valtioSub } from 'valtio/vanilla'
+import { Config } from 'wagmi'
+import { ConnectMutateAsync } from 'wagmi/query'
 
 import type { ConnectionStatusCtrlState } from './types'
 
@@ -25,7 +26,7 @@ export const ConnectionStatusCtrl = {
   resetConnectorIds() {
     state.ids = []
   },
-  async retryConnection(args?: Partial<ConnectArgs>) {
+  async retryConnection(args: Parameters<ConnectMutateAsync<Config>>[0]) {
     return state.retry?.(args)
   },
   reset() {

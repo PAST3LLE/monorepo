@@ -1,6 +1,8 @@
-import { Address, Chain, type useConnect } from 'wagmi'
+import { Address, Chain } from 'viem'
+import { type useConnect } from 'wagmi'
 
 import { PstlWeb3ModalProps } from '../../providers'
+import { ReadonlyChains } from '../../providers/types'
 import { AppType } from '../../providers/utils/connectors'
 import { ChainImages } from '../../types'
 import { ConnectorOverrides } from '../../types/connectors'
@@ -114,7 +116,7 @@ export interface UserOptionsCtrlState {
      * @name softLimitedChains
      * @description Optional. Cosmetically limited chains from Network modal switcher.
      */
-    softLimitedChains?: Chain[]
+    softLimitedChains?: Chain[] | ReadonlyChains
     /**
        * @name chainImages
        * @default {
