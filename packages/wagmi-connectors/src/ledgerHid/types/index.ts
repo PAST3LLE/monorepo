@@ -11,7 +11,7 @@ export type TransactionRequestExtended = TransactionRequest & {
   gas?: BigNumberish
 }
 
-export type ConnectorUpdate<P> = { provider: P; account: string | Address }
+export type ConnectorUpdate<P> = { provider: P; accounts: readonly Address[] }
 
 export type LoadConfig = {
   nftExplorerBaseURL?: string | null

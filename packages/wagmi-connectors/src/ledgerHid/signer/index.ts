@@ -45,22 +45,14 @@ export class LedgerHQSigner extends Signer implements TypedDataSigner {
   }
 
   async getAddress(path = this.path): Promise<string> {
-    if (!this._addressMap.has(path)) {
-      const address = await this._queryAndFormatAddress(path)
-      this._address = address
-      this._addressMap.set(path, address)
-    }
+    await this._checkAndSetAddressMap(path)
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return this._addressMap.get(path)!
   }
 
   async setAddress(path = this.path): Promise<void> {
-    if (!this._addressMap.has(path)) {
-      const address = await this._queryAndFormatAddress(path)
-      this._address = address
-      this._addressMap.set(path, address)
-    }
+    await this._checkAndSetAddressMap(path)
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     this._address = this._addressMap.get(path)!
@@ -182,5 +174,13 @@ export class LedgerHQSigner extends Signer implements TypedDataSigner {
 
     const address = this.provider.formatter.address(account.address)
     return address
+  }
+
+  private async _checkAndSetAddressMap(path: string) {
+    if (!this._addressMap.has(path)) {
+      const address = await this._queryAndFormatAddress(path)
+      this._address = address
+      this._addressMap.set(path, address)
+    }
   }
 }
