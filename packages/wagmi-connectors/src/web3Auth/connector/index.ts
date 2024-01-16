@@ -1,3 +1,4 @@
+import { devDebug } from '@past3lle/utils'
 import type { IAdapter, IProvider, IWeb3Auth, WALLET_ADAPTER_TYPE } from '@web3auth/base'
 import { ADAPTER_STATUS, CHAIN_NAMESPACES, WALLET_ADAPTERS, log } from '@web3auth/base'
 import type { IWeb3AuthModal, ModalConfig, Web3Auth } from '@web3auth/modal'
@@ -33,6 +34,7 @@ export function web3Auth<A extends IAdapter<unknown>>(options: Options<A>) {
 
   type Properties = {
     ready: boolean
+    activate(): Promise<void>
     isChainUnsupported(_chainId: number | undefined): boolean
     disconnectListeners(): void
   }
@@ -41,14 +43,16 @@ export function web3Auth<A extends IAdapter<unknown>>(options: Options<A>) {
   }
 
   return createConnector<IProvider, Properties, StorageItem>((config) => ({
-    ready: !IS_SERVER,
+    ready: false,
     name: 'Web3Auth',
     id: 'web3auth',
     get type() {
       return web3Auth.type
     },
 
-    async setup() {
+    async activate() {
+      if (this.ready) return devDebug(`[@past3lle/wagmi-connectors] ${this.id} already activated, skipping.`)
+
       web3AuthInstance = options.web3AuthInstance
       adapter = options?.adapter
       plugins = options?.plugins
@@ -71,6 +75,7 @@ export function web3Auth<A extends IAdapter<unknown>>(options: Options<A>) {
 
     async connect({ chainId }: { chainId?: number } = {}) {
       try {
+        if (!this.ready) await this.activate()
         config.emitter.emit('message', {
           type: 'connecting'
         })
@@ -90,9 +95,8 @@ export function web3Auth<A extends IAdapter<unknown>>(options: Options<A>) {
         if (!web3AuthInstance.connected) {
           if (isIWeb3AuthModal(web3AuthInstance)) {
             await web3AuthInstance.connect()
-          }
-          if (loginParams) {
-            await web3AuthInstance.connectTo(WALLET_ADAPTERS.OPENLOGIN, loginParams)
+          } else if (loginParams) {
+            await (web3AuthInstance as IWeb3Auth)?.connectTo?.(WALLET_ADAPTERS.OPENLOGIN, loginParams)
           } else {
             log.error('please provide valid loginParams when using @web3auth/no-modal')
             throw new UserRejectedRequestError(
@@ -122,6 +126,16 @@ export function web3Auth<A extends IAdapter<unknown>>(options: Options<A>) {
         this.onDisconnect()
         throw new UserRejectedRequestError('Something went wrong' as unknown as Error)
       }
+    },
+
+    async disconnect(): Promise<void> {
+      await web3AuthInstance?.logout()
+      
+      this.onDisconnect()
+      
+      const provider = await this.getProvider()
+      provider.removeListener('accountsChanged', this.onAccountsChanged.bind(this))
+      provider.removeListener('chainChanged', this.onChainChanged.bind(this))
     },
 
     async getWalletClient({ chainId }: { chainId?: number } = {}): Promise<WalletClient> {
@@ -213,13 +227,6 @@ export function web3Auth<A extends IAdapter<unknown>>(options: Options<A>) {
         log.error('Error: Cannot change chain', error)
         throw new SwitchChainError(error as Error)
       }
-    },
-
-    async disconnect(): Promise<void> {
-      await web3AuthInstance?.logout()
-      const provider = await this.getProvider()
-      provider.removeListener('accountsChanged', this.onAccountsChanged.bind(this))
-      provider.removeListener('chainChanged', this.onChainChanged.bind(this))
     },
 
     onAccountsChanged: (accounts: string[]): void => {

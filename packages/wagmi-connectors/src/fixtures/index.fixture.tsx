@@ -59,9 +59,6 @@ const Web3Button = () => {
   const { disconnectAsync } = useDisconnect()
   const { data: switchChainData, chains, switchChainAsync } = useSwitchChain()
 
-  useEffect(() => {
-  }, [switchChainData])
-
   const [error, setError] = useState<Error | undefined>(undefined)
 
   useEffect(() => {
@@ -123,7 +120,12 @@ const Web3Button = () => {
       <button
         disabled={!connector}
         style={{ cursor: 'pointer', margin: 20, padding: 20, background: 'indianred' }}
-        onClick={() => disconnectAsync().catch(setError)}
+        onClick={() =>
+          disconnectAsync().catch((e: any) => {
+            setError(e)
+            throw new Error('wagmi-connectors -- error disconnecting connector:' + e?.message)
+          })
+        }
       >
         DISCONNECT
       </button>
@@ -243,5 +245,5 @@ const withThemeProvider = (Component: () => JSX.Element | null) => (
 )
 
 export default {
-  web3modal: withThemeProvider(() => <DefaultApp />),
+  web3modal: withThemeProvider(() => <DefaultApp />)
 }
