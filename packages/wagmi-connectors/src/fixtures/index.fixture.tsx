@@ -1,8 +1,7 @@
-import React, { ReactNode, useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Address, parseEther } from 'viem'
 import { useAccount, useBalance, useConnect, useDisconnect, useSendTransaction, useSwitchChain } from 'wagmi'
 
-import { ledgerHid } from '../ledgerHid'
 import { LedgerHQProvider } from '../ledgerHid/provider'
 import { CosmosWagmiProvider } from './config'
 
@@ -244,5 +243,5 @@ const withThemeProvider = (Component: () => JSX.Element | null) => (
 )
 
 export default {
-  web3modal: withThemeProvider(() => <DefaultApp />)
+  web3modal: withThemeProvider(() => <DefaultApp />),
 }

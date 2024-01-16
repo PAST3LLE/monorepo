@@ -1,7 +1,14 @@
 import { TorusWalletConnectorPlugin } from '@web3auth/torus-wallet-connector-plugin'
 import { injected } from 'wagmi/connectors'
 
+import { iframeEthereum } from '../iframeEthereum'
 import { ledgerHid } from '../ledgerHid'
+import { ledgerLive } from '../ledgerLive'
+import { pstlWeb3Auth } from '../web3Auth'
+
+if (!process.env.REACT_APP_WEB3AUTH_DEVNET_CLIENT_ID) {
+  throw new Error('Missing process.env.REACT_APP_WEB3AUTH_DEVNET_CLIENT_ID!')
+}
 
 const TORUS_LOGO = 'https://web3auth.io/docs/contents/logo-ethereum.png'
 
@@ -22,35 +29,11 @@ export const web3authPlugins = {
     }
   })
 }
-
 export const wagmiConnectors = {
-  // ledgerLiveModal: addConnector(LedgerConnector, {
-  //   enableDebugLogs: false,
-  //   walletConnectVersion: 2,
-  //   projectId: WALLETCONNECT_ID,
-  //   requiredChains: [1]
-  // }),
-  ledgerHID: ledgerHid
-  // ledgerIFrame: () => new LedgerIFrameConnector({ options: {} }),
-  // Can also instantiate like this.
-  // addConnector is just syntactic sugar
-  // PstlWeb3AuthConnector requires this instantiation
-  // web3auth: (chains: ReadonlyChains) => {
-  //   if (typeof process.env.REACT_APP_WEB3AUTH_DEVNET_CLIENT_ID !== 'string') {
-  //     throw new Error('Missing REACT_APP_WEB3AUTH_DEVNET_CLIENT_ID!')
-  //   }
-  //   return PstlWeb3AuthConnector(chains as any, {
-  //     projectId: process.env.REACT_APP_WEB3AUTH_DEVNET_CLIENT_ID,
-  //     network: 'sapphire_devnet',
-  //     uiConfig: {
-  //       appName: 'SKILLFORGE TEST',
-  //       logoLight: FORGE_LOGO,
-  //       logoDark: FORGE_LOGO
-  //     },
-  //     uxMode: 'popup',
-  //     preset: 'DISALLOW_EXTERNAL_WALLETS'
-  //   })
-  // }
+  ledgerLive,
+  ledgerHid,
+  iframe: iframeEthereum,
+  web3auth: pstlWeb3Auth
 }
 
 export const INJECTED_CONNECTORS = [
