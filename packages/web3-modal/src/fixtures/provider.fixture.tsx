@@ -24,6 +24,7 @@ import { PstlW3Providers } from '../providers'
 import { createTheme } from '../theme'
 import { COMMON_CONNECTOR_OVERRIDES, DEFAULT_PROPS, DEFAULT_PROPS_WEB3AUTH, pstlModalTheme } from './config'
 import { INJECTED_CONNECTORS, wagmiConnectors } from './connectorsAndPlugins'
+import { ledgerHid } from '@past3lle/wagmi-connectors'
 
 config()
 
@@ -280,7 +281,7 @@ export default {
         connectors: {
           connectors: [
             // wagmiConnectors.ledgerLiveModal,
-            // wagmiConnectors.web3auth(DEFAULT_PROPS_WEB3AUTH.chains)
+            wagmiConnectors.web3auth
           ],
           overrides: COMMON_CONNECTOR_OVERRIDES
         },
@@ -307,8 +308,7 @@ export default {
         ...DEFAULT_PROPS,
         connectors: {
           connectors: [
-            // wagmiConnectors.ledgerLiveModal,
-            wagmiConnectors.ledgerHID({
+            ledgerHid({
               shimDisconnect: true,
               async onDeviceDisconnect() {
                 alert('Disconnected ledger!')
@@ -446,7 +446,7 @@ export default {
           ...DEFAULT_PROPS,
           connectors: {
             connectors: [
-              wagmiConnectors.ledgerHID({ shimDisconnect: true })
+              wagmiConnectors.ledgerHID
               // wagmiConnectors.ledgerLiveModal
             ],
             overrides: COMMON_CONNECTOR_OVERRIDES
@@ -521,7 +521,7 @@ export default {
         config={{
           ...DEFAULT_PROPS_WEB3AUTH,
           connectors: {
-            connectors: [wagmiConnectors.ledgerHID({ shimDisconnect: true }), ...INJECTED_CONNECTORS],
+            connectors: [wagmiConnectors.ledgerHID, ...INJECTED_CONNECTORS],
             overrides: {
               ...COMMON_CONNECTOR_OVERRIDES,
               'ledger-hid': {
@@ -572,7 +572,7 @@ export default {
         config={{
           ...DEFAULT_PROPS_WEB3AUTH,
           connectors: {
-            connectors: [wagmiConnectors.ledgerHID({ shimDisconnect: true }), ...INJECTED_CONNECTORS],
+            connectors: [wagmiConnectors.ledgerHID, ...INJECTED_CONNECTORS],
             overrides: {
               ...COMMON_CONNECTOR_OVERRIDES,
               'ledger-hid': {
@@ -628,7 +628,7 @@ export default {
             }
           },
           connectors: {
-            connectors: [wagmiConnectors.ledgerHID({ shimDisconnect: true }), ...INJECTED_CONNECTORS],
+            connectors: [wagmiConnectors.ledgerHID, ...INJECTED_CONNECTORS],
             overrides: COMMON_CONNECTOR_OVERRIDES
           },
           modals: {
@@ -689,7 +689,7 @@ export default {
             }
           },
           connectors: {
-            connectors: [wagmiConnectors.ledgerHID({ shimDisconnect: true }), ...INJECTED_CONNECTORS],
+            connectors: [wagmiConnectors.ledgerHID, ...INJECTED_CONNECTORS],
             overrides: COMMON_CONNECTOR_OVERRIDES
           },
           modals: {
@@ -752,7 +752,7 @@ export default {
             }
           },
           connectors: {
-            connectors: [wagmiConnectors.ledgerHID({ shimDisconnect: true }), ...INJECTED_CONNECTORS],
+            connectors: [wagmiConnectors.ledgerHID, ...INJECTED_CONNECTORS],
             overrides: COMMON_CONNECTOR_OVERRIDES
           },
           modals: {
@@ -808,7 +808,7 @@ export default {
             ...DEFAULT_PROPS_WEB3AUTH.options,
             closeModalOnKeys: ['Escape', 'Esc']
           },
-          // connectors: [wagmiConnectors.ledgerHID({ shimDisconnect: true })],
+          // connectors: [wagmiConnectors.ledgerHID],
           modals: {
             ...DEFAULT_PROPS_WEB3AUTH.modals,
             root: {
@@ -852,7 +852,7 @@ export default {
         config={{
           ...DEFAULT_PROPS_WEB3AUTH,
           connectors: {
-            // connectors: [wagmiConnectors.ledgerHID({shimDisconnect: true}), wagmiConnectors.ledgerLiveModal, wagmiConnectors.web3auth],
+            connectors: [wagmiConnectors.ledgerHID, wagmiConnectors.ledgerLiveModal, wagmiConnectors.web3auth],
             overrides: {
               'ledger-hid': {
                 ...COMMON_CONNECTOR_OVERRIDES['ledger-hid'],
@@ -898,7 +898,7 @@ export default {
         config={{
           ...DEFAULT_PROPS_WEB3AUTH,
           connectors: {
-            connectors: [wagmiConnectors.ledgerHID({ shimDisconnect: true }), ...INJECTED_CONNECTORS],
+            connectors: [wagmiConnectors.ledgerHID, ...INJECTED_CONNECTORS],
             overrides: {
               ...COMMON_CONNECTOR_OVERRIDES,
               'ledger-hid': {
@@ -947,7 +947,7 @@ export default {
         config={{
           ...DEFAULT_PROPS_WEB3AUTH,
           connectors: {
-            connectors: [wagmiConnectors.ledgerHID({ shimDisconnect: true }), ...INJECTED_CONNECTORS],
+            connectors: [wagmiConnectors.ledgerHID, ...INJECTED_CONNECTORS],
             overrides: {
               ...COMMON_CONNECTOR_OVERRIDES,
               'ledger-hid': {
