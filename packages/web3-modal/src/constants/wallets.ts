@@ -11,7 +11,7 @@ export const WALLET_IMAGES = {
 
 export const DEFAULT_CONNECTOR_OVERRIDES: ConnectorOverrides = {
   walletconnect: {
-    customConnect: async ({ connector, userOptionsStore, wagmiConnect }) => {
+    customConnect: async ({ connector, userStore, wagmiConnect }) => {
       let unsubModalState: (() => void) | undefined = undefined
       try {
         if (!!connector) {
@@ -19,10 +19,14 @@ export const DEFAULT_CONNECTOR_OVERRIDES: ConnectorOverrides = {
           const provider = await wcConnector.getProvider()
 
           unsubModalState = provider.modal?.subscribeModal?.((state: any) => {
-            userOptionsStore.ux.bypassScrollLock = !!state.open
+            userStore.update({
+              ux: {
+                bypassScrollLock: !!state.open
+              }
+            })
           })
 
-          return wagmiConnect({ connector })
+          return wagmiConnect(connector)
         }
         throw new ConnectorNotFoundError()
       } catch (error) {
