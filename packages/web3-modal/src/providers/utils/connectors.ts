@@ -4,6 +4,7 @@ import { isIframe } from '@past3lle/wagmi-connectors/utils'
 import { usePstlWeb3ModalStore } from '../../hooks'
 import { isLedgerDappBrowserProvider } from '../../utils/iframe'
 import { PstlWeb3ModalProps } from '../types'
+import { Connector } from 'wagmi'
 
 export type AppType = 'IFRAME' | 'SAFE_APP' | 'LEDGER_LIVE' | 'DAPP' | 'TEST_FRAMEWORK_IFRAME'
 export function getAppType(forcedAppType?: AppType) {
@@ -47,5 +48,16 @@ export function softFilterChains(config: PstlWeb3ModalProps): PstlWeb3ModalProps
   return {
     ...config,
     chains: filteredChains
+  }
+}
+
+export function filterOutConnectorsTypes(arr: readonly Connector[], ...typesToIgnore: Connector['type'][]) {
+  return arr.filter((cc) => !typesToIgnore.includes(cc?.id))
+}
+
+export function getConnectorsArrayFromConfig(connectorsConfig: PstlWeb3ModalProps['connectors']) {
+  if (!connectorsConfig || Array.isArray(connectorsConfig)) return connectorsConfig
+  else {
+    return connectorsConfig.connectors
   }
 }

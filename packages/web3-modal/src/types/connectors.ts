@@ -1,11 +1,12 @@
-import { Config, Connector, CreateConnectorFn, UseConnectReturnType } from 'wagmi'
+import { Config, Connector } from 'wagmi'
 import { ConnectData } from 'wagmi/query'
 
-import { UserOptionsCtrlState } from '../controllers/types'
 import { AllWeb3ModalStore } from '../hooks'
+import type { ModalCtrl, UserOptionsCtrl } from '../controllers'
 
 export type FullWeb3ModalStore = { ui: AllWeb3ModalStore }
 
+export type ConnectFunction = (connector: ConnectorEnhanced) => Promise<ConnectData<Config>>
 export type ConnectorEnhancedExtras = {
   /**
    * @name customName Optional. Custom display name.
@@ -20,15 +21,11 @@ export type ConnectorEnhancedExtras = {
    * @see {AllWeb3ModalStore}
    * @returns whatever it needs to return but should connect to the connector!
    */
-  customConnect?: <C extends CreateConnectorFn | ConnectorEnhanced>(params: {
-    store: FullWeb3ModalStore['ui']
-    userOptionsStore: UserOptionsCtrlState
+  customConnect?: <C extends ConnectorEnhanced>(params: {
+    modalsStore: typeof ModalCtrl
+    userStore: typeof UserOptionsCtrl
     connector?: C
-    wagmiConnect: (
-      params: Omit<Parameters<UseConnectReturnType['connectAsync']>[0], 'connector'> & {
-        connector: CreateConnectorFn | ConnectorEnhanced
-      }
-    ) => Promise<ConnectData<Config>>
+    wagmiConnect: ConnectFunction
   }) => unknown
   /**
    * @name modalNodeId Optional. String ID name of modal node. Used to show async loader on mount

@@ -8,17 +8,17 @@ import { useConnectorAndChainConfig } from '../hooks/internal/useConnectorAndCha
 import { useUpdateUserConfigState } from '../hooks/state/useUpdateUserConfigState'
 import type { Chain, ChainsPartialReadonly, ReadonlyChain } from '../types'
 import type { PstlWeb3ModalProps } from './types'
-import { PstlWagmiClientOptions, addConnector, usePstlWagmiClient } from './utils'
+import { PstlWagmiClientOptions, usePstlWagmiClient } from './utils'
 import { PstlWagmiProvider } from './wagmi'
-
-// import { Web3Modal } from './web3Modal'
 
 const PstlW3ProvidersBase = <chains extends WagmiProviderProps['config']['chains']>({
   children,
-  config
+  config,
+  autoReconnect = false
 }: {
   children: ReactNode
   config: PstlWeb3ModalProps<chains>
+  autoReconnect?: boolean
 }) => {
   // Get any specific connector/chain config based on the type of app we're running
   // e.g are we in a Safe app? If so, run the Safe connector automatically set with the URL shortName chain
@@ -31,21 +31,19 @@ const PstlW3ProvidersBase = <chains extends WagmiProviderProps['config']['chains
   useUpdateUserConfigState(config)
 
   return (
-    <>
-      <PstlWagmiProvider
-        wagmiClient={wagmiClient}
-        chainFromUrl={chainFromUrl}
-        autoConnect={config.options?.autoConnect}
-      >
-        <PstlWeb3Modal
-          {...config.modals.root}
-          chainIdFromUrl={chainFromUrl?.id}
-          closeModalOnKeys={config.options?.closeModalOnKeys}
-        />
-        <TransactionsUpdater />
-        {children}
-      </PstlWagmiProvider>
-    </>
+    <PstlWagmiProvider
+      wagmiClient={wagmiClient}
+      chainFromUrl={chainFromUrl}
+      autoConnect={autoReconnect || config.options?.autoConnect}
+    >
+      <PstlWeb3Modal
+        {...config.modals.root}
+        chainIdFromUrl={chainFromUrl?.id}
+        closeModalOnKeys={config.options?.closeModalOnKeys}
+      />
+      <TransactionsUpdater />
+      {children}
+    </PstlWagmiProvider>
   )
 }
 
@@ -54,12 +52,8 @@ const PstlW3Providers = memo(PstlW3ProvidersBase)
 export {
   PstlW3Providers,
   PstlWagmiProvider,
-  // Web3Modal as PstlWeb3Modal,
   // hooks
-  // usePstlEthereumClient,
   usePstlWagmiClient,
-  // utils
-  addConnector,
   // types
   type PstlWeb3ModalProps,
   type PstlWagmiClientOptions,

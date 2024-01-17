@@ -1,7 +1,7 @@
 import { useIsExtraSmallMediaWidth } from '@past3lle/hooks'
 import React, { memo, useCallback, useMemo, useState } from 'react'
+import { Connector } from 'wagmi'
 
-import { ErrorCauses } from '../../../constants/errors'
 import { UserOptionsCtrlState } from '../../../controllers/types'
 import {
   useConnectDisconnect,
@@ -9,6 +9,7 @@ import {
   useUserConnectionInfo,
   useAllWeb3Modals as useWeb3Modals
 } from '../../../hooks'
+import { isProviderOrConnectorNotFoundError } from '../../../utils/errors'
 import { LoadingScreen } from '../../LoadingScreen'
 import { WalletsWrapper } from '../common/styled'
 import { BaseModalProps, ModalId } from '../common/types'
@@ -53,13 +54,17 @@ function ConnectionModalContent({
           else return uiModalStore.root.open({ route: 'Account' })
         },
         async onError(error) {
-          if (error?.name?.includes(ErrorCauses.ConnectorNotFoundError)) {
+          // Head back to wallets if it's an "unfound" wallet error
+          // e.g user doesnt have wallet installed and should pick another wallet
+          if (isProviderOrConnectorNotFoundError(error)) {
             await store.callbacks.open({ route: 'ConnectWallet' })
-          } else {
+          }
+          // Else set the error in the approval modal
+          else {
             store.callbacks.connectionStatus.set({ status: 'error' })
           }
 
-          store.callbacks.error.set(error)
+          return store.callbacks.error.set(error)
         }
       }
     },
@@ -73,22 +78,20 @@ function ConnectionModalContent({
   })
 
   const connect = useCallback(
-    async (args: Parameters<typeof connectAsync>[0]) => {
-      const promisedConnection = connectAsync(args)
+    async (connector: Connector) => {
       // open connection status modal
-      const promisedModalOpen = uiModalStore.root.open({
+      uiModalStore.root.open({
         route: 'ConnectionApproval'
       })
 
       // Set connection status state
       store.callbacks.connectionStatus.set({
-        ids: [args?.connector?.name || 'unknown'],
+        ids: [connector?.id, connector?.type, connector?.name],
         status: 'pending',
-        retry: async () => connect(args)
+        retry: async () => connect(connector)
       })
 
-      const [connectionInfo] = await Promise.all([promisedConnection, promisedModalOpen])
-      return connectionInfo
+      return connectAsync({ connector })
     },
     [connectAsync, store.callbacks.connectionStatus, uiModalStore.root]
   )

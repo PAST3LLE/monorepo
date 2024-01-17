@@ -3,10 +3,10 @@ import isEqual from 'lodash.isequal'
 import { UseConnectReturnType } from 'wagmi'
 
 import { RenderConnectorOptionsProps } from '../components/modals/ConnectionModal/RenderConnectorOptions'
-import { ErrorCauses } from '../constants/errors'
-import { UserOptionsCtrl } from '../controllers'
+import { ModalCtrl, UserOptionsCtrl } from '../controllers'
 import { usePstlWeb3Modal } from '../hooks'
-import { ConnectorEnhanced, ConnectorEnhancedExtras, FullWeb3ModalStore } from '../types'
+import { ConnectorEnhanced, ConnectorEnhancedExtras } from '../types'
+import { isProviderOrConnectorNotFoundError } from './errors'
 import { connectorOverridePropSelector, trimAndLowerCase } from './misc'
 
 type GetConnectorInfoCallbacks = {
@@ -38,7 +38,6 @@ export type ConnectorInfo = { label: string; logo?: string; connected: boolean; 
 export function runConnectorConnectionLogic(
   connector: ConnectorEnhanced,
   currentConnector: ConnectorEnhanced | undefined,
-  modalsStore: FullWeb3ModalStore['ui'],
   {
     connect,
     disconnect,
@@ -65,7 +64,6 @@ export function runConnectorConnectionLogic(
         modalType,
         connector,
         currentConnector,
-        modalsStore,
         {
           chainId,
           address,
@@ -90,7 +88,6 @@ async function _connectProvider(
   modalId: ProviderModalType,
   connector: ConnectorEnhanced,
   currentConnector: ConnectorEnhanced | undefined,
-  modalsStore: FullWeb3ModalStore['ui'],
   constants: AuxConnectorInfoConstants & {
     isModalMounted?: boolean
   },
@@ -114,13 +111,11 @@ async function _connectProvider(
   const connectCallbackParams: [
     ConnectorEnhanced,
     ConnectorEnhanced | undefined,
-    FullWeb3ModalStore['ui'],
     BaseConnectorInfoConstants,
     Pick<GetConnectorInfoCallbacks, 'open' | 'connect' | 'disconnect'>
   ] = [
     connector,
     currentConnector,
-    modalsStore,
     { chainId, address, connectorOverrides, isConnected },
     { connect, disconnect, open }
   ]
@@ -180,7 +175,6 @@ function _getProviderInfo(
 async function _handleConnectorClick(
   connector: ConnectorEnhanced,
   currentConnector: ConnectorEnhanced | undefined,
-  modalsStore: FullWeb3ModalStore['ui'],
   { address, chainId, connectorOverrides, isConnected }: BaseConnectorInfoConstants,
   { connect, disconnect, open }: Pick<GetConnectorInfoCallbacks, 'open' | 'connect' | 'disconnect'>
 ) {
@@ -188,7 +182,6 @@ async function _handleConnectorClick(
   const connectToProviderParams = {
     connector,
     connect,
-    modalsStore,
     connectorOverride: pendingConnectorOverride,
     chainId
   }
@@ -214,27 +207,23 @@ async function _handleConnectorClick(
 async function _connectToProvider({
   connector,
   connect,
-  modalsStore,
-  connectorOverride,
-  chainId
+  connectorOverride
 }: Pick<GetConnectorInfoCallbacks, 'connect'> & {
-  modalsStore: FullWeb3ModalStore['ui']
   connector: ConnectorEnhanced
   connectorOverride: ConnectorEnhancedExtras | undefined
-  chainId?: number
 }) {
   try {
     await (connectorOverride?.customConnect?.({
-      store: modalsStore,
-      userOptionsStore: UserOptionsCtrl.state,
+      modalsStore: ModalCtrl,
+      userStore: UserOptionsCtrl,
       connector,
       wagmiConnect: connect
-    }) || connect({ connector, chainId }))
+    }) || connect(connector))
   } catch (error: any) {
-    const connectorNotFoundError: boolean = (error?.message || error)?.includes(ErrorCauses.ConnectorNotFoundError)
-
-    if (connectorOverride?.downloadUrl && connectorNotFoundError && typeof globalThis?.window !== 'undefined') {
-      window.open(connectorOverride.downloadUrl, '_newtab')
+    if (!IS_SERVER) {
+      if (connectorOverride?.downloadUrl && isProviderOrConnectorNotFoundError(error)) {
+        window.open(connectorOverride.downloadUrl, '_newtab')
+      }
     }
 
     throw error
@@ -271,7 +260,7 @@ async function _delayFindDomById({
   return new Promise((resolve) =>
     setTimeout(
       () =>
-        typeof globalThis?.window?.document === 'undefined' || value >= limit
+      IS_SERVER || value >= limit
           ? resolve('BAILED')
           : resolve(document.getElementById(id)),
       freq

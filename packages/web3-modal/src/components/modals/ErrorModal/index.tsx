@@ -3,6 +3,8 @@ import React from 'react'
 import { BaseModal } from '../common'
 import { ModalText, ModalTitleText } from '../common/styled'
 
+const IS_SERVER = typeof globalThis?.window === 'undefined'
+
 export default function ErrorModal() {
   return (
     <BaseModal
@@ -33,6 +35,6 @@ export default function ErrorModal() {
 }
 
 export function refreshWindow() {
-  if (typeof globalThis?.window === 'undefined') return
+  if (IS_SERVER) return
   return globalThis.window.location.reload()
 }

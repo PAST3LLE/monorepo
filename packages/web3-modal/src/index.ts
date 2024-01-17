@@ -35,7 +35,6 @@ import {
   PstlWagmiProvider,
   type PstlWeb3ModalProps,
   type ReadonlyChain,
-  addConnector, // usePstlEthereumClient,
   usePstlWagmiClient
 } from './providers'
 import { AppType, getAppType, useDeriveAppType } from './providers/utils/connectors'
@@ -92,7 +91,6 @@ export {
   getChainInfoFromShortName,
   getSafeAppChainInfo,
   getSafeAppChainShortName,
-  addConnector,
   getAppType,
   useDeriveAppType,
   // types

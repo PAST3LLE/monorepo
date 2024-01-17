@@ -1,13 +1,13 @@
 // import { ConfigCtrlState } from '@web3modal/core'
-import { Chain } from 'viem'
 // import { EthereumClient } from '@web3modal/ethereum'
 // import { Web3ModalProps as Web3ModalConfigOriginal } from '@web3modal/react'
-import { CreateConnectorFn, WagmiProviderProps } from 'wagmi'
+import { Chain, Transport } from 'viem'
+import { CreateConnectorFn, Config as WagmiClientConfig, WagmiProviderProps } from 'wagmi'
 import { walletConnect } from 'wagmi/connectors'
 
 import { PstlWeb3ConnectionModalProps } from '../components/modals/ConnectionModal'
 import { UserOptionsTransactionsCallbacks } from '../controllers/types'
-import { ConnectorOverrides } from '../types'
+import { ConnectorEnhanced, ConnectorOverrides } from '../types'
 import { PstlWagmiClientOptions } from './utils'
 import { AppType } from './utils/connectors'
 
@@ -91,8 +91,36 @@ export type PstlWeb3ModalCallbacks = {
   transactions?: UserOptionsTransactionsCallbacks
 }
 
+export interface WagmiClientConfigEnhanced extends Omit<WagmiClientConfig, 'connectors'> {
+  connectors?: (() => ConnectorEnhanced[]) | ConnectorEnhanced[]
+}
+
+export type WagmiClientOptions<chains extends ReadonlyChains = ReadonlyChains> = Partial<
+  Pick<WagmiClientConfigEnhanced, 'getClient'>
+> & {
+  /**
+   * @name transports
+   * @description Optional. Record<{@link Chain.id}, {@link Transport}>
+   * @see https://viem.sh/docs/clients/transports/http.html}
+   */
+  transports?: Record<chains[number]['id'], Transport>
+  pollingInterval?: number
+  /**
+   * @name walletConnect
+   * @description walletConnect connector config
+   * see {@link WalletConnectConfig}
+   */
+  walletConnect: WalletConnectConfig
+  /**
+   * @name multiInjectedProviderDiscovery
+   * @description show/hide detected injected providers.
+   * @tip use false if you're adding your own "injected" type providers e.g metamask and dont want duplicates from detection.
+   */
+  multiInjectedProviderDiscovery?: boolean
+}
+
 export type PstlWeb3ModalOptions<chains extends ReadonlyChains = ReadonlyChains> = Omit<
-  PstlWagmiClientOptions<chains>['options'] & {
+  WagmiClientOptions<chains> & {
     /**
      * @name autoConnect
      * @description Boolean. Whether or not to attempt re-connect to last connected connector.
@@ -269,7 +297,7 @@ export interface Web3ModalProps<chains extends ReadonlyChains = ReadonlyChains> 
   /**
    * Various modal options
    */
-  options?: PstlWeb3ModalOptions<chains>
+  options?: Omit<PstlWeb3ModalOptions<chains>, 'walletConnect'>
   /**
    * Various modal logic callbacks
    * @description Optional. See {@link PstlWeb3ModalCallbacks}

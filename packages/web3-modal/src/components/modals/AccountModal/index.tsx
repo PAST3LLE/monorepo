@@ -23,6 +23,8 @@ import {
   WalletAndNetworkRowContainer
 } from './styled'
 
+const IS_SERVER = typeof globalThis?.window === 'undefined'
+
 type PstlAccountModalProps = UserOptionsCtrlState['ux'] & Pick<BaseModalProps, 'errorOptions'>
 
 function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountModalProps) {
@@ -64,7 +66,7 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
   const [isCopied, onCopy] = useCopyClipboard(1500)
   const onExplorer = useCallback(() => {
     if (
-      typeof globalThis?.window === 'undefined' ||
+      IS_SERVER ||
       !userConnectionInfo?.chain?.blockExplorers?.default ||
       !userConnectionInfo?.address
     )

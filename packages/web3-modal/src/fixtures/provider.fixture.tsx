@@ -28,6 +28,8 @@ import { ledgerHid } from '@past3lle/wagmi-connectors'
 
 config()
 
+const IS_SERVER = typeof globalThis?.window === 'undefined'
+
 interface Web3ButtonProps {
   children?: ReactNode
 }
@@ -35,7 +37,7 @@ const Web3Button = ({ children = <div>Show PSTL Wallet Modal</div> }: Web3Button
   const { onAccountClick } = useModalActions()
   const { address, connector } = useUserConnectionInfo()
 
-  if (typeof globalThis?.window !== 'undefined' && !!connector && !(window as any)?.__PSTL_CONNECTOR) {
+  if (!IS_SERVER && !!connector && !(window as any)?.__PSTL_CONNECTOR) {
     ;(window as any).__PSTL_CONNECTOR = connector
   }
 
@@ -168,7 +170,7 @@ function AppWithWagmiAccess() {
 
 function Updater() {
   useEffect(() => {
-    if (typeof globalThis?.window === 'undefined') return
+    if (IS_SERVER) return
     window.document.body.setAttribute('style', `font-family: system-ui;`)
   }, [])
   return null
@@ -360,7 +362,7 @@ export default {
           connectors: [
             injected({
               target() {
-                if (typeof globalThis?.window === 'undefined') return undefined
+                if (IS_SERVER) return undefined
                 return {
                   name: 'Coinbase Wallet',
                   id: 'coinbase-injected',
@@ -518,19 +520,20 @@ export default {
   Grid__ManyInjectedAndLedger: withThemeProvider(() => {
     return (
       <PstlW3Providers
+        autoReconnect
         config={{
           ...DEFAULT_PROPS_WEB3AUTH,
           connectors: {
-            connectors: [wagmiConnectors.ledgerHID, ...INJECTED_CONNECTORS],
+            connectors: [ledgerHid(), ...INJECTED_CONNECTORS],
             overrides: {
               ...COMMON_CONNECTOR_OVERRIDES,
               'ledger-hid': {
                 ...COMMON_CONNECTOR_OVERRIDES['ledger-hid'],
-                async customConnect({ store, connector, wagmiConnect }) {
+                async customConnect({ modalsStore: store, connector, wagmiConnect }) {
                   if (!connector) throw new ConnectorNotFoundError()
-                  await wagmiConnect({ connector })
+                  await wagmiConnect(connector)
 
-                  return store.root.open({ route: 'HidDeviceOptions' })
+                  return store.open({ route: 'HidDeviceOptions' })
                 }
               }
             }
@@ -577,11 +580,11 @@ export default {
               ...COMMON_CONNECTOR_OVERRIDES,
               'ledger-hid': {
                 ...COMMON_CONNECTOR_OVERRIDES['ledger-hid'],
-                async customConnect({ store, connector, wagmiConnect }) {
+                async customConnect({ modalsStore: store, connector, wagmiConnect }) {
                   if (!connector) throw new ConnectorNotFoundError()
-                  await wagmiConnect({ connector })
+                  await wagmiConnect(connector)
 
-                  return store.root.open({ route: 'HidDeviceOptions' })
+                  return store.open({ route: 'HidDeviceOptions' })
                 }
               }
             }
@@ -808,7 +811,6 @@ export default {
             ...DEFAULT_PROPS_WEB3AUTH.options,
             closeModalOnKeys: ['Escape', 'Esc']
           },
-          // connectors: [wagmiConnectors.ledgerHID],
           modals: {
             ...DEFAULT_PROPS_WEB3AUTH.modals,
             root: {
@@ -856,11 +858,11 @@ export default {
             overrides: {
               'ledger-hid': {
                 ...COMMON_CONNECTOR_OVERRIDES['ledger-hid'],
-                async customConnect({ store, connector, wagmiConnect }) {
+                async customConnect({ modalsStore: store, connector, wagmiConnect }) {
                   if (!connector) throw new ConnectorNotFoundError()
-                  await wagmiConnect({ connector })
+                  await wagmiConnect(connector)
 
-                  return store.root.open({ route: 'ConnectorConfigType' })
+                  return store.open({ route: 'ConnectorConfigType' })
                 }
               }
             }
@@ -903,11 +905,11 @@ export default {
               ...COMMON_CONNECTOR_OVERRIDES,
               'ledger-hid': {
                 ...COMMON_CONNECTOR_OVERRIDES['ledger-hid'],
-                async customConnect({ store, connector, wagmiConnect }) {
+                async customConnect({ modalsStore: store, connector, wagmiConnect }) {
                   if (!connector) throw new ConnectorNotFoundError()
-                  await wagmiConnect({ connector })
+                  await wagmiConnect(connector)
 
-                  return store.root.open({ route: 'HidDeviceOptions' })
+                  return store.open({ route: 'HidDeviceOptions' })
                 }
               }
             }
@@ -951,11 +953,11 @@ export default {
             overrides: {
               ...COMMON_CONNECTOR_OVERRIDES,
               'ledger-hid': {
-                async customConnect({ store, connector, wagmiConnect }) {
+                async customConnect({ modalsStore: store, connector, wagmiConnect }) {
                   if (!connector) throw new ConnectorNotFoundError()
-                  await wagmiConnect({ connector })
+                  await wagmiConnect(connector)
 
-                  return store.root.open({ route: 'HidDeviceOptions' })
+                  return store.open({ route: 'HidDeviceOptions' })
                 }
               }
             }

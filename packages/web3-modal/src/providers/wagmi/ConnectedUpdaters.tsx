@@ -6,7 +6,7 @@ import { useSwitchChain } from 'wagmi'
 import { UserOptionsCtrl } from '../../controllers'
 import { UserOptionsCtrlState } from '../../controllers/types'
 import { useUserConnectionInfo } from '../../hooks'
-import { SmartAutoConnectProps, useSmartAutoConnect } from '../../hooks/internal/useSmartAutoConnect'
+// import { SmartAutoConnectProps, useSmartAutoConnect } from '../../hooks/internal/useSmartAutoConnect'
 
 function useSwitchChainOnLimitedChainsChange() {
   const uiSnap = useSnapshot<UserOptionsCtrlState['ui']>(UserOptionsCtrl.state.ui)
@@ -23,9 +23,9 @@ function useSwitchChainOnLimitedChainsChange() {
   }, [uiSnap.softLimitedChains, switchChain, chainId])
 }
 
-export function ConnectedUpdaters(props: SmartAutoConnectProps) {
+export function ConnectedUpdaters(/* props: SmartAutoConnectProps */) {
   // Run auto connection logic e.g safe app or iframe, we auto connect
-  useSmartAutoConnect(props)
+  // useSmartAutoConnect(props)
   // Run auto chain switching on limit chains changes
   useSwitchChainOnLimitedChainsChange()
 

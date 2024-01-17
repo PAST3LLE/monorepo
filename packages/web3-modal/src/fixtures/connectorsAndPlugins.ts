@@ -6,6 +6,8 @@ import { injected } from 'wagmi/connectors'
 
 import { FORGE_LOGO } from './config'
 
+const IS_SERVER = typeof globalThis?.window === 'undefined'
+
 if (!process.env.REACT_APP_WEB3AUTH_DEVNET_CLIENT_ID) {
   throw new Error('Missing REACT_APP_WEB3AUTH_DEVNET_CLIENT_ID variable. Check .env')
 }
@@ -43,21 +45,24 @@ export const wagmiConnectors = {
       logoDark: FORGE_LOGO
     },
     uxMode: 'popup',
-    preset: 'DISALLOW_EXTERNAL_WALLETS'
+    preset: 'DISALLOW_EXTERNAL_WALLETS',
+    enableLogging: true
   })
 }
 
 export const INJECTED_CONNECTORS = [
   injected({
     target() {
-      if (typeof globalThis?.window === 'undefined') return undefined
+      if (IS_SERVER) return undefined
       return {
         name: 'MetaMask',
         id: 'metamask-injected',
         provider() {
-          if (typeof globalThis?.window === 'undefined') return undefined
+          if (IS_SERVER) return undefined
           try {
-            const provider = window?.ethereum?.providers?.find((provider: any) => provider?.isMetaMask)
+            const provider =
+              window?.ethereum?.providers?.find((provider: any) => provider?.isMetaMask) ||
+              (window.ethereum?.isMetaMask && window.ethereum)
             if (!provider) devWarn('MetaMask connector not found!')
             return provider
           } catch (error) {
@@ -73,7 +78,7 @@ export const INJECTED_CONNECTORS = [
         name: 'Taho',
         id: 'taho-injected',
         provider() {
-          if (typeof globalThis?.window === 'undefined') return undefined
+          if (IS_SERVER) return undefined
           try {
             const provider = window?.tally
             if (!provider) devWarn('Connector', 'Taho' || 'unknown', 'not found!')
@@ -91,7 +96,7 @@ export const INJECTED_CONNECTORS = [
         name: 'Coinbase Wallet',
         id: 'coinbase-wallet-injected',
         provider() {
-          if (typeof globalThis?.window === 'undefined') return undefined
+          if (IS_SERVER) return undefined
           try {
             const provider = (window?.ethereum?.isCoinbaseWallet && window.ethereum) || window?.coinbaseWalletExtension
             if (!provider) devWarn('Coinbase Wallet not found!')

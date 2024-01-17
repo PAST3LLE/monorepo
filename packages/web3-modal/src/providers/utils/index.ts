@@ -1,25 +1,17 @@
-// import { EthereumClient, w3mProvider } from '@web3modal/ethereum'
 import { useMemo } from 'react'
 import { Chain, Transport, http } from 'viem'
-import { Config as ClientConfig, CreateConnectorFn, WagmiProviderProps, createConfig } from 'wagmi'
+import { WagmiProviderProps, createConfig } from 'wagmi'
 import { walletConnect } from 'wagmi/connectors'
 
-import { ConnectorEnhanced } from '../../types'
-import { PstlWeb3ModalProps, ReadonlyChains, WalletConnectConfig } from '../types'
+import type { PstlWeb3ModalProps, ReadonlyChains } from '../types'
+import { getConnectorsArrayFromConfig } from './connectors'
+import { connectorOverridePropSelector } from '../../utils/misc'
 
-interface ClientConfigEnhanced extends Omit<ClientConfig, 'connectors'> {
-  connectors?: (() => ConnectorEnhanced[]) | ConnectorEnhanced[]
-}
-interface CreateWagmiClientProps<chains extends readonly [Chain, ...Chain[]]> {
-  appName: string
-  chains: chains
-  connectors: CreateConnectorFn[]
-  w3mConnectorProps: WalletConnectConfig
-  options?: Partial<Pick<ClientConfigEnhanced, 'getClient'>> & {
-    transports?: Record<chains[number]['id'], Transport>
-    pollingInterval?: number
-    connectors?: CreateConnectorFn[]
-  }
+type CreateWagmiClientProps<chains extends readonly [Chain, ...Chain[]]> = Pick<
+  Required<PstlWeb3ModalProps<chains>>,
+  'options' | 'chains' | 'connectors' | 'appName'
+> & {
+  walletConnect: PstlWeb3ModalProps<chains>['modals']['walletConnect']
 }
 
 declare module 'wagmi' {
@@ -43,92 +35,74 @@ function createWagmiClient<chains extends readonly [Chain, ...Chain[]]>({
 
   const connectors = [
     walletConnect({
-      ...props.w3mConnectorProps,
-      projectId: props.w3mConnectorProps.projectId,
-      showQrModal: true,
-      qrModalOptions: props.w3mConnectorProps
+      projectId: props.walletConnect.projectId,
+      qrModalOptions: props.walletConnect,
+      showQrModal: true
     }),
-    ...props.connectors
+    ...(getConnectorsArrayFromConfig(props.connectors) || [])
   ]
 
-  return createConfig({
+  const client = createConfig({
     chains: props.chains,
     connectors,
-    transports: { ...transportsMap, ...options?.transports }
+    transports: { ...transportsMap, ...options?.transports },
+    multiInjectedProviderDiscovery: !!options?.multiInjectedProviderDiscovery
   })
-}
 
-// function createEthereumClient<chains extends ReadonlyChains = ReadonlyChains>(
-//   wagmiClient: ReturnType<typeof createWagmiClient>,
-//   chains: chains
-// ) {
-//   return new EthereumClient(wagmiClient, chains as any)
-// }
+  if ('overrides' in props.connectors) {
+    const overrides = props.connectors?.overrides || {}
+    client._internal.connectors.setState(connectors => connectors.map(sConn => ({
+      ...sConn,
+      ...connectorOverridePropSelector(overrides, [sConn.id, sConn.name, sConn.type]),
+    })))
+  }
+
+  return client
+}
 
 export type PstlWagmiClientOptions<chains extends readonly [Chain, ...Chain[]]> = {
   client?: WagmiClient
-  options?: Partial<CreateWagmiClientProps<chains>['options']>
+  options: Partial<CreateWagmiClientProps<chains>['options']>
 }
 
 export function usePstlWagmiClient<chains extends ReadonlyChains>(
-  props: Omit<PstlWeb3ModalProps<chains>, 'connectors'> & {
-    connectors: CreateWagmiClientProps<chains>['connectors']
-  }
+  props: PstlWeb3ModalProps<chains>
 ): ReturnType<typeof createWagmiClient> {
-  return useMemo(
-    () =>
-      !props.clients?.wagmi?.client
-        ? createWagmiClient({
-            appName: props.appName,
-            chains: props.chains,
-            connectors: props.connectors,
-            w3mConnectorProps: props.modals.walletConnect,
-            options: { ...props?.clients?.wagmi?.options, ...props.options }
-          })
-        : props.clients.wagmi.client,
-    [props]
-  )
+  return useMemo(() => {
+    return !props.clients?.wagmi?.client
+      ? createWagmiClient({
+          appName: props.appName,
+          chains: props.chains,
+          connectors: props?.connectors || [],
+          walletConnect: props.modals.walletConnect,
+          options: { ...props?.clients?.wagmi?.options, ...props.options }
+        })
+      : props.clients.wagmi.client
+  }, [props.clients?.wagmi, props.appName, props.chains, props.connectors, props.modals.walletConnect, props.options])
 }
 
-// export function usePstlEthereumClient<chains extends ReadonlyChains>(
-//   ethereumClient: EthereumClient | undefined,
-//   wagmiClient: ReturnType<typeof createWagmiClient>,
-//   chains: chains
-// ) {
-//   const client = useMemo(
-//     () => (!ethereumClient ? createEthereumClient(wagmiClient, chains) : ethereumClient),
-//     [chains, ethereumClient, wagmiClient]
-//   )
+/* 
+* Disabled until @web3modal updates to wagmi V2
+* For now we just use walletConnect connect which is slower :(
+import { EthereumClient, w3mProvider } from '@web3modal/ethereum'
 
-//   return client
-// }
+export function usePstlEthereumClient<chains extends ReadonlyChains>(
+  ethereumClient: EthereumClient | undefined,
+  wagmiClient: ReturnType<typeof createWagmiClient>,
+  chains: chains
+) {
+  const client = useMemo(
+    () => (!ethereumClient ? createEthereumClient(wagmiClient, chains) : ethereumClient),
+    [chains, ethereumClient, wagmiClient]
+  )
 
-/**
- * @name addConnector
- * @description Adds a new Wagmi connector to the modal. Takes 2 parameters:
- * @param ConnectorFn - CreateConnectorFn
- * @param params - Class constructor "options" params passed inside an object
- * @returns Instantiated connector with set options and chains (passed from root inside API)
- * 
- * @example
-  addConnector(InjectedConnector, {
-    // Not necessary or allowed to pass chains here, just options. if connector accepts them
-    options: {
-      name: 'MetaMask',
-      shimDisconnect: true,
-      getProvider() {
-        try {
-          const provider = window?.ethereum?.providers?.find((provider) => provider?.isMetaMask)
-          if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-          return provider
-        } catch (error) {
-          return undefined
-        }
-      }
-    }
-  })
- */
-export const addConnector =
-  <C extends CreateConnectorFn>(ConnectorFn: C, options: Omit<Parameters<C>[0], 'chains'>) =>
-  (chains: readonly [Chain, ...Chain[]]) =>
-    ConnectorFn({ chains, ...options })
+  return client
+}
+
+function createEthereumClient<chains extends ReadonlyChains = ReadonlyChains>(
+  wagmiClient: ReturnType<typeof createWagmiClient>,
+  chains: chains
+) {
+  return new EthereumClient(wagmiClient, chains as any)
+} 
+*/

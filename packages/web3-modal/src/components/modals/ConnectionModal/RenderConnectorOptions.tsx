@@ -3,7 +3,7 @@ import React, { Dispatch, SetStateAction } from 'react'
 import { ProviderMountedMap, PstlWeb3ConnectionModalProps } from '.'
 import { UserOptionsCtrlState } from '../../../controllers/types'
 import { useConnectDisconnect, useUserConnectionInfo } from '../../../hooks'
-import { ConnectorEnhanced, FullWeb3ModalStore } from '../../../types'
+import { ConnectFunction, ConnectorEnhanced, FullWeb3ModalStore } from '../../../types'
 import { runConnectorConnectionLogic } from '../../../utils/connectConnector'
 import { ConnectorOption } from './ConnectorOption'
 
@@ -15,7 +15,7 @@ export type RenderConnectorOptionsProps = Pick<
 > & {
   modalView: UserOptionsCtrlState['ui']['walletsView']
   userConnectionInfo: ReturnType<typeof useUserConnectionInfo>
-  connect: ReturnType<typeof useConnectDisconnect>['connect']['connectAsync']
+  connect: ConnectFunction
   disconnect: ReturnType<typeof useConnectDisconnect>['disconnect']['disconnectAsync']
   modalsStore: FullWeb3ModalStore['ui']
   providerMountedState: [ProviderMountedMap, Dispatch<SetStateAction<ProviderMountedMap>>]
@@ -43,7 +43,6 @@ const RenderConnectorOptionsBase =
     const [{ label, logo, connected, isRecommended }, callback] = runConnectorConnectionLogic(
       connector,
       currentConnector,
-      modalsStore,
       {
         connect,
         disconnect,

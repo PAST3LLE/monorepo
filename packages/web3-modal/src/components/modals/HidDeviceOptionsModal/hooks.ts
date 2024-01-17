@@ -79,7 +79,7 @@ export function useHidModalStore({ chainId, connector, path, paginationAmount }:
 
             // Disconnect hid connector and reconnect via new path and reset flag
             // reset flag sets a new signer at path address
-            await hid?.disconnect()
+            // await hid?.disconnect()
             await hid?.connect({ chainId }, { path: fullPath, reset: true })
           }
         } catch (error) {
