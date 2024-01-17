@@ -25,13 +25,14 @@ type Options = { callback?: (...args: any[]) => void; path?: string; reset?: boo
 
 export type LedgerHidParameters = {
   shimDisconnect?: boolean
+  onDeviceConnect?: () => Promise<void>
   onDeviceDisconnect?: () => Promise<void>
 }
 
 type Config = Parameters<Parameters<typeof createConnector>[0]>[0]
 
-ledgerHid.type = 'ledgerHid' as const
-export function ledgerHid(parameters: LedgerHidParameters = {}) {
+ledgerHid.type = 'hid' as const
+export function ledgerHid(parameters?: LedgerHidParameters) {
   const providerByChainMap: Map<number, LedgerHQProvider | undefined> = new Map()
 
   let chainId: number | undefined = undefined
@@ -305,6 +306,8 @@ export function ledgerHid(parameters: LedgerHidParameters = {}) {
         derivedAccounts = (connectedAccount ? [connectedAccount] : await this.getAccounts()) as Address[]
       }
       config.emitter.emit('connect', { accounts: derivedAccounts, chainId: nChainId })
+      // user param callback
+      parameters?.onDeviceConnect?.()
 
       provider.removeListener('connect', this.onConnect.bind(this))
       provider.on('accountsChanged', this.onLedgerAccountsChanged.bind(this))
@@ -316,7 +319,7 @@ export function ledgerHid(parameters: LedgerHidParameters = {}) {
       this.deactivate()
 
       // user param callback
-      parameters.onDeviceDisconnect?.()
+      parameters?.onDeviceDisconnect?.()
 
       // Remove shim signalling wallet is disconnected
       if (parameters?.shimDisconnect) config.storage?.removeItem('recentConnectorId')

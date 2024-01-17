@@ -17,7 +17,7 @@ import { ChainNotConfiguredError, ProviderNotFoundError, createConnector, normal
 import { AdapterMissingError, Web3AuthInstanceMissingError } from './errors'
 import type { Options } from './interfaces'
 
-const IS_SERVER = typeof window === 'undefined'
+const IS_SERVER = typeof globalThis?.window === 'undefined'
 
 function isIWeb3AuthModal(obj: IWeb3Auth | IWeb3AuthModal): obj is IWeb3AuthModal {
   return typeof (obj as IWeb3AuthModal).initModal !== 'undefined'
@@ -35,6 +35,7 @@ export function web3Auth<A extends IAdapter<unknown>>(options: Options<A>) {
   type Properties = {
     ready: boolean
     activate(): Promise<void>
+    onConnect(): Promise<void>
     isChainUnsupported(_chainId: number | undefined): boolean
     disconnectListeners(): void
   }
@@ -49,7 +50,6 @@ export function web3Auth<A extends IAdapter<unknown>>(options: Options<A>) {
     get type() {
       return web3Auth.type
     },
-
     async activate() {
       if (this.ready) return devDebug(`[@past3lle/wagmi-connectors] ${this.id} already activated, skipping.`)
 
@@ -72,7 +72,6 @@ export function web3Auth<A extends IAdapter<unknown>>(options: Options<A>) {
 
       this.ready = !IS_SERVER
     },
-
     async connect({ chainId }: { chainId?: number } = {}) {
       try {
         if (!this.ready) await this.activate()
@@ -81,14 +80,6 @@ export function web3Auth<A extends IAdapter<unknown>>(options: Options<A>) {
         })
 
         await this.getProvider()
-
-        provider?.on('accountsChanged', this.onAccountsChanged.bind(this))
-        provider?.on('chainChanged', this.onChainChanged.bind(this))
-        // Listen to emitted events FROM ADAPTER (current web3auth version ~7.x doesnt listen to this)
-        // Which never prompts wagmi to update the connector
-        // See issue: https://github.com/Web3Auth/web3auth-wagmi-connector/pull/113
-        adapter?.provider?.on('accountsChanged', this.onAccountsChanged.bind(this))
-        adapter?.provider?.on('chainChanged', this.onChainChanged.bind(this))
 
         if (!web3AuthInstance) throw new Web3AuthInstanceMissingError()
 
@@ -116,26 +107,23 @@ export function web3Auth<A extends IAdapter<unknown>>(options: Options<A>) {
         }
         if (!id) throw new ChainDisconnectedError(new Error('On connect chain id undefined!'))
         if (unsupported) throw new ChainNotConfiguredError()
+
+        this.onConnect()
+
         return {
           accounts,
           chainId: id
         }
       } catch (error) {
         log.error('error while connecting', error)
-        this.disconnectListeners()
         this.onDisconnect()
         throw new UserRejectedRequestError('Something went wrong' as unknown as Error)
       }
     },
-
     async disconnect(): Promise<void> {
       await web3AuthInstance?.logout()
       
       this.onDisconnect()
-      
-      const provider = await this.getProvider()
-      provider.removeListener('accountsChanged', this.onAccountsChanged.bind(this))
-      provider.removeListener('chainChanged', this.onChainChanged.bind(this))
     },
 
     async getWalletClient({ chainId }: { chainId?: number } = {}): Promise<WalletClient> {
@@ -148,7 +136,6 @@ export function web3Auth<A extends IAdapter<unknown>>(options: Options<A>) {
         transport: custom(provider)
       })
     },
-
     async getAccounts(): Promise<Address[]> {
       const provider = await this.getProvider()
       const accounts = await provider.request<unknown, Address[]>({
@@ -157,7 +144,6 @@ export function web3Auth<A extends IAdapter<unknown>>(options: Options<A>) {
       if (!accounts?.length) throw new ChainDisconnectedError(new Error('No accounts returned!'))
       return (accounts.filter(Boolean) as Address[]).map(getAddress)
     },
-
     async getProvider() {
       if (provider) {
         return provider
@@ -175,7 +161,7 @@ export function web3Auth<A extends IAdapter<unknown>>(options: Options<A>) {
         } else {
           log.error('please provide valid loginParams when using @web3auth/no-modal')
           throw new UserRejectedRequestError(
-            'please provide valid loginParams when using @web3auth/no-modal' as unknown as Error
+            new Error('please provide valid loginParams when using @web3auth/no-modal')
           )
         }
       }
@@ -186,7 +172,6 @@ export function web3Auth<A extends IAdapter<unknown>>(options: Options<A>) {
 
       return provider
     },
-
     async isAuthorized() {
       try {
         const accounts = await this.getAccounts()
@@ -233,11 +218,6 @@ export function web3Auth<A extends IAdapter<unknown>>(options: Options<A>) {
       if (accounts.length === 0) config.emitter.emit('disconnect')
       else config.emitter.emit('change', { accounts: accounts.map(getAddress) })
     },
-
-    isChainUnsupported: (chainId: number): boolean => {
-      return !config.chains.some((x) => x.id === chainId)
-    },
-
     onChainChanged(chainId: string | number): void {
       const id = normalizeChainId(chainId)
       const unsupported = this.isChainUnsupported(id)
@@ -246,6 +226,7 @@ export function web3Auth<A extends IAdapter<unknown>>(options: Options<A>) {
       config.emitter.emit('change', { chainId: id })
     },
     async onConnect() {
+      if (!provider) throw new ProviderNotFoundError()
       const accounts = await this.getAccounts()
       const chainId = await this.getChainId()
 
@@ -253,15 +234,35 @@ export function web3Auth<A extends IAdapter<unknown>>(options: Options<A>) {
         accounts,
         chainId
       })
-    },
-    onDisconnect(): void {
-      config.emitter.emit('disconnect')
-    },
 
+      provider.on('accountsChanged', this.onAccountsChanged.bind(this))
+      provider.on('chainChanged', this.onChainChanged.bind(this))
+      provider.on('disconnect', this.onDisconnect.bind(this))
+      // Listen to emitted events FROM ADAPTER (current web3auth version ~7.x doesnt listen to this)
+      // Which never prompts wagmi to update the connector
+      // See issue: https://github.com/Web3Auth/web3auth-wagmi-connector/pull/113
+      adapter?.provider?.on('accountsChanged', this.onAccountsChanged.bind(this))
+      adapter?.provider?.on('chainChanged', this.onChainChanged.bind(this))
+      adapter?.provider?.on('disconnect', this.onDisconnect.bind(this))
+    },
+    onDisconnect() {
+      config.emitter.emit('disconnect')
+      this.disconnectListeners()
+    },
+    isChainUnsupported: (chainId: number): boolean => {
+      return !config.chains.some((x) => x.id === chainId)
+    },
     disconnectListeners() {
+      if (!provider) throw new ProviderNotFoundError()
+      provider.on('connect', this.onConnect.bind(this))
+      provider.off('disconnect', this.onDisconnect.bind(this))
+      provider.off('accountsChanged', this.onAccountsChanged.bind(this))
+      provider.off('chainChanged', this.onChainChanged.bind(this))
+      // bind to adapter provider as well
+      adapter?.provider?.off('disconnect', this.onDisconnect.bind(this))
       adapter?.provider?.off('accountsChanged', this.onAccountsChanged.bind(this))
       adapter?.provider?.off('chainChanged', this.onChainChanged.bind(this))
-    }
+    },
   }))
 }
 

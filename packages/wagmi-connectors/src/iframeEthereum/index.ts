@@ -27,7 +27,7 @@ const IS_SERVER = typeof globalThis?.window === 'undefined'
 const DEFAULT_RPC_URL = 'https://eth.llamarpc.com'
 
 iframeEthereum.type = 'iframe-ethereum'
-export function iframeEthereum(options: IframeEthereumParameters) {
+export function iframeEthereum(options?: IframeEthereumParameters) {
   type Properties = {
     isChainUnsupported(_chainId: number | undefined): boolean
     ready: boolean

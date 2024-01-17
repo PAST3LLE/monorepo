@@ -46,6 +46,7 @@ export interface PstlWeb3AuthParameters extends Omit<Web3AuthParameters, 'adapte
   uiConfig?: Web3AuthOptions['uiConfig']
   mfaLevel?: OpenloginLoginParams['mfaLevel']
   uxMode?: 'popup' | 'redirect'
+  enableLogging?: boolean
 }
 export function pstlWeb3Auth(options: PstlWeb3AuthParameters) {
   return createConnector((config) => {
@@ -65,7 +66,8 @@ export function pstlWeb3Auth(options: PstlWeb3AuthParameters) {
         chainConfig,
         web3AuthNetwork: options.network,
         authMode: 'DAPP',
-        uiConfig: options.uiConfig
+        uiConfig: options.uiConfig,
+        enableLogging: options.enableLogging
       }),
       adapter: new OpenloginAdapter({
         privateKeyProvider: !options.plugins?.length
