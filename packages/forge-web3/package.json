@@ -75,7 +75,8 @@
     "react": ">=16",
     "styled-components": ">=5",
     "wagmi": "^2.x",
-    "viem": "^2.x"
+    "viem": "^2.x",
+    "@tanstack/react-query": "^5.x"
   },
   "dependencies": {
     "@past3lle/hooks": "^2.0.0-alpha.2",
@@ -88,6 +89,7 @@
   },
   "devDependencies": {
     "@emotion/react": "11.11.1",
+    "@tanstack/react-query": "^5.17.15",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "jotai-devtools": "^0.7.1",
