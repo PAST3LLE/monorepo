@@ -3,8 +3,8 @@ import { Chain, Transport, http } from 'viem'
 import { WagmiProviderProps, createConfig } from 'wagmi'
 import { walletConnect } from 'wagmi/connectors'
 
-import type { PstlWeb3ModalProps, ReadonlyChains } from '../types'
-import { getConnectorsArrayFromConfig } from './connectors'
+import type { PstlWeb3ModalProps, ReadonlyChains } from '../../providers/types'
+import { getConnectorsArrayFromConfig } from '../../utils/connectors'
 import { connectorOverridePropSelector } from '../../utils/misc'
 
 type CreateWagmiClientProps<chains extends readonly [Chain, ...Chain[]]> = Pick<
@@ -21,51 +21,12 @@ declare module 'wagmi' {
 }
 
 export type WagmiClient = ReturnType<typeof createConfig>
-function createWagmiClient<chains extends readonly [Chain, ...Chain[]]>({
-  options,
-  ...props
-}: CreateWagmiClientProps<chains>): WagmiProviderProps['config'] {
-  const transportsMap = props.chains.reduce(
-    (acc, chain) => ({
-      ...acc,
-      [chain.id]: http()
-    }),
-    {} as Record<chains[number]['id'], Transport>
-  )
-
-  const connectors = [
-    walletConnect({
-      projectId: props.walletConnect.projectId,
-      qrModalOptions: props.walletConnect,
-      showQrModal: true
-    }),
-    ...(getConnectorsArrayFromConfig(props.connectors) || [])
-  ]
-
-  const client = createConfig({
-    chains: props.chains,
-    connectors,
-    transports: { ...transportsMap, ...options?.transports },
-    multiInjectedProviderDiscovery: !!options?.multiInjectedProviderDiscovery
-  })
-
-  if ('overrides' in props.connectors) {
-    const overrides = props.connectors?.overrides || {}
-    client._internal.connectors.setState(connectors => connectors.map(sConn => ({
-      ...sConn,
-      ...connectorOverridePropSelector(overrides, [sConn.id, sConn.name, sConn.type]),
-    })))
-  }
-
-  return client
-}
-
 export type PstlWagmiClientOptions<chains extends readonly [Chain, ...Chain[]]> = {
   client?: WagmiClient
   options: Partial<CreateWagmiClientProps<chains>['options']>
 }
 
-export function usePstlWagmiClient<chains extends ReadonlyChains>(
+export function useCreateWagmiClient<chains extends ReadonlyChains>(
   props: PstlWeb3ModalProps<chains>
 ): ReturnType<typeof createWagmiClient> {
   return useMemo(() => {
@@ -106,3 +67,42 @@ function createEthereumClient<chains extends ReadonlyChains = ReadonlyChains>(
   return new EthereumClient(wagmiClient, chains as any)
 } 
 */
+
+function createWagmiClient<chains extends readonly [Chain, ...Chain[]]>({
+  options,
+  ...props
+}: CreateWagmiClientProps<chains>): WagmiProviderProps['config'] {
+  const transportsMap = props.chains.reduce(
+    (acc, chain) => ({
+      ...acc,
+      [chain.id]: http()
+    }),
+    {} as Record<chains[number]['id'], Transport>
+  )
+
+  const connectors = [
+    walletConnect({
+      projectId: props.walletConnect.projectId,
+      qrModalOptions: props.walletConnect,
+      showQrModal: true
+    }),
+    ...(getConnectorsArrayFromConfig(props.connectors) || [])
+  ]
+
+  const client = createConfig({
+    chains: props.chains,
+    connectors,
+    transports: { ...transportsMap, ...options?.transports },
+    multiInjectedProviderDiscovery: !!options?.multiInjectedProviderDiscovery
+  })
+
+  if ('overrides' in props.connectors) {
+    const overrides = props.connectors?.overrides || {}
+    client._internal.connectors.setState(connectors => connectors.map(sConn => ({
+      ...sConn,
+      ...connectorOverridePropSelector(overrides, [sConn.id, sConn.name, sConn.type]),
+    })))
+  }
+
+  return client
+}

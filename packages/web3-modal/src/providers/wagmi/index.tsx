@@ -4,7 +4,7 @@ import { Chain } from 'viem'
 import { Connector, WagmiProvider } from 'wagmi'
 
 import { SmartAutoConnectProps } from '../../hooks/internal/useSmartAutoConnect'
-import { WagmiClient } from '../utils'
+import { WagmiClient } from '../../hooks/internal/useCreateWagmiClient'
 import { ConnectedUpdaters } from './ConnectedUpdaters'
 
 const queryClient = new QueryClient()

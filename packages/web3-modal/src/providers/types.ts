@@ -8,8 +8,8 @@ import { walletConnect } from 'wagmi/connectors'
 import { PstlWeb3ConnectionModalProps } from '../components/modals/ConnectionModal'
 import { UserOptionsTransactionsCallbacks } from '../controllers/types'
 import { ConnectorEnhanced, ConnectorOverrides } from '../types'
-import { PstlWagmiClientOptions } from './utils'
-import { AppType } from './utils/connectors'
+import { PstlWagmiClientOptions } from '../hooks/internal/useCreateWagmiClient'
+import { AppType } from '../utils/connectors'
 
 export interface ConfigCtrlState {
   projectId: string

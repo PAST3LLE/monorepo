@@ -37,7 +37,7 @@ import {
   type ReadonlyChain,
   usePstlWagmiClient
 } from './providers'
-import { AppType, getAppType, useDeriveAppType } from './providers/utils/connectors'
+import { AppType, getAppType, useDeriveAppType } from './utils/connectors'
 import { type PstlModalTheme, type PstlModalThemeExtension, W3aStyleResetProvider, createTheme } from './theme'
 import {
   getAllChainsInfo,

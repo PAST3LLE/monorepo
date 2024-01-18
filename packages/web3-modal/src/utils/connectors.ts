@@ -1,9 +1,9 @@
 import { devDebug } from '@past3lle/utils'
 import { isIframe } from '@past3lle/wagmi-connectors/utils'
 
-import { usePstlWeb3ModalStore } from '../../hooks'
-import { isLedgerDappBrowserProvider } from '../../utils/iframe'
-import { PstlWeb3ModalProps } from '../types'
+import { usePstlWeb3ModalStore } from '../hooks'
+import { isLedgerDappBrowserProvider } from './iframe'
+import { PstlWeb3ModalProps } from '../providers/types'
 import { Connector } from 'wagmi'
 
 export type AppType = 'IFRAME' | 'SAFE_APP' | 'LEDGER_LIVE' | 'DAPP' | 'TEST_FRAMEWORK_IFRAME'

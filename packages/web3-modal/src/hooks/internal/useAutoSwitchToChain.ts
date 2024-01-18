@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { Chain } from 'viem'
 
 import { PstlWeb3ModalProps } from '../../providers/types'
-import { getAppType } from '../../providers/utils/connectors'
+import { getAppType } from '../../utils/connectors'
 
 export function useAutoSwitchToChain(chains: PstlWeb3ModalProps['chains'], config?: PstlWeb3ModalProps) {
   const [derivedChainId, setDerivedChainId] = useState<Chain | undefined>(undefined)

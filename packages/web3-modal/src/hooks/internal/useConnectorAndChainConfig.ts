@@ -8,7 +8,7 @@ import { CreateConnectorFn, WagmiProviderProps } from 'wagmi'
 import { safe } from 'wagmi/connectors'
 
 import { PstlWeb3ModalProps } from '../../providers'
-import { getAppType, getConnectorsArrayFromConfig, hardFilterChains } from '../../providers/utils/connectors'
+import { getAppType, getConnectorsArrayFromConfig, hardFilterChains } from '../../utils/connectors'
 
 export function useConnectorAndChainConfig<config extends PstlWeb3ModalProps<WagmiProviderProps['config']['chains']>>(
   configProps: config
