@@ -6,7 +6,6 @@ import { TransactionsUpdater } from '../controllers/TransactionsCtrl/updater'
 import { useAutoSwitchToChain } from '../hooks/internal/useAutoSwitchToChain'
 import { useConnectorAndChainConfig } from '../hooks/internal/useConnectorAndChainConfig'
 import { useUpdateUserConfigState } from '../hooks/state/useUpdateUserConfigState'
-import type { Chain, ChainsPartialReadonly, ReadonlyChain } from '../types'
 import type { PstlWeb3ModalProps } from './types'
 import { PstlWagmiClientOptions, useCreateWagmiClient } from '../hooks/internal/useCreateWagmiClient'
 import { PstlWagmiProvider } from './wagmi'
@@ -56,8 +55,5 @@ export {
   useCreateWagmiClient,
   // types
   type PstlWeb3ModalProps,
-  type PstlWagmiClientOptions,
-  type ChainsPartialReadonly,
-  type ReadonlyChain,
-  type Chain
+  type PstlWagmiClientOptions
 }

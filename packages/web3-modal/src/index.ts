@@ -28,14 +28,11 @@ import {
   useTransactionsRead
 } from './hooks'
 import {
-  type Chain,
-  type ChainsPartialReadonly,
   PstlW3Providers,
   type PstlWagmiClientOptions,
   PstlWagmiProvider,
   type PstlWeb3ModalProps,
-  type ReadonlyChain,
-  usePstlWagmiClient
+  useCreateWagmiClient
 } from './providers'
 import { AppType, getAppType, useDeriveAppType } from './utils/connectors'
 import { type PstlModalTheme, type PstlModalThemeExtension, W3aStyleResetProvider, createTheme } from './theme'
@@ -85,7 +82,7 @@ export {
   PstlWagmiProvider,
   // hooks
   // usePstlEthereumClient,
-  usePstlWagmiClient,
+  useCreateWagmiClient,
   // utils
   getAllChainsInfo,
   getChainInfoFromShortName,
@@ -96,9 +93,6 @@ export {
   // types
   type PstlWeb3ModalProps,
   type PstlWagmiClientOptions,
-  type ChainsPartialReadonly,
-  type ReadonlyChain,
-  type Chain,
   type PstlModalThemeExtension,
   type PstlModalTheme,
   type AppType,
