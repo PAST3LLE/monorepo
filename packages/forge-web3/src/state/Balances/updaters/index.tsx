@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
-import { Address, useAccount } from 'wagmi'
+import { Address } from 'viem'
+import { useAccount } from 'wagmi'
 
 import { ForgeBalances, useForgeBalancesWriteAtom, useForgeResetBalancesAtom } from '..'
 import {

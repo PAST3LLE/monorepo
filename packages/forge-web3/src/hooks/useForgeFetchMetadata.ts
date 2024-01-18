@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 
 import { useForgeMetadataUriMapReadAtom } from '../state'
 import { ForgeMetadataUpdaterProps } from '../state/Metadata/updaters/MetadataUpdater'
-import { CollectionMetadata, SkillMetadata, SupportedForgeChains } from '../types'
+import { CollectionMetadata, SkillMetadata, SupportedForgeChainIds } from '../types'
 import { CustomIpfsGatewayConfig, chainFetchIpfsUri, isIpfsUri } from '../utils'
 import { useForgeGetBatchSkillMetadataUris } from './contracts/useForgeGetBatchSkillMetadataUris'
 import { useSupportedOrDefaultChainId } from './useForgeSupportedChainId'
@@ -30,7 +30,7 @@ export function useForgeFetchMetadata({ loadAmount = BigInt(3), metadataFetchOpt
   const [metadata, setMetadata] = useState<{
     data: Promise<SkillMetadata[]>[] | undefined
 
-    chainId: SupportedForgeChains | undefined
+    chainId: SupportedForgeChainIds | undefined
   }>({ data: undefined, chainId: undefined })
 
   useEffect(() => {

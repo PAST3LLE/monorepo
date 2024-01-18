@@ -1,5 +1,5 @@
 import { Collection__factory } from '@past3lle/skilltree-contracts'
-import { useContractRead } from 'wagmi'
+import { useReadContract } from 'wagmi'
 
 import { WAGMI_SCOPE_KEYS } from '../constants'
 import { WithCollectionId } from '../types'
@@ -10,7 +10,7 @@ export function useForgeGetSkillMetadataUri({ collectionId }: WithCollectionId) 
     collectionId
   })
 
-  return useContractRead({
+  return useReadContract({
     abi: Collection__factory.abi,
     functionName: 'uri',
     address,

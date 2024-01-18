@@ -1,13 +1,11 @@
 import {
   type AnyTransactionReceipt,
   AppType,
-  type ChainsPartialReadonly,
   PstlModalTheme as ForgeModalTheme,
   PstlW3Providers,
   type TransactionOptions,
   type TransactionStatus,
   W3aStyleResetProvider,
-  addConnector,
   createTheme,
   getAppType,
   useDeriveAppType,
@@ -22,7 +20,7 @@ import {
   useTransactionsByMetadataKeyCallback as useW3TransactionsByMetadataKeyCallback,
   useTransactionsRead as useW3TransactionsRead,
   usePstlUserConnectionInfo as useW3UserConnectionInfo,
-  usePstlWagmiClient as useWagmiClient
+  useCreateWagmiClient
 } from '@past3lle/web3-modal'
 import React, { ReactNode } from 'react'
 
@@ -94,8 +92,7 @@ export {
   useW3FindTransactionByMetadataKeyValueCallback,
   useW3TransactionsByMetadataKey,
   useW3TransactionsByMetadataKeyCallback,
-  useWagmiClient,
-  addConnector,
+  useCreateWagmiClient,
   getAppType,
   useDeriveAppType,
   createTheme as createWeb3ModalTheme,
@@ -103,7 +100,6 @@ export {
   type AppType,
   type ForgeModalTheme,
   type ForgeW3CoreProvidersProps,
-  type ChainsPartialReadonly,
   type TransactionStatus,
   type TransactionOptions
 }

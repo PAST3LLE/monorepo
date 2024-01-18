@@ -4,13 +4,11 @@ import { devDebug, devError } from '@past3lle/utils'
 import { useAddPendingTransaction } from '@past3lle/web3-modal'
 import { useCallback } from 'react'
 import { Hash } from 'viem'
-import { useContractWrite, usePrepareContractWrite } from 'wagmi'
+import { useSimulateContract, useWriteContract } from 'wagmi'
 
-import { useForgeContractAddressMapReadAtom } from '../../state'
 import { SkillMetadata } from '../../types'
 import { formatSkillMetadataToArgs } from '../../utils'
-import { useSupportedChainId } from '../useForgeSupportedChainId'
-import { useContractWriteCallback, useForgeSkillMetadataToArg } from './base'
+import { useForgeSkillMetadataToArg } from './base'
 import { useForgeApproveAllTokensForClaimable, useForgeGetAllUnapprovedTokensForClaimable } from './useForgeApprove'
 import { useForgeContractAddressesByChain } from './useForgeContractAddress'
 
@@ -20,24 +18,26 @@ export function useForgeClaimLockedSkill(skill: SkillMetadata | null) {
   const unapprovedList = useForgeGetAllUnapprovedTokensForClaimable(skill)
   const addPending = useAddPendingTransaction()
 
-  const { config, error } = usePrepareContractWrite({
+  const { data, error } = useSimulateContract({
     // enabled if unapproved list is empty (all approved)
-    enabled: !unapprovedList.length,
+    query: { enabled: !!(unapprovedList?.length && arg) },
     address: mergeManager,
     abi: MergeManager__factory.abi,
     functionName: 'claimLockedSkill',
-    args: !!arg ? [arg] : undefined
+    // TODO: check this stupid type error
+    args: (arg ? [arg] : undefined) as any
   })
 
   if (error) {
     devError('useForgeClaimLockedSkill prepare contract for write error!', error)
   }
-  const res = useContractWrite(config)
+  const res = useWriteContract()
   return {
     ...res,
     writeAsync: async () => {
-      return res?.writeAsync?.().then((res) => {
-        addPending(res.hash, {
+      if (!data?.request || error) throw error
+      return res.writeContractAsync(data.request).then((res) => {
+        addPending(res, {
           metadata: {
             forgeSkillId: skill?.properties?.id,
             forgeTransactionType: 'claim'
@@ -53,41 +53,26 @@ export function useForgeClaimLockedSkillCallback() {
   const mergeManager = useForgeContractAddressesByChain(undefined, false)?.mergeManager
   const addPending = useAddPendingTransaction()
 
-  const claimLockedSkill = useContractWriteCallback()
+  const { writeContractAsync } = useWriteContract()
 
   return useCallback(
     async (skill: SkillMetadata | null) => {
       const formattedArgs = formatSkillMetadataToArgs(skill)
-      // if (!mergeManager) return
-      return claimLockedSkill({
+      if (!mergeManager)
+        throw new Error('[useForgeClaimLockedSkillCallback] Missing MergeManager address! Check configuration!')
+      if (!formattedArgs) throw new Error('[useForgeClaimLockedSkillCallback] Incorrect arguments!')
+      return writeContractAsync({
         address: mergeManager,
         abi: MergeManager__factory.abi,
         functionName: 'claimLockedSkill',
-        args: formattedArgs ? [formattedArgs] : undefined
+        args: [formattedArgs]
       }).then((hash) => {
         addPending(hash as Hash, { metadata: { forgeSkillId: skill?.properties.id, forgeTransactionType: 'claim' } })
         return hash
       })
     },
-    [addPending, claimLockedSkill, mergeManager]
+    [addPending, writeContractAsync, mergeManager]
   )
-}
-
-export function useForgeUnpreparedClaimLockedSkill(args: { token: Address; id: bigint }) {
-  const chainId = useSupportedChainId()
-  const [contractAddresses] = useForgeContractAddressMapReadAtom()
-
-  const mergeManager = chainId ? contractAddresses[chainId]?.collectionsManager : undefined
-
-  const config = {
-    mode: undefined,
-    address: mergeManager,
-    abi: MergeManager__factory.abi,
-    functionName: 'claimLockedSkill',
-    args: [args]
-  } as const
-
-  return useContractWrite(config)
 }
 
 interface ClaimLockedSkillOpts {
@@ -121,7 +106,7 @@ export function useForgeApproveAndClaimLockedSkillCallback(
       }
 
       // Step 2:
-      return claimLockedSkill?.().then((res) => opts?.onClaimSend(res?.hash))
+      return claimLockedSkill?.().then((res) => opts?.onClaimSend(res))
     } catch (error) {
       devError('[@past3lle/forge-web3] --> useForgeApproveAndClaimLockedSkillCallback --> Error!', error)
       throw error

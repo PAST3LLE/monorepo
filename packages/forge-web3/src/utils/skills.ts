@@ -1,6 +1,6 @@
 import { devWarn } from '@past3lle/utils'
 import { DefaultTheme } from 'styled-components'
-import { Address } from 'wagmi'
+import { Address } from 'viem'
 
 import { ForgeBalances } from '../state/Balances'
 import { SkillDependencyObject, SkillId, SkillMetadata, SkillRarity } from '../types'

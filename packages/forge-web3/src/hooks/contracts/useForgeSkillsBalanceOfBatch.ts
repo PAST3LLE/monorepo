@@ -1,10 +1,11 @@
 import { Collection__factory } from '@past3lle/skilltree-contracts'
 import { devWarn } from '@past3lle/utils'
 import { useMemo } from 'react'
-import { Address, useContractReads } from 'wagmi'
+import { useReadContracts } from 'wagmi'
 
 import { ForgeMetadataState } from '../../state'
 import { WAGMI_SCOPE_KEYS } from '../constants'
+import { Address } from 'viem'
 
 export function useForgeSkillsBalanceOfBatch(
   skills: { result?: Address }[] | undefined = [],
@@ -17,12 +18,11 @@ export function useForgeSkillsBalanceOfBatch(
     [skills, metadata, address]
   )
 
-  return useContractReads({
+  return useReadContracts({
     contracts: contractReadsArgs,
-    watch: true,
     scopeKey: WAGMI_SCOPE_KEYS.SKILLS_BALANCE_OF_BATCH,
     // Don't run if our contract reads args list is 0
-    enabled: !!chainId && contractReadsArgs?.length > 0
+    query: { enabled: !!chainId && contractReadsArgs?.length > 0 }
   })
 }
 
