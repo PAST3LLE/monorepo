@@ -8,9 +8,9 @@ export function useQueryImageBlob(uri?: string) {
   const [ipfsConfig] = useForgeGetIpfsAtom()
 
   return useQuery({
-    queryKey: [ForgeQueries.MetadataUri],
+    queryKey: [ForgeQueries.MetadataUri, uri || undefined],
     queryFn: async () => {
-      if (!uri) return undefined
+      if (!uri) throw new Error('No blob URI passed!')
 
       try {
         const isIpfsImageUri = isIpfsUri(uri)

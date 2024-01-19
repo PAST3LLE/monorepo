@@ -24,7 +24,7 @@ function useWaitForSafeTransaction({ chainId, hash, ...queryOptions }: UseWaitFo
   const queryChainId = chainId || chain?.id
 
   const { data: safeTxHash, isLoading: isSafeLoading } = useQuery<Address, Error>({
-    queryKey: [QUERY_KEYS.SAFE_PENDING_TRANSACTIONS],
+    queryKey: [QUERY_KEYS.SAFE_PENDING_TRANSACTIONS, queryChainId, address, hash],
     queryFn: async (): Promise<Address> => {
       if (!queryChainId || !address || !hash) {
         throw new Error(
