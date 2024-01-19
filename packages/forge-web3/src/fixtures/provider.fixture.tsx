@@ -6,26 +6,23 @@ import { Config, ProviderNotFoundError, useBalance, useSendTransaction } from 'w
 import { injected } from 'wagmi/connectors'
 import { SendTransactionMutateAsync } from 'wagmi/query'
 
-import { ForgeW3Providers, useForgeMetadataAtom, useSupportedChainId, useW3Modal, useW3UserConnectionInfo } from '..'
+import { ForgeW3Providers, useW3Modal, useW3UserConnectionInfo } from '..'
 import { THEME, commonProps, contractProps } from './config'
 
 const IS_SERVER = typeof globalThis?.window === 'undefined'
 
 /* 
-    interface Web3ModalProps {
-        appName: string
-        web3Modal: Web3ModalConfig
-        wagmiClient?: SkillForgeW3WagmiClientOptions
-        ethereumClient?: EthereumClient
-    }
+  interface Web3ModalProps {
+    appName: string
+    web3Modal: Web3ModalConfig
+    wagmiClient?: SkillForgeW3WagmiClientOptions
+    ethereumClient?: EthereumClient
+  }
 */
 
 function InnerApp() {
   const { open } = useW3Modal()
-  const { address } = useW3UserConnectionInfo()
-  const chainId = useSupportedChainId()
-  const [state] = useForgeMetadataAtom()
-  const skill = chainId ? state.metadata[chainId][1][1] : null
+  const { address, chainId, connector } = useW3UserConnectionInfo()
 
   const { data, refetch } = useBalance({ address })
   const [sendEthVal, setSendEthVal] = useState('0')
@@ -146,61 +143,60 @@ function App() {
 }
 
 export default {
-  default: () => {
-    const { open } = usePstlWeb3Modal()
-    return (
-      <ForgeW3Providers
-        config={{
-          ...contractProps,
-          contactInfo: {
-            email: 'some-fake-email@gmail.com'
-          },
-          contentUrls: {
-            FAQ: 'https://faq.learnmoreabout.stuff.net'
-          },
-          name: commonProps.appName,
-          web3: {
-            chains: commonProps.chains,
-            connectors: {
-              connectors: [
-                injected({
-                  shimDisconnect: true,
-                  target() {
-                    try {
-                      if (IS_SERVER) throw new Error('Injected providers not available in server context.')
-                      const provider = window.ethereum?.isMetaMask
-                        ? window.ethereum
-                        : window.ethereum?.providersMap?.get('metamask')
-                      if (!provider) throw new ProviderNotFoundError()
-                      return {
-                        name: 'MetaMask',
-                        id: 'io.metamask',
-                        icon: 'https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg',
-                        provider
+  default: () => (
+    <ForgeW3Providers
+      config={{
+        ...contractProps,
+        contactInfo: {
+          email: 'some-fake-email@gmail.com'
+        },
+        contentUrls: {
+          FAQ: 'https://faq.learnmoreabout.stuff.net'
+        },
+        name: commonProps.appName,
+        web3: {
+          chains: commonProps.chains,
+          connectors: {
+            connectors: [
+              injected({
+                shimDisconnect: true,
+                target() {
+                  try {
+                    if (IS_SERVER) throw new Error('Injected providers not available in server context.')
+                    return {
+                      name: 'MetaMask',
+                      id: 'io.metamask',
+                      icon: 'https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg',
+                      provider() {
+                        const provider = window.ethereum?.isMetaMask
+                          ? window.ethereum
+                          : window.ethereum?.providersMap?.get('metamask')
+                        if (!provider) throw new ProviderNotFoundError()
+                        return provider
                       }
-                    } catch (error) {
-                      alert('MetaMask injected provider not found on window!')
-                      return undefined
                     }
+                  } catch (error) {
+                    alert('MetaMask injected provider not found on window!')
+                    return undefined
                   }
-                })
-              ]
-            },
-            modals: {
-              walletConnect: commonProps.modals.walletConnect
-            },
-            options: {
-              escapeHatches: {
-                appType: 'DAPP'
-              }
+                }
+              })
+            ]
+          },
+          modals: {
+            walletConnect: commonProps.modals.walletConnect
+          },
+          options: {
+            escapeHatches: {
+              appType: 'DAPP'
             }
           }
-        }}
-      >
-        <h1>Default Modal selections</h1>
-        <button onClick={() => open({ route: 'ConnectWallet' })}>Click and select a wallet in the modal!</button>
-      </ForgeW3Providers>
-    )
-  },
+        }
+      }}
+    >
+      <h1>DEFAULT</h1>
+      <InnerApp />
+    </ForgeW3Providers>
+  ),
   app: <App />
 }
