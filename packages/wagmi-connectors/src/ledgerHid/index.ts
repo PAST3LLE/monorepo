@@ -37,7 +37,7 @@ export function ledgerHid(parameters?: LedgerHidParameters) {
 
   let chainId: number | undefined = undefined
   let provider: LedgerHQProvider | undefined = undefined
-  let url = ''  
+  let url = ''
 
   // Create a new provider instance @ chain ID
   async function getProviderInstance(_chainId: number, config: Config): Promise<LedgerHQProvider> {

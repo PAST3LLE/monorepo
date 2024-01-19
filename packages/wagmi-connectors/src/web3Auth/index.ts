@@ -18,7 +18,7 @@ import { Web3AuthParameters, web3Auth } from './connector/index'
           mode?: WhiteLabelData['mode']
           customTheme?: WhiteLabelData['theme']
         }
-        chains: ChainsPartialReadonly<ID>
+        chains: readonly [Chain, ...Chain[]]
         zIndex?: number
         network: Web3AuthOptions['web3AuthNetwork']
         storageKey?: Web3AuthOptions['storageKey']

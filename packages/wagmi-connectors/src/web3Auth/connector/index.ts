@@ -122,7 +122,7 @@ export function web3Auth<A extends IAdapter<unknown>>(options: Options<A>) {
     },
     async disconnect(): Promise<void> {
       await web3AuthInstance?.logout()
-      
+
       this.onDisconnect()
     },
 
@@ -262,7 +262,7 @@ export function web3Auth<A extends IAdapter<unknown>>(options: Options<A>) {
       adapter?.provider?.off('disconnect', this.onDisconnect.bind(this))
       adapter?.provider?.off('accountsChanged', this.onAccountsChanged.bind(this))
       adapter?.provider?.off('chainChanged', this.onChainChanged.bind(this))
-    },
+    }
   }))
 }
 

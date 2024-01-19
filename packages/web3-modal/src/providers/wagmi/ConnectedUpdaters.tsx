@@ -6,6 +6,7 @@ import { useSwitchChain } from 'wagmi'
 import { UserOptionsCtrl } from '../../controllers'
 import { UserOptionsCtrlState } from '../../controllers/types'
 import { useUserConnectionInfo } from '../../hooks'
+
 // import { SmartAutoConnectProps, useSmartAutoConnect } from '../../hooks/internal/useSmartAutoConnect'
 
 function useSwitchChainOnLimitedChainsChange() {

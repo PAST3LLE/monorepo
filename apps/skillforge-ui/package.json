@@ -36,10 +36,13 @@
     "forge-cli:local": "../../node_modules/@past3lle/forge-cli/bin/forge-cli.js"
   },
   "resolutions": {
-    "@web3modal/ethereum": "^2.x",
-    "@web3modal/react": "^2.x",
-    "wagmi": "^1.x",
-    "**/*/@wagmi/core": "^1.x"
+    "**/*/@tanstack/react-query": "^2.x",
+    "@tanstack/react-query": "^2.x",
+    "**/*/viem": "^2.x",
+    "viem": "^2.x",
+    "**/*/wagmi": "^2.x",
+    "wagmi": "^2.x",
+    "styled-components": "^5.x"
   },
   "dependencies": {
     "@past3lle/forge-web3": "^2.0.0-alpha.2",
@@ -49,7 +52,10 @@
     "@past3lle/utils": "^2.0.0-alpha.2",
     "@web3auth/torus-wallet-connector-plugin": "7.2.1",
     "react-helmet-async": "^1.3.0",
-    "styled-components": "^5.3.5"
+    "styled-components": "^5.3.5",
+    "wagmi": "^2.2.1",
+    "viem": "^2.3.1",
+    "@tanstack/react-query": "^5.17.15"
   },
   "devDependencies": {
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.13.8",

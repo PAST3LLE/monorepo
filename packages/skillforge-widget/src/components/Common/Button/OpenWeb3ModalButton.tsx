@@ -1,5 +1,5 @@
 import { ButtonProps, Row } from '@past3lle/components'
-import { useWeb3Modal } from '@web3modal/react'
+import { useW3Modal } from '@past3lle/forge-web3'
 import React, { useCallback } from 'react'
 
 import { ThemedButton } from './common'
@@ -13,7 +13,7 @@ interface Props {
 }
 
 export function OpenWeb3ModalButton({ logoUri, buttonProps, openOptions, children }: Props) {
-  const { open, isOpen } = useWeb3Modal()
+  const { open, isOpen } = useW3Modal()
 
   const handleClick = useCallback(async () => {
     open(openOptions)

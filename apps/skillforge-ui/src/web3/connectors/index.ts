@@ -16,15 +16,15 @@ function _getWhitelistTheme(): PstlWeb3AuthParameters['uiConfig'] {
 }
 
 const connectors = [
-    pstlWeb3Auth({
-      network: process.env.REACT_APP_WEB3_AUTH_NETWORK as PstlWeb3AuthParameters['network'],
-      projectId: process.env.REACT_APP_WEB3AUTH_ID as string,
-      storageKey: 'session',
-      preset: 'DISALLOW_EXTERNAL_WALLETS',
-      mfaLevel: 'none',
-      uxMode: 'popup',
-      ..._getWhitelistTheme()
-    })
+  pstlWeb3Auth({
+    network: process.env.REACT_APP_WEB3_AUTH_NETWORK as PstlWeb3AuthParameters['network'],
+    projectId: process.env.REACT_APP_WEB3AUTH_ID as string,
+    storageKey: 'session',
+    preset: 'DISALLOW_EXTERNAL_WALLETS',
+    mfaLevel: 'none',
+    uxMode: 'popup',
+    ..._getWhitelistTheme()
+  })
 ]
 const frameConnectors = [ledgerLive({})]
 export { connectors, frameConnectors }

@@ -17,17 +17,22 @@ if (!process.env.REACT_APP_WEB3AUTH_DEVNET_CLIENT_ID) {
 }
 const WAGMI_CLIENT = createConfig({
   chains,
-  connectors: [ledgerHid({ shimDisconnect: true }),wagmiConnectors.ledgerLive({}), wagmiConnectors.iframe({}), wagmiConnectors.web3auth({
-    projectId: process.env.REACT_APP_WEB3AUTH_DEVNET_CLIENT_ID as string,
-    network: 'sapphire_devnet',
-    uiConfig: {
-      appName: 'SKILLFORGE TEST',
-      logoLight: '',
-      logoDark: ''
-    },
-    uxMode: 'popup',
-    preset: 'DISALLOW_EXTERNAL_WALLETS'
-  })],
+  connectors: [
+    ledgerHid({ shimDisconnect: true }),
+    wagmiConnectors.ledgerLive({}),
+    wagmiConnectors.iframe({}),
+    wagmiConnectors.web3auth({
+      projectId: process.env.REACT_APP_WEB3AUTH_DEVNET_CLIENT_ID as string,
+      network: 'sapphire_devnet',
+      uiConfig: {
+        appName: 'SKILLFORGE TEST',
+        logoLight: '',
+        logoDark: ''
+      },
+      uxMode: 'popup',
+      preset: 'DISALLOW_EXTERNAL_WALLETS'
+    })
+  ],
   transports: {
     1: http(`https://eth-mainnet.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_GOERLI_API_KEY as string}`),
     5: http(`https://eth-goerli.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_GOERLI_API_KEY as string}`),

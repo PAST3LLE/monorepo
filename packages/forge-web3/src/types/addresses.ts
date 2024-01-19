@@ -1,9 +1,9 @@
 import { Address } from 'abitype'
 
-import { FORGE_SUPPORTED_CHAINS } from '../constants/chains'
+import { ForgeChainsMinimum } from './appConfig'
 
-export type ForgeContractAddressMap = Partial<{
-  [id in (typeof FORGE_SUPPORTED_CHAINS)[number]['id']]: {
+export type ForgeContractAddressMap<forgeChains extends ForgeChainsMinimum> = Partial<{
+  [id in forgeChains[number]['id']]: {
     collectionsManager: Address
     mergeManager: Address
   }

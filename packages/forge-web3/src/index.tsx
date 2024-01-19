@@ -12,6 +12,7 @@ import {
   usePstlAccountNetworkActions as useW3AccountNetworkActions,
   usePstlConnectDisconnect as useW3ConnectDisconnect,
   usePstlConnection as useW3Connection,
+  useCreateWagmiClient as useW3CreateWagmiClient,
   useFindTransactionByMetadataKeyValue as useW3FindTransactionByMetadataKeyValue,
   useFindTransactionByMetadataKeyValueCallback as useW3FindTransactionByMetadataKeyValueCallback,
   usePstlWeb3Modal as useW3Modal,
@@ -20,12 +21,13 @@ import {
   useTransactionsByMetadataKeyCallback as useW3TransactionsByMetadataKeyCallback,
   useTransactionsRead as useW3TransactionsRead,
   usePstlUserConnectionInfo as useW3UserConnectionInfo,
-  useCreateWagmiClient
+  usePstlWaitForTransaction as useW3WaitForTransaction,
+  usePstlWaitForTransactionEffect as useW3WaitForTransactionEffect
 } from '@past3lle/web3-modal'
 import React, { ReactNode } from 'react'
 
 import { ForgeBalancesUpdater, ForgeW3StateUpdaters, ForgeWindowSizeUpdater } from './state'
-import { ForgeW3AppConfig } from './types'
+import { ForgeChainsMinimum, ForgeW3AppConfig } from './types'
 
 // Utilities & Types & Contract Hooks
 export * from './utils'
@@ -36,16 +38,22 @@ export * from './constants'
 // State and Updaters
 export * from './state'
 
-interface ForgeW3CoreProvidersProps {
+interface ForgeW3CoreProvidersProps<forgeChains extends ForgeChainsMinimum> {
   children: ReactNode
-  config: ForgeW3AppConfig
+  config: ForgeW3AppConfig<forgeChains>
 }
 
-function ForgeStateProviders({ config, children }: ForgeW3CoreProvidersProps) {
+function ForgeStateProviders<forgeChains extends ForgeChainsMinimum>({
+  config,
+  children
+}: ForgeW3CoreProvidersProps<forgeChains>) {
   return <ForgeW3StateUpdaters {...config}>{children}</ForgeW3StateUpdaters>
 }
 
-function ForgeW3Providers({ config, children }: ForgeW3CoreProvidersProps) {
+function ForgeW3Providers<forgeChains extends ForgeChainsMinimum>({
+  config,
+  children
+}: ForgeW3CoreProvidersProps<forgeChains>) {
   return (
     <PstlW3Providers
       config={{
@@ -59,7 +67,10 @@ function ForgeW3Providers({ config, children }: ForgeW3CoreProvidersProps) {
   )
 }
 
-function ForgeW3BalancesAndWindowSizeProviders({ config, children }: ForgeW3CoreProvidersProps) {
+function ForgeW3BalancesAndWindowSizeProviders<forgeChains extends ForgeChainsMinimum>({
+  config,
+  children
+}: ForgeW3CoreProvidersProps<forgeChains>) {
   return (
     <>
       <ForgeWindowSizeUpdater {...config.options?.windowSizeOptions} />
@@ -92,7 +103,9 @@ export {
   useW3FindTransactionByMetadataKeyValueCallback,
   useW3TransactionsByMetadataKey,
   useW3TransactionsByMetadataKeyCallback,
-  useCreateWagmiClient,
+  useW3CreateWagmiClient,
+  useW3WaitForTransaction,
+  useW3WaitForTransactionEffect,
   getAppType,
   useDeriveAppType,
   createTheme as createWeb3ModalTheme,

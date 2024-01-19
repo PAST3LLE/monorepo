@@ -20,6 +20,7 @@ import {
   useModalActions as usePstlModalActions,
   useUserConnectionInfo as usePstlUserConnectionInfo,
   useWaitForTransaction as usePstlWaitForTransaction,
+  useWaitForTransactionReceiptEffect as usePstlWaitForTransactionEffect,
   useWatchPendingTransactions as usePstlWatchPendingTransactions,
   usePstlWeb3Modal,
   useAllWeb3Modals as usePstlWeb3Modals,
@@ -34,7 +35,6 @@ import {
   type PstlWeb3ModalProps,
   useCreateWagmiClient
 } from './providers'
-import { AppType, getAppType, useDeriveAppType } from './utils/connectors'
 import { type PstlModalTheme, type PstlModalThemeExtension, W3aStyleResetProvider, createTheme } from './theme'
 import {
   getAllChainsInfo,
@@ -42,6 +42,7 @@ import {
   getSafeAppChainInfo,
   getSafeAppChainShortName
 } from './utils/chains'
+import { AppType, getAppType, useDeriveAppType } from './utils/connectors'
 
 export * from './types'
 
@@ -58,6 +59,7 @@ export {
   usePstlWeb3Modals,
   useAllWeb3Modals,
   usePstlWaitForTransaction,
+  usePstlWaitForTransactionEffect,
   useLimitChainsAndSwitchCallback,
   usePstlWatchPendingTransactions,
   useIsSafeWallet,

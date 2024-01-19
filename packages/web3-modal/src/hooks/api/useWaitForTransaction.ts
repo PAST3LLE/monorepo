@@ -99,7 +99,7 @@ export function useWaitForTransactionReceiptEffect({
   enabled: boolean
 }) {
   // Watch EOA transactions
-  const { data, error } = useWagmiWaitForTransactionReceipt({
+  const results = useWagmiWaitForTransactionReceipt({
     hash,
     query: {
       enabled
@@ -109,7 +109,9 @@ export function useWaitForTransactionReceiptEffect({
 
   useEffect(() => {
     if (!enabled) return
-    onSettled(data, error)
+    onSettled(results?.data, results?.error)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, error, onSettled, enabled])
+  }, [results?.data, results?.error, onSettled, enabled])
+
+  return results
 }

@@ -1,11 +1,11 @@
 import { Collection__factory } from '@past3lle/skilltree-contracts'
 import { devWarn } from '@past3lle/utils'
 import { useMemo } from 'react'
+import { Address } from 'viem'
 import { useReadContracts } from 'wagmi'
 
 import { ForgeMetadataState } from '../../state'
 import { WAGMI_SCOPE_KEYS } from '../constants'
-import { Address } from 'viem'
 
 export function useForgeSkillsBalanceOfBatch(
   skills: { result?: Address }[] | undefined = [],

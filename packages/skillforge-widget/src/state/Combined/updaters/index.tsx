@@ -1,4 +1,4 @@
-import { ForgeStateProviders, ForgeW3Providers } from '@past3lle/forge-web3'
+import { ForgeChainsMinimum, ForgeStateProviders, ForgeW3Providers } from '@past3lle/forge-web3'
 import { ThemeProviderSimple, useConstructTheme } from '@past3lle/theme'
 import React, { ReactNode } from 'react'
 import { DefaultTheme } from 'styled-components'
@@ -12,7 +12,9 @@ import { SkillsUpdaters } from '../../Skills/updaters'
 import { AppThemeMode, useAppThemeModeRead } from '../../Theme'
 import { ThemeUpdater } from '../../Theme/updaters'
 
-export function SkillForgeThemeAndDataProviders(props: SkillForgeWidgetConfig & { children: ReactNode }) {
+export function SkillForgeThemeAndDataProviders<chains extends ForgeChainsMinimum>(
+  props: SkillForgeWidgetConfig<chains> & { children: ReactNode }
+) {
   const [mode] = useAppThemeModeRead()
   const theme = useConstructTheme({
     theme: props.theme,
@@ -34,10 +36,10 @@ export function SkillForgeThemeAndDataProviders(props: SkillForgeWidgetConfig & 
   )
 }
 
-export function SkillForgeDisconnectedDataProviders({
+export function SkillForgeDisconnectedDataProviders<chains extends ForgeChainsMinimum>({
   children,
   ...props
-}: SkillForgeWidgetConfig & { children: ReactNode }) {
+}: SkillForgeWidgetConfig<chains> & { children: ReactNode }) {
   return (
     <ForgeStateProviders config={props}>
       <SkillForgeThemeAndDataProviders {...props}>{children}</SkillForgeThemeAndDataProviders>
@@ -45,10 +47,10 @@ export function SkillForgeDisconnectedDataProviders({
   )
 }
 
-export function SkillForgeConnectedDataProviders({
+export function SkillForgeConnectedDataProviders<chains extends ForgeChainsMinimum>({
   children,
   ...props
-}: SkillForgeWidgetConfig & { children: ReactNode }) {
+}: SkillForgeWidgetConfig<chains> & { children: ReactNode }) {
   return (
     <ForgeW3Providers config={props}>
       <SkillForgeThemeAndDataProviders {...props}>{children}</SkillForgeThemeAndDataProviders>

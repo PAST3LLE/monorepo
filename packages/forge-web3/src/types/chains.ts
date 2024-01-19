@@ -2,6 +2,6 @@ import type { SupportedForgeNetworks as SupportedForgeChainIds } from '@past3lle
 
 import { FORGE_SUPPORTED_CHAINS } from '../constants/chains'
 
-type PartialForgeChains = readonly typeof FORGE_SUPPORTED_CHAINS[number][]
+type PartialForgeChains = readonly (typeof FORGE_SUPPORTED_CHAINS)[number][]
 
 export { type SupportedForgeChainIds, type PartialForgeChains }

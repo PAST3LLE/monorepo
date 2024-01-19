@@ -1,8 +1,8 @@
-import { iframeEthereum, IframeEthereumParameters } from './iframeEthereum'
-import { ledgerLive, LedgerLiveParameters } from './ledgerLive'
-import { pstlWeb3Auth, PstlWeb3AuthParameters } from './web3Auth'
+import { IframeEthereumParameters, iframeEthereum } from './iframeEthereum'
 import { LedgerHidParameters, checkError as checkLedgerHidError, isHIDSupported, ledgerHid } from './ledgerHid'
+import { LedgerLiveParameters, ledgerLive } from './ledgerLive'
 import { isIframe } from './utils'
+import { PstlWeb3AuthParameters, pstlWeb3Auth } from './web3Auth'
 
 export {
   iframeEthereum,

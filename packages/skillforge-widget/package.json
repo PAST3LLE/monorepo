@@ -63,17 +63,20 @@
     ]
   },
   "resolutions": {
-    "@web3modal/ethereum": ">=2.2.0",
-    "@web3modal/react": ">=2.2.0",
-    "wagmi": ">=0.12.1"
+    "**/*/@tanstack/react-query": "^2.x",
+    "@tanstack/react-query": "^2.x",
+    "**/*/viem": "^2.x",
+    "viem": "^2.x",
+    "**/*/wagmi": "^2.x",
+    "wagmi": "^2.x"
   },
   "peerDependencies": {
-    "@web3modal/ethereum": ">=2.2.0",
-    "@web3modal/react": ">=2.2.0",
-    "jotai": ">=2",
     "react": ">=16",
     "styled-components": ">=5",
-    "wagmi": ">=0.12.1"
+    "jotai": ">=2",
+    "wagmi": "^2.x",
+    "viem": "^2.x",
+    "@tanstack/react-query": "^5.x"
   },
   "devDependencies": {
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.13.8",
@@ -92,7 +95,10 @@
     "react": "^18.2.0",
     "react-cosmos": "^5.7.2",
     "react-dom": "^18.2.0",
-    "styled-components": "^5.3.5"
+    "styled-components": "^5.3.5",
+    "wagmi": "^2.2.1",
+    "viem": "^2.3.1",
+    "@tanstack/react-query": "^5.17.15"
   },
   "dependencies": {
     "@past3lle/components": "^2.0.0-alpha.2",

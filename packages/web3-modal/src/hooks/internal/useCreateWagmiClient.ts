@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { Z_INDICES } from '../../constants'
 import { Chain, Transport, http } from 'viem'
 import { WagmiProviderProps, createConfig } from 'wagmi'
 import { walletConnect } from 'wagmi/connectors'
@@ -75,7 +76,7 @@ function createWagmiClient<chains extends readonly [Chain, ...Chain[]]>({
   const transportsMap = props.chains.reduce(
     (acc, chain) => ({
       ...acc,
-      [chain.id]: http()
+      [chain.id]: http(chain.rpcUrls.default.http[0])
     }),
     {} as Record<chains[number]['id'], Transport>
   )
@@ -83,7 +84,16 @@ function createWagmiClient<chains extends readonly [Chain, ...Chain[]]>({
   const connectors = [
     walletConnect({
       projectId: props.walletConnect.projectId,
-      qrModalOptions: props.walletConnect,
+      qrModalOptions: {
+        ...props.walletConnect,
+        themeVariables: {
+          ...props.walletConnect.themeVariables,
+          '--wcm-z-index':
+            props.walletConnect.zIndex?.toString() ||
+            props.walletConnect.themeVariables?.['--wcm-z-index'] ||
+            Z_INDICES.W3M.toString()
+        }
+      },
       showQrModal: true
     }),
     ...(getConnectorsArrayFromConfig(props.connectors) || [])
@@ -98,10 +108,12 @@ function createWagmiClient<chains extends readonly [Chain, ...Chain[]]>({
 
   if ('overrides' in props.connectors) {
     const overrides = props.connectors?.overrides || {}
-    client._internal.connectors.setState(connectors => connectors.map(sConn => ({
-      ...sConn,
-      ...connectorOverridePropSelector(overrides, [sConn.id, sConn.name, sConn.type]),
-    })))
+    client._internal.connectors.setState((connectors) =>
+      connectors.map((sConn) => ({
+        ...sConn,
+        ...connectorOverridePropSelector(overrides, [sConn.id, sConn.name, sConn.type])
+      }))
+    )
   }
 
   return client

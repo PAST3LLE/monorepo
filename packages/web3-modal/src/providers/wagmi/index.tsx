@@ -3,8 +3,8 @@ import React, { ReactNode, memo } from 'react'
 import { Chain } from 'viem'
 import { Connector, WagmiProvider } from 'wagmi'
 
-import { SmartAutoConnectProps } from '../../hooks/internal/useSmartAutoConnect'
 import { WagmiClient } from '../../hooks/internal/useCreateWagmiClient'
+import { SmartAutoConnectProps } from '../../hooks/internal/useSmartAutoConnect'
 import { ConnectedUpdaters } from './ConnectedUpdaters'
 
 const queryClient = new QueryClient()

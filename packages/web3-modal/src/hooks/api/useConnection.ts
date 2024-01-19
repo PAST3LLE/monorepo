@@ -127,11 +127,11 @@ export function useAccountNetworkActions() {
     return root.open({
       route: (chain?.id && address) || !isMobileWidth ? 'SelectNetwork' : 'ConnectWallet'
     })
-  }, [root, chain?.id, address, isMobileWidth])
+  }, [chain?.id, root, isMobileWidth])
 
   const onAccountClick = useCallback(async () => {
     return root.open({ route: chain?.id && address ? 'Account' : 'ConnectWallet' })
-  }, [address, chain?.id, root])
+  }, [chain?.id, root])
 
   return {
     onAccountClick,
@@ -141,11 +141,11 @@ export function useAccountNetworkActions() {
 
 export function useModalActions() {
   const { root } = useAllWeb3Modals()
-  const { address, chain } = useUserConnectionInfo()
+  const { chain } = useUserConnectionInfo()
 
   const onTransactionsClick = useCallback(async () => {
-    return root.open({ route: address && chain?.id ? 'Transactions' : 'ConnectWallet' })
-  }, [address, chain?.id, root])
+    return root.open({ route: chain?.id ? 'Transactions' : 'ConnectWallet' })
+  }, [chain?.id, root])
 
   const onConnectClick = useCallback(async () => {
     return root.open({ route: 'ConnectWallet' })

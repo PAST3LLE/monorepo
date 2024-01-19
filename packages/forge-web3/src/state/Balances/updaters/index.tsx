@@ -51,7 +51,6 @@ export function ForgeBalancesUpdater({ loadAmount = BigInt(DEFAULT_COLLECTION_LO
         updateForgeBalances(balances)
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chainId, address, balancesBatch, metadata, resetUserBalances, updateForgeBalances])
 
   return null

@@ -1,11 +1,7 @@
 import { devError } from '@past3lle/utils'
 import { useCallback, useMemo } from 'react'
 import { Abi, ContractFunctionArgs, SimulateContractParameters } from 'viem'
-import {
-  useAccount,
-  usePublicClient,
-  useWalletClient
-} from 'wagmi'
+import { useAccount, usePublicClient, useWalletClient } from 'wagmi'
 
 import { SkillMetadata } from '../../types'
 import { dedupeList, formatSkillMetadataToArgs } from '../../utils'

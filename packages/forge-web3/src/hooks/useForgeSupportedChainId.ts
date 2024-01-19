@@ -54,5 +54,5 @@ export function useSupportedChainId(): SupportedForgeChainIds | undefined {
 export function useSupportedOrDefaultChainId(allowDefault = true) {
   const [defaultChain] = useForgeReadonlyChainAtom()
 
-  return useSupportedChainId() || allowDefault ? defaultChain?.id as SupportedForgeChainIds : undefined
+  return useSupportedChainId() || allowDefault ? (defaultChain?.id as SupportedForgeChainIds) : undefined
 }

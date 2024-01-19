@@ -1,10 +1,10 @@
 import { Collection__factory } from '@past3lle/skilltree-contracts'
 import { devWarn } from '@past3lle/utils'
+import { Address } from 'viem'
 import { useReadContracts } from 'wagmi'
 
 import { SkillMetadata } from '../../types/skill'
 import { WAGMI_SCOPE_KEYS } from '../constants'
-import { Address } from 'viem'
 
 type TokenDepsMap = { [key: Address]: bigint[] }
 export function useForgeBalanceOfBatchFromMetadata(skillMetadata?: SkillMetadata, address?: Address) {

@@ -1,5 +1,5 @@
 import { PstlWeb3ModalProps } from '@past3lle/web3-modal'
 
-import { FORGE_SUPPORTED_CHAINS } from '../constants/chains'
+import { ForgeChainsMinimum } from './appConfig'
 
-export type ForgeWeb3ModalProps = PstlWeb3ModalProps<typeof FORGE_SUPPORTED_CHAINS>
+export type ForgeWeb3ModalProps = PstlWeb3ModalProps<ForgeChainsMinimum>

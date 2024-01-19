@@ -258,13 +258,7 @@ async function _delayFindDomById({
   id: string
 }): Promise<HTMLElement | null | 'BAILED'> {
   return new Promise((resolve) =>
-    setTimeout(
-      () =>
-      IS_SERVER || value >= limit
-          ? resolve('BAILED')
-          : resolve(document.getElementById(id)),
-      freq
-    )
+    setTimeout(() => (IS_SERVER || value >= limit ? resolve('BAILED') : resolve(document.getElementById(id))), freq)
   )
 }
 

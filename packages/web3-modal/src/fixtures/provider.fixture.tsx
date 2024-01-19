@@ -1,6 +1,7 @@
 import { ButtonVariations, ColumnCenter, PstlButton, RowCenter, SpinnerCircle } from '@past3lle/components'
 import { ThemeProvider, createCustomTheme } from '@past3lle/theme'
 import { getExpirementalCookieStore as getCookieStore, truncateLongString } from '@past3lle/utils'
+import { ledgerHid } from '@past3lle/wagmi-connectors'
 import { config } from 'dotenv'
 import React, { ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTheme } from 'styled-components'
@@ -24,7 +25,6 @@ import { PstlW3Providers } from '../providers'
 import { createTheme } from '../theme'
 import { COMMON_CONNECTOR_OVERRIDES, DEFAULT_PROPS, DEFAULT_PROPS_WEB3AUTH, pstlModalTheme } from './config'
 import { INJECTED_CONNECTORS, wagmiConnectors } from './connectorsAndPlugins'
-import { ledgerHid } from '@past3lle/wagmi-connectors'
 
 config()
 

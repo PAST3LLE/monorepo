@@ -5,9 +5,9 @@ import { PstlWeb3Modal } from '../components'
 import { TransactionsUpdater } from '../controllers/TransactionsCtrl/updater'
 import { useAutoSwitchToChain } from '../hooks/internal/useAutoSwitchToChain'
 import { useConnectorAndChainConfig } from '../hooks/internal/useConnectorAndChainConfig'
+import { PstlWagmiClientOptions, useCreateWagmiClient } from '../hooks/internal/useCreateWagmiClient'
 import { useUpdateUserConfigState } from '../hooks/state/useUpdateUserConfigState'
 import type { PstlWeb3ModalProps } from './types'
-import { PstlWagmiClientOptions, useCreateWagmiClient } from '../hooks/internal/useCreateWagmiClient'
 import { PstlWagmiProvider } from './wagmi'
 
 const PstlW3ProvidersBase = <chains extends WagmiProviderProps['config']['chains']>({
@@ -30,19 +30,27 @@ const PstlW3ProvidersBase = <chains extends WagmiProviderProps['config']['chains
   useUpdateUserConfigState(config)
 
   return (
-    <PstlWagmiProvider
-      wagmiClient={wagmiClient}
-      chainFromUrl={chainFromUrl}
-      autoConnect={autoReconnect || config.options?.autoConnect}
-    >
-      <PstlWeb3Modal
-        {...config.modals.root}
-        chainIdFromUrl={chainFromUrl?.id}
-        closeModalOnKeys={config.options?.closeModalOnKeys}
-      />
-      <TransactionsUpdater />
-      {children}
-    </PstlWagmiProvider>
+    <>
+      {/* 
+        * Wagmi V2 // Web3Modal V4 is not compatible with this package unfortunately :(
+        * Will likely phase out entirely. For now, use walletConnect connector. 
+        
+        <Web3Modal chains={config.chains as Writable<chains>} config={config.modals.walletConnect} /> 
+      */}
+      <PstlWagmiProvider
+        wagmiClient={wagmiClient}
+        chainFromUrl={chainFromUrl}
+        autoConnect={autoReconnect || config.options?.autoConnect}
+      >
+        <PstlWeb3Modal
+          {...config.modals.root}
+          chainIdFromUrl={chainFromUrl?.id}
+          closeModalOnKeys={config.options?.closeModalOnKeys}
+        />
+        <TransactionsUpdater />
+        {children}
+      </PstlWagmiProvider>
+    </>
   )
 }
 

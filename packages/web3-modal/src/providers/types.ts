@@ -1,14 +1,11 @@
-// import { ConfigCtrlState } from '@web3modal/core'
-// import { EthereumClient } from '@web3modal/ethereum'
-// import { Web3ModalProps as Web3ModalConfigOriginal } from '@web3modal/react'
 import { Chain, Transport } from 'viem'
 import { CreateConnectorFn, Config as WagmiClientConfig, WagmiProviderProps } from 'wagmi'
 import { walletConnect } from 'wagmi/connectors'
 
 import { PstlWeb3ConnectionModalProps } from '../components/modals/ConnectionModal'
 import { UserOptionsTransactionsCallbacks } from '../controllers/types'
-import { ConnectorEnhanced, ConnectorOverrides } from '../types'
 import { PstlWagmiClientOptions } from '../hooks/internal/useCreateWagmiClient'
+import { ConnectorEnhanced, ConnectorOverrides } from '../types'
 import { AppType } from '../utils/connectors'
 
 export interface ConfigCtrlState {
@@ -37,7 +34,20 @@ export type Web3ModalThemeVariables = {
 
 export type ReadonlyChains = WagmiProviderProps['config']['chains']
 
-type WalletConnectQrModalOptions = Required<Parameters<typeof walletConnect>[0]>['qrModalOptions']
+type WalletConnectConnectorConfig = Required<Parameters<typeof walletConnect>[0]>
+type WalletConnectEnhancedThemeVariables = Required<
+  WalletConnectConnectorConfig['qrModalOptions']
+>['themeVariables'] & {
+  '--wcm-color-fg-1'?: string
+  '--wcm-color-fg-2'?: string
+  '--wcm-color-fg-3'?: string
+  '--wcm-color-bg-1'?: string
+  '--wcm-color-bg-2'?: string
+  '--wcm-color-bg-3'?: string
+}
+type WalletConnectQrModalOptions = WalletConnectConnectorConfig['qrModalOptions'] & {
+  themeVariables?: WalletConnectEnhancedThemeVariables
+}
 
 export type WalletConnectConfig<chains extends ReadonlyChains = ReadonlyChains> = Omit<
   WalletConnectQrModalOptions,
@@ -179,7 +189,7 @@ export interface Web3ModalProps<chains extends ReadonlyChains = ReadonlyChains> 
    * @name chains
    * @description Wagmi chains to allow.
    * @example 
-    import { mainnet, goerli, polygon } from '@wagmi/chains'
+    import { mainnet, goerli, polygon } from 'viem/chains'
     ...
     return (
       <PstlW3Providers
@@ -207,7 +217,7 @@ export interface Web3ModalProps<chains extends ReadonlyChains = ReadonlyChains> 
    * @name chains
    * @descriptions Required. Chains to support.
    * @example
-   * import { mainnet, goerli, matic, polygon } from 'wagmi/chains'
+   * import { mainnet, goerli, matic, polygon } from 'viem/chains'
    * ...
    * chains: [mainnet, goerli, matic, polygon]
    */
@@ -248,6 +258,7 @@ export interface Web3ModalProps<chains extends ReadonlyChains = ReadonlyChains> 
   modals: {
     /**
      * @description Root modal props. Mostly UI/UX
+     * {@link RootModalProps}
      * @example 
      interface PstlWeb3ModalProps.modals.root {
         // Optional. Modal title, appears at top.

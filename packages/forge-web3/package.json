@@ -69,7 +69,14 @@
     "url": "https://github.com/PAST3LLE/past3lle-monorepo/issues"
   },
   "resolutions": {
-    "**/*/@wagmi/core": ">=2"
+    "@wagmi/core": ">2 < 3",
+    "**/*/@wagmi/core": ">2 < 3",
+    "**/*/@tanstack/react-query": "^2.x",
+    "@tanstack/react-query": "^2.x",
+    "**/*/viem": "^2.x",
+    "viem": "^2.x",
+    "**/*/wagmi": "^2.x",
+    "wagmi": "^2.x"
   },
   "peerDependencies": {
     "react": ">=16",
@@ -89,7 +96,6 @@
   },
   "devDependencies": {
     "@emotion/react": "11.11.1",
-    "@tanstack/react-query": "^5.17.15",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "jotai-devtools": "^0.7.1",
@@ -97,8 +103,9 @@
     "react-cosmos": "^5.7.2",
     "react-dom": "^18.2.0",
     "styled-components": "^5.3.6",
-    "wagmi": "^2.0.3",
-    "viem": "^2.0.5"
+    "wagmi": "^2.2.1",
+    "viem": "^2.3.1",
+    "@tanstack/react-query": "^5.17.15"
   },
   "browserslist": {
     "production": [

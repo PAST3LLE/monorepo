@@ -69,9 +69,12 @@
     ]
   },
   "resolutions": {
-    "**/*/@wagmi/connectors": ">=4 < 5",
-    "**/*/@wagmi/core": ">=2 < 3",
-    "@wagmi/core": ">=2 < 3",
+    "**/*/@tanstack/react-query": "^2.x",
+    "@tanstack/react-query": "^2.x",
+    "**/*/viem": "^2.x",
+    "viem": "^2.x",
+    "**/*/wagmi": "^2.x",
+    "wagmi": "^2.x",
     "styled-components": "^5.x"
   },
   "peerDependencies": {
@@ -110,9 +113,9 @@
     "react-dom": "^18.2.0",
     "rollup": "^3.29.2",
     "styled-components": "^5.3.6",
-    "viem": "^2.0.3",
-    "wagmi": "^2.0.3",
-    "@tanstack/react-query": "^5.17.9"
+    "wagmi": "^2.2.1",
+    "viem": "^2.3.1",
+    "@tanstack/react-query": "^5.17.15"
   },
   "browserslist": {
     "production": [

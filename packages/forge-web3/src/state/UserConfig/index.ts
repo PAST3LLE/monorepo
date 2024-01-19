@@ -2,12 +2,12 @@ import { Address } from '@past3lle/types'
 import { atom, useAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 import { useCallback, useMemo } from 'react'
-
-import { STATE_STORAGE_KEYS } from '../../constants/state-storage-keys'
-import { ForgeContractAddressMap, ForgeMetadataUriMap, PartialForgeChains } from '../../types'
-import { CustomIpfsGatewayConfig } from '../../utils'
 import { Chain } from 'viem'
 import { goerli } from 'viem/chains'
+
+import { STATE_STORAGE_KEYS } from '../../constants/state-storage-keys'
+import { ForgeChainsMinimum, ForgeContractAddressMap, ForgeMetadataUriMap, PartialForgeChains } from '../../types'
+import { CustomIpfsGatewayConfig } from '../../utils'
 
 const MINIMUM_COLLECTION_BOARD_SIZE = 3
 const EMPTY_COLLECTION_ROWS_SIZE = 6
@@ -58,8 +58,8 @@ export interface UserConfigState {
     gatewayUris: CustomIpfsGatewayConfig[]
     gatewayApiUris: CustomIpfsGatewayConfig[]
   }
-  metadataUriMap: Partial<ForgeMetadataUriMap>
-  contractAddressMap: Partial<ForgeContractAddressMap>
+  metadataUriMap: ForgeMetadataUriMap<ForgeChainsMinimum>
+  contractAddressMap: ForgeContractAddressMap<ForgeChainsMinimum>
 }
 export const userConfigAtom = atomWithStorage<UserConfigState>(STATE_STORAGE_KEYS.FORGE_USER_CONFIG_STATE, {
   chains: [goerli],
@@ -172,10 +172,7 @@ export const useForgeContractAddressMapAtom = () => useAtom(contractAddressMapAt
 export const useForgeReadonlyChainAtom = () => useAtom(readonlyChainAtom)
 export const useForgeSetUrlToReadonlyChain = (
   chainParam: string | null | undefined
-): [
-  Chain | undefined,
-  (chain: Chain) => void
-] => {
+): [Chain | undefined, (chain: Chain) => void] => {
   const [{ chains }, setUserConfig] = useForgeUserConfigAtom()
   const isParamNetwork = isNaN(Number(chainParam))
 
@@ -183,10 +180,6 @@ export const useForgeSetUrlToReadonlyChain = (
 
   return [
     chain,
-    useCallback(
-      (chain: Chain) =>
-        setUserConfig((state) => ({ ...state, readonlyChain: chain })),
-      [setUserConfig]
-    )
+    useCallback((chain: Chain) => setUserConfig((state) => ({ ...state, readonlyChain: chain })), [setUserConfig])
   ]
 }

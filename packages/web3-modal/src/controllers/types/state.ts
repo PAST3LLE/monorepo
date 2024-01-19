@@ -3,9 +3,9 @@ import { type useConnect } from 'wagmi'
 
 import { PstlWeb3ModalProps } from '../../providers'
 import { ReadonlyChains } from '../../providers/types'
-import { AppType } from '../../utils/connectors'
 import { ChainImages } from '../../types'
 import { ConnectorOverrides } from '../../types/connectors'
+import { AppType } from '../../utils/connectors'
 import { AnyTransactionReceipt } from '../TransactionsCtrl/types'
 import { DesktopConnectorData, InstallConnectorData, RouterView, SwitchNetworkData } from './controllerTypes'
 

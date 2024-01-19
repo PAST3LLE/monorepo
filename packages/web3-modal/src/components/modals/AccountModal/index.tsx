@@ -7,9 +7,9 @@ import { useTheme } from 'styled-components'
 import { UserOptionsCtrlState } from '../../../controllers/types'
 import { useConnectDisconnect, usePstlWeb3Modal, useUserConnectionInfo } from '../../../hooks'
 import { useConnectedChainAndWalletLogo } from '../../../hooks/misc/useLogos'
-import { useDeriveAppType } from '../../../utils/connectors'
 import { PstlModalTheme } from '../../../theme'
 import { ConnectorEnhanced } from '../../../types'
+import { useDeriveAppType } from '../../../utils/connectors'
 import { BaseModalProps, ModalId } from '../common/types'
 import { WalletChainLogos } from './WalletChainLogos'
 import {
@@ -65,12 +65,7 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
 
   const [isCopied, onCopy] = useCopyClipboard(1500)
   const onExplorer = useCallback(() => {
-    if (
-      IS_SERVER ||
-      !userConnectionInfo?.chain?.blockExplorers?.default ||
-      !userConnectionInfo?.address
-    )
-      return
+    if (IS_SERVER || !userConnectionInfo?.chain?.blockExplorers?.default || !userConnectionInfo?.address) return
 
     const explorerUrl = userConnectionInfo.chain.blockExplorers.default.url + '/address/' + userConnectionInfo.address
     window.open(explorerUrl, '_blank')

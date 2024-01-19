@@ -1,8 +1,8 @@
 import { Config, Connector } from 'wagmi'
 import { ConnectData } from 'wagmi/query'
 
-import { AllWeb3ModalStore } from '../hooks'
 import type { ModalCtrl, UserOptionsCtrl } from '../controllers'
+import { AllWeb3ModalStore } from '../hooks'
 
 export type FullWeb3ModalStore = { ui: AllWeb3ModalStore }
 

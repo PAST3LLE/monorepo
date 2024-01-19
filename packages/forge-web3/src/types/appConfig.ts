@@ -11,14 +11,20 @@ export { type ForgeMetadataFetchOptions }
 export interface ForgeW3AppConfigSkillOptions {
   metadataFetchOptions?: ForgeMetadataFetchOptions
 }
-
-export type Web3ModalConfigWeb3Props = Omit<PstlWeb3ModalProps<typeof FORGE_SUPPORTED_CHAINS>, 'appName'> & {
+export type ForgeChainsMinimum = readonly [
+  (typeof FORGE_SUPPORTED_CHAINS)[number],
+  ...(typeof FORGE_SUPPORTED_CHAINS)[number][]
+]
+export type Web3ModalConfigWeb3Props<forgeChains extends ForgeChainsMinimum> = Omit<
+  PstlWeb3ModalProps<forgeChains>,
+  'appName'
+> & {
   standalone?: boolean
 }
 interface Options {
   windowSizeOptions: UseWindowSizeOptions
 }
-export interface ForgeW3AppConfig {
+export interface ForgeW3AppConfig<forgeChains extends ForgeChainsMinimum> {
   name: string
   /**
    * @name boardOptions - properties:
@@ -30,30 +36,30 @@ export interface ForgeW3AppConfig {
   boardOptions?: Partial<UserConfigState['board']>
   contactInfo: UserConfigState['user']['contactInfo']
   contentUrls?: UserConfigState['contentUrls']
-  web3: Web3ModalConfigWeb3Props
+  web3: Web3ModalConfigWeb3Props<forgeChains>
   /**
    * @name contractAddresses - mapping of network IDs to deployed CollectionsManager.sol addresses
    * @example
    * contractAddresses: {
-   *  [SupportedForgeChains.GOERLI]: {
+   *  [SupportedForgeChainIds.GOERLI]: {
    *    CollectionsManager: "0x123123123123123123_GoerliAddress"
    *  },
-   * [SupportedForgeChains.POLYGON]: {
+   * [SupportedForgeChainIds.POLYGON]: {
    *    CollectionsManager: "0x123123123123123123_PolyAddress"
    *  },
-   *  [SupportedForgeChains.POLYGON]: "https://some.polygon.metadata.uri"
+   *  [SupportedForgeChainIds.POLYGON]: "https://some.polygon.metadata.uri"
    * }
    */
-  contractAddresses: ForgeContractAddressMap
+  contractAddresses: ForgeContractAddressMap<forgeChains>
   /**
    * @name metadataUris - mapping of network IDs to CollectionsManager.sol metadata
    * @example
    * metadataUris: {
-   *  [SupportedForgeChains.GOERLI]: "https://some.metadata.uri",
-   *  [SupportedForgeChains.POLYGON]: "https://some.polygon.metadata.uri"
+   *  [SupportedForgeChainIds.GOERLI]: "https://some.metadata.uri",
+   *  [SupportedForgeChainIds.POLYGON]: "https://some.polygon.metadata.uri"
    * }
    */
-  metadataUris: ForgeMetadataUriMap
+  metadataUris: ForgeMetadataUriMap<forgeChains>
   skillOptions?: ForgeW3AppConfigSkillOptions
   options?: Options
 }

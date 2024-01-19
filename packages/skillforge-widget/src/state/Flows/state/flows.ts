@@ -1,10 +1,11 @@
-import { SkillId, SupportedForgeChains, useSupportedChainId } from '@past3lle/forge-web3'
+import { SkillId, SupportedForgeChainIds, useSupportedChainId } from '@past3lle/forge-web3'
 import { MakeOptional } from '@past3lle/types'
 import { Getter, Setter, atom, useAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 import { useMemo } from 'react'
 import { Hash } from 'viem'
-import { Address, useAccount } from 'wagmi'
+import { Address } from 'viem'
+import { useAccount } from 'wagmi'
 
 import { StorageKeys } from '../../../constants/keys'
 
@@ -91,23 +92,29 @@ const flowReadWriteAtom = (chainId: number | undefined, address: Address | undef
   )
 
 export const useForgeFlowReadAtom = (
-  chainId: SupportedForgeChains | undefined,
+  chainId: SupportedForgeChainIds | undefined,
   address: Address | undefined
 ): [FlowStateMap, never] => {
   const state = useMemo(() => flowReadAtom(chainId, address), [chainId, address])
   return useAtom(state)
 }
-export const useForgeFlowWriteAtom = (chainId: SupportedForgeChains | undefined, address: Address | undefined) => {
+export const useForgeFlowWriteAtom = (chainId: SupportedForgeChainIds | undefined, address: Address | undefined) => {
   const state = useMemo(() => flowWriteAtom(chainId, address), [chainId, address])
   return useAtom(state)
 }
 
-export const useForgeFlowBatchWriteAtom = (chainId: SupportedForgeChains | undefined, address: Address | undefined) => {
+export const useForgeFlowBatchWriteAtom = (
+  chainId: SupportedForgeChainIds | undefined,
+  address: Address | undefined
+) => {
   const state = useMemo(() => flowBatchWriteAtom(chainId, address), [chainId, address])
   return useAtom(state)
 }
 
-export const useForgeFlowReadWriteAtom = (chainId: SupportedForgeChains | undefined, address: Address | undefined) => {
+export const useForgeFlowReadWriteAtom = (
+  chainId: SupportedForgeChainIds | undefined,
+  address: Address | undefined
+) => {
   const state = useMemo(() => flowReadWriteAtom(chainId, address), [chainId, address])
   return useAtom(state)
 }
