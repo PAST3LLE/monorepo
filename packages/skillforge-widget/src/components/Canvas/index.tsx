@@ -1,6 +1,5 @@
 import { Row, Text } from '@past3lle/components'
 import {
-  ForgeW3AppConfig,
   SkillId,
   SkillRarity,
   useForgeBalancesReadAtom,
@@ -20,9 +19,6 @@ import { Skillpoint } from '../Skillpoint'
 import { LightningCanvas } from './LightningCanvas'
 import { SkillCanvasContainer, SkillInnerCanvasContainer } from './styleds'
 
-export interface SkillsCanvasProps {
-  options?: ForgeW3AppConfig['skillOptions']
-}
 export function SkillsCanvas() {
   const [{ vectors }] = useVectorsAtom()
 

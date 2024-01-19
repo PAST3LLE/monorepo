@@ -8,7 +8,7 @@ export function trimAndLowerCase(thing: string | undefined) {
 
 export function connectorOverridePropSelector(
   overrides?: ConnectorOverrides,
-  connectorOrPossibleIds?: ConnectorEnhanced<any, any> | string[]
+  connectorOrPossibleIds?: ConnectorEnhanced | string[]
 ): ConnectorEnhancedExtras | undefined {
   const connectorIsArray = Array.isArray(connectorOrPossibleIds)
   if (!overrides || (connectorIsArray && !connectorOrPossibleIds?.length) || !connectorOrPossibleIds) return undefined

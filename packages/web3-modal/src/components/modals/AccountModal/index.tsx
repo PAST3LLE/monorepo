@@ -7,9 +7,9 @@ import { useTheme } from 'styled-components'
 import { UserOptionsCtrlState } from '../../../controllers/types'
 import { useConnectDisconnect, usePstlWeb3Modal, useUserConnectionInfo } from '../../../hooks'
 import { useConnectedChainAndWalletLogo } from '../../../hooks/misc/useLogos'
-import { useDeriveAppType } from '../../../providers/utils/connectors'
 import { PstlModalTheme } from '../../../theme'
 import { ConnectorEnhanced } from '../../../types'
+import { useDeriveAppType } from '../../../utils/connectors'
 import { BaseModalProps, ModalId } from '../common/types'
 import { WalletChainLogos } from './WalletChainLogos'
 import {
@@ -23,27 +23,33 @@ import {
   WalletAndNetworkRowContainer
 } from './styled'
 
+const IS_SERVER = typeof globalThis?.window === 'undefined'
+
 type PstlAccountModalProps = UserOptionsCtrlState['ux'] & Pick<BaseModalProps, 'errorOptions'>
 
 function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountModalProps) {
   const modalCallbacks = usePstlWeb3Modal()
   const userConnectionInfo = useUserConnectionInfo()
   const {
-    disconnect: { disconnectAsync }
+    disconnect: { disconnect }
   } = useConnectDisconnect({
     connect: {
-      onSuccess: closeModalOnConnect ? modalCallbacks.close : undefined
+      mutation: {
+        onSuccess: closeModalOnConnect ? modalCallbacks.close : undefined
+      }
     },
     disconnect: {
-      onSuccess: modalCallbacks.close
+      mutation: {
+        onSuccess: modalCallbacks.close
+      }
     }
   })
 
   const appType = useDeriveAppType()
   const { isUnsupportedChain, showNetworkButton, isNonFrameWalletApp } = useMemo(() => {
-    const isUnsupportedChain =
-      userConnectionInfo.chain?.unsupported ||
-      !userConnectionInfo.supportedChains.some((chain) => chain.id === userConnectionInfo.chain?.id)
+    const isUnsupportedChain = !userConnectionInfo.supportedChains.some(
+      (chain) => chain.id === userConnectionInfo.chain?.id
+    )
     const supportsSeveralChains = (userConnectionInfo?.supportedChains?.length || 0) > 1
 
     return {
@@ -51,7 +57,7 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
       showNetworkButton: supportsSeveralChains || isUnsupportedChain,
       isNonFrameWalletApp: appType === 'DAPP' || appType === 'TEST_FRAMEWORK_IFRAME'
     }
-  }, [appType, userConnectionInfo.chain?.id, userConnectionInfo.chain?.unsupported, userConnectionInfo.supportedChains])
+  }, [appType, userConnectionInfo.chain?.id, userConnectionInfo.supportedChains])
 
   const isSmallerScreen = useIsSmallMediaWidth()
 
@@ -59,12 +65,7 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
 
   const [isCopied, onCopy] = useCopyClipboard(1500)
   const onExplorer = useCallback(() => {
-    if (
-      typeof globalThis?.window === 'undefined' ||
-      !userConnectionInfo?.chain?.blockExplorers?.default ||
-      !userConnectionInfo?.address
-    )
-      return
+    if (IS_SERVER || !userConnectionInfo?.chain?.blockExplorers?.default || !userConnectionInfo?.address) return
 
     const explorerUrl = userConnectionInfo.chain.blockExplorers.default.url + '/address/' + userConnectionInfo.address
     window.open(explorerUrl, '_blank')
@@ -174,7 +175,7 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
                   alignItems="center"
                   padding={0}
                 >
-                  {(userConnectionInfo.connector as ConnectorEnhanced<any, any>)?.customName ||
+                  {(userConnectionInfo.connector as ConnectorEnhanced)?.customName ||
                     userConnectionInfo.connector?.name}
                 </AccountText>
               </Row>
@@ -215,7 +216,7 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
                 id={`${ModalId.ACCOUNT}__disconnect-button`}
                 connected={false}
                 padding="0.6rem"
-                onClick={() => disconnectAsync()}
+                onClick={() => disconnect()}
               >
                 Disconnect
               </AccountModalButton>

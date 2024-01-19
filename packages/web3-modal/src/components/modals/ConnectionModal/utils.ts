@@ -3,7 +3,7 @@ import { ConnectorEnhanced, ConnectorOverrides } from '../../../types'
 import { connectorOverridePropSelector, trimAndLowerCase } from '../../../utils/misc'
 
 export const sortConnectorsByRank =
-  (overrides?: ConnectorOverrides) => (connA: ConnectorEnhanced<any, any>, connB: ConnectorEnhanced<any, any>) => {
+  (overrides?: ConnectorOverrides) => (connA: ConnectorEnhanced, connB: ConnectorEnhanced) => {
     const connA_rank = connectorOverridePropSelector(overrides, connA)?.rank || 0
     const connB_rank = connectorOverridePropSelector(overrides, connB)?.rank || 0
 

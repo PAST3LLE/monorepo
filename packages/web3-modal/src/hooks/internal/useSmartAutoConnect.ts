@@ -1,7 +1,8 @@
 import { devDebug } from '@past3lle/utils'
 import { isIframe } from '@past3lle/wagmi-connectors/utils'
 import { useEffect } from 'react'
-import { Chain, useAccount, useConnect } from 'wagmi'
+import { Chain } from 'viem'
+import { Connector, useAccount, useConnect } from 'wagmi'
 
 import { ConnectorEnhanced } from '../../types'
 
@@ -39,8 +40,8 @@ export function useSmartAutoConnect({ chainFromUrl, autoConnect }: SmartAutoConn
         const internalChain = await connector.getChainId()
         await connectAsync({ connector, chainId: chainFromUrl?.id })
         if (chainFromUrl && chainFromUrl.id !== internalChain) {
-          if (!connector.ready) await connector.connect()
-          await connector.switchChain?.(chainFromUrl.id)
+          if (!(await connector.getProvider())) await connector.connect()
+          await connector.switchChain?.({ chainId: chainFromUrl.id })
         }
       }
 
@@ -49,9 +50,8 @@ export function useSmartAutoConnect({ chainFromUrl, autoConnect }: SmartAutoConn
   }, [autoConnect, chainFromUrl, connectAsync, connectors, isDisconnected])
 }
 
-function _getIFrameConnector(connectors: ConnectorEnhanced<any, any>[]) {
+function _getIFrameConnector(connectors: readonly Connector[]) {
   return connectors.find(
-    (connector) =>
-      (connector as ConnectorEnhanced<any, any> & { isIFrame?: boolean })?.isIFrame || connector?.id === 'safe'
+    (connector) => (connector as ConnectorEnhanced & { isIFrame?: boolean })?.isIFrame || connector?.type === 'safe'
   )
 }

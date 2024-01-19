@@ -1,10 +1,11 @@
 import { connectors, frameConnectors } from '../connectors'
-import { SUPPORTED_CHAINS } from './chains'
-import { Web3ModalConfigWeb3Props } from '@past3lle/forge-web3'
-import GOOGLE_APPLE_LOGO from 'assets/png/google-apple.png'
+import { SUPPORTED_CHAINS_DEV, SUPPORTED_CHAINS_PROD } from './chains'
+import { WCM_THEME_VARIABLES } from './walletConnect'
+import { ForgeChainsMinimum, Web3ModalConfigWeb3Props } from '@past3lle/forge-web3'
 import { pstlModalTheme as PSTL_MODAL_THEME } from 'theme/pstlModal'
-import { skillforgeTheme as SKILLFORGE_THEME } from 'theme/skillforge'
-import { alchemyProvider } from 'wagmi/providers/alchemy'
+import { http } from 'viem'
+
+const IS_SERVER = typeof globalThis?.window == 'undefined'
 
 if (
   !process.env.REACT_APP_WEB3MODAL_ID ||
@@ -15,53 +16,33 @@ if (
 }
 
 export const SKILLFORGE_APP_NAME = 'SKILLFORGE'
-export const WEB3_PROPS: Web3ModalConfigWeb3Props = {
-  chains: SUPPORTED_CHAINS,
+export const WEB3_PROPS_BASE = {
   clients: {
     wagmi: {
       options: {
         // GOERLI KEY - steal it idgaf
-        publicClients: [
-          {
-            client: alchemyProvider,
-            5: process.env.REACT_APP_ALCHEMY_GOERLI_API_KEY as string,
-            137: process.env.REACT_APP_ALCHEMY_MATIC_API_KEY as string,
-            80001: process.env.REACT_APP_ALCHEMY_MATIC_API_KEY as string
-          }
-        ]
+        transports: {
+          5: http(`https://eth-goerli.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_GOERLI_API_KEY as string}`),
+          137: http(
+            `https://polygon-mainnet.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_MATIC_API_KEY as string}`
+          ),
+          80001: http(
+            `https://polygon-mumbai.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_MUMBAI_API_KEY as string}`
+          )
+        }
       }
     }
   },
-  connectors: {
-    connectors,
-    overrides: {
-      web3auth: {
-        isRecommended: true,
-        logo: GOOGLE_APPLE_LOGO,
-        customName: 'Google & more',
-        rank: 1000
-      },
-      walletconnect: {
-        logo: 'https://raw.githubusercontent.com/WalletConnect/walletconnect-assets/master/Logo/Gradient/Logo.png',
-        customName: 'Web3',
-        rank: 100,
-        modalNodeId: 'w3m-modal'
-      },
-      'ledger-hid': {
-        logo: 'https://crypto-central.io/library/uploads/Ledger-Logo-3.png',
-        rank: 0
-      }
-    }
-  },
+  connectors,
   frameConnectors,
   callbacks: {
     switchChain: async (chains) => {
-      if (typeof globalThis?.window == 'undefined') return undefined
+      if (IS_SERVER) return undefined
       const searchParams = new URLSearchParams(window.location.search)
       const dirtyParams = searchParams.get('forge-network')
 
       const decodedSearchParam = dirtyParams ? decodeURI(dirtyParams) : undefined
-      return decodedSearchParam ? chains.find((chain) => chain.network === decodedSearchParam.toLowerCase()) : undefined
+      return decodedSearchParam ? chains.find((chain) => chain.name === decodedSearchParam.toLowerCase()) : undefined
     }
   },
   options: {
@@ -73,16 +54,7 @@ export const WEB3_PROPS: Web3ModalConfigWeb3Props = {
     walletConnect: {
       projectId: process.env.REACT_APP_WEB3MODAL_ID as string,
       themeMode: 'dark',
-      themeVariables: {
-        '--w3m-background-color': SKILLFORGE_THEME.blackOpaque,
-        '--w3m-accent-color': '#525291',
-        '--w3m-accent-fill-color': SKILLFORGE_THEME.modes.DEFAULT.mainBgAlt,
-        // TODO: either host image on IK and call using params to set height/width
-        // TODO: OR just save a formatted image W x H somewhere here
-        '--w3m-background-image-url': 'https://ik.imagekit.io/pastelle/SKILLFORGE/forge-background.png?tr=h-103,w-0.99',
-        '--w3m-color-bg-1': SKILLFORGE_THEME.blackOpaque,
-        '--w3m-color-fg-1': SKILLFORGE_THEME.offwhiteOpaqueMore
-      }
+      themeVariables: WCM_THEME_VARIABLES
     },
     root: {
       chainImages: {
@@ -105,4 +77,14 @@ export const WEB3_PROPS: Web3ModalConfigWeb3Props = {
       }
     }
   }
-}
+} as const satisfies Omit<Web3ModalConfigWeb3Props<ForgeChainsMinimum>, 'chains'>
+
+export const WEB3_PROPS_PRODUCTION = {
+  ...WEB3_PROPS_BASE,
+  chains: SUPPORTED_CHAINS_PROD
+} as const satisfies Web3ModalConfigWeb3Props<typeof SUPPORTED_CHAINS_PROD>
+
+export const WEB3_PROPS_DEVELOP = {
+  ...WEB3_PROPS_BASE,
+  chains: SUPPORTED_CHAINS_DEV
+} as const

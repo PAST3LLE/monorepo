@@ -1,11 +1,12 @@
 import { Address } from '@past3lle/types'
-import { ChainsPartialReadonly } from '@past3lle/web3-modal'
 import { atom, useAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 import { useCallback, useMemo } from 'react'
+import { Chain } from 'viem'
+import { goerli } from 'viem/chains'
 
 import { STATE_STORAGE_KEYS } from '../../constants/state-storage-keys'
-import { ForgeContractAddressMap, ForgeMetadataUriMap, SupportedForgeChains } from '../../types'
+import { ForgeChainsMinimum, ForgeContractAddressMap, ForgeMetadataUriMap, PartialForgeChains } from '../../types'
 import { CustomIpfsGatewayConfig } from '../../utils'
 
 const MINIMUM_COLLECTION_BOARD_SIZE = 3
@@ -14,8 +15,8 @@ const MINIMUM_BOARD_WIDTH = 580
 const MINIMUM_BOARD_HEIGHT = 500
 
 export interface UserConfigState {
-  chains: ChainsPartialReadonly<SupportedForgeChains>
-  readonlyChain: ChainsPartialReadonly<SupportedForgeChains>[number] | undefined
+  chains: PartialForgeChains
+  readonlyChain: Readonly<Chain> | undefined
   user: {
     account: Address | undefined
     chainId: number | undefined
@@ -57,11 +58,11 @@ export interface UserConfigState {
     gatewayUris: CustomIpfsGatewayConfig[]
     gatewayApiUris: CustomIpfsGatewayConfig[]
   }
-  metadataUriMap: Partial<ForgeMetadataUriMap>
-  contractAddressMap: Partial<ForgeContractAddressMap>
+  metadataUriMap: ForgeMetadataUriMap<ForgeChainsMinimum>
+  contractAddressMap: ForgeContractAddressMap<ForgeChainsMinimum>
 }
 export const userConfigAtom = atomWithStorage<UserConfigState>(STATE_STORAGE_KEYS.FORGE_USER_CONFIG_STATE, {
-  chains: [],
+  chains: [goerli],
   get readonlyChain() {
     return this.chains?.[0]
   },
@@ -171,21 +172,14 @@ export const useForgeContractAddressMapAtom = () => useAtom(contractAddressMapAt
 export const useForgeReadonlyChainAtom = () => useAtom(readonlyChainAtom)
 export const useForgeSetUrlToReadonlyChain = (
   chainParam: string | null | undefined
-): [
-  ChainsPartialReadonly<SupportedForgeChains>[number] | undefined,
-  (chain: ChainsPartialReadonly<SupportedForgeChains>[number]) => void
-] => {
+): [Chain | undefined, (chain: Chain) => void] => {
   const [{ chains }, setUserConfig] = useForgeUserConfigAtom()
   const isParamNetwork = isNaN(Number(chainParam))
 
-  const chain = chains.find((userChain) => userChain[isParamNetwork ? 'network' : 'id'] == chainParam)
+  const chain = chains.find((userChain) => userChain[isParamNetwork ? 'name' : 'id'] == chainParam)
 
   return [
     chain,
-    useCallback(
-      (chain: ChainsPartialReadonly<SupportedForgeChains>[number]) =>
-        setUserConfig((state) => ({ ...state, readonlyChain: chain })),
-      [setUserConfig]
-    )
+    useCallback((chain: Chain) => setUserConfig((state) => ({ ...state, readonlyChain: chain })), [setUserConfig])
   ]
 }

@@ -13,9 +13,11 @@ const STORAGE_KEYS = {
   version: 'W3M_VERSION'
 } as const
 
+const IS_SERVER = typeof globalThis?.window === 'undefined'
+
 export const CoreUtil = {
   isMobile() {
-    if (typeof globalThis?.window !== 'undefined') {
+    if (!IS_SERVER) {
       return Boolean(
         window.matchMedia('(pointer:coarse)').matches ||
           /Android|webOS|iPhone|iPad|iPod|BlackBerry|Opera Mini/u.test(navigator.userAgent)

@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
-import { Chain } from 'viem'
 
 import { UserOptionsCtrl } from '../../controllers'
+import { ReadonlyChains } from '../../providers/types'
 
 /**
  * @name useLimitChainsAndSwitchCallback
@@ -9,7 +9,7 @@ import { UserOptionsCtrl } from '../../controllers'
  * @returns void
  */
 export function useLimitChainsAndSwitchCallback() {
-  return useCallback((chains: Chain[]) => {
+  return useCallback((chains: ReadonlyChains) => {
     if (!UserOptionsCtrl.state.ui?.softLimitedChains?.length) {
       UserOptionsCtrl.state.ui.softLimitedChains = []
     }

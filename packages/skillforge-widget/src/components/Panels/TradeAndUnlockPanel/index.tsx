@@ -9,13 +9,14 @@ import {
   useForgeBalancesReadAtom,
   useForgeIpfsGatewayUrisAtom,
   useForgeMetadataMapReadAtom,
-  useSupportedChainId
+  useSupportedChainId,
+  useW3WaitForTransactionEffect
 } from '@past3lle/forge-web3'
 import { OFF_WHITE, urlToSimpleGenericImageSrcSet } from '@past3lle/theme'
 import { darken } from 'polished'
 import React, { useMemo, useRef } from 'react'
 import { useTheme } from 'styled-components'
-import { useAccount, useWaitForTransaction } from 'wagmi'
+import { useAccount } from 'wagmi'
 
 import { SKILLPOINTS_CONTAINER_ID } from '../../../constants/skills'
 import { useGetActiveSkillFromActiveSkillId } from '../../../hooks/useGetActiveSkillFromActiveSkillId'
@@ -64,36 +65,39 @@ export function TradeAndUnlockPanel() {
 
   const [, updateFlow] = useForgeFlowReadWriteAtom(chainId, address)
 
-  const [{ data, isLoading, isError: isErrorContract, error }, approveBurnAndClaimLockedSkill] =
-    useForgeApproveAndClaimLockedSkillCallback(activeSkill, {
-      onApproveSend(hash) {
-        updateFlow({
-          id: activeSkill.properties.id,
-          status: 'needs-approvals',
-          hash
-        })
-      },
-      onClaimSend(hash) {
-        updateFlow({
-          id: activeSkill.properties.id,
-          status: 'claiming',
-          hash
-        })
-      }
-    })
+  const [
+    { data, isPending: isApproveBurnClaimPending, isError: isErrorContract, error },
+    approveBurnAndClaimLockedSkill
+  ] = useForgeApproveAndClaimLockedSkillCallback(activeSkill, {
+    onApproveSend(hash) {
+      updateFlow({
+        id: activeSkill.properties.id,
+        status: 'needs-approvals',
+        hash
+      })
+    },
+    onClaimSend(hash) {
+      updateFlow({
+        id: activeSkill.properties.id,
+        status: 'claiming',
+        hash
+      })
+    }
+  })
 
   const [, setPanelState] = useSidePanelAtom()
 
-  const { isLoading: isLoadingHash, isSuccess: isSuccessHash } = useWaitForTransaction({
-    hash: data?.hash,
+  const { isPending: isLoadingHash, isSuccess: isSuccessHash } = useW3WaitForTransactionEffect({
+    enabled: !!data,
+    hash: data,
     onSettled() {
       // close panel on any settled state
       setPanelState('reset')
     }
   })
 
-  const isClickedButNoHash = isLoading && !data?.hash
-  const isPending = isLoadingHash || isLoading || (!!data?.hash && !isSuccessHash)
+  const isClickedButNoHash = isApproveBurnClaimPending && !data
+  const isPending = isLoadingHash || isApproveBurnClaimPending || (!!data && !isSuccessHash)
   const isError = isErrorContract && !!error
 
   const [gatewayUris] = useForgeIpfsGatewayUrisAtom()

@@ -10,10 +10,10 @@ import {
   ThumbsUp
 } from '@past3lle/components'
 import React from 'react'
-import { AnyTransactionReceipt } from 'src/controllers/TransactionsCtrl/types'
 import styled from 'styled-components'
 import { ReplacementReason } from 'viem'
 
+import { AnyTransactionReceipt } from '../../../controllers/TransactionsCtrl/types'
 import { HidModalTextInput } from '../HidDeviceOptionsModal/styleds'
 import { ModalText, WalletsWrapper } from '../common/styled'
 

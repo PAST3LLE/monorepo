@@ -1,5 +1,5 @@
 import { ColumnCenter, RowProps } from '@past3lle/components'
-import { SupportedForgeChains, useSupportedChainId } from '@past3lle/forge-web3'
+import { ForgeChainsMinimum, SupportedForgeChainIds, useSupportedChainId } from '@past3lle/forge-web3'
 import { useIsMobile } from '@past3lle/hooks'
 import { StaticGlobalCssProvider, ThemedGlobalCssProvider } from '@past3lle/theme'
 import React, { useMemo } from 'react'
@@ -37,7 +37,7 @@ const CssProviders = () => {
 const InnerRenderComponent = ({
   render
 }: {
-  render?: ({ chainId }: { chainId: SupportedForgeChains | undefined }) => React.ReactElement<any, any>
+  render?: ({ chainId }: { chainId: SupportedForgeChainIds | undefined }) => React.ReactElement<any, any>
 }) => {
   const chainId = useSupportedChainId()
   if (!render) {
@@ -46,7 +46,11 @@ const InnerRenderComponent = ({
   return render({ chainId })
 }
 
-function SkillforgeInnerComponent({ render, dimensions, ...boxProps }: Omit<SkillForgeProps, 'config'>) {
+function SkillforgeInnerComponent<chains extends ForgeChainsMinimum>({
+  render,
+  dimensions,
+  ...boxProps
+}: Omit<SkillForgeProps<chains>, 'config'>) {
   const isMobile = useIsMobile()
   const dynamicDimensions = useMemo(
     () => ({
@@ -98,10 +102,10 @@ interface SkillforgeDimensions {
     height?: MinMaxDimensions
   }
 }
-interface SkillForgeProps extends RowProps {
-  config: SkillForgeWidgetConfig
+interface SkillForgeProps<chains extends ForgeChainsMinimum> extends RowProps {
+  config: SkillForgeWidgetConfig<chains>
   dimensions?: SkillforgeDimensions
-  render?: ({ chainId }: { chainId: SupportedForgeChains | undefined }) => React.ReactElement<any, any>
+  render?: ({ chainId }: { chainId: SupportedForgeChainIds | undefined }) => React.ReactElement<any, any>
 }
 
 /**
@@ -119,8 +123,8 @@ interface SkillForgeProps extends RowProps {
       }
     }
  */
-function SkillForge({ config, render, ...boxProps }: SkillForgeProps) {
-  const [Provider, modifiedConfig] = useConfigMiddleware(config)
+function SkillForge<chains extends ForgeChainsMinimum>({ config, render, ...boxProps }: SkillForgeProps<chains>) {
+  const [Provider, modifiedConfig] = useConfigMiddleware<chains>(config)
 
   return (
     <Provider {...modifiedConfig}>

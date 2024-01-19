@@ -1,4 +1,4 @@
-import { SkillMetadata, SupportedForgeChains } from '@past3lle/forge-web3'
+import { SkillMetadata, SupportedForgeChainIds } from '@past3lle/forge-web3'
 
 import { SHOP_URL } from '../constants'
 
@@ -7,7 +7,7 @@ type MetadataExplorerUris = 'opensea'
 export function buildSkillMetadataExplorerUri(
   uri: MetadataExplorerUris,
   skill: SkillMetadata | undefined,
-  chainId: SupportedForgeChains | undefined
+  chainId: SupportedForgeChainIds | undefined
 ) {
   if (!skill || !chainId) return ''
   switch (uri) {
@@ -20,7 +20,7 @@ export function buildSkillMetadataExplorerUri(
   }
 }
 
-function chainIdToOpenseaNetworkName(chainId: SupportedForgeChains) {
+function chainIdToOpenseaNetworkName(chainId: SupportedForgeChainIds) {
   switch (chainId) {
     case 5:
       return 'goerli'

@@ -1,11 +1,11 @@
 import COLLECTIONS_MANAGER_NETWORKS from '../../forge-networks.json'
 import { Column, Row } from '@past3lle/components'
-import { SupportedForgeChains, useForgeUserConfigAtom } from '@past3lle/forge-web3'
+import { SupportedForgeChainIds, useForgeUserConfigAtom } from '@past3lle/forge-web3'
 import MERGE_MANAGER_NETWORKS from '@past3lle/skilltree-contracts/networks.json'
 import MERGE_MANAGER_VERSION from '@past3lle/skilltree-contracts/package.json'
 import React, { useCallback } from 'react'
 import styled from 'styled-components/macro'
-import { Address } from 'wagmi'
+import { Address } from 'viem'
 import { getBlockExplorerURL } from 'web3/utilts'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -81,11 +81,11 @@ export function AppVersion() {
             <strong>CollectionsManager:</strong>{' '}
             <a
               href={`${getExplorerUrl(
-                COLLECTIONS_MANAGER_NETWORKS?.[chainId as SupportedForgeChains]?.CollectionsManager.address as Address
+                COLLECTIONS_MANAGER_NETWORKS?.[chainId as SupportedForgeChainIds]?.CollectionsManager.address as Address
               )}#code`}
               target="_blank noreferrer"
             >
-              {(COLLECTIONS_MANAGER_NETWORKS?.[chainId as SupportedForgeChains]?.CollectionsManager
+              {(COLLECTIONS_MANAGER_NETWORKS?.[chainId as SupportedForgeChainIds]?.CollectionsManager
                 .address as Address) || 'CollectionsManager not deployed on this network'}
             </a>
             //
@@ -100,11 +100,11 @@ export function AppVersion() {
             <strong>MergeManager:</strong>{' '}
             <a
               href={`${getExplorerUrl(
-                MERGE_MANAGER_NETWORKS?.[chainId as SupportedForgeChains]?.MergeManager.address as Address
+                MERGE_MANAGER_NETWORKS?.[chainId as SupportedForgeChainIds]?.MergeManager.address as Address
               )}#code`}
               target="_blank noreferrer"
             >
-              {(MERGE_MANAGER_NETWORKS?.[chainId as SupportedForgeChains]?.MergeManager.address as Address) ||
+              {(MERGE_MANAGER_NETWORKS?.[chainId as SupportedForgeChainIds]?.MergeManager.address as Address) ||
                 'MergeManager not deployed on this network'}
             </a>
             //

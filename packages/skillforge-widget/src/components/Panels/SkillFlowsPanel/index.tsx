@@ -11,8 +11,8 @@ import {
 import { urlToSimpleGenericImageSrcSet } from '@past3lle/theme'
 import { devError, truncateHash } from '@past3lle/utils'
 import React, { useMemo, useState } from 'react'
-import { Hash } from 'viem'
-import { Address, useAccount } from 'wagmi'
+import { Address, Hash } from 'viem'
+import { useAccount } from 'wagmi'
 
 import { useGetSkillFromIdCallback } from '../../../hooks/skills'
 import { FlowState, useForgeFlowReadAtom } from '../../../state/Flows'

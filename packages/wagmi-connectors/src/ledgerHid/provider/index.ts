@@ -7,6 +7,8 @@ import { checkError, convertToUnsigned } from '../helpers'
 import { LedgerHQSigner } from '../signer'
 import { TransactionRequestExtended } from '../types'
 
+const IS_SERVER = typeof globalThis?.window === 'undefined'
+
 export class LedgerHQProvider extends JsonRpcBatchProvider {
   public signer?: LedgerHQSigner
   public device?: HIDDevice
@@ -41,25 +43,45 @@ export class LedgerHQProvider extends JsonRpcBatchProvider {
     try {
       this.transport = TransportWebHID
 
-      const hid = typeof globalThis?.window !== 'undefined' && window?.navigator?.hid
+      const hid = !IS_SERVER && window?.navigator?.hid
 
       if (!hid) throw new Error('User navigator missing HID property! Incompatible.')
 
-      const onDisconnect = (event: HIDConnectionEvent) => {
+      const onHidDisconnect = (event: HIDConnectionEvent) => {
         if (this.device?.vendorId === event.device.vendorId) {
-          hid.removeEventListener('disconnect', onDisconnect)
-          this.emit('disconnect')
+          hid.removeEventListener('disconnect', onHidDisconnect)
+          this.disable()
           callback?.()
         }
       }
 
-      hid.addEventListener('disconnect', onDisconnect)
+      hid.addEventListener('disconnect', onHidDisconnect)
 
       if (!!reset || !this.signer) {
         this.signer = this.getSigner(path)
       }
 
-      return (await this.getAddress(path)) as Address
+      const address = (await this.getAddress(path)) as Address
+
+      this.onConnect({ accounts: [address], chainId: this._network.chainId })
+
+      return address
+    } catch (error) {
+      return checkError(error)
+    }
+  }
+
+  onConnect(params: { accounts: string[]; chainId: number }) {
+    this.emit('connect', params)
+  }
+  onDisconnect() {
+    this.emit('disconnect')
+  }
+
+  async disable(): Promise<void> {
+    try {
+      this._shutdown()
+      this.onDisconnect()
     } catch (error) {
       return checkError(error)
     }
@@ -101,5 +123,11 @@ export class LedgerHQProvider extends JsonRpcBatchProvider {
       default:
         return this.send(method, params)
     }
+  }
+
+  private _shutdown() {
+    this.transport = undefined
+    this.device = undefined
+    this.signer = undefined
   }
 }

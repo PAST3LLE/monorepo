@@ -1,7 +1,7 @@
 import { useIsExtraSmallMediaWidth } from '@past3lle/hooks'
 import { devDebug, devError } from '@past3lle/utils'
 import React, { memo } from 'react'
-import { useSwitchNetwork } from 'wagmi'
+import { useSwitchChain } from 'wagmi'
 
 import { useGetChainLogoCallback, usePstlWeb3Modal, usePstlWeb3ModalStore, useUserConnectionInfo } from '../../../hooks'
 import { NoChainLogo } from '../../NoChainLogo'
@@ -16,19 +16,21 @@ function NetworkModalContent() {
 
   const { chain: currentChain, supportedChains } = useUserConnectionInfo()
 
-  const { switchNetworkAsync } = useSwitchNetwork({
-    async onSuccess(data) {
-      devDebug(
-        '[@past3lle/web3-modals::NetworkModal] Success switching networks!',
-        !!modalCallbacks,
-        data?.id,
-        data?.name
-      )
-      return modalCallbacks.close()
-    },
-    async onError(error) {
-      devError('[@past3lle/web3-modals::NetworkModal] Error switching networks!', error?.message || error)
-      return modalStore.callbacks.error.set(error)
+  const { switchChainAsync } = useSwitchChain({
+    mutation: {
+      async onSuccess(data) {
+        devDebug(
+          '[@past3lle/web3-modals::NetworkModal] Success switching networks!',
+          !!modalCallbacks,
+          data?.id,
+          data?.name
+        )
+        return modalCallbacks.close()
+      },
+      async onError(error) {
+        devError('[@past3lle/web3-modals::NetworkModal] Error switching networks!', error?.message || error)
+        return modalStore.callbacks.error.set(error)
+      }
     }
   })
 
@@ -48,7 +50,7 @@ function NetworkModalContent() {
         width="100%"
       >
         {supportedChains.map((chain) => {
-          if (!switchNetworkAsync || currentChain?.id === chain.id) return null
+          if (!switchChainAsync || currentChain?.id === chain.id) return null
           const chainLogo = getChainLogo(chain.id)
           return (
             <ConnectorOption
@@ -57,7 +59,7 @@ function NetworkModalContent() {
               optionValue={chain.id}
               key={chain.id}
               // data props
-              callback={async () => switchNetworkAsync(chain.id)}
+              callback={async () => switchChainAsync({ chainId: chain.id })}
               modalView={modalView}
               connected={false}
               label={chain.name}

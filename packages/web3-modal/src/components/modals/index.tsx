@@ -40,7 +40,7 @@ const MODAL_SIZES = {
   LIST_MAX_HEIGHT: '600px',
   GRID_WIDTH: '650px',
   GRID_MAX_WIDTH: '100%',
-  GRID_MAX_HEIGHT: '500px'
+  GRID_MAX_HEIGHT: '550px'
 }
 
 export function ModalWithoutThemeProvider(baseProps: Omit<StatelessBaseModalProps, 'modal'>) {

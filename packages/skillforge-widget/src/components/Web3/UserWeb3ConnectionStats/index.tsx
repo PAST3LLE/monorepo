@@ -4,7 +4,7 @@ import { BLACK_TRANSPARENT } from '@past3lle/theme'
 import { truncateAddress } from '@past3lle/utils'
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
-import { useAccount, useNetwork } from 'wagmi'
+import { useAccount } from 'wagmi'
 
 import { OpenOptions } from '../../Common/Button/types'
 import { FlashingText } from '../../Common/FlashingText'
@@ -19,19 +19,17 @@ function UnstyledUserConnectionStats({
   fontSize?: string
   className?: string
 }) {
-  const { address } = useAccount()
-  const { chain } = useNetwork()
+  const { address, chain } = useAccount()
 
   const {
-    root: { open: openRoot },
-    walletConnect: { open: openWC }
+    root: { open: openRoot }
   } = useW3Modals()
 
   const handleClick = useCallback(
     async (connectedRoute: OpenOptions['route'], disconnectedRoute: OpenOptions['route']) => {
-      address ? openWC({ route: connectedRoute }) : openRoot({ route: disconnectedRoute })
+      openRoot({ route: address ? connectedRoute : disconnectedRoute })
     },
-    [address, openRoot, openWC]
+    [address, openRoot]
   )
 
   return (

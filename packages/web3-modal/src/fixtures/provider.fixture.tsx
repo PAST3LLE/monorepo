@@ -1,14 +1,14 @@
 import { ButtonVariations, ColumnCenter, PstlButton, RowCenter, SpinnerCircle } from '@past3lle/components'
 import { ThemeProvider, createCustomTheme } from '@past3lle/theme'
-import { devWarn, getExpirementalCookieStore as getCookieStore, truncateLongString } from '@past3lle/utils'
+import { getExpirementalCookieStore as getCookieStore, truncateLongString } from '@past3lle/utils'
+import { ledgerHid } from '@past3lle/wagmi-connectors'
 import { config } from 'dotenv'
 import React, { ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTheme } from 'styled-components'
-import { parseEther } from 'viem'
-import { goerli, polygon, polygonMumbai } from 'viem/chains'
-import { mainnet, useBalance, useSendTransaction } from 'wagmi'
-import { InjectedConnector } from 'wagmi/connectors/injected'
-import { infuraProvider } from 'wagmi/providers/infura'
+import { Address, http, parseEther } from 'viem'
+import { goerli, mainnet, polygon, polygonMumbai } from 'viem/chains'
+import { ConnectorNotFoundError, useBalance, useSendTransaction } from 'wagmi'
+import { injected } from 'wagmi/connectors'
 
 import { TransactionsButton } from '../components/buttons/Transactions'
 import { RouterCtrl } from '../controllers'
@@ -21,17 +21,14 @@ import {
   useTransactions,
   useUpdateTransactionsViaCallback
 } from '../hooks/api/useTransactions'
-import { PstlWeb3ModalProps, PstlW3Providers as WalletModal } from '../providers'
-import { addConnector } from '../providers/utils'
+import { PstlW3Providers } from '../providers'
 import { createTheme } from '../theme'
 import { COMMON_CONNECTOR_OVERRIDES, DEFAULT_PROPS, DEFAULT_PROPS_WEB3AUTH, pstlModalTheme } from './config'
-import { wagmiConnectors } from './connectorsAndPlugins'
+import { INJECTED_CONNECTORS, wagmiConnectors } from './connectorsAndPlugins'
 
 config()
 
-const PstlW3Providers = ({ children, config }: { children: ReactNode; config: PstlWeb3ModalProps }) => (
-  <WalletModal config={config}>{children}</WalletModal>
-)
+const IS_SERVER = typeof globalThis?.window === 'undefined'
 
 interface Web3ButtonProps {
   children?: ReactNode
@@ -40,7 +37,7 @@ const Web3Button = ({ children = <div>Show PSTL Wallet Modal</div> }: Web3Button
   const { onAccountClick } = useModalActions()
   const { address, connector } = useUserConnectionInfo()
 
-  if (typeof globalThis?.window !== 'undefined' && !!connector && !(window as any)?.__PSTL_CONNECTOR) {
+  if (!IS_SERVER && !!connector && !(window as any)?.__PSTL_CONNECTOR) {
     ;(window as any).__PSTL_CONNECTOR = connector
   }
 
@@ -97,7 +94,7 @@ function AppWithWagmiAccess() {
   const { address } = useUserConnectionInfo()
   const { data, refetch } = useBalance({ address })
   const [sendEthVal, setSendEthVal] = useState('0')
-  const [addressToSendTo, setAddress] = useState('')
+  const [addressToSendTo, setAddress] = useState<Address | undefined>()
 
   const sendApi = useSendTransaction()
 
@@ -106,13 +103,13 @@ function AppWithWagmiAccess() {
 
   const [currentTx, setTx] = useState('')
   const handleSendTransaction = useCallback(
-    async (args: { value: bigint; to: string }) => {
+    async (args: Parameters<ReturnType<typeof useSendTransaction>['sendTransaction']>[0]) => {
       setTx('pending')
       sendApi
         .sendTransactionAsync(args)
         .then((tx) => {
-          setTx(tx.hash)
-          addPendingTransaction(tx.hash)
+          setTx(tx)
+          addPendingTransaction(tx)
         })
         .catch((error) => {
           throw error
@@ -159,7 +156,11 @@ function AppWithWagmiAccess() {
           To
           <input type="text" value={addressToSendTo} onChange={(e: any) => setAddress(e.target.value)} />
         </p>
-        <button onClick={() => handleSendTransaction({ value: parseEther(sendEthVal), to: addressToSendTo })}>
+        <button
+          onClick={() =>
+            addressToSendTo && handleSendTransaction({ value: parseEther(sendEthVal), to: addressToSendTo })
+          }
+        >
           Send to {addressToSendTo || 'N/A'}
         </button>
       </>
@@ -169,7 +170,7 @@ function AppWithWagmiAccess() {
 
 function Updater() {
   useEffect(() => {
-    if (typeof globalThis?.window === 'undefined') return
+    if (IS_SERVER) return
     window.document.body.setAttribute('style', `font-family: system-ui;`)
   }, [])
   return null
@@ -202,18 +203,16 @@ export default {
     <PstlW3Providers
       config={{
         ...DEFAULT_PROPS,
+        chains: [mainnet],
         clients: {
           wagmi: {
             options: {
-              publicClients: [
-                {
-                  client: infuraProvider,
-                  1: '5f5d6fa3fcd249f288a5aa36d2337914',
-                  5: '5f5d6fa3fcd249f288a5aa36d2337914',
-                  137: '5f5d6fa3fcd249f288a5aa36d2337914',
-                  80001: '5f5d6fa3fcd249f288a5aa36d2337914'
-                }
-              ]
+              transports: {
+                1: http('https://mainnet.infura.io/v3/5f5d6fa3fcd249f288a5aa36d2337914'),
+                5: http('https://goerli.infura.io/v3/5f5d6fa3fcd249f288a5aa36d2337914'),
+                137: http('https://polygon-mainnet.infura.io/v3/5f5d6fa3fcd249f288a5aa36d2337914'),
+                80001: http('https://polygon-mumbai.infura.io/v3/5f5d6fa3fcd249f288a5aa36d2337914')
+              }
             }
           }
         },
@@ -311,8 +310,12 @@ export default {
         ...DEFAULT_PROPS,
         connectors: {
           connectors: [
-            // wagmiConnectors.ledgerLiveModal,
-            wagmiConnectors.ledgerHID
+            ledgerHid({
+              shimDisconnect: true,
+              async onDeviceDisconnect() {
+                alert('Disconnected ledger!')
+              }
+            })
           ],
           overrides: COMMON_CONNECTOR_OVERRIDES
         },
@@ -357,14 +360,16 @@ export default {
         ...DEFAULT_PROPS,
         connectors: {
           connectors: [
-            // wagmiConnectors.ledgerLiveModal,
-            addConnector(InjectedConnector, {
-              name: 'Coinbase Wallet',
-              getProvider() {
-                if (typeof globalThis?.window === 'undefined') return undefined
-                return window?.ethereum?.isCoinbaseWallet
-                  ? window.ethereum.providerMap?.get('CoinbaseWallet')
-                  : window?.coinbaseWalletExtension
+            injected({
+              target() {
+                if (IS_SERVER) return undefined
+                return {
+                  name: 'Coinbase Wallet',
+                  id: 'coinbase-injected',
+                  provider: window?.ethereum?.isCoinbaseWallet
+                    ? window.ethereum.providerMap?.get('CoinbaseWallet')
+                    : window?.coinbaseWalletExtension
+                }
               }
             })
           ],
@@ -482,51 +487,7 @@ export default {
           ...DEFAULT_PROPS,
           chains: [DEFAULT_PROPS.chains[0]],
           connectors: {
-            connectors: [
-              addConnector(InjectedConnector, {
-                name: 'MetaMask',
-                shimDisconnect: true,
-                getProvider() {
-                  if (typeof globalThis?.window === 'undefined') return undefined
-                  try {
-                    const provider = window?.ethereum?.providers?.find((provider) => provider?.isMetaMask)
-                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                    return provider
-                  } catch (error) {
-                    return undefined
-                  }
-                }
-              }),
-              addConnector(InjectedConnector, {
-                name: 'Taho',
-                shimDisconnect: true,
-                getProvider() {
-                  if (typeof globalThis?.window === 'undefined') return undefined
-                  try {
-                    const provider = window?.tally
-                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                    return provider
-                  } catch (error) {
-                    return undefined
-                  }
-                }
-              }),
-              addConnector(InjectedConnector, {
-                name: 'Coinbase Wallet',
-                shimDisconnect: true,
-                getProvider() {
-                  if (typeof globalThis?.window === 'undefined') return undefined
-                  try {
-                    const provider =
-                      (window?.ethereum?.isCoinbaseWallet && window.ethereum) || window?.coinbaseWalletExtension
-                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                    return provider
-                  } catch (error) {
-                    return undefined
-                  }
-                }
-              })
-            ],
+            connectors: INJECTED_CONNECTORS,
             overrides: COMMON_CONNECTOR_OVERRIDES
           },
           modals: {
@@ -559,64 +520,20 @@ export default {
   Grid__ManyInjectedAndLedger: withThemeProvider(() => {
     return (
       <PstlW3Providers
+        autoReconnect
         config={{
           ...DEFAULT_PROPS_WEB3AUTH,
           connectors: {
-            connectors: [
-              wagmiConnectors.ledgerHID,
-              // wagmiConnectors.ledgerLiveModal,
-              addConnector(InjectedConnector, {
-                name: 'MetaMask',
-                shimDisconnect: true,
-                getProvider() {
-                  if (typeof globalThis?.window === 'undefined') return undefined
-                  try {
-                    const provider = window?.ethereum?.providers?.find((provider) => provider?.isMetaMask)
-                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                    return provider
-                  } catch (error) {
-                    return undefined
-                  }
-                }
-              }),
-              addConnector(InjectedConnector, {
-                name: 'Taho',
-                shimDisconnect: true,
-                getProvider() {
-                  if (typeof globalThis?.window === 'undefined') return undefined
-                  try {
-                    const provider = window?.tally
-                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                    return provider
-                  } catch (error) {
-                    return undefined
-                  }
-                }
-              }),
-              addConnector(InjectedConnector, {
-                name: 'Coinbase Wallet',
-                shimDisconnect: true,
-                getProvider() {
-                  if (typeof globalThis?.window === 'undefined') return undefined
-                  try {
-                    const provider =
-                      (window?.ethereum?.isCoinbaseWallet && window.ethereum) || window?.coinbaseWalletExtension
-                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                    return provider
-                  } catch (error) {
-                    return undefined
-                  }
-                }
-              })
-            ],
+            connectors: [ledgerHid(), ...INJECTED_CONNECTORS],
             overrides: {
               ...COMMON_CONNECTOR_OVERRIDES,
               'ledger-hid': {
                 ...COMMON_CONNECTOR_OVERRIDES['ledger-hid'],
-                async customConnect({ store, connector, wagmiConnect }) {
-                  await wagmiConnect({ connector })
+                async customConnect({ modalsStore: store, connector, wagmiConnect }) {
+                  if (!connector) throw new ConnectorNotFoundError()
+                  await wagmiConnect(connector)
 
-                  return store.root.open({ route: 'HidDeviceOptions' })
+                  return store.open({ route: 'HidDeviceOptions' })
                 }
               }
             }
@@ -658,61 +575,16 @@ export default {
         config={{
           ...DEFAULT_PROPS_WEB3AUTH,
           connectors: {
-            connectors: [
-              wagmiConnectors.ledgerHID,
-              // wagmiConnectors.ledgerLiveModal,
-              addConnector(InjectedConnector, {
-                name: 'MetaMask',
-                shimDisconnect: true,
-                getProvider() {
-                  if (typeof globalThis?.window === 'undefined') return undefined
-                  try {
-                    const provider = window?.ethereum?.providers?.find((provider) => provider?.isMetaMask)
-                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                    return provider
-                  } catch (error) {
-                    return undefined
-                  }
-                }
-              }),
-              addConnector(InjectedConnector, {
-                name: 'Taho',
-                shimDisconnect: true,
-                getProvider() {
-                  if (typeof globalThis?.window === 'undefined') return undefined
-                  try {
-                    const provider = window?.tally
-                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                    return provider
-                  } catch (error) {
-                    return undefined
-                  }
-                }
-              }),
-              addConnector(InjectedConnector, {
-                name: 'Coinbase Wallet',
-                shimDisconnect: true,
-                getProvider() {
-                  if (typeof globalThis?.window === 'undefined') return undefined
-                  try {
-                    const provider =
-                      (window?.ethereum?.isCoinbaseWallet && window.ethereum) || window?.coinbaseWalletExtension
-                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                    return provider
-                  } catch (error) {
-                    return undefined
-                  }
-                }
-              })
-            ],
+            connectors: [wagmiConnectors.ledgerHID, ...INJECTED_CONNECTORS],
             overrides: {
               ...COMMON_CONNECTOR_OVERRIDES,
               'ledger-hid': {
                 ...COMMON_CONNECTOR_OVERRIDES['ledger-hid'],
-                async customConnect({ store, connector, wagmiConnect }) {
-                  await wagmiConnect({ connector })
+                async customConnect({ modalsStore: store, connector, wagmiConnect }) {
+                  if (!connector) throw new ConnectorNotFoundError()
+                  await wagmiConnect(connector)
 
-                  return store.root.open({ route: 'HidDeviceOptions' })
+                  return store.open({ route: 'HidDeviceOptions' })
                 }
               }
             }
@@ -759,53 +631,7 @@ export default {
             }
           },
           connectors: {
-            connectors: [
-              wagmiConnectors.ledgerHID,
-              // wagmiConnectors.ledgerLiveModal,
-              addConnector(InjectedConnector, {
-                name: 'MetaMask',
-                shimDisconnect: true,
-                getProvider() {
-                  if (typeof globalThis?.window === 'undefined') return undefined
-                  try {
-                    const provider = window?.ethereum?.providers?.find((provider) => provider?.isMetaMask)
-                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                    return provider
-                  } catch (error) {
-                    return undefined
-                  }
-                }
-              }),
-              addConnector(InjectedConnector, {
-                name: 'Taho',
-                shimDisconnect: true,
-                getProvider() {
-                  if (typeof globalThis?.window === 'undefined') return undefined
-                  try {
-                    const provider = window?.tally
-                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                    return provider
-                  } catch (error) {
-                    return undefined
-                  }
-                }
-              }),
-              addConnector(InjectedConnector, {
-                name: 'Coinbase Wallet',
-                shimDisconnect: true,
-                getProvider() {
-                  if (typeof globalThis?.window === 'undefined') return undefined
-                  try {
-                    const provider =
-                      (window?.ethereum?.isCoinbaseWallet && window.ethereum) || window?.coinbaseWalletExtension
-                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                    return provider
-                  } catch (error) {
-                    return undefined
-                  }
-                }
-              })
-            ],
+            connectors: [wagmiConnectors.ledgerHID, ...INJECTED_CONNECTORS],
             overrides: COMMON_CONNECTOR_OVERRIDES
           },
           modals: {
@@ -866,53 +692,7 @@ export default {
             }
           },
           connectors: {
-            connectors: [
-              wagmiConnectors.ledgerHID,
-              // wagmiConnectors.ledgerLiveModal,
-              addConnector(InjectedConnector, {
-                name: 'MetaMask',
-                shimDisconnect: true,
-                getProvider() {
-                  if (typeof globalThis?.window === 'undefined') return undefined
-                  try {
-                    const provider = window?.ethereum?.providers?.find((provider) => provider?.isMetaMask)
-                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                    return provider
-                  } catch (error) {
-                    return undefined
-                  }
-                }
-              }),
-              addConnector(InjectedConnector, {
-                name: 'Taho',
-                shimDisconnect: true,
-                getProvider() {
-                  if (typeof globalThis?.window === 'undefined') return undefined
-                  try {
-                    const provider = window?.tally
-                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                    return provider
-                  } catch (error) {
-                    return undefined
-                  }
-                }
-              }),
-              addConnector(InjectedConnector, {
-                name: 'Coinbase Wallet',
-                shimDisconnect: true,
-                getProvider() {
-                  if (typeof globalThis?.window === 'undefined') return undefined
-                  try {
-                    const provider =
-                      (window?.ethereum?.isCoinbaseWallet && window.ethereum) || window?.coinbaseWalletExtension
-                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                    return provider
-                  } catch (error) {
-                    return undefined
-                  }
-                }
-              })
-            ],
+            connectors: [wagmiConnectors.ledgerHID, ...INJECTED_CONNECTORS],
             overrides: COMMON_CONNECTOR_OVERRIDES
           },
           modals: {
@@ -975,53 +755,7 @@ export default {
             }
           },
           connectors: {
-            connectors: [
-              wagmiConnectors.ledgerHID,
-              // wagmiConnectors.ledgerLiveModal,
-              addConnector(InjectedConnector, {
-                name: 'MetaMask',
-                shimDisconnect: true,
-                getProvider() {
-                  if (typeof globalThis?.window === 'undefined') return undefined
-                  try {
-                    const provider = window?.ethereum?.providers?.find((provider) => provider?.isMetaMask)
-                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                    return provider
-                  } catch (error) {
-                    return undefined
-                  }
-                }
-              }),
-              addConnector(InjectedConnector, {
-                name: 'Taho',
-                shimDisconnect: true,
-                getProvider() {
-                  if (typeof globalThis?.window === 'undefined') return undefined
-                  try {
-                    const provider = window?.tally
-                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                    return provider
-                  } catch (error) {
-                    return undefined
-                  }
-                }
-              }),
-              addConnector(InjectedConnector, {
-                name: 'Coinbase Wallet',
-                shimDisconnect: true,
-                getProvider() {
-                  if (typeof globalThis?.window === 'undefined') return undefined
-                  try {
-                    const provider =
-                      (window?.ethereum?.isCoinbaseWallet && window.ethereum) || window?.coinbaseWalletExtension
-                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                    return provider
-                  } catch (error) {
-                    return undefined
-                  }
-                }
-              })
-            ],
+            connectors: [wagmiConnectors.ledgerHID, ...INJECTED_CONNECTORS],
             overrides: COMMON_CONNECTOR_OVERRIDES
           },
           modals: {
@@ -1048,12 +782,12 @@ export default {
             wagmi: {
               options: {
                 ...DEFAULT_PROPS_WEB3AUTH.clients?.wagmi?.options,
-                publicClients: [
-                  {
-                    client: infuraProvider,
-                    5: process.env.REACT_APP_INFURA_ID as string
-                  }
-                ]
+                transports: {
+                  1: http(`https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_ID}`),
+                  5: http(`https://goerli.infura.io/v3/${process.env.REACT_APP_INFURA_ID}`),
+                  137: http(`https://polygon-mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_ID}`),
+                  80001: http(`https://polygon-mumbai.infura.io/v3/${process.env.REACT_APP_INFURA_ID}`)
+                }
               }
             }
           }
@@ -1077,55 +811,6 @@ export default {
             ...DEFAULT_PROPS_WEB3AUTH.options,
             closeModalOnKeys: ['Escape', 'Esc']
           },
-          connectors: [
-            wagmiConnectors.ledgerHID,
-            // wagmiConnectors.ledgerLiveModal,
-            addConnector(InjectedConnector, {
-              name: 'MetaMask',
-              shimDisconnect: true,
-              getProvider() {
-                if (typeof globalThis?.window === 'undefined') return undefined
-                try {
-                  const provider =
-                    window?.ethereum?.providers?.find((provider) => provider?.isMetaMask) ||
-                    (window.ethereum?.isMetaMask && window.ethereum)
-                  if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                  return provider
-                } catch (error) {
-                  return undefined
-                }
-              }
-            }),
-            addConnector(InjectedConnector, {
-              name: 'Taho',
-              shimDisconnect: true,
-              getProvider() {
-                if (typeof globalThis?.window === 'undefined') return undefined
-                try {
-                  const provider = window?.tally
-                  if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                  return provider
-                } catch (error) {
-                  return undefined
-                }
-              }
-            }),
-            addConnector(InjectedConnector, {
-              name: 'Coinbase Wallet',
-              shimDisconnect: true,
-              getProvider() {
-                if (typeof globalThis?.window === 'undefined') return undefined
-                try {
-                  const provider =
-                    (window?.ethereum?.isCoinbaseWallet && window.ethereum) || window?.coinbaseWalletExtension
-                  if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                  return provider
-                } catch (error) {
-                  return undefined
-                }
-              }
-            })
-          ],
           modals: {
             ...DEFAULT_PROPS_WEB3AUTH.modals,
             root: {
@@ -1169,14 +854,15 @@ export default {
         config={{
           ...DEFAULT_PROPS_WEB3AUTH,
           connectors: {
-            // connectors: [wagmiConnectors.ledgerHID, wagmiConnectors.ledgerLiveModal, wagmiConnectors.web3auth],
+            connectors: [wagmiConnectors.ledgerHID, wagmiConnectors.ledgerLiveModal, wagmiConnectors.web3auth],
             overrides: {
               'ledger-hid': {
                 ...COMMON_CONNECTOR_OVERRIDES['ledger-hid'],
-                async customConnect({ store, connector, wagmiConnect }) {
-                  await wagmiConnect({ connector })
+                async customConnect({ modalsStore: store, connector, wagmiConnect }) {
+                  if (!connector) throw new ConnectorNotFoundError()
+                  await wagmiConnect(connector)
 
-                  return store.root.open({ route: 'ConnectorConfigType' })
+                  return store.open({ route: 'ConnectorConfigType' })
                 }
               }
             }
@@ -1214,61 +900,16 @@ export default {
         config={{
           ...DEFAULT_PROPS_WEB3AUTH,
           connectors: {
-            connectors: [
-              wagmiConnectors.ledgerHID,
-              // wagmiConnectors.ledgerLiveModal,
-              addConnector(InjectedConnector, {
-                name: 'MetaMask',
-                shimDisconnect: true,
-                getProvider() {
-                  if (typeof globalThis?.window === 'undefined') return undefined
-                  try {
-                    const provider = window?.ethereum?.providers?.find((provider) => provider?.isMetaMask)
-                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                    return provider
-                  } catch (error) {
-                    return undefined
-                  }
-                }
-              }),
-              addConnector(InjectedConnector, {
-                name: 'Taho',
-                shimDisconnect: true,
-                getProvider() {
-                  if (typeof globalThis?.window === 'undefined') return undefined
-                  try {
-                    const provider = window?.tally
-                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                    return provider
-                  } catch (error) {
-                    return undefined
-                  }
-                }
-              }),
-              addConnector(InjectedConnector, {
-                name: 'Coinbase Wallet',
-                shimDisconnect: true,
-                getProvider() {
-                  if (typeof globalThis?.window === 'undefined') return undefined
-                  try {
-                    const provider =
-                      (window?.ethereum?.isCoinbaseWallet && window.ethereum) || window?.coinbaseWalletExtension
-                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                    return provider
-                  } catch (error) {
-                    return undefined
-                  }
-                }
-              })
-            ],
+            connectors: [wagmiConnectors.ledgerHID, ...INJECTED_CONNECTORS],
             overrides: {
               ...COMMON_CONNECTOR_OVERRIDES,
               'ledger-hid': {
                 ...COMMON_CONNECTOR_OVERRIDES['ledger-hid'],
-                async customConnect({ store, connector, wagmiConnect }) {
-                  await wagmiConnect({ connector })
+                async customConnect({ modalsStore: store, connector, wagmiConnect }) {
+                  if (!connector) throw new ConnectorNotFoundError()
+                  await wagmiConnect(connector)
 
-                  return store.root.open({ route: 'HidDeviceOptions' })
+                  return store.open({ route: 'HidDeviceOptions' })
                 }
               }
             }
@@ -1308,60 +949,15 @@ export default {
         config={{
           ...DEFAULT_PROPS_WEB3AUTH,
           connectors: {
-            connectors: [
-              wagmiConnectors.ledgerHID,
-              // wagmiConnectors.ledgerLiveModal,
-              addConnector(InjectedConnector, {
-                name: 'MetaMask',
-                shimDisconnect: true,
-                getProvider() {
-                  if (typeof globalThis?.window === 'undefined') return undefined
-                  try {
-                    const provider = window?.ethereum?.providers?.find((provider) => provider?.isMetaMask)
-                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                    return provider
-                  } catch (error) {
-                    return undefined
-                  }
-                }
-              }),
-              addConnector(InjectedConnector, {
-                name: 'Taho',
-                shimDisconnect: true,
-                getProvider() {
-                  if (typeof globalThis?.window === 'undefined') return undefined
-                  try {
-                    const provider = window?.tally
-                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                    return provider
-                  } catch (error) {
-                    return undefined
-                  }
-                }
-              }),
-              addConnector(InjectedConnector, {
-                name: 'Coinbase Wallet',
-                shimDisconnect: true,
-                getProvider() {
-                  if (typeof globalThis?.window === 'undefined') return undefined
-                  try {
-                    const provider =
-                      (window?.ethereum?.isCoinbaseWallet && window.ethereum) || window?.coinbaseWalletExtension
-                    if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-                    return provider
-                  } catch (error) {
-                    return undefined
-                  }
-                }
-              })
-            ],
+            connectors: [wagmiConnectors.ledgerHID, ...INJECTED_CONNECTORS],
             overrides: {
               ...COMMON_CONNECTOR_OVERRIDES,
               'ledger-hid': {
-                async customConnect({ store, connector, wagmiConnect }) {
-                  await wagmiConnect({ connector })
+                async customConnect({ modalsStore: store, connector, wagmiConnect }) {
+                  if (!connector) throw new ConnectorNotFoundError()
+                  await wagmiConnect(connector)
 
-                  return store.root.open({ route: 'HidDeviceOptions' })
+                  return store.open({ route: 'HidDeviceOptions' })
                 }
               }
             }

@@ -3,9 +3,13 @@ import { resolveProperties } from '@ethersproject/properties'
 
 import { TransactionRequestExtended, UnsignedTransactionStrict } from '../types'
 
+const IS_SERVER = typeof globalThis?.window === 'undefined'
+
 export const isHIDSupported = () => {
   try {
-    return typeof globalThis?.window !== 'undefined' && 'hid' in window.navigator
+    if (IS_SERVER)
+      throw new Error('HID support check error! IS_SERVER flag returned true. Server environments not supported.')
+    return !IS_SERVER && 'hid' in window.navigator
   } catch (error) {
     return false
   }

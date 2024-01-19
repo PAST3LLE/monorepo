@@ -1,68 +1,65 @@
 import { useIsSmallMediaWidth } from '@past3lle/hooks'
-import { ConnectArgs, ConnectResult } from '@wagmi/core'
-import { useWeb3Modal as useWeb3ModalBase } from '@web3modal/react'
-import { useCallback, useMemo } from 'react'
+// import { useWeb3Modal as useWeb3ModalBase } from '@web3modal/react'
+import { useCallback } from 'react'
+import { Address, Chain } from 'viem'
 import {
-  Address,
-  Chain,
   Connector,
+  UseConnectParameters,
+  UseConnectReturnType,
+  UseConnectorsReturnType,
+  UseDisconnectParameters,
+  UseDisconnectReturnType,
   useAccount,
   useBalance,
+  useConfig,
   useConnect as useConnectWagmi,
-  useDisconnect as useDisconnectWagmi,
-  useNetwork
+  useDisconnect as useDisconnectWagmi
 } from 'wagmi'
 
-import { OpenOptions } from '../../controllers'
+import { useConnectDisconnectEffects } from '../internal/useConnectDisconnectEffects'
+// import { OpenOptions } from '../../controllers'
 import { useAllWeb3Modals } from './useAllWeb3Modals'
 import { usePstlWeb3Modal } from './usePstlWeb3Modal'
 import { usePstlWeb3ModalStore } from './usePstlWeb3ModalStore'
 
 type Callbacks = Pick<ReturnType<typeof useDisconnectWagmi>, 'disconnect'> & {
-  openWalletConnectModal: ReturnType<typeof useWeb3Modal>['open']
-  closeWalletConnectModal: ReturnType<typeof useWeb3Modal>['close']
+  // openWalletConnectModal: ReturnType<typeof useWeb3Modal>['open']
+  // closeWalletConnectModal: ReturnType<typeof useWeb3Modal>['close']
   openRootModal: ReturnType<typeof usePstlWeb3Modal>['open']
   closeRootModal: ReturnType<typeof usePstlWeb3Modal>['close']
   onNetworkClick: () => Promise<void>
   onAccountClick: () => Promise<void>
-  connect: ReturnType<typeof useConnectWagmi>['connectAsync']
+  connect: UseConnectorsReturnType[0]['connect']
 }
 
-type DisconnectConfig = {
-  /** Function to invoke when an error is thrown while connecting. */
-  onError?: (error: Error, context: unknown) => void | Promise<unknown>
-  /**
-   * Function fires before mutation function and is passed same variables mutation function would receive.
-   * Value returned from this function will be passed to both onError and onSettled functions in event of a mutation failure.
-   */
-  onMutate?: () => unknown
-  /** Function to invoke when connect is settled (either successfully connected, or an error has thrown). */
-  onSettled?: (error: Error | null, context: unknown) => void | Promise<unknown>
-  /** Function fires when mutation is successful and will be passed the mutation's result */
-  onSuccess?: (context: unknown) => void | Promise<unknown>
-}
-
-type ConnectConfig = DisconnectConfig & {
-  /** Function to invoke when connect is settled (either successfully connected, or an error has thrown). */
-  onSettled?:
-    | ((data: ConnectResult | undefined, error: Error | null, variables: ConnectArgs, context: unknown) => unknown)
-    | undefined
-}
+type ConnectConfig = UseConnectParameters
+type DisconnectConfig = UseDisconnectParameters
 
 type UseConnectDisconnectProps = {
-  connect?: Partial<ConnectArgs> & ConnectConfig
+  connect?: ConnectConfig
   disconnect?: DisconnectConfig
 }
 export function useConnectDisconnect(props?: UseConnectDisconnectProps): {
-  connect: ReturnType<typeof useConnectWagmi>
-  disconnect: ReturnType<typeof useDisconnectWagmi>
+  connect: UseConnectReturnType
+  disconnect: UseDisconnectReturnType
 } {
-  return { connect: useConnectWagmi(props?.connect), disconnect: useDisconnectWagmi(props?.disconnect) }
+  const connectReturn = useConnectWagmi(props?.connect)
+  const disconnectReturn = useDisconnectWagmi(props?.disconnect)
+
+  useConnectDisconnectEffects({
+    connect: { returnData: connectReturn, mutation: props?.connect?.mutation },
+    disconnect: { returnData: disconnectReturn, mutation: props?.disconnect?.mutation }
+  })
+
+  return {
+    connect: connectReturn,
+    disconnect: disconnectReturn
+  }
 }
 
 export function useUserConnectionInfo() {
-  const { address, connector, isConnected, isConnecting, isDisconnected, isReconnecting } = useAccount()
-  const { chain, chains } = useNetwork()
+  const { chains } = useConfig()
+  const { address, chain, chainId, connector, isConnected, isConnecting, isDisconnected, isReconnecting } = useAccount()
   const {
     state: {
       userOptions: { ui }
@@ -70,13 +67,12 @@ export function useUserConnectionInfo() {
   } = usePstlWeb3ModalStore()
   const balance = useBalance({
     address,
-    chainId: chain?.id
+    chainId
   })
-  const { connectors, pendingConnector } = useConnectWagmi()
+  const { connectors } = useConnectWagmi()
 
   return {
     address,
-    pendingConnector,
     connector,
     connectors,
     isConnected,
@@ -84,58 +80,57 @@ export function useUserConnectionInfo() {
     isDisconnected,
     isReconnecting,
     chain,
+    chainId,
     supportedChains: ui.softLimitedChains || chains,
     balance
   }
 }
 
-export function useWeb3Modal(): ReturnType<typeof useWeb3ModalBase> {
-  const baseApi = useWeb3ModalBase()
-  const modalStore = usePstlWeb3ModalStore()
+// export function useWeb3Modal(): ReturnType<typeof useWeb3ModalBase> {
+//   const baseApi = useWeb3ModalBase()
+//   const modalStore = usePstlWeb3ModalStore()
 
-  return useMemo(() => {
-    return {
-      isOpen: baseApi.isOpen,
-      setDefaultChain: baseApi.setDefaultChain,
-      close: () => {
-        // Re-enable root modal's trap scroll locking
-        modalStore.callbacks.userOptions.set({
-          ux: {
-            bypassScrollLock: false
-          }
-        })
-        return baseApi.close()
-      },
-      open: (options?: OpenOptions) => {
-        // Disable root modal's scroll lock
-        // And allow walletconnect to scroll internally
-        modalStore.callbacks.userOptions.set({
-          ux: {
-            bypassScrollLock: true
-          }
-        })
-        return baseApi.open(options)
-      }
-    }
-  }, [baseApi, modalStore])
-}
+//   return useMemo(() => {
+//     return {
+//       isOpen: baseApi.isOpen,
+//       setDefaultChain: baseApi.setDefaultChain,
+//       close: () => {
+//         // Re-enable root modal's trap scroll locking
+//         modalStore.callbacks.userOptions.set({
+//           ux: {
+//             bypassScrollLock: false
+//           }
+//         })
+//         return baseApi.close()
+//       },
+//       open: (options?: OpenOptions) => {
+//         // Disable root modal's scroll lock
+//         // And allow walletconnect to scroll internally
+//         modalStore.callbacks.userOptions.set({
+//           ux: {
+//             bypassScrollLock: true
+//           }
+//         })
+//         return baseApi.open(options)
+//       }
+//     }
+//   }, [baseApi, modalStore])
+// }
 
 export function useAccountNetworkActions() {
-  const { chain } = useUserConnectionInfo()
+  const { address, chain } = useUserConnectionInfo()
   const { root } = useAllWeb3Modals()
 
   const isMobileWidth = useIsSmallMediaWidth()
 
   const onNetworkClick = useCallback(async () => {
-    return chain?.id
-      ? root.open({
-          route: !isMobileWidth ? 'SelectNetwork' : 'Account'
-        })
-      : root.open({ route: 'ConnectWallet' })
+    return root.open({
+      route: (chain?.id && address) || !isMobileWidth ? 'SelectNetwork' : 'ConnectWallet'
+    })
   }, [chain?.id, root, isMobileWidth])
 
   const onAccountClick = useCallback(async () => {
-    return root.open({ route: chain?.id ? 'Account' : 'ConnectWallet' })
+    return root.open({ route: chain?.id && address ? 'Account' : 'ConnectWallet' })
   }, [chain?.id, root])
 
   return {
@@ -172,13 +167,13 @@ export function useModalActions() {
 }
 
 export type PstlW3mConnectionHook = [
-  Connector<any, any>[],
+  readonly Connector[],
   Callbacks,
   {
     address?: Address
     balanceInfo: ReturnType<typeof useBalance>
     chain?: Chain
-    currentConnector: ReturnType<typeof useAccount>['connector']
+    currentConnector: Connector | undefined
     error: Error | null
     isError: boolean
     isIdle: boolean
@@ -188,8 +183,7 @@ export type PstlW3mConnectionHook = [
     isConnecting: boolean
     isDisconnected: boolean
     isReconnecting: boolean
-    pendingConnector: Connector<any, any> | undefined
-    isWalletConnectOpen: ReturnType<typeof useWeb3Modal>['isOpen']
+    // isWalletConnectOpen: ReturnType<typeof useWeb3Modal>['isOpen']
     isRootModalOpen: ReturnType<typeof usePstlWeb3Modal>['isOpen']
   }
 ]
@@ -220,7 +214,7 @@ export type PstlW3mConnectionHook = [
         isConnecting: boolean
         isDisconnected: boolean
         isReconnecting: boolean
-        pendingConnector: Connector<any, any> | undefined
+        pendingConnector: Connector | undefined
         isWalletConnectOpen: ReturnType<typeof useWeb3Modal>['isOpen']
         isRootModalOpen: ReturnType<typeof usePstlWeb3Modal>['isOpen'] 
       }
@@ -231,10 +225,10 @@ type UseConnectionProps = {
   disconnect: UseConnectDisconnectProps['disconnect']
 }
 export function useConnection(props?: UseConnectionProps): PstlW3mConnectionHook {
-  const { root, walletConnect } = useAllWeb3Modals()
+  const { root } = useAllWeb3Modals()
 
   const {
-    connect: { connectAsync: connect, connectors, error, isLoading, pendingConnector, isError, isIdle, isSuccess },
+    connect: { connectAsync: connect, connectors, error, isPending: isLoading, isError, isIdle, isSuccess },
     disconnect: { disconnect }
   } = useConnectDisconnect(props)
 
@@ -256,8 +250,8 @@ export function useConnection(props?: UseConnectionProps): PstlW3mConnectionHook
     {
       connect,
       disconnect,
-      openWalletConnectModal: walletConnect.open,
-      closeWalletConnectModal: walletConnect.close,
+      // openWalletConnectModal: walletConnect.open,
+      // closeWalletConnectModal: walletConnect.close,
       openRootModal: root.open,
       closeRootModal: root.close,
       onNetworkClick,
@@ -273,13 +267,12 @@ export function useConnection(props?: UseConnectionProps): PstlW3mConnectionHook
       isIdle,
       isLoading,
       isSuccess,
-      isWalletConnectOpen: walletConnect.isOpen,
+      // isWalletConnectOpen: walletConnect.isOpen,
       isRootModalOpen: root.isOpen,
-      pendingConnector,
       isConnected,
       isConnecting,
       isDisconnected,
       isReconnecting
     }
-  ]
+  ] as const
 }

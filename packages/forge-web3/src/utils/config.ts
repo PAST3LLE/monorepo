@@ -1,6 +1,6 @@
 import { ThemeBaseRequired } from '@past3lle/theme'
 
-import { Web3ModalConfigWeb3Props } from '../types'
+import { ForgeChainsMinimum, Web3ModalConfigWeb3Props } from '../types'
 
 /**
  * overwriteWeb3PropsWithOuterTheme
@@ -11,9 +11,9 @@ import { Web3ModalConfigWeb3Props } from '../types'
  * @returns
  */
 export function overwriteWeb3PropsWithOuterTheme<T extends ThemeBaseRequired>(
-  props: Web3ModalConfigWeb3Props,
+  props: Web3ModalConfigWeb3Props<ForgeChainsMinimum>,
   externalTheme: T
-): Web3ModalConfigWeb3Props {
+): Web3ModalConfigWeb3Props<ForgeChainsMinimum> {
   const constructedProps = Object.assign({}, props)
   if (!constructedProps.modals.root?.themeConfig) return props
 

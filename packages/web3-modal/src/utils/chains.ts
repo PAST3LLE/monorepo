@@ -10,6 +10,8 @@ interface ChainInfo {
   }
 }
 
+const IS_SERVER = typeof globalThis?.window === 'undefined'
+
 export const getAllChainsInfo = async (): Promise<ChainInfo[]> => {
   try {
     const chainInfo = await fetch('https://chainid.network/chains_mini.json')
@@ -24,7 +26,7 @@ export const getAllChainsInfo = async (): Promise<ChainInfo[]> => {
 }
 
 export function getSafeAppChainShortName() {
-  if (typeof globalThis?.window === 'undefined' || !window?.top?.location?.search) return undefined
+  if (IS_SERVER || !window?.top?.location?.search) return undefined
 
   return new URLSearchParams(window.top.location.search).get('safe')?.split(':')[0]
 }

@@ -1,32 +1,32 @@
 import { RowCenter, SpinnerCircle } from '@past3lle/components'
-import { useAddPendingTransaction, usePendingTransactions } from '@past3lle/web3-modal'
-import { Web3Button } from '@web3modal/react'
+import { useAddPendingTransaction, usePendingTransactions, usePstlWeb3Modal } from '@past3lle/web3-modal'
 import React, { useCallback, useState } from 'react'
-import { parseEther } from 'viem'
-import { useBalance, useSendTransaction } from 'wagmi'
+import { Address, parseEther } from 'viem'
+import { Config, ProviderNotFoundError, useBalance, useSendTransaction } from 'wagmi'
+import { injected } from 'wagmi/connectors'
+import { SendTransactionMutateAsync } from 'wagmi/query'
 
-import { ForgeW3Providers, useForgeMetadataAtom, useSupportedChainId, useW3Modal, useW3UserConnectionInfo } from '..'
+import { ForgeW3Providers, useW3Modal, useW3UserConnectionInfo } from '..'
 import { THEME, commonProps, contractProps } from './config'
 
+const IS_SERVER = typeof globalThis?.window === 'undefined'
+
 /* 
-    interface Web3ModalProps {
-        appName: string
-        web3Modal: Web3ModalConfig
-        wagmiClient?: SkillForgeW3WagmiClientOptions
-        ethereumClient?: EthereumClient
-    }
+  interface Web3ModalProps {
+    appName: string
+    web3Modal: Web3ModalConfig
+    wagmiClient?: SkillForgeW3WagmiClientOptions
+    ethereumClient?: EthereumClient
+  }
 */
 
 function InnerApp() {
   const { open } = useW3Modal()
-  const { address } = useW3UserConnectionInfo()
-  const chainId = useSupportedChainId()
-  const [state] = useForgeMetadataAtom()
-  const skill = chainId ? state.metadata[chainId][1][1] : null
+  const { address, chainId, connector } = useW3UserConnectionInfo()
 
   const { data, refetch } = useBalance({ address })
   const [sendEthVal, setSendEthVal] = useState('0')
-  const [addressToSendTo, setAddress] = useState('')
+  const [addressToSendTo, setAddress] = useState<Address | undefined>()
 
   const sendApi = useSendTransaction()
 
@@ -35,13 +35,13 @@ function InnerApp() {
 
   const [currentTx, setTx] = useState('')
   const handleSendTransaction = useCallback(
-    async (args: { value: bigint; to: string }) => {
+    async (args: Parameters<SendTransactionMutateAsync<Config>>[0]) => {
       setTx('pending')
       sendApi
         .sendTransactionAsync(args)
-        .then((tx) => {
-          setTx(tx.hash)
-          addPendingTransaction(tx.hash)
+        .then((hash) => {
+          setTx(hash)
+          addPendingTransaction(hash)
         })
         .catch((error) => {
           throw error
@@ -83,7 +83,11 @@ function InnerApp() {
           To
           <input type="text" value={addressToSendTo} onChange={(e: any) => setAddress(e.target.value)} />
         </p>
-        <button onClick={() => handleSendTransaction({ value: parseEther(sendEthVal), to: addressToSendTo })}>
+        <button
+          onClick={() =>
+            addressToSendTo && handleSendTransaction({ value: parseEther(sendEthVal), to: addressToSendTo })
+          }
+        >
           Send to {addressToSendTo || 'N/A'}
         </button>
         <br />
@@ -112,8 +116,8 @@ function App() {
           connectors: {
             overrides: {
               walletconnect: {
-                async customConnect({ store }) {
-                  return store.walletConnect.open()
+                async customConnect({ modalsStore }) {
+                  return modalsStore.open()
                 }
               }
             }
@@ -139,7 +143,7 @@ function App() {
 }
 
 export default {
-  default: (
+  default: () => (
     <ForgeW3Providers
       config={{
         ...contractProps,
@@ -152,6 +156,33 @@ export default {
         name: commonProps.appName,
         web3: {
           chains: commonProps.chains,
+          connectors: {
+            connectors: [
+              injected({
+                shimDisconnect: true,
+                target() {
+                  try {
+                    if (IS_SERVER) throw new Error('Injected providers not available in server context.')
+                    return {
+                      name: 'MetaMask',
+                      id: 'io.metamask',
+                      icon: 'https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg',
+                      provider() {
+                        const provider = window.ethereum?.isMetaMask
+                          ? window.ethereum
+                          : window.ethereum?.providersMap?.get('metamask')
+                        if (!provider) throw new ProviderNotFoundError()
+                        return provider
+                      }
+                    }
+                  } catch (error) {
+                    alert('MetaMask injected provider not found on window!')
+                    return undefined
+                  }
+                }
+              })
+            ]
+          },
           modals: {
             walletConnect: commonProps.modals.walletConnect
           },
@@ -163,36 +194,8 @@ export default {
         }
       }}
     >
-      <h1>Default Web3Modal selections</h1>
-      <Web3Button label="Click and select a wallet in the modal!" />
-    </ForgeW3Providers>
-  ),
-  web3Auth: (
-    <ForgeW3Providers
-      config={{
-        ...contractProps,
-        contactInfo: {
-          email: 'some-fake-email@gmail.com'
-        },
-        contentUrls: {
-          FAQ: 'https://faq.learnmoreabout.stuff.net'
-        },
-        name: commonProps.appName,
-        web3: {
-          chains: commonProps.chains,
-          modals: {
-            walletConnect: commonProps.modals.walletConnect
-          },
-          options: {
-            escapeHatches: {
-              appType: 'DAPP'
-            }
-          }
-        }
-      }}
-    >
-      <h1>Web3Auth in the Web3Modal</h1>
-      <Web3Button label="Click and try selecting Web3Auth in the modal!" />
+      <h1>DEFAULT</h1>
+      <InnerApp />
     </ForgeW3Providers>
   ),
   app: <App />

@@ -1,8 +1,17 @@
-import { ForgeW3CoreProvidersProps, addConnector, createWeb3ModalTheme } from '@past3lle/forge-web3'
+import {
+  ForgeChainsMinimum,
+  ForgeContractAddressMap,
+  ForgeMetadataUriMap,
+  ForgeW3CoreProvidersProps,
+  createWeb3ModalTheme
+} from '@past3lle/forge-web3'
 import { devDebug } from '@past3lle/utils'
-import { LedgerHIDConnector } from '@past3lle/wagmi-connectors'
-import { goerli, polygon } from 'wagmi/chains'
+import { ledgerHid } from '@past3lle/wagmi-connectors'
+import { goerli, polygon } from 'viem/chains'
+import { ConnectorNotFoundError, ProviderNotFoundError } from 'wagmi'
+import { injected } from 'wagmi/connectors'
 
+const IS_SERVER = typeof globalThis?.window === 'undefined'
 const MODAL_THEME = createWeb3ModalTheme({
   DEFAULT: {
     modals: {
@@ -74,21 +83,43 @@ const MODAL_THEME = createWeb3ModalTheme({
 })
 // TESTING ID - DONT USE IN PROD
 const WALLETCONNECT_TEST_ID = 'a01e2f3b7c64ff495f9cb28e4e2d4b49'
-const DEFAULT_PROPS: ForgeW3CoreProvidersProps['config']['web3'] = {
-  chains: [goerli, polygon],
+const SUPPORTED_CHAINS = [goerli as any, polygon] as const satisfies ForgeChainsMinimum
+const WEB3_PROPS: ForgeW3CoreProvidersProps<typeof SUPPORTED_CHAINS>['config']['web3'] = {
+  chains: SUPPORTED_CHAINS,
   connectors: {
-    connectors: [addConnector(LedgerHIDConnector, {})],
+    connectors: [
+      ledgerHid(),
+      injected({
+        target() {
+          if (IS_SERVER) throw new ProviderNotFoundError()
+          return {
+            name: 'MetaMask',
+            id: 'metamask',
+            icon: 'https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg',
+            provider() {
+              try {
+                if (IS_SERVER) throw new ProviderNotFoundError()
+                const provider = window?.ethereum?.isMetaMask
+                  ? window.ethereum
+                  : window?.ethereum?.providers?.find((provider: any) => provider?.isMetaMask)
+                if (!provider) throw new ProviderNotFoundError()
+                return provider
+              } catch (error) {
+                console.error(error)
+                throw error
+              }
+            }
+          }
+        }
+      })
+    ],
     overrides: {
       'ledger-hid': {
         customName: 'Ledger HID Device',
-        async customConnect({ store, connector, wagmiConnect }) {
-          await wagmiConnect({ connector })
-          store.root.open({ route: 'HidDeviceOptions' })
-        }
-      },
-      walletconnect: {
-        async customConnect(params) {
-          params.store.walletConnect.open()
+        async customConnect({ modalsStore, connector, wagmiConnect }) {
+          if (!connector) throw new ConnectorNotFoundError()
+          await wagmiConnect(connector)
+          modalsStore.open({ route: 'HidDeviceOptions' })
         }
       }
     }
@@ -119,8 +150,9 @@ const DEFAULT_PROPS: ForgeW3CoreProvidersProps['config']['web3'] = {
       }
     }
   }
-}
-const DEFAULT_CONFIG_PROPS: Pick<ForgeW3CoreProvidersProps['config'], 'contractAddresses' | 'metadataUris'> = {
+} as const satisfies ForgeW3CoreProvidersProps<typeof SUPPORTED_CHAINS>['config']['web3']
+
+const METADATA_URIS_AND_CONTRACTS_PROPS = {
   metadataUris: {
     [5]: { collectionsManager: 'https://pstlcollections.s3.eu-south-2.amazonaws.com/collections/' },
     [137]: { collectionsManager: 'https://pstlcollections.s3.eu-south-2.amazonaws.com/collections/' }
@@ -135,6 +167,9 @@ const DEFAULT_CONFIG_PROPS: Pick<ForgeW3CoreProvidersProps['config'], 'contractA
       mergeManager: '0x0B397B88C96E22E63D6D9b802df62fe40bB1B544'
     }
   }
+} as const satisfies {
+  metadataUris: ForgeMetadataUriMap<typeof SUPPORTED_CHAINS>
+  contractAddresses: ForgeContractAddressMap<typeof SUPPORTED_CHAINS>
 }
 
-export { DEFAULT_PROPS as commonProps, DEFAULT_CONFIG_PROPS as contractProps }
+export { SUPPORTED_CHAINS, WEB3_PROPS, METADATA_URIS_AND_CONTRACTS_PROPS }

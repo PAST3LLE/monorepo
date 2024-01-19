@@ -1,10 +1,10 @@
-import { SkillId, SkillMetadata, SupportedForgeChains, useForgeMetadataMapReadAtom } from '@past3lle/forge-web3'
+import { SkillId, SkillMetadata, SupportedForgeChainIds, useForgeMetadataMapReadAtom } from '@past3lle/forge-web3'
 import { useCallback } from 'react'
 
 import { useForgeSkillAtom } from '../state/Skills'
 
 export function useGetSkillFromIdCallback(
-  chainId: SupportedForgeChains | undefined
+  chainId: SupportedForgeChainIds | undefined
 ): (id: SkillId) => SkillMetadata | undefined {
   const [metadataMap] = useForgeMetadataMapReadAtom(chainId)
 
@@ -12,7 +12,7 @@ export function useGetSkillFromIdCallback(
 }
 
 export function useGetActiveSkill(
-  chainId: SupportedForgeChains | undefined
+  chainId: SupportedForgeChainIds | undefined
 ): null | [SkillMetadata | undefined, ReturnType<typeof useForgeSkillAtom>[1]] {
   const getActiveSkill = useGetSkillFromIdCallback(chainId)
   const [skillState, setSkillState] = useForgeSkillAtom()

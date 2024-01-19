@@ -9,6 +9,9 @@ export type Writable<T> = {
 export type Nullable<T> = T | null
 
 export type MakeOptional<T, K extends keyof T> = Partial<T> & Pick<T, Exclude<keyof T, K>>
+export type MakeRequired<T, K extends keyof T> = T & {
+  [P in K]-?: T[P]
+}
 
 export type DeepRequired<T> = {
   [K in keyof T]-?: DeepRequired<T[K]>

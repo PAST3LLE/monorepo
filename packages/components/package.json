@@ -23,6 +23,7 @@
   "author": "pas3lle",
   "license": "MIT",
   "scripts": {
+    "pack": "yarn pack",
     "clean": "rm -rf dist && rm -rf tsconfig.tsbuildinfo",
     "compile": "tsdx build && cp \"./package.json\" ./dist/",
     "build": "yarn clean && yarn compile",

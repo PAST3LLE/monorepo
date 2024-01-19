@@ -1,15 +1,16 @@
 import { Collection__factory, ERC1155__factory } from '@past3lle/skilltree-contracts'
 import { devError } from '@past3lle/utils'
 import { useAddPendingTransaction } from '@past3lle/web3-modal'
+import { useMutation } from '@tanstack/react-query'
 import { useCallback, useMemo } from 'react'
-import { Hash } from 'viem'
-import { Address, useAccount, useContractReads, useMutation } from 'wagmi'
+import { Address, Hash } from 'viem'
+import { useAccount, useReadContracts, useWriteContract } from 'wagmi'
 
 import { useForgeFlattenedSkillDependencies } from '../../state'
 import { SkillId, SkillMetadata } from '../../types'
 import { skillToDependencySet } from '../../utils'
 import { MutationConfig } from '../types'
-import { useContractReadCallback, useContractWriteCallback, useDedupeList, useForgeSkillMetadataToArg } from './base'
+import { useContractReadCallback, useDedupeList, useForgeSkillMetadataToArg } from './base'
 import { useForgeContractAddressesByChain } from './useForgeContractAddress'
 
 /**
@@ -31,8 +32,8 @@ function useForgeCheckClaimableSkillDependencyApprovalStatuses(skill: SkillMetad
     [tokenIdMap, skill]
   )
 
-  const { data } = useContractReads({
-    enabled: Boolean(address && !!dedupedAddressList?.length),
+  const { data } = useReadContracts({
+    query: { enabled: Boolean(address && !!dedupedAddressList?.length) },
     contracts: useMemo(
       () =>
         dedupedAddressList.map((dep) => ({
@@ -54,7 +55,7 @@ type IsApprovedForAllArgs = {
 type IsApprovedForAllResults = {
   approved: boolean
   flowSkill: SkillMetadata
-  dependencyId: `0x${string}-${string}`
+  dependencyId: SkillId
 }[]
 type IsApprovedForAllConfig = MutationConfig<IsApprovedForAllResults, Error, IsApprovedForAllArgs> & {
   onSingleApproveSuccess: MutationConfig<IsApprovedForAllResults[number], Error, IsApprovedForAllArgs>['onSuccess']
@@ -82,7 +83,6 @@ async function _getApproved(
   }
 }
 
-export const mutationKey = () => [{ entity: 'isApprovedForAll' }] as const
 const mutationFn = async (
   args: IsApprovedForAllArgs & {
     checkApproval: (collectionAddr: `0x${string}`, operator?: `0x${string}` | undefined) => Promise<boolean>
@@ -100,7 +100,9 @@ export function useForgeGetAllUnapprovedTokensForClaimableCallback(
     mutate: mutate_,
     mutateAsync: mutateAsync_,
     ...rest
-  } = useMutation(mutationKey(), ({ skill }) => mutationFn({ skill, checkApproval }), params)
+  } = useMutation({
+    mutationFn: ({ skill }: { skill: SkillMetadata | null | undefined }) => mutationFn({ skill, checkApproval })
+  })
 
   const mutate = useCallback((skill: SkillMetadata | null) => mutate_({ skill }), [mutate_])
   const mutateAsync = useCallback(
@@ -123,21 +125,22 @@ export function useForgeGetAllUnapprovedTokensForClaimableCallback(
 export function useForgeApproveCallback() {
   const mergeManager = useForgeContractAddressesByChain(undefined, false)?.mergeManager
   const addPending = useAddPendingTransaction()
-  const approveCallback = useContractWriteCallback()
+  const { writeContractAsync } = useWriteContract()
 
   return useCallback(
     async (tokenAddress: Address, forgeSkillId: SkillId) => {
-      return approveCallback({
+      if (!mergeManager) throw new Error('Missing MergeManager contract address! Check function parameters!')
+      return writeContractAsync({
         abi: Collection__factory.abi,
         address: tokenAddress,
         functionName: 'setApprovalForAll',
-        args: mergeManager ? [mergeManager, true] : undefined
+        args: [mergeManager, true]
       }).then((hash) => {
         addPending(hash as Hash, { metadata: { forgeSkillId, forgeTransactionType: 'approve' } })
         return hash
       })
     },
-    [addPending, approveCallback, mergeManager]
+    [addPending, writeContractAsync, mergeManager]
   )
 }
 
@@ -159,24 +162,24 @@ export function useForgeApproveAllBatch(
   approveAddress?: Address
 ): (() => Promise<Address>)[] | null {
   const addPending = useAddPendingTransaction()
-  const approveCallback = useContractWriteCallback()
+  const { writeContractAsync } = useWriteContract()
   const approveCallbacksList = useMemo(
     () =>
       !unapprovedList.length
         ? null
-        : unapprovedList.map(
-            (tokenToApprove) => async () =>
-              approveCallback({
-                abi: ERC1155__factory.abi,
-                functionName: 'setApprovalForAll',
-                address: tokenToApprove,
-                args: approveAddress ? [approveAddress, true] : undefined
-              }).then((tx) => {
-                addPending(tx as Hash, { metadata: { forgeSkillId, forgeTransactionType: 'approve' } })
-                return tx
-              })
-          ),
-    [unapprovedList, approveCallback, approveAddress, addPending, forgeSkillId]
+        : unapprovedList.map((tokenToApprove) => async () => {
+            if (!approveAddress) throw new Error('Missing address of approvee! Check parameters!')
+            return writeContractAsync({
+              abi: ERC1155__factory.abi,
+              functionName: 'setApprovalForAll',
+              address: tokenToApprove,
+              args: [approveAddress, true]
+            }).then((tx) => {
+              addPending(tx as Hash, { metadata: { forgeSkillId, forgeTransactionType: 'approve' } })
+              return tx
+            })
+          }),
+    [unapprovedList, writeContractAsync, approveAddress, addPending, forgeSkillId]
   )
 
   return approveCallbacksList as (() => Promise<Address>)[] | null
@@ -220,7 +223,7 @@ export function useForgeGetLockedSkillsApprovalStatuses(params?: {
   enabled?: boolean
   onIterationSuccess?: (data: {
     approved: boolean
-    parentSkillId: `0x${string}-${string}`
+    parentSkillId: SkillId
     token: `0x${string}`
     id: bigint
   }) => Promise<void>
@@ -233,8 +236,8 @@ export function useForgeGetLockedSkillsApprovalStatuses(params?: {
 
   const dedupedList = useDedupeList(flattenedDepsList)
 
-  const result = useContractReads({
-    enabled: Boolean(enabled && dedupedList?.length && address && mergeManager),
+  const result = useReadContracts({
+    query: { enabled: Boolean(enabled && dedupedList?.length && address && mergeManager) },
     contracts: useMemo(
       () =>
         dedupedList.map((dep) => ({

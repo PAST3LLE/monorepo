@@ -1,4 +1,3 @@
-export * from './internal/useCloseAndUpdateModals'
 export * from './api/useConnection'
 export * from './misc/useLogos'
 export * from './theme/useMergeThemes'

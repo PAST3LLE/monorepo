@@ -1,7 +1,7 @@
 
 # Generated file. Do not edit directly.
-/IFrameConnector/
-/LedgerHIDConnector/
-/LedgerIFrameConnector/
-/PstlWeb3AuthConnector/
+/iframeEthereum/
+/ledgerHid/
+/ledgerLive/
 /utils/
+/web3Auth/
