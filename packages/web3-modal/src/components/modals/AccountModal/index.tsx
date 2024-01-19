@@ -31,7 +31,7 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
   const modalCallbacks = usePstlWeb3Modal()
   const userConnectionInfo = useUserConnectionInfo()
   const {
-    disconnect: { disconnectAsync }
+    disconnect: { disconnect }
   } = useConnectDisconnect({
     connect: {
       mutation: {
@@ -216,9 +216,7 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
                 id={`${ModalId.ACCOUNT}__disconnect-button`}
                 connected={false}
                 padding="0.6rem"
-                onClick={async () => {
-                  await disconnectAsync()
-                }}
+                onClick={() => disconnect()}
               >
                 Disconnect
               </AccountModalButton>

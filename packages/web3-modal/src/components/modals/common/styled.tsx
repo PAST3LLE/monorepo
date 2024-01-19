@@ -219,7 +219,7 @@ export const StyledConnectionModal = styled(Modal)<{ modal: keyof RequiredPstlSu
       font-size: ${(props) => props.theme.modals?.[props.modal]?.baseFontSize}px;
       ${(props) => upToSmall`
           min-height: ${props?.minHeight || '75%'};
-          max-height: 500px;
+          max-height: ${props?.maxHeight || '550px'};
           max-width: unset;
           width: 100%;
           margin: auto 0 0;

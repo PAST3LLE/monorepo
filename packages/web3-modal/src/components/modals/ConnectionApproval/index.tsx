@@ -98,6 +98,10 @@ const FooterButtonsWrapper = styled(RowCenter)``
 const ConnectionApprovalContainer = styled(ArticleFadeIn).attrs({ as: ColumnCenter })`
   justify-content: center;
   height: 100%;
+
+  overflow-y: auto;
+  justify-content: flex-start;
+
   gap: 20%;
   z-index: 1;
 
