@@ -1,4 +1,4 @@
-import { SkillId, SupportedForgeChains, TransactionStatus, useSupportedChainId } from '@past3lle/forge-web3'
+import { SkillId, SupportedForgeChainIds, TransactionStatus, useSupportedChainId } from '@past3lle/forge-web3'
 import { Address, MakeOptional } from '@past3lle/types'
 import { atom, useAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
@@ -58,7 +58,7 @@ const flowTransactionsReadWriteAtom = (chainId?: number, address?: Address) =>
   )
 
 export const useForgeFlowTransactionsReadWriteAtom = (
-  chainId: SupportedForgeChains | undefined,
+  chainId: SupportedForgeChainIds | undefined,
   address: Address | undefined
 ) => {
   const state = useMemo(() => flowTransactionsReadWriteAtom(chainId, address), [chainId, address])

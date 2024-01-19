@@ -3,9 +3,11 @@ import React, { Dispatch, SetStateAction } from 'react'
 import { ProviderMountedMap, PstlWeb3ConnectionModalProps } from '.'
 import { UserOptionsCtrlState } from '../../../controllers/types'
 import { useConnectDisconnect, useUserConnectionInfo } from '../../../hooks'
-import { ConnectorEnhanced, FullWeb3ModalStore } from '../../../types'
+import { ConnectFunction, ConnectorEnhanced, FullWeb3ModalStore } from '../../../types'
 import { runConnectorConnectionLogic } from '../../../utils/connectConnector'
 import { ConnectorOption } from './ConnectorOption'
+
+const IS_SERVER = typeof globalThis.window === 'undefined'
 
 export type RenderConnectorOptionsProps = Pick<
   PstlWeb3ConnectionModalProps,
@@ -13,7 +15,7 @@ export type RenderConnectorOptionsProps = Pick<
 > & {
   modalView: UserOptionsCtrlState['ui']['walletsView']
   userConnectionInfo: ReturnType<typeof useUserConnectionInfo>
-  connect: ReturnType<typeof useConnectDisconnect>['connect']['connectAsync']
+  connect: ConnectFunction
   disconnect: ReturnType<typeof useConnectDisconnect>['disconnect']['disconnectAsync']
   modalsStore: FullWeb3ModalStore['ui']
   providerMountedState: [ProviderMountedMap, Dispatch<SetStateAction<ProviderMountedMap>>]
@@ -33,15 +35,14 @@ const RenderConnectorOptionsBase =
     providerMountedState: [providerMountedMap, setProviderMountedMap],
     providerLoadingState: [, setProviderLoading]
   }: RenderConnectorOptionsProps) =>
-  (connector: ConnectorEnhanced<any, any>, index: number) => {
+  (connector: ConnectorEnhanced, index: number) => {
     // Don't show "injected" provider if either
     // a. User explicitly states to ignore it
     // b. Window object does NOT contain the injected ethereum proxy object
-    if ((hideInjectedFromRoot || !(window as any)?.ethereum) && connector.id === 'injected') return null
+    if ((hideInjectedFromRoot || (!IS_SERVER && !(window as any)?.ethereum)) && connector.id === 'injected') return null
     const [{ label, logo, connected, isRecommended }, callback] = runConnectorConnectionLogic(
       connector,
       currentConnector,
-      modalsStore,
       {
         connect,
         disconnect,

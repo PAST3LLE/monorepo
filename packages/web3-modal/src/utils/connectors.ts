@@ -1,11 +1,10 @@
 import { devDebug } from '@past3lle/utils'
 import { isIframe } from '@past3lle/wagmi-connectors/utils'
-import { ChainProviderFn } from 'wagmi'
+import { Connector } from 'wagmi'
 
-import { usePstlWeb3ModalStore } from '../../hooks'
-import { Chain, ConnectorEnhanced } from '../../types'
-import { isLedgerDappBrowserProvider } from '../../utils/iframe'
-import { PstlWeb3ModalProps } from '../types'
+import { usePstlWeb3ModalStore } from '../hooks'
+import { PstlWeb3ModalProps } from '../providers/types'
+import { isLedgerDappBrowserProvider } from './iframe'
 
 export type AppType = 'IFRAME' | 'SAFE_APP' | 'LEDGER_LIVE' | 'DAPP' | 'TEST_FRAMEWORK_IFRAME'
 export function getAppType(forcedAppType?: AppType) {
@@ -34,13 +33,6 @@ export function useDeriveAppType() {
   return getAppType(appType)
 }
 
-export function mapChainsToConnectors(
-  connectors: ((chains: Chain<number>[]) => ConnectorEnhanced<any, any>)[],
-  chains: PstlWeb3ModalProps['chains']
-) {
-  return connectors.map((conn) => conn?.(chains as Chain<number>[]))
-}
-
 export function hardFilterChains({ callbacks, chains }: Pick<PstlWeb3ModalProps, 'chains' | 'callbacks'>) {
   const limitChainsFn = callbacks?.filterChains || callbacks?.hardLimitChains
   if (!limitChainsFn) return chains
@@ -59,17 +51,13 @@ export function softFilterChains(config: PstlWeb3ModalProps): PstlWeb3ModalProps
   }
 }
 
-export type PublicClientFn<TChain extends Chain<number> = Chain<number>> = ({
-  apiKey
-}: {
-  apiKey: string
-}) => ChainProviderFn<TChain>
-export type ApiKeyMap<P extends PublicClientFn> = {
-  client: P
-  [key: number]: string
+export function filterOutConnectorsTypes(arr: readonly Connector[], ...typesToIgnore: Connector['type'][]) {
+  return arr.filter((cc) => !typesToIgnore.includes(cc?.id))
 }
-export function addPublicClients<P extends PublicClientFn>(clientsAndKeys: ApiKeyMap<P>[], chains: Chain<number>[]) {
-  return clientsAndKeys.flatMap((clientInfo, i) => [
-    ...chains.map((chain) => clientInfo.client({ apiKey: clientsAndKeys[i]?.[chain.id] }))
-  ])
+
+export function getConnectorsArrayFromConfig(connectorsConfig: PstlWeb3ModalProps['connectors']) {
+  if (!connectorsConfig || Array.isArray(connectorsConfig)) return connectorsConfig
+  else {
+    return connectorsConfig.connectors
+  }
 }

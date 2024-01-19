@@ -2,9 +2,9 @@ import { usePstlUserConnectionInfo } from '@past3lle/web3-modal'
 import { useEffect } from 'react'
 
 import { useForgeUserConfigAtom } from '..'
-import { ForgeW3CoreProvidersProps, useChainId } from '../../../'
+import { ForgeChainsMinimum, ForgeW3CoreProvidersProps, useChainId } from '../../../'
 
-type ForgeBalancesProps = ForgeW3CoreProvidersProps['config']
+type ForgeBalancesProps = ForgeW3CoreProvidersProps<ForgeChainsMinimum>['config']
 export function ForgeUserConfigUpdater({
   boardOptions,
   contractAddresses,

@@ -1,10 +1,10 @@
 import { RobotoVariableFontProvider } from '@past3lle/theme'
 import React from 'react'
-import { alchemyProvider } from 'wagmi/providers/alchemy'
+import { http } from 'viem'
 
 import { SkillForge, SkillForgeConnectedHeader } from '../components'
 import { createTheme } from '../theme/utils'
-import { commonProps, contractProps } from './config'
+import { METADATA_URIS_AND_CONTRACTS_PROPS, SUPPORTED_CHAINS, WEB3_PROPS } from './config'
 
 /* 
     interface Web3ModalProps {
@@ -98,7 +98,7 @@ function App() {
         }
       }}
       config={{
-        ...contractProps,
+        ...METADATA_URIS_AND_CONTRACTS_PROPS,
         name: 'Skillforge Widget Fixture',
         boardOptions: {
           minimumColumns: 3,
@@ -112,19 +112,22 @@ function App() {
           FAQ: 'faq.thing.io'
         },
         web3: {
-          ...commonProps,
-          chains: commonProps.chains,
+          ...WEB3_PROPS,
+          chains: SUPPORTED_CHAINS,
           clients: {
             wagmi: {
               options: {
-                publicClients: [
-                  {
-                    client: alchemyProvider,
-                    5: process.env.REACT_APP_ALCHEMY_GOERLI_API_KEY as string,
-                    137: process.env.REACT_APP_ALCHEMY_MATIC_API_KEY as string,
-                    80001: process.env.REACT_APP_ALCHEMY_MUMBAI_API_KEY as string
-                  }
-                ]
+                transports: {
+                  5: http(
+                    `https://eth-goerli.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_GOERLI_API_KEY as string}`
+                  ),
+                  137: http(
+                    `https://polygon-mainnet.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_MATIC_API_KEY as string}`
+                  ),
+                  80001: http(
+                    `https://polygon-mumbai.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_MUMBAI_API_KEY as string}`
+                  )
+                }
               }
             }
           },
@@ -142,7 +145,7 @@ function App() {
               appType: 'DAPP'
             }
           },
-          modals: commonProps.modals
+          modals: WEB3_PROPS.modals
         },
         options: {
           windowSizeOptions: {

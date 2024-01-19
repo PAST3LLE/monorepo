@@ -1,13 +1,15 @@
 import { useIsExtraSmallMediaWidth } from '@past3lle/hooks'
 import React, { memo, useCallback, useMemo, useState } from 'react'
+import { Connector } from 'wagmi'
 
 import { UserOptionsCtrlState } from '../../../controllers/types'
 import {
-  useConnectDisconnectAndCloseModals, // useConnectDisconnect,
+  useConnectDisconnect,
   usePstlWeb3ModalStore,
   useUserConnectionInfo,
   useAllWeb3Modals as useWeb3Modals
 } from '../../../hooks'
+import { isProviderOrConnectorNotFoundError } from '../../../utils/errors'
 import { LoadingScreen } from '../../LoadingScreen'
 import { WalletsWrapper } from '../common/styled'
 import { BaseModalProps, ModalId } from '../common/types'
@@ -43,29 +45,40 @@ function ConnectionModalContent({
   const {
     connect: { connectAsync },
     disconnect: { disconnectAsync: disconnect }
-  } = useConnectDisconnectAndCloseModals(
-    !!closeModalOnConnect,
-    // Connect
-    {
-      onSuccess() {
-        store.callbacks.connectionStatus.set({ status: 'success' })
-        if (closeModalOnConnect) uiModalStore.root.close()
-        else uiModalStore.root.open({ route: 'Account' })
-      },
-      onError: async (error) => {
-        store.callbacks.connectionStatus.set({ status: 'error' })
-        store.callbacks.error.set(error)
+  } = useConnectDisconnect({
+    connect: {
+      mutation: {
+        async onSuccess() {
+          store.callbacks.connectionStatus.set({ status: 'success' })
+          if (closeModalOnConnect) uiModalStore.root.close()
+          else return uiModalStore.root.open({ route: 'Account' })
+        },
+        async onError(error) {
+          // Head back to wallets if it's an "unfound" wallet error
+          // e.g user doesnt have wallet installed and should pick another wallet
+          if (isProviderOrConnectorNotFoundError(error)) {
+            await store.callbacks.open({ route: 'ConnectWallet' })
+          }
+          // Else set the error in the approval modal
+          else {
+            store.callbacks.connectionStatus.set({ status: 'error' })
+          }
+
+          return store.callbacks.error.set(error)
+        }
       }
     },
-    // Disconnect
-    {
-      onError(error) {
-        store.callbacks.error.set(error)
+    disconnect: {
+      mutation: {
+        onError(error) {
+          store.callbacks.error.set(error)
+        }
       }
     }
-  )
+  })
+
   const connect = useCallback(
-    async (args: Parameters<typeof connectAsync>[0]) => {
+    async (connector: Connector) => {
       // open connection status modal
       uiModalStore.root.open({
         route: 'ConnectionApproval'
@@ -73,14 +86,12 @@ function ConnectionModalContent({
 
       // Set connection status state
       store.callbacks.connectionStatus.set({
-        ids: [args?.connector?.name || 'unknown', args?.connector?.id || 'unknown'],
-        status: 'loading',
-        retry: async () => connect(args)
+        ids: [connector?.id, connector?.type, connector?.name],
+        status: 'pending',
+        retry: async () => connect(connector)
       })
 
-      const connectionInfo = await connectAsync(args)
-
-      return connectionInfo
+      return connectAsync({ connector })
     },
     [connectAsync, store.callbacks.connectionStatus, uiModalStore.root]
   )
@@ -94,20 +105,23 @@ function ConnectionModalContent({
 
   const data = useMemo(
     () =>
-      userConnectionInfo.connectors.sort(sortConnectorsByRank(overrides)).map(
-        RenderConnectorOptions({
-          chainIdFromUrl,
-          hideInjectedFromRoot,
-          overrides,
-          modalView,
-          userConnectionInfo,
-          connect,
-          disconnect,
-          modalsStore: uiModalStore,
-          providerMountedState,
-          providerLoadingState
-        })
-      ),
+      userConnectionInfo.connectors
+        .slice()
+        .sort(sortConnectorsByRank(overrides))
+        .map(
+          RenderConnectorOptions({
+            chainIdFromUrl,
+            hideInjectedFromRoot,
+            overrides,
+            modalView,
+            userConnectionInfo,
+            connect,
+            disconnect,
+            modalsStore: uiModalStore,
+            providerMountedState,
+            providerLoadingState
+          })
+        ),
     [
       connect,
       disconnect,

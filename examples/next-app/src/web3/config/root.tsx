@@ -8,12 +8,7 @@ enum WalletRank {
 }
 export const CONNECTOR_DISPLAY_OVERRIDES: ConnectorOverrides = {
   walletconnect: {
-    logo: 'https://repository-images.githubusercontent.com/204001588/a5169900-c66c-11e9-8592-33c7334dfd6d',
-    // Uncomment to add helper text under connectors
-    // infoText: {
-    //   title: 'What is this option?',
-    //   content: 'Choose this to open the WalletConnect wallet modal and select a 3rd party wallet of your choice!'
-    // },
+    logo: 'https://repository-images.githubusercontent.com/204001588/a5169900-c66c-11e9-8592-33c7334dfd6d', 
     rank: WalletRank['walletConnect']
   },
   metamask: {
@@ -45,11 +40,7 @@ export const CONNECTOR_DISPLAY_OVERRIDES: ConnectorOverrides = {
     customName: 'LEDGER HID',
     logo: 'https://crypto-central.io/library/uploads/Ledger-Logo-3.png',
     rank: 10,
-    isRecommended: true,
-    infoText: {
-      title: 'What is Ledger HID?',
-      content: <strong>Ledger wallet is a cold storage hardware wallet.</strong>
-    }
+    isRecommended: true
   }
 }
 
@@ -60,6 +51,5 @@ export const ROOT_CONFIG: PstlWeb3ModalProps<SupportedChainIds>['modals']['root'
   themeConfig: {
     theme
   },
-  connectorDisplayOverrides: CONNECTOR_DISPLAY_OVERRIDES,
   closeModalOnConnect: true
 }

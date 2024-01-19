@@ -1,5 +1,5 @@
 import { MakeOptional } from '@past3lle/types'
-import merge from 'lodash.merge'
+import defaultsDeep from 'lodash.defaultsdeep'
 
 import {
   betweenMediaWidthTemplates as betweenMediaWidth,
@@ -130,7 +130,7 @@ export const createTemplateThemeFactory = <TE extends { [name: string]: ThemeByM
     // and set type accordingly
     if (extension) {
       // Merge together all parts
-      const mergedThemeModes = merge({}, theme.modes, extension)
+      const mergedThemeModes: TE[K]['modes'] = defaultsDeep(extension, theme.modes)
       theme.modes = mergedThemeModes
     }
 

@@ -53,4 +53,4 @@ export const UserOptionsCtrl = {
       ...props.transactions
     }
   }
-}
+} as const

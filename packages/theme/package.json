@@ -6,10 +6,12 @@
   "main": "dist/esm/index.js",
   "module": "dist/esm/index.js",
   "typings": "dist/types/index.d.ts",
+  "types": "dist/types/index.d.ts",
   "exports": {
     "import": "./dist/esm/index.js",
     "require": "./dist/cjs/index.js",
-    "default": "./dist/esm/index.js"
+    "default": "./dist/esm/index.js",
+    "types": "./dist/types/index.d.ts"
   },
   "files": [
     "dist"
@@ -81,7 +83,7 @@
     "@past3lle/assets": "^2.0.0-alpha.2",
     "@past3lle/constants": "^2.0.0-alpha.2",
     "get-contrast": "3.0.0",
-    "lodash.merge": "^4.6.2",
+    "lodash.defaultsdeep": "^4.6.1",
     "polished": "^4.2.2",
     "react-helmet": "^6.1.0"
   },

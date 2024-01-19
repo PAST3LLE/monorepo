@@ -1,16 +1,16 @@
 import { chainFetchIpfsUriBlob, getHash, isIpfsUri, responseToBlob, useForgeGetIpfsAtom } from '@past3lle/forge-web3'
 import { devError } from '@past3lle/utils'
-import { useQuery } from 'wagmi'
+import { useQuery } from '@tanstack/react-query'
 
 import { ForgeQueries } from '../constants/keys'
 
 export function useQueryImageBlob(uri?: string) {
   const [ipfsConfig] = useForgeGetIpfsAtom()
 
-  return useQuery(
-    [ForgeQueries.MetadataUri],
-    async () => {
-      if (!uri) return undefined
+  return useQuery({
+    queryKey: [ForgeQueries.MetadataUri, uri || undefined],
+    queryFn: async () => {
+      if (!uri) throw new Error('No blob URI passed!')
 
       try {
         const isIpfsImageUri = isIpfsUri(uri)
@@ -24,9 +24,6 @@ export function useQueryImageBlob(uri?: string) {
         devError('[SkillForge-Widget::Skillpoint/index.tsx] Error in fetching IPFS Uri Blob!', error)
         return undefined
       }
-    },
-    {
-      queryHash: uri
     }
-  )
+  })
 }

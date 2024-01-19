@@ -1,4 +1,4 @@
-import { Address } from 'wagmi'
+import { Address } from 'viem'
 
 export interface ForgeMetadata<P, A = Record<any, any>> {
   name: string

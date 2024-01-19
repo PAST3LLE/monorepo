@@ -1,0 +1,6 @@
+{
+    "port": 5020,
+    "webpack": {
+        "overridePath": "./webpack.override.cjs"
+      }
+}

@@ -17,8 +17,10 @@ import {
   useAccountNetworkActions as usePstlAccountNetworkActions,
   useConnectDisconnect as usePstlConnectDisconnect,
   useConnection as usePstlConnection,
+  useModalActions as usePstlModalActions,
   useUserConnectionInfo as usePstlUserConnectionInfo,
   useWaitForTransaction as usePstlWaitForTransaction,
+  useWaitForTransactionReceiptEffect as usePstlWaitForTransactionEffect,
   useWatchPendingTransactions as usePstlWatchPendingTransactions,
   usePstlWeb3Modal,
   useAllWeb3Modals as usePstlWeb3Modals,
@@ -27,19 +29,12 @@ import {
   useTransactionsRead
 } from './hooks'
 import {
-  type Chain,
-  type ChainsPartialReadonly,
   PstlW3Providers,
   type PstlWagmiClientOptions,
   PstlWagmiProvider,
   type PstlWeb3ModalProps,
-  type ReadonlyChain,
-  addConnector,
-  addFrameConnector,
-  usePstlEthereumClient,
-  usePstlWagmiClient
+  useCreateWagmiClient
 } from './providers'
-import { AppType, addPublicClients, getAppType, useDeriveAppType } from './providers/utils/connectors'
 import { type PstlModalTheme, type PstlModalThemeExtension, W3aStyleResetProvider, createTheme } from './theme'
 import {
   getAllChainsInfo,
@@ -47,6 +42,7 @@ import {
   getSafeAppChainInfo,
   getSafeAppChainShortName
 } from './utils/chains'
+import { AppType, getAppType, useDeriveAppType } from './utils/connectors'
 
 export * from './types'
 
@@ -57,11 +53,13 @@ export {
   usePstlAccountNetworkActions,
   usePstlConnectDisconnect,
   usePstlConnection,
+  usePstlModalActions,
   usePstlUserConnectionInfo,
   usePstlWeb3Modal,
   usePstlWeb3Modals,
   useAllWeb3Modals,
   usePstlWaitForTransaction,
+  usePstlWaitForTransactionEffect,
   useLimitChainsAndSwitchCallback,
   usePstlWatchPendingTransactions,
   useIsSafeWallet,
@@ -85,24 +83,18 @@ export {
   PstlW3Providers,
   PstlWagmiProvider,
   // hooks
-  usePstlEthereumClient,
-  usePstlWagmiClient,
+  // usePstlEthereumClient,
+  useCreateWagmiClient,
   // utils
   getAllChainsInfo,
   getChainInfoFromShortName,
   getSafeAppChainInfo,
   getSafeAppChainShortName,
-  addConnector,
-  addFrameConnector,
-  addPublicClients,
   getAppType,
   useDeriveAppType,
   // types
   type PstlWeb3ModalProps,
   type PstlWagmiClientOptions,
-  type ChainsPartialReadonly,
-  type ReadonlyChain,
-  type Chain,
   type PstlModalThemeExtension,
   type PstlModalTheme,
   type AppType,

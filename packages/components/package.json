@@ -7,9 +7,11 @@
   "module": "dist/components.esm.js",
   "exports": {
     "require": "./dist/index.js",
-    "import": "./dist/components.esm.js"
+    "import": "./dist/components.esm.js",
+    "types": "./dist/index.d.ts"
   },
   "typings": "dist/index.d.ts",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
@@ -21,6 +23,7 @@
   "author": "pas3lle",
   "license": "MIT",
   "scripts": {
+    "pack": "yarn pack",
     "clean": "rm -rf dist && rm -rf tsconfig.tsbuildinfo",
     "compile": "tsdx build && cp \"./package.json\" ./dist/",
     "build": "yarn clean && yarn compile",

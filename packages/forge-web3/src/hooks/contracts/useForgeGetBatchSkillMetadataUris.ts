@@ -1,6 +1,7 @@
 import { Collection__factory } from '@past3lle/skilltree-contracts'
 import { useMemo } from 'react'
-import { Address, useContractReads } from 'wagmi'
+import { Address } from 'viem'
+import { useReadContracts } from 'wagmi'
 
 import { WAGMI_SCOPE_KEYS } from '../constants'
 import { WithLoadAmount } from '../types'
@@ -29,12 +30,13 @@ export function useForgeGetBatchSkillMetadataUris({ loadAmount = BigInt(10) }: W
   )
 
   return {
-    uris: useContractReads({
+    uris: useReadContracts({
       contracts: contractsReadsArgs,
-      watch: false,
       scopeKey: WAGMI_SCOPE_KEYS.SKILLS_URI,
-      enabled: contractsReadsArgs?.length > 0,
-      select: (data) => data.filter(({ result }) => Boolean(result))
+      query: {
+        enabled: contractsReadsArgs?.length > 0,
+        select: (data) => data.filter(({ result }) => Boolean(result))
+      }
     }),
     addresses: skillErc1155Addresses.map((data) => data.result) as Address[]
   }

@@ -2,10 +2,9 @@ import { Column, InfoCircle, MouseoverTooltip, Row, SpinnerCircle, useSelect } f
 import { useIsExtraSmallMediaWidth } from '@past3lle/hooks'
 import { BLACK_TRANSPARENT, OFF_WHITE, setBestTextColour, transparentize } from '@past3lle/theme'
 import { truncateAddress } from '@past3lle/utils'
-import type { LedgerHIDConnector } from '@past3lle/wagmi-connectors'
 import React, { memo } from 'react'
 import { useTheme } from 'styled-components'
-import { useSwitchNetwork } from 'wagmi'
+import { useSwitchChain } from 'wagmi'
 
 import { KEYS } from '../../../constants/localstorage'
 import { useGetChainLogoCallback, usePstlWeb3Modal, useUserConnectionInfo } from '../../../hooks'
@@ -15,7 +14,7 @@ import { AccountText, FooterActionButtonsRow } from '../AccountModal/styled'
 import { ConnectorOption } from '../ConnectionModal/ConnectorOption'
 import { ModalButton } from '../common/styled'
 import { BaseModalProps, ModalId } from '../common/types'
-import { useHidModalPath, useHidModalStore, useHidUpdater } from './hooks'
+import { LedgerHidConnector, useHidModalPath, useHidModalStore, useHidUpdater } from './hooks'
 import {
   HidDeviceContainer,
   HidModalAddressPlaceholder,
@@ -39,12 +38,12 @@ const SUPPORTED_BIP_DERIVATION_PATHS = [
   "m/44'/60'/*'/0",
   // BIP44 Standard
   "m/44'/60'/0'/0/*"
-]
+] as const
 
 type PstlHidDeviceModalProps = Pick<BaseModalProps, 'errorOptions'>
 
 const PAGINATION_AMT = 5
-const CHAIN_IMAGE_STYLES = { width: 20, marginLeft: '0.2rem', borderRadius: '30%' }
+const CHAIN_IMAGE_STYLES = { width: 20, height: 20, marginLeft: 7, borderRadius: '30%' }
 
 const DEFAULT_PATH = localStorage.getItem(KEYS.HID_DERIVATION_PATH) ?? SUPPORTED_BIP_DERIVATION_PATHS[0]
 const DISABLED_SELECTOR_COLOR = 'darkgrey'
@@ -52,13 +51,12 @@ const DISABLED_SELECTOR_COLOR = 'darkgrey'
 function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
   const { close } = usePstlWeb3Modal()
 
-  const { address, chain, supportedChains } = useUserConnectionInfo()
-  const chainId = chain?.id
+  const { address, chain, chainId, supportedChains } = useUserConnectionInfo()
 
   const getChainLogo = useGetChainLogoCallback()
-  const currChainLogo = getChainLogo(chain?.id)
+  const currChainLogo = getChainLogo(chainId)
 
-  const { switchNetworkAsync } = useSwitchNetwork()
+  const { switchChainAsync } = useSwitchChain()
   const { connector: hidConnector } = useUserConnectionInfo()
   const { dbPath, path, isCustomPath, ...pathCallbacks } = useHidModalPath(DEFAULT_PATH)
 
@@ -67,7 +65,7 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
       path: dbPath,
       chainId,
       paginationAmount: PAGINATION_AMT,
-      connector: hidConnector as LedgerHIDConnector | undefined
+      connector: hidConnector as LedgerHidConnector | undefined
     })
 
   const {
@@ -110,7 +108,13 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
             <Column maxHeight={115} height="auto">
               <AccountText node="main">
                 Network:{' '}
-                <ModalSubHeaderText node="subHeader" display="inline-flex" justifyContent={'center'}>
+                <ModalSubHeaderText
+                  node="subHeader"
+                  display="inline-flex"
+                  justifyContent={'center'}
+                  alignItems="center"
+                  fontSize="1em"
+                >
                   {chain?.name || chain?.id || 'disconnected'}{' '}
                   {currChainLogo ? (
                     <img src={currChainLogo} style={CHAIN_IMAGE_STYLES} />
@@ -121,7 +125,7 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
               </AccountText>
               <HidModalWalletsWrapper modal="connection" node="main" view="grid" width="auto">
                 {supportedChains.map((sChain) => {
-                  if (!switchNetworkAsync || chain?.id === sChain.id) return null
+                  if (!switchChainAsync || chain?.id === sChain.id) return null
                   const chainLogo = getChainLogo(sChain.id)
                   return (
                     <ConnectorOption
@@ -130,7 +134,7 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
                       optionValue={sChain.id}
                       key={sChain.id}
                       // data props
-                      callback={async () => switchNetworkAsync(sChain.id)}
+                      callback={async () => switchChainAsync({ chainId: sChain.id })}
                       modalView={'grid'}
                       connected={false}
                       label={sChain.name}

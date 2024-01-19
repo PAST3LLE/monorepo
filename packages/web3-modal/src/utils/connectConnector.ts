@@ -1,9 +1,12 @@
 import { devError } from '@past3lle/utils'
 import isEqual from 'lodash.isequal'
+import { UseConnectReturnType } from 'wagmi'
 
 import { RenderConnectorOptionsProps } from '../components/modals/ConnectionModal/RenderConnectorOptions'
-import { useConnection, usePstlWeb3Modal } from '../hooks'
-import { ConnectorEnhanced, ConnectorEnhancedExtras, FullWeb3ModalStore } from '../types'
+import { ModalCtrl, UserOptionsCtrl } from '../controllers'
+import { usePstlWeb3Modal } from '../hooks'
+import { ConnectorEnhanced, ConnectorEnhancedExtras } from '../types'
+import { isProviderOrConnectorNotFoundError } from './errors'
 import { connectorOverridePropSelector, trimAndLowerCase } from './misc'
 
 type GetConnectorInfoCallbacks = {
@@ -29,11 +32,12 @@ interface AuxConnectorInfoConstants extends BaseConnectorInfoConstants {
 
 type ProviderModalType = 'w3a-modal' | 'w3m-modal' | string | null | undefined
 
+const IS_SERVER = typeof globalThis?.window?.document === 'undefined'
+
 export type ConnectorInfo = { label: string; logo?: string; connected: boolean; isRecommended?: boolean }
 export function runConnectorConnectionLogic(
-  connector: ConnectorEnhanced<any, any>,
-  currentConnector: ConnectorEnhanced<any, any> | undefined,
-  modalsStore: FullWeb3ModalStore['ui'],
+  connector: ConnectorEnhanced,
+  currentConnector: ConnectorEnhanced | undefined,
   {
     connect,
     disconnect,
@@ -49,10 +53,7 @@ export function runConnectorConnectionLogic(
     closeOnConnect,
     connectorOverrides
   }: Omit<AuxConnectorInfoConstants, 'isConnected'>
-): [
-  ConnectorInfo,
-  ReturnType<typeof useConnection>[1]['connect'] | ReturnType<typeof useConnection>[1]['openWalletConnectModal']
-] {
+): [ConnectorInfo, UseConnectReturnType['connect'] | UseConnectReturnType['connectAsync']] {
   const modalType: ProviderModalType = connectorOverridePropSelector(connectorOverrides, connector)?.modalNodeId
   const isModalMounted = !modalType || !!isProviderModalMounted
   const providerInfo = _getProviderInfo(connector, currentConnector, connectorOverrides)
@@ -63,7 +64,6 @@ export function runConnectorConnectionLogic(
         modalType,
         connector,
         currentConnector,
-        modalsStore,
         {
           chainId,
           address,
@@ -86,9 +86,8 @@ export function runConnectorConnectionLogic(
 
 async function _connectProvider(
   modalId: ProviderModalType,
-  connector: ConnectorEnhanced<any, any>,
-  currentConnector: ConnectorEnhanced<any, any> | undefined,
-  modalsStore: FullWeb3ModalStore['ui'],
+  connector: ConnectorEnhanced,
+  currentConnector: ConnectorEnhanced | undefined,
   constants: AuxConnectorInfoConstants & {
     isModalMounted?: boolean
   },
@@ -107,19 +106,16 @@ async function _connectProvider(
   const { address, chainId, isModalMounted, isConnected, connectorOverrides } = constants
   const { connect, disconnect, setModalLoading, setModalMounted, open } = callbacks
 
-  const modalNodeSyncCheck =
-    !!modalId && typeof globalThis?.window?.document !== 'undefined' ? document.getElementById(modalId) : null
+  const modalNodeSyncCheck = !!modalId && !IS_SERVER ? document.getElementById(modalId) : null
 
   const connectCallbackParams: [
-    ConnectorEnhanced<any, any>,
-    ConnectorEnhanced<any, any> | undefined,
-    FullWeb3ModalStore['ui'],
+    ConnectorEnhanced,
+    ConnectorEnhanced | undefined,
     BaseConnectorInfoConstants,
     Pick<GetConnectorInfoCallbacks, 'open' | 'connect' | 'disconnect'>
   ] = [
     connector,
     currentConnector,
-    modalsStore,
     { chainId, address, connectorOverrides, isConnected },
     { connect, disconnect, open }
   ]
@@ -142,8 +138,8 @@ async function _connectProvider(
       ])
     }
   } catch (error: any) {
-    await connector.disconnect()
     console.error('[PstlWeb3ConnectionModal::_getProviderInfo] - Error in loading modal:', error)
+    await connector.disconnect()
     throw new Error(error)
   } finally {
     setModalLoading?.(false)
@@ -152,8 +148,8 @@ async function _connectProvider(
 }
 
 function _getProviderInfo(
-  connector: ConnectorEnhanced<any, any>,
-  currentConnector: ConnectorEnhanced<any, any> | undefined,
+  connector: ConnectorEnhanced,
+  currentConnector: ConnectorEnhanced | undefined,
   connectorOverrides: BaseConnectorInfoConstants['connectorOverrides']
 ) {
   const { pendingConnectorOverride, connectedConnectorOverride } = _getConnectorOverrideInfo(
@@ -177,9 +173,8 @@ function _getProviderInfo(
 }
 
 async function _handleConnectorClick(
-  connector: ConnectorEnhanced<any, any>,
-  currentConnector: ConnectorEnhanced<any, any> | undefined,
-  modalsStore: FullWeb3ModalStore['ui'],
+  connector: ConnectorEnhanced,
+  currentConnector: ConnectorEnhanced | undefined,
   { address, chainId, connectorOverrides, isConnected }: BaseConnectorInfoConstants,
   { connect, disconnect, open }: Pick<GetConnectorInfoCallbacks, 'open' | 'connect' | 'disconnect'>
 ) {
@@ -187,7 +182,6 @@ async function _handleConnectorClick(
   const connectToProviderParams = {
     connector,
     connect,
-    modalsStore,
     connectorOverride: pendingConnectorOverride,
     chainId
   }
@@ -198,12 +192,10 @@ async function _handleConnectorClick(
     } else {
       if (!!currentConnector) {
         await disconnect(undefined, {
-          async onSuccess() {
-            await _connectToProvider(connectToProviderParams)
-          }
+          onSuccess: async () => _connectToProvider(connectToProviderParams)
         })
       } else {
-        await _connectToProvider(connectToProviderParams)
+        return _connectToProvider(connectToProviderParams)
       }
     }
   } catch (error: any) {
@@ -215,24 +207,23 @@ async function _handleConnectorClick(
 async function _connectToProvider({
   connector,
   connect,
-  modalsStore,
-  connectorOverride,
-  chainId
+  connectorOverride
 }: Pick<GetConnectorInfoCallbacks, 'connect'> & {
-  modalsStore: FullWeb3ModalStore['ui']
-  connector: ConnectorEnhanced<any, any>
+  connector: ConnectorEnhanced
   connectorOverride: ConnectorEnhancedExtras | undefined
-  chainId?: number
 }) {
   try {
-    await (connectorOverride?.customConnect?.({ store: modalsStore, connector, wagmiConnect: connect }) ||
-      connect({ connector, chainId }))
+    await (connectorOverride?.customConnect?.({
+      modalsStore: ModalCtrl,
+      userStore: UserOptionsCtrl,
+      connector,
+      wagmiConnect: connect
+    }) || connect(connector))
   } catch (error: any) {
-    const errorMessage = new Error(error).message
-    const connectorNotFoundError = errorMessage?.includes('ConnectorNotFoundError')
-
-    if (connectorOverride?.downloadUrl && connectorNotFoundError && typeof globalThis?.window !== 'undefined') {
-      window.open(connectorOverride.downloadUrl, '_newtab')
+    if (!IS_SERVER) {
+      if (connectorOverride?.downloadUrl && isProviderOrConnectorNotFoundError(error)) {
+        window.open(connectorOverride.downloadUrl, '_newtab')
+      }
     }
 
     throw error
@@ -240,8 +231,8 @@ async function _connectToProvider({
 }
 
 function _getConnectorOverrideInfo(
-  connector: ConnectorEnhanced<any, any>,
-  currentConnector: ConnectorEnhanced<any, any> | undefined,
+  connector: ConnectorEnhanced,
+  currentConnector: ConnectorEnhanced | undefined,
   connectorOverrides: BaseConnectorInfoConstants['connectorOverrides']
 ) {
   const trimmedId = trimAndLowerCase(connector?.id)
@@ -267,13 +258,7 @@ async function _delayFindDomById({
   id: string
 }): Promise<HTMLElement | null | 'BAILED'> {
   return new Promise((resolve) =>
-    setTimeout(
-      () =>
-        typeof globalThis?.window?.document === 'undefined' || value >= limit
-          ? resolve('BAILED')
-          : resolve(document.getElementById(id)),
-      freq
-    )
+    setTimeout(() => (IS_SERVER || value >= limit ? resolve('BAILED') : resolve(document.getElementById(id))), freq)
   )
 }
 

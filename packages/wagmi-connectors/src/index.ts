@@ -1,25 +1,18 @@
-import {
-  IFrameEthereumConnector,
-  IFrameEthereumProviderOptions as IFrameEthereumConnectorOptions
-} from './IFrameConnector'
-import {
-  LedgerHIDConnector,
-  LedgerHidOptions,
-  checkError as checkLedgerHidError,
-  isHIDSupported
-} from './LedgerHIDConnector'
-import { LedgerIFrameConnector } from './LedgerIFrameConnector'
-import { PstlWeb3AuthConnector, PstlWeb3AuthConnectorProps } from './PstlWeb3AuthConnector'
+import { IframeEthereumParameters, iframeEthereum } from './iframeEthereum'
+import { LedgerHidParameters, checkError as checkLedgerHidError, isHIDSupported, ledgerHid } from './ledgerHid'
+import { LedgerLiveParameters, ledgerLive } from './ledgerLive'
 import { isIframe } from './utils'
+import { PstlWeb3AuthParameters, pstlWeb3Auth } from './web3Auth'
 
 export {
-  IFrameEthereumConnector,
-  type IFrameEthereumConnectorOptions,
-  LedgerHIDConnector,
-  type LedgerHidOptions,
-  LedgerIFrameConnector,
-  PstlWeb3AuthConnector,
-  type PstlWeb3AuthConnectorProps,
+  iframeEthereum,
+  type IframeEthereumParameters,
+  ledgerHid,
+  type LedgerHidParameters,
+  ledgerLive,
+  type LedgerLiveParameters,
+  pstlWeb3Auth,
+  type PstlWeb3AuthParameters,
   // Utils
   isIframe,
   checkLedgerHidError,

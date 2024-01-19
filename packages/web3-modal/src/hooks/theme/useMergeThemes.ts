@@ -1,30 +1,28 @@
 import { BasicUserTheme, CustomThemeOrTemplate, Subset, ThemeByModes, createCustomTheme } from '@past3lle/theme'
 import { devWarn } from '@past3lle/utils'
-import merge from 'lodash.merge'
+import defaultsDeep from 'lodash.defaultsdeep'
 import { useEffect, useState } from 'react'
 import { DefaultTheme, useTheme } from 'styled-components'
 
-import { PstlSubModalsTheme } from '../../theme'
+import { PstlModalTheme, PstlSubModalsTheme, createTheme } from '../../theme'
 
-type ModalTheme =
-  | CustomThemeOrTemplate<
-      {
-        modes: {
-          [x: string]: BasicUserTheme
-          LIGHT: BasicUserTheme
-          DARK: BasicUserTheme
-          DEFAULT: DefaultTheme & Subset<BasicUserTheme>
-        }
-      },
-      undefined,
-      BasicUserTheme
-    >
-  | undefined
+type ModalTheme = CustomThemeOrTemplate<
+  {
+    modes: {
+      [x: string]: BasicUserTheme
+      LIGHT: BasicUserTheme
+      DARK: BasicUserTheme
+      DEFAULT: DefaultTheme & Subset<BasicUserTheme>
+    }
+  },
+  undefined,
+  BasicUserTheme
+>
 
 export function useMergeThemes(customModalThemeByModes?: ThemeByModes<BasicUserTheme>) {
   const currentTheme = useTheme()
 
-  const [theme, setTheme] = useState<ModalTheme>()
+  const [theme, setTheme] = useState<ModalTheme | undefined>()
   // Serialise themes and compare in useEffect as deps
   const serialisedCustomModalTheme = JSON.stringify(customModalThemeByModes)
   const serialisedTheme = JSON.stringify(theme)
@@ -34,13 +32,13 @@ export function useMergeThemes(customModalThemeByModes?: ThemeByModes<BasicUserT
         '[@past3lle/web3-modal] Missing top-level theme; building new, simplified theme. Please check that you are properly passing a Past3lle ThemeProvider with a built theme via <createCustomModalThemeByModes> or others. See @past3lle/theme'
       )
     }
-    const customThemeByMode = merge(
-      {},
-      customModalThemeByModes?.modes?.DEFAULT,
-      customModalThemeByModes?.modes?.[currentTheme?.mode]
+    const userTheme = customModalThemeByModes || createTheme({})
+    const customThemeByMode: PstlSubModalsTheme[keyof PstlSubModalsTheme] = defaultsDeep(
+      userTheme?.modes?.[currentTheme?.mode],
+      userTheme?.modes?.DEFAULT
     )
     // Fill gaps in theme modes -> e.g DEFAULT into DARK/LIGHT
-    const mergedCurrentMode = merge({}, currentTheme, customThemeByMode)
+    const mergedCurrentMode: ModalTheme & PstlModalTheme = defaultsDeep(customThemeByMode, currentTheme)
     // Fill gaps in sub modal themes -> e.g base theme into account/connection/network
     const mergedSubModals = Object.entries(mergedCurrentMode.modals || ({} as PstlSubModalsTheme)).reduce(
       (
@@ -60,7 +58,7 @@ export function useMergeThemes(customModalThemeByModes?: ThemeByModes<BasicUserT
             closeIcon: _c,
             ...sharedTheme
           } = mergedCurrentMode.modals?.base || {}
-          acc[modalName as keyof PstlSubModalsTheme] = merge({}, sharedTheme, modalTheme)
+          acc[modalName as keyof PstlSubModalsTheme] = defaultsDeep(modalTheme, sharedTheme)
         }
         return acc
       },
@@ -69,7 +67,7 @@ export function useMergeThemes(customModalThemeByModes?: ThemeByModes<BasicUserT
 
     mergedCurrentMode.modals = mergedSubModals
 
-    const modifiedModalTheme = createCustomTheme({
+    const modifiedModalTheme: ModalTheme = createCustomTheme({
       modes: { ...mergedCurrentMode.modes, [currentTheme?.mode || 'DEFAULT']: mergedCurrentMode }
     })
 

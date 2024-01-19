@@ -1,6 +1,12 @@
 import { Address } from '@past3lle/types'
 import { devDebug, wait } from '@past3lle/utils'
-import { useQuery, useWaitForTransaction as useWagmiWaitForTransaction } from 'wagmi'
+import { useQuery } from '@tanstack/react-query'
+import { useEffect } from 'react'
+import {
+  UseWaitForTransactionReceiptParameters,
+  UseWaitForTransactionReceiptReturnType,
+  useWaitForTransactionReceipt as useWagmiWaitForTransactionReceipt
+} from 'wagmi'
 
 import { QUERY_KEYS } from '../../constants/queryKeys'
 import { getSafeKitAndTx } from '../../utils/safe'
@@ -13,17 +19,13 @@ const DEFAULT_CONFIRMATION_POLL_TIME = 7500
 /**
  * @name useWaitForSafeTransaction
  */
-function useWaitForSafeTransaction({
-  chainId,
-  hash,
-  ...queryOptions
-}: Parameters<typeof useWagmiWaitForTransaction>[0] = {}) {
+function useWaitForSafeTransaction({ chainId, hash, ...queryOptions }: UseWaitForTransactionReceiptParameters = {}) {
   const { chain, address } = useUserConnectionInfo()
   const queryChainId = chainId || chain?.id
 
-  const { data: safeTxHash, isLoading: isSafeLoading } = useQuery<Address, Error>(
-    [QUERY_KEYS.SAFE_PENDING_TRANSACTIONS],
-    async (): Promise<Address> => {
+  const { data: safeTxHash, isLoading: isSafeLoading } = useQuery<Address, Error>({
+    queryKey: [QUERY_KEYS.SAFE_PENDING_TRANSACTIONS, queryChainId, address, hash],
+    queryFn: async (): Promise<Address> => {
       if (!queryChainId || !address || !hash) {
         throw new Error(
           '[@past3lle/web3-modal] Missing chain id, address, wallet client, or tx hash. Check that you are connected!' +
@@ -49,16 +51,14 @@ function useWaitForSafeTransaction({
 
       return confirmed.transactionHash
     },
-    {
-      enabled: !!hash,
-      queryHash: hash
-    }
-  )
+    enabled: !!hash,
+    queryHash: hash
+  })
 
   devDebug('Safe Tx Hash from useWaitForSafeTransaction --->', safeTxHash)
 
   // Wait the normal transaction hash returned from SAFE
-  const wagmiWaitResults = useWagmiWaitForTransaction({ ...queryOptions, hash: safeTxHash })
+  const wagmiWaitResults = useWagmiWaitForTransactionReceipt({ ...queryOptions, hash: safeTxHash })
 
   return {
     ...wagmiWaitResults,
@@ -77,11 +77,41 @@ function useWaitForSafeTransaction({
  *  hash: '0x...',
  * })
  */
-export function useWaitForTransaction(props: Parameters<typeof useWagmiWaitForTransaction>[0]) {
+export function useWaitForTransaction(props: UseWaitForTransactionReceiptParameters) {
   const isWCSafeWallet = useIsSafeViaWc()
 
-  const normalResults = useWagmiWaitForTransaction({ ...props, enabled: !isWCSafeWallet })
-  const safeResults = useWaitForSafeTransaction({ ...props, enabled: isWCSafeWallet })
+  const normalResults = useWagmiWaitForTransactionReceipt({ ...props, query: { enabled: !isWCSafeWallet } })
+  const safeResults = useWaitForSafeTransaction({ ...props, query: { enabled: isWCSafeWallet } })
 
   return isWCSafeWallet ? safeResults : normalResults
+}
+
+export function useWaitForTransactionReceiptEffect({
+  hash,
+  enabled,
+  onSettled,
+  onReplaced
+}: UseWaitForTransactionReceiptParameters & {
+  onSettled: (
+    data: UseWaitForTransactionReceiptReturnType['data'],
+    error: UseWaitForTransactionReceiptReturnType['error']
+  ) => void
+  enabled: boolean
+}) {
+  // Watch EOA transactions
+  const results = useWagmiWaitForTransactionReceipt({
+    hash,
+    query: {
+      enabled
+    },
+    onReplaced
+  })
+
+  useEffect(() => {
+    if (!enabled) return
+    onSettled(results?.data, results?.error)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [results?.data, results?.error, onSettled, enabled])
+
+  return results
 }

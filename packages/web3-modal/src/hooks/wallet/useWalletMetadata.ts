@@ -1,5 +1,5 @@
+import { isIframe } from '@past3lle/wagmi-connectors'
 import { useEffect, useState } from 'react'
-import { SafeConnector } from 'wagmi/connectors/safe'
 
 import { useUserConnectionInfo } from '../api/useConnection'
 import { usePstlWeb3ModalStore } from '../api/usePstlWeb3ModalStore'
@@ -37,9 +37,7 @@ function getWcPeerMetadata(provider: any | undefined): WalletMetaData {
     return defaultOutput
   }
 
-  const v1MetaData = provider?.connector?.peerMeta
-  const v2MetaData = provider?.session?.peer?.metadata
-  const meta = v1MetaData || v2MetaData
+  const meta = provider?.session?.peer?.metadata
 
   if (meta) {
     return {
@@ -66,8 +64,8 @@ export function useWalletMetadata(): WalletMetaData {
     async function getMetadata() {
       if (!account || !connector) return
 
-      const provider = await connector.getProvider()
-      const isWalletConnect = provider?.isWalletConnect
+      const provider = await connector?.getProvider?.()
+      const isWalletConnect = (provider as any)?.isWalletConnect
 
       if (isWalletConnect) setMetadata(getWcPeerMetadata(provider))
       else setMetadata({ walletName: connector?.name || connector?.id, icon: overrides?.[connector?.name]?.logo })
@@ -86,7 +84,7 @@ export function useWalletMetadata(): WalletMetaData {
 export function useIsSafeApp(): boolean {
   const { connector, isConnected } = useUserConnectionInfo()
 
-  return isConnected && connector instanceof SafeConnector && connector.id !== 'safe'
+  return isConnected && connector?.type === 'safe' && isIframe()
 }
 
 /**

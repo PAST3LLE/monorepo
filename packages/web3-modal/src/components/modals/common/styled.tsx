@@ -169,10 +169,10 @@ export const InnerContainer = styled(ModalContainer).attrs(
     padding: 1rem 0.5rem 0.2rem;
   `}
 
-  ${({ theme }) =>
+  ${({ theme, modal }) =>
     setBackgroundOrDefault(theme, {
-      bgValue: theme?.modals?.base?.background?.url,
-      defaultValue: theme?.modals?.base?.background?.main as string
+      bgValue: theme?.modals?.[modal]?.background?.url,
+      defaultValue: theme?.modals?.[modal]?.background?.main as string
     })};
 `
 export const ErrorMessageContainer = styled(InnerContainer).attrs({ modal: 'base', node: 'main' })<{ hide: boolean }>`
@@ -219,7 +219,7 @@ export const StyledConnectionModal = styled(Modal)<{ modal: keyof RequiredPstlSu
       font-size: ${(props) => props.theme.modals?.[props.modal]?.baseFontSize}px;
       ${(props) => upToSmall`
           min-height: ${props?.minHeight || '75%'};
-          max-height: 500px;
+          max-height: ${props?.maxHeight || '550px'};
           max-width: unset;
           width: 100%;
           margin: auto 0 0;

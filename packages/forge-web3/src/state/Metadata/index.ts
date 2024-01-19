@@ -1,11 +1,11 @@
 import { atom, useAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 import { useMemo } from 'react'
-import { Address } from 'wagmi'
+import { Address } from 'viem'
 
 import { STATE_STORAGE_KEYS } from '../../constants/state-storage-keys'
 import { useSupportedChainId } from '../../hooks'
-import { SkillId, SkillMetadata, SupportedForgeChains } from '../../types'
+import { SkillId, SkillMetadata, SupportedForgeChainIds } from '../../types'
 import { useForgeBalancesReadAtom } from '../Balances'
 
 type MetadataMapByChain = {
@@ -77,25 +77,25 @@ const metadataReadWriteAtom = (chainId?: number) =>
     }
   )
 
-export const useForgeMetadataMapReadAtom = (chainId: SupportedForgeChains | undefined) => {
+export const useForgeMetadataMapReadAtom = (chainId: SupportedForgeChainIds | undefined) => {
   const state = useMemo(() => skillMetadataMapReadAtom(chainId), [chainId])
   return useAtom(state)
 }
-export const useForgeMetadataMapWriteAtom = (chainId: SupportedForgeChains | undefined) => {
+export const useForgeMetadataMapWriteAtom = (chainId: SupportedForgeChainIds | undefined) => {
   const state = useMemo(() => skillMetadataMapWriteAtom(chainId), [chainId])
   return useAtom(state)
 }
 
-export const useForgeMetadataReadAtom = (chainId: SupportedForgeChains | undefined) => {
+export const useForgeMetadataReadAtom = (chainId: SupportedForgeChainIds | undefined) => {
   const state = useMemo(() => skillMetadataReadAtom(chainId), [chainId])
   return useAtom(state)
 }
-export const useForgeMetadataWriteAtom = (chainId: SupportedForgeChains | undefined) => {
+export const useForgeMetadataWriteAtom = (chainId: SupportedForgeChainIds | undefined) => {
   const state = useMemo(() => skillMetadataWriteAtom(chainId), [chainId])
   return useAtom(state)
 }
 
-export const useForgeMetadataReadWriteAtom = (chainId: SupportedForgeChains | undefined) => {
+export const useForgeMetadataReadWriteAtom = (chainId: SupportedForgeChainIds | undefined) => {
   const state = useMemo(() => metadataReadWriteAtom(chainId), [chainId])
   return useAtom(state)
 }
