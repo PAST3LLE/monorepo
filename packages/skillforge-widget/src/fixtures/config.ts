@@ -1,10 +1,17 @@
-import { ForgeChainsMinimum, ForgeContractAddressMap, ForgeMetadataUriMap } from '@past3lle/forge-web3'
-import { ForgeW3CoreProvidersProps, createWeb3ModalTheme } from '@past3lle/forge-web3'
+import {
+  ForgeChainsMinimum,
+  ForgeContractAddressMap,
+  ForgeMetadataUriMap,
+  ForgeW3CoreProvidersProps,
+  createWeb3ModalTheme
+} from '@past3lle/forge-web3'
 import { devDebug } from '@past3lle/utils'
 import { ledgerHid } from '@past3lle/wagmi-connectors'
-import { Chain, goerli, polygon } from 'viem/chains'
-import { ConnectorNotFoundError } from 'wagmi'
+import { goerli, polygon } from 'viem/chains'
+import { ConnectorNotFoundError, ProviderNotFoundError } from 'wagmi'
+import { injected } from 'wagmi/connectors'
 
+const IS_SERVER = typeof globalThis?.window === 'undefined'
 const MODAL_THEME = createWeb3ModalTheme({
   DEFAULT: {
     modals: {
@@ -80,7 +87,32 @@ const SUPPORTED_CHAINS = [goerli as any, polygon] as const satisfies ForgeChains
 const WEB3_PROPS: ForgeW3CoreProvidersProps<typeof SUPPORTED_CHAINS>['config']['web3'] = {
   chains: SUPPORTED_CHAINS,
   connectors: {
-    connectors: [ledgerHid()],
+    connectors: [
+      ledgerHid(),
+      injected({
+        target() {
+          if (IS_SERVER) throw new ProviderNotFoundError()
+          return {
+            name: 'MetaMask',
+            id: 'metamask',
+            icon: 'https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg',
+            provider() {
+              try {
+                if (IS_SERVER) throw new ProviderNotFoundError()
+                const provider = window?.ethereum?.isMetaMask
+                  ? window.ethereum
+                  : window?.ethereum?.providers?.find((provider: any) => provider?.isMetaMask)
+                if (!provider) throw new ProviderNotFoundError()
+                return provider
+              } catch (error) {
+                console.error(error)
+                throw error
+              }
+            }
+          }
+        }
+      })
+    ],
     overrides: {
       'ledger-hid': {
         customName: 'Ledger HID Device',

@@ -1,10 +1,13 @@
 import { TorusWalletConnectorPlugin } from '@web3auth/torus-wallet-connector-plugin'
+import { ProviderNotFoundError } from 'wagmi'
 import { injected } from 'wagmi/connectors'
 
 import { iframeEthereum } from '../iframeEthereum'
 import { ledgerHid } from '../ledgerHid'
 import { ledgerLive } from '../ledgerLive'
 import { pstlWeb3Auth } from '../web3Auth'
+
+const IS_SERVER = typeof globalThis?.window === 'undefined'
 
 if (!process.env.REACT_APP_WEB3AUTH_DEVNET_CLIENT_ID) {
   throw new Error('Missing process.env.REACT_APP_WEB3AUTH_DEVNET_CLIENT_ID!')
@@ -39,17 +42,19 @@ export const wagmiConnectors = {
 export const INJECTED_CONNECTORS = [
   injected({
     target() {
-      if (typeof globalThis?.window === 'undefined') return undefined
+      if (IS_SERVER) throw new ProviderNotFoundError()
       return {
         name: 'MetaMask',
         id: 'metamask-injected',
         provider() {
-          if (typeof globalThis?.window === 'undefined') return undefined
           try {
+            if (IS_SERVER) throw new ProviderNotFoundError()
             const provider = window?.ethereum?.providers?.find((provider: any) => provider?.isMetaMask)
+            if (!provider) throw new ProviderNotFoundError()
             return provider
           } catch (error) {
-            return undefined
+            console.error(error)
+            throw error
           }
         }
       }
@@ -61,11 +66,13 @@ export const INJECTED_CONNECTORS = [
         name: 'Taho',
         id: 'taho-injected',
         provider() {
-          if (typeof globalThis?.window === 'undefined') return undefined
           try {
+            if (IS_SERVER) throw new ProviderNotFoundError()
             const provider = (window as any)?.tally
+            if (!provider) throw new ProviderNotFoundError()
             return provider
           } catch (error) {
+            console.error(error)
             return undefined
           }
         }
@@ -78,11 +85,13 @@ export const INJECTED_CONNECTORS = [
         name: 'Coinbase Wallet',
         id: 'coinbase-wallet-injected',
         provider() {
-          if (typeof globalThis?.window === 'undefined') return undefined
           try {
-            const provider = (window?.ethereum?.isCoinbaseWallet && window.ethereum) || window?.coinbaseWalletExtension
+            if (IS_SERVER) throw new ProviderNotFoundError()
+            const provider = window?.coinbaseWalletExtension || (window?.ethereum?.isCoinbaseWallet && window.ethereum)
+            if (!provider) throw new ProviderNotFoundError()
             return provider
           } catch (error) {
+            console.error(error)
             return undefined
           }
         }

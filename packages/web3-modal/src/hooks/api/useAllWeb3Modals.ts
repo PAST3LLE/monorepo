@@ -6,7 +6,7 @@ export type AllWeb3ModalStore = {
 }
 export function useAllWeb3Modals(): AllWeb3ModalStore {
   return {
-    root: usePstlWeb3Modal(),
+    root: usePstlWeb3Modal()
     // walletConnect: useWeb3Modal()
   }
 }

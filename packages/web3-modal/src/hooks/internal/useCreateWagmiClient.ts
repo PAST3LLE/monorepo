@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
-import { Z_INDICES } from '../../constants'
 import { Chain, Transport, http } from 'viem'
 import { WagmiProviderProps, createConfig } from 'wagmi'
 import { walletConnect } from 'wagmi/connectors'
 
+import { Z_INDICES } from '../../constants'
 import type { PstlWeb3ModalProps, ReadonlyChains } from '../../providers/types'
 import { getConnectorsArrayFromConfig } from '../../utils/connectors'
 import { connectorOverridePropSelector } from '../../utils/misc'

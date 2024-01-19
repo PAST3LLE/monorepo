@@ -118,9 +118,15 @@ function App() {
             wagmi: {
               options: {
                 transports: {
-                  5: http(process.env.REACT_APP_ALCHEMY_GOERLI_API_KEY as string),
-                  137: http(process.env.REACT_APP_ALCHEMY_MATIC_API_KEY as string),
-                  80001: http(process.env.REACT_APP_ALCHEMY_MUMBAI_API_KEY as string)
+                  5: http(
+                    `https://eth-goerli.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_GOERLI_API_KEY as string}`
+                  ),
+                  137: http(
+                    `https://polygon-mainnet.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_MATIC_API_KEY as string}`
+                  ),
+                  80001: http(
+                    `https://polygon-mumbai.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_MUMBAI_API_KEY as string}`
+                  )
                 }
               }
             }
