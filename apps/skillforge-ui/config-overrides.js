@@ -2,7 +2,6 @@
 /* config-overrides.js */
 const webpack = require('webpack')
 const fs = require('fs')
-const WorkBoxPlugin = require('workbox-webpack-plugin')
 // 8MB
 const preCachedLimitInBytes = 8 * 1024 * 1024
 
@@ -38,7 +37,7 @@ module.exports = {
 
     // Bundle size warning bypass
     config.plugins.forEach((plugin) => {
-      if (plugin instanceof WorkBoxPlugin.InjectManifest) {
+      if ('config' in plugin) {
         // 8MB
         plugin.config.maximumFileSizeToCacheInBytes = preCachedLimitInBytes
       }

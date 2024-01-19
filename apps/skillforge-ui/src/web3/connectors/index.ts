@@ -1,5 +1,7 @@
-import { ledgerLive, pstlWeb3Auth, PstlWeb3AuthParameters } from '@past3lle/wagmi-connectors'
+import METAMASK_ICON from '../../assets/png/metamask.png'
+import { ledgerHid, ledgerLive, pstlWeb3Auth, PstlWeb3AuthParameters } from '@past3lle/wagmi-connectors'
 import { ASSETS_MAP } from 'assets'
+import GOOGLE_APPLE_LOGO from 'assets/png/google-apple.png'
 import { skillforgeTheme } from 'theme/skillforge'
 import { ProviderNotFoundError } from 'wagmi'
 import { injected } from 'wagmi/connectors'
@@ -19,39 +21,66 @@ function _getWhitelistTheme(): PstlWeb3AuthParameters['uiConfig'] {
   }
 }
 
-const connectors = [
-  injected({
-    target() {
-      if (IS_SERVER) throw new ProviderNotFoundError()
-      return {
-        name: 'MetaMask',
-        id: 'metamask',
-        icon: 'https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg',
-        provider() {
-          try {
-            if (IS_SERVER) throw new ProviderNotFoundError()
-            const provider = window?.ethereum?.isMetaMask
-              ? window.ethereum
-              : window?.ethereum?.providers?.find((provider: any) => provider?.isMetaMask)
-            if (!provider) throw new ProviderNotFoundError()
-            return provider
-          } catch (error) {
-            console.error(error)
-            throw error
+const connectors = {
+  connectors: [
+    ledgerHid({ shimDisconnect: true }),
+    injected({
+      shimDisconnect: true,
+      target() {
+        if (IS_SERVER) throw new ProviderNotFoundError()
+        return {
+          name: 'MetaMask',
+          id: 'metamask',
+          icon: METAMASK_ICON,
+          provider() {
+            try {
+              if (IS_SERVER) throw new ProviderNotFoundError()
+              const provider = window?.ethereum?.isMetaMask
+                ? window.ethereum
+                : window?.ethereum?.providers?.find((provider: any) => provider?.isMetaMask)
+              if (!provider) throw new ProviderNotFoundError()
+              return provider
+            } catch (error) {
+              console.error(error)
+              throw error
+            }
           }
         }
       }
+    }),
+    pstlWeb3Auth({
+      network: process.env.REACT_APP_WEB3_AUTH_NETWORK as PstlWeb3AuthParameters['network'],
+      projectId: process.env.REACT_APP_WEB3AUTH_ID as string,
+      storageKey: 'session',
+      preset: 'DISALLOW_EXTERNAL_WALLETS',
+      mfaLevel: 'none',
+      uxMode: 'popup',
+      ..._getWhitelistTheme()
+    })
+  ],
+  overrides: {
+    web3auth: {
+      isRecommended: true,
+      logo: GOOGLE_APPLE_LOGO,
+      customName: 'Google & more',
+      rank: 1000
+    },
+    metamask: {
+      logo: METAMASK_ICON,
+      customName: 'MetaMask',
+      rank: 900
+    },
+    walletconnect: {
+      logo: 'https://raw.githubusercontent.com/WalletConnect/walletconnect-assets/master/Logo/Gradient/Logo.png',
+      customName: 'WalletConnect & more',
+      rank: 100,
+      modalNodeId: 'w3m-modal'
+    },
+    'ledger-hid': {
+      logo: 'https://crypto-central.io/library/uploads/Ledger-Logo-3.png',
+      rank: 0
     }
-  }),
-  pstlWeb3Auth({
-    network: process.env.REACT_APP_WEB3_AUTH_NETWORK as PstlWeb3AuthParameters['network'],
-    projectId: process.env.REACT_APP_WEB3AUTH_ID as string,
-    storageKey: 'session',
-    preset: 'DISALLOW_EXTERNAL_WALLETS',
-    mfaLevel: 'none',
-    uxMode: 'popup',
-    ..._getWhitelistTheme()
-  })
-]
-const frameConnectors = [ledgerLive({})]
+  }
+}
+const frameConnectors = [ledgerLive()]
 export { connectors, frameConnectors }

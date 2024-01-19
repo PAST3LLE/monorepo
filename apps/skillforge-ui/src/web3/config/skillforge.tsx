@@ -2,7 +2,6 @@ import { connectors, frameConnectors } from '../connectors'
 import { SUPPORTED_CHAINS_DEV, SUPPORTED_CHAINS_PROD } from './chains'
 import { WCM_THEME_VARIABLES } from './walletConnect'
 import { ForgeChainsMinimum, Web3ModalConfigWeb3Props } from '@past3lle/forge-web3'
-import GOOGLE_APPLE_LOGO from 'assets/png/google-apple.png'
 import { pstlModalTheme as PSTL_MODAL_THEME } from 'theme/pstlModal'
 import { http } from 'viem'
 
@@ -34,27 +33,7 @@ export const WEB3_PROPS_BASE = {
       }
     }
   },
-  connectors: {
-    connectors,
-    overrides: {
-      web3auth: {
-        isRecommended: true,
-        logo: GOOGLE_APPLE_LOGO,
-        customName: 'Google & more',
-        rank: 1000
-      },
-      walletconnect: {
-        logo: 'https://raw.githubusercontent.com/WalletConnect/walletconnect-assets/master/Logo/Gradient/Logo.png',
-        customName: 'Web3',
-        rank: 100,
-        modalNodeId: 'w3m-modal'
-      },
-      'ledger-hid': {
-        logo: 'https://crypto-central.io/library/uploads/Ledger-Logo-3.png',
-        rank: 0
-      }
-    }
-  },
+  connectors,
   frameConnectors,
   callbacks: {
     switchChain: async (chains) => {
