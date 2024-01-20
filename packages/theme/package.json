@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/theme",
   "sideEffects": false,
-  "version": "2.0.0-alpha.2",
+  "version": "2.0.0-alpha.3",
   "description": "common theme parts",
   "main": "dist/esm/index.js",
   "module": "dist/esm/index.js",
@@ -54,7 +54,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",
-    "@past3lle/types": "^2.0.0-alpha.2",
+    "@past3lle/types": "^2.0.0-alpha.3",
     "@rollup/plugin-image": "^3.0.1",
     "@types/jest": "^29.2.5",
     "@types/lodash.merge": "^4.6.7",
@@ -80,8 +80,8 @@
     "styled-components": ">=5"
   },
   "dependencies": {
-    "@past3lle/assets": "^2.0.0-alpha.2",
-    "@past3lle/constants": "^2.0.0-alpha.2",
+    "@past3lle/assets": "^2.0.0-alpha.3",
+    "@past3lle/constants": "^2.0.0-alpha.3",
     "get-contrast": "3.0.0",
     "lodash.defaultsdeep": "^4.6.1",
     "polished": "^4.2.2",

@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/skillforge-widget",
   "sideEffects": false,
-  "version": "2.0.0-alpha.2",
+  "version": "2.0.0-alpha.3",
   "description": "PAST3LLE SKILLFORGE component as an NPM ESM pkg.",
   "main": "dist/esm/index.js",
   "typings": "dist/types/index.d.ts",
@@ -71,16 +71,17 @@
     "wagmi": "^2.x"
   },
   "peerDependencies": {
+    "@tanstack/react-query": "^5.x",
+    "jotai": ">=2",
     "react": ">=16",
     "styled-components": ">=5",
-    "jotai": ">=2",
-    "wagmi": "^2.x",
     "viem": "^2.x",
-    "@tanstack/react-query": "^5.x"
+    "wagmi": "^2.x"
   },
   "devDependencies": {
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.13.8",
-    "@past3lle/types": "^2.0.0-alpha.2",
+    "@past3lle/types": "^2.0.0-alpha.3",
+    "@tanstack/react-query": "^5.17.15",
     "@trivago/prettier-plugin-sort-imports": "^4.0.0",
     "@types/jest": "^25.2.1",
     "@types/react": "^18.2.0",
@@ -96,16 +97,15 @@
     "react-cosmos": "^5.7.2",
     "react-dom": "^18.2.0",
     "styled-components": "^5.3.5",
-    "wagmi": "^2.2.1",
     "viem": "^2.3.1",
-    "@tanstack/react-query": "^5.17.15"
+    "wagmi": "^2.2.1"
   },
   "dependencies": {
-    "@past3lle/components": "^2.0.0-alpha.2",
-    "@past3lle/forge-web3": "^2.0.0-alpha.2",
-    "@past3lle/hooks": "^2.0.0-alpha.2",
-    "@past3lle/theme": "^2.0.0-alpha.2",
-    "@past3lle/utils": "^2.0.0-alpha.2",
+    "@past3lle/components": "^2.0.0-alpha.3",
+    "@past3lle/forge-web3": "^2.0.0-alpha.3",
+    "@past3lle/hooks": "^2.0.0-alpha.3",
+    "@past3lle/theme": "^2.0.0-alpha.3",
+    "@past3lle/utils": "^2.0.0-alpha.3",
     "jotai": "^2.6.0",
     "polished": "^4.2.2"
   },

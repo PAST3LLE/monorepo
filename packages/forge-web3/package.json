@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/forge-web3",
   "sideEffects": false,
-  "version": "2.0.0-alpha.2",
+  "version": "2.0.0-alpha.3",
   "description": "PAST3LLE FORGE Web3 hooks and tings",
   "typings": "dist/types/index.d.ts",
   "types": "dist/types/index.d.ts",
@@ -79,23 +79,24 @@
     "wagmi": "^2.x"
   },
   "peerDependencies": {
+    "@tanstack/react-query": "^5.x",
     "react": ">=16",
     "styled-components": ">=5",
-    "wagmi": "^2.x",
     "viem": "^2.x",
-    "@tanstack/react-query": "^5.x"
+    "wagmi": "^2.x"
   },
   "dependencies": {
-    "@past3lle/hooks": "^2.0.0-alpha.2",
+    "@past3lle/hooks": "^2.0.0-alpha.3",
     "@past3lle/skilltree-contracts": "^0.1.1",
-    "@past3lle/utils": "^2.0.0-alpha.2",
-    "@past3lle/web3-modal": "^2.0.0-alpha.11",
+    "@past3lle/utils": "^2.0.0-alpha.3",
+    "@past3lle/web3-modal": "^2.0.0-alpha.12",
     "jotai": "^2.6.0",
     "jotai-optics": "^0.3.1",
     "optics-ts": "^2.4.1"
   },
   "devDependencies": {
     "@emotion/react": "11.11.1",
+    "@tanstack/react-query": "^5.17.15",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "jotai-devtools": "^0.7.1",
@@ -103,9 +104,8 @@
     "react-cosmos": "^5.7.2",
     "react-dom": "^18.2.0",
     "styled-components": "^5.3.6",
-    "wagmi": "^2.2.1",
     "viem": "^2.3.1",
-    "@tanstack/react-query": "^5.17.15"
+    "wagmi": "^2.2.1"
   },
   "browserslist": {
     "production": [
