@@ -29,10 +29,11 @@ async function writeUpdatedNetworks(): Promise<void> {
   
   Custom sub-path:`,
       default: '',
-      validate: (input) => {
-        if (input === '' || input === undefined || input === null) return true
-        if (!input.startsWith('/')) return 'Custom sub-path must start with a "/"'
-        if (!input.endsWith('/')) return 'Custom sub-path must end with a "/"'
+      validate: (input: unknown) => {
+        if (typeof input === 'string') {
+          if (!input.startsWith('/')) return 'Custom sub-path must start with a "/"'
+          if (!input.endsWith('/')) return 'Custom sub-path must end with a "/"'
+        }
         return true
       }
     },
@@ -60,19 +61,13 @@ async function writeUpdatedNetworks(): Promise<void> {
     }
   ])
 
-  const {
-    contractName,
-    newAddress,
-    transactionHash,
-    network,
-    customSubPath
-  }: {
+  const { contractName, newAddress, transactionHash, network, customSubPath } = answers as {
     contractName: 'CollectionsManager'
     network: string
     newAddress: string
     transactionHash: string | undefined
     customSubPath?: string
-  } = answers
+  }
 
   const chainId =
     networks?.[network as SupportedNetworks]?.id || (networksToChainId as Record<string, number>)?.[network]

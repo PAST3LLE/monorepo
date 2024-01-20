@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { isAddress } from '@ethersproject/address'
 import { Contract } from '@ethersproject/contracts'
@@ -50,10 +48,11 @@ async function mintCollectionSkills(props?: { tryHigherValues?: boolean }): Prom
   
   Custom sub-path:`,
       default: '',
-      validate: (input) => {
-        if (input === '' || input === undefined || input === null) return true
-        if (!input.startsWith('/')) return 'Custom sub-path must start with a "/"'
-        if (!input.endsWith('/')) return 'Custom sub-path must end with a "/"'
+      validate: (input: unknown) => {
+        if (typeof input === 'string') {
+          if (!input.startsWith('/')) return 'Custom sub-path must start with a "/"'
+          if (!input.endsWith('/')) return 'Custom sub-path must end with a "/"'
+        }
         return true
       }
     },
@@ -103,7 +102,7 @@ async function mintCollectionSkills(props?: { tryHigherValues?: boolean }): Prom
       message:
         'To which address are you minting new skills? Any locked skills will ignore this param, so if you plan on only minting locked skills, you can just leave blank! Address:',
       default: '',
-      validate(input) {
+      validate(input: string | null | undefined) {
         if (!input || isAddress(input)) {
           return true
         }
@@ -120,7 +119,7 @@ async function mintCollectionSkills(props?: { tryHigherValues?: boolean }): Prom
 
 IDs:`,
       default: '[]',
-      validate(input) {
+      validate(input: string | null | undefined) {
         if (input && JSON.parse(input)) {
           return true
         }
@@ -140,11 +139,11 @@ IDs:`,
   if (unlockedIds?.length) {
     const unlockedSkillsAmountAnswers: { amount: number }[] = []
     for (let i = 0; i < unlockedIds.length; i++) {
-      const answer = await inquirer.prompt({
+      const answer = (await inquirer.prompt({
         type: 'number',
         name: 'amount',
         message: `How many of skill ${unlockedIds[i]} are you minting?`
-      })
+      })) as { amount: number }
       unlockedSkillsAmountAnswers.push(answer)
     }
 
@@ -163,7 +162,7 @@ IDs:`,
 
 IDs:`,
       default: '[]',
-      validate(input) {
+      validate(input: string | null | undefined) {
         if (input && JSON.parse(input)) {
           return true
         }
@@ -186,7 +185,7 @@ IDs:`,
       burnDependencies: string
     })[] = []
     for (let i = 0; i < lockedIds.length; i++) {
-      const answer = await inquirer.prompt([
+      const answer = (await inquirer.prompt([
         { type: 'number', name: 'amount', message: `How many of locked skill ${lockedIds[i]} are you minting?` },
         {
           type: 'input',
@@ -198,8 +197,8 @@ IDs:`,
     
     Hold dependencies:`,
           default: '[]',
-          validate(input) {
-            if (JSON.parse(input)) {
+          validate(input: string | null | undefined) {
+            if (typeof input === 'string' && JSON.parse(input)) {
               return true
             }
 
@@ -218,15 +217,19 @@ IDs:`,
 
     Burn dependencies:`,
           default: '[]',
-          validate(input) {
-            if (JSON.parse(input)) {
+          validate(input: string | null | undefined) {
+            if (typeof input === 'string' && JSON.parse(input)) {
               return true
             }
 
             throw Error('Invalid JSON. Try again.')
           }
         }
-      ])
+      ])) as Omit<LockedSkillParams, 'holdDependencies' | 'burnDependencies'> & {
+        holdDependencies: string
+        burnDependencies: string
+      }
+
       lockedSkillsAmountAnswers.push(answer)
     }
 
@@ -350,7 +353,7 @@ IDs:`,
     An error occurred while minting new skills! Error message (if any):
     
     ==========================
-    ${(error as any)?.message}
+    ${error instanceof Error && 'message' in error ? error.message : 'N/A'}
     ==========================
     
     Confirm below to try again with higher gas fees as this is likely a network congestion issue.
