@@ -10,7 +10,7 @@ export const TradeAndUnlockPanelContainer = styled(ActiveSkillPanelContainer)`
     ${SkillRarityLabel} {
       font-size: 1.5rem;
       margin: -2.5rem 0 0 0;
-      padding: 0rem 0.5rem 0rem 0.5rem;
+      padding: 0.2rem 0.5rem 0.2rem 0.5rem;
       border-radius: 0 0 0.7rem 0.7rem;
       z-index: 10;
     }

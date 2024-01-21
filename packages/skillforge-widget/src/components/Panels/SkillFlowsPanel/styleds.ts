@@ -1,5 +1,5 @@
 import { Column, Row, RowCenter } from '@past3lle/components'
-import { fromLarge, upToSmall } from '@past3lle/theme'
+import { upToSmall } from '@past3lle/theme'
 import styled from 'styled-components'
 
 import { FlowState } from '../../../state/Flows'
@@ -20,9 +20,19 @@ export const FlowRow = styled(RowCenter).attrs({
   padding: '1.2rem 1.4rem'
 })<{ background?: string }>``
 
-export const FlowCard = styled(FlowRow)<{ status: FlowState['status'] }>`
+export const FlowCard = styled(FlowRow)<{ hide?: boolean; status: FlowState['status'] }>`
   background: ${(props) => `linear-gradient(45deg, ${_statusToColour(props.status)}, transparent)`};
   padding: 1.5rem 2rem;
+
+  cursor: pointer;
+
+  position: relative;
+  > span#flow-card-minimise {
+    position: absolute;
+    text-decoration: underline;
+    font-size: 1.1rem;
+    color: ${(props) => props.theme.offwhite};
+  }
 `
 
 export const SubSkillRow = styled(Row).attrs({
@@ -46,10 +56,6 @@ export const UpgradingSkillHeader = styled(BlackHeader).attrs({
   letterSpacing: '-1.5px'
 })`
   font-size: 2.2rem;
-
-  ${fromLarge`
-    font-size: 1.9vw;
-  `}
 `
 
 export const UpgradingSkillHeaderResponse = styled(BlackHeader).attrs({
@@ -59,10 +65,6 @@ export const UpgradingSkillHeaderResponse = styled(BlackHeader).attrs({
   letterSpacing: '-1.2px'
 })`
   font-size: 2.4rem;
-
-  ${fromLarge`
-    font-size: 2.1vw;
-  `}
 `
 
 export const SubSkillHeader = styled(BlackHeader).attrs({
@@ -70,10 +72,6 @@ export const SubSkillHeader = styled(BlackHeader).attrs({
   padding: 0
 })`
   font-size: 1.7rem;
-
-  ${fromLarge`
-    font-size: 1.4vw;
-  `}
 `
 
 export const SubSkillHeaderResponse = styled(BlackHeader).attrs({
@@ -83,10 +81,6 @@ export const SubSkillHeaderResponse = styled(BlackHeader).attrs({
   letterSpacing: '-1.6px'
 })`
   font-size: 1.55rem;
-
-  ${fromLarge`
-    font-size: 1.3vw;
-  `}
 `
 
 export const SkillFlowsContainer = styled(Column)`
@@ -128,7 +122,7 @@ export const UserSkillpointsContainer = styled(Column)`
 
   > ${Row} {
     flex: 0 1 auto;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
   }
 `
