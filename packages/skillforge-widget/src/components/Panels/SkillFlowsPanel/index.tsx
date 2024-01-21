@@ -295,7 +295,11 @@ function ActionButton({
         bgColor={bgColor}
         bgImage={bgImage}
         iconKey={iconKey}
-        onClick={async () => {
+        // TODO: fix this weird TSX error
+        // @ts-ignore
+        onClick={async (e) => {
+          // stop the click bubbling into the container and closing
+          e.stopPropagation()
           try {
             setClicked(true)
             await statusToCallbackMap[flow.status as 'claimable' | 'claimed' | 'needs-approvals']()

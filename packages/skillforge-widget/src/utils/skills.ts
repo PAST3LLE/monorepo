@@ -65,7 +65,7 @@ export function getBestAvailableSkillImage(
 ): string
 export function getBestAvailableSkillImage(
   skill: SkillMetadata,
-  preferredSize: 'full' | 250 | 500 | 750 | 'ipfs' = 'full',
+  preferredSize: 'full' | 250 | 500 | 750 | 'ipfs',
   options?: {
     skipIpfs?: boolean
     gatewayUris?: string[]
