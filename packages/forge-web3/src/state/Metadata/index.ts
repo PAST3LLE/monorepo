@@ -158,7 +158,7 @@ export const useForgeFlattenedSkillDependencies = (params?: { hideNoBalance?: bo
         let include = true
         if (params?.hideNoBalance) {
           const depSkillId = skillDepToSkillId(dep)
-          const balBigInt = depSkillId ? BigInt(balanceMap?.[depSkillId]) : BigInt(0)
+          const balBigInt = depSkillId ? BigInt(balanceMap?.[depSkillId] || 0) : BigInt(0)
           include = balBigInt > 0
         }
 
