@@ -17,7 +17,7 @@ export function usePrepareContract() {
 }
 
 export function useContractReadCallback() {
-  const { account, client, publicClient } = usePrepareContract()
+  const { publicClient } = usePrepareContract()
 
   return useCallback(
     async (args: SimulateContractParameters) => {
@@ -28,7 +28,7 @@ export function useContractReadCallback() {
         throw error
       }
     },
-    [account, client, publicClient]
+    [publicClient]
   )
 }
 

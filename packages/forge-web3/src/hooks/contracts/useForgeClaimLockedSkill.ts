@@ -89,14 +89,13 @@ export function useForgeApproveAndClaimLockedSkillCallback(
   const approveAndClaimCallback = useCallback(async () => {
     devDebug(`
 [useForgeApproveAndClaimLockedSkillCallback] --> STATE!
-
   Needs approval?     ${!!approveAllTokensCallbacks}
   --
   Has claim callback? ${!!claimLockedSkill}
 `)
     try {
       // Step 1: check & approve merge manager to burn / claiming tokens
-      if (!!approveAllTokensCallbacks) {
+      if (approveAllTokensCallbacks?.length) {
         // fire all approve callbacks
         await Promise.all(
           approveAllTokensCallbacks.map((callback) =>

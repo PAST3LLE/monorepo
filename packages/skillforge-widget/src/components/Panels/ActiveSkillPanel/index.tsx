@@ -146,20 +146,20 @@ export function ActiveSkillPanel() {
         <Row alignSelf="flex-start" width="100%" justifyContent={'center'} gap="1rem">
           <SkillStatusLabel
             bgColour={getLockStatusColour(lockStatus, customTheme as DefaultTheme)}
-            fgColour={BLACK}
-            fontWeight={500}
+            fgColour={lockStatus !== SkillLockStatus.OWNED ? BLACK : 'white'}
+            fontWeight={800}
             borderRadius="0.3rem"
             letterSpacing={-2.2}
             flex={1}
-            display={'flex'}
-            alignItems={'center'}
-            justifyContent={'center'}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
             height="100%"
-            textShadow={lockStatus !== SkillLockStatus.OWNED ? '1px 1px 1px #000000ba' : 'none'}
+            textShadow={lockStatus !== SkillLockStatus.OWNED ? '1px 1px 1px #000000ba' : '-1px 2px 1px #f13d7d'}
           >
             {lockStatus === SkillLockStatus.UNLOCKABLE_IN_STORE || lockStatus === SkillLockStatus.UNLOCKABLE_IN_TRADE
               ? 'UNLOCKABLE'
-              : lockStatus}
+              : lockStatus + '!'}
           </SkillStatusLabel>
           <SkillRarityLabel
             backgroundColor={darken(0.02, customTheme.rarity[rarity].backgroundColor)}

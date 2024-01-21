@@ -43,15 +43,15 @@ function SkillpointUnmemoed({
 
   const { isEmptySkill, isCurrentSkillActive, isDependency, isDimSkill } = useMemo(
     () => ({
-      isEmptySkill: (metadata.properties.id as `${string}-${string}`) === 'EMPTY-EMPTY',
-      isCurrentSkillActive: !disabledHighlight && metadata.properties.id === currentlyActive,
-      isDependency: state.activeDependencies.includes(metadata.properties.id),
+      isEmptySkill: (metadata?.properties.id as `${string}-${string}`) === 'EMPTY-EMPTY',
+      isCurrentSkillActive: !disabledHighlight && metadata?.properties.id === currentlyActive,
+      isDependency: state.activeDependencies.includes(metadata?.properties.id),
       get isDimSkill() {
         const otherSkillActive = !this.isDependency && !this.isCurrentSkillActive && !!currentlyActive
         return otherSkillActive || !hasSkill
       }
     }),
-    [hasSkill, currentlyActive, metadata.properties.id, state.activeDependencies, disabledHighlight]
+    [hasSkill, currentlyActive, metadata?.properties.id, state.activeDependencies, disabledHighlight]
   )
 
   const skillpointUri = useMemo((): string => {
@@ -76,7 +76,7 @@ function SkillpointUnmemoed({
     setSkillState((state) => {
       const newState = {
         ...state,
-        active: isCurrentSkillActive ? state.active.slice(1) : [metadata.properties.id, ...state.active]
+        active: isCurrentSkillActive ? state.active.slice(1) : [metadata?.properties.id, ...state.active]
       }
       // light it up
       lightupDependencies && lightupDependencies(newState)
@@ -88,12 +88,12 @@ function SkillpointUnmemoed({
 
   return (
     <StyledSkillpoint
-      id={metadata.properties.id}
-      title={`${metadata.name}_${metadata.properties.id}`}
+      id={metadata?.properties.id}
+      title={`${metadata?.name}_${metadata?.properties.id}`}
       className={className}
       metadataCss={metadata?.attributes?.css}
       yOffset={emptySkillYOffset}
-      rarity={forceRarity || (!isEmptySkill ? metadata.properties?.rarity : undefined)}
+      rarity={forceRarity || (!isEmptySkill ? metadata?.properties?.rarity : undefined)}
       dimSkill={isDimSkill}
       active={isCurrentSkillActive}
       isCollectionSkill={isCollectionSkill}

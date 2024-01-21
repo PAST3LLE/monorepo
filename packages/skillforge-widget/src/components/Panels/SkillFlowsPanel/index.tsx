@@ -10,7 +10,7 @@ import {
 } from '@past3lle/forge-web3'
 import { urlToSimpleGenericImageSrcSet } from '@past3lle/theme'
 import { devError, truncateHash } from '@past3lle/utils'
-import React, { useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { Address, Hash } from 'viem'
 import { useAccount } from 'wagmi'
 
@@ -67,6 +67,18 @@ export function SkillFlowsPanel() {
 
   const srcSet = useGenericImageSrcSet()
   const { root: w3Modal } = useW3Modals()
+  const [hideFlowCardMap, setHideFlowCardMap] = useState<{ [id: string]: boolean }>({})
+
+  const handleHideFlowCard = useCallback(
+    (id: string) => (e: Event) => {
+      e.preventDefault()
+      setHideFlowCardMap((state) => ({
+        ...state,
+        [id]: !state?.[id]
+      }))
+    },
+    []
+  )
 
   const skillFlows = useMemo(() => {
     return _getListFromMapByKeyValue(flows, 'status', 'claimed', {
@@ -82,7 +94,8 @@ export function SkillFlowsPanel() {
       const hidePrerequisites = upgradeStatus !== 'claimed' || upgradeStatus !== 'claimable'
       const definedImgUri = upgradingSkill?.image250 || upgradingSkill?.image500 || upgradingSkill?.image
       return (
-        <FlowCard key={id} as={Column} gap="2rem" status={flow.status}>
+        <FlowCard key={id} as={Column} gap="2rem" status={flow.status} onClick={handleHideFlowCard(id)}>
+          <span id="flow-card-minimise">CLICK TO {hideFlowCardMap?.[id] ? 'EXPAND' : 'MINIMISE'}</span>
           <Row width="100%" gap="4rem" justifyContent="space-between" alignItems="flex-start">
             <Column alignItems="flex-start" marginTop="1rem" gap="1rem">
               <UpgradingSkillColumn>
@@ -96,7 +109,7 @@ export function SkillFlowsPanel() {
             </Column>
             <FlowSkillImageCircle src={definedImgUri} maxWidth="100px" />
           </Row>
-          {hidePrerequisites && (
+          {(!hideFlowCardMap?.[id] || !hidePrerequisites) && (
             <ColumnCenter
               width="95%"
               gap="1rem"
@@ -144,30 +157,34 @@ export function SkillFlowsPanel() {
             </ColumnCenter>
           )}
 
-          <ActionButton
-            skill={upgradingSkill}
-            flow={flow}
-            assetsSrcSet={srcSet}
-            statusToCallbackMap={{
-              claimed: () => setSkill(id),
-              claimable: async () => claimLockedSkill(upgradingSkill),
-              'needs-approvals': async () => {
-                const unapprovedList = await getCollectionApprovedCallback(upgradingSkill)
-                return approveAllBatchCallback(
-                  unapprovedList.map((dep) => dep.dependencyId.split('-')[0] as Address),
-                  id
-                )
-              }
-            }}
-          />
+          {!hideFlowCardMap?.[id] && (
+            <ActionButton
+              skill={upgradingSkill}
+              flow={flow}
+              assetsSrcSet={srcSet}
+              statusToCallbackMap={{
+                claimed: () => setSkill(id),
+                claimable: async () => claimLockedSkill(upgradingSkill),
+                'needs-approvals': async () => {
+                  const unapprovedList = await getCollectionApprovedCallback(upgradingSkill)
+                  return approveAllBatchCallback(
+                    unapprovedList.map((dep) => dep.dependencyId.split('-')[0] as Address),
+                    id
+                  )
+                }
+              }}
+            />
+          )}
         </FlowCard>
       )
     })
   }, [
-    address,
     flows,
     hideClaimed,
     getSkill,
+    address,
+    handleHideFlowCard,
+    hideFlowCardMap,
     flowTransactions,
     srcSet,
     setSkill,
@@ -196,11 +213,12 @@ export function SkillFlowsPanel() {
         onClick={() => w3Modal.open({ route: 'Transactions' })}
       />
       <SkillFlowsContainer gap="1rem 0">
-        {!!skillFlows?.length && (
+        {!!address && (
           <HideClaimedCheckbox>
             <Checkboxes
+              style={{ width: '1.5rem', height: '1.5rem', marginTop: 1 }}
               checkedColor="#bfef1b"
-              checkedScale={0.8}
+              checkedScale={0.6}
               borderColor="ghostwhite"
               backgroundColor="transparent"
             />
@@ -216,7 +234,7 @@ export function SkillFlowsPanel() {
 
 function HideClaimedCheckbox({ children }: { children: React.ReactNode }) {
   return (
-    <Row gap="2rem">
+    <Row gap="0.8rem">
       <SubSkillHeader color="ghostwhite" letterSpacing="-1.4px">
         HIDE CLAIMED
       </SubSkillHeader>
@@ -277,7 +295,11 @@ function ActionButton({
         bgColor={bgColor}
         bgImage={bgImage}
         iconKey={iconKey}
-        onClick={async () => {
+        // TODO: fix this weird TSX error
+        // @ts-ignore
+        onClick={async (e) => {
+          // stop the click bubbling into the container and closing
+          e.stopPropagation()
           try {
             setClicked(true)
             await statusToCallbackMap[flow.status as 'claimable' | 'claimed' | 'needs-approvals']()
