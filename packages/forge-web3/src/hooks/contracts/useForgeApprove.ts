@@ -6,6 +6,7 @@ import { useCallback, useMemo } from 'react'
 import { Address, Hash } from 'viem'
 import { useAccount, useReadContracts, useWriteContract } from 'wagmi'
 
+import { ForgeMutationKeys } from '../../constants/keys'
 import { useForgeFlattenedSkillDependencies } from '../../state'
 import { SkillId, SkillMetadata } from '../../types'
 import { skillToDependencySet } from '../../utils'
@@ -61,7 +62,7 @@ type IsApprovedForAllConfig = MutationConfig<IsApprovedForAllResults, Error, IsA
   onSingleApproveSuccess: MutationConfig<IsApprovedForAllResults[number], Error, IsApprovedForAllArgs>['onSuccess']
 }
 
-async function _getApproved(
+async function _getIsApproved(
   args: IsApprovedForAllArgs & {
     checkApproval: (collectionAddr: `0x${string}`, operator?: `0x${string}` | undefined) => Promise<boolean>
   }
@@ -89,7 +90,7 @@ const mutationFn = async (
   }
 ) => {
   if (!args?.skill) throw new Error('Skill is required')
-  return _getApproved(args)
+  return _getIsApproved(args)
 }
 
 export function useForgeGetAllUnapprovedTokensForClaimableCallback(
@@ -101,6 +102,7 @@ export function useForgeGetAllUnapprovedTokensForClaimableCallback(
     mutateAsync: mutateAsync_,
     ...rest
   } = useMutation({
+    mutationKey: [ForgeMutationKeys.isApprovedForAll, params?.skill?.properties?.id],
     mutationFn: ({ skill }: { skill: SkillMetadata | null | undefined }) => mutationFn({ skill, checkApproval })
   })
 
@@ -182,7 +184,7 @@ export function useForgeApproveAllBatch(
     [unapprovedList, writeContractAsync, approveAddress, addPending, forgeSkillId]
   )
 
-  return approveCallbacksList as (() => Promise<Address>)[] | null
+  return approveCallbacksList
 }
 
 export function useForgeApproveAllTokensForClaimable(skill: SkillMetadata | null) {
