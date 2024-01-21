@@ -189,6 +189,7 @@ export function TradeAndUnlockPanel() {
           <Column minWidth={'15rem'} width="100%" gap="0.25rem">
             {[...depsMap.entries()].map(([rarity, { length }], idx) => (
               <SkillRarityLabel
+                key={`${rarity}_${idx}`}
                 id={`${rarity}_${idx}`}
                 backgroundColor={darken(0.02, theme.rarity[rarity as SkillRarity].backgroundColor)}
                 color={OFF_WHITE}
