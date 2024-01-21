@@ -6,6 +6,7 @@ import { Address } from 'viem'
 import { STATE_STORAGE_KEYS } from '../../constants/state-storage-keys'
 import { useSupportedChainId } from '../../hooks'
 import { SkillId, SkillMetadata, SupportedForgeChainIds } from '../../types'
+import { skillDepToSkillId } from '../../utils'
 import { useForgeBalancesReadAtom } from '../Balances'
 
 type MetadataMapByChain = {
@@ -152,21 +153,25 @@ export const useForgeFlattenedSkillDependencies = (params?: { hideNoBalance?: bo
   const [balanceMap] = useForgeBalancesReadAtom()
 
   return useMemo(() => {
-    return skillsWithDeps.flatMap((skill) => {
-      let include = true
-      if (params?.hideNoBalance) {
-        const balBigInt = BigInt(balanceMap?.[skill.properties.id] || '0')
-        include = balBigInt > 0
-      }
-      return include
-        ? [
-            ...(skill?.properties?.dependencies.map((dep) => ({
-              ...dep,
-              parentSkillId: skill.properties.id
-            })) || [])
-          ]
-        : []
-    })
+    return skillsWithDeps.flatMap((skill) => [
+      ...(skill?.properties?.dependencies.flatMap((dep) => {
+        let include = true
+        if (params?.hideNoBalance) {
+          const depSkillId = skillDepToSkillId(dep)
+          const balBigInt = depSkillId ? BigInt(balanceMap?.[depSkillId]) : BigInt(0)
+          include = balBigInt > 0
+        }
+
+        if (!include) return []
+
+        return [
+          {
+            ...dep,
+            parentSkillId: skill.properties.id
+          }
+        ]
+      }) || [])
+    ])
   }, [balanceMap, params?.hideNoBalance, skillsWithDeps])
 }
 
