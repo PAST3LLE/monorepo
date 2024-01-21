@@ -4,7 +4,6 @@ import {
   SkillDependencyObject,
   SkillId,
   SkillRarity,
-  ipfsToImageUri,
   useForgeApproveAndClaimLockedSkillCallback,
   useForgeBalancesReadAtom,
   useForgeIpfsGatewayUrisAtom,
@@ -12,7 +11,7 @@ import {
   useSupportedChainId,
   useW3WaitForTransactionEffect
 } from '@past3lle/forge-web3'
-import { OFF_WHITE, urlToSimpleGenericImageSrcSet } from '@past3lle/theme'
+import { OFF_WHITE, createImageSrcSet } from '@past3lle/theme'
 import { darken } from 'polished'
 import React, { useMemo, useRef } from 'react'
 import { useTheme } from 'styled-components'
@@ -23,7 +22,7 @@ import { useGetActiveSkillFromActiveSkillId } from '../../../hooks/useGetActiveS
 import { useForgeFlowReadWriteAtom } from '../../../state/Flows'
 import { useSidePanelAtom } from '../../../state/SidePanel'
 import { baseTheme } from '../../../theme/base'
-import { buildSkillMetadataExplorerUri } from '../../../utils/skills'
+import { buildSkillMetadataExplorerUri, getBestAvailableSkillImage } from '../../../utils/skills'
 import { BlackHeader, MonospaceText } from '../../Common/Text'
 import { Skillpoint } from '../../Skillpoint'
 import { RequiredDepsContainer, SkillRarityLabel, SkillsRowContainer } from '../ActiveSkillPanel/styleds'
@@ -101,10 +100,18 @@ export function TradeAndUnlockPanel() {
   const isError = isErrorContract && !!error
 
   const [gatewayUris] = useForgeIpfsGatewayUrisAtom()
-  const bgImageSet = activeSkill?.image
-    ? urlToSimpleGenericImageSrcSet(ipfsToImageUri(activeSkill.image, ...gatewayUris.slice(1)))
-    : undefined
-
+  const bgImageSet = useMemo(
+    () =>
+      createImageSrcSet({
+        default: getBestAvailableSkillImage(activeSkill, 'full', { gatewayUris, skipIpfs: true }),
+        500: getBestAvailableSkillImage(activeSkill, 500, { gatewayUris, skipIpfs: true }),
+        720: getBestAvailableSkillImage(activeSkill, 750, { gatewayUris, skipIpfs: true }),
+        960: getBestAvailableSkillImage(activeSkill, 'full', { gatewayUris, skipIpfs: true }),
+        1280: getBestAvailableSkillImage(activeSkill, 'full', { gatewayUris, skipIpfs: true }),
+        1440: getBestAvailableSkillImage(activeSkill, 'full', { gatewayUris, skipIpfs: true })
+      }),
+    [activeSkill, gatewayUris]
+  )
   return isError ? (
     <ErrorPanel title="UPGRADE ERROR!" reason={error} />
   ) : (
