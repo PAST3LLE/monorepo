@@ -30,6 +30,10 @@ export const ActiveSkillPanelContainer = styled(Column)`
   overflow-y: auto;
   overflow-x: hidden;
 
+  > ${Row}:first-child {
+    z-index: 1;
+  }
+
   ${SkillStatusLabel}, ${SkillRarityLabel} {
     width: inherit;
     font-size: 2.5rem;

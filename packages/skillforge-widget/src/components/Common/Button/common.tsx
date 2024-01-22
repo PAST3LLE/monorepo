@@ -50,8 +50,9 @@ export const ThemedButtonExternalLink = styled(ExternalLink)<{
   fontSize?: string
   fullWidth?: boolean
 }>`
+  z-index: 1;
   padding: 1rem 2rem;
-  flex: 1;
+  flex: 1 1 200px;
   text-align: center;
   ${({ fontSize }) => fontSize && `font-size: ${fontSize};`}
   background-color: ${({ theme, disabled }) => (disabled ? theme.rarity.common.backgroundColor : theme.mainBg)};
@@ -69,7 +70,8 @@ export const ThemedButtonExternalLink = styled(ExternalLink)<{
 
 export const ThemedButtonActions = styled(ThemedButton)`
   padding: 1rem 2rem;
-  flex: 1;
+  flex: 1 1 200px;
+  z-index: 1;
   text-align: center;
   box-shadow: none;
   border-radius: none;
