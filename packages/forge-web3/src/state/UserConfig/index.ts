@@ -1,8 +1,7 @@
-import { Address } from '@past3lle/types'
 import { atom, useAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 import { useCallback, useMemo } from 'react'
-import { Chain } from 'viem'
+import { Address, Chain } from 'viem'
 import { goerli } from 'viem/chains'
 
 import { STATE_STORAGE_KEYS } from '../../constants/state-storage-keys'
