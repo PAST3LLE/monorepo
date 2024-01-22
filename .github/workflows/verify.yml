@@ -1,0 +1,67 @@
+name: Verify
+on:
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        uses: ./.github/actions/install-dependencies
+
+      - name: Lint code
+        run: yarn lint
+      
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          commit_message: 'chore: format'
+          commit_user_name: 'github-actions[bot]'
+          commit_user_email: 'github-actions[bot]@users.noreply.github.com'
+
+  build:
+    name: Build
+    needs: lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        uses: yarn install
+
+      - name: Build
+        run: yarn build
+
+  types:
+    name: Types
+    needs: lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      matrix:
+        typescript-version: ['5.0.4', '5.1.6', '5.2.2', 'latest']
+        viem-version: ['2.0.0', 'latest']
+        wagmi-version: ['2.0.0', 'latest']
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        uses: yarn install
+
+      - run: yarn add -D -w typescript@${{ matrix.typescript-version }} viem@${{ matrix.viem-version }} wagmi@${{ matrix.wagmi-version }}
+
+      - name: Check types
+        run: yarn check-types
