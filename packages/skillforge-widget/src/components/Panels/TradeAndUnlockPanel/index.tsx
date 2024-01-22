@@ -283,7 +283,7 @@ export function TradeAndUnlockPanel() {
               justifyContent={'space-around'}
               marginBottom="12%"
               flexWrap={'wrap'}
-              gap="1rem 4rem"
+              gap="3.5rem 4rem"
             >
               <Skillpoint
                 forceRarity="empty"

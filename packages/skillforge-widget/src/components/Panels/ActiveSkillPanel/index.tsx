@@ -124,7 +124,7 @@ export function ActiveSkillPanel() {
           justifyContent={'space-around'}
           marginBottom="12%"
           flexWrap={'wrap'}
-          gap="1rem 4rem"
+          gap="3.5rem 4rem"
         >
           <SkillPanelSkillpoint
             className={isLocked ? 'disabled' : ''}
