@@ -148,11 +148,11 @@ export function TradeAndUnlockPanel() {
       onDismiss={isPending ? undefined : setPanelState}
       onBack={isPending ? undefined : setPanelState}
     >
-      <TradeAndUnlockPanelContainer gap="1rem">
+      <TradeAndUnlockPanelContainer gap="1.2rem">
         <Row justifyContent={'center'} margin="0">
           <BlackHeader
             color={MAIN_COLOR}
-            fontSize={'2.5rem'}
+            fontSize="2.5rem"
             fontWeight={300}
             margin="0"
             padding="1rem 1rem 0.25rem 1rem"
@@ -249,7 +249,7 @@ export function TradeAndUnlockPanel() {
           <>
             <RequiredDepsContainer overflow={'visible'} background="linear-gradient(90deg, black, transparent 80%)">
               <BlackHeader
-                fontSize="1.8rem"
+                fontSize="2.5rem"
                 fontWeight={800}
                 margin="0 0 0.25rem 0"
                 padding="0"
@@ -257,7 +257,7 @@ export function TradeAndUnlockPanel() {
                 width="max-content"
                 color={MAIN_COLOR}
               >
-                SKILLS TO TRADE FOR UPGRADE
+                TRADING:
               </BlackHeader>
               <SkillsCardDeck
                 balances={balances}
@@ -268,7 +268,7 @@ export function TradeAndUnlockPanel() {
             </RequiredDepsContainer>
 
             <BlackHeader
-              fontSize="1.8rem"
+              fontSize="2.5rem"
               fontWeight={800}
               margin="1rem 0 -0.3rem 0"
               padding="0"
@@ -276,11 +276,11 @@ export function TradeAndUnlockPanel() {
               letterSpacing={-1}
               color={MAIN_COLOR}
             >
-              SKILL TO UNLOCK + RECEIVE
+              RECEIVING:
             </BlackHeader>
             <Row
               id="skill-image-and-store-button"
-              justifyContent={'space-around'}
+              justifyContent="flex-start"
               marginBottom="12%"
               flexWrap={'wrap'}
               gap="3.5rem 4rem"
@@ -311,9 +311,7 @@ export function TradeAndUnlockPanel() {
               `
                 }}
               />
-              {!isPending && (
-                <TradeAndUnlockActionButton skill={activeSkill} handleClaim={approveBurnAndClaimLockedSkill} />
-              )}
+              {!isPending && <TradeAndUnlockActionButton handleClaim={approveBurnAndClaimLockedSkill} />}
             </Row>
 
             {chainId && (
