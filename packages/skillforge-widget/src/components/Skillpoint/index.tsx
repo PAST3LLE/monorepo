@@ -4,7 +4,7 @@ import { SkillMetadata, SkillRarity } from '@past3lle/forge-web3'
 import { BackgroundPropertyFull, MediaWidths, isImageKitUrl, isImageSrcSet } from '@past3lle/theme'
 import { GenericImageSrcSet } from '@past3lle/types'
 import React, { memo, useMemo } from 'react'
-import styled, { useTheme } from 'styled-components'
+import styled, { css, useTheme } from 'styled-components'
 
 import { Vector } from '../../api/vector'
 import { useQueryImageBlob } from '../../hooks/useQueryImageBlob'
@@ -43,15 +43,15 @@ function SkillpointUnmemoed({
 
   const { isEmptySkill, isCurrentSkillActive, isDependency, isDimSkill } = useMemo(
     () => ({
-      isEmptySkill: (metadata.properties.id as `${string}-${string}`) === 'EMPTY-EMPTY',
-      isCurrentSkillActive: !disabledHighlight && metadata.properties.id === currentlyActive,
-      isDependency: state.activeDependencies.includes(metadata.properties.id),
+      isEmptySkill: (metadata?.properties.id as `${string}-${string}`) === 'EMPTY-EMPTY',
+      isCurrentSkillActive: !disabledHighlight && metadata?.properties.id === currentlyActive,
+      isDependency: state.activeDependencies.includes(metadata?.properties.id),
       get isDimSkill() {
         const otherSkillActive = !this.isDependency && !this.isCurrentSkillActive && !!currentlyActive
         return otherSkillActive || !hasSkill
       }
     }),
-    [hasSkill, currentlyActive, metadata.properties.id, state.activeDependencies, disabledHighlight]
+    [hasSkill, currentlyActive, metadata?.properties.id, state.activeDependencies, disabledHighlight]
   )
 
   const skillpointUri = useMemo((): string => {
@@ -76,7 +76,7 @@ function SkillpointUnmemoed({
     setSkillState((state) => {
       const newState = {
         ...state,
-        active: isCurrentSkillActive ? state.active.slice(1) : [metadata.properties.id, ...state.active]
+        active: isCurrentSkillActive ? state.active.slice(1) : [metadata?.properties.id, ...state.active]
       }
       // light it up
       lightupDependencies && lightupDependencies(newState)
@@ -88,12 +88,12 @@ function SkillpointUnmemoed({
 
   return (
     <StyledSkillpoint
-      id={metadata.properties.id}
-      title={`${metadata.name}_${metadata.properties.id}`}
+      id={metadata?.properties.id}
+      title={`${metadata?.name}_${metadata?.properties.id}`}
       className={className}
       metadataCss={metadata?.attributes?.css}
       yOffset={emptySkillYOffset}
-      rarity={forceRarity || (!isEmptySkill ? metadata.properties?.rarity : undefined)}
+      rarity={forceRarity || (!isEmptySkill ? metadata?.properties?.rarity : undefined)}
       dimSkill={isDimSkill}
       active={isCurrentSkillActive}
       isCollectionSkill={isCollectionSkill}
@@ -122,39 +122,29 @@ function SkillpointUnmemoed({
 }
 
 export const Skillpoint = memo(SkillpointUnmemoed)
-
-const StyledSmartImg = styled(SmartImg)`
+const SHARED_IMAGE_STYLES = css`
   z-index: -1;
   position: absolute;
 
   width: 280%;
   height: 280%;
 
-  top: -100%;
-  left: -76%;
+  top: -98%;
+  left: -74%;
 
   overflow-clip-margin: unset;
   max-inline-size: unset;
   max-block-size: unset;
 
   pointer-events: none;
+
+  filter: blur(5px);
 `
-
+const StyledSmartImg = styled(SmartImg)`
+  ${SHARED_IMAGE_STYLES}
+`
 const StyledImg = styled.img`
-  z-index: -1;
-  position: absolute;
-
-  width: 280%;
-  height: 280%;
-
-  top: -100%;
-  left: -76%;
-
-  overflow-clip-margin: unset;
-  max-inline-size: unset;
-  max-block-size: unset;
-
-  pointer-events: none;
+  ${SHARED_IMAGE_STYLES}
 `
 
 const SkillpointHighlight = memo(() => {

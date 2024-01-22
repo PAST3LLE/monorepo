@@ -72,11 +72,12 @@ const connectors = {
     },
     walletconnect: {
       logo: 'https://raw.githubusercontent.com/WalletConnect/walletconnect-assets/master/Logo/Gradient/Logo.png',
-      customName: 'WalletConnect & more',
+      customName: 'WalletConnect',
       rank: 100,
-      modalNodeId: 'w3m-modal'
+      modalNodeId: 'wcm-modal'
     },
     'ledger-hid': {
+      customName: 'Ledger USB',
       logo: 'https://crypto-central.io/library/uploads/Ledger-Logo-3.png',
       rank: 0
     }

@@ -45,11 +45,14 @@ export const ThemedButton = styled(Button).attrs(() => ({}))<{
   transition: box-shadow 0.1s ease-in-out, transform 0.1s ease-in-out;
 `
 
-export const ThemedButtonExternalLink = styled(ExternalLink)<{
+export const ThemedButtonExternalLink = styled(ExternalLink).attrs({
+  minWidth: 200
+})<{
   disabled?: boolean
   fontSize?: string
   fullWidth?: boolean
 }>`
+  z-index: 1;
   padding: 1rem 2rem;
   flex: 1;
   text-align: center;
@@ -67,9 +70,12 @@ export const ThemedButtonExternalLink = styled(ExternalLink)<{
     `}
 `
 
-export const ThemedButtonActions = styled(ThemedButton)`
+export const ThemedButtonActions = styled(ThemedButton).attrs({
+  minWidth: 200
+})`
   padding: 1rem 2rem;
   flex: 1;
+  z-index: 1;
   text-align: center;
   box-shadow: none;
   border-radius: none;

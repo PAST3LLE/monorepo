@@ -21,7 +21,7 @@ export function SkillActionButton({
     switch (lockStatus) {
       case SkillLockStatus.OWNED:
         return (
-          <Column alignItems={'center'} gap="1rem" maxWidth={'40%'}>
+          <Column alignItems={'center'} gap="1rem" minWidth={200} flex="1">
             {
               <ThemedButtonExternalLink fullWidth href={shopUri?.url || '#'} disabled={!shopUri?.url}>
                 <Text.Black fontSize="1.6rem" fontWeight={300}>

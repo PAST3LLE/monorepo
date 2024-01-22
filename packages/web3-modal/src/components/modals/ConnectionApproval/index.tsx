@@ -95,7 +95,9 @@ const ConnectorLabelAndLogoWrapper = styled(RowCenter)`
 `
 const FooterButtonsWrapper = styled(RowCenter)``
 
-const ConnectionApprovalContainer = styled(ArticleFadeIn).attrs({ as: ColumnCenter })`
+const ConnectionApprovalContainer = styled(ArticleFadeIn).attrs({ as: ColumnCenter }).attrs({
+  marginTop: '2rem'
+})`
   justify-content: center;
   height: 100%;
 
@@ -130,6 +132,8 @@ const ConnectionApprovalContainer = styled(ArticleFadeIn).attrs({ as: ColumnCent
   ${upToExtraSmall`
     flex-flow: row wrap;
     align-items: flex-start;
+    justify-content: center;
+
     > ${ConnectorLabelAndLogoWrapper} {
       margin-top: 2rem;
     }

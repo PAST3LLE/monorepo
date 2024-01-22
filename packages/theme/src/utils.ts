@@ -316,7 +316,7 @@ export function isImageKitUrl(url?: any): url is ImageKitUrl {
   return Boolean(url?.match(/^(https:\/\/)?ik\.imagekit\.io/))
 }
 
-export function urlMapToFullSrcSet(urlMap: GenericImageSrcSet<MediaWidths>['1440']): GenericImageSrcSet<MediaWidths> {
+export function urlMapToFullSrcSet(urlMap: DDPXImageUrlMap): GenericImageSrcSet<MediaWidths> {
   return {
     defaultUrl: urlMap['1x'],
     500: urlMap,
@@ -335,6 +335,21 @@ export function urlToSimpleGenericImageSrcSet(url: string): GenericImageSrcSet<M
     960: { '1x': url },
     1280: { '1x': url },
     1440: { '1x': url }
+  }
+}
+
+export function createImageSrcSet(
+  uris: {
+    [size in MediaWidths]: string
+  } & { default: string }
+): GenericImageSrcSet<MediaWidths> {
+  return {
+    defaultUrl: uris.default,
+    500: { '1x': uris[500], '2x': uris[960], '3x': uris[1440] },
+    720: { '1x': uris[720], '2x': uris[1440], '3x': uris.default },
+    960: { '1x': uris[960], '2x': uris.default, '3x': uris.default },
+    1280: { '1x': uris[1280], '2x': uris.default, '3x': uris.default },
+    1440: { '1x': uris[1440], '2x': uris.default, '3x': uris.default }
   }
 }
 

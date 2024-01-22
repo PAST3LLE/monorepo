@@ -114,7 +114,7 @@ export const StyledSidePanel = styled(ArticleFadeIn)<SidePanelCssProps & { dpiOp
   }
 
   ${CursiveHeader} {
-    font-size: 5rem;
+    font-size: 3.5rem;
   }
 
   ${({ useMediaQueries = DEFAULT_SIDE_PANEL_PROPS.useMediaQueries }) => upToLarge`
