@@ -41,7 +41,6 @@
     "react": ">=16"
   },
   "devDependencies": {
-    "@past3lle/types": "^2.0.0-alpha.3",
     "@types/ua-parser-js": "^0.7.36",
     "react": "^18.2.0"
   },
