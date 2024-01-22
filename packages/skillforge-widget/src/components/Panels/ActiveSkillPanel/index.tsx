@@ -155,7 +155,7 @@ export function ActiveSkillPanel() {
             alignItems="center"
             justifyContent="center"
             height="100%"
-            textShadow={lockStatus !== SkillLockStatus.OWNED ? '1px 1px 1px #000000ba' : '-1px 2px 1px #f13d7d'}
+            textShadow={lockStatus !== SkillLockStatus.OWNED ? '1px 1px 1px #000000ba' : '-1px 2px 1px #f13d7d7d'}
           >
             {lockStatus === SkillLockStatus.UNLOCKABLE_IN_STORE || lockStatus === SkillLockStatus.UNLOCKABLE_IN_TRADE
               ? 'UNLOCKABLE'
