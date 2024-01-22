@@ -132,6 +132,8 @@ const ConnectionApprovalContainer = styled(ArticleFadeIn).attrs({ as: ColumnCent
   ${upToExtraSmall`
     flex-flow: row wrap;
     align-items: flex-start;
+    justify-content: center;
+
     > ${ConnectorLabelAndLogoWrapper} {
       margin-top: 2rem;
     }
