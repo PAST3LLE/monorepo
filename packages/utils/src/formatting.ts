@@ -1,3 +1,5 @@
+import { Address } from '@past3lle/types'
+
 /**
  * @name formatCurrency
  * @param amount number amount to format e.g 1234
@@ -263,15 +265,14 @@ function _getWordParts(
 
   return [firstPart, lastPart]
 }
-
-export function truncateAddress(address: `0x${string}`, opt?: { type: 'long' | 'short' }) {
+export function truncateAddress(address: Address, opt?: { type: 'long' | 'short' }) {
   const options = opt || { type: 'short' }
   const [fp, lp] = _getWordParts(address, { short: [6, 38], long: [10, 32] }, options)
 
   return fp + '...' + lp
 }
 
-export function truncateHash(hash: `0x${string}`, opt?: { type: 'long' | 'short' }) {
+export function truncateHash(hash: Address, opt?: { type: 'long' | 'short' }) {
   const options = opt || { type: 'short' }
   const [fp, lp] = _getWordParts(hash, { short: [6, 62], long: [10, 56] }, options)
 
