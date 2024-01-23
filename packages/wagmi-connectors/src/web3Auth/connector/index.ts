@@ -1,4 +1,3 @@
-import { devDebug } from '@past3lle/utils'
 import type { IAdapter, IProvider, IWeb3Auth, WALLET_ADAPTER_TYPE } from '@web3auth/base'
 import { ADAPTER_STATUS, CHAIN_NAMESPACES, WALLET_ADAPTERS, log } from '@web3auth/base'
 import type { IWeb3AuthModal, ModalConfig, Web3Auth } from '@web3auth/modal'
@@ -51,7 +50,7 @@ export function web3Auth<A extends IAdapter<unknown>>(options: Options<A>) {
       return web3Auth.type
     },
     async activate() {
-      if (this.ready) return devDebug(`[@past3lle/wagmi-connectors] ${this.id} already activated, skipping.`)
+      if (this.ready) return
 
       web3AuthInstance = options.web3AuthInstance
       adapter = options?.adapter
@@ -66,7 +65,7 @@ export function web3Auth<A extends IAdapter<unknown>>(options: Options<A>) {
       // If user has added custom plugins
       if (!!plugins?.length) {
         plugins?.forEach((plugin) => {
-          web3AuthInstance!.addPlugin(plugin)
+          if (!!web3AuthInstance) web3AuthInstance.addPlugin(plugin)
         })
       }
 
@@ -183,7 +182,8 @@ export function web3Auth<A extends IAdapter<unknown>>(options: Options<A>) {
 
     async getChainId(): Promise<number> {
       await this.getProvider()
-      const chainId = await provider!.request<unknown, string>({ method: 'eth_chainId' })
+      if (!provider) throw new ProviderNotFoundError()
+      const chainId = await provider.request<unknown, string>({ method: 'eth_chainId' })
       log.info('chainId', chainId)
       return normalizeChainId(chainId)
     },
