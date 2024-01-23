@@ -19,7 +19,9 @@ const DEFAULT_IGNORE_LIST = [
   // ignore asset folders
   /assets/,
   // ignore dev folders
-  /dev/
+  /dev/,
+  // ignore version files
+  /version/
 ]
 
 /**
