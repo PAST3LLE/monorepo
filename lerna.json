@@ -11,7 +11,8 @@
    "**/*.md",
    "**/perf/**",
    "**/.nvmrc",
-   "**/*.fixture.tsx"
+   "**/*.fixture.tsx",
+   "**/*.yml"
  ],
   "command": {
      "version": {
