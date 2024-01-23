@@ -80,7 +80,6 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.13.8",
-    "@past3lle/types": "^2.0.0-alpha.3",
     "@tanstack/react-query": "^5.17.15",
     "@trivago/prettier-plugin-sort-imports": "^4.0.0",
     "@types/jest": "^25.2.1",
@@ -105,6 +104,7 @@
     "@past3lle/forge-web3": "^2.0.0-alpha.3",
     "@past3lle/hooks": "^2.0.0-alpha.3",
     "@past3lle/theme": "^2.0.0-alpha.3",
+    "@past3lle/types": "^2.0.0-alpha.3",
     "@past3lle/utils": "^2.0.0-alpha.3",
     "jotai": "^2.6.0",
     "polished": "^4.2.2"

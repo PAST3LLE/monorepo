@@ -1,6 +1,6 @@
-import { Address } from '@past3lle/types'
 import { devError } from '@past3lle/utils'
 import { useEffect, useState } from 'react'
+import { Address } from 'viem'
 
 import { useForgeMetadataUriMapReadAtom } from '../state'
 import { ForgeMetadataUpdaterProps } from '../state/Metadata/updaters/MetadataUpdater'

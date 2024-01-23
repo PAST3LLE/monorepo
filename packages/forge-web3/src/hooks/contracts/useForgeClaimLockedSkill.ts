@@ -1,9 +1,8 @@
 import { MergeManager__factory } from '@past3lle/skilltree-contracts'
-import { Address } from '@past3lle/types'
 import { devDebug, devError } from '@past3lle/utils'
 import { useAddPendingTransaction } from '@past3lle/web3-modal'
 import { useCallback } from 'react'
-import { Hash } from 'viem'
+import { Address, Hash } from 'viem'
 import { useSimulateContract, useWriteContract } from 'wagmi'
 
 import { SkillMetadata } from '../../types'

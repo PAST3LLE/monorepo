@@ -54,7 +54,6 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",
-    "@past3lle/types": "^2.0.0-alpha.3",
     "@rollup/plugin-image": "^3.0.1",
     "@types/jest": "^29.2.5",
     "@types/lodash.merge": "^4.6.7",
@@ -82,6 +81,7 @@
   "dependencies": {
     "@past3lle/assets": "^2.0.0-alpha.3",
     "@past3lle/constants": "^2.0.0-alpha.3",
+    "@past3lle/types": "^2.0.0-alpha.3",
     "get-contrast": "3.0.0",
     "lodash.defaultsdeep": "^4.6.1",
     "polished": "^4.2.2",

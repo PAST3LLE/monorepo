@@ -51,6 +51,8 @@ export function ForgeBalancesUpdater({ loadAmount = BigInt(DEFAULT_COLLECTION_LO
         updateForgeBalances(balances)
       }
     }
+    // Can safely ignore "skills" as a dep since metadata depends on it
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chainId, address, balancesBatch, metadata, resetUserBalances, updateForgeBalances])
 
   return null

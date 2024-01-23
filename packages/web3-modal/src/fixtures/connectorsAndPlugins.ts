@@ -2,6 +2,7 @@ import { devWarn } from '@past3lle/utils'
 import { iframeEthereum, ledgerLive, pstlWeb3Auth } from '@past3lle/wagmi-connectors'
 import { ledgerHid } from '@past3lle/wagmi-connectors/ledgerHid'
 import { TorusWalletConnectorPlugin } from '@web3auth/torus-wallet-connector-plugin'
+import { CreateConnectorFn } from 'wagmi'
 import { injected } from 'wagmi/connectors'
 
 import { FORGE_LOGO } from './config'
@@ -32,7 +33,7 @@ export const web3authPlugins = {
   })
 }
 
-export const wagmiConnectors = {
+export const wagmiConnectors: Record<string, CreateConnectorFn> = {
   ledgerLiveModal: ledgerLive({}),
   ledgerHID: ledgerHid({ shimDisconnect: true }),
   ledgerIFrame: iframeEthereum({}),
