@@ -43,7 +43,7 @@ jobs:
           title: 'chore: version packages'
           commit: 'chore: version packages'
           createGithubReleases: ${{ github.ref == 'refs/heads/V2' }}
-          publish: yarn changeset:publish
+          publish: yarn publish:ci
           version: yarn changeset:version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -61,4 +61,4 @@ jobs:
           yarn clean
           yarn changeset version --no-git-tag --snapshot canary
           yarn changeset:prepublish
-          yarn changeset publish --no-git-tag --tag canary
+          yarn publish:ci --dist-tag canary

@@ -41,8 +41,7 @@ jobs:
         run: yarn
 
       - name: Build
-        # only build packages
-        run: yarn build --no-private
+        run: yarn build
 
       - name: Types
         run: yarn check-types
