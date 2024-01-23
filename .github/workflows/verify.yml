@@ -14,7 +14,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install dependencies
-        run: yarn install
+        run: yarn
 
       - name: Lint code
         run: yarn lint
@@ -38,7 +38,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install dependencies
-        run: yarn install
+        run: yarn
 
       - name: Build
         run: yarn build
@@ -59,7 +59,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install dependencies
-        run: yarn install
+        run: yarn
 
       # add ts and viem/wagmi latest versions
       - run: yarn add -D -W typescript@${{ matrix.typescript-version }} viem@${{ matrix.viem-version }} wagmi@${{ matrix.wagmi-version }}
