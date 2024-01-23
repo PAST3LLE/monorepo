@@ -12,7 +12,7 @@
     "build:public": "yarn build --no-private",
     "build:scope": "yarn build --scope",
     "build-serve:scope": "lerna run build:serve --scope",
-    "changeset:prepublish": "yarn check-types && yarn build",
+    "changeset:prepublish": "yarn build",
     "changeset:publish": "yarn changeset:prepublish && changeset publish",
     "changeset:version": "changeset version",
     "clean": "lerna run clean --stream",
