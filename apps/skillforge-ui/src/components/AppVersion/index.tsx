@@ -6,7 +6,7 @@ import MERGE_MANAGER_VERSION from '@past3lle/skilltree-contracts/package.json'
 import React, { useCallback } from 'react'
 import styled from 'styled-components/macro'
 import { Address } from 'viem'
-import { getBlockExplorerURL } from 'web3/utilts'
+import { getBlockExplorerURL } from 'web3/utils'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const packageJson = require('../../../package.json')

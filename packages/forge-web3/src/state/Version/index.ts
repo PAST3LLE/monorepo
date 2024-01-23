@@ -3,7 +3,7 @@ import { atomWithStorage } from 'jotai/utils'
 import { useMemo } from 'react'
 
 import { STATE_STORAGE_KEYS } from '../../constants/state-storage-keys'
-import pkgVersion from '../../version.json'
+import { version as pkgVersion } from '../../version'
 
 interface VersionState {
   version: string | undefined
@@ -21,5 +21,5 @@ export const useForgeVersionAtom = () => useAtom(versionStateAtom)
 export const useForgeVersionUpToDate = () => {
   const [{ version }] = useForgeVersionAtom()
 
-  return useMemo(() => version === pkgVersion?.version, [version])
+  return useMemo(() => version === pkgVersion, [version])
 }
