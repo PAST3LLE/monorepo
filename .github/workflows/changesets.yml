@@ -25,7 +25,7 @@ jobs:
       packages: write
       pull-requests: write
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
 
     steps:
       - name: Clone repository
@@ -42,7 +42,7 @@ jobs:
         with:
           title: 'chore: version packages'
           commit: 'chore: version packages'
-          createGithubReleases: ${{ github.ref == 'refs/heads/main' }}
+          createGithubReleases: ${{ github.ref == 'refs/heads/V2' }}
           publish: yarn changeset:publish
           version: yarn changeset:version
         env:
