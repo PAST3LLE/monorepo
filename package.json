@@ -34,7 +34,7 @@
     "cli-ui": "yarn forge-cli:scope @past3lle/skillforge-ui",
     "changeset:prepublish": "yarn build && yarn check-types",
     "changeset:version": "changeset version",
-    "publish:ci": "lerna publish from-package --yes",
+    "publish:ci": "yarn build && lerna publish from-package --yes",
     "prepare:publish": "node ./configure-references.js",
     "publish:all": "yarn check-types && lerna publish"
   },
