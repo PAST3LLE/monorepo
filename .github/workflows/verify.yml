@@ -31,7 +31,7 @@ jobs:
     name: Build
     needs: lint
     runs-on: ubuntu-latest
-    timeout-minutes: 6
+    timeout-minutes: 8
 
     steps:
       - name: Clone repository
@@ -41,7 +41,8 @@ jobs:
         run: yarn
 
       - name: Build
-        run: yarn build
+        # only build packages
+        run: yarn build --no-private
 
       - name: Types
         run: yarn check-types
