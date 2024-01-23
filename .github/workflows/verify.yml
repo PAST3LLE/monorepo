@@ -38,15 +38,6 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Cache node_modules
-        id: cache-node-modules
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-${{ matrix.node-version }}-nodemodules-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ matrix.node-version }}-nodemodules-
-
       - name: Lint code
         run: yarn lint
 
@@ -77,9 +68,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ matrix.node-version }}-nodemodules-
 
-      - name: Build
-        run: yarn build
-
       - name: Cache generated files
         id: cache-generated-files
         uses: actions/cache@v4
@@ -88,6 +76,9 @@ jobs:
             packages/**/*/dist
             apps/**/*/dist
           key: ${{ runner.os }}-generatedFiles-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Build
+        run: yarn build
 
       - name: Types
         run: yarn check-types
