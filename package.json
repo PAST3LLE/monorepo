@@ -12,9 +12,6 @@
     "build:public": "yarn build --no-private",
     "build:scope": "yarn build --scope",
     "build-serve:scope": "lerna run build:serve --scope",
-    "changeset:prepublish": "yarn build && yarn check-types",
-    "changeset:publish": "yarn changeset:prepublish && changeset publish",
-    "changeset:version": "changeset version",
     "clean": "lerna run clean --stream",
     "lint": "lerna run lint --stream",
     "lint:scope": "yarn lint --scope",
@@ -35,9 +32,12 @@
     "cosmos:scope": "lerna run cosmos --scope",
     "forge-cli:scope": "lerna run forge-cli --scope",
     "cli-ui": "yarn forge-cli:scope @past3lle/skillforge-ui",
-    "pre-publish": "yarn lint && lerna run check-types && yarn build;",
-    "prepare:publish": "node ./configure-references.js && lerna publish",
-    "publish:all": "yarn pre-publish && lerna publish"
+    "changeset:prepublish": "yarn build && yarn check-types",
+    "changeset:version": "changeset version",
+    "changeset:publish": "yarn changeset:prepublish && yarn publish:ci",
+    "publish:ci": "lerna publish from-package --y --no-verify-access",
+    "prepare:publish": "node ./configure-references.js",
+    "publish:all": "yarn check-types && lerna publish"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.18.6",
