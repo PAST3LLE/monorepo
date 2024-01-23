@@ -45,7 +45,6 @@
     "react": "^18.2.0"
   },
   "dependencies": {
-    "@past3lle/types": "^2.0.0-alpha.3",
     "ua-parser-js": "^1.0.32"
   },
   "gitHead": "a2b4f4f3c33ab7e1040da4cecdd300e715d5eeea"
