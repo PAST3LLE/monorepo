@@ -15,7 +15,7 @@ function _getWhitelistTheme(): PstlWeb3AuthParameters['uiConfig'] {
     theme: {
       primary: skillforgeTheme.modes.DEFAULT.mainBgDarker
     },
-    mode: 'DARK',
+    mode: 'dark',
     logoDark: ASSETS_MAP.logos.forge[512],
     logoLight: ASSETS_MAP.logos.forge[512]
   }
