@@ -2,8 +2,8 @@
   "$schema": "https://unpkg.com/@changesets/config@3.0.0/schema.json",
   "access": "public",
   "baseBranch": "V2",
-  "changelog": ["@changesets/changelog-github", { "repo": "wevm/wagmi" }],
+  "changelog": ["@changesets/changelog-github", { "repo": "PAST3LLE/monorepo" }],
   "commit": false,
-  "ignore": ["scripts", "docs", "examples", "coverage", "apps/skills-nft"],
+  "ignore": [],
   "updateInternalDependencies": "patch"
 }
