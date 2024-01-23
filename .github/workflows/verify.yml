@@ -13,28 +13,6 @@ jobs:
       - name: Clone repository
         uses: actions/checkout@v4
 
-      - name: Set output of cache
-        id: yarn-cache
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-
-      - name: Cache yarn cache
-        uses: actions/cache@v4
-        id: cache-yarn-cache
-        with:
-          path: ${{ steps.yarn-cache.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-
-      - name: Cache node_modules
-        id: cache-node-modules
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-${{ matrix.node-version }}-nodemodules-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ matrix.node-version }}-nodemodules-
-
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
@@ -53,29 +31,14 @@ jobs:
     name: Build
     needs: lint
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 6
 
     steps:
       - name: Clone repository
         uses: actions/checkout@v4
 
-      - name: Load dependencies
-        id: cache-node-modules
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-${{ matrix.node-version }}-nodemodules-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ matrix.node-version }}-nodemodules-
-
-      - name: Cache generated files
-        id: cache-generated-files
-        uses: actions/cache@v4
-        with:
-          path: |
-            packages/**/*/dist
-            apps/**/*/dist
-          key: ${{ runner.os }}-generatedFiles-${{ hashFiles('**/yarn.lock') }}
+      - name: Install dependencies
+        run: yarn
 
       - name: Build
         run: yarn build

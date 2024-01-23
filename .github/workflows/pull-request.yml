@@ -16,20 +16,11 @@ jobs:
   size:
     name: Size
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
 
     steps:
       - name: Clone repository
         uses: actions/checkout@v4
-
-      - name: Load dependencies
-        id: cache-node-modules
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-${{ matrix.node-version }}-nodemodules-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ matrix.node-version }}-nodemodules-
 
       - name: Report build size
         uses: preactjs/compressed-size-action@v2
