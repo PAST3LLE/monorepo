@@ -1,4 +1,4 @@
-import { AutoRow, Column, ExternalLink, Row, RowCenter, SpinnerCircle } from '@past3lle/components'
+import { AutoRow, Column, Row, RowCenter, SpinnerCircle, StyledLink } from '@past3lle/components'
 import {
   ForgeMetadataState,
   SkillDependencyObject,
@@ -189,10 +189,10 @@ export function TradeAndUnlockPanel() {
           <Row marginBottom={'2rem'}>
             <MonospaceText color={MAIN_COLOR}>
               Checkout this{' '}
-              <ExternalLink href="#">
+              <StyledLink href="#">
                 {' '}
                 <strong style={{ color: baseTheme.mainBg }}>tutorial</strong>{' '}
-              </ExternalLink>{' '}
+              </StyledLink>{' '}
               to understand skill upgrade and claiming works.
             </MonospaceText>
           </Row>
@@ -318,10 +318,10 @@ export function TradeAndUnlockPanel() {
               <AutoRow>
                 <MonospaceText color={MAIN_COLOR}>
                   View on{' '}
-                  <ExternalLink href={metadataExplorerUri}>
+                  <StyledLink href={metadataExplorerUri}>
                     {' '}
                     <strong style={{ color: baseTheme.mainBg }}>OpenSea</strong>{' '}
-                  </ExternalLink>{' '}
+                  </StyledLink>{' '}
                 </MonospaceText>
               </AutoRow>
             )}
@@ -329,10 +329,10 @@ export function TradeAndUnlockPanel() {
             <Row marginTop={'4rem'}>
               <MonospaceText color={MAIN_COLOR}>
                 Checkout this{' '}
-                <ExternalLink href="#">
+                <StyledLink href="#">
                   {' '}
                   <strong style={{ color: baseTheme.mainBg }}>tutorial</strong>{' '}
-                </ExternalLink>{' '}
+                </StyledLink>{' '}
                 to understand how to claim your skillpoint NFT.
               </MonospaceText>
             </Row>

@@ -1,4 +1,4 @@
-import { Button, ButtonProps, ExternalLink } from '@past3lle/components'
+import { Button, ButtonProps, StyledLink } from '@past3lle/components'
 import { useForgeWindowSizeAtom } from '@past3lle/forge-web3'
 import { MEDIA_WIDTHS, MediaWidths, setCssBackground } from '@past3lle/theme'
 import { GenericImageSrcSet } from '@past3lle/types'
@@ -45,7 +45,7 @@ export const ThemedButton = styled(Button).attrs(() => ({}))<{
   transition: box-shadow 0.1s ease-in-out, transform 0.1s ease-in-out;
 `
 
-export const ThemedButtonExternalLink = styled(ExternalLink).attrs({
+export const ThemedButtonExternalLink = styled(StyledLink).attrs({
   minWidth: 200
 })<{
   disabled?: boolean

@@ -1,4 +1,4 @@
-import { AutoRow, ExternalLink, Row, RowCenter, Text } from '@past3lle/components'
+import { AutoRow, Row, RowCenter, StyledLink, Text } from '@past3lle/components'
 import {
   SkillLockStatus,
   useDeriveSkillState,
@@ -200,10 +200,10 @@ export function ActiveSkillPanel() {
           <AutoRow>
             <MonospaceText color={MAIN_COLOR}>
               View on{' '}
-              <ExternalLink href={metadataExplorerUri}>
+              <StyledLink href={metadataExplorerUri}>
                 {' '}
                 <strong style={{ color: baseTheme.mainBg }}>OpenSea</strong>{' '}
-              </ExternalLink>{' '}
+              </StyledLink>{' '}
             </MonospaceText>
           </AutoRow>
         )}
@@ -211,10 +211,10 @@ export function ActiveSkillPanel() {
           <Row marginTop={'4rem'}>
             <MonospaceText>
               Checkout this{' '}
-              <ExternalLink href={userConfig.contentUrls.claiming}>
+              <StyledLink href={userConfig.contentUrls.claiming}>
                 {' '}
                 <strong style={{ color: baseTheme.mainBg }}>tutorial</strong>{' '}
-              </ExternalLink>{' '}
+              </StyledLink>{' '}
               to understand how to claim skills!
             </MonospaceText>
           </Row>
