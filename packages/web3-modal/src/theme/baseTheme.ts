@@ -256,6 +256,13 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
               }
             }
           }
+        },
+        transactions: {
+          container: {
+            main: {
+              background: 'transparent'
+            }
+          }
         }
       }
     }

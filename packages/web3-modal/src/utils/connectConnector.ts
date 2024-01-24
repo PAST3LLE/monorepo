@@ -34,7 +34,7 @@ type ProviderModalType = 'w3a-modal' | 'w3m-modal' | string | null | undefined
 
 const IS_SERVER = typeof globalThis?.window?.document === 'undefined'
 
-export type ConnectorInfo = { label: string; logo?: string; connected: boolean; isRecommended?: boolean }
+export type ConnectorInfo = { label: string; icon?: string; connected: boolean; isRecommended?: boolean }
 export function runConnectorConnectionLogic(
   connector: ConnectorEnhanced,
   currentConnector: ConnectorEnhanced | undefined,
@@ -166,7 +166,8 @@ function _getProviderInfo(
 
   return {
     label: pendingConnectorOverride?.customName || connector.name,
-    logo: pendingConnectorOverride?.logo || connector?.logo,
+    // TODO: remove logo prop for icon
+    icon: pendingConnectorOverride?.logo || pendingConnectorOverride?.icon || connector?.logo || connector?.icon,
     connected,
     isRecommended: pendingConnectorOverride?.isRecommended
   }

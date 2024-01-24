@@ -169,42 +169,42 @@ export const pstlModalTheme = createTheme({
 
 export const COMMON_CONNECTOR_OVERRIDES = {
   walletconnect: {
-    logo: WALLETCONNECT_LOGO
+    icon: WALLETCONNECT_LOGO
   },
   web3auth: {
     isRecommended: true,
-    logo: WEB3AUTH_LOGO
+    icon: WEB3AUTH_LOGO
   },
   ledger: {
     customName: 'Ledger Live',
-    logo: 'https://crypto-central.io/library/uploads/Ledger-Logo-3.png',
+    icon: 'https://crypto-central.io/library/uploads/Ledger-Logo-3.png',
     modalNodeId: 'ModalWrapper',
     rank: 0,
     isRecommended: true
   },
   'ledger-hid': {
     customName: 'Ledger HID',
-    logo: 'https://crypto-central.io/library/uploads/Ledger-Logo-3.png',
+    icon: 'https://crypto-central.io/library/uploads/Ledger-Logo-3.png',
     rank: 10,
     isRecommended: true
   },
   'coinbase-wallet-injected': {
     customName: 'Coinbase Wallet',
-    logo: 'https://companieslogo.com/img/orig/COIN-a63dbab3.png?t=1648737284',
+    icon: 'https://companieslogo.com/img/orig/COIN-a63dbab3.png?t=1648737284',
     rank: 12,
     downloadUrl: 'https://www.coinbase.com/wallet/downloads',
     isRecommended: true
   },
   'taho-injected': {
     customName: 'Taho',
-    logo: 'https://user-images.githubusercontent.com/95715502/221033622-fb606b37-93f1-485b-9ce5-59b92f756033.png',
+    icon: 'https://user-images.githubusercontent.com/95715502/221033622-fb606b37-93f1-485b-9ce5-59b92f756033.png',
     rank: 11,
     downloadUrl: 'https://taho.xyz/',
     isRecommended: false
   },
   'metamask-injected': {
     customName: 'MetaMask',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/1200px-MetaMask_Fox.svg.png',
+    icon: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/1200px-MetaMask_Fox.svg.png',
     rank: 10,
     downloadUrl: 'https://metamask.io/downloads',
     isRecommended: true

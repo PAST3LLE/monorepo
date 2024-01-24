@@ -33,7 +33,10 @@ export function ConnectionApproval() {
     <ConnectionApprovalContainer>
       <ConnectorLabelAndLogoWrapper>
         <ColumnCenter gap="0.5rem">
-          {!!connectorOverride?.logo && <img src={connectorOverride.logo} />}
+          {/* TODO: remove logo prop for icon */}
+          {!!(connectorOverride?.logo || !!connectorOverride?.icon) && (
+            <img src={connectorOverride?.logo || connectorOverride?.icon} />
+          )}
           <ModalText modal="connection" node="header">
             {connectorOverride?.customName || possibleIds[0]}
           </ModalText>

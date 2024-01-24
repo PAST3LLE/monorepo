@@ -3,7 +3,7 @@ import { devDebug, devError } from '@past3lle/utils'
 import React, { memo } from 'react'
 import { useSwitchChain } from 'wagmi'
 
-import { useGetChainLogoCallback, usePstlWeb3Modal, usePstlWeb3ModalStore, useUserConnectionInfo } from '../../../hooks'
+import { useGetChainIconCallback, usePstlWeb3Modal, usePstlWeb3ModalStore, useUserConnectionInfo } from '../../../hooks'
 import { NoChainLogo } from '../../NoChainLogo'
 import { AccountColumnContainer } from '../AccountModal/styled'
 import { ConnectorOption } from '../ConnectionModal/ConnectorOption'
@@ -34,7 +34,7 @@ function NetworkModalContent() {
     }
   })
 
-  const getChainLogo = useGetChainLogoCallback()
+  const getChainIcon = useGetChainIconCallback()
 
   // We always show list view in tiny screens
   const isExtraSmallScreen = useIsExtraSmallMediaWidth()
@@ -51,7 +51,7 @@ function NetworkModalContent() {
       >
         {supportedChains.map((chain) => {
           if (!switchChainAsync || currentChain?.id === chain.id) return null
-          const chainLogo = getChainLogo(chain.id)
+          const chainIcon = getChainIcon(chain.id)
           return (
             <ConnectorOption
               // keys & ids
@@ -63,7 +63,7 @@ function NetworkModalContent() {
               modalView={modalView}
               connected={false}
               label={chain.name}
-              logo={chainLogo ? <img src={chainLogo} /> : <NoChainLogo />}
+              icon={chainIcon ? <img src={chainIcon} /> : <NoChainLogo />}
             />
           )
         })}

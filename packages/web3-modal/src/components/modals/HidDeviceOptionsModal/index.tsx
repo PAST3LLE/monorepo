@@ -7,7 +7,7 @@ import { useTheme } from 'styled-components'
 import { useSwitchChain } from 'wagmi'
 
 import { KEYS } from '../../../constants/localstorage'
-import { useGetChainLogoCallback, usePstlWeb3Modal, useUserConnectionInfo } from '../../../hooks'
+import { useGetChainIconCallback, usePstlWeb3Modal, useUserConnectionInfo } from '../../../hooks'
 import { LoadingScreen } from '../../LoadingScreen'
 import { NoChainLogo } from '../../NoChainLogo'
 import { AccountText, FooterActionButtonsRow } from '../AccountModal/styled'
@@ -53,7 +53,7 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
 
   const { address, chain, chainId, supportedChains } = useUserConnectionInfo()
 
-  const getChainLogo = useGetChainLogoCallback()
+  const getChainLogo = useGetChainIconCallback()
   const currChainLogo = getChainLogo(chainId)
 
   const { switchChainAsync } = useSwitchChain()

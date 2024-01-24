@@ -18,7 +18,8 @@ export function connectorOverridePropSelector(
   } else {
     return (
       overrides?.[trimAndLowerCase(connectorOrPossibleIds?.id)] ||
-      overrides?.[trimAndLowerCase(connectorOrPossibleIds?.name)]
+      overrides?.[trimAndLowerCase(connectorOrPossibleIds?.name)] ||
+      overrides?.[trimAndLowerCase(connectorOrPossibleIds?.type)]
     )
   }
 }

@@ -305,7 +305,7 @@ const TransactionSearchBar = ({
 )
 
 const NoTxFoundMessage = () => (
-  <SubheaderText fontSize="2em" textAlign="center">
+  <SubheaderText fontSize="2em" textAlign="center" margin="auto">
     :[ no transactions found!
   </SubheaderText>
 )
