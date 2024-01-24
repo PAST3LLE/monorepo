@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.2-alpha.2](https://github.com/PAST3LLE/past3lle-monorepo/compare/@past3lle/web3-modal@2.0.2-alpha.1...@past3lle/web3-modal@2.0.2-alpha.2) (2024-01-24)
+
+
+### Bug Fixes
+
+* **workflows, web3-modal, wagmi-connectors:** update workflow scripts,  web3-modal fixes, wagmi-connector add optional params([#57](https://github.com/PAST3LLE/past3lle-monorepo/issues/57)) ([50c59e3](https://github.com/PAST3LLE/past3lle-monorepo/commit/50c59e37d33887d92c8b52399ddc9a7971e688e1))
+
+
+
+
+
 ## [2.0.2-alpha.1](https://github.com/PAST3LLE/past3lle-monorepo/compare/@past3lle/web3-modal@2.0.2-alpha.0...@past3lle/web3-modal@2.0.2-alpha.1) (2024-01-24)
 
 
