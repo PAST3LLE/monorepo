@@ -32,10 +32,13 @@ jobs:
           run: |
             git config user.name "${{ github.actor }}"
             git config user.email "${{ github.actor}}@users.noreply.github.com"
+            npm config set "//registry.npmjs.org/:_authToken" "$NPM_TOKEN"
 
             if [ ${{ github.base_ref }} = V2-development ]; then
+              git reset --hard origin/V2-development
               npx lerna@6.6.2 version --conventional-commits --conventional-prerelease --preid alpha --yes
             else
+              git reset --hard origin/V2
               npx lerna@6.6.2 version --conventional-commits --conventional-graduate --yes
             fi
 
