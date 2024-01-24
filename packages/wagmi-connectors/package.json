@@ -17,7 +17,7 @@
   "license": "MIT",
   "publishConfig": {
     "access": "public",
-    "registry": "https://registry.npmjs.org"
+    "@past3lle:registry": "https://registry.npmjs.org/@past3lle"
   },
   "type": "module",
   "main": "dist/cjs/index.js",
