@@ -19,6 +19,13 @@ jobs:
             # we need full depth here for lerna tags
             fetch-depth: 0
 
+        - name: Install dependencies
+          run: yarn install --frozen-lockfile
+
+        - name: Install dependencies
+          # skip building apps
+          run: yarn build:packages
+
         - name: "Version and publish"
           env:
             GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
