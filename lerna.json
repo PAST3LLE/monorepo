@@ -1,6 +1,7 @@
 {
   "packages": ["packages/*", "apps/*"],
   "npmClient": "yarn",
+  "useWorkspaces": true,
   "npmClientArgs": ["--no-lockfile"],
   "version": "independent",
   "ignoreChanges": [
@@ -17,7 +18,11 @@
      "version": {
         "ignoreChanges": ["*.md", ".nvmrc"],
         "npmClient": "npm",
-        "message": "chore(release): publish"
+        "message": "chore(release): publish",
+        "conventionalCommits": true,
+        "createRelease": "github",
+        "allowBranch": ["V2", "V2-development"],
+        "changelogPreset": "angular"
      },
      "publish": {
         "npmClient": "npm"
