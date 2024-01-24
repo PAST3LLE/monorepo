@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/assets",
   "sideEffects": false,
-  "version": "2.0.0-alpha.3",
+  "version": "2.0.0",
   "description": "common assets",
   "main": "dist/assets.esm.js",
   "module": "dist/assets.esm.js",
