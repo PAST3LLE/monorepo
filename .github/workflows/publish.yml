@@ -22,7 +22,7 @@ jobs:
         - name: Install dependencies
           run: yarn install --frozen-lockfile
 
-        - name: Build projects
+        - name: Build packages
           # skip building apps
           run: yarn build:packages
 
