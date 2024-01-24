@@ -9,7 +9,7 @@ import { useSwitchChain } from 'wagmi'
 import { KEYS } from '../../../constants/localstorage'
 import { useGetChainIconCallback, usePstlWeb3Modal, useUserConnectionInfo } from '../../../hooks'
 import { LoadingScreen } from '../../LoadingScreen'
-import { NoChainLogo } from '../../NoChainLogo'
+import { MissingChainIcon } from '../../MissingChainIcon'
 import { AccountText, FooterActionButtonsRow } from '../AccountModal/styled'
 import { ConnectorOption } from '../ConnectionModal/ConnectorOption'
 import { ModalButton } from '../common/styled'
@@ -119,7 +119,7 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
                   {currChainLogo ? (
                     <img src={currChainLogo} style={CHAIN_IMAGE_STYLES} />
                   ) : (
-                    <NoChainLogo style={CHAIN_IMAGE_STYLES} />
+                    <MissingChainIcon style={CHAIN_IMAGE_STYLES} />
                   )}
                 </ModalSubHeaderText>
               </AccountText>
@@ -138,7 +138,7 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
                       modalView={'grid'}
                       connected={false}
                       label={sChain.name}
-                      icon={chainLogo ? <img src={chainLogo} /> : <NoChainLogo />}
+                      icon={chainLogo ? <img src={chainLogo} /> : <MissingChainIcon />}
                     />
                   )
                 })}

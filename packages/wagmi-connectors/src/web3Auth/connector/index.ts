@@ -23,7 +23,7 @@ function isIWeb3AuthModal(obj: IWeb3Auth | IWeb3AuthModal): obj is IWeb3AuthModa
 }
 
 web3Auth.type = 'web3Auth'
-export function web3Auth<A extends IAdapter<unknown>>(options: Options<A>) {
+export function web3Auth<A extends IAdapter<unknown>>(options: Options<A> & { name?: string; icon?: string }) {
   let web3AuthInstance: Web3Auth | undefined = undefined
   let provider: IProvider | undefined = undefined
   let adapter: A | undefined = undefined
@@ -44,8 +44,9 @@ export function web3Auth<A extends IAdapter<unknown>>(options: Options<A>) {
 
   return createConnector<IProvider, Properties, StorageItem>((config) => ({
     ready: false,
-    name: 'Web3Auth',
+    name: options?.name || 'Web3Auth',
     id: 'web3auth',
+    icon: options?.icon,
     get type() {
       return web3Auth.type
     },

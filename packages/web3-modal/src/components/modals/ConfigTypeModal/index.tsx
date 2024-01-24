@@ -3,7 +3,7 @@ import { getIsMobile } from '@past3lle/utils'
 import React, { memo, useCallback, useState } from 'react'
 
 import { usePstlWeb3Modal } from '../../../hooks'
-import { NoChainLogo } from '../../NoChainLogo'
+import { MissingChainIcon } from '../../MissingChainIcon'
 import { Callback } from '../ConnectionModal/ConnectorOption'
 import { ModalText } from '../common/styled'
 import { ModalId } from '../common/types'
@@ -95,7 +95,7 @@ function NetworkModalContent() {
                 modalView={modalView}
                 connected={false}
                 label={label}
-                icon={logo ? <img src={logo} /> : <NoChainLogo />}
+                icon={logo ? <img src={logo} /> : <MissingChainIcon />}
               />
             </DiagonalChoiceWrapper>
           )

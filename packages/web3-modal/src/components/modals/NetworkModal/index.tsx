@@ -4,7 +4,7 @@ import React, { memo } from 'react'
 import { useSwitchChain } from 'wagmi'
 
 import { useGetChainIconCallback, usePstlWeb3Modal, usePstlWeb3ModalStore, useUserConnectionInfo } from '../../../hooks'
-import { NoChainLogo } from '../../NoChainLogo'
+import { MissingChainIcon } from '../../MissingChainIcon'
 import { AccountColumnContainer } from '../AccountModal/styled'
 import { ConnectorOption } from '../ConnectionModal/ConnectorOption'
 import { WalletsWrapper } from '../common/styled'
@@ -63,7 +63,7 @@ function NetworkModalContent() {
               modalView={modalView}
               connected={false}
               label={chain.name}
-              icon={chainIcon ? <img src={chainIcon} /> : <NoChainLogo />}
+              icon={chainIcon ? <img src={chainIcon} /> : <MissingChainIcon />}
             />
           )
         })}
