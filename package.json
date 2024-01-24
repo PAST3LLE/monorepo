@@ -33,11 +33,12 @@
     "cosmos:scope": "lerna run cosmos --scope",
     "forge-cli:scope": "lerna run forge-cli --scope",
     "cli-ui": "yarn forge-cli:scope @past3lle/skillforge-ui",
-    "publish:ci": "yarn build && lerna publish from-package --yes",
     "prepare:publish": "node ./configure-references.js",
     "publish:all": "yarn check-types && lerna publish",
-    "version:update": "node scripts/updateVersions.mjs",
-    "version:cc": "lerna version --conventional-commits"
+    "publish:ci": "lerna publish from-git --yes --log-level silly",
+    "version:cc": "lerna version --conventional-commits",
+    "version:ci": "version:cc --yes --log-level silly",
+    "version:update": "node scripts/updateVersions.mjs"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.18.6",
