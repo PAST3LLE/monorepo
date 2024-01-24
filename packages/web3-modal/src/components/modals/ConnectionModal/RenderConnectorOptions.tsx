@@ -3,7 +3,7 @@ import React, { Dispatch, SetStateAction } from 'react'
 import { ProviderMountedMap, PstlWeb3ConnectionModalProps } from '.'
 import { UserOptionsCtrlState } from '../../../controllers/types'
 import { useConnectDisconnect, useUserConnectionInfo } from '../../../hooks'
-import { ConnectFunction, ConnectorEnhanced, FullWeb3ModalStore } from '../../../types'
+import { ConnectFunction, ConnectorEnhanced, ConfigStore } from '../../../types'
 import { runConnectorConnectionLogic } from '../../../utils/connectConnector'
 import { ConnectorOption } from './ConnectorOption'
 
@@ -17,7 +17,7 @@ export type RenderConnectorOptionsProps = Pick<
   userConnectionInfo: ReturnType<typeof useUserConnectionInfo>
   connect: ConnectFunction
   disconnect: ReturnType<typeof useConnectDisconnect>['disconnect']['disconnectAsync']
-  modalsStore: FullWeb3ModalStore['ui']
+  modalsStore: ConfigStore['ui']
   providerMountedState: [ProviderMountedMap, Dispatch<SetStateAction<ProviderMountedMap>>]
   providerLoadingState: [boolean, (loading: boolean) => void]
 }
