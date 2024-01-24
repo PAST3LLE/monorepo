@@ -138,7 +138,7 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
                       modalView={'grid'}
                       connected={false}
                       label={sChain.name}
-                      logo={chainLogo ? <img src={chainLogo} /> : <NoChainLogo />}
+                      icon={chainLogo ? <img src={chainLogo} /> : <NoChainLogo />}
                     />
                   )
                 })}
