@@ -6,12 +6,12 @@ import { useTheme } from 'styled-components'
 
 import { UserOptionsCtrlState } from '../../../controllers/types'
 import { useConnectDisconnect, usePstlWeb3Modal, useUserConnectionInfo } from '../../../hooks'
-import { useConnectedChainAndWalletLogo } from '../../../hooks/misc/useLogos'
+import { useConnectedChainAndWalletIcon } from '../../../hooks/misc/useLogos'
 import { PstlModalTheme } from '../../../theme'
 import { ConnectorEnhanced } from '../../../types'
 import { useDeriveAppType } from '../../../utils/connectors'
 import { BaseModalProps, ModalId } from '../common/types'
-import { WalletChainLogos } from './WalletChainLogos'
+import { WalletChainIcons } from './WalletChainIcons'
 import {
   AccountColumnContainer,
   AccountModalButton,
@@ -61,7 +61,7 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
 
   const isSmallerScreen = useIsSmallMediaWidth()
 
-  const { chain: chainLogo, wallet: walletLogo } = useConnectedChainAndWalletLogo()
+  const { chain: chainLogo, wallet: walletLogo } = useConnectedChainAndWalletIcon()
 
   const [isCopied, onCopy] = useCopyClipboard(1500)
   const onExplorer = useCallback(() => {
@@ -77,14 +77,14 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
   return (
     <AccountColumnContainer width="100%" gap="1rem" overflowY="auto">
       {/* Logos Row */}
-      <WalletChainLogos
+      <WalletChainIcons
         wallet={{
           title: userConnectionInfo?.connector?.name || userConnectionInfo?.connector?.id || 'Unknown provider',
-          logo: walletLogo
+          icon: walletLogo
         }}
         chain={{
           title: userConnectionInfo?.chain?.name || userConnectionInfo?.chain?.id?.toString() || 'Unknown chain',
-          logo: chainLogo
+          icon: chainLogo
         }}
       />
       {/* Address and Balance Row */}

@@ -95,7 +95,7 @@ function NetworkModalContent() {
                 modalView={modalView}
                 connected={false}
                 label={label}
-                logo={logo ? <img src={logo} /> : <NoChainLogo />}
+                icon={logo ? <img src={logo} /> : <NoChainLogo />}
               />
             </DiagonalChoiceWrapper>
           )

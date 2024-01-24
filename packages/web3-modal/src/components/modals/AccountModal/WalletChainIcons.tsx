@@ -6,7 +6,7 @@ import { AccountLogosRow } from './styled'
 
 interface LogoProps {
   title: string
-  logo?: string
+  icon?: string
 }
 interface Props {
   wallet: LogoProps
@@ -19,22 +19,22 @@ const walletLogoStyles = {
   overflow: 'hidden',
   zIndex: 1
 }
-const _getChainLogoStyles = (walletLogo?: string) => ({
+const _getChainIconStyles = (walletLogo?: string) => ({
   marginLeft: walletLogo ? -27.5 : 'auto',
   maxWidth: 110,
   borderRadius: '5rem'
 })
 
-export function WalletChainLogos({ wallet, chain }: Props) {
-  const chainLogoStyles = _getChainLogoStyles(wallet?.logo)
+export function WalletChainIcons({ wallet, chain }: Props) {
+  const chainIconStyles = _getChainIconStyles(wallet?.icon)
   return (
     <AccountLogosRow id={`${ModalId.ACCOUNT}__provider-network-logos`}>
-      {wallet?.logo && <img title={wallet.title} src={wallet.logo} style={walletLogoStyles} />}
+      {wallet?.icon && <img title={wallet.title} src={wallet.icon} style={walletLogoStyles} />}
 
-      {chain?.logo ? (
-        <img src={chain.logo} title={chain.title} style={chainLogoStyles} />
+      {chain?.icon ? (
+        <img src={chain.icon} title={chain.title} style={chainIconStyles} />
       ) : (
-        <NoChainLogo style={{ ...chainLogoStyles, boxSizing: 'content-box', height: 'calc(100% - 2rem)' }} />
+        <NoChainLogo style={{ ...chainIconStyles, boxSizing: 'content-box', height: 'calc(100% - 2rem)' }} />
       )}
     </AccountLogosRow>
   )

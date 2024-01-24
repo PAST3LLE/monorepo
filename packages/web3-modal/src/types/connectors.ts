@@ -12,7 +12,15 @@ export type ConnectorEnhancedExtras = {
    * @name customName Optional. Custom display name.
    */
   customName?: string
+  /**
+   * @name logo
+   * @deprecated Deprecated. Use "icon" prop instead. Logo will be removed in next major release.
+   */
   logo?: string
+  /**
+   * @name icon - icon override
+   */
+  icon?: string
   details?: string
   /**
    * @name customConnect

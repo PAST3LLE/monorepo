@@ -40,7 +40,7 @@ const RenderConnectorOptionsBase =
     // a. User explicitly states to ignore it
     // b. Window object does NOT contain the injected ethereum proxy object
     if ((hideInjectedFromRoot || (!IS_SERVER && !(window as any)?.ethereum)) && connector.id === 'injected') return null
-    const [{ label, logo, connected, isRecommended }, callback] = runConnectorConnectionLogic(
+    const [{ label, icon, connected, isRecommended }, callback] = runConnectorConnectionLogic(
       connector,
       currentConnector,
       {
@@ -76,7 +76,7 @@ const RenderConnectorOptionsBase =
         label={label}
         isRecommended={isRecommended}
         modalView={modalView}
-        logo={<img src={logo} />}
+        icon={<img src={icon} />}
       />
     )
   }
