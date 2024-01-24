@@ -1,3 +1,16 @@
+# Change Log
+
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+## [2.0.2-alpha.0](https://github.com/PAST3LLE/schematics-monorepo/compare/@past3lle/theme@2.0.0-alpha.3...@past3lle/theme@2.0.2-alpha.0) (2024-01-24)
+
+**Note:** Version bump only for package @past3lle/theme
+
+
+
+
+
 # @past3lle/theme
 
 ## 2.0.1
