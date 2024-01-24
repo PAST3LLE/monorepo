@@ -36,11 +36,12 @@ jobs:
             npm config set "//registry.npmjs.org/:_authToken" "$NPM_TOKEN"
 
             if [ ${{ github.base_ref }} != V2 ]; then
+              echo "Prerelease detected. Creating alpha tags"
               git reset --hard origin/${{ github.base_ref }}
-              git checkout ${{ github.head_ref }}
               npx lerna@6.6.2 version --conventional-commits --conventional-prerelease --preid alpha --yes --loglevel silly
-              npx lerna@6.6.2 publish from-git --no-verify-access --dist-tag alpha --yes --loglevel silly
+              git checkout origin/${{ github.head_ref }} && npx lerna@6.6.2 publish from-git --no-verify-access --dist-tag alpha --yes --loglevel silly
             else
+              echo "Production release detected. Creating latest tags"
               git reset --hard origin/V2
               npx lerna@6.6.2 version --conventional-commits --conventional-graduate --yes
               npx lerna@6.6.2 publish from-git --no-verify-access --yes
