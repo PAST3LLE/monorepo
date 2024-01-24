@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { NoChainLogo } from '../../NoChainLogo'
+import { MissingChainIcon } from '../../MissingChainIcon'
 import { ModalId } from '../common/types'
 import { AccountLogosRow } from './styled'
 
@@ -34,7 +34,7 @@ export function WalletChainIcons({ wallet, chain }: Props) {
       {chain?.icon ? (
         <img src={chain.icon} title={chain.title} style={chainIconStyles} />
       ) : (
-        <NoChainLogo style={{ ...chainIconStyles, boxSizing: 'content-box', height: 'calc(100% - 2rem)' }} />
+        <MissingChainIcon style={{ ...chainIconStyles, boxSizing: 'content-box', height: 'calc(100% - 2rem)' }} />
       )}
     </AccountLogosRow>
   )
