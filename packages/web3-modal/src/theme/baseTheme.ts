@@ -95,7 +95,7 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
             },
             active: {
               ...DEFAULT_BUTTON_PROPS,
-              filter: 'invert(1) saturate(1.2)',
+              filter: 'invert(1) saturate(1.22)',
               background: { default: MAIN_COLOURS.success, url: 'none' }
             },
             disabled: {
