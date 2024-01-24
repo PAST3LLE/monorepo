@@ -3,7 +3,7 @@ import React, { Dispatch, SetStateAction } from 'react'
 import { ProviderMountedMap, PstlWeb3ConnectionModalProps } from '.'
 import { UserOptionsCtrlState } from '../../../controllers/types'
 import { useConnectDisconnect, useUserConnectionInfo } from '../../../hooks'
-import { ConnectFunction, ConnectorEnhanced, ConfigStore } from '../../../types'
+import { ConfigStore, ConnectFunction, ConnectorEnhanced } from '../../../types'
 import { runConnectorConnectionLogic } from '../../../utils/connectConnector'
 import { ConnectorOption } from './ConnectorOption'
 
