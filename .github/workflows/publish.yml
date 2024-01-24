@@ -37,7 +37,7 @@ jobs:
 
             if [ ${{ github.base_ref }} = V2-development ]; then
               echo "Prerelease detected. Creating alpha tags"
-              git reset --hard origin/V2-development
+              git reset --hard origin/{{ github.head_ref }}
               npx lerna@6.6.2 publish from-package --conventional-commits --conventional-prerelease --preid alpha --dist-tag alpha --yes --loglevel silly
             else
               echo "Production release detected. Creating latest tags"
