@@ -22,7 +22,7 @@ jobs:
         - name: Install dependencies
           run: yarn install --frozen-lockfile
 
-        - name: Install dependencies
+        - name: Build projects
           # skip building apps
           run: yarn build:packages
 
@@ -34,9 +34,9 @@ jobs:
             git config user.email "${{ github.actor}}@users.noreply.github.com"
 
             if [ ${{ github.base_ref }} = V2-development ]; then
-              npx lerna version --conventional-commits --conventional-prerelease --preid alpha --yes
+              npx lerna@6.6.2 version --conventional-commits --conventional-prerelease --preid alpha --yes
             else
-              npx lerna version --conventional-commits --conventional-graduate --yes
+              npx lerna@6.6.2 version --conventional-commits --conventional-graduate --yes
             fi
 
-            npx lerna publish from-git --yes
+            npx lerna@6.6.2 publish from-git --yes
