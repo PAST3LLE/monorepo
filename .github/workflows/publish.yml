@@ -37,7 +37,7 @@ jobs:
 
             if [ ${{ github.base_ref }} != V2 ]; then
               git reset --hard origin/${{ github.base_ref }}
-              git checkout ${{ github.base_ref }}
+              git checkout ${{ github.head_ref }}
               npx lerna@6.6.2 version --conventional-commits --conventional-prerelease --preid alpha --yes --loglevel silly
               npx lerna@6.6.2 publish from-git --no-verify-access --dist-tag alpha --yes --loglevel silly
             else
