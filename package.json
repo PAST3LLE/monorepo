@@ -36,7 +36,8 @@
     "publish:ci": "yarn build && lerna publish from-package --yes",
     "prepare:publish": "node ./configure-references.js",
     "publish:all": "yarn check-types && lerna publish",
-    "version:update": "node scripts/updateVersions.mjs"
+    "version:update": "node scripts/updateVersions.mjs",
+    "version:cc": "lerna version --conventional-commits"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.18.6",
