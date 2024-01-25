@@ -1,0 +1,52 @@
+name: Publish
+
+on:
+  push:
+    branches: [V1, V1-development]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    
+    steps:
+        - name: "Checkout"
+          uses: actions/checkout@v4
+          with:
+            # we need full depth here for lerna tags
+            fetch-depth: 0
+            clean: true
+
+        - name: Install dependencies
+          run: yarn install --frozen-lockfile
+
+        - name: Build packages
+          # skip building apps
+          run: yarn build:packages
+
+        - name: "Version and publish"
+          env:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          run: |
+            git config user.name "${{ github.actor }}"
+            git config user.email "${{ github.actor}}@users.noreply.github.com"
+            npm config set "//registry.npmjs.org/:_authToken" "$NPM_TOKEN"
+
+            if [ ${{ github.ref == 'refs/heads/V1-development' }} ]; then
+              echo "V1 prerelease detected. Creating alpha-v1 tags"
+
+              git reset --hard origin/V1-development
+              yarn version:ci --conventional-prerelease --preid alpha-v1 --no-push
+              yarn publish:ci --dist-tag alpha-v1
+            else
+              echo "Production V1 release detected. Creating v1 tags"
+
+              git reset --hard origin/V1
+              yarn version:ci --conventional-graduate --no-push
+              yarn publish:ci --dist-tag v1
+            fi
+
