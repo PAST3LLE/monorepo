@@ -34,7 +34,7 @@
   },
   "publishConfig": {
     "access": "public",
-    "@past3lle:registry": "https://registry.npmjs.org/@past3lle"
+    "registry": "https://registry.npmjs.org"
   },
   "dependencies": {
     "@past3lle/utils": "^2.0.2-alpha.1"
