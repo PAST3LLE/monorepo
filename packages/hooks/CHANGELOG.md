@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.1-alpha.2](https://github.com/PAST3LLE/schematics-monorepo/compare/@past3lle/hooks@2.0.1-alpha.1...@past3lle/hooks@2.0.1-alpha.2) (2024-01-25)
+
+
+### Bug Fixes
+
+* **packages:** update registries to standard NPM uri ([78fa2c8](https://github.com/PAST3LLE/schematics-monorepo/commit/78fa2c870d2458a22fa0109a2aa29fde94b1cb64))
+
+
+
+
+
 ## [2.0.1-alpha.1](https://github.com/PAST3LLE/schematics-monorepo/compare/@past3lle/hooks@2.0.1-alpha.0...@past3lle/hooks@2.0.1-alpha.1) (2024-01-25)
 
 **Note:** Version bump only for package @past3lle/hooks
