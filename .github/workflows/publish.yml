@@ -18,6 +18,8 @@ jobs:
           with:
             # we need full depth here for lerna tags
             fetch-depth: 0
+            ref: ${{ github.event.pull_request.head.ref }}
+            clean: true
 
         - name: Install dependencies
           run: yarn install --frozen-lockfile
@@ -34,8 +36,6 @@ jobs:
             git config user.name "${{ github.actor }}"
             git config user.email "${{ github.actor}}@users.noreply.github.com"
             npm config set "//registry.npmjs.org/:_authToken" "$NPM_TOKEN"
-
-            git checkout origin/${{ github.head_ref }}
 
             if [ ${{ github.base_ref }} = V2-development ]; then
               echo "Prerelease detected. Creating alpha tags"
