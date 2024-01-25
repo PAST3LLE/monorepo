@@ -2,7 +2,7 @@ import { Column, InfoCircle, MouseoverTooltip, Row, SpinnerCircle, useSelect } f
 import { useIsExtraSmallMediaWidth } from '@past3lle/hooks'
 import { BLACK_TRANSPARENT, OFF_WHITE, setBestTextColour, transparentize } from '@past3lle/theme'
 import { truncateAddress } from '@past3lle/utils'
-import React, { memo } from 'react'
+import React, { memo, useCallback, useState } from 'react'
 import { useTheme } from 'styled-components'
 import { useSwitchChain } from 'wagmi'
 
@@ -57,6 +57,22 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
   const currChainLogo = getChainLogo(chainId)
 
   const { switchChainAsync } = useSwitchChain()
+  const [networkSwitchLocked, setNetworkSwitchLocked] = useState(false)
+  const handleSwitchChain = useCallback(
+    async (chainId: number) => {
+      setNetworkSwitchLocked(true)
+      switchChainAsync(
+        { chainId },
+        {
+          onSettled: () => {
+            setNetworkSwitchLocked(false)
+          }
+        }
+      )
+    },
+    [switchChainAsync]
+  )
+
   const { connector: hidConnector } = useUserConnectionInfo()
   const { dbPath, path, isCustomPath, ...pathCallbacks } = useHidModalPath(DEFAULT_PATH)
 
@@ -129,12 +145,13 @@ function HidDeviceOptionsContent({ errorOptions }: PstlHidDeviceModalProps) {
                   const chainLogo = getChainLogo(sChain.id)
                   return (
                     <ConnectorOption
+                      disabled={networkSwitchLocked}
                       // keys & ids
                       optionType="chain"
                       optionValue={sChain.id}
                       key={sChain.id}
                       // data props
-                      callback={async () => switchChainAsync({ chainId: sChain.id })}
+                      callback={() => handleSwitchChain(sChain.id)}
                       modalView={'grid'}
                       connected={false}
                       label={sChain.name}

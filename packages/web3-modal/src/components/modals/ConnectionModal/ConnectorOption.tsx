@@ -23,6 +23,7 @@ export type ConnectorOptionProps = Omit<ConnectorInfo, 'icon'> & {
   logoStyleProps?: React.CSSProperties
   buttonProps?: ButtonProps
   icon: ReactNode
+  disabled?: boolean
   callback?: Callback
 }
 function ConnectorOptionBase({
@@ -35,11 +36,19 @@ function ConnectorOptionBase({
   icon,
   connected,
   buttonProps = {},
+  disabled = false,
   callback
 }: ConnectorOptionProps) {
   return (
     <ConnectorOptionWrapper className={className} option-type={optionType} option-value={optionValue} id={id}>
-      <ModalButton modal="connection" node="main" onClick={callback} connected={connected} {...buttonProps}>
+      <ModalButton
+        modal="connection"
+        node="main"
+        disabled={disabled}
+        onClick={callback}
+        connected={connected}
+        {...buttonProps}
+      >
         {icon}
         <RowCenter>{label}</RowCenter>
         {isRecommended && <RecommendedLabel />}
