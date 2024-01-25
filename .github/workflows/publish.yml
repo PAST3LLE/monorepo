@@ -40,13 +40,13 @@ jobs:
               echo "V1 prerelease detected. Creating alpha-v1 tags"
 
               git reset --hard origin/V1-development
-              yarn version:ci --conventional-prerelease --preid alpha-v1 --no-push
+              yarn version:ci --conventional-prerelease --preid alpha-v1
               yarn publish:ci --dist-tag alpha-v1
             else
               echo "Production V1 release detected. Creating v1 tags"
 
               git reset --hard origin/V1
-              yarn version:ci --conventional-graduate --no-push
-              yarn publish:ci --dist-tag v1
+              yarn version:ci --conventional-graduate
+              yarn publish:ci --dist-tag latest-v1
             fi
 
