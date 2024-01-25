@@ -1,6 +1,6 @@
 {
   "name": "@past3lle/web3-modal",
-  "version": "2.0.2-alpha.2",
+  "version": "2.0.2-alpha.3",
   "sideEffects": false,
   "description": "PAST3LLE's Web3 connection modal",
   "keywords": [
@@ -86,11 +86,11 @@
     "wagmi": "^2.x"
   },
   "dependencies": {
-    "@past3lle/components": "^2.0.1-alpha.0",
-    "@past3lle/hooks": "^2.0.1-alpha.0",
-    "@past3lle/theme": "^2.0.2-alpha.0",
-    "@past3lle/utils": "^2.0.2-alpha.0",
-    "@past3lle/wagmi-connectors": "^2.0.2-alpha.1",
+    "@past3lle/components": "^2.0.1-alpha.1",
+    "@past3lle/hooks": "^2.0.1-alpha.1",
+    "@past3lle/theme": "^2.0.2-alpha.1",
+    "@past3lle/utils": "^2.0.2-alpha.1",
+    "@past3lle/wagmi-connectors": "^2.0.2-alpha.2",
     "@safe-global/api-kit": "^2.0.0",
     "date-fns": "^3.0.0",
     "lodash.defaultsdeep": "^4.6.1",
