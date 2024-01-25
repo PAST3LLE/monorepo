@@ -1,16 +1,21 @@
 import { useMemo } from 'react'
 import { Chain, Transport, http } from 'viem'
-import { WagmiProviderProps, createConfig } from 'wagmi'
+import { Connector, WagmiProviderProps, createConfig } from 'wagmi'
 import { walletConnect } from 'wagmi/connectors'
 
 import { Z_INDICES } from '../../constants'
 import type { PstlWeb3ModalProps, ReadonlyChains } from '../../providers/types'
-import { getConnectorsArrayFromConfig } from '../../utils/connectors'
-import { connectorOverridePropSelector } from '../../utils/misc'
+import {
+  getConfigFromAppType,
+  getConnectorsArrayFromConfig,
+  getOverridesFromConnectorConfig,
+  overrideConnectors,
+  setupConnectorFns
+} from '../../utils/connectors'
 
-type CreateWagmiClientProps<chains extends readonly [Chain, ...Chain[]]> = Pick<
-  Required<PstlWeb3ModalProps<chains>>,
-  'options' | 'chains' | 'connectors' | 'appName'
+type CreateWagmiClientProps<chains extends readonly [Chain, ...Chain[]]> = Omit<
+  PstlWeb3ModalProps<chains>,
+  'modals'
 > & {
   walletConnect: PstlWeb3ModalProps<chains>['modals']['walletConnect']
 }
@@ -106,15 +111,18 @@ function createWagmiClient<chains extends readonly [Chain, ...Chain[]]>({
     multiInjectedProviderDiscovery: !!options?.multiInjectedProviderDiscovery
   })
 
-  if ('overrides' in props.connectors) {
-    const overrides = props.connectors?.overrides || {}
-    client._internal.connectors.setState((connectors) =>
-      connectors.map((sConn) => ({
-        ...sConn,
-        ...connectorOverridePropSelector(overrides, [sConn.id, sConn.name, sConn.type])
-      }))
-    )
-  }
+  // check against appType for any derived connectors
+  // Get any specific connector/chain config based on the type of app we're running
+  // e.g are we in a Safe app? If so, run the Safe connector automatically set with the URL shortName chain
+  const derivedConnectors = getConfigFromAppType({ ...props, connectors: client.connectors })
+
+  // check if any are un-setup connectors and set them up
+  const setupConnectors: Connector[] = setupConnectorFns(derivedConnectors.connectors, client)
+  // Set the new connector state
+  client._internal.connectors.setState(setupConnectors)
+
+  // override connectors with user overrides
+  overrideConnectors(setupConnectors, getOverridesFromConnectorConfig(props?.connectors), client)
 
   return client
 }
