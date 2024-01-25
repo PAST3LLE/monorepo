@@ -2,14 +2,14 @@ name: Publish
 
 on:
   pull_request:
-    types: [closed]
+    types: [opened, synchronize, closed]
     branches:
       - V2-development
       - V2
 
 jobs:
   publish:
-    if: github.event.pull_request.merged == true # Condition
+    # if: github.event.pull_request.merged == true # Condition
     runs-on: ubuntu-latest
     
     steps:
@@ -35,15 +35,15 @@ jobs:
             git config user.email "${{ github.actor}}@users.noreply.github.com"
             npm config set "//registry.npmjs.org/:_authToken" "$NPM_TOKEN"
 
+            git checkout origin/${{ github.head_ref }}
+
             if [ ${{ github.base_ref }} = V2-development ]; then
               echo "Prerelease detected. Creating alpha tags"
-              git reset --hard origin/${{ github.head_ref }}
 
               yarn version:ci --conventional-prerelease --preid alpha
               yarn publish:ci --dist-tag alpha
             else
               echo "Production release detected. Creating latest tags"
-              git reset --hard origin/V2
 
               yarn version:ci --conventional-graduate
               yarn publish:ci
