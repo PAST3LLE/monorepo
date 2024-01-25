@@ -19,14 +19,18 @@ interface ModalStyleProps {
 const StyledDialogOverlay = styled(
   ({
     // Pick out the non-dom-compatible custom props
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    zIndex,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    mainBackgroundColor,
+    zIndex: _zidx,
+    mainBackgroundColor: _mgb,
+    overflowX: _ox,
+    overflowY: _oy,
     ...props
-  }: DialogOverlayProps & { zIndex?: number; mainBackgroundColor?: string; id?: string; className?: string }) => (
-    <AnimatedDialogOverlay {...props} />
-  )
+  }: DialogOverlayProps &
+    Pick<ModalProps, 'overflowX' | 'overflowY'> & {
+      zIndex?: number
+      mainBackgroundColor?: string
+      id?: string
+      className?: string
+    }) => <AnimatedDialogOverlay {...props} />
 )<Pick<ModalStyleProps, 'overlayBackgroundColor' | 'zIndex'> & Pick<ModalProps, 'overflowX' | 'overflowY'>>`
   &[data-reach-dialog-overlay] {
     z-index: ${({ zIndex = Z_INDICES.MODALS }) => zIndex};
