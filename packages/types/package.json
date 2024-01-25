@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/types",
   "sideEffects": false,
-  "version": "0.0.26-alpha-v1.0",
+  "version": "0.0.26-alpha-v1.1",
   "description": "common types",
   "main": "dist/types.esm.js",
   "module": "dist/types.esm.js",
