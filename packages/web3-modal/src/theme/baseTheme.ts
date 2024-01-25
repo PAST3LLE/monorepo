@@ -20,16 +20,16 @@ const DEFAULT_FONT_PROPS = {
   family: 'inherit',
   textAlign: 'initial'
 } as const
+
+const DEFAULT_BUTTON_FONT_PROPS = {
+  ...DEFAULT_FONT_PROPS,
+  textTransform: 'uppercase'
+} as const
+
 const DEFAULT_BUTTON_PROPS: DeepRequired<SharedModalTheme>['button']['main'] = {
   filter: 'unset',
   height: 'auto',
-  font: {
-    ...DEFAULT_FONT_PROPS,
-    color: BASE_TEXT_COLOUR,
-    size: '1.5em',
-    weight: 300,
-    textTransform: 'uppercase'
-  },
+  font: DEFAULT_BUTTON_FONT_PROPS,
   background: { default: '#383e3d', url: 'none' },
   border: {
     border: 'unset',
@@ -41,20 +41,6 @@ const DEFAULT_BUTTON_PROPS: DeepRequired<SharedModalTheme>['button']['main'] = {
     filter: 'none'
   },
   hoverAnimations: true
-} as const
-
-const DEFAULT_BUTTON_FONT_PROPS = {
-  ...DEFAULT_FONT_PROPS,
-  color: BASE_TEXT_COLOUR,
-  size: '1em',
-  weight: 300,
-  textTransform: 'uppercase'
-} as const
-
-const DEFAULT_ACCOUNT_BUTTON_BACKGROUND_PROPS = {
-  font: DEFAULT_BUTTON_FONT_PROPS,
-  background: { default: DEFAULT_BUTTON_PROPS.background.default, url: 'none' },
-  border: DEFAULT_BUTTON_PROPS.border
 } as const
 
 const MAIN_COLOURS = {
@@ -195,7 +181,9 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
         connection: {
           button: {
             main: {
-              ...DEFAULT_BUTTON_PROPS,
+              font: {
+                size: '1.2em'
+              },
               height: '90px'
             }
           }
@@ -233,7 +221,6 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
           },
           text: {
             main: {
-              ...DEFAULT_BUTTON_FONT_PROPS,
               size: '1.2em'
             }
           },
@@ -244,12 +231,9 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
           },
           button: {
             alternate: {
-              border: DEFAULT_BUTTON_PROPS.border,
-              font: DEFAULT_BUTTON_FONT_PROPS,
               background: { default: '#7b2727b0', url: 'none' }
             },
             main: {
-              ...DEFAULT_ACCOUNT_BUTTON_BACKGROUND_PROPS,
               background: {
                 default: MAIN_COLOURS.main,
                 url: 'none'

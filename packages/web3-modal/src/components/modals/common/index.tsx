@@ -39,11 +39,11 @@ export function BaseModal({
       width={width}
       maxWidth={maxWidth}
       maxHeight={maxHeight}
+      overflowY="auto"
       // to prevent locking of focus on modal (with web3auth this blocks using their modal e.g)
       tabIndex={undefined}
       bypassConfig={{ scroll: !!state.userOptions.ux?.bypassScrollLock }}
       styleProps={{
-        // w3modal has 89 zindex
         zIndex,
         ...restModalProps.styleProps
       }}

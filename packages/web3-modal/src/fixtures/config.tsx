@@ -38,11 +38,23 @@ export const pstlModalTheme = createTheme({
           success: '#777b48',
           url: BG_LOGO
         },
+        button: {
+          main: {
+            font: {
+              color: 'ghostwhite'
+            }
+          }
+        },
         tooltip: {
           background: '#685985',
           font: {
             color: 'ghostwhite',
             family: 'monospace'
+          }
+        },
+        text: {
+          main: {
+            color: 'ghostwhite'
           }
         },
         font: {
@@ -82,8 +94,6 @@ export const pstlModalTheme = createTheme({
             },
             border: { border: 'none', radius: '1em' },
             font: {
-              color: 'ghostwhite',
-              size: '1em',
               style: 'normal',
               weight: 200,
               letterSpacing: '-1px',
@@ -115,7 +125,6 @@ export const pstlModalTheme = createTheme({
             filter: 'invert(1) hue-rotate(65deg)'
           },
           alternate: {
-            font: ACCOUNT_BUTTON.font,
             filter: 'hue-rotate(-5deg) contrast(1.3)',
             background: { default: 'indianred', url: 'none' }
           }
@@ -126,26 +135,6 @@ export const pstlModalTheme = createTheme({
           },
           alternate: {
             background: '#1113107a'
-          }
-        }
-      },
-      transactions: {
-        button: {
-          main: {
-            background: {
-              default: '#6c5990'
-            },
-            font: {
-              weight: 100
-            }
-          }
-        },
-        text: {
-          main: {
-            weight: 600
-          },
-          small: {
-            weight: 100
           }
         }
       }
