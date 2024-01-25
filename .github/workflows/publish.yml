@@ -2,7 +2,7 @@ name: Publish
 
 on:
   pull_request:
-    types: [opened, synchronize, closed]
+    types: [opened, synchronize, closed, reopened]
     branches:
       - V2-development
       - V2
