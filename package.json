@@ -35,9 +35,9 @@
     "cli-ui": "yarn forge-cli:scope @past3lle/skillforge-ui",
     "prepare:publish": "node ./configure-references.js",
     "publish:all": "yarn check-types && lerna publish",
-    "publish:ci": "lerna publish from-git --yes --log-level silly",
+    "publish:ci": "lerna publish from-git --yes",
     "version:cc": "lerna version --conventional-commits",
-    "version:ci": "yarn version:cc --yes --log-level silly",
+    "version:ci": "yarn version:cc --yes",
     "version:update": "node scripts/updateVersions.mjs"
   },
   "devDependencies": {
