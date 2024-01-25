@@ -46,7 +46,7 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
   })
 
   const appType = useDeriveAppType()
-  const { isUnsupportedChain, showNetworkButton, isNonFrameWalletApp } = useMemo(() => {
+  const { isLedgerHid, isUnsupportedChain, showNetworkButton, isNonFrameWalletApp } = useMemo(() => {
     const isUnsupportedChain = !userConnectionInfo.supportedChains.some(
       (chain) => chain.id === userConnectionInfo.chain?.id
     )
@@ -55,9 +55,10 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
     return {
       isUnsupportedChain,
       showNetworkButton: supportsSeveralChains || isUnsupportedChain,
+      isLedgerHid: userConnectionInfo.connector?.type === 'hid',
       isNonFrameWalletApp: appType === 'DAPP' || appType === 'TEST_FRAMEWORK_IFRAME'
     }
-  }, [appType, userConnectionInfo.chain?.id, userConnectionInfo.supportedChains])
+  }, [appType, userConnectionInfo.chain?.id, userConnectionInfo.connector?.type, userConnectionInfo.supportedChains])
 
   const isSmallerScreen = useIsSmallMediaWidth()
 
@@ -208,6 +209,17 @@ function AccountModalContent({ closeModalOnConnect, errorOptions }: PstlAccountM
                 onClick={() => modalCallbacks.open({ route: 'SelectNetwork', withHistory: true })}
               >
                 Switch Network
+              </AccountModalButton>
+            )}
+            {isLedgerHid && (
+              <AccountModalButton
+                node="main"
+                id={`${ModalId.ACCOUNT}__network-button`}
+                connected={false}
+                padding="0.6rem 1.2rem"
+                onClick={() => modalCallbacks.open({ route: 'HidDeviceOptions', withHistory: true })}
+              >
+                HID Options
               </AccountModalButton>
             )}
             {isNonFrameWalletApp && (

@@ -105,8 +105,12 @@ export const TransactionInput = styled(HidModalTextInput)`
   margin: 0;
 `
 
-// const SAFE_GREEN = '#12ff80'
-// const SAFE_GREEN_LIGHTER = '#76f3b0b0'
+export const TransactionSearchBarContainer = styled(RowCenter)`
+  > svg {
+    stroke: ${(props) => props.theme.modals?.base?.font?.color};
+  }
+`
+
 const SAFE_GREEN_MINTIER = '#4def98'
 
 export function statusToCardBgColor(status: AnyTransactionReceipt['status']) {

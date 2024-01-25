@@ -177,12 +177,11 @@ export type RootModalProps = Omit<
   PstlWeb3ConnectionModalProps,
   'overrides' | 'isOpen' | 'onDismiss' | 'chainIdFromUrl' | 'error'
 >
-type GenericModalConnectorOptions =
-  | {
-      connectors?: CreateConnectorFn[]
-      overrides?: ConnectorOverrides
-    }
-  | CreateConnectorFn[]
+export type ConnectorConfigWithOverrides = {
+  connectors?: CreateConnectorFn[]
+  overrides?: ConnectorOverrides
+}
+type GenericModalConnectorOptions = ConnectorConfigWithOverrides | CreateConnectorFn[]
 export interface Web3ModalProps<chains extends ReadonlyChains = ReadonlyChains> {
   appName: string
   /**
@@ -250,7 +249,7 @@ export interface Web3ModalProps<chains extends ReadonlyChains = ReadonlyChains> 
    * @name frameConnectors
    * @description iFrame connectors. ONLY loaded in iFrame Dapp browsers (e.g LedgerLive Discovery)
    */
-  frameConnectors?: GenericModalConnectorOptions
+  frameConnectors?: CreateConnectorFn[]
   /**
    * @name PstlW3Provider.modals
    * @description Modal props: root [{@link RootModalProps}], walletConnect [{@link Web3ModalConfig<ID>}]. See each for more info.

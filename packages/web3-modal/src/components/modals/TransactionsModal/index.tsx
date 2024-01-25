@@ -30,6 +30,7 @@ import {
   SubheaderText,
   TransactionInput,
   TransactionRow,
+  TransactionSearchBarContainer,
   TransactionTitle,
   TransactionWrapper,
   TransactionsModalWrapper,
@@ -298,10 +299,10 @@ const TransactionSearchBar = ({
   address,
   ...inputProps
 }: React.InputHTMLAttributes<HTMLInputElement> & { address: Address | undefined }) => (
-  <RowCenter gap="1rem" padding="0 1rem">
-    <Search size={30} stroke="ghostwhite" />
+  <TransactionSearchBarContainer gap="1rem" padding="0 1rem">
+    <Search size={30} />
     <TransactionInput {...inputProps} disabled={!address} />
-  </RowCenter>
+  </TransactionSearchBarContainer>
 )
 
 const NoTxFoundMessage = () => (

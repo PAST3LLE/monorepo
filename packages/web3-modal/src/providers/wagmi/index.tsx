@@ -15,10 +15,10 @@ interface WagmiProviderProps extends SmartAutoConnectProps {
 }
 
 export const PstlWagmiProvider = memo(
-  ({ children, wagmiClient, autoConnect }: WagmiProviderProps) => (
+  ({ children, wagmiClient, autoConnect, chainFromUrl }: WagmiProviderProps) => (
     <WagmiProvider config={wagmiClient} reconnectOnMount={!!autoConnect}>
       <QueryClientProvider client={queryClient}>
-        <ConnectedUpdaters /* {...smartConnectProps} */ />
+        <ConnectedUpdaters chainFromUrl={chainFromUrl} autoConnect={autoConnect} />
         {children}
       </QueryClientProvider>
     </WagmiProvider>

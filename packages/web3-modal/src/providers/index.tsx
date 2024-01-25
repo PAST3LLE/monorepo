@@ -4,7 +4,6 @@ import { WagmiProviderProps } from 'wagmi'
 import { PstlWeb3Modal } from '../components'
 import { TransactionsUpdater } from '../controllers/TransactionsCtrl/updater'
 import { useAutoSwitchToChain } from '../hooks/internal/useAutoSwitchToChain'
-import { useConnectorAndChainConfig } from '../hooks/internal/useConnectorAndChainConfig'
 import { PstlWagmiClientOptions, useCreateWagmiClient } from '../hooks/internal/useCreateWagmiClient'
 import { useUpdateUserConfigState } from '../hooks/state/useUpdateUserConfigState'
 import type { PstlWeb3ModalProps } from './types'
@@ -19,11 +18,8 @@ const PstlW3ProvidersBase = <chains extends WagmiProviderProps['config']['chains
   config: PstlWeb3ModalProps<chains>
   autoReconnect?: boolean
 }) => {
-  // Get any specific connector/chain config based on the type of app we're running
-  // e.g are we in a Safe app? If so, run the Safe connector automatically set with the URL shortName chain
-  const connectorAndChainConfig = useConnectorAndChainConfig(config)
   // Set up the providers
-  const wagmiClient = useCreateWagmiClient(connectorAndChainConfig)
+  const wagmiClient = useCreateWagmiClient(config)
   // Get the chainId/network info from the URL, if applicable
   const chainFromUrl = useAutoSwitchToChain(config.chains, config)
   // Setup proxy state with user config

@@ -45,6 +45,11 @@ export const pstlModalTheme = createTheme({
             }
           }
         },
+        input: {
+          font: {
+            color: 'violet'
+          }
+        },
         tooltip: {
           background: '#685985',
           font: {
@@ -137,7 +142,8 @@ export const pstlModalTheme = createTheme({
             background: '#1113107a'
           }
         }
-      }
+      },
+      transactions: {}
     }
   },
   get DARK() {
