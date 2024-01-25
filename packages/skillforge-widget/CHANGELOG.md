@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.2-alpha.6](https://github.com/PAST3LLE/past3lle-monorepo/compare/@past3lle/skillforge-widget@2.0.2-alpha.5...@past3lle/skillforge-widget@2.0.2-alpha.6) (2024-01-25)
+
+**Note:** Version bump only for package @past3lle/skillforge-widget
+
+
+
+
+
 ## [2.0.2-alpha.5](https://github.com/PAST3LLE/past3lle-monorepo/compare/@past3lle/skillforge-widget@2.0.2-alpha.4...@past3lle/skillforge-widget@2.0.2-alpha.5) (2024-01-25)
 
 **Note:** Version bump only for package @past3lle/skillforge-widget

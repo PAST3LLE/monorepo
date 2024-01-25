@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.1.0-alpha.0](https://github.com/PAST3LLE/schematics-monorepo/compare/@past3lle/components@2.0.1-alpha.3...@past3lle/components@2.1.0-alpha.0) (2024-01-25)
+
+
+### Features
+
+* **web3-modal:**  switch network behaviour and hid options in account modal ([#61](https://github.com/PAST3LLE/schematics-monorepo/issues/61)) ([6bc18e3](https://github.com/PAST3LLE/schematics-monorepo/commit/6bc18e30f5a53507655fc5702573219d09569a3c))
+
+
+
+
+
 ## [2.0.1-alpha.3](https://github.com/PAST3LLE/schematics-monorepo/compare/@past3lle/components@2.0.1-alpha.2...@past3lle/components@2.0.1-alpha.3) (2024-01-25)
 
 
