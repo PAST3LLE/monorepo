@@ -40,7 +40,7 @@
   },
   "publishConfig": {
     "access": "public",
-    "registry": "https://registry.npmjs.org"
+    "@past3lle:registry": "https://registry.npmjs.org/@past3lle"
   },
   "jest": {
     "moduleNameMapper": {

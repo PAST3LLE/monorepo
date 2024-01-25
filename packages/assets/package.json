@@ -32,7 +32,7 @@
   },
   "publishConfig": {
     "access": "public",
-    "registry": "https://registry.npmjs.org"
+    "@past3lle:registry": "https://registry.npmjs.org/@past3lle"
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",
