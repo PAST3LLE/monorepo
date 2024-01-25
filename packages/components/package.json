@@ -7,9 +7,10 @@
   "module": "dist/components.esm.js",
   "exports": {
     "require": "./dist/index.js",
-    "import": "./dist/components.esm.js"
+    "import": "./dist/components.esm.js",
+    "types": "./dist/index.d.ts"
   },
-  "typings": "dist/index.d.ts",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],

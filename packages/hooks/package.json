@@ -7,8 +7,10 @@
   "module": "dist/hooks.esm.js",
   "exports": {
     "import": "./dist/hooks.esm.js",
-    "require": "./dist/index.js"
+    "require": "./dist/index.js",
+    "types": "./dist/index.d.ts"
   },
+  "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
     "directory": "packages/hooks",
@@ -16,7 +18,6 @@
   },
   "author": "pastelle",
   "license": "MIT",
-  "typings": "dist/index.d.ts",
   "files": [
     "dist"
   ],

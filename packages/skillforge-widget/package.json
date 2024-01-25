@@ -4,11 +4,12 @@
   "version": "0.4.0",
   "description": "PAST3LLE SKILLFORGE component as an NPM ESM pkg.",
   "main": "dist/esm/index.js",
-  "typings": "dist/types/index.d.ts",
+  "types": "dist/types/index.d.ts",
   "exports": {
     "import": "./dist/esm/index.js",
     "require": "./dist/cjs/index.js",
-    "default": "./dist/esm/index.js"
+    "default": "./dist/esm/index.js",
+    "types": "./dist/types/index.d.ts"
   },
   "files": [
     "dist"
