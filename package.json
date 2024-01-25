@@ -27,6 +27,7 @@
     "serve:scope": "lerna run serve --scope",
     "start:scope": "lerna run start --scope",
     "cosmos:scope": "lerna run cosmos --scope",
+    "check-types": "lerna run check-types --stream",
     "forge-cli:scope": "lerna run forge-cli --scope",
     "cli-ui": "yarn forge-cli:scope @past3lle/skillforge-ui",
     "pre-publish": "yarn lint && lerna run check-types && yarn build;",
