@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.1-alpha.3](https://github.com/PAST3LLE/schematics-monorepo/compare/@past3lle/components@2.0.1-alpha.2...@past3lle/components@2.0.1-alpha.3) (2024-01-25)
+
+
+### Bug Fixes
+
+* **components:** Modal inline overflowY/X props ([4ac31d7](https://github.com/PAST3LLE/schematics-monorepo/commit/4ac31d71142776406c0971f5316d04275f9c28e5))
+
+
+
+
+
 ## [2.0.1-alpha.2](https://github.com/PAST3LLE/schematics-monorepo/compare/@past3lle/components@2.0.1-alpha.1...@past3lle/components@2.0.1-alpha.2) (2024-01-25)
 
 
