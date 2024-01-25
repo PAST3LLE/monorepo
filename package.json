@@ -9,7 +9,7 @@
   "scripts": {
     "analyze:scope": "lerna run analyze --scope",
     "build": "lerna run build --stream",
-    "build:public": "yarn build --no-private",
+    "build:packages": "yarn build --ignore @past3lle/pastellelabs-landing-ui --ignore @past3lle/skillforge-ui",
     "build:scope": "yarn build --scope",
     "build-serve:scope": "lerna run build:serve --scope",
     "lint": "lerna run lint --stream",
@@ -27,11 +27,15 @@
     "serve:scope": "lerna run serve --scope",
     "start:scope": "lerna run start --scope",
     "cosmos:scope": "lerna run cosmos --scope",
+    "check-types": "lerna run check-types --stream",
     "forge-cli:scope": "lerna run forge-cli --scope",
     "cli-ui": "yarn forge-cli:scope @past3lle/skillforge-ui",
     "pre-publish": "yarn lint && lerna run check-types && yarn build;",
     "prepare:publish": "node ./configure-references.js && lerna publish",
-    "publish:all": "yarn pre-publish && lerna publish"
+    "publish:all": "yarn pre-publish && lerna publish",
+    "publish:ci": "lerna publish from-git --yes",
+    "version:cc": "lerna version --conventional-commits",
+    "version:ci": "yarn version:cc --yes"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.18.6",
