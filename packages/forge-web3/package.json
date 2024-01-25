@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/forge-web3",
   "sideEffects": false,
-  "version": "0.4.1-alpha-v1.6",
+  "version": "0.4.1-alpha-v1.7",
   "description": "PAST3LLE FORGE Web3 hooks and tings",
   "types": "dist/types/index.d.ts",
   "main": "dist/esm/index.js",
@@ -47,7 +47,7 @@
     "test:ci": "yarn alt-test --coverage --no-watch --watch=false --watchAll=false --no-watchman --forceExit --detectOpenHandles",
     "pre-commit": "pretty-quick --staged && yarn test:ci && yarn build",
     "lint": "prettier --write './src/**/*' --ignore-path '../../.prettierignore'",
-    "depcheck": "npx npm-check" 
+    "depcheck": "npx npm-check"
   },
   "publishConfig": {
     "access": "public",
