@@ -7,9 +7,10 @@
   "module": "dist/utils.esm.js",
   "exports": {
     "require": "./dist/index.js",
-    "import": "./dist/utils.esm.js"
+    "import": "./dist/utils.esm.js",
+    "types": "./dist/index.d.ts"
   },
-  "typings": "dist/index.d.ts",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],

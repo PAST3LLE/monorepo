@@ -54,7 +54,6 @@
     "./package.json": "./package.json"
   },
   "types": "dist/types/index.d.ts",
-  "typings": "dist/types/index.d.ts",
   "files": [
     "/dist",
     "/IFrameConnector",
