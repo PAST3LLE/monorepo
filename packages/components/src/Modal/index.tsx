@@ -27,7 +27,7 @@ const StyledDialogOverlay = styled(
   }: DialogOverlayProps & { zIndex?: number; mainBackgroundColor?: string; id?: string; className?: string }) => (
     <AnimatedDialogOverlay {...props} />
   )
-)<Pick<ModalStyleProps, 'overlayBackgroundColor' | 'zIndex'>>`
+)<Pick<ModalStyleProps, 'overlayBackgroundColor' | 'zIndex'> & Pick<ModalProps, 'overflowX' | 'overflowY'>>`
   &[data-reach-dialog-overlay] {
     z-index: ${({ zIndex = Z_INDICES.MODALS }) => zIndex};
     position: fixed;
@@ -36,8 +36,9 @@ const StyledDialogOverlay = styled(
     right: 0;
     bottom: 0;
 
-    background-color: transparent;
     overflow: hidden;
+    ${(props) => props.overflowX && `overflow-x: ${props.overflowX};`}
+    ${(props) => props.overflowY && `overflow-y: ${props.overflowY};`}
 
     display: flex;
     align-items: center;
@@ -97,7 +98,6 @@ const StyledDialogContent = styled(
   }
 `
 // re-enable no-unused-vars
-/* eslint-enable @typescript-eslint/no-unused-vars */
 export interface ModalProps {
   // common dom props
   id?: string
@@ -115,6 +115,8 @@ export interface ModalProps {
   maxWidth?: string
   width?: string | number
   margin?: string
+  overflowY?: string
+  overflowX?: string
   // ref
   initialFocusRef?: React.RefObject<any>
   // custom style props
@@ -137,6 +139,8 @@ export function Modal({
   maxHeight = '90vh',
   maxWidth,
   width = 50,
+  overflowX,
+  overflowY,
   styleProps = {},
   initialFocusRef,
   isLargeImageModal = false
@@ -158,6 +162,8 @@ export function Modal({
       unstable_lockFocusAcrossFrames={false}
       dangerouslyBypassFocusLock={bypassConfig?.focus}
       dangerouslyBypassScrollLock={bypassConfig?.scroll}
+      overflowX={overflowX}
+      overflowY={overflowY}
       {...styleProps}
     >
       <StyledDialogContent
