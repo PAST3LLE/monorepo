@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/assets",
   "sideEffects": false,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "common assets",
   "main": "dist/assets.esm.js",
   "module": "dist/assets.esm.js",
@@ -45,5 +45,5 @@
     "tsdx": "^0.14.1",
     "tslib": "^2.4.1"
   },
-  "gitHead": "3badab841d50193ea8e26ac69e94606606622109"
+  "gitHead": "f80cbd54987438e19a2ad9fc9ecd1595279c5671"
 }

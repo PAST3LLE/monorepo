@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/constants",
   "sideEffects": false,
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "common constants",
   "main": "dist/constants.esm.js",
   "module": "dist/constants.esm.js",
@@ -35,7 +35,7 @@
     "registry": "https://registry.npmjs.org"
   },
   "dependencies": {
-    "@past3lle/utils": "^1.0.1"
+    "@past3lle/utils": "^1.0.2"
   },
-  "gitHead": "3badab841d50193ea8e26ac69e94606606622109"
+  "gitHead": "f80cbd54987438e19a2ad9fc9ecd1595279c5671"
 }

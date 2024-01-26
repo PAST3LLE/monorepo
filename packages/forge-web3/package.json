@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/forge-web3",
   "sideEffects": false,
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "PAST3LLE FORGE Web3 hooks and tings",
   "types": "dist/types/index.d.ts",
   "main": "dist/esm/index.js",
@@ -74,9 +74,9 @@
     "styled-components": ">=5"
   },
   "dependencies": {
-    "@past3lle/hooks": "^1.0.1",
+    "@past3lle/hooks": "^1.0.2",
     "@past3lle/skilltree-contracts": "^0.1.1",
-    "@past3lle/utils": "^1.0.1",
+    "@past3lle/utils": "^1.0.2",
     "@past3lle/web3-modal": "^1.6.1",
     "jotai": "^1.13.0"
   },
@@ -102,5 +102,5 @@
       "last 1 safari version"
     ]
   },
-  "gitHead": "3badab841d50193ea8e26ac69e94606606622109"
+  "gitHead": "f80cbd54987438e19a2ad9fc9ecd1595279c5671"
 }
