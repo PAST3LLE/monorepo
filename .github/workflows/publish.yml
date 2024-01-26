@@ -27,7 +27,7 @@ jobs:
           # skip building apps
           run: yarn build:packages
 
-        - name: "Version and publish"
+        - name: "Set npm config"
           env:
             GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -35,18 +35,27 @@ jobs:
             git config user.name "${{ github.actor }}"
             git config user.email "${{ github.actor}}@users.noreply.github.com"
             npm config set "//registry.npmjs.org/:_authToken" "$NPM_TOKEN"
+            
+        - name: "Version and publish PRE-RELEASE V1"
+          if: github.ref_name == 'V1-development'
+          env:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          run: |
+            echo "V1 prerelease detected. Creating alpha-v1 tags"
 
-            if [ ${{ github.ref == 'refs/heads/V1-development' }} ]; then
-              echo "V1 prerelease detected. Creating alpha-v1 tags"
+            git reset --hard origin/V1-development
+            yarn version:ci --conventional-prerelease --preid alpha-v1
+            yarn publish:ci --dist-tag alpha-v1
+            
+        - name: "Version and publish PRODUCTION V1"
+          if: github.ref_name == 'V1'
+          env:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          run: |
+            echo "Production V1 release detected. Creating v1 tags"
 
-              git reset --hard origin/V1-development
-              yarn version:ci --conventional-prerelease --preid alpha-v1
-              yarn publish:ci --dist-tag alpha-v1
-            else
-              echo "Production V1 release detected. Creating v1 tags"
-
-              git reset --hard origin/V1
-              yarn version:ci --conventional-graduate
-              yarn publish:ci --dist-tag latest-v1
-            fi
-
+            git reset --hard origin/V1
+            yarn version:ci --conventional-graduate
+            yarn publish:ci --dist-tag latest-v1
