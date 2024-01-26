@@ -16,6 +16,7 @@ jobs:
         - name: "Checkout"
           uses: actions/checkout@v4
           with:
+            token: ${{secrets.PAT}}
             # we need full depth here for lerna tags
             fetch-depth: 0
             clean: true
