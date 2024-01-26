@@ -27,7 +27,7 @@ jobs:
           # skip building apps
           run: yarn build:packages
 
-        - name: "Version and publish"
+        - name: "Set npm config"
           env:
             GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -35,18 +35,28 @@ jobs:
             git config user.name "${{ github.actor }}"
             git config user.email "${{ github.actor}}@users.noreply.github.com"
             npm config set "//registry.npmjs.org/:_authToken" "$NPM_TOKEN"
+            
+        - name: "Version and publish PRE-RELEASE V2"
+          if: github.ref_name == 'V2-development'
+          env:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          run: |
+            echo "V2 pre-release detected. Creating alpha tags"
 
-            if [ ${{ github.ref == 'refs/heads/V2-development' }} ]; then
-              echo "Prerelease detected. Creating alpha tags"
+            git reset --hard origin/V2-development
+            yarn version:ci --conventional-prerelease --preid alpha
+            yarn publish:ci --dist-tag alpha
+            
+        - name: "Version and publish PRODUCTION V2"
+          if: github.ref_name == 'V2'
+          env:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          run: |
+            echo "Production V2 release detected. Creating latest tags"
 
-              git reset --hard origin/V2-development
-              yarn version:ci --conventional-prerelease --preid alpha
-              yarn publish:ci --dist-tag alpha
-            else
-              echo "Production release detected. Creating latest tags"
-
-              git reset --hard origin/V2
-              yarn version:ci --conventional-graduate
-              yarn publish:ci
-            fi
+            git reset --hard origin/V2
+            yarn version:ci --conventional-graduate
+            yarn publish:ci
 
