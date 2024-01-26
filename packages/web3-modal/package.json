@@ -83,11 +83,11 @@
     "wagmi": "^1.x"
   },
   "dependencies": {
-    "@past3lle/components": "^0.2.1",
-    "@past3lle/hooks": "^0.2.1",
-    "@past3lle/theme": "^0.1.14",
-    "@past3lle/utils": "^0.1.12",
-    "@past3lle/wagmi-connectors": "^0.1.15",
+    "@past3lle/components": "^1.0.0",
+    "@past3lle/hooks": "^1.0.0",
+    "@past3lle/theme": "^1.0.0",
+    "@past3lle/utils": "^1.0.0",
+    "@past3lle/wagmi-connectors": "^1.0.0",
     "@web3modal/ethereum": "^2.7.1",
     "@web3modal/html": "^2.7.1",
     "@web3modal/react": "^2.7.1",
