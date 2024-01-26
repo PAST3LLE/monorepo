@@ -14,7 +14,7 @@ export type Callback =
   | ((options?: any) => Promise<void>)
   | UseConnectReturnType['connectAsync']
   | UseConnectReturnType['connect']
-export type ConnectorOptionProps = Omit<ConnectorInfo, 'logo'> & {
+export type ConnectorOptionProps = Omit<ConnectorInfo, 'icon'> & {
   id?: string
   className?: string
   optionType?: string
@@ -22,7 +22,8 @@ export type ConnectorOptionProps = Omit<ConnectorInfo, 'logo'> & {
   modalView: UserOptionsCtrlState['ui']['walletsView']
   logoStyleProps?: React.CSSProperties
   buttonProps?: ButtonProps
-  logo: ReactNode
+  icon: ReactNode
+  disabled?: boolean
   callback?: Callback
 }
 function ConnectorOptionBase({
@@ -32,15 +33,23 @@ function ConnectorOptionBase({
   optionValue,
   label,
   isRecommended,
-  logo,
+  icon,
   connected,
   buttonProps = {},
+  disabled = false,
   callback
 }: ConnectorOptionProps) {
   return (
     <ConnectorOptionWrapper className={className} option-type={optionType} option-value={optionValue} id={id}>
-      <ModalButton modal="connection" node="main" onClick={callback} connected={connected} {...buttonProps}>
-        {logo}
+      <ModalButton
+        modal="connection"
+        node="main"
+        disabled={disabled}
+        onClick={callback}
+        connected={connected}
+        {...buttonProps}
+      >
+        {icon}
         <RowCenter>{label}</RowCenter>
         {isRecommended && <RecommendedLabel />}
       </ModalButton>

@@ -2,9 +2,9 @@ import { Config, Connector } from 'wagmi'
 import { ConnectData } from 'wagmi/query'
 
 import type { ModalCtrl, UserOptionsCtrl } from '../controllers'
-import { AllWeb3ModalStore } from '../hooks'
+import { Web3ModalsStore } from '../hooks'
 
-export type FullWeb3ModalStore = { ui: AllWeb3ModalStore }
+export type ConfigStore = { ui: Web3ModalsStore }
 
 export type ConnectFunction = (connector: ConnectorEnhanced) => Promise<ConnectData<Config>>
 export type ConnectorEnhancedExtras = {
@@ -12,13 +12,21 @@ export type ConnectorEnhancedExtras = {
    * @name customName Optional. Custom display name.
    */
   customName?: string
+  /**
+   * @name logo
+   * @deprecated Deprecated. Use "icon" prop instead. Logo will be removed in next major release.
+   */
   logo?: string
+  /**
+   * @name icon - icon override
+   */
+  icon?: string
   details?: string
   /**
    * @name customConnect
    * @description - custom connect function to call in place of the default connect. Does not need to extend the default connect but should eventually call it!
    * @param modalsStore - all web3 modals store
-   * @see {AllWeb3ModalStore}
+   * @see {Web3ModalsStore}
    * @returns whatever it needs to return but should connect to the connector!
    */
   customConnect?: <C extends ConnectorEnhanced>(params: {

@@ -1,8 +1,7 @@
 import { Row } from '@past3lle/components'
 import { setBestTextColour } from '@past3lle/theme'
 import { MakeOptional } from '@past3lle/types'
-import { devError } from '@past3lle/utils'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 import { ContainerThemeTypes, ModalText } from './styled'
@@ -41,18 +40,14 @@ const PoweredByLabelContainer = styled(Row).attrs({
 `
 
 export function PoweredByLabel({ modal = 'base', node = 'main' }: MakeOptional<ContainerThemeTypes, 'modal' | 'node'>) {
-  const [logo, setLogo] = useState<{ default?: string } | null>(null)
-
-  useEffect(() => {
-    import('../../../../public/logo-40x.png' as string).then(setLogo).catch(devError)
-  }, [])
-
   return (
     <PoweredByLabelContainer modal={modal} node={node} title="POWERED BY PAST3LLE LABS">
       <ModalText modal="base" node="subHeader" fontSize={10}>
-        {logo?.default && <img src={logo.default} />}
         <a href="https://pastellelabs.com?=referrer=pstl-web3-modal" target="_blank" referrerPolicy="no-referrer">
-          POWERED BY <strong>PAST3LLE LABS</strong>
+          POWERED BY{' '}
+          <ModalText modal="base" node="strong" display="inline-block">
+            PAST3LLE LABS
+          </ModalText>
         </a>
       </ModalText>
     </PoweredByLabelContainer>

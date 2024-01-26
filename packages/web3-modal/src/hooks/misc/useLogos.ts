@@ -4,7 +4,7 @@ import { connectorOverridePropSelector } from '../../utils/misc'
 import { useUserConnectionInfo } from '../api/useConnection'
 import { usePstlWeb3ModalStore } from '../api/usePstlWeb3ModalStore'
 
-export function useConnectedChainAndWalletLogo() {
+export function useConnectedChainAndWalletIcon() {
   const userConnectionInfo = useUserConnectionInfo()
   const {
     state: {
@@ -12,19 +12,20 @@ export function useConnectedChainAndWalletLogo() {
     }
   } = usePstlWeb3ModalStore()
 
-  return useMemo(
-    () => ({
-      wallet: connectorOverridePropSelector(connectors?.overrides, userConnectionInfo.connector)?.logo,
+  return useMemo(() => {
+    const baseProp = connectorOverridePropSelector(connectors?.overrides, userConnectionInfo.connector)
+    return {
+      // TODO: remove this logo for icon in next major
+      wallet: baseProp?.logo || baseProp?.icon,
       chain: userConnectionInfo?.chain?.id ? ui?.chainImages?.[userConnectionInfo.chain.id] : undefined
-    }),
-    [connectors?.overrides, ui?.chainImages, userConnectionInfo.chain?.id, userConnectionInfo.connector]
-  )
+    }
+  }, [connectors?.overrides, ui?.chainImages, userConnectionInfo.chain?.id, userConnectionInfo.connector])
 }
 
-export const useConnectedChainLogo = () => useConnectedChainAndWalletLogo().chain
-export const useConnectedWalletLogo = () => useConnectedChainAndWalletLogo().wallet
+export const useConnectedChainIcon = () => useConnectedChainAndWalletIcon().chain
+export const useConnectedWalletIcon = () => useConnectedChainAndWalletIcon().wallet
 
-export const useGetChainLogoCallback = () => {
+export const useGetChainIconCallback = () => {
   const {
     state: {
       userOptions: { ui }

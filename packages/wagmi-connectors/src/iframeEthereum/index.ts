@@ -36,7 +36,7 @@ export function iframeEthereum(options?: IframeEthereumParameters) {
     [_ in 'iframe-ethereum.connected' | `${string}.disconnected`]: true
   }
   let provider: undefined | IFrameEthereumProvider = undefined
-  let defaultRpcUrl = options?.defaultRpcUrl || DEFAULT_RPC_URL
+  const defaultRpcUrl = options?.defaultRpcUrl || DEFAULT_RPC_URL
   let ready = false
 
   // protected

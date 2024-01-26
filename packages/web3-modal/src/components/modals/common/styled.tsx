@@ -327,7 +327,7 @@ export const WalletsWrapper = styled.div.attrs(
         flex-flow: column;
         padding: 5px;
         justify-content: center;
-        font-size: 0.75em;
+        font-size: 82%;
         
         > ${RecommendedLabelWrapper} {
           position: absolute;

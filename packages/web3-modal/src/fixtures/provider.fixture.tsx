@@ -953,11 +953,12 @@ export default {
             overrides: {
               ...COMMON_CONNECTOR_OVERRIDES,
               'ledger-hid': {
+                ...COMMON_CONNECTOR_OVERRIDES['ledger-hid'],
                 async customConnect({ modalsStore: store, connector, wagmiConnect }) {
                   if (!connector) throw new ConnectorNotFoundError()
                   await wagmiConnect(connector)
 
-                  return store.open({ route: 'HidDeviceOptions' })
+                  return store.open({ route: 'ConnectorConfigType' })
                 }
               }
             }
@@ -987,7 +988,7 @@ export default {
         }}
       >
         <AppWithWagmiAccess />
-        <ModalOpenButton view="ConnectorConfigType" />
+        <Web3Button />
       </PstlW3Providers>
     )
   }),

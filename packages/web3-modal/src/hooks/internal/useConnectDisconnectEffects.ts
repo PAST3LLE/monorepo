@@ -1,4 +1,3 @@
-// import { useWeb3ModalEvents } from '@web3modal/react'
 import { useEffect } from 'react'
 import { UseConnectParameters, UseConnectReturnType, UseDisconnectParameters, UseDisconnectReturnType } from 'wagmi'
 
@@ -24,6 +23,7 @@ export function useConnectDisconnectEffects({
     } else if (connect.mutation?.onError && cStatus === 'error' && cError && cVariables) {
       connect.mutation.onError(cError, cVariables, cContext)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cStatus, cError, cData, cContext, cVariables, connect.mutation?.onSuccess, connect.mutation?.onError])
 
   // On disconnect status updates
@@ -33,5 +33,6 @@ export function useConnectDisconnectEffects({
     } else if (disconnect.mutation?.onError && dStatus === 'error' && dError && dVariables) {
       disconnect.mutation.onError(dError, dVariables, dContext)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dStatus, dError, dData, dContext, dVariables, disconnect.mutation?.onSuccess, disconnect.mutation?.onError])
 }

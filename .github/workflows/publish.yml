@@ -1,0 +1,62 @@
+name: Publish
+
+on:
+  push:
+    branches: [V2,V2-development]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    
+    steps:
+        - name: "Checkout"
+          uses: actions/checkout@v4
+          with:
+            # we need full depth here for lerna tags
+            fetch-depth: 0
+            clean: true
+
+        - name: Install dependencies
+          run: yarn install --frozen-lockfile
+
+        - name: Build packages
+          # skip building apps
+          run: yarn build:packages
+
+        - name: "Set npm config"
+          env:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          run: |
+            git config user.name "${{ github.actor }}"
+            git config user.email "${{ github.actor}}@users.noreply.github.com"
+            npm config set "//registry.npmjs.org/:_authToken" "$NPM_TOKEN"
+            
+        - name: "Version and publish PRE-RELEASE V2"
+          if: github.ref_name == 'V2-development'
+          env:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          run: |
+            echo "V2 pre-release detected. Creating alpha tags"
+
+            git reset --hard origin/V2-development
+            yarn version:ci --conventional-prerelease --preid alpha
+            yarn publish:ci --dist-tag alpha
+            
+        - name: "Version and publish PRODUCTION V2"
+          if: github.ref_name == 'V2'
+          env:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          run: |
+            echo "Production V2 release detected. Creating latest tags"
+
+            git reset --hard origin/V2
+            yarn version:ci --conventional-graduate
+            yarn publish:ci
+

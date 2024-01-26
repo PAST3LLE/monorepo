@@ -25,6 +25,8 @@ type Options = { callback?: (...args: any[]) => void; path?: string; reset?: boo
 
 export type LedgerHidParameters = {
   shimDisconnect?: boolean
+  name?: string
+  icon?: string
   onDeviceConnect?: () => Promise<void>
   onDeviceDisconnect?: () => Promise<void>
 }
@@ -91,7 +93,8 @@ export function ledgerHid(parameters?: LedgerHidParameters) {
   return createConnector<LedgerHQProvider, Properties, StorageItem>((config) => ({
     // provider/chain info
     id: 'ledger-hid',
-    name: 'Ledger HID',
+    name: parameters?.name || 'Ledger HID',
+    icon: parameters?.icon,
     get url() {
       return url
     },

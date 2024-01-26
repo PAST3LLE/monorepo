@@ -33,7 +33,10 @@ export function ConnectionApproval() {
     <ConnectionApprovalContainer>
       <ConnectorLabelAndLogoWrapper>
         <ColumnCenter gap="0.5rem">
-          {!!connectorOverride?.logo && <img src={connectorOverride.logo} />}
+          {/* TODO: remove logo prop for icon */}
+          {!!(connectorOverride?.logo || !!connectorOverride?.icon) && (
+            <img src={connectorOverride?.logo || connectorOverride?.icon} />
+          )}
           <ModalText modal="connection" node="header">
             {connectorOverride?.customName || possibleIds[0]}
           </ModalText>
@@ -80,8 +83,8 @@ export function ConnectionApproval() {
 const ConnectorLabelAndLogoWrapper = styled(RowCenter)`
   > ${ColumnCenter}:last-child {
     > ${ModalText} {
-      text-wrap: balance;
-      text-align: center;
+      text-wrap: pretty;
+      text-align: left;
     }
   }
 
@@ -96,7 +99,7 @@ const ConnectorLabelAndLogoWrapper = styled(RowCenter)`
 const FooterButtonsWrapper = styled(RowCenter)``
 
 const ConnectionApprovalContainer = styled(ArticleFadeIn).attrs({ as: ColumnCenter }).attrs({
-  marginTop: '2rem'
+  marginTop: '12%'
 })`
   justify-content: center;
   height: 100%;
@@ -171,12 +174,12 @@ function _getErrorMessage(error?: ConnectionError) {
   switch (error?.code) {
     case -32002:
       return {
-        title: 'Error! Connection already pending',
+        title: 'Connection already pending',
         description: 'Previous wallet connection pending. Check your wallet for a connection prompt.'
       }
     case 4001:
       return {
-        title: 'Error! User rejected connection',
+        title: 'User rejected connection',
         description: 'User rejection detected. Either retry below or head back to wallets.'
       }
     default:

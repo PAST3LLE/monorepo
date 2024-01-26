@@ -1,12 +1,10 @@
 import { usePstlWeb3Modal } from './usePstlWeb3Modal'
 
-export type AllWeb3ModalStore = {
+export type Web3ModalsStore = {
   root: ReturnType<typeof usePstlWeb3Modal>
-  // walletConnect: ReturnType<typeof useWeb3Modal>
 }
-export function useAllWeb3Modals(): AllWeb3ModalStore {
+export function useAllWeb3Modals(): Web3ModalsStore {
   return {
     root: usePstlWeb3Modal()
-    // walletConnect: useWeb3Modal()
   }
 }

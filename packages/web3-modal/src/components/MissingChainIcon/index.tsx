@@ -33,7 +33,7 @@ const Svg = styled.svg.attrs({
   }
 `
 
-export const NoChainLogo = ({ style }: Props) => (
+export const MissingChainIcon = ({ style }: Props) => (
   <Svg style={style}>
     <g>
       <g>

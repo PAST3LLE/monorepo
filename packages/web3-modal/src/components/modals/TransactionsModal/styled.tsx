@@ -15,7 +15,7 @@ import { ReplacementReason } from 'viem'
 
 import { AnyTransactionReceipt } from '../../../controllers/TransactionsCtrl/types'
 import { HidModalTextInput } from '../HidDeviceOptionsModal/styleds'
-import { ModalText, WalletsWrapper } from '../common/styled'
+import { ModalContainer, ModalText, WalletsWrapper } from '../common/styled'
 
 export const SafeConfirmationSquareGradient = styled(Column)<{ borderColor?: string; gradientColor?: string }>`
   background: linear-gradient(250deg, black 60%, ${(props) => props.gradientColor});
@@ -59,15 +59,16 @@ export const TransactionWrapper = styled(Column)<{ background?: string }>`
   line-height: 1;
 
   padding: 1rem;
+  width: 100%;
 
   border-radius: 10px;
 
   gap: 0;
 `
-export const TransactionsModalWrapper = styled(Column)`
+export const TransactionsModalWrapper = styled(ModalContainer).attrs({ modal: 'transactions', node: 'main' })`
   gap: 0.4rem;
   overflow-y: auto;
-  padding: 0 0.7rem;
+  padding: 0.7rem;
 
   a {
     color: ${(props) => props.theme.modals?.base?.title?.font?.color};
@@ -104,8 +105,12 @@ export const TransactionInput = styled(HidModalTextInput)`
   margin: 0;
 `
 
-// const SAFE_GREEN = '#12ff80'
-// const SAFE_GREEN_LIGHTER = '#76f3b0b0'
+export const TransactionSearchBarContainer = styled(RowCenter)`
+  > svg {
+    stroke: ${(props) => props.theme.modals?.base?.font?.color};
+  }
+`
+
 const SAFE_GREEN_MINTIER = '#4def98'
 
 export function statusToCardBgColor(status: AnyTransactionReceipt['status']) {
