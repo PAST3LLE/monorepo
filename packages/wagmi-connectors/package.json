@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/wagmi-connectors",
   "sideEffects": false,
-  "version": "0.1.15-alpha-v1.2",
+  "version": "0.1.15",
   "description": "Past3lle enhanced v1 wagmi connectors",
   "keywords": [
     "web3",
