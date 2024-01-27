@@ -39,9 +39,12 @@
     "version:cc": "lerna version --conventional-commits",
     "version:ci": "yarn version:cc --yes",
     "version:update": "node scripts/updateVersions.mjs",
-    "docs:dev": "vocs dev", 
-    "docs:build": "vocs build", 
-    "docs:preview": "vocs preview"
+    "docs:dev": "npx lerna run dev --scope @past3lle/docs",
+    "docs:build": "npx lerna run build --scope @past3lle/docs",
+    "docs:preview": "npx lerna run preview --scope @past3lle/docs"
+  },
+  "resolutions": {
+    "**/*/yaml": "2.3.4"
   },
   "resolutions": {
     "@tanstack/react-query": "^5.x",
@@ -68,8 +71,7 @@
     "lerna": "^6.4.1",
     "prettier": "^2.8.3",
     "ts-jest": "^29.0.5",
-    "typescript": "^5.2.2",
-    "vocs": "^1.0.0-alpha.30"
+    "typescript": "^5.2.2"
   },
   "dependencies": {},
   "workspaces": [

@@ -1,0 +1,37 @@
+{
+  "name": "@past3lle/docs",
+  "version": "0.0.1",
+  "description": "PAST3LLE docs UI",
+  "private": true,
+  "keywords": [
+    "docs",
+    "past3lle",
+    "PASTELLE",
+    "documentation",
+    "web3"
+  ],
+  "author": "w3stside <david.sato64@gmail.com>",
+  "homepage": "https://github.com/past3lle/monorepo/tree/main/apps/docs#readme",
+  "license": "MIT",
+  "main": "pages/index.mdx",
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PAST3LLE/past3lle-monorepo.git"
+  },
+  "scripts": {
+    "dev": "vocs dev",
+    "build": "vocs build",
+    "preview": "vocs preview"
+  },
+  "devDependencies": {
+    "vocs": "^1.0.0-alpha.30",
+    "vite": "5.0.11",
+    "yaml": "2.3.4"
+  },
+  "bugs": {
+    "url": "https://github.com/PAST3LLE/past3lle-monorepo/issues"
+  }
+}
