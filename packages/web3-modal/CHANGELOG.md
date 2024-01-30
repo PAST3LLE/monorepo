@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.2.0-alpha.0](https://github.com/PAST3LLE/past3lle-monorepo/compare/@past3lle/web3-modal@2.1.0...@past3lle/web3-modal@2.2.0-alpha.0) (2024-01-30)
+
+
+### Features
+
+* **web3-modal:** default fallback transports + deprecate options ([#65](https://github.com/PAST3LLE/past3lle-monorepo/issues/65)) ([725222a](https://github.com/PAST3LLE/past3lle-monorepo/commit/725222a9418a5b3d0ed912d8faaa61274f490cd0))
+
+
+
+
+
 # [2.1.0](https://github.com/PAST3LLE/past3lle-monorepo/compare/@past3lle/web3-modal@2.0.0-alpha.12...@past3lle/web3-modal@2.1.0) (2024-01-26)
 
 
