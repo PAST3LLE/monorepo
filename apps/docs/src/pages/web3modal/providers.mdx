@@ -1,0 +1,94 @@
+---
+title: 'PstlW3Providers'
+description: 'The PstlW3Providers component manages configuration for all hooks using React Context.'
+---
+
+# PstlW3Providers
+
+The `PstlW3Providers` component manages configuration for all Web3Modal data and hooks using [React Context](https://reactjs.org/docs/context.html).
+
+```ts
+import { PstlW3Providers } from '@past3lle/web3-modal'
+```
+
+## Usage
+
+```tsx
+import { PstlW3Providers } from '@past3lle/web3-modal'
+import { CONFIG } from 'my-path-to-config'
+
+function App() {
+  return (
+    <PstlW3Providers config={CONFIG}>
+      <YourRoutes />
+    </PstlW3Providers>
+  )
+}
+```
+
+## Configuration
+
+### config
+
+A Web3Modal [`config`](/web3modal/config) instance that consists of configuration options.
+
+##### Simple example setup with chains, connectors & overrides
+```tsx {8-12,16}
+import { Web3ModalProps } from '@past3lle/web3-modal'
+import { mainnet, goerli } from 'wagmi/chains'
+import { injected } from 'wagmi/connectors'
+
+// check context. not necessary, just useful.
+const IS_SERVER = typeof globalThis?.window === 'undefined'
+
+// set available app chains.
+// use "as const" to mark chains as deep readonly and immutable (inferred as narrowly as possible)
+// i.e hovering over chains won't be Chain[] but it will show all the properties of the frozen object.
+// this is SUPER useful for knowing exactly what types are here and what the overall config is.
+const chains = [mainnet, goerli] as const
+
+// a basic config example
+const config = {
+  chains,
+  connectors: {
+    connectors: [
+      injected({
+        target() {
+          return {
+            name: 'SomeInjectedWallet',
+            id: 'siw',
+            icon: 'https://url-to-icon',
+            // naive implementation, should probably error handle and check more thoroughly.
+            provider: !IS_SERVER && window.ethereum
+          }
+        }
+      })
+    ],
+    // overrides allow you to have more fine-tuned control over connectors
+    overrides: {
+      siw: {
+        // Pass a UI custom name!
+        customName: 'SPECIAL WALLET T_T',
+        // Custom connection fn called on selection
+        async customConnect({ modalsStore, connector, wagmiConnect }) {
+          if (!connector) throw new Error('Uh oh!')
+          // default wagmi connect fn passed later on in app. available here.
+          await wagmiConnect(connector)
+
+          // modal store used later on. available here to open certain modals.
+          return modalsStore.open({ route: 'HidDeviceOptions' })
+        }
+      }
+    }
+  }
+} as const satisfies Web3ModalProps<typeof chains>
+```
+:::tip
+Note the
+```ts
+satisfies Web3ModalProps<typeof chains>
+``` 
+This allows you to have a frozen, narrowly typed config object. 
+
+Chain aware types throughout the rest of the config will now be exactly aware of which chains are allowed.
+:::
