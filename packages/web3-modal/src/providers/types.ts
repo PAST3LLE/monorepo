@@ -1,10 +1,9 @@
-import { Chain, Transport } from 'viem'
-import { CreateConnectorFn, Config as WagmiClientConfig, WagmiProviderProps } from 'wagmi'
+import { Chain } from 'viem'
+import { Config, CreateConfigParameters, CreateConnectorFn, WagmiProviderProps } from 'wagmi'
 import { walletConnect } from 'wagmi/connectors'
 
 import { PstlWeb3ConnectionModalProps } from '../components/modals/ConnectionModal'
 import { UserOptionsTransactionsCallbacks } from '../controllers/types'
-import { PstlWagmiClientOptions } from '../hooks/internal/useCreateWagmiClient'
 import { ConnectorEnhanced, ConnectorOverrides } from '../types'
 import { AppType } from '../utils/connectors'
 
@@ -101,78 +100,64 @@ export type PstlWeb3ModalCallbacks = {
   transactions?: UserOptionsTransactionsCallbacks
 }
 
-export interface WagmiClientConfigEnhanced extends Omit<WagmiClientConfig, 'connectors'> {
+export type WagmiClientConfigEnhanced<chains extends ReadonlyChains = ReadonlyChains> = Omit<
+  CreateConfigParameters<chains>,
+  'client' | 'connectors' | 'chains'
+> & {
   connectors?: (() => ConnectorEnhanced[]) | ConnectorEnhanced[]
 }
 
-export type WagmiClientOptions<chains extends ReadonlyChains = ReadonlyChains> = Partial<
-  Pick<WagmiClientConfigEnhanced, 'getClient'>
-> & {
-  /**
-   * @name transports
-   * @description Optional. Record<{@link Chain.id}, {@link Transport}>
-   * @see https://viem.sh/docs/clients/transports/http.html}
-   */
-  transports?: Record<chains[number]['id'], Transport>
-  pollingInterval?: number
+export type WagmiClientOptions<chains extends ReadonlyChains = ReadonlyChains> = WagmiClientConfigEnhanced<chains> & {
   /**
    * @name walletConnect
    * @description walletConnect connector config
    * see {@link WalletConnectConfig}
    */
   walletConnect: WalletConnectConfig
-  /**
-   * @name multiInjectedProviderDiscovery
-   * @description show/hide detected injected providers.
-   * @tip use false if you're adding your own "injected" type providers e.g metamask and dont want duplicates from detection.
-   */
-  multiInjectedProviderDiscovery?: boolean
 }
 
-export type PstlWeb3ModalOptions<chains extends ReadonlyChains = ReadonlyChains> = Omit<
-  WagmiClientOptions<chains> & {
+export type PstlWeb3ModalOptions<chains extends ReadonlyChains = ReadonlyChains> = WagmiClientOptions<chains> & {
+  /**
+   * @name autoConnect
+   * @description Boolean. Whether or not to attempt re-connect to last connected connector.
+   * @default false
+   */
+  autoConnect?: boolean
+  /**
+   * @name escapeHatches
+   * @description Collection of escape hatch override flags/properties
+   */
+  escapeHatches?: {
     /**
-     * @name autoConnect
-     * @description Boolean. Whether or not to attempt re-connect to last connected connector.
-     * @default false
+     * @name appType
+     * @description appType is detected and set automtically elsewhere. Escape hatch
      */
-    autoConnect?: boolean
+    appType?: AppType
+  }
+  /**
+   * @name closeModalOnKeys
+   * @description List of string key names to listen for and close modal
+   */
+  closeModalOnKeys?: string[]
+  /**
+   * @name expiremental
+   * @description Map of experimental feature flags
+   */
+  experimental?: {
     /**
-     * @name escapeHatches
-     * @description Collection of escape hatch override flags/properties
+     * @name hidDeviceOptions
+     * @description HID-specific device options
      */
-    escapeHatches?: {
+    hidDeviceOptions?: {
       /**
-       * @name appType
-       * @description appType is detected and set automtically elsewhere. Escape hatch
+       * @name enableConfigurationModal
+       * @description enable the HID device configuration modal - i.e choose derivation path
        */
-      appType?: AppType
+      enableConfigurationModal?: boolean
     }
-    /**
-     * @name closeModalOnKeys
-     * @description List of string key names to listen for and close modal
-     */
-    closeModalOnKeys?: string[]
-    /**
-     * @name expiremental
-     * @description Map of experimental feature flags
-     */
-    experimental?: {
-      /**
-       * @name hidDeviceOptions
-       * @description HID-specific device options
-       */
-      hidDeviceOptions?: {
-        /**
-         * @name enableConfigurationModal
-         * @description enable the HID device configuration modal - i.e choose derivation path
-         */
-        enableConfigurationModal?: boolean
-      }
-    }
-  },
-  'publicClient' | 'publicClients' | 'connectors'
->
+  }
+}
+
 export type RootModalProps = Omit<
   PstlWeb3ConnectionModalProps,
   'overrides' | 'isOpen' | 'onDismiss' | 'chainIdFromUrl' | 'error'
@@ -182,6 +167,14 @@ export type ConnectorConfigWithOverrides = {
   overrides?: ConnectorOverrides
 }
 type GenericModalConnectorOptions = ConnectorConfigWithOverrides | CreateConnectorFn[]
+export type PstlWagmiClientOptions<chains extends ReadonlyChains, client extends Config = Config> = {
+  client?: client
+  /**
+   * @name options
+   * @deprecated Will be deprecated in next major version. Use {@link PstlWeb3ModalProps.options} instead.
+   */
+  options?: WagmiClientConfigEnhanced<chains>
+}
 export interface Web3ModalProps<chains extends ReadonlyChains = ReadonlyChains> {
   appName: string
   /**
@@ -321,4 +314,4 @@ export type PstlWeb3ProviderProps<chains extends ReadonlyChains = ReadonlyChains
 export type WithChainIdFromUrl = {
   chainIdFromUrl: number | undefined
 }
-export type WithCloseModalOnKeys = Pick<PstlWeb3ModalOptions<any>, 'closeModalOnKeys'>
+export type WithCloseModalOnKeys = Pick<PstlWeb3ModalOptions, 'closeModalOnKeys'>

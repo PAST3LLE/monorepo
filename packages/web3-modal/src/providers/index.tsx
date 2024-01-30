@@ -4,9 +4,9 @@ import { WagmiProviderProps } from 'wagmi'
 import { PstlWeb3Modal } from '../components'
 import { TransactionsUpdater } from '../controllers/TransactionsCtrl/updater'
 import { useAutoSwitchToChain } from '../hooks/internal/useAutoSwitchToChain'
-import { PstlWagmiClientOptions, useCreateWagmiClient } from '../hooks/internal/useCreateWagmiClient'
+import { useCreateWagmiClient } from '../hooks/internal/useCreateWagmiClient'
 import { useUpdateUserConfigState } from '../hooks/state/useUpdateUserConfigState'
-import type { PstlWeb3ModalProps } from './types'
+import type { PstlWagmiClientOptions, PstlWeb3ModalProps } from './types'
 import { PstlWagmiProvider } from './wagmi'
 
 const PstlW3ProvidersBase = <chains extends WagmiProviderProps['config']['chains']>({
