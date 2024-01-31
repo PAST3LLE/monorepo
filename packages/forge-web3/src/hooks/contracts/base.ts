@@ -1,14 +1,18 @@
 import { devError } from '@past3lle/utils'
 import { useCallback, useMemo } from 'react'
-import { Abi, ContractFunctionArgs, SimulateContractParameters } from 'viem'
+import { Abi, Address, ContractFunctionArgs, PublicClient, SimulateContractParameters, WalletClient } from 'viem'
 import { useAccount, usePublicClient, useWalletClient } from 'wagmi'
 
 import { SkillMetadata } from '../../types'
 import { dedupeList, formatSkillMetadataToArgs } from '../../utils'
 
 export type WriteContractCallbackParams<A extends Abi | readonly []> = ContractFunctionArgs<A>
-
-export function usePrepareContract() {
+type PrepareContractReturnType = {
+  account: Address | undefined
+  client: WalletClient | undefined
+  publicClient: PublicClient | undefined
+}
+export function usePrepareContract(): PrepareContractReturnType {
   const { address: account } = useAccount()
   const { data: client } = useWalletClient()
   const publicClient = usePublicClient()
@@ -22,6 +26,7 @@ export function useContractReadCallback() {
   return useCallback(
     async (args: SimulateContractParameters) => {
       try {
+        if (!publicClient) throw new Error('Missing public client!')
         return publicClient.simulateContract(args)
       } catch (error: any) {
         devError('[@past3lle/forge-web3::useContractCallback] Error!', error?.message)
