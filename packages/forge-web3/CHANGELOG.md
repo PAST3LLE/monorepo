@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.1-alpha.1](https://github.com/PAST3LLE/monorepo/compare/@past3lle/forge-web3@2.1.1-alpha.0...@past3lle/forge-web3@2.1.1-alpha.1) (2024-01-31)
+
+
+### Bug Fixes
+
+* **skillforge-ui,forge-web3,skillforge-widget,wagmi-connectors,web3-modal:** bump & sync Wagmi/Viem/react-query package versions ([#66](https://github.com/PAST3LLE/monorepo/issues/66)) ([141edbd](https://github.com/PAST3LLE/monorepo/commit/141edbde34b5021e05c58569e545dc4a0a28768b))
+
+
+
+
+
 ## [2.1.1-alpha.0](https://github.com/PAST3LLE/monorepo/compare/@past3lle/forge-web3@2.1.0...@past3lle/forge-web3@2.1.1-alpha.0) (2024-01-30)
 
 **Note:** Version bump only for package @past3lle/forge-web3

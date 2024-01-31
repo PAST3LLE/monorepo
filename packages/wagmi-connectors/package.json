@@ -1,7 +1,7 @@
 {
   "name": "@past3lle/wagmi-connectors",
   "sideEffects": false,
-  "version": "2.1.0",
+  "version": "2.1.1-alpha.0",
   "description": "Past3lle enhanced V2 Wagmi connectors",
   "keywords": [
     "web3",
@@ -102,7 +102,6 @@
     ]
   },
   "resolutions": {
-    "**/*/@tanstack/react-query": "^5.x",
     "**/*/@tanstack/react-query": "^5.x",
     "**/*/viem": "^2.x",
     "viem": "^2.x",
