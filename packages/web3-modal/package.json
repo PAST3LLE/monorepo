@@ -69,12 +69,12 @@
     ]
   },
   "resolutions": {
-    "**/*/@tanstack/react-query": "^2.x",
-    "@tanstack/react-query": "^2.x",
+    "**/*/@tanstack/react-query": "^5.x",
+    "@tanstack/react-query": "^5.x",
     "**/*/viem": "^2.x",
     "viem": "^2.x",
-    "**/*/wagmi": "^2.x",
-    "wagmi": "^2.x",
+    "**/*/wagmi": ">=2.5.5 < 3",
+    "wagmi": ">=2.5.5 < 3",
     "styled-components": "^5.x"
   },
   "peerDependencies": {
@@ -83,7 +83,7 @@
     "react-dom": ">=16",
     "styled-components": "^5.x",
     "viem": "^2.x",
-    "wagmi": "^2.x"
+    "wagmi": ">=2.5.5 < 3"
   },
   "dependencies": {
     "@past3lle/components": "^2.1.0",
@@ -114,8 +114,8 @@
     "react-dom": "^18.2.0",
     "rollup": "^3.29.2",
     "styled-components": "^5.3.6",
-    "viem": "^2.3.1",
-    "wagmi": "^2.2.1"
+    "viem": "^2.7.1",
+    "wagmi": ">=2.5.5 < 3"
   },
   "browserslist": {
     "production": [
