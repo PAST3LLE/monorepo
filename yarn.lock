@@ -2235,10 +2235,18 @@
   dependencies:
     "@floating-ui/utils" "^0.2.1"
 
-"@floating-ui/dom@^1.2.1", "@floating-ui/dom@^1.6.0":
+"@floating-ui/dom@^1.2.1":
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/@floating-ui/dom/-/dom-1.6.0.tgz#282f31c5c7d2aaef3999e09f2c06280a020364d1"
   integrity sha512-SZ0BEXzsaaS6THZfZJUcAobbZTD+MvfGM42bxgeg0Tnkp4/an/avqwAXiVLsFtIBZtfsx3Ymvwx0+KnnhdA/9g==
+  dependencies:
+    "@floating-ui/core" "^1.6.0"
+    "@floating-ui/utils" "^0.2.1"
+
+"@floating-ui/dom@^1.6.1":
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/@floating-ui/dom/-/dom-1.6.1.tgz#d552e8444f77f2d88534372369b3771dc3a2fa5d"
+  integrity sha512-iA8qE43/H5iGozC3W0YSnVSW42Vh522yyM1gj+BqRwVsTNOyr231PsXDaV04yT39PsO0QL2QpbI/M0ZaLUQgRQ==
   dependencies:
     "@floating-ui/core" "^1.6.0"
     "@floating-ui/utils" "^0.2.1"
@@ -5656,7 +5664,7 @@
   integrity sha512-ZRnwxBdPneIPdFzG13bLprhnZuMt7qVCwS9P7NTut/qGLBUGYkwkCZ1FRkzxo+9edA70zJqm8HSUYnC3CorcKw==
   dependencies:
     "@metamask/rpc-errors" "^6.1.0"
-    "@toruslabs/openlogin-utils" "^6.2.9"
+    "@toruslabs/openlogin-utils" "^6.2.5"
     end-of-stream "^1.4.4"
     events "^3.3.0"
     fast-safe-stringify "^2.1.1"
@@ -6738,10 +6746,10 @@
     "@types/babel__core" "^7.20.4"
     react-refresh "^0.14.0"
 
-"@wagmi/connectors@4.1.11":
-  version "4.1.11"
-  resolved "https://registry.yarnpkg.com/@wagmi/connectors/-/connectors-4.1.11.tgz#e3880ef50ebc3fd9cdead6c0d100ffcb7564cf91"
-  integrity sha512-bZgv1a63+SC+uv9zUMFTUWNIzKrTlcfvQriEugybeol2ufAQLAKuREXhAA/PdC7eBt4NrlaaoxTu0AZvdEpZsw==
+"@wagmi/connectors@4.1.12":
+  version "4.1.12"
+  resolved "https://registry.yarnpkg.com/@wagmi/connectors/-/connectors-4.1.12.tgz#7b5a3a6838f1596f360d523c967e0d21ffbc907d"
+  integrity sha512-zqCJMOwpi8ssFjndVxVh3iUMwzcA7dPCjswhcy4xZyy1jm/VvGYC3o1wotq/gTCqUrz0SPIMGimZm4S6865b8A==
   dependencies:
     "@coinbase/wallet-sdk" "3.9.1"
     "@metamask/sdk" "0.14.1"
@@ -6750,10 +6758,10 @@
     "@walletconnect/ethereum-provider" "2.11.0"
     "@walletconnect/modal" "2.6.2"
 
-"@wagmi/core@2.6.2":
-  version "2.6.2"
-  resolved "https://registry.yarnpkg.com/@wagmi/core/-/core-2.6.2.tgz#d74ff8d33daa5e7ff0d793536248d43e541c2787"
-  integrity sha512-03lIYh+LRGMeriCTc17me+Hq3BbPZE5qtbIY7VBRnuBVy0q5qdTqzHXiT/btN5fmrmF9m992smW2k0ow5P6QyA==
+"@wagmi/core@2.6.3":
+  version "2.6.3"
+  resolved "https://registry.yarnpkg.com/@wagmi/core/-/core-2.6.3.tgz#2aa657a1b3d9c437057d3eee496c3b62e39edfdc"
+  integrity sha512-hHvJkXFqfj56nAD0SH5bAHYxBItUBDIn6yGUBguMu121v6R4NxhwciEeff56lSjnKhmXjaWdJCEJ9C1YwkmDVw==
   dependencies:
     eventemitter3 "5.0.1"
     mipd "0.0.5"
@@ -13384,7 +13392,7 @@ gzip-size@^6.0.0:
   dependencies:
     duplexer "^0.1.2"
 
-h3@^1.10.0, h3@^1.8.2:
+h3@^1.10.1, h3@^1.8.2:
   version "1.10.1"
   resolved "https://registry.yarnpkg.com/h3/-/h3-1.10.1.tgz#221634ca9bdb216a6b359bd2915be466a179b8a1"
   integrity sha512-UBAUp47hmm4BB5/njB4LrEa9gpuvZj4/Qf/ynSMzO6Ku2RXaouxEfiG2E2IFnv6fxbhAkzjasDxmo6DFdEeXRg==
@@ -25170,7 +25178,7 @@ vite@5.0.11:
   optionalDependencies:
     fsevents "~2.3.3"
 
-vite@^5.0.0, vite@^5.0.10, vite@^5.0.2:
+vite@^5.0.0, vite@^5.0.11, vite@^5.0.2:
   version "5.0.12"
   resolved "https://registry.yarnpkg.com/vite/-/vite-5.0.12.tgz#8a2ffd4da36c132aec4adafe05d7adde38333c47"
   integrity sha512-4hsnEkG3q0N4Tzf1+t6NdN9dg/L3BM+q8SWgbSPnJvrgH2kgdyzfVJwbR1ic69/4uMJJ/3dqDZZE5/WwqW8U1w==
@@ -25275,13 +25283,13 @@ w3c-xmlserializer@^2.0.0:
   dependencies:
     xml-name-validator "^3.0.0"
 
-wagmi@^2.2.1:
-  version "2.5.4"
-  resolved "https://registry.yarnpkg.com/wagmi/-/wagmi-2.5.4.tgz#de4e586bd4e3023b8d55c4a8d54eacf82b740451"
-  integrity sha512-fAHHiTf6Mb+dB29KYMTJHLtooyGzfOv2iWlyMfaAVDIQK0NF4o2NlPmU8gJne9gSA85BOTxmNJam3xQmkVMcRA==
+"wagmi@>=2.5.5 < 3", wagmi@^2.2.1:
+  version "2.5.5"
+  resolved "https://registry.yarnpkg.com/wagmi/-/wagmi-2.5.5.tgz#d0b2de97c78976186e14b472667c1f88395ced12"
+  integrity sha512-U9F5+e4bFXhSvIAWaImP4oCDXnOG/7q1xnBlkWBwbGy+oWg3BBiD01BZUnkplFGu6scSZ+TPURGtOkwH0rnxBQ==
   dependencies:
-    "@wagmi/connectors" "4.1.11"
-    "@wagmi/core" "2.6.2"
+    "@wagmi/connectors" "4.1.12"
+    "@wagmi/core" "2.6.3"
     use-sync-external-store "1.2.0"
 
 walk-up-path@^1.0.0:
