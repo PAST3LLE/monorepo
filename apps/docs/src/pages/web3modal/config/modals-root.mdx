@@ -1,0 +1,497 @@
+# Root Modal Configuration
+`root` refers to the proprietary modals (account, network, connection, transactions, hidDevice) and their configuration options.
+
+## title (optional) (deprecated)
+Main title of modal. Wallet selection screen.
+:::warning
+To be removed in the next major bump. Instead, use `headers` below
+:::
+  
+## headers (optional)
+Mapping of modal names to titles (headers).
+:::tip
+Replaces the to-be-deprecated `title` prop (above).
+:::
+Available types: 
+```ts
+interface ModalHeaders {
+  account?: string
+  networks?: string
+  wallets?: string
+}
+```
+  
+## themeConfig (optional)
+Simple to advanced theme configuration options. Change everything from background colours to individual modal font styles and border properties.
+
+:::tip
+`themeConfig.mode` can be used to sync and external theme mode with modal theme mode.
+:::
+
+```ts
+interface ThemeConfigProps<
+  T extends ThemeByModes<BasicUserTheme> = ThemeByModes<BasicUserTheme>,
+  K extends ThemeModesRequired = ThemeModesRequired
+  > {
+  theme: T
+  mode?: K
+}
+```
+
+### theme
+Import and use the `createTheme` function. `createTheme` expects an object with the keys corresponding to the theme modes you want to include. Theme modes can be anything as long as they include `DEFAULT`.
+
+Theme modes are merged using lodash's [`merge`](https://lodash.com/docs/4.17.15#merge) on TOP of `DEFAULT` meaning that properties added in theme modes outside of `DEFAULT` will overwrite that property.
+
+For theme parts INSIDE modes e.g `base` inside of `DEFAULT`, theme is merged using [`defaultsDeep`](https://lodash.com/docs/4.17.15#defaultsDeep) which only fills in the theme mode parts that are missing.
+
+#### typescript
+Common resused types in core modal api (section below)
+```ts
+type DefaultCssProp = string | 'initial' | 'none' | 'unset' | 'inherit'
+
+interface BackgroundStyles {
+  main?: string
+  secondary?: string
+  alternate?: string
+  success?: string
+  error?: string
+  warning?: string
+  // !TODO: link to @past3lle/types documentation
+  url?: BackgroundPropertyFull
+}
+
+interface BorderStyles {
+    border?: string
+    color?: string
+    radius?: string
+}
+
+interface ButtonStyles {
+  filter?: string
+  font?: FontStyles
+  border?: BorderStyles
+  height?: string
+  hoverAnimations?: boolean
+  background?: {
+    default?: string
+    // !TODO: link to @past3lle/types documentation
+    url?: BackgroundPropertyFull
+  }
+  icons?: {
+    filter?: string
+    height?: string
+  }
+}
+
+interface FontStyles {
+    color?: DefaultCssProp
+    family?: DefaultCssProp
+    style?: DefaultCssProp
+    size?: DefaultCssProp
+    weight?: number
+    letterSpacing?: DefaultCssProp
+    lineHeight?: number
+    textShadow?: DefaultCssProp
+    textTransform?: DefaultCssProp
+    textAlign?: 'left' | 'right' | 'center' | DefaultCssProp
+}
+```
+Core modals theme configuration types api. Uses common types above.
+```ts
+/**
+ * @name SharedModalTheme
+ * @description Modal api shared by all sub-modals
+ */
+interface SharedModalTheme {
+  background?: BackgroundStyles
+  baseFontSize?: number
+  filter?: string
+  font?: FontStyles
+  button?: {
+    button?: {
+    main?: ButtonStyles
+    secondary?: ButtonStyles
+    alternate?: ButtonStyles
+    active?: ButtonStyles
+    disabled?: ButtonStyles
+  }
+  }
+  container?: {
+    main?: ContainerStyles
+    secondary?: ContainerStyles
+    alternate?: ContainerStyles
+  }
+  text?: {
+    main?: FontStyles
+    header?: FontStyles
+    strong?: FontStyles
+    subHeader?: FontStyles
+    small?: FontStyles
+    error?: FontStyles
+    warning?: FontStyles
+  }
+}
+
+/** 
+ * @name BaseModalTheme
+ * @description base modal theme configuration. 
+ * Theme will automatically be filled into as the default props for
+ * all other modals if no properties are explicitly set in the config.
+ */
+interface BaseModalTheme extends SharedModalTheme {
+  padding?: string
+  tooltip?: {
+    background?: string
+    font?: FontStyles
+  }
+  title?: {
+    font?: FontStyles
+    margin?: string
+  }
+  input?: {
+    border?: BorderStyles
+    background?: string
+    font?: FontStyles
+  }
+  error?: {
+    font?: Pick<FontStyles, 'color'>
+    background?: Pick<BackgroundStyles, 'error'>['error']
+  }
+  helpers?: {
+    show?: boolean
+    font?: Pick<FontStyles, 'color' | 'size'>
+  }
+  closeIcon?: {
+    color?: string
+    /**
+     * Size of icon in pixels
+     * @type number
+     */
+    size?: number
+    background?: string
+  }
+}
+
+/** 
+ * @name AccountModalTheme
+ * @description Extends SharedModalTheme and adds custom account modal theme configuration. 
+ */
+interface AccountModalTheme extends SharedModalTheme {
+  connectionImages?: {
+    size?: string
+    background?: string
+  }
+  icons?: {
+    wallet?: { url: string; invert?: boolean }
+    network?: { url: string; invert?: boolean }
+    copy?: { url: string; invert?: boolean }
+  }
+}
+
+/** 
+ * @name ConnectionModalTheme
+ * @description Extends SharedModalTheme.
+ */
+type ConnectionModalTheme = SharedModalTheme
+/** 
+ * @name HidDeviceModalTheme
+ * @description Extends SharedModalTheme.
+ */
+type HidDeviceModalTheme = SharedModalTheme
+/** 
+ * @name TransactionsModalTheme
+ * @description Extends SharedModalTheme.
+ */
+type TransactionsModalTheme = SharedModalTheme
+
+interface Theme {
+  base?: BaseModalTheme
+  account?: AccountModalTheme
+  connection?: ConnectionModalTheme
+  hidDevice?: HidDeviceModalTheme
+  transactions?: TransactionsModalTheme
+}
+```
+
+#### Example config: DEFAULT, DARK and LIGHT modes
+```ts
+// theme.ts
+import { createTheme } from '@past3lle/web3-modal'
+export default createTheme({
+  // DEFAULT is required, it is the fallback, base theme config.
+  DEFAULT: {
+    modals: {
+      base: {
+        baseFontSize: 16,
+        background: {
+          main: 'black',
+          success: '#777b48',
+          url: BG_LOGO
+        },
+        text: {
+          main: {
+            color: 'ghostwhite'
+          }
+        },
+        font: {
+          family: "'Roboto Flex', 'Inter', sans-serif, system-ui",
+          letterSpacing: '0px'
+        },
+        button: {
+          main: {
+            font: {
+              color: 'ghostwhite'
+            }
+          }
+        },
+        input: {
+          font: {
+            color: 'violet'
+          }
+        },
+        tooltip: {
+          background: '#685985',
+          font: {
+            color: 'ghostwhite',
+            family: 'monospace'
+          }
+        },
+        closeIcon: {
+          size: 45,
+          color: 'ghostwhite',
+          background: 'rgba(255,255,255,0.1)'
+        },
+        title: {
+          font: {
+            color: '#cbb9ee',
+            size: '2.5em',
+            style: 'italic',
+            weight: 700,
+            letterSpacing: '-1.4px',
+            lineHeight: 0.82,
+            textAlign: 'center'
+          },
+          margin: '0px 20px'
+        },
+        helpers: { show: true },
+        error: {
+          background: 'rgba(0,0,0, 0.95)'
+        }
+      },
+      connection: {
+        button: {
+          main: {
+            filter: 'invert(1) hue-rotate(65deg)',
+            background: { default: '#2d222cbd', url: 'none' },
+            height: '80px',
+            icons: {
+              height: '80%'
+            },
+            border: { border: 'none', radius: '1em' },
+            font: {
+              style: 'normal',
+              weight: 200,
+              letterSpacing: '-1px',
+              textShadow: '2px 2px 3px #0000005c',
+              textTransform: 'uppercase'
+            },
+            hoverAnimations: true
+          },
+          active: {
+            filter: 'invert(1) saturate(1.2)',
+            background: { default: '#777b48' }
+          }
+        }
+      },
+      account: {
+        icons: {
+          copy: { url: 'https://img.icons8.com/?size=512&id=PoI08DwSsc7G&format=png', invert: false },
+          network: { url: 'https://img.icons8.com/?size=512&id=PrryJ8KTxcOv&format=png', invert: false },
+          wallet: { url: 'https://img.icons8.com/?size=512&id=O7exVeEFSVr3&format=png', invert: false }
+        },
+        text: {
+          main: {
+            weight: 500
+          }
+        },
+        button: {
+          main: {
+            ...ACCOUNT_BUTTON,
+            filter: 'invert(1) hue-rotate(65deg)'
+          },
+          alternate: {
+            filter: 'hue-rotate(-5deg) contrast(1.3)',
+            background: { default: 'indianred', url: 'none' }
+          }
+        },
+        container: {
+          main: {
+            background: '#1113107a'
+          },
+          alternate: {
+            background: '#1113107a'
+          }
+        }
+      },
+      transactions: {}
+    }
+  },
+  DARK: {
+    modals: {
+        base: {
+            background: {
+                main: 'midnight'
+            },
+            text: {
+                main: {
+                    color: 'red'
+                }
+            },
+            font: {
+                family: "'Some Dark Font', 'Inter', sans-serif, system-ui",
+                letterSpacing: '0px'
+            },
+        }
+    }
+  },
+  LIGHT: {
+    modals: {
+      base: {
+        baseFontSize: 5,
+        background: {
+          main: 'navajowhite',
+          url: 'unset'
+        }
+      }
+    }
+  }
+})
+```
+
+### mode (optional)
+Used to sync the external theme mode with the modals theme. This is more of an advanced use case i.e you are running another theme (external from `web3modal`) on top of your modals as part of a larger app and you want to sync the theme modes changed by the external app.
+
+:::warning
+This will likely be removed and/or changed to a callback in future versions. For now use carefully!
+:::
+
+```ts
+// to set this you'll need to remake the config object inside a component
+import { MODALS_THEME } from 'some/path/to/your/modal/config'
+
+// external theme
+const externalTheme = useTheme()
+const modalsConfig = useMemo(() => ({
+    ...MODALS_THEME,
+    modals: {
+        ...MODALS_THEME.modals,
+        root: {
+            ...MODALS_THEME.modals?.root,
+            themeConfig: {
+                theme: MODALS_THEME.theme,
+                mode: externalTheme.mode
+            }
+        }
+    }
+}), [externalTheme.mode])
+```
+
+## loaderProps (optional)
+Async loader props. For when modals are loading.
+
+```ts
+interface LoadingScreenProps {
+  /**
+   * @description Optional. Spinner container style props.
+   */
+  containerProps?: {
+    /**
+     * @description Container bg colour
+     */
+    backgroundColor?: string
+    /**
+     * @description Container bg img url (override backgroundColor)
+     */
+    backgroundImg?: string
+    /**
+     * @description Container border radius
+     */
+    borderRadius?: string
+  }
+  /**
+   * @description Async spinner props: src, size, invertColor
+   */
+  spinnerProps?: {
+    /**
+     * @description source URL
+     */
+    src?: string | undefined
+    /**
+     * @description Number size of spinner (in px)
+     * @default 20
+     */
+    size?: number | undefined
+    /**
+     * @description Stroke colour
+     * @default "#D9EAFF"
+     */
+    stroke?: string | undefined
+    /**
+     * @description Number size of spinner svg stroke width (in px)
+     * @default 0.25
+     */
+    strokeWidth?: number | undefined
+    /**
+     * @description String. CSS filter.
+     * @default "unset"
+     */
+    filter?: string
+    }
+  /**
+   * @description font size for (any) loading text. string e.g 20rem // 10px
+   */
+  fontSize?: string
+  /**
+   * @description Optional. String label to show on load.
+   * @default "QUERYING INFO..."
+   */
+  loadingText?: string
+}
+```
+
+## buttonProps (optional)
+Modal connector button style props. Extends the `@past3lle/components` button props. 
+
+:::warning
+`@past3lle/components` documentation is not yet done. For now please check the types via TS
+:::
+
+```ts
+buttonProps?: ButtonProps
+```
+
+## zIndex (optional)
+Set root modal z-index. Should be lower than any other modal z-index but greater than underlying app z-indices
+
+```ts
+zIndex?: number
+```
+  
+## errorOptions (optional)
+Error options.
+
+```ts
+errorOptions?: {
+  error: Error | null
+  show?: boolean
+}
+```
+
+## openType (optional)
+Default: `root`. 
+
+Modal account type. `root` uses the built in, extensible root modal; `walletconnect` uses WalletConnect's.
+```ts  
+openType?: 'root' | 'walletconnect'
+```

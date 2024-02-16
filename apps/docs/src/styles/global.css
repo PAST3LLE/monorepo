@@ -1,0 +1,10 @@
+:root.dark {
+    --vocs-color_background: #232225;
+}
+
+.icon-header {
+    display: inline-block;
+    border-radius: 25%;
+    max-width: 30px;
+    vertical-align: text-bottom;
+}
