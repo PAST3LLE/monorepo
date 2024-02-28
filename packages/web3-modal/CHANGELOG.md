@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.2.0-alpha.2](https://github.com/PAST3LLE/past3lle-monorepo/compare/@past3lle/web3-modal@2.2.0-alpha.1...@past3lle/web3-modal@2.2.0-alpha.2) (2024-02-28)
+
+
+### Bug Fixes
+
+* **web3-modal:** fix CSS styles and props ([#74](https://github.com/PAST3LLE/past3lle-monorepo/issues/74)) ([34aadbf](https://github.com/PAST3LLE/past3lle-monorepo/commit/34aadbfebeac777b2e02f0a07a7c7baaa09c4958))
+
+
+
+
+
 # [2.2.0-alpha.1](https://github.com/PAST3LLE/past3lle-monorepo/compare/@past3lle/web3-modal@2.2.0-alpha.0...@past3lle/web3-modal@2.2.0-alpha.1) (2024-01-31)
 
 
