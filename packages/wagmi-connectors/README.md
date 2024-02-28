@@ -6,17 +6,16 @@
 
 # Example
 ```ts
-import { IFrameEthereumConnector, LedgerHIDConnector } from '@past3lle/wagmi-connectors'
-import { addConnector } from '@past3lle/web3-modal'
+import { iframeEthereum, ledgerLive, ledgerHid } from '@past3lle/wagmi-connectors';
 
 export const wagmiConnectors = {
-  ledgerLiveModal: addConnector(LedgerConnector, {
-    enableDebugLogs: false,
-    walletConnectVersion: 2,
-    projectId: WALLETCONNECT_ID,
-    requiredChains: [1]
-  }),
-  ledgerHID: addConnector(LedgerHIDConnector, {}),
-  ledgerIFrame: addConnector(IFrameEthereumConnector, {})
+  ledgerLiveModal: ledgerLive({}),
+  ledgerHID: ledgerHid({
+                name: 'Ledger HID',
+                shimDisconnect: true,
+            }),
+  ledgerIFrame: iframeEthereum({
+                  name: 'Ledger IFrame',
+            }),
 }
 ```
