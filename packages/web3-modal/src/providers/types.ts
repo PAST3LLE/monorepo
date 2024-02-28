@@ -115,21 +115,23 @@ export interface Web3ModalProps<ID extends number> {
    * @name connectors
    * @description Optional. Custom wagmi connectors. Loaded in normal, non-iframe dapps (e.g skills.pastelle.shop). For iFrame connectors, see {@link frameConnectors}
    * @example
-      import { InjectedConnector } from 'wagmi/connectors/MetaMask'
-      import { addConnector } from '@past3lle/web3-modal'
+      import { injected } from 'wagmi/connectors'
 
-      addConnector(InjectedConnector, {
-        name: 'MetaMask',
+      injected({
         shimDisconnect: true,
-        getProvider() {
-          try {
-            // Add a declarations.d.ts in root /src/ with ethereum object 
-            // OR use (window as any)?.ethereum
-            const provider = window?.ethereum?.providers?.find((provider) => provider?.isMetaMask)
-            if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-            return provider
-          } catch (error) {
-            return undefined
+        target: {
+          name: 'MetaMask',
+          id: 'metamask',
+          provider(window) {
+              try {
+              // Add a declarations.d.ts in root /src/ with ethereum object 
+              // OR use (window as any)?.ethereum
+              const provider = window?.ethereum?.providers?.find((provider) => provider?.isMetaMask)
+              if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
+              return provider
+            } catch (error) {
+              return undefined
+            }
           }
         }
       })

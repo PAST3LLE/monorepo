@@ -1,39 +1,39 @@
-import { LedgerHIDConnector } from '@past3lle/wagmi-connectors/LedgerHIDConnector'
-import { addConnector } from '@past3lle/web3-modal'
-import { InjectedConnector } from 'wagmi/connectors/injected'
-import { LedgerConnector } from 'wagmi/connectors/ledger'
-import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
-
-import { WALLETCONNECT_CONFIG } from './walletconnect'
+import { injected } from 'wagmi/connectors'
 
 export const CONNECTORS_CONFIG = [
-  addConnector(LedgerConnector, {
-    projectId: WALLETCONNECT_CONFIG['projectId'],
-    walletConnectVersion: 2
-  }),
-  addConnector(MetaMaskConnector, {
-    name: 'MetaMask',
+  injected({
     shimDisconnect: true,
-    getProvider() {
-      if (typeof global?.window === undefined) return undefined
-      return global.window?.ethereum?.providerMap?.get('MetaMask') || global.window?.ethereum
+    target: {
+      name: 'MetaMask',
+      id: 'metamask',
+      provider(window) {
+        if (typeof window === 'undefined') return undefined
+        return (
+          (window as any)?.ethereum?.providerMap?.get('MetaMask') || (window.ethereum?.isMetaMask && window?.ethereum)
+        )
+      }
     }
   }),
-  addConnector(InjectedConnector, {
-    name: 'CoinbaseWallet',
+  injected({
     shimDisconnect: true,
-    getProvider() {
-      if (typeof global.window === undefined) return undefined
-      return global.window?.coinbaseWalletExtension
+    target: {
+      name: 'CoinbaseWallet',
+      id: 'coinbaseWallet',
+      provider(window) {
+        if (typeof window === 'undefined') return undefined
+        return window?.coinbaseWalletExtension
+      }
     }
   }),
-  addConnector(InjectedConnector, {
-    name: 'Taho',
+  injected({
     shimDisconnect: true,
-    getProvider() {
-      if (typeof global.window === undefined) return undefined
-      return global.window?.tally
+    target: {
+      name: 'Taho',
+      id: 'taho',
+      provider(window) {
+        if (typeof window === 'undefined') return undefined
+        return (window as any)?.tally
+      }
     }
-  }),
-  addConnector(LedgerHIDConnector, undefined)
+  })
 ]
