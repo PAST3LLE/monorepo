@@ -88,6 +88,9 @@ export interface BaseModalTheme extends SharedModalTheme {
     font?: FontStyles
     margin?: string
   }
+  attribution?: {
+    color?: string
+  }
   input?: {
     border?: BorderStyles
     background?: BackgroundStyles['main']

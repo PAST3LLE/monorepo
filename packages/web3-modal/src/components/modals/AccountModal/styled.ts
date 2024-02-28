@@ -33,6 +33,9 @@ export const AddressAndBalanceColumnContainer = styled(ModalContainer).attrs((pr
   overflowY: 'revert',
   ...props
 }))<{ backgroundColor?: string; cursor: string }>`
+  border: ${(props) => props.theme.modals?.account?.container?.main?.border?.border};
+  border-color: ${(props) => props.theme.modals?.account?.container?.main?.border?.color};
+
   > ${Column}:first-child {
     flex: 0 1 65%;
     min-width: max-content;
@@ -72,6 +75,9 @@ export const WalletAndNetworkRowContainer = styled(ModalContainer).attrs((props)
   overflowY: 'revert',
   ...props
 }))<{ backgroundColor?: string; cursor: string }>`
+  border: ${(props) => props.theme.modals?.account?.container?.main?.border?.border};
+  border-color: ${(props) => props.theme.modals?.account?.container?.main?.border?.color};
+
   background-color: ${({ theme, modal, backgroundColor = theme.modals?.[modal]?.container?.alternate?.background }) =>
     backgroundColor};
   z-index: 1;
