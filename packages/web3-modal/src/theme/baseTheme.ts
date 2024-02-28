@@ -140,6 +140,9 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
               weight: 300
             }
           },
+          attribution: {
+            color: ''
+          },
           title: {
             font: {
               ...DEFAULT_FONT_PROPS,

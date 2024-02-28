@@ -72,6 +72,9 @@ export const pstlModalTheme = createTheme({
           color: 'ghostwhite',
           background: 'rgba(255,255,255,0.1)'
         },
+        attribution: {
+          color: 'green'
+        },
         title: {
           font: {
             color: '#cbb9ee',
@@ -137,10 +140,18 @@ export const pstlModalTheme = createTheme({
         },
         container: {
           main: {
-            background: '#1113107a'
+            background: '#1113107a',
+            border: {
+              border: '2px solid',
+              color: 'rgba(120,110,40,0.65)'
+            }
           },
           alternate: {
-            background: '#1113107a'
+            background: '#1113107a',
+            border: {
+              border: '2px solid',
+              color: 'rgba(120,110,40,0.65)'
+            }
           }
         }
       },
