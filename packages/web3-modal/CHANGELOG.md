@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.2.0-alpha.3](https://github.com/PAST3LLE/past3lle-monorepo/compare/@past3lle/web3-modal@2.2.0-alpha.2...@past3lle/web3-modal@2.2.0-alpha.3) (2024-02-28)
+
+
+### Bug Fixes
+
+* **web3-modal:** send options as prop ([#76](https://github.com/PAST3LLE/past3lle-monorepo/issues/76)) ([2a72dd2](https://github.com/PAST3LLE/past3lle-monorepo/commit/2a72dd28b142b9b650daf669a7a6100cf64e5156))
+
+
+
+
+
 # [2.2.0-alpha.2](https://github.com/PAST3LLE/past3lle-monorepo/compare/@past3lle/web3-modal@2.2.0-alpha.1...@past3lle/web3-modal@2.2.0-alpha.2) (2024-02-28)
 
 
