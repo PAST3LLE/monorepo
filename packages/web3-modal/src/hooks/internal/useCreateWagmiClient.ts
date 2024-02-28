@@ -117,7 +117,7 @@ function createWagmiClient<chains extends readonly [Chain, ...Chain[]]>({
   // check against appType for any derived connectors
   // Get any specific connector/chain config based on the type of app we're running
   // e.g are we in a Safe app? If so, run the Safe connector automatically set with the URL shortName chain
-  const derivedConnectors = getConfigFromAppType({ ...props, connectors: client.connectors })
+  const derivedConnectors = getConfigFromAppType({ ...props, options, connectors: client.connectors })
 
   // check if any are un-setup connectors and set them up
   const setupConnectors: Connector[] = setupConnectorFns(derivedConnectors.connectors, client)
