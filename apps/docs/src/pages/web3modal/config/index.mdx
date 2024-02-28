@@ -1,0 +1,693 @@
+---
+title: 'config'
+description: "The PstlW3Providers config object in it's entirety."
+---
+
+# Config
+
+Simple to advanced configuration for `Web3Modal` via the `PstlW3Providers` component.
+
+:::tip
+Separate out your files!
+
+e.g put all of your `Web3Modal` related files in a folder and split out your files into corresponding task(s).
+
+In this case, create a `config.ts` file alongside the other `Web3Modal` related files (`connectors.ts`, `theme.ts`, etc) and import it.
+:::
+
+## appName (required)
+App name to be passed to any/all connectors (e.g web3auth)
+
+## chains (required)
+`readonly [Chain, ...Chain[]]`
+
+[`chains`](#chains) passed to `config`.
+
+:::tip
+Import these from `wagmi/chains` or `@wagmi/chains`
+```tsx
+import { mainnet, goerli } from 'wagmi/chains'
+```
+:::
+
+## connectors (optional)
+**2 options**
+1. A straight up list of connectors 
+2. An object containing 2 keys: `connectors` and an **optional** `overrides` object.
+
+:::warning
+While `connectors` is optional, it is likely you will want to customise this configuration. The default setting is only `walletConnect`, so there is no need to add this as it will be deduped.
+:::
+
+:::tip
+See wagmi's docs for more info.
+
+Connectors docs: https://0.3.x.wagmi.sh/react/config#connectors-optional
+
+Available connectors: https://wagmi.sh/react/api/connectors
+:::
+
+### Option 1: Simple array of connector functions. 
+
+```ts
+{ 
+  // ...rest config
+  connectors: CreateConnectorFn[]
+}
+```
+
+### Option 2: Configuration object
+
+```ts
+{
+  // ...rest config
+  connectors: {
+    connectors: CreateConnectorFn[];
+    overrides?: ConnectorOverrides;
+  }
+}
+/**
+ * @name ConnectorOverrides
+ * @description Key/Value pair overriding connector info. Displays in root modal. See {@link ConnectorEnhancedExtras}
+ */
+type ConnectorOverrides = Record<string, ConnectorEnhancedExtras | undefined>
+type ConnectorEnhancedExtras = {
+  /**
+   * @name customName Optional. Custom display name.
+   */
+  customName?: string
+  /**
+   * @name logo
+   * @deprecated Deprecated. Use "icon" prop instead. Logo will be removed in next major release.
+   */
+  logo?: string
+  /**
+   * @name icon - icon override
+   */
+  icon?: string
+  details?: string
+  /**
+   * @name customConnect
+   * @description - custom connect function to call in place of the default connect. Does not need to extend the default connect but should eventually call it!
+   * @param modalsStore - all web3 modals store
+   * @see {Web3ModalsStore}
+   * @returns whatever it needs to return but should connect to the connector!
+   */
+  customConnect?: <C extends ConnectorEnhanced>(params: {
+    modalsStore: typeof ModalCtrl
+    userStore: typeof UserOptionsCtrl
+    connector?: C
+    wagmiConnect: ConnectFunction
+  }) => unknown
+  /**
+   * @name modalNodeId Optional. String ID name of modal node. Used to show async loader on mount
+   */
+  modalNodeId?: string
+  /**
+   * @name isRecommended Optional. Boolean flag to show recommended label
+   */
+  isRecommended?: boolean
+  /**
+   * @name rank Optional. Number rank. Higher the number, the higher in the modal connector appears
+   */
+  rank?: number
+  /**
+   * @name downloadUrl Optional. URL to navigate to in case provider does not exist
+   */
+  downloadUrl?: string
+}
+```
+
+### Examples
+#### Option 1: connectors list
+```tsx
+import { mainnet, sepolia } from 'wagmi/chains'
+import { injected } from 'wagmi/connectors'
+import { http } from 'viem'
+
+// [!code focus]
+
+const chains = [mainnet, sepolia] as const
+const config = {
+  chains,
+  connectors: [injected()], // [!code focus]
+} as const satisfies Web3ModalProps<typeof chains>
+```
+#### Option 2: connectors object
+```tsx
+import { mainnet, sepolia } from 'wagmi/chains'
+import { injected } from 'wagmi/connectors'
+import { http } from 'viem'
+
+// [!code focus]
+
+const chains = [mainnet, sepolia] as const
+const config = {
+  chains,
+  connectors: { // [!code focus]
+    connectors: [
+      injected({ // [!code focus]
+        target() { // [!code focus]
+          return { // [!code focus]
+            id: 'metamask', // [!code focus]
+            provider: window.ethereum // [!code focus]
+          } // [!code focus]
+        } // [!code focus]
+      })
+    ], // [!code focus]
+    overrides: { // [!code focus]
+      'metamask': { // [!code focus]
+        icon: 'https://some-icon-path', // [!code focus]
+        customName: 'MetaMask Fox Injected Wallet', // [!code focus]
+        id: 'metamask', // [!code focus]
+        downloadUrl: 'https://some-dl-url-to-open-new-tab-to-if-not-installed', // [!code focus]
+        rank: 10_000 // [!code focus]
+      } // [!code focus]
+    } // [!code focus]
+  }, // [!code focus]
+} as const satisfies Web3ModalProps<typeof chains>
+```
+
+## blockExplorerUris (optional)
+Mapping of `ids` from added [chains](/web3modal/config#chains-required) to block-explorer URLs.
+
+```ts
+// ... rest of config
+// assuming these chains
+chains: [mainnet, goerli, matic],
+// statically typed requirement will be:
+blockExplorerUris: {
+   1: "https://etherscan.io",
+   5: "https://goerli.etherscan.io",
+   137: "https://polygonscan.com",
+}
+```
+
+## modals (required)
+Modals configuration; `root` and `walletConnect` (which comes standard).
+
+### root (optional)
+See [root modal config docs here](/web3modal/config/modals-root)
+### walletConnect (required)
+See [walletConnect modal config docs here](/web3modal/config/modals-walletconnect)
+
+## options (optional)
+Custom Web3Modal options and exposed Wagmi V2 client options.
+:::tip
+`wagmi` V2 exposed options below. See [the official configuration docs for more info!](https://wagmi.sh/react/api/createConfig#multiinjectedproviderdiscovery)
+:::
+### multiInjectedProviderDiscovery (optional)
+
+`boolean | undefined`
+
+- Enables discovery of injected providers via [EIP-6963](https://eips.ethereum.org/EIPS/eip-6963) using the [`mipd`](https://github.com/wevm/mipd) library and converting to <a href="`https://wagmi.sh/react/api/connectors/injected`">injected</a> connectors.
+- Defaults to `true`.
+
+```ts-vue
+import { createConfig, http } from '{{packageName}}'
+import { mainnet, sepolia } from '{{packageName}}/chains'
+
+const config = createConfig({
+  chains: [mainnet, sepolia],
+  multiInjectedProviderDiscovery: false, // [!code focus]
+  transports: {
+    [mainnet.id]: http('https://mainnet.example.com'),
+    [sepolia.id]: http('https://sepolia.example.com'),
+  },
+})
+```
+
+### ssr (optional)
+
+`boolean | undefined`
+
+Flag to indicate if the config is being used in a server-side rendering environment. Defaults to `false`.
+
+```ts-vue
+import { createConfig, createStorage, http } from '{{packageName}}' // [!code focus]
+import { mainnet, sepolia } from '{{packageName}}/chains'
+
+const config = createConfig({
+  chains: [mainnet, sepolia],
+  ssr: true, // [!code focus]
+  transports: {
+    [mainnet.id]: http('https://mainnet.example.com'),
+    [sepolia.id]: http('https://sepolia.example.com'),
+  },
+})
+```
+
+### storage (optional)
+
+`Storage | null | undefined`
+
+- <a href="`/${docsPath}/api/createStorage#storage`">`Storage`</a> used by the config. Persists `Config`'s [`State`](#state-1)
+  between sessions.
+- Defaults to `createStorage({ storage: typeof window !== 'undefined' && window.localStorage ? window.localStorage : noopStorage })`.
+
+```ts-vue
+import { createConfig, createStorage, http } from '{{packageName}}' // [!code focus]
+import { mainnet, sepolia } from '{{packageName}}/chains'
+
+const config = createConfig({
+  chains: [mainnet, sepolia],
+  storage: createStorage({ storage: window.localStorage }), // [!code focus]
+  transports: {
+    [mainnet.id]: http('https://mainnet.example.com'),
+    [sepolia.id]: http('https://sepolia.example.com'),
+  },
+})
+```
+
+### syncConnectedChain (optional)
+
+`boolean | undefined`
+
+- Keep the [`State['chainId']`](#chainid) in sync with the current connection.
+- Defaults to `true`.
+
+```ts-vue
+import { createConfig, http } from '{{packageName}}'
+import { mainnet, sepolia } from '{{packageName}}/chains'
+
+const config = createConfig({
+  chains: [mainnet, sepolia],
+  syncConnectedChain: false, // [!code focus]
+  transports: {
+    [mainnet.id]: http('https://mainnet.example.com'),
+    [sepolia.id]: http('https://sepolia.example.com'),
+  },
+})
+```
+
+---
+
+### batch (optional)
+
+`{ multicall?: boolean | { batchSize?: number | undefined; wait?: number | undefined } | undefined } | { [_ in chains[number]["id"]]?: { multicall?: boolean | { batchSize?: number | undefined; wait?: number | undefined } | undefined } | undefined } | undefined`
+
+- Batch settings. See [Viem docs](https://viem.sh/docs/clients/custom.html#batch-optional) for more info.
+- Defaults to `{ multicall: true }`.
+
+```ts-vue
+import { createConfig, http } from '{{packageName}}'
+import { mainnet, sepolia } from '{{packageName}}/chains'
+
+const config = createConfig({
+  chains: [mainnet, sepolia],
+  batch: { multicall: true }, // [!code focus]
+  transports: {
+    [mainnet.id]: http('https://mainnet.example.com'),
+    [sepolia.id]: http('https://sepolia.example.com'),
+  },
+})
+```
+
+### cacheTime (optional)
+
+`number | { [_ in chains[number]['id']]?: number | undefined } | undefined`
+
+- Frequency in milliseconds for polling enabled features. See [Viem docs](https://viem.sh/docs/clients/public.html#cachetime-optional) for more info.
+- Defaults to [`pollingInterval`](#pollinginterval) or `4_000`.
+
+```ts-vue
+import { createConfig, http } from '{{packageName}}'
+import { mainnet, sepolia } from '{{packageName}}/chains'
+
+const config = createConfig({
+  chains: [mainnet, sepolia],
+  cacheTime: 4_000, // [!code focus]
+  transports: {
+    [mainnet.id]: http('https://mainnet.example.com'),
+    [sepolia.id]: http('https://sepolia.example.com'),
+  },
+})
+```
+
+### pollingInterval (optional)
+
+`number | { [_ in chains[number]['id']]?: number | undefined } | undefined`
+
+- Frequency in milliseconds for polling enabled features. See [Viem docs](https://viem.sh/docs/clients/custom.html#pollinginterval-optional) for more info.
+- Defaults to `4_000`.
+
+```ts-vue
+import { createConfig, http } from '{{packageName}}'
+import { mainnet, sepolia } from '{{packageName}}/chains'
+
+const config = createConfig({
+  chains: [mainnet, sepolia],
+  pollingInterval: 4_000, // [!code focus]
+  transports: {
+    [mainnet.id]: http('https://mainnet.example.com'),
+    [sepolia.id]: http('https://sepolia.example.com'),
+  },
+})
+```
+
+### transports (optional)
+
+`Record<chains[number]['id'], Transport>`
+
+Mapping of [chain IDs](#chains) to <a href="`/${docsPath}/api/transports`">`Transport`</a>s. This mapping is used internally when creating chain-aware Viem [`Client`](https://viem.sh/docs/clients/custom.html) objects. See the <a href="`/${docsPath}/api/transports`">Transport docs</a> for more info.
+
+```ts-vue
+import { createConfig, fallback, http } from '{{packageName}}' // [!code focus]
+import { mainnet, sepolia } from '{{packageName}}/chains'
+
+const config = createConfig({
+  chains: [mainnet, sepolia],
+  transports: { // [!code focus]
+    [mainnet.id]: fallback([ // [!code focus]
+      http('https://...'), // [!code focus]
+      http('https://...'), // [!code focus]
+    ]), // [!code focus]
+    [sepolia.id]: http('https://...'), // [!code focus]
+  }, // [!code focus]
+})
+```
+
+### autoConnect (optional)
+Boolean. Whether or not to attempt re-connect to last connected connector.
+
+```ts
+autoConnect?: boolean
+```
+
+### escapeHatches (optional)
+Escape hatch options. Probably not required.
+  
+```ts
+escapeHatches?: {
+    appType?: AppType
+}
+```
+
+#### appType (optional)
+`web3modal` will try to auto detect your current dapp environment and set configurations accordingly (e.g in a SAFE wallet app context, there is no need to offer wallet choices. `web3modal` should and will automatically connect to SAFE wallet and not allow user any options to change.)
+
+However, in some instances this UX is not desired and thus `appType` allows you to escape hatch out and set the type of app as needed.
+  
+### closeModalOnKeys (optional)
+List of keys to listen and close modal on detection.
+  
+```ts 
+closeModalOnKeys?: string[]
+```
+
+### callbacks (optional)
+Callbacks for state changing UI/UX
+
+#### switchChain (optional)
+Custom chain switching logic e.g URL chain name detection
+
+```ts
+interface Callbacks {// [!code focus]
+  /** // [!code focus]
+   * @name switchChainCallback // [!code focus]
+   * @description Custom chain switching callback. E.g cookies or from URL -> changes network automatically // [!code focus]
+   */ // [!code focus]
+  switchChain?: (chains: ReadonlyChains, ...params: any[]) => Promise<ReadonlyChains[number] | undefined> // [!code focus]
+  /**
+   * @name filterChains
+   * @description Custom callback for filtering available chains e.g production domain vs develop etc
+   * @param chains List of available chains
+   * @param params Any params
+   * @note this will REMOVE compatibility for chains filtered out. If you just want COSMETIC filtering, see softLimitChains. Will be DEPRECATED next minor release.
+   * @alias hardLimitChains
+   * @returns Filtered list of available chains
+   */
+  filterChains?: (chains: ReadonlyChains, ...params: any[]) => ReadonlyChains
+  /**
+   * @name hardLimitChains
+   * @description Custom callback for filtering available chains e.g production domain vs develop etc
+   * @param chains List of available chains
+   * @param params Any params
+   * @note this will REMOVE compatibility for chains filtered out. If you just want COSMETIC filtering, see softLimitChains
+   * @alias filterChains
+   * @returns Filtered list of available chains
+   */
+  hardLimitChains?: (chains: ReadonlyChains, ...params: any[]) => ReadonlyChains
+  /**
+   * @name softLimitChains
+   * @description Custom callback for softly (cosmetically) filtering available chains e.g production domain vs develop etc
+   * @param chains List of available chains
+   * @param params Any params
+   * @note this will REMOVE compatibility for chains filtered out. If you just want COSMETIC filtering, see hardLimitChains
+   * @returns Cosmetically filtered list of available chains
+   */
+  softLimitChains?: (chains: ReadonlyChains, ...params: any[]) => ReadonlyChains
+  /**
+   * @name transactions
+   * @description Optional. Transaction related options. E.g callbacks on certain states
+   * @tip Useful when you want finer control over what happens on transaction approvals/reversions etc.
+   */
+  transactions?: UserOptionsTransactionsCallbacks
+} // [!code focus]
+```
+
+#### filterChains (optional)
+Custom chain filtering logic e.g certain pages should only allow switching to certain chains
+
+```ts
+interface Callbacks { // [!code focus]
+  /**
+   * @name switchChainCallback
+   * @description Custom chain switching callback. E.g cookies or from URL -> changes network automatically
+   */
+  switchChain?: (chains: ReadonlyChains, ...params: any[]) => Promise<ReadonlyChains[number] | undefined>
+  /** // [!code focus]
+   * @name filterChains // [!code focus]
+   * @description Custom callback for filtering available chains e.g production domain vs develop etc // [!code focus]
+   * @param chains List of available chains // [!code focus]
+   * @param params Any params // [!code focus]
+   * @note this will REMOVE compatibility for chains filtered out. If you just want COSMETIC filtering, see softLimitChains. Will be DEPRECATED next minor release. // [!code focus]
+   * @alias hardLimitChains // [!code focus]
+   * @returns Filtered list of available chains // [!code focus]
+   */ // [!code focus]
+  filterChains?: (chains: ReadonlyChains, ...params: any[]) => ReadonlyChains // [!code focus]
+  /**
+   * @name hardLimitChains
+   * @description Custom callback for filtering available chains e.g production domain vs develop etc
+   * @param chains List of available chains
+   * @param params Any params
+   * @note this will REMOVE compatibility for chains filtered out. If you just want COSMETIC filtering, see softLimitChains
+   * @alias filterChains
+   * @returns Filtered list of available chains
+   */
+  hardLimitChains?: (chains: ReadonlyChains, ...params: any[]) => ReadonlyChains
+  /**
+   * @name softLimitChains
+   * @description Custom callback for softly (cosmetically) filtering available chains e.g production domain vs develop etc
+   * @param chains List of available chains
+   * @param params Any params
+   * @note this will REMOVE compatibility for chains filtered out. If you just want COSMETIC filtering, see hardLimitChains
+   * @returns Cosmetically filtered list of available chains
+   */
+  softLimitChains?: (chains: ReadonlyChains, ...params: any[]) => ReadonlyChains
+  /**
+   * @name transactions
+   * @description Optional. Transaction related options. E.g callbacks on certain states
+   * @tip Useful when you want finer control over what happens on transaction approvals/reversions etc.
+   */
+  transactions?: UserOptionsTransactionsCallbacks
+} // [!code focus]
+```
+
+#### hardLimitChains (optional)
+Similar to `softLimitChains` but hard limits and removes from config.
+
+```ts
+interface Callbacks { // [!code focus]
+  /**
+   * @name switchChainCallback
+   * @description Custom chain switching callback. E.g cookies or from URL -> changes network automatically
+   */
+  switchChain?: (chains: ReadonlyChains, ...params: any[]) => Promise<ReadonlyChains[number] | undefined>
+  /**
+   * @name filterChains
+   * @description Custom callback for filtering available chains e.g production domain vs develop etc
+   * @param chains List of available chains
+   * @param params Any params
+   * @note this will REMOVE compatibility for chains filtered out. If you just want COSMETIC filtering, see softLimitChains. Will be DEPRECATED next minor release.
+   * @alias hardLimitChains
+   * @returns Filtered list of available chains
+   */
+  filterChains?: (chains: ReadonlyChains, ...params: any[]) => ReadonlyChains
+  /** // [!code focus]
+   * @name hardLimitChains // [!code focus]
+   * @description Custom callback for filtering available chains e.g production domain vs develop etc // [!code focus]
+   * @param chains List of available chains // [!code focus]
+   * @param params Any params // [!code focus]
+   * @note this will REMOVE compatibility for chains filtered out. If you just want COSMETIC filtering, see softLimitChains // [!code focus]
+   * @alias filterChains // [!code focus]
+   * @returns Filtered list of available chains // [!code focus]
+   */ // [!code focus]
+  hardLimitChains?: (chains: ReadonlyChains, ...params: any[]) => ReadonlyChains // [!code focus]
+  /**
+   * @name softLimitChains
+   * @description Custom callback for softly (cosmetically) filtering available chains e.g production domain vs develop etc
+   * @param chains List of available chains
+   * @param params Any params
+   * @note this will REMOVE compatibility for chains filtered out. If you just want COSMETIC filtering, see hardLimitChains
+   * @returns Cosmetically filtered list of available chains
+   */
+  softLimitChains?: (chains: ReadonlyChains, ...params: any[]) => ReadonlyChains
+  /**
+   * @name transactions
+   * @description Optional. Transaction related options. E.g callbacks on certain states
+   * @tip Useful when you want finer control over what happens on transaction approvals/reversions etc.
+   */
+  transactions?: UserOptionsTransactionsCallbacks
+} // [!code focus]
+```
+
+#### softLimitChains (optional)
+Similar to `hardLimitChains` but soft limits and only "cosmetically" removes chains from the app.
+
+```ts
+interface Callbacks { // [!code focus]
+  /**
+   * @name switchChainCallback
+   * @description Custom chain switching callback. E.g cookies or from URL -> changes network automatically
+   */
+  switchChain?: (chains: ReadonlyChains, ...params: any[]) => Promise<ReadonlyChains[number] | undefined>
+  /**
+   * @name filterChains
+   * @description Custom callback for filtering available chains e.g production domain vs develop etc
+   * @param chains List of available chains
+   * @param params Any params
+   * @note this will REMOVE compatibility for chains filtered out. If you just want COSMETIC filtering, see softLimitChains. Will be DEPRECATED next minor release.
+   * @alias hardLimitChains
+   * @returns Filtered list of available chains
+   */
+  filterChains?: (chains: ReadonlyChains, ...params: any[]) => ReadonlyChains
+  /**
+   * @name hardLimitChains
+   * @description Custom callback for filtering available chains e.g production domain vs develop etc
+   * @param chains List of available chains
+   * @param params Any params
+   * @note this will REMOVE compatibility for chains filtered out. If you just want COSMETIC filtering, see softLimitChains
+   * @alias filterChains
+   * @returns Filtered list of available chains
+   */
+  hardLimitChains?: (chains: ReadonlyChains, ...params: any[]) => ReadonlyChains
+  /** // [!code focus]
+   * @name softLimitChains // [!code focus]
+   * @description Custom callback for softly (cosmetically) filtering available chains e.g production domain vs develop etc // [!code focus]
+   * @param chains List of available chains // [!code focus]
+   * @param params Any params // [!code focus]
+   * @note this will REMOVE compatibility for chains filtered out. If you just want COSMETIC filtering, see hardLimitChains // [!code focus]
+   * @returns Cosmetically filtered list of available chains // [!code focus]
+   */ // [!code focus]
+  softLimitChains?: (chains: ReadonlyChains, ...params: any[]) => ReadonlyChains // [!code focus]
+  /**
+   * @name transactions
+   * @description Optional. Transaction related options. E.g callbacks on certain states
+   * @tip Useful when you want finer control over what happens on transaction approvals/reversions etc.
+   */
+  transactions?: UserOptionsTransactionsCallbacks
+} // [!code focus]
+```
+
+#### transactions (optional)
+Transaction related callbacks callable on certain states/types of transactions.
+
+```ts
+interface Callbacks { // [!code focus]
+  /**
+   * @name switchChainCallback
+   * @description Custom chain switching callback. E.g cookies or from URL -> changes network automatically
+   */
+  switchChain?: (chains: ReadonlyChains, ...params: any[]) => Promise<ReadonlyChains[number] | undefined>
+  /**
+   * @name filterChains
+   * @description Custom callback for filtering available chains e.g production domain vs develop etc
+   * @param chains List of available chains
+   * @param params Any params
+   * @note this will REMOVE compatibility for chains filtered out. If you just want COSMETIC filtering, see softLimitChains. Will be DEPRECATED next minor release.
+   * @alias hardLimitChains
+   * @returns Filtered list of available chains
+   */
+  filterChains?: (chains: ReadonlyChains, ...params: any[]) => ReadonlyChains
+  /**
+   * @name hardLimitChains
+   * @description Custom callback for filtering available chains e.g production domain vs develop etc
+   * @param chains List of available chains
+   * @param params Any params
+   * @note this will REMOVE compatibility for chains filtered out. If you just want COSMETIC filtering, see softLimitChains
+   * @alias filterChains
+   * @returns Filtered list of available chains
+   */
+  hardLimitChains?: (chains: ReadonlyChains, ...params: any[]) => ReadonlyChains
+  /**
+   * @name softLimitChains
+   * @description Custom callback for softly (cosmetically) filtering available chains e.g production domain vs develop etc
+   * @param chains List of available chains
+   * @param params Any params
+   * @note this will REMOVE compatibility for chains filtered out. If you just want COSMETIC filtering, see hardLimitChains
+   * @returns Cosmetically filtered list of available chains
+   */
+  softLimitChains?: (chains: ReadonlyChains, ...params: any[]) => ReadonlyChains
+  /** // [!code focus]
+   * @name transactions // [!code focus]
+   * @description Optional. Transaction related options. E.g callbacks on certain states // [!code focus]
+   * @tip Useful when you want finer control over what happens on transaction approvals/reversions etc. // [!code focus]
+   */ // [!code focus]
+  transactions?: { // [!code focus]
+    /** // [!code focus]
+     * @name onEoaTransactionConfirmed // [!code focus]
+     * @description Optional. Callback fired on confirmation of EOA transaction // [!code focus]
+     * @param tx {@link AnyTransactionReceipt} - transaction receipt // [!code focus]
+     * @returns Augmented transaction receipt. see {@link AnyTransactionReceipt} // [!code focus]
+     */ // [!code focus]
+    onEoaTransactionConfirmed?: (tx: AnyTransactionReceipt) => AnyTransactionReceipt // [!code focus]
+    /** // [!code focus]
+     * @name onEoaTransactionReverted // [!code focus]
+     * @description Optional. Callback fired on reverted status of EOA transaction // [!code focus]
+     * @param tx {@link AnyTransactionReceipt} - transaction receipt // [!code focus]
+     * @returns Augmented transaction receipt. see {@link AnyTransactionReceipt} // [!code focus]
+     */ // [!code focus]
+    onEoaTransactionReverted?: (tx: AnyTransactionReceipt) => AnyTransactionReceipt // [!code focus]
+    /** // [!code focus]
+     * @name onEoaTransactionUnknown // [!code focus]
+     * @description Optional. Callback fired on unknown status of EOA transaction // [!code focus]
+     * @param tx {@link AnyTransactionReceipt} - transaction receipt // [!code focus]
+     * @returns Augmented transaction receipt. see {@link AnyTransactionReceipt} // [!code focus]
+     */ // [!code focus]
+    onEoaTransactionUnknown?: (tx: AnyTransactionReceipt) => AnyTransactionReceipt // [!code focus]
+    /** // [!code focus]
+     * @name onSafeTransactionConfirmed // [!code focus]
+     * @description Optional. Callback fired on confirmation of Safe transaction // [!code focus]
+     * @param tx {@link AnyTransactionReceipt} - transaction receipt // [!code focus]
+     * @returns Augmented transaction receipt. see {@link AnyTransactionReceipt} // [!code focus]
+     */ // [!code focus]
+    onSafeTransactionConfirmed?: (tx: AnyTransactionReceipt) => AnyTransactionReceipt // [!code focus]
+    /** // [!code focus]
+     * @name onSafeTransactionReverted // [!code focus]
+     * @description Optional. Callback fired on reverted status of Safe transaction // [!code focus]
+     * @param tx {@link AnyTransactionReceipt} - transaction receipt // [!code focus]
+     * @returns Augmented transaction receipt. see {@link AnyTransactionReceipt} // [!code focus]
+     */ // [!code focus]
+    onSafeTransactionReverted?: (tx: AnyTransactionReceipt) => AnyTransactionReceipt // [!code focus]
+  } // [!code focus]
+} // [!code focus]
+```
+
+### expiremental (optional)
+Map of experimental feature flags. Probably not required.
+```ts
+experimental?: {
+    /**
+     * @name hidDeviceOptions
+     * @description HID-specific device options
+     */
+    hidDeviceOptions?: {
+        /**
+         * @name enableConfigurationModal
+         * @description enable the HID device configuration modal - i.e choose derivation path
+         */
+        enableConfigurationModal?: boolean
+    }
+}
+```

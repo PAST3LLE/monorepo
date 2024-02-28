@@ -1,0 +1,125 @@
+## Web3Modal
+
+**Web3Modal** wraps `wagmi` V2 and **makes it easy to turn any old app into a beautifully web3 connected Dapp**. 
+
+Web3Modal (V2) comes with both EOA and Safe multisig transactions tracking, HID device configuration, all Wagmi/Viem methods and hooks to "Connect Wallet"s, display ENS and balance information, sign messages, interact with contracts, and much more. All with caching, request deduplication, and persistence all available within a beautifully configurable modal component suite.
+
+:::tip
+Only Web3Modal v2 comes with transactions tracking for both EOA and multisig transactions.
+:::
+
+## 👩‍💻 Installation
+```bash
+# yarn
+yarn add @past3lle/web3-modal wagmi viem @tanstack/react-query styled-components@5.x
+
+# npm
+npm i @past3lle/web3-modal wagmi viem @tanstack/react-query styled-components@5.x
+```
+
+## 🏎️ Quick start
+Get started quickly in 2 steps:
+
+1. Setup the [`PstlW3Providers`](/web3modal/providers) provider component
+2. Setup the [`config`](/web3modal/config) object and pass to the provider component
+
+## 👀 Quick look
+[Visual examples of some possible end looks and features here!](/web3modal#visual-examples)
+
+See the [providers page](/web3modal/providers) for detailed information on configuration and use in code.
+
+```tsx
+// least configured example
+import { PstlW3Providers } from '@past3lle/web3-modal'
+import { mainnet } from 'wagmi/chains'
+import { Web3ConnectedApp } from 'your-Web3ConnectedApp-path'
+
+const CONFIG = {
+  chains: [mainnet],
+  modals: {
+    walletConnect: {
+      projectId: process.env.WALLETCONNECT_KEY
+    }
+  }
+}
+
+function App() {
+  return (
+    <PstlW3Providers config={CONFIG}>
+      {/* Wagmi hooks available inside Web3ConnectedApp */}
+      <Web3ConnectedApp />
+    </PstlW3Providers>
+  )
+}
+```
+
+```tsx
+import { usePstlUserConnectionInfo, usePstlConnectDisconnect } from '@past3lle/web3-modal'
+import { useMemo } from 'react'
+
+function Web3ConnectedApp() {
+  const { address, isConnected, connector, connectors } = usePstlUserConnectionInfo()
+  const {
+    connect: { connectAsync },
+    disconnect: { disconnectAsync }
+  } = usePstlConnectDisconnect()
+
+  const connectorInfo = useMemo(
+    {/* "customName" needs "overrides" passed in via config.connectors.overrides */}
+    () => (connector ? connector?.customName || connector?.name || connector?.id || 'Connector' : 'disconnected!'),
+    [connector]
+  )
+
+  if (isConnected)
+    return (
+      <div>
+        Connected to {address} - {connectorInfo}
+        <button onClick={() => disconnectAsync()}>Disconnect</button>
+      </div>
+    )
+  return connectors.map((connector) => (
+    <button key={connector.id} onClick={() => connectAsync({ connector })}>
+      Connect to {connectorInfo}
+    </button>
+  ))
+}
+```
+
+In this example, we create a Web3Modal `config` and pass it to the `PstlW3Providers` provider component. The config is set up to use viem's Public Client and automatically connect to previously connected wallets.
+
+Next, we use the `usePstlConnectDisconnect` hook to connect/disconnect an injected wallet (e.g. MetaMask) to the app. Finally, we show the connected account's address with `usePstlUserConnectionInfo`.
+
+:::tip
+You can use all the **original** `wagmi` hooks/methods as well! 
+
+e.g instead of `usePstlUserConnectionInfo` you can just import/call `useAccount` from `wagmi`
+:::
+
+We've only scratched the surface for what you can do with @past3lle/web3-modal!
+
+<div className="mb-20 text-center">
+  [Advanced Configuration](/web3modal/providers) · [GitHub
+  Repository](https://github.com/PAST3LLE/monorepo)
+</div>
+
+## Visual examples
+### Wallet selection 
+`list` and `grid` modes, respectively. Can be configured in the `root` modal configuration object. Both examples setup with a custom theme.
+<img className="image-50" src="/web3modal-wallet-selection-list.png"/>
+<img className="image-50" src="/web3modal-wallet-selection-grid.png"/>
+
+### Wallet connection approval
+<img src="/web3modal-approve-connection.png"/>
+
+## Features
+
+@past3lle/web3-modal is built on top of Wagmi V2, which supports:
+
+- Web3Modal component suite for building highly customisable Web3 integrated front-ends.
+- 20+ hooks for working with wallets, ENS, contracts, transactions, signing, etc.
+- Built-in wallet connectors for MetaMask, WalletConnect, Coinbase Wallet, Injected, and more
+- Caching, request deduplication, multicall, batching, and persistence
+- Auto-refresh data on wallet, block, and network changes
+- TypeScript ready (infer types from ABIs and EIP-712 Typed Data)
+
+...and a lot more.

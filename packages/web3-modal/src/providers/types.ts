@@ -218,24 +218,29 @@ export interface Web3ModalProps<chains extends ReadonlyChains = ReadonlyChains> 
    * @name connectors
    * @description Optional. Custom wagmi connectors. Loaded in normal, non-iframe dapps (e.g skills.pastelle.shop). For iFrame connectors, see {@link frameConnectors}
    * @example
-      import { InjectedConnector } from 'wagmi/connectors/MetaMask'
-      import { addConnector } from '@past3lle/web3-modal'
+      import { injected } from 'wagmi/connectors'
 
-      addConnector(InjectedConnector, {
-        name: 'MetaMask',
-        shimDisconnect: true,
-        getProvider() {
-          try {
-            // Add a declarations.d.ts in root /src/ with ethereum object 
-            // OR use (window as any)?.ethereum
-            const provider = window?.ethereum?.providers?.find((provider) => provider?.isMetaMask)
-            if (!provider) devWarn('Connector', this.name || 'unknown', 'not found!')
-            return provider
-          } catch (error) {
-            return undefined
+      connectors: {
+        connectors: [
+          injected({
+            target() {
+              return {
+                id: 'metamask',
+                provider: window.ethereum
+              }
+            }
+          })
+        ],
+        overrides: {
+          'metamask': {
+            icon: 'https://some-icon-path',
+            customName: 'MetaMask Fox Injected Wallet',
+            id: 'metamask',
+            downloadUrl: 'https://some-dl-url-to-open-new-tab-to-if-not-installed',
+            rank: 10_000
           }
         }
-      })
+      }
    */
   connectors?: GenericModalConnectorOptions
   /**
@@ -310,8 +315,3 @@ export interface Web3ModalProps<chains extends ReadonlyChains = ReadonlyChains> 
 
 export type PstlWeb3ModalProps<chains extends ReadonlyChains = ReadonlyChains> = Web3ModalProps<chains>
 export type PstlWeb3ProviderProps<chains extends ReadonlyChains = ReadonlyChains> = PstlWeb3ModalProps<chains>
-
-export type WithChainIdFromUrl = {
-  chainIdFromUrl: number | undefined
-}
-export type WithCloseModalOnKeys = Pick<PstlWeb3ModalOptions, 'closeModalOnKeys'>

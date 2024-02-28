@@ -37,7 +37,7 @@ export interface ButtonStyles {
   height?: string
   hoverAnimations?: boolean
   background?: {
-    default?: BackgroundStyles['main']
+    default?: string
     url?: BackgroundPropertyFull
   }
   icons?: {
@@ -47,7 +47,7 @@ export interface ButtonStyles {
 }
 
 export interface ContainerStyles {
-  background?: BackgroundStyles['main']
+  background?: string
   border?: BorderStyles
 }
 
@@ -81,7 +81,7 @@ export interface SharedModalTheme {
 export interface BaseModalTheme extends SharedModalTheme {
   padding?: string
   tooltip?: {
-    background?: BackgroundStyles['main']
+    background?: string
     font?: FontStyles
   }
   title?: {
@@ -93,7 +93,7 @@ export interface BaseModalTheme extends SharedModalTheme {
   }
   input?: {
     border?: BorderStyles
-    background?: BackgroundStyles['main']
+    background?: string
     font?: FontStyles
   }
   error?: {
@@ -111,7 +111,7 @@ export interface BaseModalTheme extends SharedModalTheme {
      * @type number
      */
     size?: number
-    background?: BackgroundStyles['main']
+    background?: string
   }
 }
 interface AccountModalTheme extends SharedModalTheme {

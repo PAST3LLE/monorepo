@@ -2,7 +2,7 @@ import { ButtonProps, ModalProps } from '@past3lle/components'
 import { BasicUserTheme, ThemeByModes, ThemeModesRequired } from '@past3lle/theme'
 import { ReactNode } from 'react'
 
-import { WithChainIdFromUrl, WithCloseModalOnKeys } from '../../../providers/types'
+import { PstlWeb3ModalOptions } from '../../../providers/types'
 import { PstlSubModalsTheme } from '../../../theme'
 import { LoadingScreenProps } from '../../LoadingScreen'
 
@@ -35,8 +35,7 @@ export interface ThemeConfigProps<
   mode?: K
 }
 export type BaseModalProps = Omit<ModalProps, 'isLargeImageModal'> &
-  WithChainIdFromUrl &
-  WithCloseModalOnKeys & {
+  Pick<PstlWeb3ModalOptions, 'closeModalOnKeys'> & {
     /**
      * @name title
      * @description Main title of modal. Wallet selection screen.
@@ -94,6 +93,12 @@ export type BaseModalProps = Omit<ModalProps, 'isLargeImageModal'> &
      * @default root
      */
     openType?: 'root' | 'walletconnect'
+    /**
+     * @name chainIdFromUrl
+     * @description Use chain pulled from URL
+     * @optional
+     */
+    chainIdFromUrl: number | undefined
     modal: keyof PstlSubModalsTheme
     children?: ReactNode
   }

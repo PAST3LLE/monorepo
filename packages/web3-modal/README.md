@@ -45,8 +45,10 @@ export default modalTheme
 
 ### 2: Create a config.ts file
 ```tsx
-import { PstlWeb3ModalProps, addConnector } from '@past3lle/web3-modal'
+import {ledgerLive, ledgerHid } from '@past3lle/wagmi-connectors';
+import { PstlWeb3ModalProps } from '@past3lle/web3-modal'
 import { mainnet } from '@wagmi/chains'
+import { injected } from 'wagmi/connectors'
 import modalTheme, { PALETTE } from 'theme'
 
 import { LedgerConnector } from 'wagmi/connectors/ledger'
@@ -80,17 +82,19 @@ const config = {
   chains,
   connectors: [
       // Adds LedgerHID connector
-      addConnector(LedgerHIDConnector, {}),
+      ledgerHID: ledgerHid({
+                name: 'Ledger HID',
+                shimDisconnect: true,
+            }),
       // Adds LedgerLive modal connector
-      addConnector(LedgerConnector, { 
-        projectId: WALLETCONNECT_PROJECT_ID, 
-        walletConnectVersion: 2 
-      }),
+      ledgerLive({}),
       // Adds MetaMask injected connector
-      addConnector(InjectedConnector, {
+      injected({
+      shimDisconnect: true,
+      target: {
         name: 'MetaMask',
-        shimDisconnect: true,
-        getProvider() {
+        id: 'metamask',
+        provider(window) {
           try {
             // You may need to (window as any)?.ethereum? ...
             // Or create a declarations.d.ts file in your /src/ root
@@ -101,7 +105,8 @@ const config = {
             return undefined
           }
         }
-      }),
+      }
+    }),
   ],
   options: {
     // How often to poll for new data
