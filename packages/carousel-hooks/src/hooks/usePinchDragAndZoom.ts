@@ -1,15 +1,19 @@
 import { useSprings } from '@react-spring/web'
 import { useGesture } from '@use-gesture/react'
 
-import { OverwritingOptions, SpringAnimationHookReturn } from '../types'
+import { OverwritingOptions, SpringAnimationHookReturn, WithWindowSizeOptions } from '../types'
 import utils from '../utils'
 import useScrollZoneRefs from '../utils/useScrollZoneRef'
 
-export function usePinchZoomAndDrag(data: any[], options?: OverwritingOptions): SpringAnimationHookReturn {
+export function usePinchZoomAndDrag<A extends any[]>(
+  data: A,
+  options?: OverwritingOptions,
+  auxOptions?: WithWindowSizeOptions
+): SpringAnimationHookReturn {
   const {
     refs: { itemSize, scrollingZoneTarget: ref },
     refCallbacks
-  } = useScrollZoneRefs('x', options?.sizeOptions)
+  } = useScrollZoneRefs('x', options?.sizeOptions, auxOptions)
 
   const [springs, api] = useSprings(
     data.length,

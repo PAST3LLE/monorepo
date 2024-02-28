@@ -32,13 +32,13 @@ export function DappChainUpdater() {
   useEffect(() => {
     if (isIframe()) return
 
-    if (!chain?.network) {
+    if (!chain?.name) {
       setReadonlyChain(chainFromParam || userChains[0])
-      if (!chainFromParam) updateSearchParams(ForgeSearchParamKeys.FORGE_CHAIN, userChains[0]?.network)
+      if (!chainFromParam) updateSearchParams(ForgeSearchParamKeys.FORGE_CHAIN, userChains[0]?.name)
     } else {
-      updateSearchParams(ForgeSearchParamKeys.FORGE_CHAIN, chain.network)
+      updateSearchParams(ForgeSearchParamKeys.FORGE_CHAIN, chain.name)
     }
-  }, [chain?.network, chainFromParam, setReadonlyChain, userChains])
+  }, [chain?.name, chainFromParam, setReadonlyChain, userChains])
 
   return null
 }

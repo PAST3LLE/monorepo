@@ -1,9 +1,10 @@
 import { devError } from '@past3lle/utils'
 import { useEffect } from 'react'
-import { useContractRead } from 'wagmi'
+import { useReadContract } from 'wagmi'
 
 import { ForgeMetadataState, useForgeMetadataAtom } from '..'
-import { useForgeFetchMetadata, useForgePrepareCollectionsContract } from '../../../hooks'
+import { CONTRACT_COLLECTIONS_MANAGER_PARAMETERS } from '../../../constants/contracts'
+import { useForgeFetchMetadata } from '../../../hooks'
 import { WAGMI_SCOPE_KEYS } from '../../../hooks/constants'
 import { WithLoadAmount } from '../../../hooks/types'
 import { SkillMetadata } from '../../../types'
@@ -20,10 +21,10 @@ export type ForgeMetadataUpdaterProps = {
 } & Partial<WithLoadAmount>
 
 export function ForgeMetadataUpdater(props: ForgeMetadataUpdaterProps) {
-  const collectionsConfig = useForgePrepareCollectionsContract()
-  const { data: collections } = useContractRead({
-    ...collectionsConfig,
+  const { data: collections } = useReadContract({
+    ...CONTRACT_COLLECTIONS_MANAGER_PARAMETERS,
     functionName: 'totalSupply',
+    args: [],
     scopeKey: WAGMI_SCOPE_KEYS.COLLECTIONS_MANAGER_TOTAL_SUPPLY
   })
 
@@ -35,10 +36,12 @@ export function ForgeMetadataUpdater(props: ForgeMetadataUpdaterProps) {
   const [, setMetadataState] = useForgeMetadataAtom()
 
   useEffect(() => {
-    async function resolveMetadata() {
-      try {
-        if (!chainId || !promisedMetadata) return
+    if (!chainId || !promisedMetadata) return
 
+    async function resolveMetadata() {
+      if (!chainId || !promisedMetadata) return
+
+      try {
         const metadataTuple = await Promise.all(promisedMetadata)
         // Post new metadata if it exists
         if (metadataTuple?.length) {

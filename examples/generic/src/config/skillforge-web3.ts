@@ -1,7 +1,7 @@
 import { createWeb3ModalTheme } from '@past3lle/forge-web3'
 import { Address } from '@past3lle/types'
 import { PstlWeb3ModalProps } from '@past3lle/web3-modal'
-import { goerli } from 'wagmi/chains'
+import { goerli } from 'viem/chains'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const COLLECTIONS_MANAGER_ADDRESSES = require('../../forge-networks.json')
@@ -10,7 +10,7 @@ const CONTRACTS_NETWORKS = require('@past3lle/skilltree-contracts/networks.json'
 
 // TESTING ID - DONT USE IN PROD
 const WALLETCONNECT_TEST_ID = 'a01e2f3b7c64ff495f9cb28e4e2d4b49'
-const DEFAULT_PROPS: PstlWeb3ModalProps<5> = {
+const DEFAULT_PROPS: PstlWeb3ModalProps<[typeof goerli]> = {
   appName: 'COSMOS APP',
   chains: [goerli],
   modals: {
@@ -21,7 +21,7 @@ const DEFAULT_PROPS: PstlWeb3ModalProps<5> = {
             modals: {
               base: {
                 background: {
-                  background: 'salmon'
+                  main: 'salmon'
                 }
               }
             }

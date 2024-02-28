@@ -9,8 +9,10 @@
     "lint": "next lint"
   },
   "alias": {
-    "react": "../../node_modules/react",
-    "react-dom": "../../node_modules/react-dom",
+    "react": "../../node_modules/react/dist",
+    "react-dom": "../../node_modules/react-dom/dist",
+    "@past3lle/carousel": "../../packages/carousel/dist",
+    "@past3lle/carousel-hooks": "../../packages/carousel-hooks/dist",
     "@past3lle/web3-modal": "../../packages/web3-modal/dist",
     "@past3lle/hooks": "../../packages/hooks/dist",
     "@past3lle/theme": "../../packages/theme/dist",
@@ -21,8 +23,6 @@
   "dependencies": {
     "@react-spring/web": "latest",
     "@use-gesture/react": "latest",
-    "@past3lle/carousel": "../../packages/carousel",
-    "@past3lle/carousel-hooks": "../../packages/carousel-hooks",
     "next": "^13.x"
   },
   "devDependencies": {

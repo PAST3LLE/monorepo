@@ -7,11 +7,12 @@ import React, { ReactNode } from 'react'
 import { GothicFontCssProvider } from 'theme/fonts'
 import { GlobalStyles } from 'theme/global'
 import { skillforgeTheme as SKILLFORGE_THEME } from 'theme/skillforge'
-import { SKILLFORGE_APP_NAME, WEB3_PROPS } from 'web3/config/skillforge'
+import { SUPPORTED_CHAINS_PROD } from 'web3/config'
+import { SKILLFORGE_APP_NAME, WEB3_PROPS_PRODUCTION } from 'web3/config/skillforge'
 import { CONTRACT_ADDRESSES_MAP } from 'web3/constants/addresses'
 import { METADATA_URIS_MAP } from 'web3/constants/metadata'
 
-const SKILLFORGE_CONFIG: SkillForgeProps = {
+const SKILLFORGE_CONFIG: SkillForgeProps</* typeof SUPPORTED_CHAINS_DEV */ typeof SUPPORTED_CHAINS_PROD> = {
   config: {
     name: SKILLFORGE_APP_NAME,
     boardOptions: {
@@ -26,7 +27,7 @@ const SKILLFORGE_CONFIG: SkillForgeProps = {
       FAQ: 'https://faq.pastelle.shop/#upgrading'
     },
     theme: SKILLFORGE_THEME,
-    web3: WEB3_PROPS,
+    web3: /* process.env.NODE_ENV === 'production' ? WEB3_PROPS_PRODUCTION : WEB3_PROPS_DEVELOP */ WEB3_PROPS_PRODUCTION,
     contractAddresses: CONTRACT_ADDRESSES_MAP,
     metadataUris: METADATA_URIS_MAP,
     skillOptions: {
@@ -35,8 +36,8 @@ const SKILLFORGE_CONFIG: SkillForgeProps = {
         gatewayApiUris: GATEWAY_API_URIS
       }
     },
-    hooksProviderOptions: {
-      windowSizes: {
+    options: {
+      windowSizeOptions: {
         throttleMs: 750
       }
     }
@@ -74,7 +75,7 @@ export function App() {
   return (
     <FontsAndCssProviders>
       <Column width="100%">
-        <Row height={'100vh'}>
+        <Row height="100vh">
           <SkillForge {...SKILLFORGE_CONFIG} render={() => <SkillForgeConnectedHeader />} />
         </Row>
         <AppVersion />

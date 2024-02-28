@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
-import { Address, useAccount } from 'wagmi'
+import { Address } from 'viem'
+import { useAccount } from 'wagmi'
 
 import { ForgeBalances, useForgeBalancesWriteAtom, useForgeResetBalancesAtom } from '..'
 import {
@@ -37,25 +38,27 @@ export function ForgeBalancesUpdater({ loadAmount = BigInt(DEFAULT_COLLECTION_LO
     const metadataLoaded = !!metadata?.length
 
     const derivedData: bigint[][] = _getEnvBalances(balancesBatch as { result: bigint[] }[] | undefined)
-    const dataHasLength = derivedData?.[0]?.length && derivedData?.[1]?.length
+    // check that derivedData's first/last index relative to skills has data
+    const dataHasLength = derivedData?.[0]?.length && derivedData?.[skills.length - 1]?.length
 
     if (metadataLoaded && dataHasLength) {
       if (!address) {
         // if address is undefined, reset balances
-        resetUserBalances({})
+        resetUserBalances()
       } else {
-        const balances = reduceBalanceDataToMap(derivedData, skills as { result: Address }[], metadata, chainId)
+        const balances = _reduceBalanceDataToMap(derivedData, skills as { result: Address }[], metadata, chainId)
 
         updateForgeBalances(balances)
       }
     }
+    // Can safely ignore "skills" as a dep since metadata depends on it
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chainId, address, balancesBatch, metadata, resetUserBalances, updateForgeBalances])
 
   return null
 }
 
-function reduceBalanceDataToMap(
+function _reduceBalanceDataToMap(
   data: readonly bigint[][],
   collectionsAddresses: { result: Address }[],
   metadata: ForgeMetadataState['metadata'][number],

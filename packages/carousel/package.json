@@ -1,6 +1,6 @@
 {
   "name": "@past3lle/carousel",
-  "version": "0.2.0",
+  "version": "2.1.0",
   "description": "PAST3LLE animated carousel built with @past3lle/carousel-hooks, usegesture, and react-springs",
   "keywords": [
     "springs",
@@ -14,9 +14,11 @@
   "module": "dist/carousel.esm.js",
   "exports": {
     "import": "./dist/carousel.esm.js",
-    "require": "./dist/index.js"
+    "require": "./dist/index.js",
+    "types": "./dist/index.d.ts"
   },
   "typings": "dist/index.d.ts",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
@@ -94,13 +96,13 @@
     "tslib": "^2.4.1"
   },
   "dependencies": {
-    "@past3lle/carousel-hooks": "^0.2.0",
-    "@past3lle/components": "^0.2.0",
-    "@past3lle/hooks": "^0.2.0",
-    "@past3lle/theme": "^0.1.13",
-    "@past3lle/utils": "^0.1.11",
+    "@past3lle/carousel-hooks": "^2.1.0",
+    "@past3lle/components": "^2.1.0",
+    "@past3lle/hooks": "^2.1.0",
+    "@past3lle/theme": "^2.1.0",
+    "@past3lle/utils": "^2.1.0",
     "polished": "^4.2.2",
     "react-feather": "^2.0.10"
   },
-  "gitHead": "f852fe196f05c3b9111c9642af6df32c8bff7a6e"
+  "gitHead": "a2b4f4f3c33ab7e1040da4cecdd300e715d5eeea"
 }

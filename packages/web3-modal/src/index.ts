@@ -1,27 +1,40 @@
+import { TransactionsButton as PstlTransactionsButton } from './components/buttons/Transactions'
 import { PstlWeb3Modal } from './components/modals'
+import { AnyTransactionReceipt, TransactionOptions, TransactionStatus } from './controllers/TransactionsCtrl/types'
 import {
+  useAddPendingTransaction,
+  useAddPendingTransactionsBatch,
+  useAllWeb3Modals,
+  useFindTransactionByMetadataKeyValue,
+  useFindTransactionByMetadataKeyValueCallback,
+  useHasPendingTransactions,
+  useIsSafeViaWc,
+  useIsSafeWallet,
   useLimitChainsAndSwitchCallback,
+  usePendingEoaTransactions,
+  usePendingSafeTransactions,
+  usePendingTransactions,
   useAccountNetworkActions as usePstlAccountNetworkActions,
   useConnectDisconnect as usePstlConnectDisconnect,
   useConnection as usePstlConnection,
+  useModalActions as usePstlModalActions,
   useUserConnectionInfo as usePstlUserConnectionInfo,
+  useWaitForTransaction as usePstlWaitForTransaction,
+  useWaitForTransactionReceiptEffect as usePstlWaitForTransactionEffect,
+  useWatchPendingTransactions as usePstlWatchPendingTransactions,
   usePstlWeb3Modal,
-  useWeb3Modals as usePstlWeb3Modals
+  useAllWeb3Modals as usePstlWeb3Modals,
+  useTransactionsByMetadataKey,
+  useTransactionsByMetadataKeyCallback,
+  useTransactionsRead
 } from './hooks'
 import {
-  type Chain,
-  type ChainsPartialReadonly,
   PstlW3Providers,
   type PstlWagmiClientOptions,
   PstlWagmiProvider,
   type PstlWeb3ModalProps,
-  type ReadonlyChain,
-  addConnector,
-  addFrameConnector,
-  usePstlEthereumClient,
-  usePstlWagmiClient
+  useCreateWagmiClient
 } from './providers'
-import { AppType, getAppType } from './providers/utils/connectors'
 import { type PstlModalTheme, type PstlModalThemeExtension, W3aStyleResetProvider, createTheme } from './theme'
 import {
   getAllChainsInfo,
@@ -29,18 +42,40 @@ import {
   getSafeAppChainInfo,
   getSafeAppChainShortName
 } from './utils/chains'
+import { AppType, getAppType, useDeriveAppType } from './utils/connectors'
 
 export * from './types'
 
 export {
   PstlWeb3Modal,
+  PstlTransactionsButton,
+  // hooks
   usePstlAccountNetworkActions,
   usePstlConnectDisconnect,
   usePstlConnection,
+  usePstlModalActions,
   usePstlUserConnectionInfo,
   usePstlWeb3Modal,
   usePstlWeb3Modals,
+  useAllWeb3Modals,
+  usePstlWaitForTransaction,
+  usePstlWaitForTransactionEffect,
   useLimitChainsAndSwitchCallback,
+  usePstlWatchPendingTransactions,
+  useIsSafeWallet,
+  useIsSafeViaWc,
+  // txs
+  useAddPendingTransaction,
+  useAddPendingTransactionsBatch,
+  useHasPendingTransactions,
+  usePendingTransactions,
+  usePendingEoaTransactions,
+  usePendingSafeTransactions,
+  useTransactionsRead,
+  useTransactionsByMetadataKey,
+  useTransactionsByMetadataKeyCallback,
+  useFindTransactionByMetadataKeyValue,
+  useFindTransactionByMetadataKeyValueCallback,
   // theme
   createTheme,
   W3aStyleResetProvider,
@@ -48,23 +83,22 @@ export {
   PstlW3Providers,
   PstlWagmiProvider,
   // hooks
-  usePstlEthereumClient,
-  usePstlWagmiClient,
+  // usePstlEthereumClient,
+  useCreateWagmiClient,
   // utils
   getAllChainsInfo,
   getChainInfoFromShortName,
   getSafeAppChainInfo,
   getSafeAppChainShortName,
-  addConnector,
-  addFrameConnector,
   getAppType,
+  useDeriveAppType,
   // types
   type PstlWeb3ModalProps,
   type PstlWagmiClientOptions,
-  type ChainsPartialReadonly,
-  type ReadonlyChain,
-  type Chain,
   type PstlModalThemeExtension,
   type PstlModalTheme,
-  type AppType
+  type AppType,
+  type AnyTransactionReceipt,
+  type TransactionStatus,
+  type TransactionOptions
 }

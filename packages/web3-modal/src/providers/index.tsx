@@ -1,77 +1,63 @@
 import React, { ReactNode, memo } from 'react'
+import { WagmiProviderProps } from 'wagmi'
 
 import { PstlWeb3Modal } from '../components'
-import { useAutoSwitchToChain } from '../hooks/useAutoSwitchToChain'
-import { useConnectorAndChainConfig } from '../hooks/useConnectorAndChainConfig'
-import { useHydrateModals } from '../hooks/useHydrateModals'
-import type { Chain, ChainsPartialReadonly, ReadonlyChain } from '../types'
+import { TransactionsUpdater } from '../controllers/TransactionsCtrl/updater'
+import { useAutoSwitchToChain } from '../hooks/internal/useAutoSwitchToChain'
+import { PstlWagmiClientOptions, useCreateWagmiClient } from '../hooks/internal/useCreateWagmiClient'
+import { useUpdateUserConfigState } from '../hooks/state/useUpdateUserConfigState'
 import type { PstlWeb3ModalProps } from './types'
-import {
-  PstlWagmiClientOptions,
-  addConnector,
-  addFrameConnector,
-  usePstlEthereumClient,
-  usePstlWagmiClient
-} from './utils'
 import { PstlWagmiProvider } from './wagmi'
-import { Web3Modal } from './web3Modal'
 
-const PstlW3ProvidersBase = <ID extends number>({
+const PstlW3ProvidersBase = <chains extends WagmiProviderProps['config']['chains']>({
   children,
-  config
+  config,
+  autoReconnect = false
 }: {
   children: ReactNode
-  config: PstlWeb3ModalProps<ID>
+  config: PstlWeb3ModalProps<chains>
+  autoReconnect?: boolean
 }) => {
-  // Get any specific connector/chain config based on the type of app we're running
-  // e.g are we in a Safe app? If so, run the Safe connector automatically set with the URL shortName chain
-  const connectorAndChainConfig = useConnectorAndChainConfig(config)
   // Set up the providers
-  const wagmiClient = usePstlWagmiClient(connectorAndChainConfig)
-  const ethereumClient = usePstlEthereumClient(config.clients?.ethereum, wagmiClient, config.chains)
+  const wagmiClient = useCreateWagmiClient(config)
   // Get the chainId/network info from the URL, if applicable
   const chainFromUrl = useAutoSwitchToChain(config.chains, config)
-  // Setup proxy modals state with user config
-  useHydrateModals(config)
+  // Setup proxy state with user config
+  useUpdateUserConfigState(config)
 
   return (
     <>
-      {config.modals?.walletConnect && <Web3Modal {...config} clients={{ ethereum: ethereumClient }} />}
+      {/* 
+        * Wagmi V2 // Web3Modal V4 is not compatible with this package unfortunately :(
+        * Will likely phase out entirely. For now, use walletConnect connector. 
+        
+        <Web3Modal chains={config.chains as Writable<chains>} config={config.modals.walletConnect} /> 
+      */}
       <PstlWagmiProvider
         wagmiClient={wagmiClient}
         chainFromUrl={chainFromUrl}
-        autoConnect={config.options?.autoConnect}
+        autoConnect={autoReconnect || config.options?.autoConnect}
       >
         <PstlWeb3Modal
           {...config.modals.root}
           chainIdFromUrl={chainFromUrl?.id}
           closeModalOnKeys={config.options?.closeModalOnKeys}
         />
+        <TransactionsUpdater />
         {children}
       </PstlWagmiProvider>
     </>
   )
 }
 
-const PstlW3Providers = memo(
-  PstlW3ProvidersBase,
-  (prev, next) => JSON.stringify(prev.config) === JSON.stringify(next.config)
-)
+const PstlW3Providers = memo(PstlW3ProvidersBase)
 
 export {
   PstlW3Providers,
   PstlWagmiProvider,
-  Web3Modal as PstlWeb3Modal,
   // hooks
-  usePstlEthereumClient,
-  usePstlWagmiClient,
-  // utils
-  addConnector,
-  addFrameConnector,
+  useCreateWagmiClient,
   // types
   type PstlWeb3ModalProps,
-  type PstlWagmiClientOptions,
-  type ChainsPartialReadonly,
-  type ReadonlyChain,
-  type Chain
+  type PstlWagmiClientOptions
 }

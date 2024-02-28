@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Contract, ContractFactory } from '@ethersproject/contracts'
 import {
@@ -45,10 +43,10 @@ async function deployCollectionAndAddToManager(props?: { tryHigherValues: boolea
   
   Custom sub-path:`,
       default: '',
-      validate: (input) => {
+      validate: (input: string | undefined | null) => {
         if (input === '' || input === undefined || input === null) return true
-        if (!input.startsWith('/')) return 'Custom sub-path must start with a "/"'
-        if (!input.endsWith('/')) return 'Custom sub-path must end with a "/"'
+        if (!input?.startsWith('/')) return 'Custom sub-path must start with a "/"'
+        if (!input?.endsWith('/')) return 'Custom sub-path must end with a "/"'
         return true
       }
     }
@@ -92,16 +90,24 @@ async function deployCollectionAndAddToManager(props?: { tryHigherValues: boolea
       name: 'metadataUri',
       message: `Enter your Collection metadata folder uri -
       
-  Example: ipfs://someHash/
+  Examples: 
+  1. ipfs://someHash/
+  2. https://some-collection-name.s3.eu-south-7.amazonaws.com/collections/99/
         
   NOTE: Using IPFS urls (ipfs://) are recommended as it provides an immutable url.
 
-  URL must point to an IPFS folder containing each collection's skills metadata information.
+  URL must point to a folder containing each collection's skills metadata information.
   It MUST also end with a trailing slash, like in the examples above.
 
 Metadata URI:`,
-      validate(input) {
-        if (typeof input === 'string' && input.length > 0 && input.startsWith('ipfs://') && input.endsWith('/')) {
+      validate(input: string | null | undefined) {
+        const isString = typeof input === 'string'
+        const hasLength = isString && input?.length && input.length > 0
+        const endsWithSlash = isString && input?.endsWith('/')
+
+        const isValid = hasLength && isString && endsWithSlash
+
+        if (isValid) {
           return true
         }
 
@@ -112,8 +118,8 @@ Metadata URI:`,
       type: 'input',
       name: 'collectionName',
       message: 'Enter your Collection name',
-      validate(input) {
-        if (typeof input === 'string' && input.length > 0) {
+      validate(input: string | null | undefined) {
+        if (typeof input === 'string' && input?.length && input.length > 0) {
           return true
         }
 
@@ -224,7 +230,7 @@ Metadata URI:`,
     An error occurred while deploying a new Collection.sol contract and/or trying to attach it to the CollectionsManager.sol contract! Error message (if any):
 
     ==========================
-    ${(error as any)?.message}
+    ${error instanceof Error && 'message' in error ? error.message : 'N/A'}
     ==========================
     
     Confirm below to try again with higher gas fees as this is likely a network congestion issue.

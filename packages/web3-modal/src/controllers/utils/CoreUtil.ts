@@ -1,10 +1,23 @@
+import {
+  ConnectionStatusCtrlState,
+  ModalCtrlState,
+  RouterCtrlState,
+  ToastCtrlState,
+  TransactionsCtrlState,
+  UserOptionsCtrlState
+} from '../types/state'
+
+const STORAGE_KEYS = {
+  deepLinkChoice: 'WALLETCONNECT_DEEPLINK_CHOICE',
+  transactions: 'W3M_TRANSACTIONS',
+  version: 'W3M_VERSION'
+} as const
+
+const IS_SERVER = typeof globalThis?.window === 'undefined'
+
 export const CoreUtil = {
-  WALLETCONNECT_DEEPLINK_CHOICE: 'PSTL_WALLETCONNECT_DEEPLINK_CHOICE',
-
-  W3M_VERSION: 'W3M_VERSION',
-
   isMobile() {
-    if (typeof globalThis?.window !== 'undefined') {
+    if (!IS_SERVER) {
       return Boolean(
         window.matchMedia('(pointer:coarse)').matches ||
           /Android|webOS|iPhone|iPad|iPod|BlackBerry|Opera Mini/u.test(navigator.userAgent)
@@ -70,17 +83,17 @@ export const CoreUtil = {
   },
 
   setWalletConnectDeepLink(href: string, name: string) {
-    localStorage.setItem(CoreUtil.WALLETCONNECT_DEEPLINK_CHOICE, JSON.stringify({ href, name }))
+    localStorage.setItem(STORAGE_KEYS.deepLinkChoice, JSON.stringify({ href, name }))
   },
 
   setWalletConnectAndroidDeepLink(wcUri: string) {
     const [href] = wcUri.split('?')
 
-    localStorage.setItem(CoreUtil.WALLETCONNECT_DEEPLINK_CHOICE, JSON.stringify({ href, name: 'Android' }))
+    localStorage.setItem(STORAGE_KEYS.deepLinkChoice, JSON.stringify({ href, name: 'Android' }))
   },
 
   removeWalletConnectDeepLink() {
-    localStorage.removeItem(CoreUtil.WALLETCONNECT_DEEPLINK_CHOICE)
+    localStorage.removeItem(STORAGE_KEYS.deepLinkChoice)
   },
 
   isNull<T>(value: T | null): value is null {
@@ -89,7 +102,28 @@ export const CoreUtil = {
 
   setWeb3ModalVersionInStorage() {
     if (typeof localStorage !== 'undefined') {
-      localStorage.setItem(CoreUtil.W3M_VERSION, process.env.ROLLUP_W3M_VERSION ?? 'UNKNOWN')
+      localStorage.setItem(STORAGE_KEYS.version, process.env.ROLLUP_W3M_VERSION ?? 'UNKNOWN')
+    }
+  },
+  getStateFromStorage(key: keyof typeof STORAGE_KEYS, defaultState: any = null) {
+    if (typeof globalThis?.window?.localStorage !== 'undefined') {
+      const serialisedState = localStorage.getItem(STORAGE_KEYS[key])
+      return serialisedState ? JSON.parse(serialisedState) : defaultState
+    }
+    return defaultState
+  },
+  setStateToStorage(
+    key: keyof typeof STORAGE_KEYS,
+    state:
+      | ConnectionStatusCtrlState
+      | ModalCtrlState
+      | RouterCtrlState
+      | ToastCtrlState
+      | TransactionsCtrlState
+      | UserOptionsCtrlState
+  ) {
+    if (typeof globalThis?.window?.localStorage !== 'undefined') {
+      localStorage.setItem(STORAGE_KEYS[key], JSON.stringify(state))
     }
   }
 }

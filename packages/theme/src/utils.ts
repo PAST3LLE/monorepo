@@ -1,11 +1,18 @@
 import { DDPXImageUrlMap, GenericImageSrcSet } from '@past3lle/types'
+import contrast from 'get-contrast'
 import { darken, lighten, transparentize } from 'polished'
 import { CSSObject, DefaultTheme, SimpleInterpolation, css } from 'styled-components'
-import { hex } from 'wcag-contrast'
 
 import { MEDIA_WIDTHS, MediaWidths } from './styles'
 import { BaseColours } from './templates/base'
-import { BackgroundPropertyFull, ImageKitUrl, ThemeBaseRequired, ThemeByModes, ThemeModesRequired } from './types'
+import {
+  BackgroundPropertyFull,
+  Color,
+  ImageKitUrl,
+  ThemeBaseRequired,
+  ThemeByModes,
+  ThemeModesRequired
+} from './types'
 
 export const WHITE = BaseColours.white
 export const OFF_WHITE = BaseColours.offwhite
@@ -65,28 +72,39 @@ export const betweenSmallAndLarge = whenMediaBetween('betweenSmallAndLarge')
 const IMG_SET_SIZE_ENTRIES = Object.entries(MEDIA_WIDTHS).reverse()
 type UpToSizeKey = keyof typeof MEDIA_WIDTHS
 
-type CheckHexColourContrastParams = { bgColour: string; fgColour: string }
-export function checkHexColourContrast({ bgColour, fgColour }: CheckHexColourContrastParams) {
-  const contrast = hex(bgColour, fgColour)
+type CheckHexColourContrastParams = { bgColour: Color; fgColour: Color }
 
-  return contrast
+export function checkHexColourContrast({ bgColour, fgColour }: CheckHexColourContrastParams): [number, string] {
+  const score: number = contrast.ratio(bgColour, fgColour)
+  const rating: string = contrast.score(bgColour, fgColour)
+
+  return [score, rating]
 }
 
 type BestContrastingColourParams = CheckHexColourContrastParams & {
-  lightColour: string
-  darkColour: string
+  lightColour: Color
+  darkColour: Color
 }
-const CONTRAST_THRESHOLD = 10
+type PossiblePassingContrastRatingThresholds = 'AAA' | 'AA' | 'A'
+type ContrastCheckOptions = {
+  threshold: number | PossiblePassingContrastRatingThresholds[]
+}
+
 export function setBestContrastingColour(
   { bgColour, fgColour, lightColour, darkColour }: BestContrastingColourParams,
-  threshold = CONTRAST_THRESHOLD
-) {
-  const contrastLevel = checkHexColourContrast({
+  options: ContrastCheckOptions = { threshold: ['AA'] }
+): string {
+  const [contrastScore, contrastRating] = checkHexColourContrast({
     bgColour,
     fgColour
   })
 
-  return contrastLevel < threshold ? lightColour : darkColour
+  const passesThreshold =
+    typeof options.threshold === 'number'
+      ? contrastScore > options.threshold
+      : !options.threshold.some((acceptedRating) => acceptedRating === contrastRating)
+
+  return passesThreshold ? lightColour : darkColour
 }
 
 type LqIkUrlOptions = {
@@ -105,6 +123,28 @@ export function getLqIkUrl(
 
   return process.env.REACT_APP_IMAGEKIT_URL_ENDPOINT + urlObj?.pathname + '?tr=' + transform
 }
+export type BackgroundBlendMode =
+  | 'color'
+  | 'color-burn'
+  | 'color-dodge'
+  | 'darken'
+  | 'difference'
+  | 'exclusion'
+  | 'hard-light'
+  | 'hue'
+  | 'lighten'
+  | 'luminosity'
+  | 'multiply'
+  | 'normal'
+  | 'overlay'
+  | 'saturation'
+  | 'screen'
+  | 'soft-light'
+  | 'inherit'
+  | 'initial'
+  | 'revert'
+  | 'revert-layer'
+  | 'unset'
 /**
  *
  * @param theme
@@ -121,7 +161,7 @@ export function getLqIkUrl(
 type SetCssBackgroundParams = {
   imageUrls?: GenericImageSrcSet<MediaWidths>[]
   backgroundAttributes?: string[]
-  backgroundBlendMode?: string
+  backgroundBlendMode?: BackgroundBlendMode
   backgroundColor?: string
   ignoreQueriesWithFixedWidth?: MediaWidths
   dpiLevel?: '3x' | '2x' | '1x'
@@ -195,7 +235,7 @@ type BackgroundWithDPIProps = Partial<Omit<SetCssBackgroundParams, 'isLogo' | 'i
   modeColours?: [string, string]
 }
 
-export function setBestTextColour(bgColor: string, threshold = CONTRAST_THRESHOLD) {
+export function setBestTextColour(bgColor: Color, threshold: ContrastCheckOptions['threshold'] = ['AA']) {
   return setBestContrastingColour(
     {
       bgColour: bgColor,
@@ -203,7 +243,7 @@ export function setBestTextColour(bgColor: string, threshold = CONTRAST_THRESHOL
       darkColour: BLACK,
       lightColour: OFF_WHITE
     },
-    threshold
+    { threshold }
   )
 }
 
@@ -276,7 +316,7 @@ export function isImageKitUrl(url?: any): url is ImageKitUrl {
   return Boolean(url?.match(/^(https:\/\/)?ik\.imagekit\.io/))
 }
 
-export function urlMapToFullSrcSet(urlMap: GenericImageSrcSet<MediaWidths>['1440']): GenericImageSrcSet<MediaWidths> {
+export function urlMapToFullSrcSet(urlMap: DDPXImageUrlMap): GenericImageSrcSet<MediaWidths> {
   return {
     defaultUrl: urlMap['1x'],
     500: urlMap,
@@ -295,6 +335,21 @@ export function urlToSimpleGenericImageSrcSet(url: string): GenericImageSrcSet<M
     960: { '1x': url },
     1280: { '1x': url },
     1440: { '1x': url }
+  }
+}
+
+export function createImageSrcSet(
+  uris: {
+    [size in MediaWidths]: string
+  } & { default: string }
+): GenericImageSrcSet<MediaWidths> {
+  return {
+    defaultUrl: uris.default,
+    500: { '1x': uris[500], '2x': uris[960], '3x': uris[1440] },
+    720: { '1x': uris[720], '2x': uris[1440], '3x': uris.default },
+    960: { '1x': uris[960], '2x': uris.default, '3x': uris.default },
+    1280: { '1x': uris[1280], '2x': uris.default, '3x': uris.default },
+    1440: { '1x': uris[1440], '2x': uris.default, '3x': uris.default }
   }
 }
 

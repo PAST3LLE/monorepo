@@ -1,37 +1,41 @@
-import { AutoRow, Column, ExternalLink, Row, RowCenter, SpinnerCircle, Text } from '@past3lle/components'
+import { AutoRow, Column, Row, RowCenter, SpinnerCircle, StyledLink } from '@past3lle/components'
 import {
   ForgeMetadataState,
   SkillDependencyObject,
   SkillId,
   SkillRarity,
-  ipfsToImageUri,
+  useForgeApproveAndClaimLockedSkillCallback,
   useForgeBalancesReadAtom,
-  useForgeClaimLockedSkill,
   useForgeIpfsGatewayUrisAtom,
   useForgeMetadataMapReadAtom,
-  useSupportedChainId
+  useSupportedChainId,
+  useW3WaitForTransactionEffect
 } from '@past3lle/forge-web3'
-import { OFF_WHITE, urlToSimpleGenericImageSrcSet } from '@past3lle/theme'
+import { OFF_WHITE, createImageSrcSet } from '@past3lle/theme'
 import { darken } from 'polished'
 import React, { useMemo, useRef } from 'react'
 import { useTheme } from 'styled-components'
-import { Address, useWaitForTransaction } from 'wagmi'
+import { useAccount } from 'wagmi'
 
 import { SKILLPOINTS_CONTAINER_ID } from '../../../constants/skills'
 import { useGetActiveSkillFromActiveSkillId } from '../../../hooks/useGetActiveSkillFromActiveSkillId'
+import { useForgeFlowReadWriteAtom } from '../../../state/Flows'
 import { useSidePanelAtom } from '../../../state/SidePanel'
 import { baseTheme } from '../../../theme/base'
-import { buildSkillMetadataExplorerUri } from '../../../utils/skills'
+import { MAIN_BG } from '../../../theme/constants'
+import { buildSkillMetadataExplorerUri, getBestAvailableSkillImage } from '../../../utils/skills'
 import { BlackHeader, MonospaceText } from '../../Common/Text'
 import { Skillpoint } from '../../Skillpoint'
 import { RequiredDepsContainer, SkillRarityLabel, SkillsRowContainer } from '../ActiveSkillPanel/styleds'
 import { SidePanel } from '../BaseSidePanel'
+import { MAIN_COLOR } from '../BaseSidePanel/styleds'
 import { ErrorPanel } from '../ErrorPanel'
 import { SkillsRowProps } from '../common'
 import { TradeAndUnlockActionButton } from './ActionButton'
 import { SkillTradeExpandingContainer, TradeAndUnlockPanelContainer } from './styleds'
 
 export function TradeAndUnlockPanel() {
+  const { address } = useAccount()
   const chainId = useSupportedChainId()
 
   const activeSkill = useGetActiveSkillFromActiveSkillId(chainId)
@@ -45,12 +49,12 @@ export function TradeAndUnlockPanel() {
 
   const theme = useTheme()
 
-  const rarity = activeSkill.properties.rarity
-  const cardColour = 'linear-gradient(195deg,#996ef4,#ffb900)'
+  const rarity = activeSkill?.properties?.rarity
+  const cardColour = 'black'
 
   const { metadataExplorerUri, requiresSeveralDepsOfDifferentRarities, depsMap } = useMemo(() => {
     const metadataExplorerUri = buildSkillMetadataExplorerUri('opensea', activeSkill, chainId)
-    const depsMap = gatherDepsInfo(activeSkill.properties.dependencies, metadataMap)
+    const depsMap = gatherDepsInfo(activeSkill?.properties?.dependencies, metadataMap)
     const hasMultiDeps = [...depsMap.entries()].filter(([, list]) => !!list.length).length > 1
 
     return {
@@ -60,35 +64,58 @@ export function TradeAndUnlockPanel() {
     }
   }, [activeSkill, chainId, metadataMap])
 
-  const [token, id] = activeSkill.properties.id.split('-')
-  const {
-    data,
-    writeAsync,
-    isLoading,
-    isError: isErrorContract,
-    error
-  } = useForgeClaimLockedSkill({
-    token: token as Address,
-    id: BigInt(id)
+  const [, updateFlow] = useForgeFlowReadWriteAtom(chainId, address)
+
+  const [
+    { data: approveBurnAndClaimHash, isPending: isApproveBurnClaimPending, isError: isErrorContract, error },
+    approveBurnAndClaimLockedSkill
+  ] = useForgeApproveAndClaimLockedSkillCallback(activeSkill, {
+    onApproveSend(hash) {
+      updateFlow({
+        id: activeSkill.properties.id,
+        status: 'needs-approvals',
+        hash
+      })
+    },
+    onClaimSend(hash) {
+      updateFlow({
+        id: activeSkill.properties.id,
+        status: 'claiming',
+        hash
+      })
+    }
   })
 
   const [, setPanelState] = useSidePanelAtom()
 
-  const { isLoading: isLoadingHash, isSuccess: isSuccessHash } = useWaitForTransaction({
-    hash: data?.hash,
+  const pendingTxResults = useW3WaitForTransactionEffect({
+    enabled: !!approveBurnAndClaimHash,
+    hash: approveBurnAndClaimHash,
     onSettled() {
       // close panel on any settled state
       setPanelState('reset')
     }
   })
 
-  const isClickedButNoHash = isLoading && !data?.hash
-  const isPending = isLoadingHash || isLoading || (!!data?.hash && !isSuccessHash)
+  const { isLoading: isLoadingHash, isSuccess: isSuccessHash } = pendingTxResults
+
+  const isClickedButNoHash = isApproveBurnClaimPending && !approveBurnAndClaimHash
+  const isPending = isLoadingHash || isApproveBurnClaimPending || (!!approveBurnAndClaimHash && !isSuccessHash)
   const isError = isErrorContract && !!error
 
   const [gatewayUris] = useForgeIpfsGatewayUrisAtom()
-  const bgImageSet = urlToSimpleGenericImageSrcSet(ipfsToImageUri(activeSkill.image, ...gatewayUris.slice(1)))
-
+  const bgImageSet = useMemo(
+    () =>
+      createImageSrcSet({
+        default: getBestAvailableSkillImage(activeSkill, 'full', { gatewayUris, skipIpfs: true }),
+        500: getBestAvailableSkillImage(activeSkill, 500, { gatewayUris, skipIpfs: true }),
+        720: getBestAvailableSkillImage(activeSkill, 750, { gatewayUris, skipIpfs: true }),
+        960: getBestAvailableSkillImage(activeSkill, 'full', { gatewayUris, skipIpfs: true }),
+        1280: getBestAvailableSkillImage(activeSkill, 'full', { gatewayUris, skipIpfs: true }),
+        1440: getBestAvailableSkillImage(activeSkill, 'full', { gatewayUris, skipIpfs: true })
+      }),
+    [activeSkill, gatewayUris]
+  )
   return isError ? (
     <ErrorPanel title="UPGRADE ERROR!" reason={error} />
   ) : (
@@ -96,25 +123,40 @@ export function TradeAndUnlockPanel() {
       header={activeSkill?.name || 'Unknown'}
       styledProps={{
         background: isPending ? '#fff' : cardColour,
-        bgWithDpiOptions: isPending
-          ? {
-              bgSet: bgImageSet,
-              color: '#fff'
-            }
-          : undefined,
         padding: '2.5rem 0 4rem 0',
         filter: isPending ? 'invert(1) hue-rotate(180deg)' : 'none',
         transition: 'filter 1s ease-out'
       }}
       options={{
-        onClickOutsideConditionalCb: (targetNode: Node) => !!skillContainerRef?.current?.contains(targetNode)
+        onClickOutsideConditionalCb: (targetNode: Node) => !!skillContainerRef?.current?.contains(targetNode),
+        backgroundImageOptions: {
+          smartImg: {
+            uri: bgImageSet[500]['1x'],
+            options: bgImageSet
+              ? {
+                  filter: 'blur(10px) grayscale(1)'
+                }
+              : // CSS props
+                /* {
+                  bgSet: bgImageSet,
+                  modeColors: isPending ? ['#fff', '#fff'] : ['#3f1010', '#3f1010'],
+                } */
+                undefined
+          }
+        }
       }}
       onDismiss={isPending ? undefined : setPanelState}
       onBack={isPending ? undefined : setPanelState}
     >
-      <TradeAndUnlockPanelContainer gap="1rem">
+      <TradeAndUnlockPanelContainer gap="1.2rem">
         <Row justifyContent={'center'} margin="0">
-          <Text.SubHeader fontSize={'2.5rem'} fontWeight={200}>
+          <BlackHeader
+            color={MAIN_COLOR}
+            fontSize="2.5rem"
+            fontWeight={300}
+            margin="0"
+            padding="1rem 1rem 0.25rem 1rem"
+          >
             {isClickedButNoHash ? (
               <>
                 <p>UPGRADE IN PROGRESS</p>
@@ -126,9 +168,9 @@ export function TradeAndUnlockPanel() {
                 MODAL WILL CLOSE WHEN UPGRADE COMPLETES.
               </>
             ) : (
-              `TRADE SKILLS AND UNLOCK ${activeSkill.name.toUpperCase() || 'SKILL'}!`
+              `TRADE SKILLS AND UNLOCK ${activeSkill?.name.toUpperCase() || 'SKILL'}!`
             )}
-          </Text.SubHeader>
+          </BlackHeader>
         </Row>
 
         {isPending && (
@@ -145,12 +187,12 @@ export function TradeAndUnlockPanel() {
 
         {isPending && (
           <Row marginBottom={'2rem'}>
-            <MonospaceText>
+            <MonospaceText color={MAIN_COLOR}>
               Checkout this{' '}
-              <ExternalLink href="#">
+              <StyledLink href="#">
                 {' '}
                 <strong style={{ color: baseTheme.mainBg }}>tutorial</strong>{' '}
-              </ExternalLink>{' '}
+              </StyledLink>{' '}
               to understand skill upgrade and claiming works.
             </MonospaceText>
           </Row>
@@ -160,16 +202,20 @@ export function TradeAndUnlockPanel() {
           <Column minWidth={'15rem'} width="100%" gap="0.25rem">
             {[...depsMap.entries()].map(([rarity, { length }], idx) => (
               <SkillRarityLabel
+                key={`${rarity}_${idx}`}
                 id={`${rarity}_${idx}`}
-                backgroundColor={darken(0.02, theme.rarity[rarity as SkillRarity].backgroundColor)}
+                backgroundColor={darken(0.02, theme.rarity[rarity as SkillRarity]?.backgroundColor || 'white')}
                 color={OFF_WHITE}
                 fontWeight={100}
                 borderRadius="0.3rem"
-                border={`0.2rem solid ${theme.rarity[rarity as SkillRarity].backgroundColor}`}
+                border={`0.2rem solid ${theme.rarity[rarity as SkillRarity]?.backgroundColor}`}
                 justifyContent="flex-start"
                 padding="0 0.5rem 0 0.5rem"
                 minWidth="10rem"
-                textShadow={`1px 1px 1px ${darken(0.3, theme.rarity[rarity as SkillRarity].backgroundColor)}`}
+                textShadow={`1px 1px 1px ${darken(
+                  0.3,
+                  theme.rarity[rarity as SkillRarity]?.backgroundColor || 'white'
+                )}`}
                 width="100%"
               >
                 <img
@@ -184,13 +230,13 @@ export function TradeAndUnlockPanel() {
           </Column>
           <img src={'https://cdn-icons-png.flaticon.com/512/3248/3248150.png'} style={{ width: '4.2rem' }} />
           <SkillRarityLabel
-            backgroundColor={darken(0.02, theme.rarity[rarity].backgroundColor)}
+            backgroundColor={darken(0.02, theme.rarity[rarity]?.backgroundColor || 'white')}
             color={OFF_WHITE}
             letterSpacing={0}
             fontWeight={100}
             borderRadius="0.3rem"
             marginLeft="0"
-            textShadow={`1px 1px 1px ${darken(0.3, theme.rarity[rarity].backgroundColor)}`}
+            textShadow={`1px 1px 1px ${darken(0.3, theme.rarity[rarity]?.backgroundColor || 'white')}`}
             width="auto"
             justifyContent="flex-start"
           >
@@ -203,14 +249,15 @@ export function TradeAndUnlockPanel() {
           <>
             <RequiredDepsContainer overflow={'visible'} background="linear-gradient(90deg, black, transparent 80%)">
               <BlackHeader
-                fontSize="1.8rem"
-                fontWeight={100}
+                fontSize="2.5rem"
+                fontWeight={800}
                 margin="0 0 0.25rem 0"
                 padding="0"
                 letterSpacing={-1}
                 width="max-content"
+                color={MAIN_COLOR}
               >
-                SKILLS TO TRADE FOR UPGRADE
+                TRADING:
               </BlackHeader>
               <SkillsCardDeck
                 balances={balances}
@@ -221,21 +268,22 @@ export function TradeAndUnlockPanel() {
             </RequiredDepsContainer>
 
             <BlackHeader
-              fontSize="1.8rem"
-              fontWeight={100}
+              fontSize="2.5rem"
+              fontWeight={800}
               margin="1rem 0 -0.3rem 0"
               padding="0"
               width="max-content"
               letterSpacing={-1}
+              color={MAIN_COLOR}
             >
-              SKILL TO UNLOCK + RECEIVE
+              RECEIVING:
             </BlackHeader>
             <Row
               id="skill-image-and-store-button"
-              justifyContent={'space-around'}
+              justifyContent="flex-start"
               marginBottom="12%"
               flexWrap={'wrap'}
-              gap="1rem 4rem"
+              gap="3.5rem 4rem"
             >
               <Skillpoint
                 forceRarity="empty"
@@ -243,45 +291,48 @@ export function TradeAndUnlockPanel() {
                 hasSkill={false}
                 disabledHighlight
                 skillpointStyles={{
-                  height: '80%',
-                  flex: 1.4,
+                  height: '250px',
+                  width: '250px',
+                  flex: '0 1 250px',
                   padding: '0',
                   backgroundColor: 'transparent',
                   justifyContent: 'center',
                   css: `
                 > ${RowCenter} {
                   justify-content: flex-start;
-                  min-height: 200px;
-                  height: 20vh;
+                  width: 100%;
+                  height: 100%;
                   > img {
                     border-radius: 10px;
+                    max-height: 100%;
+                    max-width: unset;
                   }
                 }
               `
                 }}
               />
-              {!isPending && <TradeAndUnlockActionButton skill={activeSkill} handleClaim={writeAsync} />}
+              {!isPending && <TradeAndUnlockActionButton handleClaim={approveBurnAndClaimLockedSkill} />}
             </Row>
 
             {chainId && (
               <AutoRow>
-                <MonospaceText>
+                <MonospaceText color={MAIN_COLOR}>
                   View on{' '}
-                  <ExternalLink href={metadataExplorerUri}>
+                  <StyledLink href={metadataExplorerUri}>
                     {' '}
                     <strong style={{ color: baseTheme.mainBg }}>OpenSea</strong>{' '}
-                  </ExternalLink>{' '}
+                  </StyledLink>{' '}
                 </MonospaceText>
               </AutoRow>
             )}
 
             <Row marginTop={'4rem'}>
-              <MonospaceText>
+              <MonospaceText color={MAIN_COLOR}>
                 Checkout this{' '}
-                <ExternalLink href="#">
+                <StyledLink href="#">
                   {' '}
                   <strong style={{ color: baseTheme.mainBg }}>tutorial</strong>{' '}
-                </ExternalLink>{' '}
+                </StyledLink>{' '}
                 to understand how to claim your skillpoint NFT.
               </MonospaceText>
             </Row>
@@ -299,18 +350,20 @@ export function SkillsCardDeck({
 }: SkillsRowProps & { theme: ReturnType<typeof useTheme> }) {
   return (
     <SkillsRowContainer padding="0.2rem" gap="0" overflowX={'auto'}>
-      {deps.flatMap(({ token, id }, idx) => {
+      {deps?.flatMap(({ token, id }, idx) => {
         const skillId: SkillId = `${token}-${id}`
-        const skill = metadataMap[skillId]
-        const depRarity = skill.properties.rarity
-        const depRarityColour = theme.rarity[depRarity].backgroundColor
+        const skill = metadataMap?.[skillId]
+        const depRarity = skill?.properties.rarity
+        const depRarityColour = theme.rarity[depRarity]?.backgroundColor
         return (
           skill && (
             <Column
-              key={skill.properties.id}
+              key={skill?.properties.id}
               css={`
                 &:not(:first-child) {
                   margin-left: -7%;
+                  border-left: 10px solid ${MAIN_BG};
+                  border-radius: 5px;
                 }
                 z-index: ${idx + 1};
 
@@ -323,13 +376,13 @@ export function SkillsCardDeck({
             >
               <Skillpoint
                 // @ts-ignore
-                title={skill.name}
+                title={skill?.name || 'unknown skill'}
                 hasSkill
                 metadata={skill}
                 skillpointStyles={{
                   css: `
-                    width: 14.5vh;
-                    height: 14.5vh;
+                    width: 14.5vh !important;
+                    height: 14.5vh !important;
                     box-shadow: unset;
                 `
                 }}
@@ -339,6 +392,7 @@ export function SkillsCardDeck({
                 color={OFF_WHITE}
                 fontWeight={100}
                 border={`0.2rem solid ${depRarityColour}`}
+                borderRadius="0 0 0.7rem 0"
                 justifyContent="flex-start"
                 textShadow={`1px 1px 1px ${darken(0.3, depRarityColour)}`}
               >
@@ -353,7 +407,12 @@ export function SkillsCardDeck({
   )
 }
 
-function gatherDepsInfo(deps: SkillDependencyObject[], metadataMap: ForgeMetadataState['metadataMap'][number]) {
+const EMPTY_MAP = new Map()
+function gatherDepsInfo(
+  deps: SkillDependencyObject[] | undefined,
+  metadataMap: ForgeMetadataState['metadataMap'][number]
+) {
+  if (!deps) return EMPTY_MAP
   return deps.reduce((acc, dep) => {
     const skillId = `${dep.token}-${dep.id}` as SkillId
     const rarity = metadataMap[skillId].properties.rarity

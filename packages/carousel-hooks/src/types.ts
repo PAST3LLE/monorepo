@@ -1,5 +1,10 @@
+import { UseWindowSizeOptions } from '@past3lle/hooks'
 import { SpringConfig, useSprings } from '@react-spring/web'
 import { DOMAttributes, MutableRefObject } from 'react'
+
+export type WithWindowSizeOptions = {
+  windowSizeOptions?: UseWindowSizeOptions
+}
 
 /**
  * @name AxisDirection

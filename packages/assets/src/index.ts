@@ -1,3 +1,5 @@
+// React Components
+import { CircleOutline } from './components/CircleOutline'
 // PNG circle logo
 import PNG_LogoCircle_1x from './png/pastelle-logo-circle.png'
 import PNG_LogoCircle_2x from './png/pastelle-logo-circle@2x.png'
@@ -10,13 +12,15 @@ import PNG_LogoFull_3x from './png/pastelle-logo-full@3x.png'
 import PNG_LogoShort_1x from './png/pastelle-logo-short.png'
 import PNG_LogoShort_2x from './png/pastelle-logo-short@2x.png'
 import PNG_LogoShort_3x from './png/pastelle-logo-short@3x.png'
-import SVG_LoadingCircleLight from './svg/loading-circle-light.svg'
 // SVGs
+import SVG_LoadingCircleLight from './svg/loading-circle-light.svg'
 import SVG_LogoCircle from './svg/pastelle-logo-circle.svg'
 import SVG_LogoFull from './svg/pastelle-logo-full.svg'
 import SVG_LogoShort from './svg/pastelle-logo-short.svg'
 
 export {
+  // React Components
+  CircleOutline,
   // SVG
   SVG_LogoCircle,
   SVG_LogoFull,

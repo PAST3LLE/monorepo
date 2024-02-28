@@ -1,6 +1,12 @@
 import { Dispatch, SetStateAction, useMemo, useRef, useState } from 'react'
 
-import { AxisDirection, InfiniteScrollOptions, InifniteScrollDataParams, WheelGestureParams } from '../types'
+import {
+  AxisDirection,
+  InfiniteScrollOptions,
+  InifniteScrollDataParams,
+  WheelGestureParams,
+  WithWindowSizeOptions
+} from '../types'
 import useScrollZoneRefs from './useScrollZoneRef'
 
 interface InfiniteScrollSetup {
@@ -19,7 +25,8 @@ interface InfiniteScrollSetup {
 
 export default function useInfiniteScrollSetup(
   axisDirection: AxisDirection,
-  options: InfiniteScrollOptions
+  options: InfiniteScrollOptions,
+  auxOptions?: WithWindowSizeOptions
 ): InfiniteScrollSetup {
   const [firstAnimationOver, setFirstPaintOver] = useState(false)
 
@@ -29,7 +36,7 @@ export default function useInfiniteScrollSetup(
   const {
     refs: { itemSize, scrollingZoneTarget },
     refCallbacks: { setItemSizeRef, setScrollingZoneRef }
-  } = useScrollZoneRefs(axisDirection, options.sizeOptions)
+  } = useScrollZoneRefs(axisDirection, options.sizeOptions, auxOptions)
 
   const gestureParams = useMemo(() => ({ ...options, prevRef, itemSize, setCurrentIndex }), [itemSize, options])
 

@@ -13,7 +13,7 @@ declare module '*.png' {
 
 interface Window {
   __PSTL_HOOKS_WINDOW_SIZE_PROXY_STATE: { width: number; height: number; ar: number }
-  __PSTL_HOOKS_WINDOW_SIZE_PROXY_STATE_SET_DIMENSIONS: ({ width, height, ar }: { width: number | undefined; height: number | undefined; ar: number | undefined }) => void
+  __PSTL_HOOKS_WINDOW_SIZE_CALLBACK: ({ width, height, ar }: { width: number | undefined; height: number | undefined; ar: number | undefined }) => void
   __PSTL_HOOKS_CONTEXT_LISTENER_COUNT?: number
   __PSTL_HOOKS_CONTEXT_LISTENER?: EventListener
 }

@@ -1,5 +1,3 @@
-import { Address } from '@past3lle/types'
-
 /**
  * @name formatCurrency
  * @param amount number amount to format e.g 1234
@@ -253,11 +251,36 @@ export type CurrencyCode =
   | 'ZMW'
   | 'ZWL'
 
-export function truncateAddress(address: Address, opt?: { type: 'long' | 'short' }) {
+function _getWordParts(
+  word: string,
+  sizes: { short: [number, number]; long: [number, number] },
+  opt: { type: 'long' | 'short' }
+) {
   const options = opt || { type: 'short' }
-  const numbers = options.type === 'short' ? [6, 38] : [10, 32]
-  const firstPart = address.slice(0, numbers[0])
-  const lastPart = address.slice(numbers[1])
+  const numbers = options.type === 'short' ? sizes.short : sizes.long
+  const firstPart = word.slice(0, numbers[0])
+  const lastPart = word.slice(numbers[1])
 
-  return firstPart + '...' + lastPart
+  return [firstPart, lastPart]
+}
+export function truncateAddress(address: string, opt?: { type: 'long' | 'short' }) {
+  const options = opt || { type: 'short' }
+  const [fp, lp] = _getWordParts(address, { short: [6, 38], long: [10, 32] }, options)
+
+  return fp + '...' + lp
+}
+
+export function truncateHash(hash: string, opt?: { type: 'long' | 'short' }) {
+  const options = opt || { type: 'short' }
+  const [fp, lp] = _getWordParts(hash, { short: [6, 62], long: [10, 56] }, options)
+
+  return fp + '...' + lp
+}
+
+export function truncateLongString(string: string, opt?: { type: 'long' | 'short' }) {
+  const options = opt || { type: 'short' }
+  const sigLength = string.length
+  const [fp, lp] = _getWordParts(string, { short: [6, sigLength - 6], long: [10, sigLength - 12] }, options)
+
+  return fp + '...' + lp
 }

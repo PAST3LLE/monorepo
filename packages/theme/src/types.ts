@@ -9,7 +9,9 @@ export type ImageKitUrl = `https://ik.imagekit.io/${string}/${string}`
 
 export type BackgroundPropertyFull = GenericImageSrcSet<MediaWidths> | ImageKitUrl | string
 
-export type Color = string
+export type HexColor = `#${string}`
+export type RgbColor = `rgb${string}`
+export type Color = HexColor | RgbColor | string
 
 export interface ThemeBaseColoursRequired {
   // black
@@ -36,22 +38,22 @@ export interface ThemeBaseColoursRequired {
 export interface ThemeContentPartsRequired {
   button: {
     border: {
-      radius: Color
+      radius: string
       colour: Color
-      border: Color
+      border: string
     }
     hoverColour: Color
     fontSize: {
-      small: Color
-      normal: Color
-      large: Color
+      small: string
+      normal: string
+      large: string
     }
   }
   input: {
     border: {
-      radius: Color
+      radius: string
       colour: Color
-      border: Color
+      border: string
     }
     hoverColour: Color
   }

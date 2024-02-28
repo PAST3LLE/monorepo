@@ -1,15 +1,17 @@
 {
   "name": "@past3lle/types",
   "sideEffects": false,
-  "version": "0.0.25",
+  "version": "2.1.0",
   "description": "common types",
   "main": "dist/types.esm.js",
   "module": "dist/types.esm.js",
   "exports": {
     "require": "./dist/index.js",
-    "import": "./dist/types.esm.js"
+    "import": "./dist/types.esm.js",
+    "types": "./dist/index.d.ts"
   },
   "typings": "dist/index.d.ts",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
@@ -27,7 +29,8 @@
     "prepack": "yarn build",
     "start": "tsdx watch",
     "pre-commit": "pretty-quick --staged && yarn test:ci && yarn build",
-    "lint": "prettier --write ./src/** --ignore-path '../../.prettierignore'"
+    "lint": "prettier --write ./src/** --ignore-path '../../.prettierignore'",
+    "check-types": "npx tsc --noEmit"
   },
   "publishConfig": {
     "access": "public",
@@ -36,5 +39,5 @@
   "devDependencies": {
     "abitype": "^0.4.0"
   },
-  "gitHead": "5e49f48f540a2eb11b63050c2685accd8e77f41f"
+  "gitHead": "a2b4f4f3c33ab7e1040da4cecdd300e715d5eeea"
 }

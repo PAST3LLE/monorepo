@@ -213,7 +213,7 @@ export const CarouselIndicatorWrapper = styled(Row)<{
     opacity: 1;
   }
 
-  transition: opacity, background 0.3 ease-in-out;
+  transition: opacity 0.3 ease-in-out, background 0.3 ease-in-out;
 
   ${({ axis, position }) =>
     axis === 'x'

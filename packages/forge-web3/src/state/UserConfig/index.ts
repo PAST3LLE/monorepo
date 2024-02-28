@@ -1,11 +1,11 @@
-import { Address } from '@past3lle/types'
-import { ChainsPartialReadonly } from '@past3lle/web3-modal'
 import { atom, useAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
+import { Address, Chain } from 'viem'
+import { goerli } from 'viem/chains'
 
 import { STATE_STORAGE_KEYS } from '../../constants/state-storage-keys'
-import { ForgeContractAddressMap, ForgeMetadataUriMap, SupportedForgeChains } from '../../types'
+import { ForgeChainsMinimum, ForgeContractAddressMap, ForgeMetadataUriMap, PartialForgeChains } from '../../types'
 import { CustomIpfsGatewayConfig } from '../../utils'
 
 const MINIMUM_COLLECTION_BOARD_SIZE = 3
@@ -14,8 +14,8 @@ const MINIMUM_BOARD_WIDTH = 580
 const MINIMUM_BOARD_HEIGHT = 500
 
 export interface UserConfigState {
-  chains: ChainsPartialReadonly<SupportedForgeChains>
-  readonlyChain: ChainsPartialReadonly<SupportedForgeChains>[number] | undefined
+  chains: PartialForgeChains
+  readonlyChain: Readonly<Chain> | undefined
   user: {
     account: Address | undefined
     chainId: number | undefined
@@ -57,11 +57,11 @@ export interface UserConfigState {
     gatewayUris: CustomIpfsGatewayConfig[]
     gatewayApiUris: CustomIpfsGatewayConfig[]
   }
-  metadataUriMap: Partial<ForgeMetadataUriMap>
-  contractAddressMap: Partial<ForgeContractAddressMap>
+  metadataUriMap: ForgeMetadataUriMap<ForgeChainsMinimum>
+  contractAddressMap: ForgeContractAddressMap<ForgeChainsMinimum>
 }
 export const userConfigAtom = atomWithStorage<UserConfigState>(STATE_STORAGE_KEYS.FORGE_USER_CONFIG_STATE, {
-  chains: [],
+  chains: [goerli],
   get readonlyChain() {
     return this.chains?.[0]
   },
@@ -87,9 +87,9 @@ export const userConfigAtom = atomWithStorage<UserConfigState>(STATE_STORAGE_KEY
 })
 userConfigAtom.debugLabel = 'USER CONFIG ATOM'
 
-const readonlyChainAtom = atom<UserConfigState['readonlyChain'], UserConfigState['readonlyChain']>(
+const readonlyChainAtom = atom(
   (get) => get(userConfigAtom).readonlyChain,
-  (get, set, update) => {
+  (get, set, update: UserConfigState['readonlyChain']) => {
     const state = get(userConfigAtom)
     return set(userConfigAtom, {
       ...state,
@@ -97,14 +97,11 @@ const readonlyChainAtom = atom<UserConfigState['readonlyChain'], UserConfigState
     })
   }
 )
-export const supportedChainsSetter = atom<null, ChainsPartialReadonly<SupportedForgeChains>>(
-  null,
-  (get, set, update) => {
-    const state = get(userConfigAtom)
-    return set(userConfigAtom, { ...state, chains: update })
-  }
-)
-export const ipfsGatewaysSetter = atom<null, UserConfigState['ipfs']>(null, (get, set, update) => {
+export const supportedChainsSetter = atom(null, (get, set, update: UserConfigState['chains']) => {
+  const state = get(userConfigAtom)
+  return set(userConfigAtom, { ...state, chains: update })
+})
+export const ipfsGatewaysSetter = atom(null, (get, set, update: UserConfigState['ipfs']) => {
   const state = get(userConfigAtom)
   return set(userConfigAtom, {
     ...state,
@@ -115,9 +112,9 @@ export const ipfsGatewaysSetter = atom<null, UserConfigState['ipfs']>(null, (get
 export const mmetadataUrisReadAtom = atom<UserConfigState['metadataUriMap']>(
   (get) => get(userConfigAtom).metadataUriMap
 )
-export const metadataUriMapAtom = atom<UserConfigState['metadataUriMap'], UserConfigState['metadataUriMap']>(
+export const metadataUriMapAtom = atom(
   (get) => get(userConfigAtom).metadataUriMap,
-  (get, set, update) => {
+  (get, set, update: UserConfigState['metadataUriMap']) => {
     const state = get(userConfigAtom)
     return set(userConfigAtom, {
       ...state,
@@ -129,12 +126,9 @@ export const metadataUriMapAtom = atom<UserConfigState['metadataUriMap'], UserCo
 export const contractAddressesReadAtom = atom<UserConfigState['contractAddressMap']>(
   (get) => get(userConfigAtom).contractAddressMap
 )
-export const contractAddressMapAtom = atom<
-  UserConfigState['contractAddressMap'],
-  UserConfigState['contractAddressMap']
->(
+export const contractAddressMapAtom = atom(
   (get) => get(userConfigAtom).contractAddressMap,
-  (get, set, update) => {
+  (get, set, update: UserConfigState['contractAddressMap']) => {
     const state = get(userConfigAtom)
     return set(userConfigAtom, {
       ...state,
@@ -158,6 +152,15 @@ export const useForgeGetUserConfigChainsAtom = () => useAtom(userChainsGetter)
 export const useForgeSetUserConfigChainsAtom = () => useAtom(supportedChainsSetter)
 
 export const useForgeUserConfigAtom = () => useAtom(userConfigAtom)
+export const useForgeCurrentChain = () => {
+  const [
+    {
+      chains,
+      user: { chainId }
+    }
+  ] = useForgeUserConfigAtom()
+  return useMemo(() => !!chainId && chains?.find((chain) => chain.id === chainId), [chainId, chains])
+}
 
 export const useForgeMetadataUriMapReadAtom = () => useAtom(mmetadataUrisReadAtom)
 export const useForgeMetadataUriMapAtom = () => useAtom(metadataUriMapAtom)
@@ -168,21 +171,14 @@ export const useForgeContractAddressMapAtom = () => useAtom(contractAddressMapAt
 export const useForgeReadonlyChainAtom = () => useAtom(readonlyChainAtom)
 export const useForgeSetUrlToReadonlyChain = (
   chainParam: string | null | undefined
-): [
-  ChainsPartialReadonly<SupportedForgeChains>[number] | undefined,
-  (chain: ChainsPartialReadonly<SupportedForgeChains>[number]) => void
-] => {
+): [Chain | undefined, (chain: Chain) => void] => {
   const [{ chains }, setUserConfig] = useForgeUserConfigAtom()
   const isParamNetwork = isNaN(Number(chainParam))
 
-  const chain = chains.find((userChain) => userChain[isParamNetwork ? 'network' : 'id'] == chainParam)
+  const chain = chains.find((userChain) => userChain[isParamNetwork ? 'name' : 'id'] == chainParam)
 
   return [
     chain,
-    useCallback(
-      (chain: ChainsPartialReadonly<SupportedForgeChains>[number]) =>
-        setUserConfig((state) => ({ ...state, readonlyChain: chain })),
-      [setUserConfig]
-    )
+    useCallback((chain: Chain) => setUserConfig((state) => ({ ...state, readonlyChain: chain })), [setUserConfig])
   ]
 }

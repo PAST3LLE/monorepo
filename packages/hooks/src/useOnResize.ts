@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import { useWindowSize } from './useWindowSize'
+import { UseWindowSizeOptions, useWindowSize } from './useWindowSize'
 
 /**
  * @name useOnResize
@@ -11,8 +11,12 @@ import { useWindowSize } from './useWindowSize'
  * @param callback function to call on window resize. If condition param is given, only fires when true
  * @param condition [optional] condition necessary to be true before firing callback. Defaults to <true>
  */
-export function useOnResize(callback: (...params: any[]) => any, condition = true) {
-  const windowSizes = useWindowSize()
+export function useOnResize(
+  callback: (...params: any[]) => any,
+  condition = true,
+  options?: { windowSizeOptions?: UseWindowSizeOptions }
+) {
+  const windowSizes = useWindowSize(options?.windowSizeOptions)
   useEffect(() => {
     if (condition) {
       callback()

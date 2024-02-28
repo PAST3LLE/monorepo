@@ -6,10 +6,7 @@
         "src/mock/**/*.js"
     ],
     "exclude": [
-        "./src/__mocks__",
-        "./src/**/*.fixture.tsx?",
-        "./src/**/*.decorator.tsx?",
-        "./src/fixtures"
+        "./src/__mocks__"
     ],
     "compilerOptions": {
         "baseUrl": "./",

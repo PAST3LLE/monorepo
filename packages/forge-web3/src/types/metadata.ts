@@ -1,7 +1,7 @@
-import { SupportedForgeChains } from './chains'
+import { ForgeChainsMinimum } from './appConfig'
 
-export type ForgeMetadataUriMap = Partial<{
-  [id in SupportedForgeChains]: {
+export type ForgeMetadataUriMap<forgeChains extends ForgeChainsMinimum> = Partial<{
+  [id in forgeChains[number]['id']]: {
     collectionsManager: string
   }
 }>

@@ -11,13 +11,18 @@
    "**/*.md",
    "**/perf/**",
    "**/.nvmrc",
-   "**/*.fixture.tsx"
+   "**/*.fixture.tsx",
+   "**/*.yml"
  ],
   "command": {
      "version": {
         "ignoreChanges": ["*.md", ".nvmrc"],
         "npmClient": "npm",
-        "message": "chore(release): publish"
+        "message": "chore(release): publish",
+        "conventionalCommits": true,
+        "createRelease": "github",
+        "allowBranch": ["V2", "V2-development"],
+        "changelogPreset": "angular"
      },
      "publish": {
         "npmClient": "npm"

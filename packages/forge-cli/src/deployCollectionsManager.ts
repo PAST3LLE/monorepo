@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ContractFactory } from '@ethersproject/contracts'
 import { CollectionsManager__factory as CollectionsManager } from '@past3lle/skilltree-contracts'
 import dotEnv from 'dotenv'
@@ -40,7 +39,7 @@ async function deployCollectionsManager(props?: { tryHigherValues: boolean }): P
   
   Custom sub-path:`,
       default: '',
-      validate: (input) => {
+      validate: (input: string | undefined | null) => {
         if (input === '' || input === undefined || input === null) return true
         if (!input.startsWith('/')) return 'Custom sub-path must start with a "/"'
         if (!input.endsWith('/')) return 'Custom sub-path must end with a "/"'
@@ -63,7 +62,7 @@ async function deployCollectionsManager(props?: { tryHigherValues: boolean }): P
   It MUST also end with a trailing slash, like in the examples above.
 
 Metadata folder URI:`,
-      validate(input) {
+      validate(input: string | null | undefined) {
         if (typeof input === 'string' && input.length > 0 && input.endsWith('/')) {
           return true
         }
@@ -77,7 +76,7 @@ Metadata folder URI:`,
     network,
     mnemonic: cliMnemonic,
     metadataUri
-  }: { network: SupportedNetworks; mnemonic: string | undefined; metadataUri: string } = answers
+  } = answers as { network: SupportedNetworks; mnemonic: string | undefined; metadataUri: string }
 
   const mnemonic: string | undefined = cliMnemonic || configMnemonic
   if (!mnemonic) throw new Error('[Forge-CLI] Please set your MNEMONIC correctly in forge.config or in the CLI prompt')
@@ -142,7 +141,7 @@ Metadata folder URI:`,
     An error occurred while deploying a new CollectionsManager.sol contract! Error message (if any):
 
     ==========================
-    ${(error as any)?.message}
+    ${error instanceof Error && 'message' in error ? error.message : 'N/A'}
     ==========================
     
     Confirm below to try again with higher gas fees as this is likely a network congestion issue.

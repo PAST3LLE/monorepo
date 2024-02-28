@@ -1,8 +1,8 @@
 import { ColumnCenter, RowProps } from '@past3lle/components'
-import { SupportedForgeChains, useSupportedChainId } from '@past3lle/forge-web3'
+import { ForgeChainsMinimum, SupportedForgeChainIds, useSupportedChainId } from '@past3lle/forge-web3'
 import { useIsMobile } from '@past3lle/hooks'
 import { StaticGlobalCssProvider, ThemedGlobalCssProvider } from '@past3lle/theme'
-import React, { StrictMode } from 'react'
+import React, { useMemo } from 'react'
 import { useTheme } from 'styled-components'
 
 import { useConfigMiddleware } from '../hooks/useConfigMiddleware'
@@ -24,12 +24,12 @@ const CssProviders = () => {
   return (
     <>
       <StaticGlobalCssProvider />
-      <CustomStaticGlobalCss
+      <CustomStaticGlobalCss />
+      <ThemedGlobalCssProvider />
+      <CustomThemeGlobalCss
         backgroundImage={assetsMap.images.background.app}
         lockedSkillIcon={assetsMap.icons.locked}
       />
-      <ThemedGlobalCssProvider />
-      <CustomThemeGlobalCss />
     </>
   )
 }
@@ -37,7 +37,7 @@ const CssProviders = () => {
 const InnerRenderComponent = ({
   render
 }: {
-  render?: ({ chainId }: { chainId: SupportedForgeChains | undefined }) => React.ReactElement<any, any>
+  render?: ({ chainId }: { chainId: SupportedForgeChainIds | undefined }) => React.ReactElement<any, any>
 }) => {
   const chainId = useSupportedChainId()
   if (!render) {
@@ -46,17 +46,41 @@ const InnerRenderComponent = ({
   return render({ chainId })
 }
 
-function SkillforgeInnerComponent({ render, dimensions, ...boxProps }: Omit<SkillForgeProps, 'config'>) {
+function SkillforgeInnerComponent<chains extends ForgeChainsMinimum>({
+  render,
+  dimensions,
+  ...boxProps
+}: Omit<SkillForgeProps<chains>, 'config'>) {
   const isMobile = useIsMobile()
+  const dynamicDimensions = useMemo(
+    () => ({
+      maxWidth: isMobile ? dimensions?.mobile?.width?.max || '100%' : dimensions?.desktop?.width?.max || '90%',
+      maxHeight: isMobile ? dimensions?.mobile?.height?.max : dimensions?.desktop?.height?.max,
+      minWidth: isMobile ? dimensions?.mobile?.width?.min : dimensions?.desktop?.width?.min,
+      minHeight: isMobile ? dimensions?.mobile?.height?.min : dimensions?.desktop?.height?.min,
+      height: (isMobile ? dimensions?.mobile?.height?.base : dimensions?.desktop?.height?.base) || '100%',
+      width: (isMobile ? dimensions?.mobile?.width?.base : dimensions?.desktop?.width?.base) || '100%'
+    }),
+    [
+      dimensions?.desktop?.height?.base,
+      dimensions?.desktop?.height?.max,
+      dimensions?.desktop?.height?.min,
+      dimensions?.desktop?.width?.base,
+      dimensions?.desktop?.width?.max,
+      dimensions?.desktop?.width?.min,
+      dimensions?.mobile?.height?.base,
+      dimensions?.mobile?.height?.max,
+      dimensions?.mobile?.height?.min,
+      dimensions?.mobile?.width?.base,
+      dimensions?.mobile?.width?.max,
+      dimensions?.mobile?.width?.min,
+      isMobile
+    ]
+  )
   return (
     <ColumnCenter
       // Default
-      maxWidth={isMobile ? dimensions?.mobile?.width?.max || '100%' : dimensions?.desktop?.width?.max || '90%'}
-      maxHeight={isMobile ? dimensions?.mobile?.height?.max : dimensions?.desktop?.height?.max}
-      minWidth={isMobile ? dimensions?.mobile?.width?.min : dimensions?.desktop?.width?.min}
-      minHeight={isMobile ? dimensions?.mobile?.height?.min : dimensions?.desktop?.height?.min}
-      height={(isMobile ? dimensions?.mobile?.height?.base : dimensions?.desktop?.height?.base) || '100%'}
-      width={(isMobile ? dimensions?.mobile?.width?.base : dimensions?.desktop?.width?.base) || '100%'}
+      {...dynamicDimensions}
       margin="auto"
       justifyContent="center"
       // User passed in props
@@ -78,10 +102,10 @@ interface SkillforgeDimensions {
     height?: MinMaxDimensions
   }
 }
-interface SkillForgeProps extends RowProps {
-  config: SkillForgeWidgetConfig
+interface SkillForgeProps<chains extends ForgeChainsMinimum> extends RowProps {
+  config: SkillForgeWidgetConfig<chains>
   dimensions?: SkillforgeDimensions
-  render?: ({ chainId }: { chainId: SupportedForgeChains | undefined }) => React.ReactElement<any, any>
+  render?: ({ chainId }: { chainId: SupportedForgeChainIds | undefined }) => React.ReactElement<any, any>
 }
 
 /**
@@ -99,16 +123,14 @@ interface SkillForgeProps extends RowProps {
       }
     }
  */
-function SkillForge({ config, render, ...boxProps }: SkillForgeProps) {
-  const [Provider, modifiedConfig] = useConfigMiddleware(config)
+function SkillForge<chains extends ForgeChainsMinimum>({ config, render, ...boxProps }: SkillForgeProps<chains>) {
+  const [Provider, modifiedConfig] = useConfigMiddleware<chains>(config)
 
   return (
-    <StrictMode>
-      <Provider {...modifiedConfig}>
-        <CssProviders />
-        <SkillforgeInnerComponent {...boxProps} render={render} />
-      </Provider>
-    </StrictMode>
+    <Provider {...modifiedConfig}>
+      <CssProviders />
+      <SkillforgeInnerComponent {...boxProps} render={render} />
+    </Provider>
   )
 }
 

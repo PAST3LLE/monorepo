@@ -1,7 +1,23 @@
-export * from './useCloseAndUpdateModals'
-export * from './useConnection'
-export * from './useLogos'
-export * from './useMergeThemes'
-export * from './usePstlWeb3Modal'
-export * from './usePstlWeb3ModalStore'
-export * from './useLimitChainsAndSwitchCallback'
+export * from './api/useConnection'
+export * from './misc/useLogos'
+export * from './theme/useMergeThemes'
+export * from './api/usePstlWeb3Modal'
+export * from './api/usePstlWeb3ModalStore'
+export * from './api/useLimitChainsAndSwitchCallback'
+export * from './api/useAllWeb3Modals'
+export * from './api/useWaitForTransaction'
+export * from './api/useWatchPendingTransactions'
+export * from './wallet/useWalletMetadata'
+export {
+  useAddPendingTransaction,
+  useAddPendingTransactionsBatch,
+  usePendingEoaTransactions,
+  usePendingSafeTransactions,
+  usePendingTransactions,
+  useHasPendingTransactions,
+  useTransactionsRead,
+  useTransactionsByMetadataKey,
+  useTransactionsByMetadataKeyCallback,
+  useFindTransactionByMetadataKeyValue,
+  useFindTransactionByMetadataKeyValueCallback
+} from './api/useTransactions'

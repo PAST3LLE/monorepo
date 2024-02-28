@@ -1,45 +1,51 @@
-import { ChevronDown, ChevronUp, ColumnCenter } from '@past3lle/components'
+import { ColumnCenter } from '@past3lle/components'
 import { useStateRef } from '@past3lle/hooks'
 import React, { ReactNode, useState } from 'react'
 import styled from 'styled-components'
 import { Connector } from 'wagmi'
 
 import { ConnectorEnhanced } from '../../../types'
+import { ModalText } from '../common/styled'
 
 const ConnectorHelperContainer = styled(ColumnCenter)<{ open: boolean; contentHeight?: number }>`
   cursor: pointer;
   color: ${({ theme }) => theme?.modals?.base?.helpers?.font?.color};
   font-size: ${({ theme }) => theme?.modals?.base?.helpers?.font?.size};
-  > p {
+  > ${ModalText} {
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    background-color: ${(props) => props.theme.modals?.base?.background?.success};
     font-weight: 400;
+    width: 93%;
+    text-decoration: underline;
 
-    margin: 0 0 0 2em;
-    width: 100%;
+    transition: border-radius 1s ease-in-out;
 
     &:first-child {
       display: flex;
       align-items: center;
       gap: 0.3rem;
-    }
 
-    &:last-child {
-      margin: 1em;
+      border-radius: 0 0 10px 10px;
+      padding: 1px 1rem;
       overflow: hidden;
-      ${({ open, contentHeight = 0 }) =>
+
+      ${({ open }) =>
         open
           ? `
-        height: ${contentHeight}px;
-        margin: 0 0 0.5em 0;
+        overflow-y: auto;
+        text-decoration: unset;
+        padding: 5px 1rem 0.3rem;
+        height: 80px;
       `
           : `
-        height: 0px;
-        margin: 0;
+        height: 20px;
       `}
-      transition: margin 0.6s ease-in-out, height 0.3s ease-in-out;
+
+      transition: padding 0.6s ease-in-out, margin 0.6s ease-in-out, height 0.3s ease-in-out;
     }
     > span {
       display: block;
-      margin-left: 1em;
     }
   }
 `
@@ -49,26 +55,35 @@ export function ConnectorHelper({
   ...props
 }: {
   title?: ReactNode
+  className?: string
   children?: ReactNode
   color?: string
-  connector?: Connector<any, any>
+  connector?: Connector
 }) {
   const [open, setOpen] = useState(false)
   const handleClick = () => setOpen((state) => !state)
-  const [height, setRef] = useStateRef<number | undefined>(undefined, (node: HTMLElement | null) => node?.offsetHeight)
+  const [height = 0, setRef] = useStateRef<number | undefined>(
+    undefined,
+    (node: HTMLElement | null) => node?.offsetHeight
+  )
   return (
-    <ConnectorHelperContainer width="100%" textAlign="left" open={open} contentHeight={height}>
-      <p onClick={handleClick}>
-        {open ? <ChevronUp width={'1.2em'} /> : <ChevronDown width={'1.2em'} />} {title}
-      </p>
-      <p>
+    <ConnectorHelperContainer
+      className={props?.className}
+      width="100%"
+      textAlign="left"
+      open={open}
+      contentHeight={height + 10}
+      onClick={handleClick}
+    >
+      <ModalText modal="base" node="main">
+        {title}
         <span ref={setRef}>{props.children || _getConnectorHelperText(props.connector)}</span>
-      </p>
+      </ModalText>
     </ConnectorHelperContainer>
   )
 }
 
-function _getConnectorHelperText(connector?: ConnectorEnhanced<any, any>) {
+function _getConnectorHelperText(connector?: ConnectorEnhanced) {
   switch (connector?.id) {
     case 'web3auth':
       return (

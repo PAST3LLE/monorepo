@@ -1,15 +1,17 @@
 {
   "name": "@past3lle/constants",
   "sideEffects": false,
-  "version": "0.1.11",
+  "version": "2.1.0",
   "description": "common constants",
   "main": "dist/constants.esm.js",
   "module": "dist/constants.esm.js",
   "exports": {
     "require": "./dist/index.js",
-    "import": "./dist/constants.esm.js"
+    "import": "./dist/constants.esm.js",
+    "types": "./dist/index.d.ts"
   },
   "typings": "dist/index.d.ts",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
@@ -27,14 +29,15 @@
     "prepack": "yarn build",
     "start": "tsdx watch",
     "pre-commit": "pretty-quick --staged && yarn test:ci && yarn build",
-    "lint": "prettier --write ./src/** --ignore-path '../../.prettierignore'"
+    "lint": "prettier --write ./src/** --ignore-path '../../.prettierignore'",
+    "check-types": "npx tsc --noEmit"
   },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
   },
   "dependencies": {
-    "@past3lle/utils": "^0.1.11"
+    "@past3lle/utils": "^2.1.0"
   },
-  "gitHead": "9aa2cea4e1db3f2a1f8fce04ef83295c05a5d9e0"
+  "gitHead": "a2b4f4f3c33ab7e1040da4cecdd300e715d5eeea"
 }

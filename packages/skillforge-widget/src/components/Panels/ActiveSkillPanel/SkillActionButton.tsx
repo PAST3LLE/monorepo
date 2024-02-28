@@ -4,7 +4,7 @@ import React, { useMemo } from 'react'
 
 import { useSidePanelWriteAtom } from '../../../state/SidePanel'
 import { getSkillShopUri } from '../../../utils/skills'
-import { ThemedButtonActions, ThemedButtonExternalLink } from '../../Common/Button'
+import { ThemedButtonActions, ThemedButtonExternalLink } from '../../Common/Button/common'
 
 export function SkillActionButton({
   skill,
@@ -17,15 +17,18 @@ export function SkillActionButton({
 }) {
   const [, openSidePanel] = useSidePanelWriteAtom()
   const conditionalRenderData = useMemo(() => {
+    const shopUri = getSkillShopUri(skill)
     switch (lockStatus) {
       case SkillLockStatus.OWNED:
         return (
-          <Column alignItems={'center'} gap="1rem" maxWidth={'40%'}>
-            <ThemedButtonExternalLink fullWidth href={getSkillShopUri(skill)}>
-              <Text.Black fontSize="1.6rem" fontWeight={300}>
-                VIEW IN SHOP
-              </Text.Black>
-            </ThemedButtonExternalLink>
+          <Column alignItems={'center'} gap="1rem" minWidth={200} flex="1">
+            {
+              <ThemedButtonExternalLink fullWidth href={shopUri?.url || '#'} disabled={!shopUri?.url}>
+                <Text.Black fontSize="1.6rem" fontWeight={300}>
+                  VIEW {shopUri?.type === 'COLLECTION' ? 'COLLECTION' : 'IN SHOP'}
+                </Text.Black>
+              </ThemedButtonExternalLink>
+            }
             <ThemedButtonExternalLink fullWidth href={metadataExplorerUri}>
               <Text.Black fontSize="1.6rem" fontWeight={300}>
                 VIEW ON OPENSEA
@@ -35,8 +38,10 @@ export function SkillActionButton({
         )
       case SkillLockStatus.UNLOCKABLE_IN_STORE:
         return (
-          <ThemedButtonExternalLink fullWidth fontSize="2rem" href={getSkillShopUri(skill)}>
-            <Text.Black fontWeight={300}>UNLOCK IN SHOP</Text.Black>
+          <ThemedButtonExternalLink fullWidth fontSize="2rem" href={shopUri?.url || '#'} disabled={!shopUri?.url}>
+            <Text.Black fontWeight={300}>
+              {shopUri?.type === 'COLLECTION' ? 'VIEW COLLECTION' : 'UNLOCK IN SHOP'}
+            </Text.Black>
           </ThemedButtonExternalLink>
         )
       case SkillLockStatus.UNLOCKABLE_IN_TRADE:

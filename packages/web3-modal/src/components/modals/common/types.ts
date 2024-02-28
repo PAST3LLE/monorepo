@@ -3,13 +3,16 @@ import { BasicUserTheme, ThemeByModes, ThemeModesRequired } from '@past3lle/them
 import { ReactNode } from 'react'
 
 import { WithChainIdFromUrl, WithCloseModalOnKeys } from '../../../providers/types'
+import { PstlSubModalsTheme } from '../../../theme'
 import { LoadingScreenProps } from '../../LoadingScreen'
 
 export enum ModalId {
   BASE = 'pstl-w3modal',
   WALLETS = 'pstl-w3modal-wallets',
   NETWORK = 'pstl-w3modal-network',
-  ACCOUNT = 'pstl-w3modal-account'
+  ACCOUNT = 'pstl-w3modal-account',
+  HID_DEVICE_OPTIONS = 'pstl-we3modal-hid-device-options',
+  TRANSACTIONS = 'pstl-w3modal-transactions'
 }
 
 interface ModalHeaders {
@@ -91,6 +94,7 @@ export type BaseModalProps = Omit<ModalProps, 'isLargeImageModal'> &
      * @default root
      */
     openType?: 'root' | 'walletconnect'
+    modal: keyof PstlSubModalsTheme
     children?: ReactNode
   }
 

@@ -1,4 +1,4 @@
-import { ChainsPartialReadonly, SkillRarity, SupportedForgeChains } from '@past3lle/forge-web3'
+import { PartialForgeChains, SkillRarity } from '@past3lle/forge-web3'
 import {
   BackgroundPropertyFull,
   ThemeBaseRequired,
@@ -7,20 +7,17 @@ import {
   ThemeMinimumRequired
 } from '@past3lle/theme'
 
-type ChainsIcons<SC extends ChainsPartialReadonly<SupportedForgeChains> = ChainsPartialReadonly<SupportedForgeChains>> =
-  {
-    readonly [key in SC[number]['id']]: string
-  } & {
-    readonly disconnected: string
-  }
+type ChainsIcons<SC extends PartialForgeChains = PartialForgeChains> = {
+  readonly [key in SC[number]['id']]: string
+} & {
+  readonly disconnected: string
+}
 
 type RarityIcons = {
   readonly [key in SkillRarity]: string
 }
 
-export interface SkillForgeAssetsMap<
-  SC extends ChainsPartialReadonly<SupportedForgeChains> = ChainsPartialReadonly<SupportedForgeChains>
-> {
+export interface SkillForgeAssetsMap<SC extends PartialForgeChains = PartialForgeChains> {
   readonly assetsMap: {
     readonly logos: {
       company: {
@@ -51,6 +48,7 @@ export interface SkillForgeAssetsMap<
       connection: string
       inventory: string
       shop: string
+      transactions: string
       chains: ChainsIcons<SC>
       rarity: RarityIcons
     }
@@ -63,8 +61,7 @@ export enum ForgeSidePanelTypes {
   INVENTORY = 'INVENTORY'
 }
 
-export interface SkillForgeTheme<SC extends ChainsPartialReadonly<SupportedForgeChains>>
-  extends SkillForgeAssetsMap<SC> {
+export interface SkillForgeTheme<SC extends PartialForgeChains> extends SkillForgeAssetsMap<SC> {
   mainText: string
   darkText: string
   lightText: string
@@ -124,13 +121,11 @@ export interface SkillForgeTheme<SC extends ChainsPartialReadonly<SupportedForge
   }
 }
 
-export type SkillForgeThemeByModes<
-  SC extends ChainsPartialReadonly<SupportedForgeChains> = ChainsPartialReadonly<SupportedForgeChains>
-> = ThemeMinimumRequired & ThemeMediaWidthsBaseRequired & ThemeByModes<SkillForgeTheme<SC>>
+export type SkillForgeThemeByModes<SC extends PartialForgeChains = PartialForgeChains> = ThemeMinimumRequired &
+  ThemeMediaWidthsBaseRequired &
+  ThemeByModes<SkillForgeTheme<SC>>
 
 declare module 'styled-components' {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  export interface DefaultTheme
-    extends SkillForgeTheme<ChainsPartialReadonly<SupportedForgeChains>>,
-      ThemeBaseRequired {}
+  export interface DefaultTheme extends SkillForgeTheme<PartialForgeChains>, ThemeBaseRequired {}
 }

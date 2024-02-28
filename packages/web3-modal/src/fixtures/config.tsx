@@ -1,8 +1,9 @@
-import React from 'react'
+import { devDebug } from '@past3lle/utils'
+import { http } from 'viem'
 
 import { PstlWeb3ModalProps } from '../providers'
 import { createTheme } from '../theme'
-import { ChainImages } from '../types'
+import { ChainImages, ConnectorOverrides } from '../types'
 import { chains } from './chains'
 
 const BG_LOGO = 'https://ik.imagekit.io/pastelle/SKILLFORGE/forge-background.png'
@@ -18,82 +19,49 @@ const WALLETCONNECT_LOGO =
 export const FORGE_LOGO =
   'https://raw.githubusercontent.com/PAST3LLE/monorepo/main/apps/skillforge-ui/public/512_logo.png'
 
-const BASE_BUTTON_BACKGROUND = {
-  background: '#301d4ea1',
-  connected: '#37b9927d'
-}
 const ACCOUNT_BUTTON = {
   font: {
     textTransform: 'inherit'
   },
   background: {
-    ...BASE_BUTTON_BACKGROUND,
-    background: '#5a3e85a1'
+    default: '#5a3e85a1',
+    url: 'none'
   }
 }
 export const pstlModalTheme = createTheme({
-  DARK: {
-    modals: {
-      base: {
-        title: {
-          font: {
-            color: 'black',
-            weight: 900
-          },
-          margin: '0px 60px 0px 10px'
-        },
-        background: {
-          backgroundImg: 'unset',
-          background: 'indianred'
-        }
-      },
-      connection: {
-        filter: 'invert(1) brightness(0.65) contrast(1.8) hue-rotate(247deg) saturate(2)',
-        button: {
-          background: {
-            background: 'rgba(0,0,0,0.75)',
-            connected: 'green'
-          },
-          font: {
-            color: 'indianred',
-            weight: 500
-          }
-        }
-      }
-    }
-  },
-  LIGHT: {
-    modals: {
-      base: {
-        title: {
-          font: {
-            color: 'pink',
-            weight: 900
-          }
-        },
-        background: {
-          backgroundImg: 'unset',
-          background: '#818ccaf2'
-        }
-      },
-      connection: {
-        button: {
-          background: {
-            backgroundImg: 'unset',
-            background: '#fec0cb7d',
-            connected: 'green'
-          },
-          font: {
-            color: 'ghostwhite',
-            weight: 500
-          }
-        }
-      }
-    }
-  },
   DEFAULT: {
     modals: {
       base: {
+        baseFontSize: 16,
+        background: {
+          main: 'black',
+          success: '#777b48',
+          url: BG_LOGO
+        },
+        button: {
+          main: {
+            font: {
+              color: 'ghostwhite'
+            }
+          }
+        },
+        input: {
+          font: {
+            color: 'violet'
+          }
+        },
+        tooltip: {
+          background: '#685985',
+          font: {
+            color: 'ghostwhite',
+            family: 'monospace'
+          }
+        },
+        text: {
+          main: {
+            color: 'ghostwhite'
+          }
+        },
         font: {
           family: "'Roboto Flex', 'Inter', sans-serif, system-ui",
           letterSpacing: '0px'
@@ -101,9 +69,7 @@ export const pstlModalTheme = createTheme({
         closeIcon: {
           size: 45,
           color: 'ghostwhite',
-          background: {
-            background: 'rgba(255,255,255,0.1)'
-          }
+          background: 'rgba(255,255,255,0.1)'
         },
         title: {
           font: {
@@ -117,68 +83,79 @@ export const pstlModalTheme = createTheme({
           },
           margin: '0px 20px'
         },
-        background: {
-          backgroundImg: BG_LOGO
-        },
-        helpers: { show: true }
+        helpers: { show: true },
+        error: {
+          background: 'rgba(0,0,0, 0.95)'
+        }
       },
       connection: {
-        baseFontSize: 16,
         button: {
-          background: BASE_BUTTON_BACKGROUND,
-          height: '80px',
-          icons: {
-            height: '80%'
+          main: {
+            filter: 'invert(1) hue-rotate(65deg)',
+            background: { default: '#2d222cbd', url: 'none' },
+            height: '80px',
+            icons: {
+              height: '80%'
+            },
+            border: { border: 'none', radius: '1em' },
+            font: {
+              style: 'normal',
+              weight: 200,
+              letterSpacing: '-1px',
+              textShadow: '2px 2px 3px #0000005c',
+              textTransform: 'uppercase'
+            },
+            hoverAnimations: true
           },
-          border: { border: 'none', radius: '1em' },
-          font: {
-            color: 'ghostwhite',
-            size: '1em',
-            style: 'normal',
-            weight: 200,
-            letterSpacing: '-1px',
-            textShadow: '2px 2px 3px #0000005c',
-            textTransform: 'uppercase'
-          },
-          hoverAnimations: true
+          active: {
+            filter: 'invert(1) saturate(1.2)',
+            background: { default: '#777b48' }
+          }
         }
       },
       account: {
-        container: {},
         icons: {
           copy: { url: 'https://img.icons8.com/?size=512&id=PoI08DwSsc7G&format=png', invert: false },
           network: { url: 'https://img.icons8.com/?size=512&id=PrryJ8KTxcOv&format=png', invert: false },
           wallet: { url: 'https://img.icons8.com/?size=512&id=O7exVeEFSVr3&format=png', invert: false }
         },
         text: {
-          address: {},
-          balance: {},
           main: {
-            font: {
-              weight: 500
-            }
+            weight: 500
           }
         },
         button: {
-          disconnect: {
-            font: ACCOUNT_BUTTON.font,
-            background: {
-              ...BASE_BUTTON_BACKGROUND,
-              background: 'indianred'
-            }
+          main: {
+            ...ACCOUNT_BUTTON,
+            filter: 'invert(1) hue-rotate(65deg)'
           },
-          switchNetwork: {
-            font: ACCOUNT_BUTTON.font,
-            background: ACCOUNT_BUTTON.background
-          },
-          explorer: {
-            font: ACCOUNT_BUTTON.font,
-            background: ACCOUNT_BUTTON.background
-          },
-          copy: {
-            font: ACCOUNT_BUTTON.font,
-            background: ACCOUNT_BUTTON.background
+          alternate: {
+            filter: 'hue-rotate(-5deg) contrast(1.3)',
+            background: { default: 'indianred', url: 'none' }
           }
+        },
+        container: {
+          main: {
+            background: '#1113107a'
+          },
+          alternate: {
+            background: '#1113107a'
+          }
+        }
+      },
+      transactions: {}
+    }
+  },
+  get DARK() {
+    return this.DEFAULT
+  },
+  LIGHT: {
+    modals: {
+      base: {
+        baseFontSize: 5,
+        background: {
+          main: 'navajowhite',
+          url: 'unset'
         }
       }
     }
@@ -186,81 +163,48 @@ export const pstlModalTheme = createTheme({
 })
 
 export const COMMON_CONNECTOR_OVERRIDES = {
-  general: {
-    infoText: {
-      title: 'What is this?',
-      content: (
-        <strong>
-          This is some helper filler text to describe wtf is going on in this connection modal. It is useful to learn
-          these things while browsing apps as users can get confused when having to exit apps to read info somewhere
-          else that isn't the current screent they are on.
-        </strong>
-      )
-    }
-  },
   walletconnect: {
-    logo: WALLETCONNECT_LOGO,
-    infoText: {
-      title: 'What is WalletConnect?',
-      content: (
-        <strong>
-          Web3Modal/WalletConnect is a simple blockchain wallet aggregator modal that facilitates the choice of
-          selecting preferred blockchain wallet(s) for connecting to dApps (decentralised apps). This generally requires
-          more blockchain knowledge.
-        </strong>
-      )
-    }
+    icon: WALLETCONNECT_LOGO
   },
   web3auth: {
     isRecommended: true,
-    logo: WEB3AUTH_LOGO,
-    infoText: {
-      title: 'How does this login work?',
-      content: (
-        <strong>
-          Social login is done via Web3Auth - a non-custodial social login protocol (i.e they never actually know, or
-          hold your data) - which facilitates logging into dApps (decentralised apps) via familiar social login choices
-        </strong>
-      )
-    }
+    icon: WEB3AUTH_LOGO
   },
   ledger: {
-    customName: 'LEDGER LIVE',
-    logo: 'https://crypto-central.io/library/uploads/Ledger-Logo-3.png',
+    customName: 'Ledger Live',
+    icon: 'https://crypto-central.io/library/uploads/Ledger-Logo-3.png',
     modalNodeId: 'ModalWrapper',
     rank: 0,
-    isRecommended: true,
-    infoText: {
-      title: 'What is Ledger?',
-      content: <strong>Ledger wallet is a cold storage hardware wallet.</strong>
-    }
+    isRecommended: true
   },
   'ledger-hid': {
-    customName: 'LEDGER HID',
-    logo: 'https://crypto-central.io/library/uploads/Ledger-Logo-3.png',
+    customName: 'Ledger HID',
+    icon: 'https://crypto-central.io/library/uploads/Ledger-Logo-3.png',
     rank: 10,
     isRecommended: true
   },
-  coinbasewallet: {
+  'coinbase-wallet-injected': {
     customName: 'Coinbase Wallet',
-    logo: 'https://companieslogo.com/img/orig/COIN-a63dbab3.png?t=1648737284',
+    icon: 'https://companieslogo.com/img/orig/COIN-a63dbab3.png?t=1648737284',
     rank: 12,
     downloadUrl: 'https://www.coinbase.com/wallet/downloads',
     isRecommended: true
   },
-  taho: {
-    logo: 'https://user-images.githubusercontent.com/95715502/221033622-fb606b37-93f1-485b-9ce5-59b92f756033.png',
+  'taho-injected': {
+    customName: 'Taho',
+    icon: 'https://user-images.githubusercontent.com/95715502/221033622-fb606b37-93f1-485b-9ce5-59b92f756033.png',
     rank: 11,
     downloadUrl: 'https://taho.xyz/',
     isRecommended: false
   },
-  metamask: {
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/1200px-MetaMask_Fox.svg.png',
+  'metamask-injected': {
+    customName: 'MetaMask',
+    icon: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/1200px-MetaMask_Fox.svg.png',
     rank: 10,
     downloadUrl: 'https://metamask.io/downloads',
     isRecommended: true
   }
-}
+} as const
 
 const CHAIN_IMAGES: ChainImages = {
   // unknown: 'https://img.freepik.com/premium-vector/unknown-mysterious-logo-sports_67734-82.jpg',
@@ -270,10 +214,43 @@ const CHAIN_IMAGES: ChainImages = {
 const DEFAULT_PROPS: PstlWeb3ModalProps = {
   appName: 'COSMOS APP',
   chains,
+  connectors: {
+    overrides: COMMON_CONNECTOR_OVERRIDES
+  },
+  clients: {
+    wagmi: {
+      options: {
+        transports: {
+          1: http(`https://eth-mainnet.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_GOERLI_API_KEY as string}`),
+          5: http(`https://eth-goerli.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_GOERLI_API_KEY as string}`),
+          137: http(
+            `https://polygon-mainnet.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_MATIC_API_KEY as string}`
+          ),
+          80001: http(
+            `https://polygon-mumbai.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_MUMBAI_API_KEY as string}`
+          )
+        }
+      }
+    }
+  },
   options: {
+    autoConnect: true,
     pollingInterval: 10_000,
     escapeHatches: {
       appType: 'DAPP'
+    },
+    multiInjectedProviderDiscovery: false
+  },
+  callbacks: {
+    transactions: {
+      onEoaTransactionConfirmed(tx) {
+        devDebug('[@past3lle/web3-modal --> onEoaConfirmed] EOA transaction confirmed! Transaction:', tx)
+        return tx
+      },
+      onEoaTransactionUnknown(tx) {
+        devDebug('[@past3lle/web3-modal --> onEoaUnknown] EOA transaction status unknown!', tx)
+        return tx
+      }
     }
   },
   modals: {
@@ -287,48 +264,47 @@ const DEFAULT_PROPS: PstlWeb3ModalProps = {
       chainImages: CHAIN_IMAGES,
       closeModalOnConnect: false,
       hideInjectedFromRoot: true,
-      connectorDisplayOverrides: COMMON_CONNECTOR_OVERRIDES,
       loaderProps: {
         spinnerProps: {
           size: 80
-        }
+        },
+        fontSize: '3.2em'
       }
     },
     walletConnect: {
       projectId: WALLETCONNECT_TEST_ID,
-      walletImages: {
-        web3auth: 'https://web3auth.io/images/web3auth-L-Favicon-1.svg',
-        safe: 'https://user-images.githubusercontent.com/3975770/212338977-5968eae5-bb1b-4e71-8f82-af5282564c66.png'
-      }
+      themeMode: 'dark',
+      // themeVariables: {
+      //   '--wcm-background-color': 'slategrey',
+      //   '--wcm-z-index': '999'
+      // },
+      zIndex: 9999
+      // walletImages: {
+      //   web3auth: 'https://web3auth.io/images/web3auth-L-Favicon-1.svg',
+      //   safe: 'https://user-images.githubusercontent.com/3975770/212338977-5968eae5-bb1b-4e71-8f82-af5282564c66.png'
+      // }
     }
   }
 }
 
 const DEFAULT_PROPS_WEB3AUTH: PstlWeb3ModalProps = {
   ...DEFAULT_PROPS,
+  connectors: {
+    ...DEFAULT_PROPS.connectors,
+    overrides: {
+      ...((DEFAULT_PROPS.connectors as any)?.overrides as ConnectorOverrides),
+      web3auth: {
+        isRecommended: true,
+        logo: WEB3AUTH_LOGO
+      }
+    }
+  },
   modals: {
     ...DEFAULT_PROPS.modals,
     root: {
-      ...DEFAULT_PROPS.modals.root,
-      connectorDisplayOverrides: {
-        ...DEFAULT_PROPS.modals.root?.connectorDisplayOverrides,
-        web3auth: {
-          isRecommended: true,
-          logo: WEB3AUTH_LOGO,
-          infoText: {
-            title: 'How does this login work?',
-            content: (
-              <strong>
-                Social login is done via Web3Auth - a non-custodial social login protocol (i.e they never actually know,
-                or hold your data) - which facilitates logging into dApps (decentralised apps) via familiar social login
-                choices
-              </strong>
-            )
-          }
-        }
-      }
+      ...DEFAULT_PROPS.modals.root
     }
   }
-} as const
+}
 
 export { WALLETCONNECT_TEST_ID as WALLETCONNECT_ID, DEFAULT_PROPS, DEFAULT_PROPS_WEB3AUTH }

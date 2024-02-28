@@ -1,12 +1,10 @@
-import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
-// An internal link from the react-router-dom library that is correctly styled
-export const StyledInternalLink = styled(Link)`
+export const StyledLink = styled.a<{ $color?: string }>`
   text-decoration: none;
   cursor: pointer;
-  color: ${({ theme }) => theme.primary1};
-  font-weight: 500;
+  color: ${({ theme, $color = theme.primary1 }) => $color};
+  font-weight: inherit;
 
   :hover {
     text-decoration: underline;
@@ -22,11 +20,11 @@ export const StyledInternalLink = styled(Link)`
   }
 `
 
-export const StyledLink = styled.a<{ $color?: string }>`
+export const StyledInternalLink = styled(StyledLink)`
   text-decoration: none;
   cursor: pointer;
-  color: ${({ theme, $color = theme.primary1 }) => $color};
-  font-weight: inherit;
+  color: ${({ theme }) => theme.primary1};
+  font-weight: 500;
 
   :hover {
     text-decoration: underline;

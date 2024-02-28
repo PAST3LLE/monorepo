@@ -2,8 +2,8 @@ import { Column, Row } from '@past3lle/components'
 import { fromExtraSmall, upToExtraSmall, upToSmall } from '@past3lle/theme'
 import styled from 'styled-components'
 
-import { PstlModalThemeExtension } from '../../../theme'
-import { ModalButton, ModalTitleText } from '../common/styled'
+import { PstlSubModalsTheme, RequiredPstlSubModalsTheme } from '../../../theme'
+import { ModalButton, ModalContainer, ModalText } from '../common/styled'
 import { ModalId } from '../common/types'
 
 export const Icon = styled.img`
@@ -14,52 +14,34 @@ export const Icon = styled.img`
   opacity: 0.8;
 `
 
-export const AccountModalButton = styled(ModalButton).attrs((props) => ({
-  height: props.height || 'auto',
-  justifyContent: props.justifyContent || 'center',
-  padding: props.padding || '0.3rem 0.75rem',
-  ...props
-}))<{ type: keyof PstlModalThemeExtension['modals']['account']['button'] }>`
-  background: ${({ theme, type }) => theme?.modals?.account?.button?.[type]?.background?.background};
-  color: ${({ theme, type }) => theme?.modals?.account?.button?.[type]?.font?.color};
-  font-size: ${({ theme, type }) => theme?.modals?.account?.button?.[type]?.font?.size};
-  font-style: ${({ theme, type }) => theme?.modals?.account?.button?.[type]?.font?.style};
-  letter-spacing: ${({ theme, type }) => theme?.modals?.account?.button?.[type]?.font?.letterSpacing};
-  font-weight: ${({ theme, type }) => theme?.modals?.account?.button?.[type]?.font?.weight};
-  font-variation-settings: 'wght' ${({ theme, type }) => theme?.modals?.account?.button?.[type]?.font?.weight};
-
-  text-transform: ${({ theme, type }) => theme?.modals?.account?.button?.[type]?.font?.textTransform};
-  text-shadow: ${({ theme, type }) => theme?.modals?.account?.button?.[type]?.font?.textShadow};
-  text-align: ${({ theme, type }) => theme?.modals?.account?.button?.[type]?.font?.textAlign};
-
-  border: ${({ theme, type }) => theme?.modals?.account?.button?.[type]?.border?.border};
+export const AccountModalButton = styled(ModalButton).attrs({ modal: 'account' })`
+  justify-content: center;
 `
 export const FooterActionButtonsRow = styled(Row)`
   flex: 1 1 max-content;
 `
-export const AccountText = styled(ModalTitleText)<{
-  type: keyof PstlModalThemeExtension['modals']['account']['text']
-}>`
-  line-height: 1.2;
-
-  color: ${({ theme, type }) => theme?.modals?.account?.text?.[type]?.font?.color};
-  font-size: ${({ theme, type }) => theme?.modals?.account?.text?.[type]?.font?.size};
-  font-style: ${({ theme, type }) => theme?.modals?.account?.text?.[type]?.font?.style};
-  font-weight: ${({ theme, type }) => theme?.modals?.account?.text?.[type]?.font?.weight};
-  letter-spacing: ${({ theme, type }) => theme?.modals?.account?.text?.[type]?.font?.letterSpacing};
-  font-variation-settings: 'wght' ${({ theme, type }) => theme?.modals?.account?.text?.[type]?.font?.weight};
-
-  text-transform: ${({ theme, type }) => theme?.modals?.account?.text?.[type]?.font?.textTransform};
-  text-shadow: ${({ theme, type }) => theme?.modals?.account?.text?.[type]?.font?.textShadow};
-  text-align: ${({ theme, type }) => theme?.modals?.account?.text?.[type]?.font?.textAlign};
+export const AccountText = styled(ModalText).attrs((props) => ({
+  modal: 'account',
+  ...props
+}))<{ cursor?: 'nesw-resize' | 'not-allowed' | 'pointer' | 'wait' | 'none' }>`
+  ${({ cursor }) => cursor && `cursor: ${cursor};`}
 `
-
-export const AccountBottomColumnContainer = styled(Column)`
-  background-color: ${({ theme }) => theme?.modals?.account?.container?.addressAndBalance?.background?.background};
+export const AddressAndBalanceRow = styled(Row)``
+export const AddressAndBalanceColumnContainer = styled(ModalContainer).attrs((props) => ({
+  modal: 'account',
+  node: 'main',
+  overflowY: 'revert',
+  ...props
+}))<{ backgroundColor?: string; cursor: string }>`
   > ${Column}:first-child {
-    flex: 0 1 68%;
+    flex: 0 1 65%;
     min-width: max-content;
   }
+  ${upToExtraSmall`
+    > ${Column}:first-child {
+      width: 100%;
+    }
+  `}
 `
 
 export const AccountLogosRow = styled(Row)<{ backgroundFrameColor?: string }>`
@@ -71,7 +53,7 @@ export const AccountLogosRow = styled(Row)<{ backgroundFrameColor?: string }>`
     height: 100%;
     max-width: ${({ theme }) => theme.modals?.account?.connectionImages?.size};
     padding: 1rem;
-    background-color: ${({ theme }) => theme.modals?.account?.connectionImages?.background?.background};
+    background-color: ${({ theme }) => theme.modals?.account?.connectionImages?.background};
   }
   > img:first-child,
   > svg:first-child {
@@ -83,10 +65,27 @@ export const AccountLogosRow = styled(Row)<{ backgroundFrameColor?: string }>`
   }
 `
 
-export const AccountWalletNetworkRow = styled(Row)<{ cursor: string }>`
+export const WalletAndNetworkRowContainer = styled(ModalContainer).attrs((props) => ({
+  as: Row,
+  modal: 'account' as keyof PstlSubModalsTheme,
+  node: 'main' as keyof RequiredPstlSubModalsTheme['account']['container'],
+  overflowY: 'revert',
+  ...props
+}))<{ backgroundColor?: string; cursor: string }>`
+  background-color: ${({ theme, modal, backgroundColor = theme.modals?.[modal]?.container?.alternate?.background }) =>
+    backgroundColor};
   z-index: 1;
+
   ${Row}#${ModalId.ACCOUNT}__wallets-button {
     cursor: ${({ cursor }) => cursor};
+    flex: 0 1 65%;
+    min-width: max-content;
+    ${upToExtraSmall`
+      min-width: unset;
+      > ${AccountText}:first-child {
+        font-size: 12px;
+      }
+    `}
     > ${Column} {
       > ${AccountText} {
         font-weight: 300;
@@ -94,12 +93,14 @@ export const AccountWalletNetworkRow = styled(Row)<{ cursor: string }>`
       }
     }
   }
+
   #${ModalId.ACCOUNT}__network-disconnect-buttons {
     gap: 10px;
     > ${AccountModalButton} {
       min-width: max-content;
     }
   }
+
   cursor: pointer;
   ${upToExtraSmall`
     > ${Column} > ${Row}#${ModalId.ACCOUNT}__network-disconnect-buttons {
@@ -112,7 +113,7 @@ export const AccountWalletNetworkRow = styled(Row)<{ cursor: string }>`
   `}
 `
 
-export const AccountColumnContainer = styled(Column)`
+export const ModalColumnContainer = styled(ModalContainer)<{ layout: 'Account' | 'Other' }>`
   .unsupported-small-text {
     font-size: 0.6em;
     color: darkgrey;
@@ -126,32 +127,34 @@ export const AccountColumnContainer = styled(Column)`
   }
 
   > ${Row} {
-    // Details column
     > ${Column} {
       width: 100%;
       order: 0;
     }
-    // Logo row
     > ${Row} {
       width: auto;
       flex: 1;
     }
   }
 
-  ${upToSmall`
+  ${Row}#pstl-web3-modal-wallet-text, ${Row}#pstl-web3-modal-network-text {
+    > ${AccountText} {
+      font-size: ${(props) => props.theme.modals?.account?.text?.subHeader?.size};
+    }
+  }
+
+  ${({ layout = 'Account' }) => upToSmall`
     > ${Row} {
       flex-flow: row wrap;
       
-      // Details column
       > ${Column} {
-        order: 2;
+        order: ${layout === 'Account' ? 2 : 1};
         margin: auto;
         max-width: unset;
       }
 
-      // Logo row
       > ${Row} {
-        order: 1;
+        order: ${layout === 'Account' ? 1 : 2};
         margin-bottom: 1rem;
         min-width: 150px;
         width: 100%;
@@ -162,7 +165,7 @@ export const AccountColumnContainer = styled(Column)`
       }
 
       > ${ModalButton} {
-          order: 2;
+          order: ${layout === 'Account' ? 2 : 1};
           margin: 1rem auto 0.5rem auto;
       } 
     }
@@ -176,24 +179,17 @@ export const AccountColumnContainer = styled(Column)`
     }
   `}
 
-  ${({ theme }) => upToExtraSmall`
-    // Address text
-    ${AccountText}#pstl-web3-modal-address-text, ${AccountText}#pstl-web3-modal-wallet-text, ${AccountText}#pstl-web3-modal-network-text {
-      font-size: calc(${theme.modals?.account?.text?.address?.font?.size} * 0.8);
-    }
-  `}
-
-  ${fromExtraSmall`
-    ${AccountBottomColumnContainer} {
+  ${({ layout = 'Account' }) => fromExtraSmall`
+    ${ModalContainer} {
       flex-flow: row wrap;
 
       > #${ModalId.ACCOUNT}__balance-text {
-        order: 2;
+        order: ${layout === 'Account' ? 2 : 1};
       }
 
       > ${FooterActionButtonsRow} {
         margin: 0 0 0 auto;
-        order: 1;
+        order: ${layout === 'Account' ? 1 : 0};
 
         > ${AccountModalButton}#${ModalId.ACCOUNT}__copy-button {
           display: none;
@@ -202,9 +198,8 @@ export const AccountColumnContainer = styled(Column)`
     }
 
     > ${Row} {
-      // network/wallet wrapper
       > ${Column}:first-child {
-        flex-flow: row nowrap;
+        flex-flow: row wrap;
         max-width: unset;
 
         div#pstl-w3modal-account__wallets-button {
@@ -216,14 +211,20 @@ export const AccountColumnContainer = styled(Column)`
             justify-content: space-evenly;
           }
         }
-        // Switch/Disconnect buttons
         > ${Row}:last-child {
           flex-flow: column nowrap;
           height: 100%;
-          max-width: 32%;
           margin-top: 0;
         }
       }
     }
   `}
+`
+
+export const AccountColumnContainer = styled(ModalColumnContainer).attrs({
+  modal: 'Account',
+  node: 'main',
+  layout: 'Account'
+})`
+  padding: 0;
 `

@@ -1,10 +1,10 @@
 import { useIsExtraSmallMediaWidth } from '@past3lle/hooks'
+import { devDebug, devError } from '@past3lle/utils'
 import React, { memo } from 'react'
-import { useSwitchNetwork } from 'wagmi'
+import { useSwitchChain } from 'wagmi'
 
-import { useGetChainLogoCallback, usePstlWeb3Modal, usePstlWeb3ModalStore, useUserConnectionInfo } from '../../../hooks'
-import { ConnectorEnhanced } from '../../../types'
-import { NoChainLogo } from '../../NoChainLogo'
+import { useGetChainIconCallback, usePstlWeb3Modal, usePstlWeb3ModalStore, useUserConnectionInfo } from '../../../hooks'
+import { MissingChainIcon } from '../../MissingChainIcon'
 import { AccountColumnContainer } from '../AccountModal/styled'
 import { ConnectorOption } from '../ConnectionModal/ConnectorOption'
 import { WalletsWrapper } from '../common/styled'
@@ -14,22 +14,27 @@ function NetworkModalContent() {
   const modalCallbacks = usePstlWeb3Modal()
   const modalStore = usePstlWeb3ModalStore()
 
-  const { connector, chain: currentChain, supportedChains } = useUserConnectionInfo()
+  const { chain: currentChain, supportedChains } = useUserConnectionInfo()
 
-  const { switchNetworkAsync } = useSwitchNetwork({
-    onSuccess() {
-      modalCallbacks.close()
-    },
-    onError(error) {
-      modalStore.updateModalProps({
-        network: {
-          error
-        }
-      })
+  const { switchChainAsync } = useSwitchChain({
+    mutation: {
+      async onSuccess(data) {
+        devDebug(
+          '[@past3lle/web3-modals::NetworkModal] Success switching networks!',
+          !!modalCallbacks,
+          data?.id,
+          data?.name
+        )
+        return modalCallbacks.close()
+      },
+      async onError(error) {
+        devError('[@past3lle/web3-modals::NetworkModal] Error switching networks!', error?.message || error)
+        return modalStore.callbacks.error.set(error)
+      }
     }
   })
 
-  const getChainLogo = useGetChainLogoCallback()
+  const getChainIcon = useGetChainIconCallback()
 
   // We always show list view in tiny screens
   const isExtraSmallScreen = useIsExtraSmallMediaWidth()
@@ -37,10 +42,16 @@ function NetworkModalContent() {
 
   return (
     <AccountColumnContainer width="100%">
-      <WalletsWrapper id={`${ModalId.WALLETS}__chains-wrapper`} view={modalView} width="auto">
+      <WalletsWrapper
+        id={`${ModalId.WALLETS}__chains-wrapper`}
+        modal="connection"
+        node="main"
+        view={modalView}
+        width="100%"
+      >
         {supportedChains.map((chain) => {
-          if (!switchNetworkAsync || currentChain?.id === chain.id) return null
-          const chainLogo = getChainLogo(chain.id)
+          if (!switchChainAsync || currentChain?.id === chain.id) return null
+          const chainIcon = getChainIcon(chain.id)
           return (
             <ConnectorOption
               // keys & ids
@@ -48,12 +59,11 @@ function NetworkModalContent() {
               optionValue={chain.id}
               key={chain.id}
               // data props
-              callback={async () => switchNetworkAsync(chain.id)}
+              callback={async () => switchChainAsync({ chainId: chain.id })}
               modalView={modalView}
               connected={false}
-              connector={connector as ConnectorEnhanced<any, any>}
               label={chain.name}
-              logo={chainLogo ? <img src={chainLogo} /> : <NoChainLogo />}
+              icon={chainIcon ? <img src={chainIcon} /> : <MissingChainIcon />}
             />
           )
         })}
@@ -62,4 +72,4 @@ function NetworkModalContent() {
   )
 }
 
-export const NetworkModal = memo(NetworkModalContent)
+export default memo(NetworkModalContent)
