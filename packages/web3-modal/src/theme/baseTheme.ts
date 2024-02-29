@@ -53,7 +53,7 @@ const MAIN_COLOURS = {
   url: 'unset'
 }
 
-const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
+export const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
   modes: {
     LIGHT: {},
     DARK: {},
@@ -255,5 +255,3 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
     }
   }
 }
-
-export default PstlModalTheme
