@@ -155,4 +155,5 @@ function ConnectionModalContent({
   )
 }
 
+// Exported as default for lazy import inside /components/modals/index.tsx
 export default memo(ConnectionModalContent)

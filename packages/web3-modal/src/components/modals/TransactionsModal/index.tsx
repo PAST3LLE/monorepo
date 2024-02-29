@@ -359,4 +359,5 @@ const _sortBy =
         : (a[sortByKey] as number) - (b[sortByKey] as number)
       : 0
 
+// Exported as default for lazy import inside /components/modals/index.tsx
 export default memo(TransactionModalContent)
