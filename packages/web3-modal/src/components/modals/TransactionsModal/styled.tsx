@@ -10,6 +10,7 @@ import {
   ThumbsUp
 } from '@past3lle/components'
 import React from 'react'
+import { BackgroundStyles } from 'src/theme/types'
 import styled from 'styled-components'
 import { ReplacementReason } from 'viem'
 
@@ -113,12 +114,15 @@ export const TransactionSearchBarContainer = styled(RowCenter)`
 
 const SAFE_GREEN_MINTIER = '#4def98'
 
-export function statusToCardBgColor(status: AnyTransactionReceipt['status']) {
+export function statusToCardBgColor(
+  status: AnyTransactionReceipt['status'],
+  backgrounds: BackgroundStyles | undefined
+) {
   switch (status) {
     case 'success':
-      return 'linear-gradient(45deg,#000000ba 60%,#062e1dd4)'
+      return backgrounds?.success ? backgrounds?.success : 'linear-gradient(45deg,#000000ba 60%,#062e1dd4)'
     case 'reverted':
-      return 'linear-gradient(45deg,#000000ba 40%,#2c0e0ebd)'
+      return backgrounds?.error ? backgrounds?.error : 'linear-gradient(45deg,#000000ba 40%,#2c0e0ebd)'
     default:
       return '#00000091'
   }
