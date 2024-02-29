@@ -10,11 +10,11 @@ import {
   ThumbsUp
 } from '@past3lle/components'
 import React from 'react'
-import { BackgroundStyles } from 'src/theme/types'
 import styled from 'styled-components'
 import { ReplacementReason } from 'viem'
 
 import { AnyTransactionReceipt } from '../../../controllers/TransactionsCtrl/types'
+import { BackgroundStyles, TransactionsModalTheme } from '../../../theme/types'
 import { HidModalTextInput } from '../HidDeviceOptionsModal/styleds'
 import { ModalContainer, ModalText, WalletsWrapper } from '../common/styled'
 
@@ -72,7 +72,7 @@ export const TransactionsModalWrapper = styled(ModalContainer).attrs({ modal: 't
   padding: 0.7rem;
 
   a {
-    color: ${(props) => props.theme.modals?.base?.title?.font?.color};
+    color: ${(props) => props.theme.modals?.transactions?.card?.url};
   }
 `
 
@@ -116,7 +116,7 @@ const SAFE_GREEN_MINTIER = '#4def98'
 
 export function statusToCardBgColor(
   status: AnyTransactionReceipt['status'],
-  backgrounds: BackgroundStyles | undefined
+  backgrounds: Pick<BackgroundStyles, 'success' | 'error'> | undefined
 ) {
   switch (status) {
     case 'success':
@@ -137,13 +137,18 @@ export function statusToConfirmationSpecialColors(status: AnyTransactionReceipt[
   }
 }
 
-export function statusToPillProps(tx: AnyTransactionReceipt): PillProps {
+export function statusToPillProps(
+  tx: AnyTransactionReceipt,
+  cssProps: TransactionsModalTheme['card']['statusPill'] | undefined
+): PillProps {
+  const background = cssProps?.background
+  const text = cssProps?.text
   switch (tx.status) {
     case 'success':
     case 'replaced-success':
       return {
-        backgroundColor: '#708c7e',
-        color: 'ghostwhite',
+        backgroundColor: background?.success ? background.success : '#708c7e',
+        color: text?.success ? text.success : 'ghostwhite',
         reasonTooltip: {
           text: _getReplacedReason(tx.replaceReason),
           backgroundColor: 'slategray'
@@ -152,8 +157,8 @@ export function statusToPillProps(tx: AnyTransactionReceipt): PillProps {
       }
     case 'reverted':
       return {
-        backgroundColor: '#994e4e',
-        color: 'ghostwhite',
+        backgroundColor: background?.error ? background.error : '#994e4e',
+        color: text?.error ? text.error : 'ghostwhite',
         tooltip: {
           text: 'Transaction was not confirmed (reverted). See the STATUS row for more detailed information pertaining to the transaction reversion.',
           backgroundColor: '#c03838'
@@ -167,8 +172,8 @@ export function statusToPillProps(tx: AnyTransactionReceipt): PillProps {
     case 'pending':
     case 'replaced-pending':
       return {
-        backgroundColor: '#657bb9a8',
-        color: 'ghostwhite',
+        backgroundColor: background?.warning ? background.warning : '#657bb9a8',
+        color: text?.pending ? text.pending : 'ghostwhite',
         reasonTooltip: {
           text: _getReplacedReason(tx.replaceReason),
           backgroundColor: 'slategray'
@@ -177,8 +182,8 @@ export function statusToPillProps(tx: AnyTransactionReceipt): PillProps {
       }
     case 'unknown':
       return {
-        backgroundColor: 'navajowhite',
-        color: 'black',
+        backgroundColor: background?.alternate ? background.alternate : 'navajowhite',
+        color: text?.unknown ? text.unknown : 'black',
         tooltip: {
           text: "Transaction was not found or errored during it's search. This may mean the transaction reverted, cancelled, or overwritten by another transaction e.g speed-up",
           backgroundColor: '#ffa92a'

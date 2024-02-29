@@ -127,7 +127,43 @@ interface AccountModalTheme extends SharedModalTheme {
 }
 type ConnectionModal = SharedModalTheme
 type HidDeviceModal = SharedModalTheme
-type TransactionsModalTheme = SharedModalTheme
+export interface TransactionsModalTheme extends SharedModalTheme {
+  card: {
+    background?: Pick<BackgroundStyles, 'success' | 'error'>
+    /**
+     * Colour of the `a` tag
+     */
+    url: string
+    statusPill: {
+      /**
+       * Colour of the text inside the pill.
+       * - **success** - for `success` and `replaced-success` status
+       * - **error** - for `reverted` status
+       * - **warning** - for `pending` and `replaced-pending` status
+       * - **unknown** - for `unknown` status
+       */
+      text?: {
+        success: string
+        error: string
+        pending: string
+        unknown: string
+      }
+      /**
+       * Size of icon in pixels
+       * @type number
+       */
+      size?: number
+      /**
+       * Colour of the pill.
+       * - **success** - for `success` and `replaced-success` status
+       * - **error** - for `reverted` status
+       * - **warning** - for `pending` and `replaced-pending` status
+       * - **alternate** - for `unknown` status
+       */
+      background?: Pick<BackgroundStyles, 'success' | 'error' | 'warning' | 'alternate'>
+    }
+  }
+}
 export interface PstlSubModalsTheme {
   base?: BaseModalTheme
   account?: AccountModalTheme
