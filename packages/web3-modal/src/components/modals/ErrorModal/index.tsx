@@ -5,6 +5,7 @@ import { ModalText, ModalTitleText } from '../common/styled'
 
 const IS_SERVER = typeof globalThis?.window === 'undefined'
 
+// Exported as default for lazy import inside /components/modals/index.tsx
 export default function ErrorModal() {
   return (
     <BaseModal

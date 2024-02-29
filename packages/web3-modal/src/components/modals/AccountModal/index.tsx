@@ -245,4 +245,5 @@ function useModalTheme(): PstlModalTheme['modals'] {
   return theme.modals
 }
 
+// Exported as default for lazy import inside /components/modals/index.tsx
 export default memo(AccountModalContent)
