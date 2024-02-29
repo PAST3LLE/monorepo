@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.1-alpha.4](https://github.com/PAST3LLE/monorepo/compare/@past3lle/forge-web3@2.1.1-alpha.3...@past3lle/forge-web3@2.1.1-alpha.4) (2024-02-29)
+
+**Note:** Version bump only for package @past3lle/forge-web3
+
+
+
+
+
 ## [2.1.1-alpha.3](https://github.com/PAST3LLE/monorepo/compare/@past3lle/forge-web3@2.1.1-alpha.2...@past3lle/forge-web3@2.1.1-alpha.3) (2024-02-28)
 
 **Note:** Version bump only for package @past3lle/forge-web3
