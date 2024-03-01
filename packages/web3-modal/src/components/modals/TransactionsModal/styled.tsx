@@ -10,11 +10,10 @@ import {
   ThumbsUp
 } from '@past3lle/components'
 import React from 'react'
-import styled from 'styled-components'
+import styled, { DefaultTheme } from 'styled-components'
 import { ReplacementReason } from 'viem'
 
 import { AnyTransactionReceipt } from '../../../controllers/TransactionsCtrl/types'
-import { BackgroundStyles, TransactionsModalTheme } from '../../../theme/types'
 import { HidModalTextInput } from '../HidDeviceOptionsModal/styleds'
 import { ModalContainer, ModalText, WalletsWrapper } from '../common/styled'
 
@@ -114,10 +113,8 @@ export const TransactionSearchBarContainer = styled(RowCenter)`
 
 const SAFE_GREEN_MINTIER = '#4def98'
 
-export function statusToCardBgColor(
-  status: AnyTransactionReceipt['status'],
-  backgrounds: Pick<BackgroundStyles, 'success' | 'error'> | undefined
-) {
+export function statusToCardBgColor(status: AnyTransactionReceipt['status'], theme: DefaultTheme) {
+  const backgrounds = theme.modals?.transactions?.card?.background
   switch (status) {
     case 'success':
       return backgrounds?.success
@@ -137,12 +134,9 @@ export function statusToConfirmationSpecialColors(status: AnyTransactionReceipt[
   }
 }
 
-export function statusToPillProps(
-  tx: AnyTransactionReceipt,
-  cssProps: TransactionsModalTheme['card']['statusPill'] | undefined
-): PillProps {
-  const background = cssProps?.background
-  const text = cssProps?.text
+export function statusToPillProps(tx: AnyTransactionReceipt, theme: DefaultTheme): PillProps {
+  const background = theme.modals?.transactions?.card?.statusPill?.background
+  const text = theme.modals?.transactions?.card?.statusPill?.text
   switch (tx.status) {
     case 'success':
     case 'replaced-success':

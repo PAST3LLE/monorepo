@@ -126,16 +126,11 @@ export const TransactionCard = memo(function TransactionComponent({
   connectorMetadata?: WalletMetaData
 }) {
   const theme = useTheme()
-  const { Icon, tooltip, reasonTooltip, ...statusStyleProps } = statusToPillProps(
-    transaction,
-    theme?.modals?.transactions?.card?.statusPill
-  )
+  const { Icon, tooltip, reasonTooltip, ...statusStyleProps } = statusToPillProps(transaction, theme)
   const explorerUri = blockExplorerUris?.default.url
   const formattedHash = transaction.transactionHash ? truncateHash(transaction.transactionHash, { type: 'short' }) : '-'
   return (
-    <TransactionWrapper
-      background={statusToCardBgColor(transaction.status, theme.modals?.transactions?.card?.background)}
-    >
+    <TransactionWrapper background={statusToCardBgColor(transaction.status, theme)}>
       {/* NONCE */}
       {!!transaction?.nonce && (
         <TransactionRow>
