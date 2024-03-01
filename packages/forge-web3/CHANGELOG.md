@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.2.0](https://github.com/PAST3LLE/monorepo/compare/@past3lle/forge-web3@2.1.0...@past3lle/forge-web3@2.2.0) (2024-03-01)
+
+
+### Features
+
+* update web3-modal transports, transactions theme, css styles, several bug fixes, and bump packages ([#80](https://github.com/PAST3LLE/monorepo/issues/80)) ([9be3786](https://github.com/PAST3LLE/monorepo/commit/9be3786edfb9606d292cb081cbb8e9e56af86327)), closes [#65](https://github.com/PAST3LLE/monorepo/issues/65) [#66](https://github.com/PAST3LLE/monorepo/issues/66) [#74](https://github.com/PAST3LLE/monorepo/issues/74) [#76](https://github.com/PAST3LLE/monorepo/issues/76) [#78](https://github.com/PAST3LLE/monorepo/issues/78)
+
+
+
+
+
 ## [2.1.1-alpha.5](https://github.com/PAST3LLE/monorepo/compare/@past3lle/forge-web3@2.1.1-alpha.4...@past3lle/forge-web3@2.1.1-alpha.5) (2024-03-01)
 
 **Note:** Version bump only for package @past3lle/forge-web3
