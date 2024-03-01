@@ -155,7 +155,24 @@ export const pstlModalTheme = createTheme({
           }
         }
       },
-      transactions: {}
+      transactions: {
+        text: {
+          subHeader: { color: 'orange' },
+          main: { color: 'red' },
+          strong: { color: 'red' },
+          small: { color: 'red' },
+          anchor: { color: 'yellow' }
+        },
+        card: {
+          background: { success: 'indianred', error: 'black' },
+          statusPill: {
+            statusText: {
+              success: 'orange',
+              pending: 'navajowhite'
+            }
+          }
+        }
+      }
     }
   },
   get DARK() {
