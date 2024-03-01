@@ -249,6 +249,26 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
             main: {
               background: 'transparent'
             }
+          },
+          card: {
+            background: {
+              success: 'linear-gradient(45deg,#000000ba 60%,#062e1dd4)',
+              error: 'linear-gradient(45deg,#000000ba 40%,#2c0e0ebd)'
+            },
+            statusPill: {
+              text: {
+                success: 'ghostwhite',
+                error: 'ghostwhite',
+                pending: 'ghostwhite',
+                unknown: 'black'
+              },
+              background: {
+                success: '#708c7e',
+                error: '#994e4e',
+                warning: '#657bb9a8',
+                alternate: 'navajowhite'
+              }
+            }
           }
         }
       }
