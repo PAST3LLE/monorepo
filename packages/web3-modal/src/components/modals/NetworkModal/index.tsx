@@ -72,4 +72,5 @@ function NetworkModalContent() {
   )
 }
 
+// Exported as default for lazy import inside /components/modals/index.tsx
 export default memo(NetworkModalContent)

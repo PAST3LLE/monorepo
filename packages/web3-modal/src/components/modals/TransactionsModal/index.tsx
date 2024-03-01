@@ -4,6 +4,7 @@ import { Address } from '@past3lle/types'
 import { truncateAddress, truncateHash, truncateLongString } from '@past3lle/utils'
 import { formatDistanceToNow } from 'date-fns'
 import React, { memo, useMemo, useState } from 'react'
+import { useTheme } from 'styled-components'
 import { Hash } from 'viem'
 
 import { AnyTransactionReceipt } from '../../../controllers/TransactionsCtrl/types'
@@ -124,12 +125,12 @@ export const TransactionCard = memo(function TransactionComponent({
   blockExplorerUris?: PstlWeb3ModalProps['blockExplorerUris']
   connectorMetadata?: WalletMetaData
 }) {
-  const { Icon, tooltip, reasonTooltip, ...statusStyleProps } = statusToPillProps(transaction)
+  const theme = useTheme()
+  const { Icon, tooltip, reasonTooltip, ...statusStyleProps } = statusToPillProps(transaction, theme)
   const explorerUri = blockExplorerUris?.default.url
   const formattedHash = transaction.transactionHash ? truncateHash(transaction.transactionHash, { type: 'short' }) : '-'
-
   return (
-    <TransactionWrapper background={statusToCardBgColor(transaction.status)}>
+    <TransactionWrapper background={statusToCardBgColor(transaction.status, theme)}>
       {/* NONCE */}
       {!!transaction?.nonce && (
         <TransactionRow>
@@ -359,4 +360,5 @@ const _sortBy =
         : (a[sortByKey] as number) - (b[sortByKey] as number)
       : 0
 
+// Exported as default for lazy import inside /components/modals/index.tsx
 export default memo(TransactionModalContent)

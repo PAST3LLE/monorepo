@@ -10,7 +10,7 @@ import {
   ThumbsUp
 } from '@past3lle/components'
 import React from 'react'
-import styled from 'styled-components'
+import styled, { DefaultTheme } from 'styled-components'
 import { ReplacementReason } from 'viem'
 
 import { AnyTransactionReceipt } from '../../../controllers/TransactionsCtrl/types'
@@ -49,7 +49,7 @@ export const TransactionRow = styled(RowBetween)<{ fontSize?: string; borderBott
   }
 `
 
-export const TransactionTitle = styled(ModalText).attrs({ modal: 'base', node: 'subHeader' })``
+export const TransactionTitle = styled(ModalText).attrs({ modal: 'transactions', node: 'subHeader' })``
 export const TransactionWrapper = styled(Column)<{ background?: string }>`
   color: ghostwhite;
   background: ${(props) => props.background};
@@ -71,13 +71,13 @@ export const TransactionsModalWrapper = styled(ModalContainer).attrs({ modal: 't
   padding: 0.7rem;
 
   a {
-    color: ${(props) => props.theme.modals?.base?.title?.font?.color};
+    color: ${(props) => props.theme.modals?.transactions?.text?.anchor?.color};
   }
 `
 
 export interface PillProps {
-  backgroundColor: string
-  color: string
+  backgroundColor?: string
+  color?: string
   tooltip?: { text: string; backgroundColor: string }
   reasonTooltip?: { text: string; backgroundColor?: string }
   Icon?: typeof Icon
@@ -113,12 +113,13 @@ export const TransactionSearchBarContainer = styled(RowCenter)`
 
 const SAFE_GREEN_MINTIER = '#4def98'
 
-export function statusToCardBgColor(status: AnyTransactionReceipt['status']) {
+export function statusToCardBgColor(status: AnyTransactionReceipt['status'], theme: DefaultTheme) {
+  const backgrounds = theme.modals?.transactions?.card?.background
   switch (status) {
     case 'success':
-      return 'linear-gradient(45deg,#000000ba 60%,#062e1dd4)'
+      return backgrounds?.success
     case 'reverted':
-      return 'linear-gradient(45deg,#000000ba 40%,#2c0e0ebd)'
+      return backgrounds?.error
     default:
       return '#00000091'
   }
@@ -133,13 +134,15 @@ export function statusToConfirmationSpecialColors(status: AnyTransactionReceipt[
   }
 }
 
-export function statusToPillProps(tx: AnyTransactionReceipt): PillProps {
+export function statusToPillProps(tx: AnyTransactionReceipt, theme: DefaultTheme): PillProps {
+  const background = theme.modals?.transactions?.card?.statusPill?.background
+  const text = theme.modals?.transactions?.card?.statusPill?.statusText
   switch (tx.status) {
     case 'success':
     case 'replaced-success':
       return {
-        backgroundColor: '#708c7e',
-        color: 'ghostwhite',
+        backgroundColor: background?.success,
+        color: text?.success,
         reasonTooltip: {
           text: _getReplacedReason(tx.replaceReason),
           backgroundColor: 'slategray'
@@ -148,8 +151,8 @@ export function statusToPillProps(tx: AnyTransactionReceipt): PillProps {
       }
     case 'reverted':
       return {
-        backgroundColor: '#994e4e',
-        color: 'ghostwhite',
+        backgroundColor: background?.error,
+        color: text?.error,
         tooltip: {
           text: 'Transaction was not confirmed (reverted). See the STATUS row for more detailed information pertaining to the transaction reversion.',
           backgroundColor: '#c03838'
@@ -163,8 +166,8 @@ export function statusToPillProps(tx: AnyTransactionReceipt): PillProps {
     case 'pending':
     case 'replaced-pending':
       return {
-        backgroundColor: '#657bb9a8',
-        color: 'ghostwhite',
+        backgroundColor: background?.warning,
+        color: text?.pending,
         reasonTooltip: {
           text: _getReplacedReason(tx.replaceReason),
           backgroundColor: 'slategray'
@@ -173,8 +176,8 @@ export function statusToPillProps(tx: AnyTransactionReceipt): PillProps {
       }
     case 'unknown':
       return {
-        backgroundColor: 'navajowhite',
-        color: 'black',
+        backgroundColor: background?.alternate,
+        color: text?.unknown,
         tooltip: {
           text: "Transaction was not found or errored during it's search. This may mean the transaction reverted, cancelled, or overwritten by another transaction e.g speed-up",
           backgroundColor: '#ffa92a'

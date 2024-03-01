@@ -3,6 +3,69 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.2.0-alpha.5](https://github.com/PAST3LLE/past3lle-monorepo/compare/@past3lle/web3-modal@2.2.0-alpha.4...@past3lle/web3-modal@2.2.0-alpha.5) (2024-03-01)
+
+
+### Bug Fixes
+
+* **web3-modal:** allow custom styling for transaction cards ([2640ef7](https://github.com/PAST3LLE/past3lle-monorepo/commit/2640ef71a7ab7325adb2ebe1f7038b4d7017d3ae))
+
+
+
+
+
+# [2.2.0-alpha.4](https://github.com/PAST3LLE/past3lle-monorepo/compare/@past3lle/web3-modal@2.2.0-alpha.3...@past3lle/web3-modal@2.2.0-alpha.4) (2024-02-29)
+
+**Note:** Version bump only for package @past3lle/web3-modal
+
+
+
+
+
+# [2.2.0-alpha.3](https://github.com/PAST3LLE/past3lle-monorepo/compare/@past3lle/web3-modal@2.2.0-alpha.2...@past3lle/web3-modal@2.2.0-alpha.3) (2024-02-28)
+
+
+### Bug Fixes
+
+* **web3-modal:** send options as prop ([#76](https://github.com/PAST3LLE/past3lle-monorepo/issues/76)) ([2a72dd2](https://github.com/PAST3LLE/past3lle-monorepo/commit/2a72dd28b142b9b650daf669a7a6100cf64e5156))
+
+
+
+
+
+# [2.2.0-alpha.2](https://github.com/PAST3LLE/past3lle-monorepo/compare/@past3lle/web3-modal@2.2.0-alpha.1...@past3lle/web3-modal@2.2.0-alpha.2) (2024-02-28)
+
+
+### Bug Fixes
+
+* **web3-modal:** fix CSS styles and props ([#74](https://github.com/PAST3LLE/past3lle-monorepo/issues/74)) ([34aadbf](https://github.com/PAST3LLE/past3lle-monorepo/commit/34aadbfebeac777b2e02f0a07a7c7baaa09c4958))
+
+
+
+
+
+# [2.2.0-alpha.1](https://github.com/PAST3LLE/past3lle-monorepo/compare/@past3lle/web3-modal@2.2.0-alpha.0...@past3lle/web3-modal@2.2.0-alpha.1) (2024-01-31)
+
+
+### Bug Fixes
+
+* **skillforge-ui,forge-web3,skillforge-widget,wagmi-connectors,web3-modal:** bump & sync Wagmi/Viem/react-query package versions ([#66](https://github.com/PAST3LLE/past3lle-monorepo/issues/66)) ([141edbd](https://github.com/PAST3LLE/past3lle-monorepo/commit/141edbde34b5021e05c58569e545dc4a0a28768b))
+
+
+
+
+
+# [2.2.0-alpha.0](https://github.com/PAST3LLE/past3lle-monorepo/compare/@past3lle/web3-modal@2.1.0...@past3lle/web3-modal@2.2.0-alpha.0) (2024-01-30)
+
+
+### Features
+
+* **web3-modal:** default fallback transports + deprecate options ([#65](https://github.com/PAST3LLE/past3lle-monorepo/issues/65)) ([725222a](https://github.com/PAST3LLE/past3lle-monorepo/commit/725222a9418a5b3d0ed912d8faaa61274f490cd0))
+
+
+
+
+
 # [2.1.0](https://github.com/PAST3LLE/past3lle-monorepo/compare/@past3lle/web3-modal@2.0.0-alpha.12...@past3lle/web3-modal@2.1.0) (2024-01-26)
 
 

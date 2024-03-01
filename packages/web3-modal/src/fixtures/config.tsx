@@ -1,5 +1,6 @@
 import { devDebug } from '@past3lle/utils'
 import { http } from 'viem'
+import { fallback } from 'wagmi'
 
 import { PstlWeb3ModalProps } from '../providers'
 import { createTheme } from '../theme'
@@ -71,6 +72,9 @@ export const pstlModalTheme = createTheme({
           color: 'ghostwhite',
           background: 'rgba(255,255,255,0.1)'
         },
+        attribution: {
+          color: 'green'
+        },
         title: {
           font: {
             color: '#cbb9ee',
@@ -136,14 +140,39 @@ export const pstlModalTheme = createTheme({
         },
         container: {
           main: {
-            background: '#1113107a'
+            background: '#1113107a',
+            border: {
+              border: '2px solid',
+              color: 'rgba(120,110,40,0.65)'
+            }
           },
           alternate: {
-            background: '#1113107a'
+            background: '#1113107a',
+            border: {
+              border: '2px solid',
+              color: 'rgba(120,110,40,0.65)'
+            }
           }
         }
       },
-      transactions: {}
+      transactions: {
+        text: {
+          subHeader: { color: 'orange' },
+          main: { color: 'red' },
+          strong: { color: 'red' },
+          small: { color: 'red' },
+          anchor: { color: 'yellow' }
+        },
+        card: {
+          background: { success: 'indianred', error: 'black' },
+          statusPill: {
+            statusText: {
+              success: 'orange',
+              pending: 'navajowhite'
+            }
+          }
+        }
+      }
     }
   },
   get DARK() {
@@ -211,29 +240,20 @@ const CHAIN_IMAGES: ChainImages = {
   137: 'https://icons.llamao.fi/icons/chains/rsz_polygon.jpg'
 }
 
-const DEFAULT_PROPS: PstlWeb3ModalProps = {
+const DEFAULT_PROPS = {
   appName: 'COSMOS APP',
   chains,
   connectors: {
     overrides: COMMON_CONNECTOR_OVERRIDES
   },
-  clients: {
-    wagmi: {
-      options: {
-        transports: {
-          1: http(`https://eth-mainnet.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_GOERLI_API_KEY as string}`),
-          5: http(`https://eth-goerli.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_GOERLI_API_KEY as string}`),
-          137: http(
-            `https://polygon-mainnet.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_MATIC_API_KEY as string}`
-          ),
-          80001: http(
-            `https://polygon-mumbai.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_MUMBAI_API_KEY as string}`
-          )
-        }
-      }
-    }
-  },
   options: {
+    transports: {
+      5: fallback([
+        http(`https://eth-goerli.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_GOERLI_API_KEY as string}`)
+      ]),
+      137: http(`https://polygon-mainnet.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_MATIC_API_KEY as string}`),
+      80001: http(`https://polygon-mumbai.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_MUMBAI_API_KEY as string}`)
+    },
     autoConnect: true,
     pollingInterval: 10_000,
     escapeHatches: {
@@ -285,7 +305,7 @@ const DEFAULT_PROPS: PstlWeb3ModalProps = {
       // }
     }
   }
-}
+} as const satisfies PstlWeb3ModalProps<typeof chains>
 
 const DEFAULT_PROPS_WEB3AUTH: PstlWeb3ModalProps = {
   ...DEFAULT_PROPS,

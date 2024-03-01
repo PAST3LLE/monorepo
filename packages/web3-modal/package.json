@@ -1,6 +1,6 @@
 {
   "name": "@past3lle/web3-modal",
-  "version": "2.1.0",
+  "version": "2.2.0-alpha.5",
   "sideEffects": false,
   "description": "PAST3LLE's Web3 connection modal",
   "keywords": [
@@ -69,12 +69,12 @@
     ]
   },
   "resolutions": {
-    "**/*/@tanstack/react-query": "^2.x",
-    "@tanstack/react-query": "^2.x",
+    "**/*/@tanstack/react-query": "^5.x",
+    "@tanstack/react-query": "^5.x",
     "**/*/viem": "^2.x",
     "viem": "^2.x",
-    "**/*/wagmi": "^2.x",
-    "wagmi": "^2.x",
+    "**/*/wagmi": ">=2.5.5 < 3",
+    "wagmi": ">=2.5.5 < 3",
     "styled-components": "^5.x"
   },
   "peerDependencies": {
@@ -83,14 +83,14 @@
     "react-dom": ">=16",
     "styled-components": "^5.x",
     "viem": "^2.x",
-    "wagmi": "^2.x"
+    "wagmi": ">=2.5.5 < 3"
   },
   "dependencies": {
     "@past3lle/components": "^2.1.0",
     "@past3lle/hooks": "^2.1.0",
     "@past3lle/theme": "^2.1.0",
     "@past3lle/utils": "^2.1.0",
-    "@past3lle/wagmi-connectors": "^2.1.0",
+    "@past3lle/wagmi-connectors": "^2.1.1-alpha.0",
     "@safe-global/api-kit": "^2.0.0",
     "date-fns": "^3.0.0",
     "lodash.defaultsdeep": "^4.6.1",
@@ -114,8 +114,8 @@
     "react-dom": "^18.2.0",
     "rollup": "^3.29.2",
     "styled-components": "^5.3.6",
-    "viem": "^2.3.1",
-    "wagmi": "^2.2.1"
+    "viem": "^2.7.1",
+    "wagmi": ">=2.5.5 < 3"
   },
   "browserslist": {
     "production": [

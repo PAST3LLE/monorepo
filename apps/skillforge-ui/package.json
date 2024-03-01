@@ -14,7 +14,7 @@
     "url": "git+https://github.com/PAST3LLE/past3lle-monorepo.git"
   },
   "private": true,
-  "version": "1.1.0",
+  "version": "1.1.1-alpha.5",
   "engines": {
     "node": ">=18.12.0"
   },
@@ -36,8 +36,7 @@
     "forge-cli:local": "../../node_modules/@past3lle/forge-cli/bin/forge-cli.js"
   },
   "resolutions": {
-    "**/*/@tanstack/react-query": "^2.x",
-    "@tanstack/react-query": "^2.x",
+    "**/*/@tanstack/react-query": "^5.x",
     "**/*/viem": "^2.x",
     "viem": "^2.x",
     "**/*/wagmi": "^2.x",
@@ -45,8 +44,8 @@
     "styled-components": "^5.x"
   },
   "dependencies": {
-    "@past3lle/forge-web3": "^2.1.0",
-    "@past3lle/skillforge-widget": "^2.1.0",
+    "@past3lle/forge-web3": "^2.1.1-alpha.5",
+    "@past3lle/skillforge-widget": "^2.1.1-alpha.5",
     "@past3lle/skilltree-contracts": "^0.1.1",
     "@past3lle/theme": "^2.1.0",
     "@past3lle/utils": "^2.1.0",

@@ -1,7 +1,7 @@
 import { Subset, createTemplateThemeFactory } from '@past3lle/theme'
 import { MakeOptional } from '@past3lle/types'
 
-import PstlModalTheme from './baseTheme'
+import { PstlModalTheme } from './baseTheme'
 import { PstlModalThemeExtension } from './types'
 
 const templates = {

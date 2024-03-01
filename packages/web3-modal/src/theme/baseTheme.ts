@@ -53,7 +53,7 @@ const MAIN_COLOURS = {
   url: 'unset'
 }
 
-const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
+export const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
   modes: {
     LIGHT: {},
     DARK: {},
@@ -138,7 +138,14 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
               color: 'navajowhite',
               textTransform: 'uppercase',
               weight: 300
+            },
+            anchor: {
+              ...DEFAULT_FONT_PROPS,
+              color: BASE_TEXT_COLOUR
             }
+          },
+          attribution: {
+            color: ''
           },
           title: {
             font: {
@@ -246,11 +253,29 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
             main: {
               background: 'transparent'
             }
+          },
+          card: {
+            background: {
+              success: 'linear-gradient(45deg,#000000ba 60%,#062e1dd4)',
+              error: 'linear-gradient(45deg,#000000ba 40%,#2c0e0ebd)'
+            },
+            statusPill: {
+              statusText: {
+                success: 'ghostwhite',
+                error: 'ghostwhite',
+                pending: 'ghostwhite',
+                unknown: 'black'
+              },
+              background: {
+                success: '#708c7e',
+                error: '#994e4e',
+                warning: '#657bb9a8',
+                alternate: 'navajowhite'
+              }
+            }
           }
         }
       }
     }
   }
 }
-
-export default PstlModalTheme

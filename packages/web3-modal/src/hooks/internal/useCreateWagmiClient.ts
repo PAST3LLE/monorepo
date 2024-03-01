@@ -1,6 +1,8 @@
+import { devWarn } from '@past3lle/utils'
+import defaultsDeep from 'lodash.defaultsdeep'
 import { useMemo } from 'react'
-import { Chain, Transport, http } from 'viem'
-import { Connector, WagmiProviderProps, createConfig } from 'wagmi'
+import { Chain, createClient, http } from 'viem'
+import { Connector, WagmiProviderProps, createConfig, fallback } from 'wagmi'
 import { walletConnect } from 'wagmi/connectors'
 
 import { Z_INDICES } from '../../constants'
@@ -27,22 +29,24 @@ declare module 'wagmi' {
 }
 
 export type WagmiClient = ReturnType<typeof createConfig>
-export type PstlWagmiClientOptions<chains extends readonly [Chain, ...Chain[]]> = {
-  client?: WagmiClient
-  options: Partial<CreateWagmiClientProps<chains>['options']>
-}
 
 export function useCreateWagmiClient<chains extends ReadonlyChains>(
   props: PstlWeb3ModalProps<chains>
 ): ReturnType<typeof createWagmiClient> {
   return useMemo(() => {
+    if (!!(props?.clients?.wagmi?.options && Object.keys(props?.clients.wagmi.options).length)) {
+      devWarn(
+        '[@past3lle/web3-modal] WARNING! You are passing both "clients.wagmi.options" AND "options" which is unstable and will not be possible in the next major version (3.x). Please copy all properties from "clients.wagmi.options" and move them to the root "options" configuration property.'
+      )
+    }
     return !props.clients?.wagmi?.client
       ? createWagmiClient({
           appName: props.appName,
           chains: props.chains,
           connectors: props?.connectors || [],
           walletConnect: props.modals.walletConnect,
-          options: { ...props?.clients?.wagmi?.options, ...props.options }
+          // TODO: remove this for just props.options when we deprecate clients.wagmi.options
+          options: defaultsDeep(props.options, props?.clients?.wagmi?.options)
         })
       : props.clients.wagmi.client
   }, [props.clients?.wagmi, props.appName, props.chains, props.connectors, props.modals.walletConnect, props.options])
@@ -78,14 +82,6 @@ function createWagmiClient<chains extends readonly [Chain, ...Chain[]]>({
   options,
   ...props
 }: CreateWagmiClientProps<chains>): WagmiProviderProps['config'] {
-  const transportsMap = props.chains.reduce(
-    (acc, chain) => ({
-      ...acc,
-      [chain.id]: http(chain.rpcUrls.default.http[0])
-    }),
-    {} as Record<chains[number]['id'], Transport>
-  )
-
   const connectors = [
     walletConnect({
       projectId: props.walletConnect.projectId,
@@ -107,14 +103,21 @@ function createWagmiClient<chains extends readonly [Chain, ...Chain[]]>({
   const client = createConfig({
     chains: props.chains,
     connectors,
-    transports: { ...transportsMap, ...options?.transports },
+    client({ chain }) {
+      const userTransports = options?.transports?.[chain.id as chains[number]['id']]
+      const defaultTransports = chain.rpcUrls.default.http.map((url) => http(url))
+      return createClient({
+        chain,
+        transport: fallback(userTransports ? [userTransports, ...defaultTransports] : defaultTransports)
+      })
+    },
     multiInjectedProviderDiscovery: !!options?.multiInjectedProviderDiscovery
   })
 
   // check against appType for any derived connectors
   // Get any specific connector/chain config based on the type of app we're running
   // e.g are we in a Safe app? If so, run the Safe connector automatically set with the URL shortName chain
-  const derivedConnectors = getConfigFromAppType({ ...props, connectors: client.connectors })
+  const derivedConnectors = getConfigFromAppType({ ...props, options, connectors: client.connectors })
 
   // check if any are un-setup connectors and set them up
   const setupConnectors: Connector[] = setupConnectorFns(derivedConnectors.connectors, client)
