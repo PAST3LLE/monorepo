@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.2.0-alpha.5](https://github.com/PAST3LLE/past3lle-monorepo/compare/@past3lle/web3-modal@2.2.0-alpha.4...@past3lle/web3-modal@2.2.0-alpha.5) (2024-03-01)
+
+
+### Bug Fixes
+
+* **web3-modal:** allow custom styling for transaction cards ([2640ef7](https://github.com/PAST3LLE/past3lle-monorepo/commit/2640ef71a7ab7325adb2ebe1f7038b4d7017d3ae))
+
+
+
+
+
 # [2.2.0-alpha.4](https://github.com/PAST3LLE/past3lle-monorepo/compare/@past3lle/web3-modal@2.2.0-alpha.3...@past3lle/web3-modal@2.2.0-alpha.4) (2024-02-29)
 
 **Note:** Version bump only for package @past3lle/web3-modal
