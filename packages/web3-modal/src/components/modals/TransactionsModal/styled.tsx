@@ -49,7 +49,7 @@ export const TransactionRow = styled(RowBetween)<{ fontSize?: string; borderBott
   }
 `
 
-export const TransactionTitle = styled(ModalText).attrs({ modal: 'base', node: 'subHeader' })``
+export const TransactionTitle = styled(ModalText).attrs({ modal: 'transactions', node: 'subHeader' })``
 export const TransactionWrapper = styled(Column)<{ background?: string }>`
   color: ghostwhite;
   background: ${(props) => props.background};
@@ -71,7 +71,7 @@ export const TransactionsModalWrapper = styled(ModalContainer).attrs({ modal: 't
   padding: 0.7rem;
 
   a {
-    color: ${(props) => props.theme.modals?.base?.text?.anchor?.color};
+    color: ${(props) => props.theme.modals?.transactions?.text?.anchor?.color};
   }
 `
 
