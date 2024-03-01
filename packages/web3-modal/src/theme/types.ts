@@ -135,7 +135,6 @@ export interface TransactionsModalTheme extends SharedModalTheme {
      * Background of the card.
      */
     background: Pick<BackgroundStyles, 'success' | 'error'>
-    text?: SharedModalTheme['text']
     statusPill?: {
       /**
        * Colour of the text inside the pill.
