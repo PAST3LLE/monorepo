@@ -72,13 +72,13 @@ export const TransactionsModalWrapper = styled(ModalContainer).attrs({ modal: 't
   padding: 0.7rem;
 
   a {
-    color: ${(props) => props.theme.modals?.transactions?.card?.url};
+    color: ${(props) => props.theme.modals?.transactions?.card?.anchorTag};
   }
 `
 
 export interface PillProps {
-  backgroundColor: string
-  color: string
+  backgroundColor?: string
+  color?: string
   tooltip?: { text: string; backgroundColor: string }
   reasonTooltip?: { text: string; backgroundColor?: string }
   Icon?: typeof Icon
@@ -120,9 +120,9 @@ export function statusToCardBgColor(
 ) {
   switch (status) {
     case 'success':
-      return backgrounds?.success ? backgrounds?.success : 'linear-gradient(45deg,#000000ba 60%,#062e1dd4)'
+      return backgrounds?.success
     case 'reverted':
-      return backgrounds?.error ? backgrounds?.error : 'linear-gradient(45deg,#000000ba 40%,#2c0e0ebd)'
+      return backgrounds?.error
     default:
       return '#00000091'
   }
@@ -147,8 +147,8 @@ export function statusToPillProps(
     case 'success':
     case 'replaced-success':
       return {
-        backgroundColor: background?.success ? background.success : '#708c7e',
-        color: text?.success ? text.success : 'ghostwhite',
+        backgroundColor: background?.success,
+        color: text?.success,
         reasonTooltip: {
           text: _getReplacedReason(tx.replaceReason),
           backgroundColor: 'slategray'
@@ -157,8 +157,8 @@ export function statusToPillProps(
       }
     case 'reverted':
       return {
-        backgroundColor: background?.error ? background.error : '#994e4e',
-        color: text?.error ? text.error : 'ghostwhite',
+        backgroundColor: background?.error,
+        color: text?.error,
         tooltip: {
           text: 'Transaction was not confirmed (reverted). See the STATUS row for more detailed information pertaining to the transaction reversion.',
           backgroundColor: '#c03838'
@@ -172,8 +172,8 @@ export function statusToPillProps(
     case 'pending':
     case 'replaced-pending':
       return {
-        backgroundColor: background?.warning ? background.warning : '#657bb9a8',
-        color: text?.pending ? text.pending : 'ghostwhite',
+        backgroundColor: background?.warning,
+        color: text?.pending,
         reasonTooltip: {
           text: _getReplacedReason(tx.replaceReason),
           backgroundColor: 'slategray'
@@ -182,8 +182,8 @@ export function statusToPillProps(
       }
     case 'unknown':
       return {
-        backgroundColor: background?.alternate ? background.alternate : 'navajowhite',
-        color: text?.unknown ? text.unknown : 'black',
+        backgroundColor: background?.alternate,
+        color: text?.unknown,
         tooltip: {
           text: "Transaction was not found or errored during it's search. This may mean the transaction reverted, cancelled, or overwritten by another transaction e.g speed-up",
           backgroundColor: '#ffa92a'

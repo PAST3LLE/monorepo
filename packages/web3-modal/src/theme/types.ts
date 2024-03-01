@@ -129,12 +129,15 @@ type ConnectionModal = SharedModalTheme
 type HidDeviceModal = SharedModalTheme
 export interface TransactionsModalTheme extends SharedModalTheme {
   card: {
-    background?: Pick<BackgroundStyles, 'success' | 'error'>
+    /**
+     * Background of the card.
+     */
+    background: Pick<BackgroundStyles, 'success' | 'error'>
     /**
      * Colour of the `a` tag
      */
-    url: string
-    statusPill: {
+    anchorTag?: string
+    statusPill?: {
       /**
        * Colour of the text inside the pill.
        * - **success** - for `success` and `replaced-success` status
@@ -154,7 +157,7 @@ export interface TransactionsModalTheme extends SharedModalTheme {
        */
       size?: number
       /**
-       * Colour of the pill.
+       * Background of the pill.
        * - **success** - for `success` and `replaced-success` status
        * - **error** - for `reverted` status
        * - **warning** - for `pending` and `replaced-pending` status
