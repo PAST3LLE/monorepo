@@ -138,6 +138,10 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
               color: 'navajowhite',
               textTransform: 'uppercase',
               weight: 300
+            },
+            anchor: {
+              ...DEFAULT_FONT_PROPS,
+              color: BASE_TEXT_COLOUR
             }
           },
           attribution: {
@@ -256,7 +260,7 @@ const PstlModalTheme: ThemeByModes<PstlModalThemeExtension> = {
               error: 'linear-gradient(45deg,#000000ba 40%,#2c0e0ebd)'
             },
             statusPill: {
-              text: {
+              statusText: {
                 success: 'ghostwhite',
                 error: 'ghostwhite',
                 pending: 'ghostwhite',

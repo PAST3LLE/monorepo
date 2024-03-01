@@ -71,7 +71,7 @@ export const TransactionsModalWrapper = styled(ModalContainer).attrs({ modal: 't
   padding: 0.7rem;
 
   a {
-    color: ${(props) => props.theme.modals?.transactions?.card?.anchorTag};
+    color: ${(props) => props.theme.modals?.base?.text?.anchor?.color};
   }
 `
 
@@ -136,7 +136,7 @@ export function statusToConfirmationSpecialColors(status: AnyTransactionReceipt[
 
 export function statusToPillProps(tx: AnyTransactionReceipt, theme: DefaultTheme): PillProps {
   const background = theme.modals?.transactions?.card?.statusPill?.background
-  const text = theme.modals?.transactions?.card?.statusPill?.text
+  const text = theme.modals?.transactions?.card?.statusPill?.statusText
   switch (tx.status) {
     case 'success':
     case 'replaced-success':

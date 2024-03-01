@@ -76,6 +76,7 @@ export interface SharedModalTheme {
     small?: FontStyles
     error?: FontStyles
     warning?: FontStyles
+    anchor?: FontStyles
   }
 }
 export interface BaseModalTheme extends SharedModalTheme {
@@ -127,16 +128,14 @@ interface AccountModalTheme extends SharedModalTheme {
 }
 type ConnectionModal = SharedModalTheme
 type HidDeviceModal = SharedModalTheme
+
 export interface TransactionsModalTheme extends SharedModalTheme {
   card: {
     /**
      * Background of the card.
      */
     background: Pick<BackgroundStyles, 'success' | 'error'>
-    /**
-     * Colour of the `a` tag
-     */
-    anchorTag?: string
+    text?: SharedModalTheme['text']
     statusPill?: {
       /**
        * Colour of the text inside the pill.
@@ -145,7 +144,7 @@ export interface TransactionsModalTheme extends SharedModalTheme {
        * - **warning** - for `pending` and `replaced-pending` status
        * - **unknown** - for `unknown` status
        */
-      text?: {
+      statusText?: {
         success: string
         error: string
         pending: string
@@ -167,6 +166,7 @@ export interface TransactionsModalTheme extends SharedModalTheme {
     }
   }
 }
+
 export interface PstlSubModalsTheme {
   base?: BaseModalTheme
   account?: AccountModalTheme
